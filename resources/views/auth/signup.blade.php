@@ -283,6 +283,8 @@
                                 <br><strong>💡 Quattro ruoli principali:</strong> Poeta, Event Manager, Proprietario Venue, Audience
                             </p>
 
+
+
                             <div class="row">
                                 @foreach($roles as $role)
                                     <div class="col-md-6 mb-2">

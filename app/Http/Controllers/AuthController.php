@@ -29,7 +29,7 @@ class AuthController extends Controller
             ];
         });
 
-        return view('auth.signup', compact('roles'));
+                return view('auth.signup', compact('roles'));
     }
 
 
