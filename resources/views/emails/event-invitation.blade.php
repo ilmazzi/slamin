@@ -1,9 +1,9 @@
 @component('mail::message')
 # 🎭 Invito Poetry Slam
 
-Ciao **{{ $invitation->invitedUser->name }}**!
+Ciao **{{ $invitation->invitedUser->getDisplayName() }}**!
 
-{{ $inviter->name }} ti ha invitato a partecipare come **{{ $role }}** all'evento:
+{{ $inviter->getDisplayName() }} ti ha invitato a partecipare come **{{ $role }}** all'evento:
 
 @component('mail::panel')
 # {{ $event->title }}
@@ -79,7 +79,7 @@ Come **{{ $role }}**, sarai parte fondamentale di questo evento Poetry Slam!
 📖 Vedi dettagli evento
 @endcomponent
 
-Hai domande? Rispondi direttamente a questa email per contattare {{ $inviter->name }}.
+Hai domande? Rispondi direttamente a questa email per contattare {{ $inviter->getDisplayName() }}.
 
 Grazie e a presto sul palco! 🎤
 

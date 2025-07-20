@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\App;
 
-class PoetrySlamTestController extends Controller
+class TestController extends Controller
 {
     /**
-     * Dashboard di test per mostrare il sistema poetry slam
+     * Dashboard di test per mostrare il sistema Slamin
      */
     public function dashboard(Request $request)
     {
+        /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
         $data = [
@@ -29,7 +30,7 @@ class PoetrySlamTestController extends Controller
             'recentUsers' => User::with('roles')->latest()->limit(5)->get(),
         ];
 
-        return view('poetry_slam_test.dashboard', $data);
+        return view('poetry_slam_test.test-dashboard', $data);
     }
 
     /**
@@ -48,6 +49,7 @@ class PoetrySlamTestController extends Controller
      */
     public function permissions()
     {
+        /** @var \App\Models\User|null $user */
         $user = Auth::user();
         $allPermissions = Permission::all()->groupBy(function($permission) {
             return explode('.', $permission->name)[0]; // Group by module (events, users, etc.)
@@ -87,8 +89,9 @@ class PoetrySlamTestController extends Controller
 
         if ($user) {
             Auth::login($user);
-                        $roleText = count($user->getDisplayRoles()) > 0 ? $user->getDisplayRoles()[0] : 'no role';
-            return redirect()->route('poetry.test.dashboard')
+            $userRoles = $user->getDisplayRoles();
+            $roleText = count($userRoles) > 0 ? $userRoles[0] : 'no role';
+            return redirect()->route('slamin.test.dashboard')
                 ->with('success', "Logged in as {$user->name} ({$roleText})");
         }
 
@@ -101,7 +104,7 @@ class PoetrySlamTestController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('poetry.test.login')->with('success', 'Logged out successfully');
+        return redirect()->route('slamin.test.login')->with('success', 'Logged out successfully');
     }
 
     /**
@@ -124,6 +127,7 @@ class PoetrySlamTestController extends Controller
     public function testPermission(Request $request)
     {
         $permission = $request->input('permission');
+        /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
         if (!$user) {

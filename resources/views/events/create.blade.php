@@ -3,6 +3,8 @@
 @section('title', __('events.create_event'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/datepikar/flatpickr.min.css')}}">
 @endsection
 
 @section('main-content')
@@ -91,7 +93,7 @@
                                     <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
                                     <label for="public" class="form-check-label">
                                         <i class="ph ph-globe me-2"></i>Pubblico
-                                        <small class="d-block text-muted">Visibile a tutti, accetta richieste</small>
+                                        <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -129,7 +131,7 @@
                             <!-- Date and Time -->
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="datetime-local" name="start_datetime" id="start_datetime" class="form-control" required>
+                                    <input type="text" name="start_datetime" id="start_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora inizio..." required readonly>
                                     <label for="start_datetime">{{ __('events.start_date') }} {{ __('events.start_time') }} *</label>
                                 </div>
                                 <div class="error-feedback" id="start_datetime-error"></div>
@@ -137,7 +139,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="datetime-local" name="end_datetime" id="end_datetime" class="form-control" required>
+                                    <input type="text" name="end_datetime" id="end_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora fine..." required readonly>
                                     <label for="end_datetime">{{ __('events.end_date') }} {{ __('events.end_time') }} *</label>
                                 </div>
                                 <div class="error-feedback" id="end_datetime-error"></div>
@@ -145,10 +147,11 @@
 
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                    <input type="datetime-local" name="registration_deadline" id="registration_deadline" class="form-control">
+                                    <input type="text" name="registration_deadline" id="registration_deadline" class="form-control flatpickr-input" placeholder="Seleziona data e ora scadenza...">
                                     <label for="registration_deadline">{{ __('events.registration_deadline') }} ({{ __('common.optional') }})</label>
                                 </div>
                                 <small class="text-muted">Lascia vuoto per nessuna scadenza</small>
+                                <div class="error-feedback" id="registration_deadline-error"></div>
                             </div>
 
                             <!-- Location -->
@@ -1399,6 +1402,88 @@ function updateInvitationsData() {
 
 // Enhanced form submission
 document.getElementById('eventForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default submission
+
+    // Validate dates
+    const startDateTime = document.getElementById('start_datetime').value;
+    const endDateTime = document.getElementById('end_datetime').value;
+    const registrationDeadline = document.getElementById('registration_deadline').value;
+
+    const now = new Date();
+    const startDate = startDateTime ? new Date(startDateTime.replace(' ', 'T')) : null;
+    const endDate = endDateTime ? new Date(endDateTime.replace(' ', 'T')) : null;
+    const regDeadline = registrationDeadline ? new Date(registrationDeadline.replace(' ', 'T')) : null;
+
+    let hasErrors = false;
+
+    // Clear previous errors and styling
+    document.querySelectorAll('.error-feedback').forEach(el => el.textContent = '');
+    document.querySelectorAll('.form-control.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+        el.classList.add('is-valid');
+    });
+
+        // Validate start datetime
+    if (!startDateTime) {
+        document.getElementById('start_datetime-error').textContent = 'La data di inizio è obbligatoria.';
+        document.getElementById('start_datetime').classList.add('is-invalid');
+        document.getElementById('start_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else if (startDate && startDate <= now) {
+        document.getElementById('start_datetime-error').textContent = 'La data di inizio deve essere nel futuro.';
+        document.getElementById('start_datetime').classList.add('is-invalid');
+        document.getElementById('start_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else {
+        document.getElementById('start_datetime').classList.remove('is-invalid');
+        document.getElementById('start_datetime').classList.add('is-valid');
+    }
+
+    // Validate end datetime
+    if (!endDateTime) {
+        document.getElementById('end_datetime-error').textContent = 'La data di fine è obbligatoria.';
+        document.getElementById('end_datetime').classList.add('is-invalid');
+        document.getElementById('end_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else if (startDate && endDate && endDate <= startDate) {
+        document.getElementById('end_datetime-error').textContent = 'La data di fine deve essere dopo la data di inizio.';
+        document.getElementById('end_datetime').classList.add('is-invalid');
+        document.getElementById('end_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else {
+        document.getElementById('end_datetime').classList.remove('is-invalid');
+        document.getElementById('end_datetime').classList.add('is-valid');
+    }
+
+    // Validate registration deadline
+    if (regDeadline && startDate && regDeadline >= startDate) {
+        document.getElementById('registration_deadline-error').textContent = 'La scadenza iscrizioni deve essere prima della data di inizio.';
+        document.getElementById('registration_deadline').classList.add('is-invalid');
+        document.getElementById('registration_deadline').classList.remove('is-valid');
+        hasErrors = true;
+    } else if (regDeadline) {
+        document.getElementById('registration_deadline').classList.remove('is-invalid');
+        document.getElementById('registration_deadline').classList.add('is-valid');
+    }
+
+    if (hasErrors) {
+        // Scroll to first error
+        const firstError = document.querySelector('.form-control.is-invalid');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstError.focus();
+        }
+
+        // Show error alert
+        Swal.fire({
+            icon: 'error',
+            title: 'Errore di Validazione',
+            text: 'Controlla i campi evidenziati in rosso e riprova.',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
     const submitBtn = document.getElementById('submitBtn');
     const submitStatus = document.getElementById('submitStatus');
 
@@ -1411,8 +1496,8 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     submitBtn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i>Creazione...';
     submitStatus.style.display = 'block';
 
-    // Don't prevent default - let form submit normally
-    // The loading state will show until redirect happens
+    // Submit the form
+    this.submit();
 });
 
 function startAutoSave() {
@@ -1481,5 +1566,80 @@ window.addEventListener('load', function() {
         console.log('Event created successfully - draft cleared from localStorage');
     @endif
 });
+
+// Initialize Flatpickr for date/time inputs
+document.addEventListener('DOMContentLoaded', function() {
+    // Start datetime picker
+    flatpickr("#start_datetime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Update end datetime minimum date
+            if (endDateTimePicker) {
+                endDateTimePicker.set('minDate', selectedDates[0]);
+            }
+            // Clear error when valid date is selected
+            document.getElementById('start_datetime-error').textContent = '';
+            document.getElementById('start_datetime').classList.remove('is-invalid');
+            document.getElementById('start_datetime').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
+
+    // End datetime picker
+    const endDateTimePicker = flatpickr("#end_datetime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Clear error when valid date is selected
+            document.getElementById('end_datetime-error').textContent = '';
+            document.getElementById('end_datetime').classList.remove('is-invalid');
+            document.getElementById('end_datetime').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
+
+    // Registration deadline picker
+    flatpickr("#registration_deadline", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        allowInput: true,
+        placeholder: "Seleziona data e ora scadenza...",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Clear error when valid date is selected
+            document.getElementById('registration_deadline-error').textContent = '';
+            document.getElementById('registration_deadline').classList.remove('is-invalid');
+            document.getElementById('registration_deadline').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
+});
 </script>
+
+<!-- Flatpickr JS -->
+<script src="{{asset('assets/vendor/datepikar/flatpickr.js')}}"></script>
 @endsection

@@ -49,7 +49,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="ph ph-user me-2 fs-5"></i>
-                        <span class="fs-5">{{ __('events.organized_by') }} {{ $event->organizer->name }}</span>
+                        <span class="fs-5">{{ __('events.organized_by') }} {{ $event->organizer->getDisplayName() }}</span>
                     </div>
                 </div>
             </div>
@@ -151,10 +151,10 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="d-flex align-items-center">
                                                                         <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                                    {{ substr($invitation->invitedUser->name, 0, 2) }}
+                                    {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
                                 </div>
                                         <div>
-                                            <h6 class="mb-0">{{ $invitation->invitedUser->name }}</h6>
+                                            <h6 class="mb-0">{{ $invitation->invitedUser->getDisplayName() }}</h6>
                                             <small class="text-muted">{{ ucfirst($invitation->role) }} (Invitato)</small>
                                         </div>
                                     </div>
@@ -166,10 +166,10 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="d-flex align-items-center">
                                                                         <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                                    {{ substr($request->user->name, 0, 2) }}
+                                    {{ substr($request->user->getDisplayName(), 0, 2) }}
                                 </div>
                                         <div>
-                                            <h6 class="mb-0">{{ $request->user->name }}</h6>
+                                            <h6 class="mb-0">{{ $request->user->getDisplayName() }}</h6>
                                             <small class="text-muted">{{ ucfirst($request->requested_role) }} (Applicato)</small>
                                         </div>
                                     </div>
@@ -233,7 +233,7 @@
                                     <div class="alert alert-info mb-3">
                                         <i class="ph ph-envelope me-2"></i>Hai ricevuto un invito per questo evento!
                                     </div>
-                                    <a href="{{ route('invitations.show', $userInvitation) }}" class="btn btn-light-primary w-100 mb-2">
+                                    <a href="{{ route('invitations.index') }}" class="btn btn-light-primary w-100 mb-2">
                                         <i class="ph ph-envelope-open me-2"></i>Gestisci Invito
                                     </a>
                                 @elseif($userInvitation->status === 'accepted')
@@ -293,7 +293,7 @@
                             <div class="alert alert-info mb-3">
                                 <i class="ph ph-sign-in me-2"></i>Accedi per partecipare a questo evento
                             </div>
-                            <a href="{{ route('poetry.test.real-login') }}" class="btn btn-light-primary w-100">
+                            <a href="{{ route('login') }}" class="btn btn-light-primary w-100">
                                 <i class="ph ph-sign-in me-2"></i>Accedi
                             </a>
                         @endauth
@@ -363,10 +363,10 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                            {{ substr($event->organizer->name, 0, 2) }}
+                            {{ substr($event->organizer->getDisplayName(), 0, 2) }}
                         </div>
                         <div>
-                            <h6 class="mb-0 text-white">{{ $event->organizer->name }}</h6>
+                            <h6 class="mb-0 text-white">{{ $event->organizer->getDisplayName() }}</h6>
                             <small class="text-white-50">Organizzatore</small>
                         </div>
                     </div>

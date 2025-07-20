@@ -47,7 +47,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <h5 class="text-white mb-1">Testing as: {{ $user->name ?? 'Guest' }}</h5>
+                                <h5 class="text-white mb-1">Testing as: {{ $user->getDisplayName() ?? 'Guest' }}</h5>
                                 <p class="text-white-50 mb-0">
                                     Roles:
                                     @if($user)

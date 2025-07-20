@@ -202,7 +202,7 @@
                     <div class="mt-4">
                         <p class="small opacity-75">
                             La piattaforma italiana per<br>
-                            poeti, organizzatori, venue e appassionati di poetry slam
+                            poeti, organizzatori, venue e appassionati di slam
                         </p>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
                             </label>
                             <p class="text-muted small mb-3">
                                 Puoi selezionare uno o più ruoli. Se non ne selezioni nessuno, verrai registrato come audience/fan.
-                                <br><strong>💡 Quattro ruoli principali:</strong> Poeta, Organizzatore, Proprietario Venue, Audience
+                                <br><strong>💡 Quattro ruoli principali:</strong> Poeta, Event Manager, Proprietario Venue, Audience
                             </p>
 
                             <div class="row">
@@ -338,7 +338,7 @@
                             <h6>🌟 Perché unirti a Slam In?</h6>
                             <ul class="list-unstyled mb-0 small">
                                 <li>• <strong>Registrazione veloce:</strong> Solo i dati essenziali, profilo completabile dopo</li>
-                                <li>• <strong>Ruoli flessibili:</strong> Poeta, organizzatore, proprietario venue o audience</li>
+                                <li>• <strong>Ruoli flessibili:</strong> Poeta, event manager, proprietario venue o audience</li>
                                 <li>• <strong>Ecosistema completo:</strong> Artisti, organizzatori, venue e pubblico insieme</li>
                             </ul>
                         </div>

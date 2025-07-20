@@ -13,7 +13,7 @@ return [
 
     // Titoli principali
     'events' => 'Eventi',
-    'events_poetry_slam' => 'Eventi Poetry Slam',
+    'events_poetry_slam' => 'Eventi Slam In',
     'create_event' => 'Crea Evento',
     'edit_event' => 'Modifica Evento',
     'manage_event' => 'Gestisci Evento',
@@ -77,14 +77,8 @@ return [
     'detect_location_help' => 'Rileva automaticamente le tue coordinate GPS',
 
     // Azioni
-    'create_event_action' => 'Crea Evento',
-    'edit_event_action' => 'Modifica',
-    'delete_event_action' => 'Elimina',
-    'manage_event_action' => 'Gestisci Evento',
-    'view_event' => 'Visualizza',
     'apply_to_event' => 'Richiedi Partecipazione',
     'cancel_request' => 'Cancella Richiesta',
-    'share_event' => 'Condividi Evento',
     'detect_location' => 'Rileva Posizione Automatica',
     'add_tag' => 'Aggiungi Tag',
     'preview_event' => 'Anteprima Evento',
@@ -136,11 +130,17 @@ return [
     // Filtri e ricerca
     'search_events' => 'Cerca eventi, città, venue...',
     'filter_by_city' => 'Tutte le città',
-    'filter_by_type' => 'Tutti i tipi',
+    'all_types' => 'Tutti i tipi',
     'radius_km' => 'Raggio (km)',
     'near_me' => 'Vicino a me',
     'show_map' => 'Mostra Mappa',
     'show_list' => 'Mostra Lista',
+     'search_events_placeholder' => 'Cerca eventi per titolo, città o organizzatore...',
+     'filter_by_status' => 'Filtra per stato',
+     'filter_by_type' => 'Filtra per tipo',
+     'filter_by_date' => 'Filtra per data',
+     'clear_filters' => 'Pulisci Filtri',
+
 
     // Messaggi
     'no_events_found' => 'Nessun evento trovato',
@@ -212,6 +212,71 @@ return [
     'invitations_sent_success' => ':count inviti sono stati inviati.',
     'request_sent_success' => 'Richiesta di partecipazione inviata con successo!',
     'request_cancelled_success' => 'Richiesta di partecipazione cancellata.',
+
+    // Stati eventi
+    'event_ended' => 'Evento Concluso',
+    'event_imminent' => 'Evento Imminente',
+    'event_upcoming' => 'Evento Prossimo',
+    'event_live' => 'Evento in Corso',
+
+    // Azioni evento
+    'view_event' => 'Vedi Evento',
+    'edit_event_action' => 'Modifica',
+    'delete_event_action' => 'Elimina',
+    'share_event' => 'Condividi',
+    'duplicate_event' => 'Duplica',
+
+    // Gestione partecipanti
+    'pending_invitations' => 'Inviti Pendenti',
+    'pending_requests' => 'Richieste',
+    'confirmed_participants' => 'Confermati',
+    'total_requests' => 'Richieste Totali',
+    'participation_requests' => 'Richieste di Partecipazione',
+    'confirmed_participants_list' => 'Partecipanti Confermati',
+    'requests_selected' => 'richieste selezionate',
+    'requests_today' => 'Richieste Oggi',
+
+    // Azioni su richieste/inviti
+    'accept_action' => 'accettare',
+    'reject_action' => 'rifiutare',
+    'approve_all' => 'Approva Tutti',
+    'reject_all' => 'Rifiuta Tutti',
+    'bulk_actions' => 'Azioni Multiple',
+
+    // Badge e stato
+    'waiting_status' => 'Attesa',
+    'applications_status' => 'Candidature',
+    'participants_status' => 'Partecipanti',
+
+    // Descrizioni evento
+    'public_event_description' => 'Visibile a tutti, accetta richieste',
+    'private_event_description' => 'Solo su invito',
+
+    // Breadcrumb
+    'dashboard' => 'Dashboard',
+    'events_list' => 'Lista Eventi',
+    'event_management' => 'Gestione Evento',
+
+
+    // Statistiche
+    'statistics' => 'Statistiche',
+    'event_stats' => 'Statistiche Evento',
+    'total_views' => 'Visualizzazioni Totali',
+    'unique_visitors' => 'Visitatori Unici',
+
+    // Messaggi JavaScript
+    'message_for_action' => 'Inserisci un messaggio per',
+    'this_request' => 'questa richiesta',
+
+    // Filtri rapidi
+    'today' => 'Oggi',
+    'tomorrow' => 'Domani',
+    'weekend' => 'Weekend',
+    'free_events' => 'Gratis',
+    'nearby' => 'Vicino a me',
+    'this_week' => 'Questa Settimana',
+    'next_week' => 'Prossima Settimana',
+    'this_month' => 'Questo Mese',
 
     // Varie
     'organized_by' => 'Organizzato da',

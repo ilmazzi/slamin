@@ -100,4 +100,7 @@ return [
         'de' => 'Deutsch',
     ],
 
+    // Pagine
+    'page_under_construction' => 'Pagina in costruzione',
+
 ];

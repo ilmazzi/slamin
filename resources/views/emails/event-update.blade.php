@@ -3,7 +3,7 @@
 @if($updateType === 'cancelled')
 # 🚫 Evento cancellato
 
-Ciao **{{ $user->name }}**,
+Ciao **{{ $user->getDisplayName() }}**,
 
 ci dispiace informarti che l'evento **{{ $event->title }}** è stato cancellato.
 
@@ -16,7 +16,7 @@ ci dispiace informarti che l'evento **{{ $event->title }}** è stato cancellato.
 @elseif($updateType === 'reminder')
 # ⏰ Promemoria evento
 
-Ciao **{{ $user->name }}**!
+Ciao **{{ $user->getDisplayName() }}**!
 
 Ti ricordiamo che l'evento **{{ $event->title }}** è previsto
 @if($daysUntilEvent == 0)
@@ -36,7 +36,7 @@ tra **{{ $daysUntilEvent }} giorni**!
 @else
 # 📢 Aggiornamento evento
 
-Ciao **{{ $user->name }}**!
+Ciao **{{ $user->getDisplayName() }}**!
 
 {{ $organizerName }} ha aggiornato l'evento **{{ $event->title }}**.
 

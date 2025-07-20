@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class PoetrySlamAuthController extends Controller
+class AuthController extends Controller
 {
     /**
      * Mostra la pagina di registrazione con selezione multi-ruolo
@@ -29,7 +29,7 @@ class PoetrySlamAuthController extends Controller
             ];
         });
 
-        return view('poetry_slam_test.signup', compact('roles'));
+        return view('auth.signup', compact('roles'));
     }
 
 
@@ -42,12 +42,14 @@ class PoetrySlamAuthController extends Controller
         // Validazione
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,name',
         ], [
             'name.required' => 'Il nome è obbligatorio',
+            'nickname.unique' => 'Questo nickname è già in uso',
             'email.required' => 'L\'email è obbligatoria',
             'email.email' => 'Inserisci un\'email valida',
             'email.unique' => 'Questa email è già registrata',
@@ -65,6 +67,7 @@ class PoetrySlamAuthController extends Controller
         // Crea l'utente
         $user = User::create([
             'name' => $request->name,
+            'nickname' => $request->nickname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'status' => 'active',
@@ -89,8 +92,8 @@ class PoetrySlamAuthController extends Controller
             count($selectedRoles) . ' ruoli' :
             $this->getRoleDisplayName($selectedRoles[0]);
 
-        return redirect()->route('poetry.test.dashboard')
-            ->with('success', "🎉 Benvenuto nel Poetry Slam Social Network! Hai {$roleText} attivi.");
+        return redirect()->route('dashboard')
+            ->with('success', "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi.");
     }
 
     /**
@@ -99,7 +102,7 @@ class PoetrySlamAuthController extends Controller
     public function showLogin()
     {
         $roles = Role::all();
-        return view('poetry_slam_test.login', compact('roles'));
+        return view('auth.login', compact('roles'));
     }
 
     /**
@@ -117,7 +120,7 @@ class PoetrySlamAuthController extends Controller
             $user = Auth::user();
 
             return redirect()->route('dashboard')
-                ->with('success', "Bentornato {$user->name}!");
+                ->with('success', "Ti diamo il bentornato, {$user->name}!");
         }
 
         return back()->withErrors([
@@ -144,9 +147,9 @@ class PoetrySlamAuthController extends Controller
     {
         $names = [
             'admin' => 'Amministratore',
-            'moderator' => 'Moderatore',
+            'moderator' => 'Community Manager',
             'poet' => 'Poeta/Artista',
-            'organizer' => 'Organizzatore Eventi',
+            'organizer' => 'Event Manager',
             'judge' => 'Giudice Competizioni',
             'venue_owner' => 'Proprietario Venue',
             'technician' => 'Tecnico Professionista',
@@ -162,10 +165,10 @@ class PoetrySlamAuthController extends Controller
     private function getRoleDescription($roleName)
     {
         $descriptions = [
-            'admin' => 'Controllo completo della piattaforma Poetry Slam',
+            'admin' => 'Controllo completo della piattaforma Slamin',
             'moderator' => 'Moderazione contenuti e gestione community',
             'poet' => 'Partecipazione eventi, pubblicazione contenuti artistici',
-            'organizer' => 'Creazione e gestione eventi poetry slam',
+            'organizer' => 'Creazione e gestione eventi slam',
             'judge' => 'Giudizio competizioni e valutazione performance',
             'venue_owner' => 'Gestione locali e prenotazioni spazi',
             'technician' => 'Supporto tecnico audio/video per eventi',

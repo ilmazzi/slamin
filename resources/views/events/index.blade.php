@@ -10,7 +10,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item">Dashboard</li>
+<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events.dashboard') }}</a></li>
 <li class="breadcrumb-item active">{{ __('events.events') }}</li>
 @endsection
 
@@ -102,7 +102,7 @@
                             </div>
                             <div class="col-lg-2 col-md-4">
                                 <select name="type" class="form-select">
-                                    <option value="">{{ __('events.filter_by_type') }}</option>
+                                    <option value="">{{ __('events.all_types') }}</option>
                                     <option value="public" {{ request('type') == 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
                                     <option value="private" {{ request('type') == 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
@@ -135,24 +135,167 @@
                             <div class="col-12">
                                 <div class="d-flex flex-wrap gap-2">
                                     <span class="bg-light-primary rounded px-3 py-2" data-filter="today" style="cursor: pointer;">
-                                        <i class="ph ph-calendar me-1"></i> Oggi
+                                        <i class="ph ph-calendar me-1"></i> {{ __('events.today') }}
                                     </span>
                                     <span class="bg-light-info rounded px-3 py-2" data-filter="tomorrow" style="cursor: pointer;">
-                                        <i class="ph ph-calendar-plus me-1"></i> Domani
+                                        <i class="ph ph-calendar-plus me-1"></i> {{ __('events.tomorrow') }}
                                     </span>
                                     <span class="bg-light-success rounded px-3 py-2" data-filter="weekend" style="cursor: pointer;">
-                                        <i class="ph ph-calendar-check me-1"></i> Weekend
+                                        <i class="ph ph-calendar-check me-1"></i> {{ __('events.weekend') }}
                                     </span>
                                     <span class="bg-light-warning rounded px-3 py-2" data-filter="free" style="cursor: pointer;">
-                                        <i class="ph ph-currency-circle-dollar me-1"></i> Gratis
+                                        <i class="ph ph-currency-circle-dollar me-1"></i> {{ __('events.free_events') }}
                                     </span>
                                     <span class="bg-light-secondary rounded px-3 py-2" data-filter="nearby" style="cursor: pointer;">
-                                        <i class="ph ph-map-pin me-1"></i> Vicino a me
+                                        <i class="ph ph-map-pin me-1"></i> {{ __('events.nearby') }}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </form>
+
+                    <!-- Filter functionality -->
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Quick filter functionality
+                        document.querySelectorAll('[data-filter]').forEach(filter => {
+                            filter.addEventListener('click', function() {
+                                const filterType = this.dataset.filter;
+                                applyQuickFilter(filterType);
+                            });
+                        });
+                    });
+
+                                        function applyQuickFilter(filterType) {
+                        const mapContainer = document.getElementById('mapContainer');
+                        const isMapVisible = mapContainer.style.display !== 'none';
+
+                        if (isMapVisible) {
+                            // Se la mappa è aperta, applica filtri alla mappa
+                            applyFilterToMap(filterType);
+                        } else {
+                            // Se la lista è aperta, applica filtri alla lista
+                            applyFilterToList(filterType);
+                        }
+                    }
+
+                    function applyFilterToList(filterType) {
+                        const form = document.getElementById('filterForm');
+                        const now = new Date();
+
+                        // Clear existing values
+                        form.querySelector('[name="search"]').value = '';
+
+                        switch(filterType) {
+                            case 'today':
+                                const today = now.toISOString().split('T')[0];
+                                addHiddenInput(form, 'date_from', today);
+                                addHiddenInput(form, 'date_to', today);
+                                break;
+
+                            case 'tomorrow':
+                                const tomorrow = new Date(now);
+                                tomorrow.setDate(tomorrow.getDate() + 1);
+                                const tomorrowStr = tomorrow.toISOString().split('T')[0];
+                                addHiddenInput(form, 'date_from', tomorrowStr);
+                                addHiddenInput(form, 'date_to', tomorrowStr);
+                                break;
+
+                            case 'weekend':
+                                const saturday = new Date(now);
+                                const sunday = new Date(now);
+                                const daysUntilSaturday = (6 - now.getDay()) % 7;
+                                saturday.setDate(now.getDate() + daysUntilSaturday);
+                                sunday.setDate(saturday.getDate() + 1);
+                                addHiddenInput(form, 'date_from', saturday.toISOString().split('T')[0]);
+                                addHiddenInput(form, 'date_to', sunday.toISOString().split('T')[0]);
+                                break;
+
+                            case 'free':
+                                addHiddenInput(form, 'free_only', '1');
+                                break;
+
+                            case 'nearby':
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(function(position) {
+                                        addHiddenInput(form, 'lat', position.coords.latitude);
+                                        addHiddenInput(form, 'lng', position.coords.longitude);
+                                        addHiddenInput(form, 'radius', '10');
+                                        form.submit();
+                                    });
+                                    return;
+                                }
+                                break;
+                        }
+
+                        form.submit();
+                    }
+
+                    function applyFilterToMap(filterType) {
+                        const center = map.getCenter();
+                        const params = {
+                            latitude: center.lat,
+                            longitude: center.lng,
+                            radius: 200
+                        };
+
+                        const now = new Date();
+
+                        switch(filterType) {
+                                                         case 'today':
+                                 params.date_from = now.toISOString().split('T')[0];
+                                 params.date_to = now.toISOString().split('T')[0];
+                                 console.log('Today filter applied:', params.date_from);
+                                 break;
+
+                                                         case 'tomorrow':
+                                 const tomorrow = new Date(now);
+                                 tomorrow.setDate(tomorrow.getDate() + 1);
+                                 params.date_from = tomorrow.toISOString().split('T')[0];
+                                 params.date_to = tomorrow.toISOString().split('T')[0];
+                                 console.log('Tomorrow filter applied:', params.date_from);
+                                 break;
+
+                                                         case 'weekend':
+                                 const saturday = new Date(now);
+                                 const sunday = new Date(now);
+                                 const daysUntilSaturday = (6 - now.getDay()) % 7;
+                                 saturday.setDate(now.getDate() + daysUntilSaturday);
+                                 sunday.setDate(saturday.getDate() + 1);
+                                 params.date_from = saturday.toISOString().split('T')[0];
+                                 params.date_to = sunday.toISOString().split('T')[0];
+                                 console.log('Weekend filter applied:', params.date_from, 'to', params.date_to);
+                                 break;
+
+                                                         case 'free':
+                                 params.free_only = '1';
+                                 console.log('Free filter applied');
+                                 break;
+
+                            case 'nearby':
+                                params.radius = '10';
+                                break;
+                        }
+
+                                                 console.log('Applying filter to map:', filterType, params);
+                         loadEventsOnMapWithFilter(params);
+                    }
+
+                    function addHiddenInput(form, name, value) {
+                        // Remove existing hidden input with same name
+                        const existing = form.querySelector(`input[name="${name}"]`);
+                        if (existing && existing.type === 'hidden') {
+                            existing.remove();
+                        }
+
+                        // Add new hidden input
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = name;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+                    </script>
                 </div>
             </div>
         </div>
@@ -163,7 +306,19 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body p-0">
-                    <div id="eventsMap" style="height: 400px; border-radius: 10px; overflow: hidden;"></div>
+                    <div id="eventsMap" style="height: 500px; border-radius: 10px; overflow: hidden; position: relative;">
+                    <div class="map-controls position-absolute top-0 end-0 p-3" style="z-index: 1000;">
+                        <button class="btn btn-light btn-sm mb-2 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
+                            <i class="ph ph-crosshairs"></i>
+                        </button>
+                        <button class="btn btn-light btn-sm mb-2 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
+                            <i class="ph ph-arrow-clockwise"></i>
+                        </button>
+                        <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="Mostra tutti gli eventi">
+                            <i class="ph ph-globe"></i>
+                        </button>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -176,9 +331,9 @@
                 <div class="card h-100 position-relative">
                     <!-- Event Status Badge -->
                     @if($event->is_public)
-                        <span class="badge bg-success position-absolute top-0 end-0 m-3" style="z-index: 3;">Pubblico</span>
+                        <span class="badge bg-success position-absolute top-0 end-0 m-3" style="z-index: 3;">{{ __('events.public') }}</span>
                     @else
-                        <span class="badge bg-warning position-absolute top-0 end-0 m-3" style="z-index: 3;">Privato</span>
+                        <span class="badge bg-warning position-absolute top-0 end-0 m-3" style="z-index: 3;">{{ __('events.private') }}</span>
                     @endif
 
                     <!-- Event Image with Overlay Info -->
@@ -273,7 +428,7 @@
                                             </button>
                                         @endif
                                     @else
-                                        <a href="{{ route('poetry.test.real-login') }}" class="btn btn-light-primary btn-sm w-100">
+                                        <a href="{{ route('login') }}" class="btn btn-light-primary btn-sm w-100">
                                             <i class="ph ph-sign-in"></i>
                                         </a>
                                     @endauth
@@ -378,6 +533,11 @@
 @section('script')
 <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
 <script>
+// Traduzioni JavaScript
+const translations = {
+    show_map: '{{ __('events.show_map') }}',
+    show_list: '{{ __('events.show_list') }}',
+};
 let map = null;
 let markers = [];
 
@@ -391,12 +551,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (mapContainer.style.display === 'none') {
             mapContainer.style.display = 'block';
             eventsGrid.style.display = 'none';
-            this.innerHTML = '<i class="ph ph-list"></i> Lista';
+            this.innerHTML = `<i class="ph ph-list me-1"></i>${translations.show_list}`;
             initMap();
         } else {
             mapContainer.style.display = 'none';
             eventsGrid.style.display = 'flex';
-            this.innerHTML = '<i class="ph ph-map-pin"></i> Mappa';
+            this.innerHTML = `<i class="ph ph-map-pin me-1"></i>${translations.show_map}`;
         }
     });
 
@@ -451,23 +611,100 @@ document.addEventListener('DOMContentLoaded', function() {
 function initMap() {
     if (map) return;
 
-    map = L.map('eventsMap').setView([41.9028, 12.4964], 6); // Italy center
+    // Inizializza mappa con controlli di zoom
+    map = L.map('eventsMap', {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true
+    }).setView([41.9028, 12.4964], 6); // Default: centro Italia
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18
     }).addTo(map);
 
-    // Load events on map
-    loadEventsOnMap();
+    // Prova a ottenere la posizione dell'utente
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+
+                // Centra la mappa sulla posizione dell'utente
+                map.setView([userLat, userLng], 12);
+
+                // Aggiungi un marker per la posizione dell'utente
+                L.marker([userLat, userLng], {
+                    icon: L.divIcon({
+                        className: 'user-location-marker',
+                        html: '<div style="background: #007bff; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,123,255,0.5);"></div>',
+                        iconSize: [18, 18],
+                        iconAnchor: [9, 9]
+                    })
+                }).addTo(map).bindPopup('La tua posizione');
+
+                // Carica eventi vicino alla posizione dell'utente
+                loadEventsOnMap(userLat, userLng);
+            },
+            function(error) {
+                console.warn('Geolocation error:', error);
+                let message = '';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Geolocalizzazione negata. Puoi attivarla nelle impostazioni del browser.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Posizione non disponibile.';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Timeout nella richiesta di geolocalizzazione.';
+                        break;
+                    default:
+                        message = 'Geolocalizzazione non disponibile (richiede HTTPS). Mostra eventi di default.';
+                        break;
+                }
+                showNotification(message, 'info');
+                // Fallback: usa coordinate Italia centrale
+                map.setView([41.9028, 12.4964], 6);
+                loadEventsOnMap(41.9028, 12.4964);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minuti
+            }
+        );
+    } else {
+        console.warn('Geolocation not supported');
+        showNotification('Il tuo browser non supporta la geolocalizzazione.', 'info');
+        // Fallback: usa coordinate Italia centrale
+        map.setView([41.9028, 12.4964], 6);
+        loadEventsOnMap(41.9028, 12.4964);
+    }
 }
 
-function loadEventsOnMap() {
-    fetch('/api/events/near?' + new URLSearchParams({
-        latitude: 41.9028,
-        longitude: 12.4964,
-        radius: 1000
-    }))
-    .then(response => response.json())
+function loadEventsOnMap(lat = 45.59614070, lng = 8.91219860) {
+    loadEventsOnMapWithFilter({
+        latitude: lat,
+        longitude: lng,
+        radius: 200
+    });
+}
+
+function loadEventsOnMapWithFilter(params) {
+    // Pulisci markers esistenti
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+
+    fetch('/api/events/near?' + new URLSearchParams(params))
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(events => {
         events.forEach(event => {
             if (event.latitude && event.longitude) {
@@ -477,14 +714,90 @@ function loadEventsOnMap() {
                         <div class="p-2">
                             <h6>${event.title}</h6>
                             <p class="mb-1"><i class="ph ph-calendar me-1"></i>${event.start_datetime}</p>
-                            <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}</p>
-                            <a href="${event.url}" class="btn btn-primary btn-sm">Dettagli</a>
+                            <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
+                            <small class="text-muted d-block">Organizzato da: ${event.organizer}</small>
+                            <a href="${event.url}" class="btn btn-primary btn-sm mt-2">Vedi Dettagli</a>
                         </div>
                     `);
                 markers.push(marker);
             }
         });
+
+        // Mostra notifica con numero di eventi trovati
+        const filterInfo = Object.keys(params).length > 3 ? ' filtrati' : '';
+        showNotification(`${events.length} eventi${filterInfo} trovati`, 'success');
+    })
+    .catch(error => {
+        console.error('Error loading events on map:', error);
+        showNotification('Errore nel caricamento degli eventi sulla mappa', 'error');
     });
+}
+
+// Funzione per centrare sulla posizione dell'utente
+function centerOnUser() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                map.setView([userLat, userLng], 12);
+                loadEventsOnMap(userLat, userLng);
+                showNotification('Mappa centrata sulla tua posizione', 'success');
+            },
+            function(error) {
+                let message = error.code === 1 ?
+                    'Geolocalizzazione richiede HTTPS. Usa il bottone refresh per eventi nell\'area corrente.' :
+                    'Impossibile ottenere la tua posizione';
+                showNotification(message, 'warning');
+            }
+        );
+    }
+}
+
+// Funzione per aggiornare gli eventi
+function refreshEvents() {
+    const center = map.getCenter();
+    loadEventsOnMap(center.lat, center.lng);
+    showNotification('Eventi aggiornati', 'success');
+}
+
+// Funzione per mostrare tutti gli eventi (senza filtro geografico)
+function showAllEvents() {
+    // Rimuovi la logica di distanza temporaneamente
+    fetch('/api/events/test')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.events) {
+                // Pulisci markers esistenti
+                markers.forEach(marker => map.removeLayer(marker));
+                markers = [];
+
+                data.events.forEach(event => {
+                    if (event.latitude && event.longitude) {
+                        L.marker([parseFloat(event.latitude), parseFloat(event.longitude)])
+                            .addTo(map)
+                            .bindPopup(`
+                                <div class="p-2">
+                                    <h6>${event.title}</h6>
+                                    <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
+                                    <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">Vedi Dettagli</a>
+                                </div>
+                            `);
+                    }
+                                        });
+                        showNotification(`Mostrati ${data.events.length} eventi`, 'success');
+
+                        // Centra la mappa se ci sono eventi
+                        if (data.events.length > 0) {
+                            const firstEvent = data.events[0];
+                            map.setView([parseFloat(firstEvent.latitude), parseFloat(firstEvent.longitude)], 10);
+                        }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading all events:', error);
+            showNotification('Errore nel caricamento degli eventi', 'error');
+        });
 }
 
 @auth

@@ -7,13 +7,13 @@ return [
     | Events Language Lines - ENGLISH
     |--------------------------------------------------------------------------
     |
-    | Translations for the Poetry Slam events system
+    | Translations for the Slam In events system
     |
     */
 
     // Main titles
     'events' => 'Events',
-    'events_poetry_slam' => 'Poetry Slam Events',
+    'events_poetry_slam' => 'Slam In Events',
     'create_event' => 'Create Event',
     'edit_event' => 'Edit Event',
     'manage_event' => 'Manage Event',

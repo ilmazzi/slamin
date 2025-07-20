@@ -12,7 +12,7 @@ return [
     */
 
     // Generale Dashboard
-    'welcome' => 'Benvenuto, :name!',
+    'welcome' => 'Ti diamo il benvenuto, :name!',
     'dashboard' => 'Dashboard',
     'overview' => 'Panoramica',
     'my_dashboard' => 'La mia Dashboard',
@@ -44,11 +44,12 @@ return [
 
     // Azioni Rapide
     'quick_actions' => 'Azioni Rapide',
-    'create_post' => 'Crea Post',
+    'create_post' => 'Crea Articolo',
     'create_post_desc' => 'Condividi le tue idee',
     'write_poem' => 'Scrivi Poesia',
     'write_poem_desc' => 'Esprimi la tua arte',
-    'upload_performance' => 'Carica Performance',
+    'upload_performance' => 'Carica Video',
+    'upload_photo' => 'Carica Foto',
     'upload_performance_desc' => 'Mostra il tuo talento',
     'find_events' => 'Trova Eventi',
     'find_events_desc' => 'Scopri opportunità',

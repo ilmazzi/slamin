@@ -7,6 +7,8 @@ use App\Models\EventInvitation;
 use App\Models\EventRequest;
 use App\Models\User;
 use App\Models\Notification;
+use App\Mail\EventInvitationMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -49,6 +51,23 @@ class EventController extends Controller
             $query->where('is_public', $request->type === 'public');
         }
 
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('start_datetime', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('start_datetime', '<=', $request->date_to);
+        }
+
+        // Filter free events only
+        if ($request->filled('free_only') && $request->free_only == '1') {
+            $query->where(function($q) {
+                $q->where('entry_fee', 0)
+                  ->orWhereNull('entry_fee');
+            });
+        }
+
         // Filter by tags
         if ($request->filled('tags')) {
             $tags = explode(',', $request->tags);
@@ -56,6 +75,25 @@ class EventController extends Controller
                 foreach ($tags as $tag) {
                     $q->orWhereJsonContains('tags', trim($tag));
                 }
+            });
+        }
+
+        // Filter for "My Events" - events organized by user or where user participates
+        if ($request->filled('filter') && $request->filter === 'my' && Auth::check()) {
+            $userId = Auth::id();
+            $query->where(function ($q) use ($userId) {
+                // Events organized by user
+                $q->where('organizer_id', $userId)
+                  // OR events where user has accepted invitation
+                  ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                      $inviteQuery->where('invited_user_id', $userId)
+                                  ->where('status', 'accepted');
+                  })
+                  // OR events where user has accepted request
+                  ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                      $requestQuery->where('user_id', $userId)
+                                   ->where('status', 'accepted');
+                  });
             });
         }
 
@@ -83,29 +121,52 @@ class EventController extends Controller
     {
         Gate::authorize('create', Event::class);
 
+        // Log the request data for debugging
+        Log::info('Event creation request', [
+            'user_id' => Auth::id(),
+            'request_data' => $request->all()
+        ]);
 
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'requirements' => 'nullable|string',
-            'start_datetime' => 'required|date|after:now',
-            'end_datetime' => 'required|date|after:start_datetime',
-            'registration_deadline' => 'nullable|date|before:start_datetime',
-            'venue_name' => 'required|string|max:255',
-            'venue_address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'country' => 'required|string|size:2',
-            'latitude' => 'nullable|numeric|between:-90,90',
-            'longitude' => 'nullable|numeric|between:-180,180',
-            'is_public' => 'required|in:0,1',
-            'max_participants' => 'nullable|integer|min:1',
-            'entry_fee' => 'nullable|numeric|min:0',
-            'venue_owner_id' => 'nullable|exists:users,id',
-            'allow_requests' => 'boolean',
-            'tags' => 'nullable|string',
-            'image_url' => 'nullable|url',
+
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'requirements' => 'nullable|string',
+                'start_datetime' => 'required|date_format:Y-m-d H:i|after:now',
+                'end_datetime' => 'required|date_format:Y-m-d H:i|after:start_datetime',
+                'registration_deadline' => 'nullable|date_format:Y-m-d H:i|before:start_datetime',
+                'venue_name' => 'required|string|max:255',
+                'venue_address' => 'required|string',
+                'city' => 'required|string|max:255',
+                'country' => 'required|string|size:2',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
+                'is_public' => 'required|in:0,1',
+                'max_participants' => 'nullable|integer|min:1',
+                'entry_fee' => 'nullable|numeric|min:0',
+                'venue_owner_id' => 'nullable|exists:users,id',
+                'allow_requests' => 'nullable',
+                            'tags' => 'nullable|string',
+            'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'invitations' => 'nullable|string', // JSON string of invitations
+            ], [
+                'start_datetime.after' => 'La data di inizio deve essere nel futuro.',
+                'end_datetime.after' => 'La data di fine deve essere dopo la data di inizio.',
+                'registration_deadline.before' => 'La scadenza iscrizioni deve essere prima della data di inizio.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Event validation failed', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            throw $e;
+        }
+
+        // Log validated data
+        Log::info('Event validation passed', [
+            'validated_data' => $validated
         ]);
 
         // Process tags
@@ -115,6 +176,17 @@ class EventController extends Controller
 
                 // Convert is_public to boolean explicitly
         $validated['is_public'] = $validated['is_public'] === '1' || $validated['is_public'] === 1;
+
+        // Convert allow_requests to boolean
+        $validated['allow_requests'] = isset($validated['allow_requests']) && ($validated['allow_requests'] === 'on' || $validated['allow_requests'] === true);
+
+        // Handle image upload
+        if ($request->hasFile('event_image')) {
+            $image = $request->file('event_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('events', $imageName, 'public');
+            $validated['image_url'] = '/storage/' . $imagePath;
+        }
 
         // Set organizer
         $validated['organizer_id'] = Auth::id();
@@ -145,6 +217,8 @@ class EventController extends Controller
                         // Create the event
             $event = Event::create($validated);
 
+
+
             // Create invitations if any
             foreach ($invitations as $invitation) {
                 if (isset($invitation['user_id']) && isset($invitation['role'])) {
@@ -164,6 +238,23 @@ class EventController extends Controller
 
                         // Create notification
                         Notification::createEventInvitation($eventInvitation);
+
+                        // Send email invitation
+                        try {
+                            Mail::to($user->email)->send(new EventInvitationMail($eventInvitation));
+                            Log::info('Event invitation email sent', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitation['user_id'],
+                                'email' => $user->email
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Failed to send event invitation email', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitation['user_id'],
+                                'email' => $user->email,
+                                'error' => $e->getMessage()
+                            ]);
+                        }
                     }
                 }
             }
@@ -381,40 +472,77 @@ class EventController extends Controller
     /**
      * Search events near a location
      */
-    public function near(Request $request): JsonResponse
+        public function near(Request $request): JsonResponse
     {
-        $request->validate([
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'radius' => 'nullable|integer|min:1|max:200',
-        ]);
+        try {
+            $request->validate([
+                'latitude' => 'required|numeric|between:-90,90',
+                'longitude' => 'required|numeric|between:-180,180',
+                'radius' => 'nullable|integer|min:1|max:200',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date',
+                'free_only' => 'nullable|boolean',
+            ]);
 
-        $events = Event::published()
-                      ->public()
-                      ->upcoming()
-                      ->nearLocation(
-                          $request->latitude,
-                          $request->longitude,
-                          $request->radius ?? 50
-                      )
-                      ->with(['organizer'])
-                      ->get()
-                      ->map(function ($event) {
-                          return [
-                              'id' => $event->id,
-                              'title' => $event->title,
-                              'start_datetime' => $event->start_datetime->format('Y-m-d H:i'),
-                              'venue_name' => $event->venue_name,
-                              'city' => $event->city,
-                              'latitude' => $event->latitude,
-                              'longitude' => $event->longitude,
-                              'organizer' => $event->organizer->name,
-                              'formatted_address' => $event->formatted_address,
-                              'url' => route('events.show', $event),
-                          ];
-                      });
+            Log::info('Events near request params:', $request->all());
 
-        return response()->json($events);
+                                    // Recupera eventi pubblici vicini alla posizione richiesta
+            $query = Event::where('is_public', true)
+                          ->whereNotNull('latitude')
+                          ->whereNotNull('longitude');
+
+            // Temporaneamente disabilito nearLocation per debug
+            // ->nearLocation(
+            //     $request->latitude,
+            //     $request->longitude,
+            //     $request->radius ?? 50
+            // );
+
+            // Applica filtri temporali se presenti
+            if ($request->filled('date_from')) {
+                $query->whereDate('start_datetime', '>=', $request->date_from);
+            }
+
+            if ($request->filled('date_to')) {
+                $query->whereDate('start_datetime', '<=', $request->date_to);
+            }
+
+            // Filtro eventi gratuiti
+            if ($request->filled('free_only') && $request->free_only == '1') {
+                $query->where(function($q) {
+                    $q->where('entry_fee', 0)
+                      ->orWhereNull('entry_fee');
+                });
+            }
+
+            $events = $query->with(['organizer'])->get();
+
+            Log::info('Found events count: ' . $events->count());
+            if ($events->count() === 0) {
+                Log::info('No events found with current filters');
+            }
+
+            $mappedEvents = $events->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->title,
+                    'start_datetime' => $event->start_datetime->format('d/m/Y H:i'),
+                    'venue_name' => $event->venue_name,
+                    'city' => $event->city,
+                    'latitude' => (float) $event->latitude,
+                    'longitude' => (float) $event->longitude,
+                    'organizer' => $event->organizer ? $event->organizer->getDisplayName() : 'N/A',
+                    'url' => route('events.show', $event),
+                ];
+            });
+
+            return response()->json($mappedEvents);
+
+        } catch (\Exception $e) {
+            Log::error('Error in events.near endpoint: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return response()->json(['error' => 'Errore nel caricamento degli eventi', 'debug' => $e->getMessage()], 500);
+        }
     }
 
     /**

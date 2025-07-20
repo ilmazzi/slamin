@@ -10,6 +10,7 @@
 @endsection
 
 @section('breadcrumb-items')
+<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events.dashboard') }}</a></li>
 <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events.events') }}</a></li>
 <li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}">{{ $event->title }}</a></li>
 <li class="breadcrumb-item active">{{ __('common.manage') }}</li>
@@ -21,34 +22,37 @@
     <!-- Dashboard Header -->
     <div class="row m-1 mb-4">
         <div class="col-12">
-            <div class="card bg-primary text-white">
-                <div class="card-body p-4">
-        <div class="row align-items-center">
-            <div class="col-md-8">
+            <div class="card bg-primary text-white position-relative overflow-hidden" style="min-height: 200px;">
+                @if($event->image_url)
+                    <div class="position-absolute w-100 h-100" style="background: url('{{ $event->image_url }}') center/cover; opacity: 0.3;"></div>
+                @endif
+                <div class="card-body p-4 position-relative" style="z-index: 2;">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
                             <h2 class="text-white mb-3 fw-bold">{{ $event->title }}</h2>
                             @if($event->start_datetime->isPast())
                                 <span class="badge bg-white text-primary fs-6 px-3 py-2">
-                                    <i class="ph ph-clock me-2"></i>Evento Concluso
+                                    <i class="ph ph-clock me-2"></i>{{ __('events.event_ended') }}
                                 </span>
                             @elseif($event->start_datetime->diffInDays(now()) <= 7)
                                 <span class="badge bg-warning text-dark fs-6 px-3 py-2">
-                                    <i class="ph ph-warning me-2"></i>Evento Imminente
+                                    <i class="ph ph-warning me-2"></i>{{ __('events.event_imminent') }}
                                 </span>
                             @endif
                         </div>
                         <div class="col-md-4 text-end">
                             <a href="{{ route('events.show', $event) }}" class="btn btn-white text-primary me-2 px-4">
-                                <i class="ph ph-eye me-2"></i>Vedi Evento
+                                <i class="ph ph-eye me-2"></i>{{ __('events.view_event') }}
                             </a>
                             <a href="{{ route('events.edit', $event) }}" class="btn btn-light-white text-white px-4">
-                                <i class="ph ph-pencil me-2"></i>Modifica
+                                <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
                             </a>
-                    </div>
                         </div>
                     </div>
-                        </div>
-                    </div>
-                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Statistics Row -->
     <div class="row m-1 mb-4">
@@ -64,8 +68,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-warning mb-0">{{ $pendingInvites }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">Inviti Pendenti</p>
-                                    <span class="badge bg-light-warning">📨 Attesa</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_invitations') }}</p>
+                                    <span class="badge bg-light-warning">📨 {{ __('events.waiting_status') }}</span>
                     </div>
                 </div>
             </div>
@@ -80,8 +84,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-info mb-0">{{ $pendingRequests }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">Richieste</p>
-                                    <span class="badge bg-light-info">🙋 Candidature</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_requests') }}</p>
+                                    <span class="badge bg-light-info">🙋 {{ __('events.applications_status') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -96,8 +100,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-success mb-0">{{ $confirmed }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">Confermati</p>
-                                    <span class="badge bg-light-success">✅ Partecipanti</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.confirmed_participants') }}</p>
+                                    <span class="badge bg-light-success">✅ {{ __('events.participants_status') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +134,22 @@
             </div>
         </div>
     </div>
+
+    <!-- Event Image Section -->
+    @if($event->image_url)
+    <div class="row m-1 mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-image me-2"></i>Immagine Evento</h6>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <!-- Quick Actions -->
     <div class="row m-1 mb-4">
@@ -176,14 +196,14 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
-                        <i class="ph ph-hand-waving me-2"></i>Richieste di Partecipazione
+                        <i class="ph ph-hand-waving me-2"></i>{{ __('events.participation_requests') }}
                         <span class="badge bg-warning ms-2">{{ $event->pendingRequests->count() }}</span>
                     </h5>
 
                     <!-- Bulk Actions -->
                     <div class="alert alert-primary d-none" id="bulkActionsRequests">
                         <div class="d-flex align-items-center justify-content-between">
-                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> richieste selezionate</span>
+                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> {{ __('events.requests_selected') }}</span>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-light-success btn-sm" onclick="bulkActionRequests('accept')">
                                 <i class="ph ph-check me-1"></i>Accetta
@@ -323,7 +343,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-users me-2"></i>Partecipanti Confermati
+                        <i class="ph ph-users me-2"></i>{{ __('events.confirmed_participants_list') }}
                         <span class="badge bg-success ms-2">{{ $event->acceptedInvitations->count() + $event->acceptedRequests->count() }}</span>
                     </h5>
                 </div>
@@ -476,7 +496,7 @@
                         <div class="col-6">
                             <div class="border rounded p-3">
                                 <div class="h4 text-success mb-1">{{ $event->requests->count() }}</div>
-                                <small class="text-muted">Richieste Totali</small>
+                                <small class="text-muted">{{ __('events.total_requests') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
@@ -650,6 +670,14 @@
 
 @section('script')
 <script>
+// Traduzioni JavaScript
+const translations = {
+    accept_action: '{{ __('events.accept_action') }}',
+    reject_action: '{{ __('events.reject_action') }}',
+    requests: '{{ __('events.requests') }}',
+    message_for_action: '{{ __('events.message_for_action') }}',
+    this_request: '{{ __('events.this_request') }}'
+};
 let selectedRequests = [];
 let currentRequestId = null;
 
@@ -728,7 +756,7 @@ function quickResponse(requestId, action) {
 function bulkActionRequests(action) {
     if (selectedRequests.length === 0) return;
 
-    const message = prompt(`Inserisci un messaggio per ${action === 'accept' ? 'accettare' : 'rifiutare'} ${selectedRequests.length} richieste:`);
+    const message = prompt(`${translations.message_for_action} ${action === 'accept' ? translations.accept_action : translations.reject_action} ${selectedRequests.length} ${translations.requests}:`);
     if (message === null) return;
 
     const data = {
@@ -905,7 +933,7 @@ function loadRequestDetail(requestId) {
 function respondToRequest(action) {
     if (!currentRequestId) return;
 
-    const message = prompt(`Inserisci un messaggio per ${action === 'accept' ? 'accettare' : 'rifiutare'} questa richiesta:`);
+    const message = prompt(`${translations.message_for_action} ${action === 'accept' ? translations.accept_action : translations.reject_action} ${translations.this_request}:`);
     if (message === null) return;
 
     quickResponse(currentRequestId, action);

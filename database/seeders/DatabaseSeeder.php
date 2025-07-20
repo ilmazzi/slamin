@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // Run Poetry Slam roles and permissions setup
         $this->call([
             PoetrySlamSeeder::class,
+            TestUsersSeeder::class,
         ]);
 
         // Create test user with default 'audience' role

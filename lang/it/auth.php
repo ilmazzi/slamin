@@ -12,9 +12,9 @@ return [
     */
 
     // Generali
-    'welcome' => 'Benvenuto in Slam In!',
-    'welcome_back' => 'Bentornato!',
-    'welcome_community' => 'Benvenuto nella community italiana di poetry slam',
+    'welcome' => 'Ti diamo il benvenuto in Slam In!',
+    'welcome_back' => 'Ti diamo il bentornato!',
+    'welcome_community' => 'Ti diamo il benvenuto nella community italiana di poetry slam',
     'home_for_poetry' => 'Una casa per la poesia',
 
     // Login

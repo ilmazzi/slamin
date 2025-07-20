@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Poetry Slam - Test Dashboard')
+@section('title', 'Slamin - Test Dashboard')
 @section('css')
     <!-- apexcharts css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/apexcharts/apexcharts.css') }}">
@@ -10,7 +10,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">🎭 Poetry Slam Test Dashboard</h4>
+                <h4 class="main-title">🎭 Slamin Test Dashboard</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -40,7 +40,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <h5 class="text-white mb-0">Welcome, {{ auth()->user()->name ?? 'Guest' }}!</h5>
+                                <h5 class="text-white mb-0">Welcome, {{ auth()->user()->getDisplayName() ?? 'Guest' }}!</h5>
                                 <p class="text-white-50 mb-2">{{ auth()->user()->email ?? '' }}</p>
                                 @if(auth()->check())
                                     <div class="mb-2">

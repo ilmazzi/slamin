@@ -2,125 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\PoetrySlamAuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\InvitationController;
 
 Route::get('/', function () {
-    return view('index');
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
 });
 
-// DEBUG: Test specifico per events/create
-Route::get('/debug-events-create', function () {
-    return response()->json([
-        'message' => 'Route debug events create raggiunta!',
-        'user_authenticated' => Auth::check(),
-        'user_id' => Auth::id(),
-        'route_exists' => Route::has('events.create'),
-        'events_create_url' => route('events.create'),
-        'current_user' => Auth::user() ? Auth::user()->name : 'Non autenticato'
-    ]);
-})->name('debug-events-create');
 
-// TEST ROUTE SEMPLICISSIMA
-Route::get('/test-simple', function () {
-    return '<h1>FUNZIONA!</h1><p>Se vedi questo, le route funzionano!</p>';
-})->name('test-simple');
 
 // Authentication Routes (pubbliche)
-Route::get('/login', [PoetrySlamAuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [PoetrySlamAuthController::class, 'processLogin'])->name('login.process');
-Route::get('/register', [PoetrySlamAuthController::class, 'showSignup'])->name('register');
-Route::post('/register', [PoetrySlamAuthController::class, 'processSignup'])->name('register.process');
-Route::post('/logout', [PoetrySlamAuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'processLogin'])->name('login.process');
+Route::get('/register', [AuthController::class, 'showSignup'])->name('register');
+Route::post('/register', [AuthController::class, 'processSignup'])->name('register.process');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// DEBUG ROUTES - TEMPORANEE
-Route::get('/debug-auth', function () {
-    if (Auth::check()) {
-        $user = Auth::user();
-        return response()->json([
-            'authenticated' => true,
-            'user' => $user->name,
-            'email' => $user->email,
-        ]);
-    } else {
-        return response()->json([
-            'authenticated' => false,
-            'message' => 'Utente non autenticato - fai login prima!'
-        ]);
-    }
-})->name('debug-auth');
 
-// TEST ROUTE PUBBLICA PER EVENTCONTROLLER
-Route::get('/test-event-controller', function () {
-    try {
-        $controller = new App\Http\Controllers\EventController();
-        return response()->json([
-            'message' => 'EventController caricato con successo!',
-            'class' => get_class($controller)
-        ]);
-    } catch (Exception $e) {
-        return response()->json([
-            'error' => 'Errore nel caricare EventController',
-            'message' => $e->getMessage()
-        ], 500);
-    }
-})->name('test-controller');
 
-// DEBUG: Test diretto EventController@create
-Route::get('/test-controller-direct', function () {
-    try {
-        $controller = new App\Http\Controllers\EventController();
-        return response()->json([
-            'message' => 'Controller creato con successo',
-            'controller_class' => get_class($controller),
-            'methods' => get_class_methods($controller)
-        ]);
-    } catch (Exception $e) {
-        return response()->json([
-            'error' => 'Errore nel controller',
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ], 500);
-    }
-})->name('test-controller-direct');
-
-// DEBUG: Test view events.create direttamente
-Route::get('/test-view-direct', function () {
-    try {
-        return view('events.create', ['venueOwners' => collect()]);
-    } catch (Exception $e) {
-        return response()->json([
-            'error' => 'Errore nella view',
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ], 500);
-    }
-})->name('test-view-direct');
-
-// TEST ROUTE PUBBLICA CHE BYPASSA TUTTO
-Route::get('/test-events-create-public', function () {
-    return view('events.create', ['venueOwners' => collect()]);
-})->name('test-events-public');
-
-// Test route nel middleware auth
-Route::middleware('auth')->group(function () {
-    Route::get('/test-auth-middleware', function () {
-        return response()->json([
-            'message' => 'Middleware auth OK!',
-            'user' => Auth::user()->name,
-            'time' => now()
-        ]);
-    })->name('test-auth');
-
-    Route::get('/test-events-simple', function () {
-        return response()->json([
-            'message' => 'Route eventi semplice OK!',
-            'user_can_create' => Auth::user()->can('create', App\Models\Event::class)
-        ]);
-    })->name('test-events-simple');
-});
 
 
 Route::view('index', 'index')->name('index');
@@ -303,41 +206,41 @@ Route::view('wrapper', 'wrapper')->name('wrapper');
 
 /*
 |--------------------------------------------------------------------------
-| 🎭 Poetry Slam Test Routes
+| 🎭 Slamin Test Routes
 |--------------------------------------------------------------------------
-| Route per testare il sistema di ruoli e permessi del poetry slam
+| Route per testare il sistema di ruoli e permessi di Slamin
 | SOLO PER TESTING - Rimuovere in produzione
 */
 
-use App\Http\Controllers\PoetrySlamTestController;
+use App\Http\Controllers\TestController;
 
-Route::prefix('poetry-test')->name('poetry.test.')->group(function () {
+Route::prefix('slamin-test')->name('slamin.test.')->group(function () {
     // Login di test (pubblico)
-    Route::get('/login', [PoetrySlamTestController::class, 'loginTest'])->name('login');
-    Route::post('/quick-login', [PoetrySlamTestController::class, 'quickLogin'])->name('quick-login');
-    Route::post('/logout', [PoetrySlamTestController::class, 'logout'])->name('logout');
+    Route::get('/login', [TestController::class, 'loginTest'])->name('login');
+    Route::post('/quick-login', [TestController::class, 'quickLogin'])->name('quick-login');
+    Route::post('/logout', [TestController::class, 'logout'])->name('logout');
 
     // Signup e Login reali
-    Route::get('/signup', [App\Http\Controllers\PoetrySlamAuthController::class, 'showSignup'])->name('signup');
-    Route::post('/signup', [App\Http\Controllers\PoetrySlamAuthController::class, 'processSignup'])->name('signup.process');
-    Route::get('/real-login', [App\Http\Controllers\PoetrySlamAuthController::class, 'showLogin'])->name('real-login');
-    Route::post('/real-login', [App\Http\Controllers\PoetrySlamAuthController::class, 'processLogin'])->name('real-login.process');
+    Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
+    Route::post('/signup', [AuthController::class, 'processSignup'])->name('signup.process');
+    Route::get('/real-login', [AuthController::class, 'showLogin'])->name('real-login');
+    Route::post('/real-login', [AuthController::class, 'processLogin'])->name('real-login.process');
 
     // Pagine protette (richiedono autenticazione)
     Route::middleware('auth')->group(function () {
-        Route::get('/dashboard', [PoetrySlamTestController::class, 'dashboard'])->name('dashboard');
-        Route::get('/users', [PoetrySlamTestController::class, 'users'])->name('users');
-        Route::get('/permissions', [PoetrySlamTestController::class, 'permissions'])->name('permissions');
+        Route::get('/dashboard', [TestController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [TestController::class, 'users'])->name('users');
+        Route::get('/permissions', [TestController::class, 'permissions'])->name('permissions');
 
         // API per test permessi
-        Route::post('/test-permission', [PoetrySlamTestController::class, 'testPermission'])->name('test-permission');
-        Route::post('/assign-role/{user}', [PoetrySlamTestController::class, 'assignRole'])->name('assign-role');
+        Route::post('/test-permission', [TestController::class, 'testPermission'])->name('test-permission');
+        Route::post('/assign-role/{user}', [TestController::class, 'assignRole'])->name('assign-role');
     });
 });
 
 // Route di accesso rapido al test
 Route::get('/test', function () {
-    return redirect()->route('poetry.test.login');
+    return redirect()->route('slamin.test.login');
 });
 
 // Dashboard moderna multilanguage
@@ -348,9 +251,9 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 🎪 Poetry Slam Events System
+| 🎪 Slamin Events System
 |--------------------------------------------------------------------------
-| Sistema completo per la gestione eventi poetry slam:
+| Sistema completo per la gestione eventi Slamin:
 | - Creazione e gestione eventi
 | - Sistema inviti organizzatori → artisti
 | - Richieste partecipazione artisti → eventi pubblici
@@ -396,6 +299,33 @@ Route::get('/events/create', function () {
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/api/events/near', [EventController::class, 'near'])->name('events.near');
+
+// Test endpoint semplificato
+Route::get('/api/events/test', function() {
+    try {
+        $events = \App\Models\Event::where('is_public', true)
+                    ->whereNotNull('latitude')
+                    ->whereNotNull('longitude')
+                    ->limit(5)
+                    ->get(['id', 'title', 'latitude', 'longitude', 'venue_name', 'city', 'start_datetime']);
+
+        return response()->json([
+            'success' => true,
+            'count' => $events->count(),
+            'events' => $events,
+            'debug' => [
+                'total_events' => \App\Models\Event::count(),
+                'public_events' => \App\Models\Event::where('is_public', true)->count(),
+                'events_with_coords' => \App\Models\Event::whereNotNull('latitude')->whereNotNull('longitude')->count()
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+});
 Route::get('/api/users/search', [EventController::class, 'searchUsers'])->name('users.search');
 
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
@@ -421,8 +351,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
     Route::get('/api/events/calendar', [EventController::class, 'calendar'])->name('events.calendar');
 
-    // Event invitations
-    Route::prefix('invitations')->name('invitations.')->group(function () {
+// Invitation routes
+Route::get('/invitations', [InvitationController::class, 'index'])->name('invitations.index');
+Route::get('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
+Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitations.decline');
+
+// Request routes
+Route::get('/requests', [EventRequestController::class, 'index'])->name('requests.index');
+Route::post('/requests/{eventRequest}/accept', [EventRequestController::class, 'accept'])->name('requests.accept');
+Route::post('/requests/{eventRequest}/decline', [EventRequestController::class, 'decline'])->name('requests.decline');
+Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, 'cancel'])->name('requests.cancel');
+
+    // Event invitations (organizer management)
+    Route::prefix('events/{event}/invitations')->name('event-invitations.')->group(function () {
         Route::get('/', [EventInvitationController::class, 'index'])->name('index');
         Route::get('/{invitation}', [EventInvitationController::class, 'show'])->name('show');
         Route::post('/', [EventInvitationController::class, 'store'])->name('store');
@@ -433,9 +374,9 @@ Route::middleware('auth')->group(function () {
 
         // API routes for invitations
         Route::prefix('api')->name('api.')->group(function () {
-            Route::get('/events/{event}/statistics', [EventInvitationController::class, 'statistics'])->name('statistics');
+            Route::get('/statistics', [EventInvitationController::class, 'statistics'])->name('statistics');
             Route::post('/mark-expired', [EventInvitationController::class, 'markExpired'])->name('mark-expired');
-            Route::post('/events/{event}/bulk-action', [EventInvitationController::class, 'bulkAction'])->name('bulk-action');
+            Route::post('/bulk-action', [EventInvitationController::class, 'bulkAction'])->name('bulk-action');
         });
     });
 

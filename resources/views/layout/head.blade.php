@@ -12,3 +12,5 @@
 <link rel="shortcut icon" href="{{('../assets/images/logo/favicon.png')}}" type="image/x-icon">
 
 <title>@yield('title') | Slam In - A home for poetry</title>
+
+

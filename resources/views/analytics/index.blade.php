@@ -498,7 +498,7 @@
                         </div>
                         <div class="col-6">
                             <div class="h4 text-success" id="newRequestsToday">-</div>
-                            <small class="text-muted">Richieste Oggi</small>
+                                                            <small class="text-muted">{{ __('events.requests_today') }}</small>
                         </div>
                         <div class="col-6">
                             <div class="h4 text-info" id="eventsNext7Days">-</div>

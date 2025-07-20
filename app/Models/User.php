@@ -20,6 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nickname',
         'email',
         'password',
         'bio',
@@ -84,6 +85,14 @@ class User extends Authenticatable
     public function isPoet(): bool
     {
         return $this->hasRole('poet');
+    }
+
+    /**
+     * Get display name (nickname if available, otherwise name)
+     */
+    public function getDisplayName(): string
+    {
+        return $this->nickname ?: $this->name;
     }
 
     /**
