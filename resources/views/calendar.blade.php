@@ -1,28 +1,58 @@
 @extends('layout.master')
 @section('title', 'Calendar')
 @section('css')
-
+    <link rel="stylesheet" href="{{asset('assets/vendor/fullcalendar/fullcalendar.bundle.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendor/slick/slick.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendor/slick/slick-theme.css')}}">
+    <style>
+        .event-organizer {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+        }
+        .event-participant {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+        }
+        .event-private {
+            background-color: #ffc107 !important;
+            border-color: #ffc107 !important;
+        }
+        .fc-event {
+            cursor: pointer;
+        }
+        .fc-event:hover {
+            opacity: 0.8;
+        }
+    </style>
 @endsection
 @section('main-content')
     <div class="container-fluid">
         <!-- Breadcrumb start -->
         <div class="row m-1">
-            <div class="col-12 ">
-                <h4 class="main-title">Calendar</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-stack f-s-16"></i> Apps
-                      </span>
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="main-title">Calendar</h4>
+                        <ul class="app-line-breadcrumbs mb-3">
+                            <li class="">
+                                <a href="#" class="f-s-14 f-w-500">
+                              <span>
+                                <i class="ph-duotone  ph-stack f-s-16"></i> Apps
+                              </span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#" class="f-s-14 f-w-500">Calendar</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <a href="{{ route('events.create') }}" class="btn btn-primary">
+                            <i class="ph ph-plus me-2"></i>
+                            {{ __('events.create_new_event') }}
                         </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Calendar</a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Breadcrumb end -->

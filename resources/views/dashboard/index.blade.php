@@ -1,6 +1,42 @@
 @extends('layout.master')
 @section('title', __('dashboard.dashboard') . ' - Slam In')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('assets/vendor/fullcalendar/fullcalendar.bundle.css') }}">
+<style>
+    .dashboard-calendar .fc-toolbar {
+        display: none !important;
+    }
+    .dashboard-calendar .fc-daygrid-day {
+        cursor: pointer;
+    }
+    .dashboard-calendar .fc-event {
+        cursor: pointer;
+        font-size: 11px;
+        padding: 2px 4px;
+    }
+    .dashboard-calendar .fc-daygrid-day-number {
+        font-size: 12px;
+    }
+    .dashboard-calendar .fc-col-header-cell {
+        font-size: 11px;
+        padding: 4px 0;
+    }
+    .event-organizer {
+        background-color: #28a745 !important;
+        border-color: #28a745 !important;
+    }
+    .event-participant {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+    }
+    .event-private {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+</style>
+@endsection
+
 @section('main-content')
     <div class="container-fluid">
 
@@ -211,43 +247,34 @@
                 </div>
             </div>
 
-            <!-- Upcoming Events compatta -->
+            <!-- Interactive Calendar -->
             <div class="col-lg-6 mb-4">
                 <div class="card hover-effect equal-card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h6 class="card-title mb-0 f-w-600">
-                            <i class="ph ph-calendar me-2 text-warning"></i>{{ __('dashboard.upcoming_events') }}
+                            <i class="ph ph-calendar me-2 text-warning"></i>{{ __('dashboard.my_calendar') }}
                         </h6>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-light-warning btn-sm" id="calendarPrev">
+                                <i class="ph ph-caret-left"></i>
+                            </button>
+                            <button class="btn btn-light-warning btn-sm" id="calendarNext">
+                                <i class="ph ph-caret-right"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body pa-20">
-                        @if(count($upcomingEvents) > 0)
-                            @foreach($upcomingEvents as $event)
-                                <div class="d-flex align-items-center mb-2 pb-2 border-bottom">
-                                    <div class="flex-shrink-0">
-                                        <div class="bg-light-warning h-35 w-35 d-flex-center rounded-circle">
-                                            <i class="ph ph-calendar-check text-warning f-s-14"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 fw-600 f-s-14">{{ $event['title'] }}</h6>
-                                        <p class="mb-0 text-muted f-s-12">{{ $event['date'] }}</p>
-                                        <small class="text-secondary f-s-11">{{ $event['venue'] }}</small>
-                                    </div>
-                                </div>
-                            @endforeach
-                            <div class="text-center mt-3">
-                                <a href="#" class="btn btn-light-warning btn-sm">
-                                    <i class="ph ph-calendar me-1"></i>{{ __('dashboard.view_calendar') }}
+                        <div id="dashboardCalendar" style="height: 300px;"></div>
+                        <div class="text-center mt-3">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ route('events.create') }}" class="btn btn-success btn-sm">
+                                    <i class="ph ph-plus me-1"></i>{{ __('dashboard.create_event_button') }}
+                                </a>
+                                <a href="{{ route('calendar') }}" class="btn btn-light-warning btn-sm">
+                                    <i class="ph ph-calendar me-1"></i>{{ __('dashboard.view_full_calendar') }}
                                 </a>
                             </div>
-                        @else
-                            <div class="text-center py-3">
-                                <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                                    <i class="ph ph-calendar-x f-s-24 text-warning"></i>
-                                </div>
-                                <p class="text-muted f-s-14 mb-0">{{ __('dashboard.no_upcoming_events') }}</p>
-                            </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -302,4 +329,99 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/vendor/fullcalendar/global.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('dashboardCalendar');
+
+    if (calendarEl) {
+        // Check if FullCalendar is available
+        if (typeof FullCalendar === 'undefined') {
+            console.error('FullCalendar library not loaded');
+            calendarEl.innerHTML = `
+                <div class="alert alert-warning text-center">
+                    <i class="ph ph-warning me-2"></i>
+                    {{ __('dashboard.calendar_not_available') }}
+                    <br>
+                    <small class="text-muted">{{ __('dashboard.calendar_reload_page') }}</small>
+                </div>
+            `;
+
+            // Show SweetAlert notification
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '{{ __('dashboard.calendar') }}',
+                    text: '{{ __('dashboard.calendar_not_available') }}',
+                    confirmButtonText: 'OK'
+                });
+            }
+            return;
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            headerToolbar: false,
+            dayMaxEvents: 2,
+            moreLinkClick: 'popover',
+            locale: 'it',
+            firstDay: 1,
+            dayHeaderFormat: { weekday: 'short' },
+            dayCellDidMount: function(arg) {
+                // Add custom styling for today
+                if (arg.date.toDateString() === new Date().toDateString()) {
+                    arg.el.style.backgroundColor = '#fff3cd';
+                }
+            },
+            events: function(fetchInfo, successCallback, failureCallback) {
+                // Fetch events from API
+                fetch('/api/events/calendar')
+                    .then(response => response.json())
+                    .then(data => {
+                        const events = data.map(event => ({
+                            ...event,
+                            className: event.className || 'event-participant'
+                        }));
+                        successCallback(events);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching calendar events:', error);
+                        failureCallback(error);
+                    });
+            },
+            eventClick: function(info) {
+                // Navigate to event details
+                if (info.event.url) {
+                    window.location.href = info.event.url;
+                }
+            },
+            eventDidMount: function(info) {
+                // Add tooltip
+                const event = info.event;
+                const tooltip = new bootstrap.Tooltip(info.el, {
+                    title: `${event.title}\n${event.start.toLocaleDateString('it-IT')}`,
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                });
+            }
+        });
+
+        calendar.render();
+
+        // Navigation buttons
+        document.getElementById('calendarPrev').addEventListener('click', function() {
+            calendar.prev();
+        });
+
+        document.getElementById('calendarNext').addEventListener('click', function() {
+            calendar.next();
+        });
+    }
+});
+</script>
 @endsection

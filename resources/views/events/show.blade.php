@@ -60,6 +60,19 @@
         <!-- Main Content -->
         <div class="col-lg-8">
 
+            <!-- Private Event Notice -->
+            @if(!$event->is_public)
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex align-items-center">
+                        <i class="ph ph-info-circle me-3 fs-4"></i>
+                        <div>
+                            <h6 class="mb-1">{{ __('events.private_event_notice_title') }}</h6>
+                            <p class="mb-0">{{ __('events.private_event_notice_text') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Event Description -->
             <div class="card mb-4">
                 <div class="card-header">

@@ -68,7 +68,26 @@ return [
     'event_tomorrow' => 'Domani',
     'event_this_week' => 'Questa settimana',
     'view_calendar' => 'Vedi Calendario',
+    'my_calendar' => 'Il Mio Calendario',
+    'view_full_calendar' => 'Vedi Calendario Completo',
     'register_for_event' => 'Iscriviti all\'evento',
+
+    // Calendario
+    'calendar' => 'Calendario',
+    'calendar_not_available' => 'Calendario temporaneamente non disponibile',
+    'calendar_reload_page' => 'Ricarica la pagina per riprovare',
+    'calendar_loading' => 'Caricamento calendario...',
+    'calendar_no_events' => 'Nessun evento in questo periodo',
+    'calendar_today' => 'Oggi',
+    'calendar_previous' => 'Precedente',
+    'calendar_next' => 'Successivo',
+    'calendar_month' => 'Mese',
+    'calendar_week' => 'Settimana',
+    'calendar_day' => 'Giorno',
+    'calendar_list' => 'Lista',
+    'calendar_events' => 'Eventi',
+    'calendar_click_event' => 'Clicca su un evento per i dettagli',
+    'create_event_button' => 'Crea Evento',
 
     // Posts e Contenuti
     'my_posts' => 'I miei Post',

@@ -111,6 +111,13 @@
                                 <input type="number" name="radius" class="form-control"
                                        placeholder="{{ __('events.radius_km') }}" value="{{ request('radius', 50) }}" min="1" max="200">
                             </div>
+                            <div class="col-lg-2 col-md-4">
+                                <select name="type" class="form-select">
+                                    <option value="">{{ __('events.all_events') }}</option>
+                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events_only') }}</option>
+                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events_only') }}</option>
+                                </select>
+                            </div>
                             <div class="col-lg-3 col-md-12">
                                 <div class="d-flex gap-2 justify-content-end flex-wrap">
                                     <button type="submit" class="btn btn-primary">
@@ -149,6 +156,14 @@
                                     <span class="bg-light-secondary rounded px-3 py-2" data-filter="nearby" style="cursor: pointer;">
                                         <i class="ph ph-map-pin me-1"></i> {{ __('events.nearby') }}
                                     </span>
+                                    @auth
+                                        <span class="bg-light-primary rounded px-3 py-2" data-filter="my" style="cursor: pointer;">
+                                            <i class="ph ph-user me-1"></i> {{ __('events.my_events') }}
+                                        </span>
+                                        <span class="bg-light-warning rounded px-3 py-2" data-filter="private" style="cursor: pointer;">
+                                            <i class="ph ph-lock me-1"></i> {{ __('events.my_private_events') }}
+                                        </span>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -225,6 +240,12 @@
                                     });
                                     return;
                                 }
+                                break;
+                            case 'my':
+                                addHiddenInput(form, 'filter', 'my');
+                                break;
+                            case 'private':
+                                addHiddenInput(form, 'filter', 'my_private');
                                 break;
                         }
 

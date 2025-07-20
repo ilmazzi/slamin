@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -27,6 +28,8 @@ class EventController extends Controller
      */
     public function index(Request $request): View
     {
+        $user = Auth::user();
+
         $query = Event::with([
             'organizer',
             'venueOwner',
@@ -84,8 +87,8 @@ class EventController extends Controller
         }
 
         // Filter for "My Events" - events organized by user or where user participates
-        if ($request->filled('filter') && $request->filter === 'my' && Auth::check()) {
-            $userId = Auth::id();
+        if ($request->filled('filter') && $request->filter === 'my' && $user) {
+            $userId = $user->id;
             $query->where(function ($q) use ($userId) {
                 // Events organized by user
                 $q->where('organizer_id', $userId)
@@ -100,6 +103,55 @@ class EventController extends Controller
                                    ->where('status', 'accepted');
                   });
             });
+        }
+        // Filter for "My Private Events" - only private events organized by user or where user participates
+        elseif ($request->filled('filter') && $request->filter === 'my_private' && $user) {
+            $userId = $user->id;
+            $query->where('is_public', false)
+                  ->where(function ($q) use ($userId) {
+                      // Private events organized by user
+                      $q->where('organizer_id', $userId)
+                        // OR private events where user has accepted invitation
+                        ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                            $inviteQuery->where('invited_user_id', $userId)
+                                        ->where('status', 'accepted');
+                        })
+                        // OR private events where user has accepted request
+                        ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                            $requestQuery->where('user_id', $userId)
+                                         ->where('status', 'accepted');
+                        });
+                  });
+        } else {
+            // If not filtering for "my events", only show public events or private events where user has access
+            if ($user) {
+                $userId = $user->id;
+                $query->where(function ($q) use ($userId) {
+                    // Public events
+                    $q->where('is_public', true)
+                      // OR private events organized by user
+                      ->orWhere('organizer_id', $userId)
+                      // OR private events where user has accepted invitation
+                      ->orWhere(function ($subQ) use ($userId) {
+                          $subQ->where('is_public', false)
+                               ->whereHas('invitations', function ($inviteQuery) use ($userId) {
+                                   $inviteQuery->where('invited_user_id', $userId)
+                                               ->where('status', 'accepted');
+                               });
+                      })
+                      // OR private events where user has accepted request
+                      ->orWhere(function ($subQ) use ($userId) {
+                          $subQ->where('is_public', false)
+                               ->whereHas('requests', function ($requestQuery) use ($userId) {
+                                   $requestQuery->where('user_id', $userId)
+                                                ->where('status', 'accepted');
+                               });
+                      });
+                });
+            } else {
+                // If user is not authenticated, only show public events
+                $query->where('is_public', true);
+            }
         }
 
         $events = $query->paginate(12);
@@ -315,11 +367,41 @@ class EventController extends Controller
     /**
      * Display the specified event
      */
-    public function show(Event $event): View
+    public function show(Event $event): View|RedirectResponse
     {
+        $user = Auth::user();
+
+        // Check access for private events
+        if (!$event->is_public) {
+            // If user is not authenticated, redirect to login
+            if (!$user) {
+                return redirect()->route('login')
+                    ->with('error', 'Devi effettuare il login per visualizzare questo evento privato.');
+            }
+
+            // Check if user is the organizer
+            $isOrganizer = $event->organizer_id === $user->id;
+
+            // Check if user has accepted invitation
+            $hasAcceptedInvitation = $event->invitations()
+                ->where('invited_user_id', $user->id)
+                ->where('status', 'accepted')
+                ->exists();
+
+            // Check if user has accepted request
+            $hasAcceptedRequest = $event->requests()
+                ->where('user_id', $user->id)
+                ->where('status', 'accepted')
+                ->exists();
+
+            // If user is not organizer and has no accepted participation, deny access
+            if (!$isOrganizer && !$hasAcceptedInvitation && !$hasAcceptedRequest) {
+                abort(403, 'Non hai i permessi per visualizzare questo evento privato.');
+            }
+        }
+
         $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user']);
 
-        $user = Auth::user();
         $canApply = false;
         $hasInvitation = false;
         $hasRequest = false;
@@ -603,6 +685,19 @@ class EventController extends Controller
 
         $events = $query->get()->map(function ($event) use ($user) {
             $isOrganizer = $user && $event->organizer_id === $user->id;
+            $isPrivate = !$event->is_public;
+
+            // Determine event type and styling
+            $className = 'event-participant';
+            $backgroundColor = '#007bff';
+
+            if ($isOrganizer) {
+                $className = 'event-organizer';
+                $backgroundColor = '#28a745';
+            } elseif ($isPrivate) {
+                $className = 'event-private';
+                $backgroundColor = '#ffc107';
+            }
 
             return [
                 'id' => $event->id,
@@ -610,8 +705,15 @@ class EventController extends Controller
                 'start' => $event->start_datetime->toISOString(),
                 'end' => $event->end_datetime->toISOString(),
                 'url' => route('events.show', $event),
-                'className' => $isOrganizer ? 'event-organizer' : 'event-participant',
-                'backgroundColor' => $isOrganizer ? '#28a745' : '#007bff',
+                'className' => $className,
+                'backgroundColor' => $backgroundColor,
+                'extendedProps' => [
+                    'venue' => $event->venue_name,
+                    'city' => $event->city,
+                    'isPrivate' => $isPrivate,
+                    'isOrganizer' => $isOrganizer,
+                    'description' => Str::limit($event->description, 100)
+                ]
             ];
         });
 

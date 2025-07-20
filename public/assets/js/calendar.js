@@ -3,117 +3,78 @@
 document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendar');
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         navLinks: true,
         editable: true,
         dayMaxEvents: true,
         headerToolbar: {
-            left: 'prev,next,addEventButton',
+            left: 'prev,next',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
         },
-        customButtons: {
-            addEventButton: {
-                text: 'add event...',
-                click: function() {
-                    const dateStr = prompt('Enter a date in YYYY-MM-DD format');
-                    const date = new Date(dateStr + 'T00:00:00');
-
-                    if (!isNaN(date.valueOf())) {
-                        calendar.addEvent({
-                            title: 'dynamic event',
-                            start: date,
-                            allDay: true
-                        });
-                        alert('Great. Now, update your database...');
-                    } else {
-                        alert('Invalid date.');
-                    }
-                }
-            }
+        events: function(fetchInfo, successCallback, failureCallback) {
+            // Fetch events from API
+            fetch('/api/events/calendar')
+                .then(response => response.json())
+                .then(data => {
+                    const events = data.map(event => ({
+                        ...event,
+                        className: event.className || 'event-participant'
+                    }));
+                    successCallback(events);
+                })
+                .catch(error => {
+                    console.error('Error fetching calendar events:', error);
+                    failureCallback(error);
+                });
         },
-        events: [
-            {
-                title: 'Holiday',
-                start: '2024-07-01',
-                end: '2024-07-02',
-                color: '#26C450',
-                className: "event-success",
-            },
-            {
-                title: 'Meeting',
-                start: '2024-07-09',
-                className: "event-primary",
-            },
-            {
-                title: 'Meeting',
-                start: '2024-07-15',
-                className: "event-primary",
-            },
-            {
-                title: 'Tour',
-                start: '2024-07-18',
-                end: '2024-07-21',
-                className: "event-warning",
-            },
-            {
-                title: 'Lunch',
-                start: '2024-07-30',
-                end: '2024-07-31',
-                color: '#F09E3C',
-                className: "event-secondary",
-            },
-            {
-                title: 'Meeting',
-                start: '2024-07-12T10:30:00',
-                end: '2024-07-12T12:30:00'
-            },
-            {
-                title: 'Lunch',
-                start: '2024-07-12T12:00:00'
-            },
-            {
-                title: 'Meeting',
-                start: '2024-07-12T14:30:00'
-            },
-            {
-                title: 'Happy Hour',
-                start: '2024-07-12T17:30:00'
-            },
-            {
-                title: 'Dinner',
-                start: '2024-07-12T20:00:00'
-            },
-            {
-                groupId: 'availableForMeeting',
-                start: '2024-07-11T10:00:00',
-                end: '2024-07-11T16:00:00',
-                display: 'background',
-            },
-            {
-                groupId: 'availableForMeeting',
-                start: '2024-07-13T10:00:00',
-                end: '2024-07-13T16:00:00',
-                display: 'background'
-            },
-        ],
-        eventClick: function() {
-            $('#exampleModal').modal('show');
+        eventClick: function(info) {
+            // Navigate to event details
+            if (info.event.url) {
+                window.location.href = info.event.url;
+            }
         },
         selectable: true,
         selectMirror: true,
         select: function (arg) {
-            const title = prompt('Event Title:');
-            if (title) {
-                calendar.addEvent({
-                    title: title,
-                    start: arg.start,
-                    end: arg.end,
-                    allDay: arg.allDay
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Nuovo Evento', // TODO: Usare traduzione
+                    input: 'text',
+                    inputLabel: 'Titolo Evento', // TODO: Usare traduzione
+                    inputPlaceholder: 'Inserisci il titolo dell\'evento', // TODO: Usare traduzione
+                    showCancelButton: true,
+                    confirmButtonText: 'Aggiungi', // TODO: Usare traduzione
+                    cancelButtonText: 'Annulla', // TODO: Usare traduzione
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Devi inserire un titolo!' // TODO: Usare traduzione
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        calendar.addEvent({
+                            title: result.value,
+                            start: arg.start,
+                            end: arg.end,
+                            allDay: arg.allDay
+                        });
+                    }
+                    calendar.unselect();
                 });
+            } else {
+                const title = prompt('Titolo Evento:');
+                if (title) {
+                    calendar.addEvent({
+                        title: title,
+                        start: arg.start,
+                        end: arg.end,
+                        allDay: arg.allDay
+                    });
+                }
+                calendar.unselect();
             }
-            calendar.unselect();
         },
 
         droppable: true,
