@@ -215,62 +215,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     @foreach($event->pendingRequests as $request)
-                        <div class="participant-item" data-request-id="{{ $request->id }}">
-                            <div class="d-flex align-items-start">
-                                <div class="form-check me-3">
-                                    <input type="checkbox" class="form-check-input request-checkbox" value="{{ $request->id }}">
-                                </div>
-
-                                <div class="participant-avatar me-3">
-                                    {{ substr($request->user->name, 0, 2) }}
-                                </div>
-
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <h6 class="mb-1">{{ $request->user->name }}</h6>
-                                            <span class="role-badge">{{ ucfirst($request->requested_role) }}</span>
-                                            <small class="text-muted ms-2">
-                                                <i class="ph ph-clock me-1"></i>{{ $request->created_at->diffForHumans() }}
-                                            </small>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            <button class="btn btn-light-success btn-sm" onclick="quickResponse({{ $request->id }}, 'accept')">
-                                                <i class="ph ph-check me-1"></i>Accetta
-                                            </button>
-                                            <button class="btn btn-light-danger btn-sm" onclick="quickResponse({{ $request->id }}, 'decline')">
-                                                <i class="ph ph-x me-1"></i>Rifiuta
-                                            </button>
-                                            <button class="btn btn-light-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#requestDetailModal" data-request-id="{{ $request->id }}">
-                                                <i class="ph ph-eye"></i>
-                                            </button>
-                                        </div>
+                        <div class="participant-item border-bottom" data-request-id="{{ $request->id }}" style="border-color: #f0f0f0 !important;">
+                            <div class="p-3">
+                                <div class="d-flex align-items-start">
+                                    <div class="form-check me-3 mt-1">
+                                        <input type="checkbox" class="form-check-input request-checkbox" value="{{ $request->id }}">
                                     </div>
 
-                                    <div class="message-preview">
-                                        {{ Str::limit($request->message, 150) }}
-                                    </div>
-
-                                    @if($request->experience)
-                                        <small class="text-muted">
-                                            <strong>Esperienza:</strong> {{ Str::limit($request->experience, 100) }}
-                                        </small>
-                                    @endif
-
-                                    @if($request->portfolio_links)
-                                        <div class="mt-2">
-                                            <small class="text-muted">
-                                                <strong>Portfolio:</strong>
-                                                @foreach($request->portfolio_links as $link)
-                                                    <a href="{{ $link }}" target="_blank" class="me-2">
-                                                        <i class="ph ph-link me-1"></i>Link {{ $loop->iteration }}
-                                                    </a>
-                                                @endforeach
-                                            </small>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">
+                                                    Da {{ $request->user->name }}
+                                                    @if($request->user->username)
+                                                        <span class="text-muted">({{ $request->user->username }})</span>
+                                                    @endif
+                                                </h6>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge bg-primary">{{ ucfirst($request->requested_role) }}</span>
+                                                    <small class="text-muted">
+                                                        <i class="ph ph-clock me-1"></i>{{ $request->created_at->diffForHumans() }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-success btn-sm" onclick="quickResponse({{ $request->id }}, 'accept')"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Accetta richiesta">
+                                                    <i class="ph ph-check me-1"></i>Accetta
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" onclick="quickResponse({{ $request->id }}, 'decline')"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Rifiuta richiesta">
+                                                    <i class="ph ph-x me-1"></i>Rifiuta
+                                                </button>
+                                                <button class="btn btn-light-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#requestDetailModal" data-request-id="{{ $request->id }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Vedi dettagli">
+                                                    <i class="ph ph-eye"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    @endif
+
+                                        <div class="message-preview mb-2">
+                                            <strong>Messaggio:</strong> {{ $request->message }}
+                                        </div>
+
+                                        @if($request->experience)
+                                            <div class="mb-2">
+                                                <small class="text-muted">
+                                                    <strong>Esperienza:</strong> {{ $request->experience }}
+                                                </small>
+                                            </div>
+                                        @endif
+
+                                        @if($request->portfolio_links && count($request->portfolio_links) > 0)
+                                            <div class="mb-2">
+                                                <small class="text-muted">
+                                                    <strong>Portfolio:</strong>
+                                                    @foreach($request->portfolio_links as $link)
+                                                        <a href="{{ $link }}" target="_blank" class="me-2 text-decoration-none">
+                                                            <i class="ph ph-link me-1"></i>Link {{ $loop->iteration }}
+                                                        </a>
+                                                    @endforeach
+                                                </small>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -682,6 +692,11 @@ let selectedRequests = [];
 let currentRequestId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
     // Request checkboxes
     document.querySelectorAll('.request-checkbox').forEach(checkbox => {
@@ -696,17 +711,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Invite form
-    document.getElementById('inviteForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        sendInvitations();
-    });
+    const inviteForm = document.getElementById('inviteForm');
+    if (inviteForm) {
+        inviteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendInvitations();
+        });
+    }
 
     // Request detail modal
-    document.getElementById('requestDetailModal').addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget;
-        const requestId = button.getAttribute('data-request-id');
-        loadRequestDetail(requestId);
-    });
+    const requestDetailModal = document.getElementById('requestDetailModal');
+    if (requestDetailModal) {
+        requestDetailModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const requestId = button.getAttribute('data-request-id');
+            loadRequestDetail(requestId);
+        });
+    }
 
     // Auto-refresh pending items every 30 seconds
     setInterval(refreshPendingItems, 30000);
@@ -725,31 +746,67 @@ function updateBulkActions() {
 }
 
 function quickResponse(requestId, action) {
-    const data = {
-        action: action,
-        message: action === 'accept' ? 'Richiesta accettata!' : 'Richiesta non accettata.'
-    };
+    const actionText = action === 'accept' ? 'accettare' : 'rifiutare';
 
-    fetch(`/requests/${requestId}/quick-response`, {
+    if (!confirm(`Sei sicuro di voler ${actionText} questa richiesta?`)) {
+        return;
+    }
+
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="ph ph-spinner ph-spin me-1"></i>Elaborazione...';
+
+    fetch(`/requests/${requestId}/${action}-ajax`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': getCSRFToken() || ''
-        },
-        body: JSON.stringify(data)
+        }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification(data.message, 'success');
-            removeParticipantItem(requestId);
-            updateStats();
+            showNotification(`Richiesta ${action === 'accept' ? 'accettata' : 'rifiutata'} con successo!`, 'success');
+
+            // Remove the request item with animation
+            const requestElement = document.querySelector(`[data-request-id="${requestId}"]`);
+            if (requestElement) {
+                requestElement.style.transition = 'all 0.3s ease';
+                requestElement.style.opacity = '0';
+                requestElement.style.transform = 'translateX(-100%)';
+                setTimeout(() => {
+                    requestElement.remove();
+
+                    // Update the count badge
+                    const badge = document.querySelector('.card-header .badge');
+                    if (badge) {
+                        const currentCount = parseInt(badge.textContent);
+                        if (currentCount > 1) {
+                            badge.textContent = currentCount - 1;
+                        } else {
+                            // Hide the entire section if no more requests
+                            const card = requestElement.closest('.card');
+                            if (card) {
+                                card.style.transition = 'all 0.3s ease';
+                                card.style.opacity = '0';
+                                setTimeout(() => card.remove(), 300);
+                            }
+                        }
+                    }
+                }, 300);
+            }
         } else {
-            showNotification(data.message, 'error');
+            showNotification(`Errore nell'${action === 'accept' ? 'accettazione' : 'rifiuto'} della richiesta`, 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
         }
     })
     .catch(error => {
+        console.error('Error:', error);
         showNotification('Errore di connessione', 'error');
+        button.disabled = false;
+        button.innerHTML = originalText;
     });
 }
 

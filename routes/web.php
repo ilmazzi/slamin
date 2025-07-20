@@ -360,6 +360,8 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 Route::get('/requests', [EventRequestController::class, 'index'])->name('requests.index');
 Route::post('/requests/{eventRequest}/accept', [EventRequestController::class, 'accept'])->name('requests.accept');
 Route::post('/requests/{eventRequest}/decline', [EventRequestController::class, 'decline'])->name('requests.decline');
+Route::post('/requests/{eventRequest}/accept-ajax', [EventRequestController::class, 'acceptAjax'])->name('requests.accept.ajax');
+Route::post('/requests/{eventRequest}/decline-ajax', [EventRequestController::class, 'declineAjax'])->name('requests.decline.ajax');
 Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, 'cancel'])->name('requests.cancel');
 
     // Event invitations (organizer management)

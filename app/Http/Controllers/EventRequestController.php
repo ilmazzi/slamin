@@ -78,6 +78,33 @@ class EventRequestController extends Controller
     }
 
     /**
+     * Accept a request via AJAX (organizer only)
+     */
+    public function acceptAjax(Request $request, EventRequest $eventRequest): JsonResponse
+    {
+        Gate::authorize('update', $eventRequest->event);
+
+        try {
+            if ($eventRequest->accept(Auth::user(), null)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Richiesta accettata con successo!'
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile accettare questa richiesta.'
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'accettazione della richiesta.'
+            ], 500);
+        }
+    }
+
+    /**
      * Decline a request (organizer only)
      */
     public function decline(Request $request, EventRequest $eventRequest): RedirectResponse
@@ -95,6 +122,33 @@ class EventRequestController extends Controller
         }
 
         return back()->with('error', 'Impossibile rifiutare questa richiesta.');
+    }
+
+    /**
+     * Decline a request via AJAX (organizer only)
+     */
+    public function declineAjax(Request $request, EventRequest $eventRequest): JsonResponse
+    {
+        Gate::authorize('update', $eventRequest->event);
+
+        try {
+            if ($eventRequest->decline(Auth::user(), 'Richiesta non accettata')) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Richiesta rifiutata con successo!'
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile rifiutare questa richiesta.'
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante il rifiuto della richiesta.'
+            ], 500);
+        }
     }
 
     /**

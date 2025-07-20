@@ -194,7 +194,7 @@ class Notification extends Model
                 'role' => $invitation->role,
                 'compensation' => $invitation->compensation,
             ],
-            'action_url' => route('invitations.show', $invitation),
+            'action_url' => route('invitations.index'),
             'action_text' => 'Gestisci Invito',
             'priority' => self::PRIORITY_HIGH,
         ]);
@@ -433,6 +433,36 @@ class Notification extends Model
         return self::where('created_at', '<', Carbon::now()->subDays(90))
                    ->where('is_read', true)
                    ->delete();
+    }
+
+    /**
+     * Create invitation response notification
+     */
+    public static function createInvitationResponse(EventInvitation $invitation, string $response): void
+    {
+        $responseText = $response === 'accepted' ? 'accettato' : 'rifiutato';
+        $type = $response === 'accepted' ? self::TYPE_INVITATION_ACCEPTED : self::TYPE_INVITATION_DECLINED;
+        $title = $response === 'accepted' ? 'Invito Accettato' : 'Invito Rifiutato';
+
+        $notification = self::create([
+            'user_id' => $invitation->event->user_id, // Notify the event organizer
+            'type' => $type,
+            'title' => $title,
+            'message' => "{$invitation->invitedUser->name} ha {$responseText} l'invito per partecipare come {$invitation->role} all'evento \"{$invitation->event->title}\"",
+            'data' => [
+                'event_id' => $invitation->event_id,
+                'invitation_id' => $invitation->id,
+                'invited_user_id' => $invitation->invited_user_id,
+                'response' => $response,
+                'role' => $invitation->role,
+            ],
+            'action_url' => route('events.show', $invitation->event),
+            'action_text' => 'Vedi Evento',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
     }
 
     /**

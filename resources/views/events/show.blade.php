@@ -131,55 +131,193 @@
                     <h5 class="mb-0">
                         <i class="ph ph-users me-2"></i>{{ __('events.participants') }}
                     </h5>
-                    <span class="badge bg-light-primary">
-                        {{ $event->invitations->where('status', 'accepted')->count() + $event->requests->where('status', 'accepted')->count() }}
-                        @if($event->max_participants)
-                            / {{ $event->max_participants }}
-                        @endif
-                    </span>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-light-primary">
+                            {{ $event->invitations->where('status', 'accepted')->count() + $event->requests->where('status', 'accepted')->count() }}
+                            @if($event->max_participants)
+                                / {{ $event->max_participants }}
+                            @endif
+                        </span>
+                        @auth
+                            @if($event->organizer_id === auth()->id())
+                                <a href="{{ route('events.manage', $event) }}" class="btn btn-sm btn-light-primary">
+                                    <i class="ph ph-gear me-1"></i>Gestisci
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
                 <div class="card-body">
                     @php
                         $acceptedInvitations = $event->invitations->where('status', 'accepted');
                         $acceptedRequests = $event->requests->where('status', 'accepted');
+                        $pendingInvitations = $event->invitations->where('status', 'pending');
+                        $pendingRequests = $event->requests->where('status', 'pending');
                     @endphp
 
+                    <!-- Confirmed Participants -->
                     @if($acceptedInvitations->count() + $acceptedRequests->count() > 0)
-                        <div class="row">
-                            <!-- Invited Participants -->
-                            @foreach($acceptedInvitations as $invitation)
-                                <div class="col-md-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                                    {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
-                                </div>
-                                        <div>
-                                            <h6 class="mb-0">{{ $invitation->invitedUser->getDisplayName() }}</h6>
-                                            <small class="text-muted">{{ ucfirst($invitation->role) }} (Invitato)</small>
+                        <div class="mb-4">
+                            <h6 class="mb-3 text-success">
+                                <i class="ph ph-check-circle me-2"></i>{{ __('events.confirmed_participants') }}
+                            </h6>
+                            <div class="row">
+                                <!-- Invited Participants -->
+                                @foreach($acceptedInvitations as $invitation)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card card-light-success border-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <span class="badge bg-success">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
+                                                        </div>
+                                                        @if($invitation->compensation)
+                                                            <small class="text-muted">
+                                                                <i class="ph ph-currency-eur me-1"></i>{{ $invitation->compensation }}
+                                                            </small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
 
-                            <!-- Requested Participants -->
-                            @foreach($acceptedRequests as $request)
-                                <div class="col-md-6 mb-3">
-                                    <div class="d-flex align-items-center">
-                                                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                                    {{ substr($request->user->getDisplayName(), 0, 2) }}
-                                </div>
-                                        <div>
-                                            <h6 class="mb-0">{{ $request->user->getDisplayName() }}</h6>
-                                            <small class="text-muted">{{ ucfirst($request->requested_role) }} (Applicato)</small>
+                                <!-- Requested Participants -->
+                                @foreach($acceptedRequests as $request)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card card-light-success border-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <span class="badge bg-success">{{ ucfirst($request->requested_role) }}</span>
+                                                            <span class="badge bg-light-warning">{{ __('events.participant_applied') }}</span>
+                                                        </div>
+                                                        @if($request->experience)
+                                                            <small class="text-muted">
+                                                                <i class="ph ph-star me-1"></i>{{ Str::limit($request->experience, 50) }}
+                                                            </small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                    @else
+                    @endif
+
+                    <!-- Pending Participants -->
+                    @if($pendingInvitations->count() + $pendingRequests->count() > 0)
+                        <div class="mb-4">
+                            <h6 class="mb-3 text-warning">
+                                <i class="ph ph-clock me-2"></i>{{ __('events.pending_participants') }}
+                            </h6>
+                            <div class="row">
+                                <!-- Pending Invitations -->
+                                @foreach($pendingInvitations as $invitation)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card card-light-warning border-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <span class="badge bg-warning">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
+                                                        </div>
+                                                        @if($invitation->expires_at)
+                                                            <small class="text-muted">
+                                                                <i class="ph ph-timer me-1"></i>Scade {{ $invitation->expires_at->diffForHumans() }}
+                                                            </small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <!-- Pending Requests -->
+                                @foreach($pendingRequests as $request)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card card-light-warning border-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
+                                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                                            <span class="badge bg-warning">{{ ucfirst($request->requested_role) }}</span>
+                                                            <span class="badge bg-light-warning">{{ __('events.participant_applied') }}</span>
+                                                        </div>
+                                                        @if($request->message)
+                                                            <small class="text-muted">
+                                                                <i class="ph ph-chat-circle me-1"></i>{{ Str::limit($request->message, 50) }}
+                                                            </small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- No Participants -->
+                    @if($acceptedInvitations->count() + $acceptedRequests->count() + $pendingInvitations->count() + $pendingRequests->count() === 0)
                         <div class="text-center py-4">
                             <i class="ph ph-users-three display-4 text-muted mb-3"></i>
-                            <p class="text-muted">{{ __('events.no_participants') }}</p>
+                            <p class="text-muted mb-3">{{ __('events.no_participants') }}</p>
+                            @auth
+                                @if($canApply)
+                                    <button class="btn btn-light-success" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                        <i class="ph ph-hand-waving me-2"></i>{{ __('events.first_participant') }}
+                                    </button>
+                                @endif
+                            @endauth
+                        </div>
+                    @endif
+
+                    <!-- Role Statistics -->
+                    @if($event->invitations->count() + $event->requests->count() > 0)
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="mb-3">{{ __('events.participant_stats') }}</h6>
+                            <div class="row g-2">
+                                @php
+                                    $roleStats = collect();
+                                    foreach($event->invitations as $inv) {
+                                        $roleStats->put($inv->role, $roleStats->get($inv->role, 0) + 1);
+                                    }
+                                    foreach($event->requests as $req) {
+                                        $roleStats->put($req->requested_role, $roleStats->get($req->requested_role, 0) + 1);
+                                    }
+                                @endphp
+                                @foreach($roleStats as $role => $count)
+                                    <div class="col-auto">
+                                        <span class="badge bg-light-primary">{{ ucfirst($role) }}: {{ $count }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -413,54 +551,122 @@
 <div class="modal fade" id="applyModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="ph ph-hand-waving me-2"></i>Richiesta Partecipazione - {{ $event->title }}
+            <div class="modal-header bg-light-success">
+                <h5 class="modal-title text-success">
+                    <i class="ph ph-hand-waving me-2"></i>{{ __('events.participant_apply_title') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('events.apply', $event) }}" method="POST">
+            <form action="{{ route('events.apply', $event) }}" method="POST" id="applyForm">
                 @csrf
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Ruolo Richiesto *</label>
-                        <select name="requested_role" class="form-select" required>
-                            <option value="">Seleziona ruolo...</option>
+                    <!-- Event Info -->
+                    <div class="alert alert-info mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="ph ph-info-circle me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">{{ $event->title }}</h6>
+                                <p class="mb-0 small">
+                                    <i class="ph ph-calendar me-1"></i>{{ $event->start_datetime->format('d F Y, H:i') }}<br>
+                                    <i class="ph ph-map-pin me-1"></i>{{ $event->venue_name }}, {{ $event->city }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Role Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-user-circle me-2"></i>{{ __('events.participant_apply_role') }} *
+                        </label>
+                        <select name="requested_role" class="form-select form-select-lg" required>
+                            <option value="">{{ __('events.participant_apply_role_help') }}</option>
                             @if(auth()->user()->hasRole('poet'))
-                                <option value="performer">Performer</option>
+                                <option value="performer" data-description="Interpreterai le tue poesie o quelle di altri artisti">
+                                    🎭 Performer
+                                </option>
                             @endif
                             @if(auth()->user()->hasRole('judge'))
-                                <option value="judge">Judge</option>
+                                <option value="judge" data-description="Valuterai le performance degli artisti">
+                                    ⚖️ Judge
+                                </option>
                             @endif
                             @if(auth()->user()->hasRole('technician'))
-                                <option value="technician">Technician</option>
+                                <option value="technician" data-description="Gestirai audio, luci e supporto tecnico">
+                                    🔧 Technician
+                                </option>
                             @endif
-                            <option value="host">Host</option>
+                            <option value="host" data-description="Presenterai l'evento e gestirai il pubblico">
+                                🎤 Host
+                            </option>
                         </select>
+                        <div id="roleDescription" class="form-text mt-2"></div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Messaggio di Presentazione *</label>
+                    <!-- Personal Message -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-chat-circle-text me-2"></i>{{ __('events.participant_apply_message') }} *
+                        </label>
                         <textarea name="message" class="form-control" rows="4"
-                                  placeholder="Presentati e spiega perché vuoi partecipare a questo evento..." required></textarea>
+                                  placeholder="{{ __('events.participant_apply_message_help') }}" required></textarea>
+                        <div class="form-text">
+                            <i class="ph ph-lightbulb me-1"></i>{{ __('events.participant_apply_message_suggestion') }}
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Esperienza (Opzionale)</label>
+                    <!-- Experience -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-star me-2"></i>{{ __('events.participant_apply_experience') }}
+                        </label>
                         <textarea name="experience" class="form-control" rows="3"
-                                  placeholder="Descrivi la tua esperienza nel poetry slam..."></textarea>
+                                  placeholder="{{ __('events.participant_apply_experience_help') }}"></textarea>
+                        <div class="form-text">
+                            <i class="ph ph-info me-1"></i>{{ __('events.participant_apply_experience_optional') }}
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Link Portfolio (Opzionale)</label>
-                        <input type="url" name="portfolio_links[]" class="form-control"
-                               placeholder="https://youtube.com/watch?v=...">
+                    <!-- Portfolio Links -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-link me-2"></i>{{ __('events.participant_links') }} (Opzionale)
+                        </label>
+                        <div id="portfolioLinks">
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">
+                                    <i class="ph ph-link"></i>
+                                </span>
+                                <input type="url" name="portfolio_links[]" class="form-control"
+                                       placeholder="{{ __('events.participant_links_placeholder') }}">
+                                <button type="button" class="btn btn-outline-secondary" onclick="addPortfolioLink()">
+                                    <i class="ph ph-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text">
+                            <i class="ph ph-video-camera me-1"></i>{{ __('events.participant_links_help') }}
+                        </div>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="alert alert-warning">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="termsAccepted" required>
+                            <label class="form-check-label" for="termsAccepted">
+                                                                <small>
+                                    {{ __('events.participant_terms_accept') }}
+                                </small>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="submit" class="btn btn-light-success">
-                        <i class="ph ph-paper-plane me-2"></i>Invia Richiesta
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <i class="ph ph-x me-2"></i>{{ __('events.participant_apply_cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-light-success" id="submitBtn">
+                        <i class="ph ph-paper-plane me-2"></i>{{ __('events.participant_apply_send') }}
                     </button>
                 </div>
             </form>
@@ -537,6 +743,82 @@ document.addEventListener('DOMContentLoaded', function() {
 @endif
 
 <script>
+// Role description functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.querySelector('select[name="requested_role"]');
+    const roleDescription = document.getElementById('roleDescription');
+
+    if (roleSelect && roleDescription) {
+        roleSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const description = selectedOption.getAttribute('data-description');
+
+            if (description) {
+                roleDescription.innerHTML = `<i class="ph ph-info-circle me-1"></i>${description}`;
+                roleDescription.style.display = 'block';
+            } else {
+                roleDescription.style.display = 'none';
+            }
+        });
+    }
+
+    // Form validation
+    const applyForm = document.getElementById('applyForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (applyForm && submitBtn) {
+        applyForm.addEventListener('submit', function(e) {
+            const message = document.querySelector('textarea[name="message"]').value.trim();
+            const role = document.querySelector('select[name="requested_role"]').value;
+            const terms = document.getElementById('termsAccepted').checked;
+
+                        if (!role) {
+                e.preventDefault();
+                showNotification('{{ __("events.participant_apply_validation_role") }}', 'error');
+                return;
+            }
+
+            if (message.length < 10) {
+                e.preventDefault();
+                showNotification('{{ __("events.participant_apply_validation_message") }}', 'error');
+                return;
+            }
+
+            if (!terms) {
+                e.preventDefault();
+                showNotification('{{ __("events.participant_apply_validation_terms") }}', 'error');
+                return;
+            }
+
+            // Disable submit button to prevent double submission
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin me-2"></i>{{ __("events.participant_apply_sending") }}';
+        });
+    }
+});
+
+// Add portfolio link functionality
+function addPortfolioLink() {
+    const portfolioLinks = document.getElementById('portfolioLinks');
+    const newLink = document.createElement('div');
+    newLink.className = 'input-group mb-2';
+    newLink.innerHTML = `
+        <span class="input-group-text">
+            <i class="ph ph-link"></i>
+        </span>
+                                        <input type="url" name="portfolio_links[]" class="form-control"
+                                       placeholder="{{ __('events.participant_links_placeholder') }}">
+        <button type="button" class="btn btn-outline-danger" onclick="removePortfolioLink(this)">
+            <i class="ph ph-minus"></i>
+        </button>
+    `;
+    portfolioLinks.appendChild(newLink);
+}
+
+function removePortfolioLink(button) {
+    button.closest('.input-group').remove();
+}
+
 function shareEvent() {
     if (navigator.share) {
         navigator.share({

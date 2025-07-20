@@ -330,11 +330,19 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 position-relative">
                     <!-- Event Status Badge -->
-                    @if($event->is_public)
-                        <span class="badge bg-success position-absolute top-0 end-0 m-3" style="z-index: 3;">{{ __('events.public') }}</span>
-                    @else
-                        <span class="badge bg-warning position-absolute top-0 end-0 m-3" style="z-index: 3;">{{ __('events.private') }}</span>
-                    @endif
+                    <div class="position-absolute top-0 end-0 m-3" style="z-index: 3;">
+                        @if($event->is_public)
+                            <span class="badge bg-success">{{ __('events.public') }}</span>
+                        @else
+                            <span class="badge bg-warning">{{ __('events.private') }}</span>
+                        @endif
+
+                        @if($event->acceptsRequests())
+                            <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ __('events.apply_to_event') }}">
+                                <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
+                            </span>
+                        @endif
+                    </div>
 
                     <!-- Event Image with Overlay Info -->
                     <div class="position-relative overflow-hidden" style="height: 200px;">
@@ -392,6 +400,96 @@
                             @endif
                         </div>
 
+                                                <!-- Participants Preview -->
+                        @php
+                            $acceptedInvitations = $event->invitations->where('status', 'accepted');
+                            $acceptedRequests = $event->requests->where('status', 'accepted');
+                            $totalConfirmed = $acceptedInvitations->count() + $acceptedRequests->count();
+                            $maxParticipants = $event->max_participants;
+                            $spotsLeft = $maxParticipants ? $maxParticipants - $totalConfirmed : null;
+                        @endphp
+
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <small class="text-muted fw-semibold" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       title="{{ __('events.participants_preview') }}">
+                                    <i class="ph ph-users me-1"></i>{{ __('events.participants') }}
+                                </small>
+                                <div class="d-flex align-items-center gap-1">
+                                    @if($maxParticipants)
+                                        <span class="badge bg-primary">{{ $totalConfirmed }}/{{ $maxParticipants }}</span>
+                                        @if($spotsLeft > 0)
+                                            <span class="badge bg-success" style="font-size: 10px;">{{ __('events.participants_spots_left') }}: {{ $spotsLeft }}</span>
+                                        @elseif($spotsLeft === 0)
+                                            <span class="badge bg-warning" style="font-size: 10px;">{{ __('events.participants_full') }}</span>
+                                        @endif
+                                    @else
+                                        <span class="badge bg-success">{{ $totalConfirmed }}</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            @if($totalConfirmed > 0)
+                                <!-- Show first 3 participants -->
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach($acceptedInvitations->take(3) as $invitation)
+                                        <div class="d-flex align-items-center bg-light-success rounded px-2 py-1" style="font-size: 11px;">
+                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-1" style="width: 16px; height: 16px; font-size: 8px; font-weight: bold;">
+                                                {{ substr($invitation->invitedUser->getDisplayName(), 0, 1) }}
+                                            </div>
+                                            <span class="text-success fw-semibold">{{ ucfirst($invitation->role) }}</span>
+                                        </div>
+                                    @endforeach
+
+                                    @foreach($acceptedRequests->take(3 - $acceptedInvitations->count()) as $request)
+                                        <div class="d-flex align-items-center bg-light-success rounded px-2 py-1" style="font-size: 11px;">
+                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-1" style="width: 16px; height: 16px; font-size: 8px; font-weight: bold;">
+                                                {{ substr($request->user->getDisplayName(), 0, 1) }}
+                                            </div>
+                                            <span class="text-success fw-semibold">{{ ucfirst($request->requested_role) }}</span>
+                                        </div>
+                                    @endforeach
+
+                                    @if($totalConfirmed > 3)
+                                        <span class="badge bg-light text-muted" style="font-size: 10px;">+{{ $totalConfirmed - 3 }}</span>
+                                    @endif
+                                </div>
+
+                                <!-- Role summary -->
+                                @php
+                                    $roleStats = collect();
+                                    foreach($acceptedInvitations as $inv) {
+                                        $roleStats->put($inv->role, $roleStats->get($inv->role, 0) + 1);
+                                    }
+                                    foreach($acceptedRequests as $req) {
+                                        $roleStats->put($req->requested_role, $roleStats->get($req->requested_role, 0) + 1);
+                                    }
+                                @endphp
+                                @if($roleStats->count() > 0)
+                                    <div class="mt-2">
+                                        <small class="text-muted">{{ __('events.participants_roles_summary') }}:</small>
+                                        <div class="d-flex flex-wrap gap-1 mt-1">
+                                            @foreach($roleStats->take(3) as $role => $count)
+                                                <span class="badge bg-light-primary" style="font-size: 9px;">{{ ucfirst($role) }}: {{ $count }}</span>
+                                            @endforeach
+                                            @if($roleStats->count() > 3)
+                                                <span class="badge bg-light text-muted" style="font-size: 9px;">+{{ $roleStats->count() - 3 }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <small class="text-muted">{{ __('events.no_participants') }}</small>
+                                @if($event->acceptsRequests())
+                                    <div class="mt-1">
+                                        <small class="text-success fw-semibold">
+                                            <i class="ph ph-hand-waving me-1"></i>{{ __('events.participants_accepting_applications') }}
+                                        </small>
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
+
                         <!-- Tags -->
                         @if($event->tags)
                             <div class="mb-3">
@@ -418,9 +516,10 @@
                                             <a href="{{ route('events.manage', $event) }}" class="btn btn-light-secondary btn-sm w-100">
                                                 <i class="ph ph-gear"></i>
                                             </a>
-                                        @elseif($event->acceptsRequests() && !$event->requests()->where('user_id', auth()->id())->exists())
-                                            <button class="btn btn-light-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#applyModal" data-event-id="{{ $event->id }}">
-                                                <i class="ph ph-hand-waving"></i>
+                                                                                @elseif($event->acceptsRequests() && !$event->requests()->where('user_id', auth()->id())->exists())
+                                            <button class="btn btn-light-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#applyModal" data-event-id="{{ $event->id }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('events.participants_click_to_apply') }}">
+                                                <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
                                             </button>
                                         @else
                                             <button class="btn btn-light-secondary btn-sm w-100" disabled>
@@ -569,34 +668,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Apply Modal
-    @auth
-    const applyModal = document.getElementById('applyModal');
-    if (applyModal) {
-        applyModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const eventId = button.getAttribute('data-event-id');
-            loadEventDetails(eventId);
-        });
-
-        // Portfolio Links
-        document.getElementById('addPortfolioLink').addEventListener('click', function() {
+    // Portfolio Links functionality
+    const addPortfolioLinkBtn = document.getElementById('addPortfolioLink');
+    if (addPortfolioLinkBtn) {
+        addPortfolioLinkBtn.addEventListener('click', function() {
             const container = document.getElementById('portfolioLinks');
             const input = document.createElement('input');
             input.type = 'url';
             input.name = 'portfolio_links[]';
             input.className = 'form-control mb-2';
-            input.placeholder = 'https://...';
+            input.placeholder = 'https://youtube.com/watch?v=... o https://instagram.com/...';
             container.appendChild(input);
         });
-
-        // Apply Form Submit
-        document.getElementById('applyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitApplication();
-        });
     }
-    @endauth
 
     // Live Search
     let searchTimeout;
@@ -801,73 +885,129 @@ function showAllEvents() {
 }
 
 @auth
-function loadEventDetails(eventId) {
-    fetch(`/requests/api/events/${eventId}/form-data`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.can_apply) {
-                document.getElementById('eventDetails').innerHTML = `
-                    <div class="alert alert-light">
-                        <h6>${data.event.title}</h6>
-                        <p class="mb-1"><i class="ph ph-calendar me-2"></i>${data.event.start_datetime}</p>
-                        <p class="mb-1"><i class="ph ph-map-pin me-2"></i>${data.event.venue_name}, ${data.event.city}</p>
-                        <p class="mb-0 small text-muted">${data.event.description}</p>
-                    </div>
-                `;
+// Handle apply modal events
+document.addEventListener('DOMContentLoaded', function() {
+    const applyModal = document.getElementById('applyModal');
+    if (applyModal) {
+        applyModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const eventId = button.getAttribute('data-event-id');
 
-                // Update role options
-                const roleSelect = document.querySelector('select[name="requested_role"]');
-                roleSelect.innerHTML = '<option value="">Seleziona ruolo...</option>';
-                Object.entries(data.available_roles).forEach(([key, value]) => {
-                    roleSelect.innerHTML += `<option value="${key}">${value}</option>`;
-                });
+            if (eventId) {
+                // Set the event ID in the form
+                const form = document.getElementById('applyForm');
+                form.setAttribute('action', `/events/${eventId}/apply`);
+                form.dataset.eventId = eventId;
 
-                document.getElementById('applyForm').dataset.eventId = eventId;
-            } else {
-                document.getElementById('eventDetails').innerHTML = `
-                    <div class="alert alert-warning">
-                        ${data.message}
-                    </div>
-                `;
+                // Update event details in modal
+                const eventCard = button.closest('.card');
+                const eventTitle = eventCard.querySelector('.card-title a').textContent;
+                const eventTime = eventCard.querySelector('.d-flex.align-items-center.text-muted').textContent;
+                const eventLocation = eventCard.querySelector('.text-white h6').textContent;
+                const eventCity = eventCard.querySelector('.text-white-50').textContent;
+
+                const eventDetails = document.getElementById('eventDetails');
+                if (eventDetails) {
+                    eventDetails.innerHTML = `
+                        <div class="alert alert-info mb-4">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-info-circle me-3 fs-4"></i>
+                                <div>
+                                    <h6 class="mb-1">${eventTitle}</h6>
+                                    <p class="mb-0 small">
+                                        <i class="ph ph-calendar me-1"></i>${eventTime}<br>
+                                        <i class="ph ph-map-pin me-1"></i>${eventLocation}, ${eventCity}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             }
         });
-}
+    }
 
-function submitApplication() {
-    const form = document.getElementById('applyForm');
-    const eventId = form.dataset.eventId;
-    const formData = new FormData(form);
+    // Handle form submission
+    const applyForm = document.getElementById('applyForm');
+    if (applyForm) {
+        applyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    const data = {
-        message: formData.get('message'),
-        requested_role: formData.get('requested_role'),
-        experience: formData.get('experience'),
-        portfolio_links: formData.getAll('portfolio_links[]').filter(link => link.trim() !== '')
-    };
+            const formData = new FormData(this);
+            const eventId = this.dataset.eventId;
 
-    fetch(`/events/${eventId}/apply`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            bootstrap.Modal.getInstance(document.getElementById('applyModal')).hide();
-            // Show success notification
-            showNotification('Richiesta inviata con successo!', 'success');
-        } else {
-            showNotification('Errore nell\'invio della richiesta', 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Errore di connessione', 'error');
-    });
-}
+            // Validate form
+            const message = formData.get('message');
+            const role = formData.get('requested_role');
+
+            if (!role) {
+                showNotification('Seleziona un ruolo per continuare', 'error');
+                return;
+            }
+
+            if (!message || message.trim().length < 10) {
+                showNotification('Il messaggio deve contenere almeno 10 caratteri', 'error');
+                return;
+            }
+
+            // Disable submit button
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin me-2"></i>Invio in corso...';
+
+            // Submit form
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Hide modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
+                modal.hide();
+
+                // Show success message
+                showNotification('Richiesta inviata con successo!', 'success');
+
+                // Reset form
+                this.reset();
+
+                // Reload page after a short delay to show updated participant count
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error submitting application:', error);
+                showNotification('Errore nell\'invio della richiesta. Riprova.', 'error');
+            })
+            .finally(() => {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
+        });
+    }
+});
 @endauth
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
 
 function showNotification(message, type) {
     // Simple notification system - will be enhanced with real-time notifications

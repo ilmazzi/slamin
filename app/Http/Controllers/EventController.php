@@ -27,7 +27,12 @@ class EventController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Event::with(['organizer', 'venueOwner'])
+        $query = Event::with([
+            'organizer',
+            'venueOwner',
+            'invitations.invitedUser',
+            'requests.user'
+        ])
                      ->published()
                      ->upcoming()
                      ->orderBy('start_datetime');
