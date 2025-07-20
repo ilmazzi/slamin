@@ -13,11 +13,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Run Poetry Slam roles and permissions setup
+        $this->call([
+            PoetrySlamSeeder::class,
         ]);
+
+        // Create test user with default 'audience' role
+        $testUser = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@poetryslam.com',
+        ]);
+
+        // Assign default audience role
+        $testUser->assignRole('audience');
+
+        $this->command->info('✅ Test user created: test@poetryslam.com with audience role');
     }
 }

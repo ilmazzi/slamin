@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f8f9ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main background -->
+  <rect width="300" height="80" rx="40" fill="url(#bgGradient)" />
+
+  <!-- Microphone Icon -->
+  <g transform="translate(20,20)">
+    <!-- Mic body -->
+    <rect x="15" y="5" width="10" height="25" rx="5" fill="#ffffff" opacity="0.9"/>
+    <!-- Mic base -->
+    <rect x="12" y="32" width="16" height="3" rx="1.5" fill="#ffffff" opacity="0.9"/>
+    <!-- Mic stand -->
+    <rect x="19" y="35" width="2" height="8" fill="#ffffff" opacity="0.9"/>
+    <!-- Sound waves -->
+    <path d="M 35 15 Q 40 20 35 25" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M 38 12 Q 45 20 38 28" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.5"/>
+  </g>
+
+  <!-- Main Text -->
+  <text x="75" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#textGradient)">
+    Poetry Slam
+  </text>
+
+  <!-- Subtitle -->
+  <text x="75" y="50" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.8">
+    Social Network
+  </text>
+
+  <!-- Decorative elements -->
+  <circle cx="270" cy="25" r="8" fill="#ffffff" opacity="0.1"/>
+  <circle cx="285" cy="40" r="5" fill="#ffffff" opacity="0.1"/>
+  <circle cx="275" cy="55" r="3" fill="#ffffff" opacity="0.1"/>
+
+  <!-- Emoji-style mic -->
+  <text x="245" y="45" font-size="20">🎤</text>
+</svg>

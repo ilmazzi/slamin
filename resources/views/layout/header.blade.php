@@ -27,37 +27,47 @@
                             <a aria-expanded="false" class="d-block head-icon ps-0"
                                data-bs-toggle="dropdown"
                                href="#">
-                                <div class="lang-flag lang-en ">
-                                                <span class="flag rounded-circle overflow-hidden">
-                                                    <i class=""></i>
-                                                </span>
+                                <div class="lang-flag lang-{{ app()->getLocale() }}">
+                                    <span class="flag rounded-circle overflow-hidden">
+                                        <i class="flag-icon flag-icon-{{
+                                            app()->getLocale() == 'en' ? 'gbr' :
+                                            (app()->getLocale() == 'de' ? 'deu' :
+                                            (app()->getLocale() == 'es' ? 'esp' :
+                                            (app()->getLocale() == 'fr' ? 'fra' : 'ita')))
+                                        }}"></i>
+                                    </span>
                                 </div>
                             </a>
                             <ul class="dropdown-menu language-dropdown header-card border-0">
-                                <li class="lang lang-en selected dropdown-item p-2" data-bs-placement="top"
-                                    data-bs-toggle="tooltip" title="US">
-                                                <span class="d-flex align-items-center">
-                                                    <i class="flag-icon flag-icon-usa flag-icon-squared rounded-circle f-s-20"></i>
-                                                    <span class="ps-2">US</span>
-                                                </span>
+                                <li class="lang lang-it {{ app()->getLocale() == 'it' ? 'selected' : '' }} dropdown-item p-2" data-bs-placement="top" data-bs-toggle="tooltip" title="IT">
+                                    <a href="{{ url()->current() }}?lang=it" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-ita flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">Italiano</span>
+                                    </a>
                                 </li>
-                                <li class="lang lang-pt dropdown-item p-2" title="FR">
-                                                <span class="d-flex align-items-center">
-                                                    <i class="flag-icon flag-icon-fra flag-icon-squared rounded-circle f-s-20"></i>
-                                                    <span class="ps-2">France</span>
-                                                </span>
+                                <li class="lang lang-en {{ app()->getLocale() == 'en' ? 'selected' : '' }} dropdown-item p-2" title="EN">
+                                    <a href="{{ url()->current() }}?lang=en" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-gbr flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">English</span>
+                                    </a>
                                 </li>
-                                <li class="lang lang-es dropdown-item p-2" title="UK">
-                                                <span class="d-flex align-items-center">
-                                                    <i class="flag-icon flag-icon-gbr flag-icon-squared rounded-circle f-s-20"></i>
-                                                    <span class="ps-2">UK</span>
-                                                </span>
+                                <li class="lang lang-fr {{ app()->getLocale() == 'fr' ? 'selected' : '' }} dropdown-item p-2" title="FR">
+                                    <a href="{{ url()->current() }}?lang=fr" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-fra flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">Français</span>
+                                    </a>
                                 </li>
-                                <li class="lang lang-es dropdown-item p-2" title="IT">
-                                                <span class="d-flex align-items-center">
-                                                    <i class="flag-icon flag-icon-ita flag-icon-squared rounded-circle f-s-20"></i>
-                                                    <span class="ps-2">Italy</span>
-                                                </span>
+                                <li class="lang lang-es {{ app()->getLocale() == 'es' ? 'selected' : '' }} dropdown-item p-2" title="ES">
+                                    <a href="{{ url()->current() }}?lang=es" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-esp flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">Español</span>
+                                    </a>
+                                </li>
+                                <li class="lang lang-de {{ app()->getLocale() == 'de' ? 'selected' : '' }} dropdown-item p-2" title="DE">
+                                    <a href="{{ url()->current() }}?lang=de" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-deu flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">Deutsch</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -446,129 +456,65 @@
                            data-bs-target="#notificationcanvasRight"
                            data-bs-toggle="offcanvas"
                            href="#"
-                           role="button">
+                           role="button"
+                           id="notificationTrigger">
                             <i class="ph ph-bell"></i>
-                            <span
-                                class="position-absolute translate-middle p-1 bg-primary border border-light rounded-circle animate__animated animate__fadeIn animate__infinite animate__slower"></span>
+                            <!-- Dynamic notification badge -->
+                            <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
                         </a>
                         <div aria-labelledby="notificationcanvasRightLabel"
                              class="offcanvas offcanvas-end header-notification-canvas"
                              id="notificationcanvasRight" tabindex="-1">
                             <div class="offcanvas-header">
                                 <h5 class="offcanvas-title" id="notificationcanvasRightLabel">
-                                    Notification</h5>
-                                <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas"
-                                        type="button"></button>
+                                    <i class="ph ph-bell me-2"></i>Notifiche
+                                    <span id="notificationCount" class="badge bg-primary ms-2">0</span>
+                                </h5>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="Segna tutte come lette">
+                                        <i class="ph ph-check-circle"></i>
+                                    </button>
+                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
+                                </div>
                             </div>
-                            <div class="offcanvas-body app-scroll p-0">
-                                <div class="head-container">
-                                    <div class="notification-message head-box">
+                            <div class="offcanvas-body app-scroll p-0" id="notificationsContainer">
+                                <!-- Loading state -->
+                                <div id="notificationsLoading" class="text-center p-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Caricamento...</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">Caricamento notifiche...</p>
+                                </div>
 
-                                        <div class="message-content-box flex-grow-1 pe-2">
+                                <!-- Notifications will be loaded here -->
+                                <div id="notificationsList" class="head-container" style="display: none;">
+                                    <!-- Dynamic notifications loaded via JavaScript -->
+                                </div>
 
-                                            <a class="f-s-15 text-dark mb-0"
-                                               href="{{route('read_email')}}"><span
-                                                    class="f-w-500 text-dark">Gene Hart</span> wants to
-                                                edit <span
-                                                    class="f-w-500 text-dark">Report.doc</span></a>
-                                            <div>
-                                                <a class="d-inline-block f-w-500 text-success me-1"
-                                                   href="#">Approve</a>
-                                                <a class="d-inline-block f-w-500 text-danger"
-                                                   href="#">Deny</a>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <div>
-                                                <span class="badge text-light-primary"> sep 23 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="notification-message head-box">
+                                <!-- Empty state -->
+                                <div id="notificationsEmpty" class="text-center p-4" style="display: none;">
+                                    <i class="ph ph-bell-slash display-4 text-muted mb-3"></i>
+                                    <h6 class="text-muted">Nessuna notifica</h6>
+                                    <p class="text-muted small">Le tue notifiche appariranno qui</p>
+                                </div>
 
-                                        <div class="message-content-box flex-grow-1 pe-2">
-                                            <a class="f-s-15 text-dark mb-0" href="{{route('read_email')}}">Hey
-                                                <span
-                                                    class="f-w-500 text-dark">Emery McKenzie</span>,
-                                                get ready: Your order from <span
-                                                    class="f-w-500 text-dark">@Shopper.com</span></a>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <div>
-                                                <span class="badge text-light-primary"> sep 23 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="notification-message head-box">
-                                        <div class="message-content-box flex-grow-1 pe-2">
-                                            <a class="f-s-15 text-dark mb-0"
-                                               href="{{route('read_email')}}"><span
-                                                    class="f-w-500 text-dark">Simon Young</span> shared
-                                                a file called <span
-                                                    class="f-w-500 text-dark">Dropdown.pdf</span></a>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <div>
-                                                <span class="badge text-light-primary"> 30 min</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="notification-message head-box">
-                                        <div class="message-content-box flex-grow-1 pe-2">
-                                            <a class="f-s-15 text-dark mb-0"
-                                               href="{{route('read_email')}}"><span
-                                                    class="f-w-500 text-dark">Becky G. Hayes</span> has
-                                                added a comment to <span
-                                                    class="f-w-500 text-dark">Final_Report.pdf</span></a>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <div>
-                                                <span class="badge text-light-primary"> 45 min</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="notification-message head-box">
-                                        <div class="message-content-box  flex-grow-1 pe-2">
-                                            <a class="f-s-15 text-dark mb-0 "
-                                               href="{{route('read_email')}}"><span
-                                                    class="f-w-600 text-dark">@Romaine</span>
-                                                invited you to a meeting
+                                <!-- Footer actions -->
+                                <div class="p-3 border-top" id="notificationsFooter" style="display: none;">
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <a href="{{ route('notifications.index') }}" class="btn btn-outline-primary btn-sm w-100">
+                                                <i class="ph ph-list me-1"></i>Vedi Tutte
                                             </a>
-                                            <div>
-                                                <a class="d-inline-block f-w-500 text-success me-1"
-                                                   href="#">Join</a>
-                                                <a class="d-inline-block f-w-500 text-danger" href="#">Decline</a>
-                                            </div>
-
                                         </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <div>
-                                                <span class="badge text-light-primary"> 1 hour ago </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="hidden-massage py-4 px-3">
-                                        <div>
-                                            <i class="ph-duotone  ph-bell-ringing f-s-50 text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0">Notification Not Found</h6>
-                                            <p class="text-dark">When you have any notifications added
-                                                here,will
-                                                appear here.
-                                            </p>
+                                        <div class="col-6">
+                                            <button class="btn btn-outline-secondary btn-sm w-100" onclick="clearOldNotifications()">
+                                                <i class="ph ph-trash me-1"></i>Pulisci
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </li>
                 </ul>
             </div>

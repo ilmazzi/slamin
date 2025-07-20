@@ -1,4 +1,3 @@
-
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -626,7 +625,7 @@
                                                  src="{{asset('../assets/images/landing/notification.jpg')}}">
                                             <div class="demo-box">
                                                 <h6 class="m-0 f-w-500 f-s-18">Notifications</h6>
-                                                <a class="btn btn-primary icon-btn b-r-22" href="{{route('notifications')}}"
+                                                <a class="btn btn-primary icon-btn b-r-22" href="{{route('notifications.index')}}"
                                                    role="button"
                                                    target="_blank">
 

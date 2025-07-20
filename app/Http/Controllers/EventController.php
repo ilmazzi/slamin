@@ -1,0 +1,557 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Event;
+use App\Models\EventInvitation;
+use App\Models\EventRequest;
+use App\Models\User;
+use App\Models\Notification;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Carbon\Carbon;
+
+class EventController extends Controller
+{
+    /**
+     * Display a listing of events
+     */
+    public function index(Request $request): View
+    {
+        $query = Event::with(['organizer', 'venueOwner'])
+                     ->published()
+                     ->upcoming()
+                     ->orderBy('start_datetime');
+
+        // Filter by location if provided
+        if ($request->has(['lat', 'lng'])) {
+            $query->nearLocation(
+                $request->lat,
+                $request->lng,
+                $request->radius ?? 50
+            );
+        }
+
+        // Filter by city
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+
+        // Filter by type (public/private)
+        if ($request->filled('type')) {
+            $query->where('is_public', $request->type === 'public');
+        }
+
+        // Filter by tags
+        if ($request->filled('tags')) {
+            $tags = explode(',', $request->tags);
+            $query->where(function ($q) use ($tags) {
+                foreach ($tags as $tag) {
+                    $q->orWhereJsonContains('tags', trim($tag));
+                }
+            });
+        }
+
+        $events = $query->paginate(12);
+
+        return view('events.index', compact('events'));
+    }
+
+    /**
+     * Show the form for creating a new event
+     */
+    public function create(): View
+    {
+        $venueOwners = User::whereHas('roles', function ($query) {
+            $query->where('name', 'venue_owner');
+        })->get();
+
+        return view('events.create', compact('venueOwners'));
+    }
+
+    /**
+     * Store a newly created event
+     */
+        public function store(Request $request): RedirectResponse
+    {
+        Gate::authorize('create', Event::class);
+
+
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'nullable|string',
+            'start_datetime' => 'required|date|after:now',
+            'end_datetime' => 'required|date|after:start_datetime',
+            'registration_deadline' => 'nullable|date|before:start_datetime',
+            'venue_name' => 'required|string|max:255',
+            'venue_address' => 'required|string',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|size:2',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_public' => 'required|in:0,1',
+            'max_participants' => 'nullable|integer|min:1',
+            'entry_fee' => 'nullable|numeric|min:0',
+            'venue_owner_id' => 'nullable|exists:users,id',
+            'allow_requests' => 'boolean',
+            'tags' => 'nullable|string',
+            'image_url' => 'nullable|url',
+            'invitations' => 'nullable|string', // JSON string of invitations
+        ]);
+
+        // Process tags
+        if ($validated['tags']) {
+            $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
+        }
+
+                // Convert is_public to boolean explicitly
+        $validated['is_public'] = $validated['is_public'] === '1' || $validated['is_public'] === 1;
+
+        // Set organizer
+        $validated['organizer_id'] = Auth::id();
+        $validated['status'] = Event::STATUS_PUBLISHED;
+
+
+
+
+
+        // Process invitations if provided
+        $invitations = [];
+        if (!empty($validated['invitations'])) {
+            try {
+                $invitations = json_decode($validated['invitations'], true);
+                if (!is_array($invitations)) {
+                    $invitations = [];
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse invitations JSON: ' . $e->getMessage());
+                $invitations = [];
+            }
+        }
+
+        // Remove invitations from validated data as it's not part of Event model
+        unset($validated['invitations']);
+
+        DB::transaction(function () use ($validated, $invitations, &$event) {
+                        // Create the event
+            $event = Event::create($validated);
+
+            // Create invitations if any
+            foreach ($invitations as $invitation) {
+                if (isset($invitation['user_id']) && isset($invitation['role'])) {
+                    // Verify user exists
+                    $user = User::find($invitation['user_id']);
+                    if ($user) {
+                        // Create invitation
+                        $eventInvitation = EventInvitation::create([
+                            'event_id' => $event->id,
+                            'invited_user_id' => $invitation['user_id'],
+                            'inviter_id' => Auth::id(),
+                            'role' => $invitation['role'],
+                            'message' => $invitation['message'] ?? "Sei invitato a partecipare al nostro evento Poetry Slam!",
+                            'status' => EventInvitation::STATUS_PENDING,
+                            'expires_at' => Carbon::parse($event->start_datetime)->subDays(1), // Expires 1 day before event
+                        ]);
+
+                        // Create notification
+                        Notification::createEventInvitation($eventInvitation);
+                    }
+                }
+            }
+        });
+
+        $invitationCount = count($invitations);
+        $successMessage = __('events.event_created_success');
+        if ($invitationCount > 0) {
+            $successMessage .= ' ' . __('events.invitations_sent_success', ['count' => $invitationCount]);
+        }
+
+        return redirect()
+            ->route('events.show', $event)
+            ->with('success', $successMessage);
+    }
+
+    /**
+     * Search users for event invitations (API endpoint)
+     */
+    public function searchUsers(Request $request): JsonResponse
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $users = User::where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                  ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->whereHas('roles', function ($q) {
+                // Only users with relevant roles for poetry slam events
+                $q->whereIn('name', ['poet', 'judge', 'technician', 'organizer']);
+            })
+            ->where('status', 'active')
+            ->where('id', '!=', Auth::id()) // Exclude current user
+            ->limit(10)
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'roles' => $user->roles->pluck('name')->toArray(),
+                    'avatar' => $user->avatar ?? null,
+                ];
+            });
+
+        return response()->json($users);
+    }
+
+    /**
+     * Display the specified event
+     */
+    public function show(Event $event): View
+    {
+        $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user']);
+
+        $user = Auth::user();
+        $canApply = false;
+        $hasInvitation = false;
+        $hasRequest = false;
+        $userInvitation = null;
+        $userRequest = null;
+
+        if ($user) {
+            // Check if user can apply to this event
+            $canApply = EventRequest::canUserApplyToEvent($user, $event);
+
+            // Check if user has invitation
+            $userInvitation = $event->invitations()
+                                  ->where('invited_user_id', $user->id)
+                                  ->first();
+            $hasInvitation = $userInvitation !== null;
+
+            // Check if user has request
+            $userRequest = $event->requests()
+                               ->where('user_id', $user->id)
+                               ->first();
+            $hasRequest = $userRequest !== null;
+        }
+
+        return view('events.show', compact(
+            'event',
+            'canApply',
+            'hasInvitation',
+            'hasRequest',
+            'userInvitation',
+            'userRequest'
+        ));
+    }
+
+    /**
+     * Show the form for editing the event
+     */
+    public function edit(Event $event): View
+    {
+        Gate::authorize('update', $event);
+
+        $venueOwners = User::whereHas('roles', function ($query) {
+            $query->where('name', 'venue_owner');
+        })->get();
+
+        return view('events.edit', compact('event', 'venueOwners'));
+    }
+
+    /**
+     * Update the specified event
+     */
+    public function update(Request $request, Event $event): RedirectResponse
+    {
+        Gate::authorize('update', $event);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'nullable|string',
+            'start_datetime' => 'required|date|after:now',
+            'end_datetime' => 'required|date|after:start_datetime',
+            'registration_deadline' => 'nullable|date|before:start_datetime',
+            'venue_name' => 'required|string|max:255',
+            'venue_address' => 'required|string',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|size:2',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_public' => 'boolean',
+            'max_participants' => 'nullable|integer|min:1',
+            'entry_fee' => 'nullable|numeric|min:0',
+            'venue_owner_id' => 'nullable|exists:users,id',
+            'allow_requests' => 'boolean',
+            'tags' => 'nullable|string',
+            'image_url' => 'nullable|url',
+            'status' => ['required', Rule::in([Event::STATUS_DRAFT, Event::STATUS_PUBLISHED, Event::STATUS_CANCELLED])],
+        ]);
+
+        // Process tags
+        if ($validated['tags']) {
+            $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
+        }
+
+        $event->update($validated);
+
+        // Notify participants about event update
+        $this->notifyEventUpdate($event);
+
+        return redirect()
+            ->route('events.show', $event)
+            ->with('success', 'Evento aggiornato con successo!');
+    }
+
+    /**
+     * Remove the specified event
+     */
+    public function destroy(Event $event): RedirectResponse
+    {
+        Gate::authorize('delete', $event);
+
+        // Notify all participants about cancellation
+        $this->notifyEventCancellation($event);
+
+        $event->delete();
+
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Evento eliminato con successo!');
+    }
+
+    /**
+     * Show event management interface for organizers
+     */
+    public function manage(Event $event): View
+    {
+        Gate::authorize('update', $event);
+
+        $event->load([
+            'pendingInvitations.invitedUser',
+            'pendingRequests.user',
+            'invitations', // Load ALL invitations for statistics
+            'requests',    // Load ALL requests for statistics
+            'acceptedInvitations' => function ($query) {
+                $query->where('status', 'accepted');
+            },
+            'declinedInvitations' => function ($query) {
+                $query->where('status', 'declined');
+            },
+            'acceptedRequests' => function ($query) {
+                $query->where('status', 'accepted');
+            },
+            'declinedRequests' => function ($query) {
+                $query->where('status', 'declined');
+            }
+        ]);
+
+        // Get potential artists to invite
+        $availableArtists = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['poet', 'judge', 'technician']);
+        })
+        ->whereNotIn('id', function ($query) use ($event) {
+            $query->select('invited_user_id')
+                  ->from('event_invitations')
+                  ->where('event_id', $event->id);
+        })
+        ->whereNotIn('id', function ($query) use ($event) {
+            $query->select('user_id')
+                  ->from('event_requests')
+                  ->where('event_id', $event->id);
+        })
+        ->get();
+
+        return view('events.manage', compact('event', 'availableArtists'));
+    }
+
+    /**
+     * Search events near a location
+     */
+    public function near(Request $request): JsonResponse
+    {
+        $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'radius' => 'nullable|integer|min:1|max:200',
+        ]);
+
+        $events = Event::published()
+                      ->public()
+                      ->upcoming()
+                      ->nearLocation(
+                          $request->latitude,
+                          $request->longitude,
+                          $request->radius ?? 50
+                      )
+                      ->with(['organizer'])
+                      ->get()
+                      ->map(function ($event) {
+                          return [
+                              'id' => $event->id,
+                              'title' => $event->title,
+                              'start_datetime' => $event->start_datetime->format('Y-m-d H:i'),
+                              'venue_name' => $event->venue_name,
+                              'city' => $event->city,
+                              'latitude' => $event->latitude,
+                              'longitude' => $event->longitude,
+                              'organizer' => $event->organizer->name,
+                              'formatted_address' => $event->formatted_address,
+                              'url' => route('events.show', $event),
+                          ];
+                      });
+
+        return response()->json($events);
+    }
+
+    /**
+     * Apply to participate in a public event
+     */
+    public function apply(Request $request, Event $event): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (!EventRequest::canUserApplyToEvent($user, $event)) {
+            return back()->with('error', 'Non puoi richiedere di partecipare a questo evento.');
+        }
+
+        $validated = $request->validate([
+            'message' => 'required|string|min:10',
+            'requested_role' => 'required|string|in:performer,judge,technician,host',
+            'portfolio_links' => 'nullable|array',
+            'portfolio_links.*' => 'url',
+            'experience' => 'nullable|string',
+        ]);
+
+        $validated['event_id'] = $event->id;
+        $validated['user_id'] = $user->id;
+
+        EventRequest::createWithNotification($validated);
+
+        return back()->with('success', 'Richiesta di partecipazione inviata con successo!');
+    }
+
+    /**
+     * Get events for calendar
+     */
+    public function calendar(Request $request): JsonResponse
+    {
+        $user = Auth::user();
+
+        $query = Event::published()->upcoming();
+
+        // Show user's events (organized, invited to, or requested)
+        if ($user) {
+            $query->where(function ($q) use ($user) {
+                $q->where('organizer_id', $user->id)
+                  ->orWhereHas('invitations', function ($query) use ($user) {
+                      $query->where('invited_user_id', $user->id)
+                            ->where('status', 'accepted');
+                  })
+                  ->orWhereHas('requests', function ($query) use ($user) {
+                      $query->where('user_id', $user->id)
+                            ->where('status', 'accepted');
+                  });
+            });
+        }
+
+        $events = $query->get()->map(function ($event) use ($user) {
+            $isOrganizer = $user && $event->organizer_id === $user->id;
+
+            return [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->start_datetime->toISOString(),
+                'end' => $event->end_datetime->toISOString(),
+                'url' => route('events.show', $event),
+                'className' => $isOrganizer ? 'event-organizer' : 'event-participant',
+                'backgroundColor' => $isOrganizer ? '#28a745' : '#007bff',
+            ];
+        });
+
+        return response()->json($events);
+    }
+
+    /**
+     * Notify participants about event update
+     */
+    private function notifyEventUpdate(Event $event): void
+    {
+        $participantIds = collect();
+
+        // Get accepted invitations
+        $participantIds = $participantIds->merge(
+            $event->invitations()
+                  ->where('status', 'accepted')
+                  ->pluck('invited_user_id')
+        );
+
+        // Get accepted requests
+        $participantIds = $participantIds->merge(
+            $event->requests()
+                  ->where('status', 'accepted')
+                  ->pluck('user_id')
+        );
+
+        // Create notifications
+        foreach ($participantIds->unique() as $userId) {
+            Notification::create([
+                'user_id' => $userId,
+                'type' => Notification::TYPE_EVENT_UPDATE,
+                'title' => 'Evento Aggiornato',
+                'message' => 'L\'evento "' . $event->title . '" è stato aggiornato',
+                'data' => ['event_id' => $event->id],
+                'action_url' => route('events.show', $event),
+                'action_text' => 'Vedi Evento',
+                'priority' => Notification::PRIORITY_NORMAL,
+            ]);
+        }
+    }
+
+    /**
+     * Notify participants about event cancellation
+     */
+    private function notifyEventCancellation(Event $event): void
+    {
+        $participantIds = collect();
+
+        // Get all invitations (pending and accepted)
+        $participantIds = $participantIds->merge(
+            $event->invitations()
+                  ->whereIn('status', ['pending', 'accepted'])
+                  ->pluck('invited_user_id')
+        );
+
+        // Get all requests (pending and accepted)
+        $participantIds = $participantIds->merge(
+            $event->requests()
+                  ->whereIn('status', ['pending', 'accepted'])
+                  ->pluck('user_id')
+        );
+
+        // Create notifications
+        foreach ($participantIds->unique() as $userId) {
+            Notification::create([
+                'user_id' => $userId,
+                'type' => Notification::TYPE_EVENT_CANCELLED,
+                'title' => 'Evento Cancellato',
+                'message' => 'L\'evento "' . $event->title . '" è stato cancellato',
+                'data' => ['event_id' => $event->id],
+                'priority' => Notification::PRIORITY_HIGH,
+            ]);
+        }
+    }
+}

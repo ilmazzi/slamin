@@ -6,8 +6,9 @@
 <meta content="admin template, ki-admin admin template, dashboard template, flat admin template, responsive admin template, web app"
       name="keywords">
 <meta content="la-themes" name="author">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="icon" href="{{('../assets/images/logo/favicon.png')}}" type="image/x-icon">
 <link rel="shortcut icon" href="{{('../assets/images/logo/favicon.png')}}" type="image/x-icon">
 
-<title>@yield('title') | ki-admin - Premium Admin Template</title>
+<title>@yield('title') | Slam In - A home for poetry</title>
