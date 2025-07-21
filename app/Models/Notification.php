@@ -440,12 +440,28 @@ class Notification extends Model
      */
     public static function createInvitationResponse(EventInvitation $invitation, string $response): void
     {
+        // Check if event and organizer exist
+        if (!$invitation->event || !$invitation->event->organizer_id) {
+            \Log::warning('Cannot create invitation response notification: missing event or organizer', [
+                'invitation_id' => $invitation->id,
+                'event_id' => $invitation->event_id,
+                'organizer_id' => $invitation->event?->organizer_id
+            ]);
+            return;
+        }
+
+        // Delete existing invitation notifications for the invited user
+        self::where('type', self::TYPE_EVENT_INVITATION)
+            ->where('user_id', $invitation->invited_user_id)
+            ->whereJsonContains('data->invitation_id', $invitation->id)
+            ->delete();
+
         $responseText = $response === 'accepted' ? 'accettato' : 'rifiutato';
         $type = $response === 'accepted' ? self::TYPE_INVITATION_ACCEPTED : self::TYPE_INVITATION_DECLINED;
         $title = $response === 'accepted' ? 'Invito Accettato' : 'Invito Rifiutato';
 
         $notification = self::create([
-            'user_id' => $invitation->event->user_id, // Notify the event organizer
+            'user_id' => $invitation->event->organizer_id, // Notify the event organizer
             'type' => $type,
             'title' => $title,
             'message' => "{$invitation->invitedUser->name} ha {$responseText} l'invito per partecipare come {$invitation->role} all'evento \"{$invitation->event->title}\"",

@@ -233,8 +233,8 @@
 
                     <div class="mb-3">
                         <label class="form-label f-w-600">Carica Nuova Foto</label>
-                        <input type="file" id="profile-photo-input" class="form-control" accept="image/*" onchange="previewImage(this)">
-                        <small class="text-muted f-s-12">Formati supportati: JPG, PNG, GIF. Max 2MB</small>
+                        <input type="file" id="profile-photo-input" name="profile_photo" class="form-control" accept="image/*" onchange="previewImage(this)">
+                        <small class="text-muted f-s-12">Formati supportati: Tutti i formati immagine (JPG, PNG, GIF, WebP, ecc.). Max {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) / 1024 }}MB</small>
                     </div>
 
                     <div class="text-start">
@@ -293,37 +293,117 @@ function previewImage(input) {
 // Auto-submit form when profile photo is selected
 document.getElementById('profile-photo-input').addEventListener('change', function() {
     if (this.files && this.files[0]) {
+        const file = this.files[0];
+
+        console.log('File selezionato:', file);
+        console.log('Dimensione file:', file.size, 'bytes');
+        console.log('Tipo file:', file.type);
+
+        // Verifica dimensione file (dinamica dalle impostazioni)
+        const maxSize = {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) }} * 1024; // Converti KB in bytes
+        if (file.size > maxSize) {
+            const maxSizeMB = {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) }} / 1024;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Errore', 'Il file è troppo grande. Dimensione massima: ' + maxSizeMB + 'MB', 'error');
+            } else {
+                alert('Il file è troppo grande. Dimensione massima: ' + maxSizeMB + 'MB');
+            }
+            this.value = ''; // Reset input
+            return;
+        }
+
+        // Verifica tipo file
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Errore', 'Tipo di file non supportato. Usa: JPEG, PNG, JPG, GIF', 'error');
+            } else {
+                alert('Tipo di file non supportato. Usa: JPEG, PNG, JPG, GIF');
+            }
+            this.value = ''; // Reset input
+            return;
+        }
+
         const formData = new FormData();
-        formData.append('profile_photo', this.files[0]);
-        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('profile_photo', file);
         formData.append('_method', 'PUT');
 
         // Show loading
-        Swal.fire({
-            title: 'Caricamento...',
-            text: 'Sto aggiornando la tua foto profilo',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Caricamento...',
+                text: 'Sto aggiornando la tua foto profilo',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        } else {
+            console.log('SweetAlert2 non disponibile, mostro alert normale');
+            alert('Caricamento foto profilo...');
+        }
+
+        console.log('Invio richiesta a:', '{{ route("profile.update") }}');
 
         fetch('{{ route("profile.update") }}', {
             method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire('Successo!', 'Foto profilo aggiornata con successo', 'success').then(() => {
-                    location.reload();
-                });
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
             } else {
-                Swal.fire('Errore', data.message || 'Errore durante il caricamento', 'error');
+                // If not JSON, get the text and log it
+                return response.text().then(text => {
+                    console.error('Non-JSON response received:', text);
+                    throw new Error('Server returned non-JSON response: ' + text.substring(0, 200));
+                });
+            }
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                // Aggiorna l'immagine nella sidebar se esiste
+                const sidebarAvatar = document.querySelector('.nav-profile img');
+                if (sidebarAvatar && data.profile_photo_url) {
+                    sidebarAvatar.src = data.profile_photo_url;
+                }
+
+                // Aggiorna l'immagine nella pagina di modifica
+                const profileAvatar = document.querySelector('.profile-photo img');
+                if (profileAvatar && data.profile_photo_url) {
+                    profileAvatar.src = data.profile_photo_url;
+                }
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Successo!', 'Foto profilo aggiornata con successo', 'success');
+                } else {
+                    alert('Foto profilo aggiornata con successo!');
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Errore', data.message || 'Errore durante il caricamento', 'error');
+                } else {
+                    alert('Errore: ' + (data.message || 'Errore durante il caricamento'));
+                }
             }
         })
         .catch(error => {
-            Swal.fire('Errore', 'Errore durante il caricamento', 'error');
+            console.error('Errore durante il caricamento:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('Errore', 'Errore durante il caricamento: ' + error.message, 'error');
+            } else {
+                alert('Errore durante il caricamento: ' + error.message);
+            }
         });
     }
 });

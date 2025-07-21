@@ -7,11 +7,11 @@
 <!-- Bootstrap js-->
 <script src="{{asset('assets/vendor/bootstrap/bootstrap.bundle.min.js')}}"></script>
 
-<!-- Simple bar js-->
-<script src="{{asset('assets/vendor/simplebar/simplebar.js')}}"></script>
-
 <!-- phosphor js -->
 <script src="{{asset('assets/vendor/phosphor/phosphor.js')}}"></script>
+
+<!-- Simple bar js-->
+<script src="{{asset('assets/vendor/simplebar/simplebar.js')}}"></script>
 
 <!-- Customizer js-->
 <script src="{{asset('assets/js/customizer.js')}}"></script>

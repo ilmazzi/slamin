@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Request;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -127,7 +128,7 @@ Route::view('maintenance', 'maintenance')->name('maintenance');
 Route::view('misc', 'misc')->name('misc');
 Route::view('mixed_chart', 'mixed_chart')->name('mixed_chart');
 Route::view('modals', 'modals')->name('modals');
-Route::view('notifications', 'notifications')->name('notifications');
+
 
 Route::view('offcanvas', 'offcanvas')->name('offcanvas');
 Route::view('orders', 'orders')->name('orders');
@@ -352,6 +353,7 @@ Route::middleware('auth')->group(function () {
 
 // Invitation routes
 Route::get('/invitations', [InvitationController::class, 'index'])->name('invitations.index');
+Route::get('/invitations/{invitation}', [InvitationController::class, 'show'])->name('invitations.show');
 Route::get('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
 Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitations.decline');
 
@@ -463,6 +465,12 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
         Route::resource('carousels', App\Http\Controllers\Admin\CarouselController::class)->names('carousels');
         Route::post('/carousels/order', [App\Http\Controllers\Admin\CarouselController::class, 'updateOrder'])->name('carousels.order');
+
+        // System Settings
+        Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
+        Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+        Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)
@@ -488,9 +496,16 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
 
         // Video playback and views
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
-        Route::get('/{video}/play', [App\Http\Controllers\VideoController::class, 'play'])->name('play');
         Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
+
+        // Video interactions (comments, likes, snaps)
+        Route::post('/{video}/comments', [App\Http\Controllers\VideoController::class, 'addComment'])->name('add-comment');
+        Route::post('/{video}/like', [App\Http\Controllers\VideoController::class, 'toggleLike'])->name('toggle-like');
+        Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('add-snap');
+        Route::delete('/comments/{comment}', [App\Http\Controllers\VideoController::class, 'deleteComment'])->name('delete-comment');
+        Route::delete('/snaps/{snap}', [App\Http\Controllers\VideoController::class, 'deleteSnap'])->name('delete-snap');
+        Route::post('/snaps/{snap}/like', [App\Http\Controllers\VideoController::class, 'toggleSnapLike'])->name('snap-like');
     });
 
     // Premium Routes
@@ -559,5 +574,50 @@ Route::get('/debug-simulate-create', function () {
         ], 500);
     }
 })->name('debug-simulate-create');
+
+// Test route per upload
+Route::get('/test-upload', function () {
+    return view('test.upload');
+})->middleware('auth')->name('test.upload');
+
+Route::post('/test-upload', function (Request $request) {
+    \Log::info('Test upload chiamato', [
+        'has_file' => $request->hasFile('profile_photo'),
+        'all_data' => $request->all(),
+        'files' => $request->allFiles()
+    ]);
+
+    if ($request->hasFile('profile_photo')) {
+        $file = $request->file('profile_photo');
+        \Log::info('File ricevuto', [
+            'original_name' => $file->getClientOriginalName(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType()
+        ]);
+
+        try {
+            $path = $file->store('profile-photos', 'public');
+            \Log::info('File salvato', ['path' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File caricato con successo',
+                'path' => $path,
+                'url' => asset('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Errore salvataggio', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Nessun file ricevuto'
+    ], 400);
+})->middleware('auth');
 
 

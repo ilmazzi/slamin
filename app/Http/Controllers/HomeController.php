@@ -18,13 +18,16 @@ class HomeController extends Controller
         // Carousel attivo
         $carousels = Carousel::active()->ordered()->get();
 
-        // Video più popolari (più visualizzazioni)
-        $popularVideos = Video::where('moderation_status', 'approved')
+        // Video più popolare (più interazioni totali)
+        $mostPopularVideo = Video::where('moderation_status', 'approved')
             ->where('is_public', true)
-            ->orderBy('view_count', 'desc')
-            ->limit(6)
             ->with('user')
-            ->get();
+            ->get()
+            ->sortByDesc(function($video) {
+                // Calcola il punteggio totale delle interazioni
+                return $video->view_count + $video->like_count + $video->comment_count + $video->snaps()->count();
+            })
+            ->first();
 
         // Eventi più recenti
         $recentEvents = Event::where('status', 'published')
@@ -52,7 +55,7 @@ class HomeController extends Controller
             'total_views' => Video::sum('view_count'),
         ];
 
-        return view('home', compact('carousels', 'popularVideos', 'recentEvents', 'topPoets', 'stats'));
+        return view('home', compact('carousels', 'mostPopularVideo', 'recentEvents', 'topPoets', 'stats'));
     }
 
     /**

@@ -117,7 +117,7 @@
                             <button class="btn btn-outline-primary hover-effect" onclick="editVideo({{ $video->id }})" title="Modifica">
                                 <i class="ph ph-pencil f-s-14"></i>
                             </button>
-                            <button class="btn btn-outline-success hover-effect" onclick="window.location.href='{{ route('videos.play', $video) }}'" title="Visualizza">
+                                                            <button class="btn btn-outline-success hover-effect" onclick="window.location.href='{{ route('videos.show', $video) }}'" title="Visualizza">
                                 <i class="ph ph-play f-s-14"></i>
                             </button>
                             <button class="btn btn-outline-danger hover-effect" onclick="deleteVideo({{ $video->id }})" title="Elimina">
@@ -128,7 +128,7 @@
 
                     <div class="d-grid">
                         @if($video->file_path)
-                            <a href="{{ route('videos.play', $video) }}" class="btn btn-success hover-effect">
+                            <a href="{{ route('videos.show', $video) }}" class="btn btn-success hover-effect">
                                 <i class="ph ph-play me-2"></i>Riproduci Video
                             </a>
                         @elseif($video->video_url)

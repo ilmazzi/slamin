@@ -15,14 +15,16 @@ use Illuminate\Support\Facades\Gate;
 class EventRequestController extends Controller
 {
     /**
-     * Display requests for the authenticated user
+     * Display requests received by the authenticated user (as organizer)
      */
     public function index(Request $request): View
     {
         $user = Auth::user();
 
-        $query = EventRequest::with(['event.organizer'])
-                            ->where('user_id', $user->id);
+        $query = EventRequest::with(['event.organizer', 'user'])
+                            ->whereHas('event', function ($q) use ($user) {
+                                $q->where('organizer_id', $user->id);
+                            });
 
         // Filter by status
         if ($request->filled('status')) {

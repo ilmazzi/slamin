@@ -22,6 +22,15 @@
 <!-- Simplebar css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/simplebar/simplebar.css') }}">
 
+<!-- Phosphor Icons css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/phosphor/phosphor-light.css') }}">
+
+<!-- AOS css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/aos/aos.css') }}">
+
+<!-- App css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/app.css') }}">
+
 @yield('css')
 
 @vite(['public/assets/scss/style.scss'])

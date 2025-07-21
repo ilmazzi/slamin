@@ -12,6 +12,7 @@ use App\Models\VideoComment;
 use App\Models\VideoSnap;
 use App\Models\VideoLike;
 use App\Models\Video;
+use App\Models\SystemSetting;
 
 class User extends Authenticatable
 {
@@ -375,8 +376,8 @@ class User extends Authenticatable
             return $subscription->effective_video_limit;
         }
 
-        // Limite gratuito di default
-        return 3;
+        // Limite gratuito dalle impostazioni di sistema
+        return SystemSetting::get('default_video_limit', 3);
     }
 
     /**

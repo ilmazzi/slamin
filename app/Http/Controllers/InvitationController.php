@@ -113,6 +113,19 @@ class InvitationController extends Controller
     }
 
     /**
+     * Show a specific invitation
+     */
+    public function show(EventInvitation $invitation): \Illuminate\View\View
+    {
+        // Check if user is authorized to view this invitation
+        if ($invitation->invited_user_id !== Auth::id()) {
+            abort(403, 'Non autorizzato a visualizzare questo invito.');
+        }
+
+        return view('invitations.show', compact('invitation'));
+    }
+
+    /**
      * Show all invitations for the current user
      */
     public function index(): \Illuminate\View\View

@@ -1,6 +1,6 @@
 {
   "public/assets/images/avatar/09.png": {
-    "file": "assets/09-CjpJAQ08.png",
+    "file": "assets/09-RVi4f03I.png",
     "src": "public/assets/images/avatar/09.png"
   },
   "public/assets/images/background/06.jpg": {
@@ -20,7 +20,7 @@
     "src": "public/assets/images/background/sign-in-bg.jpg"
   },
   "public/assets/images/dashboard/ecommerce-dashboard/02.png": {
-    "file": "assets/02-RulLIf5W.png",
+    "file": "assets/02-DBzJUS7u.png",
     "src": "public/assets/images/dashboard/ecommerce-dashboard/02.png"
   },
   "public/assets/images/dashboard/ecommerce-dashboard/kids-offer.png": {
@@ -39,9 +39,9 @@
     "file": "assets/meeting-bg-BldcbZCY.png",
     "src": "public/assets/images/dashboard/project/meeting-bg.png"
   },
-  "public/assets/images/dashboard/project/slider-card.png": {
-    "file": "assets/slider-card-DWY8TG2T.png",
-    "src": "public/assets/images/dashboard/project/slider-card.png"
+  "public/assets/images/dashboard/project/payment-card-bg.jpg": {
+    "file": "assets/payment-card-bg-D5AvgPvx.jpg",
+    "src": "public/assets/images/dashboard/project/payment-card-bg.jpg"
   },
   "public/assets/images/landing/colour-theme-bg.png": {
     "file": "assets/colour-theme-bg-DKFSn6ob.png",
@@ -64,44 +64,44 @@
     "src": "public/assets/images/landing/speed-performance-bg.png"
   },
   "public/assets/images/profile-app/25.jpg": {
-    "file": "assets/25-CIpb4geA.jpg",
+    "file": "assets/25-DAR1kEkL.jpg",
     "src": "public/assets/images/profile-app/25.jpg"
   },
   "public/assets/images/profile-app/28.jpg": {
-    "file": "assets/28-DdVrmbwz.jpg",
+    "file": "assets/28-CK9LEFzI.jpg",
     "src": "public/assets/images/profile-app/28.jpg"
   },
   "public/assets/images/slick/11.jpg": {
-    "file": "assets/11-BpGFQ1Be.jpg",
+    "file": "assets/11-j_sFk51y.jpg",
     "src": "public/assets/images/slick/11.jpg"
   },
   "public/assets/images/slick/29.jpg": {
-    "file": "assets/29-DhaO5NyO.jpg",
+    "file": "assets/29-CFjV2cZ4.jpg",
     "src": "public/assets/images/slick/29.jpg"
   },
   "public/assets/images/slick/30.jpg": {
-    "file": "assets/30-CATAFb7X.jpg",
+    "file": "assets/30-BFd1pjVI.jpg",
     "src": "public/assets/images/slick/30.jpg"
   },
   "public/assets/images/slick/31.jpg": {
-    "file": "assets/31-qRlYDgyQ.jpg",
-    "src": "public/assets/images/slick/31.jpg"
+    "file": "assets/30-BFd1pjVI.jpg",
+    "src": "public/assets/images/slick/30.jpg"
   },
   "public/assets/images/slick/32.jpg": {
-    "file": "assets/32-roE_10Sv.jpg",
+    "file": "assets/32-SEdkjFpQ.jpg",
     "src": "public/assets/images/slick/32.jpg"
   },
   "public/assets/images/slick/33.jpg": {
-    "file": "assets/33-DWzwbNyB.jpg",
-    "src": "public/assets/images/slick/33.jpg"
+    "file": "assets/30-BFd1pjVI.jpg",
+    "src": "public/assets/images/slick/30.jpg"
   },
   "public/assets/scss/style.scss": {
-    "file": "assets/style-Cuxwy5N_.css",
+    "file": "assets/style-C29tfeIe.css",
     "src": "public/assets/scss/style.scss",
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-D9gHxNq6.css",
+    "file": "assets/app-De9EcrKS.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },

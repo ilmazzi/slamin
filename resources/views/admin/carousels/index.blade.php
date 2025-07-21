@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Gestione Carosello')
+@section('title', __('carousel.management'))
 
 @section('main-content')
 <div class="page-content">
@@ -9,116 +9,118 @@
         <!-- Header -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">Gestione Carosello</h4>
+                <h4 class="main-title">{{ __('carousel.management') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('carousel.dashboard') }}
                             </span>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Carosello</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('carousel.breadcrumb') }}</a>
                     </li>
                 </ul>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="ph-duotone ph-images f-s-16 me-2"></i>
-                        Slide del Carosello
-                    </h5>
-                    <a href="{{ route('admin.carousels.create') }}" class="btn btn-success hover-effect">
-                        <i class="ph-duotone ph-plus f-s-16 me-2"></i>
-                        Nuova Slide
-                    </a>
-                </div>
             </div>
         </div>
 
         <!-- Carousel List -->
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card hover-effect">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">
+                                    <i class="ph-duotone ph-images f-s-16 me-2"></i>
+                                    {{ __('carousel.slides') }}
+                                </h5>
+                                <p class="mt-1 f-m-light mb-0">{{ __('carousel.slides_description') }}</p>
+                            </div>
+                            <a href="{{ route('admin.carousels.create') }}" class="btn btn-success hover-effect">
+                                <i class="ph-duotone ph-plus f-s-16 me-2"></i>
+                                {{ __('carousel.new_slide') }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
                         @if($carousels->count() > 0)
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-bottom-border table-box-hover align-middle mb-0">
                                     <thead>
                                         <tr>
-                                            <th>Ordine</th>
-                                            <th>Immagine</th>
-                                            <th>Titolo</th>
-                                            <th>Stato</th>
-                                            <th>Date</th>
-                                            <th>Azioni</th>
+                                            <th class="text-center" style="width: 60px;">
+                                                <i class="ti ti-arrows-move fs-4 text-secondary"></i>
+                                            </th>
+                                            <th style="width: 100px;">{{ __('carousel.image_header') }}</th>
+                                            <th>{{ __('carousel.title_header') }}</th>
+                                            <th style="width: 120px;">{{ __('carousel.status_header') }}</th>
+                                            <th style="width: 140px;">{{ __('carousel.dates_header') }}</th>
+                                            <th class="text-center" style="width: 150px;">{{ __('carousel.actions_header') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody id="sortableCarousel">
                                         @foreach($carousels as $carousel)
                                         <tr data-id="{{ $carousel->id }}">
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="ph-duotone ph-dots-six-vertical f-s-16 text-muted me-2 cursor-move"></i>
-                                                    <span class="badge bg-secondary">{{ $carousel->order }}</span>
-                                                </div>
+                                            <td class="text-center">
+                                                <span class="badge bg-secondary f-s-12">{{ $carousel->order }}</span>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $carousel->imageUrl }}" alt="{{ $carousel->title }}"
-                                                         class="rounded me-3" style="width: 60px; height: 40px; object-fit: cover;">
-                                                    @if($carousel->video_path)
-                                                        <i class="ph-duotone ph-video-camera f-s-14 text-primary"></i>
-                                                    @endif
+                                                    <div class="position-relative">
+                                                        <img src="{{ $carousel->imageUrl }}" alt="{{ $carousel->title }}"
+                                                             class="rounded" style="width: 50px; height: 35px; object-fit: cover;">
+                                                        @if($carousel->video_path)
+                                                            <div class="position-absolute top-0 end-0">
+                                                                <i class="ph-duotone ph-video-camera f-s-10 text-primary bg-white rounded-circle p-1"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
                                                     <h6 class="mb-1 f-s-14 f-w-600">{{ $carousel->title }}</h6>
                                                     @if($carousel->description)
-                                                        <small class="text-muted">{{ Str::limit($carousel->description, 50) }}</small>
+                                                        <p class="text-muted f-s-12 mb-0">{{ Str::limit($carousel->description, 40) }}</p>
                                                     @endif
                                                 </div>
                                             </td>
                                             <td>
                                                 @if($carousel->is_active)
-                                                    <span class="badge bg-success">
-                                                        <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Attivo
+                                                    <span class="badge bg-success f-s-11">
+                                                        <i class="ph-duotone ph-check-circle f-s-11 me-1"></i>{{ __('carousel.active') }}
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-danger">
-                                                        <i class="ph-duotone ph-x-circle f-s-12 me-1"></i>Inattivo
+                                                    <span class="badge bg-danger f-s-11">
+                                                        <i class="ph-duotone ph-x-circle f-s-11 me-1"></i>{{ __('carousel.inactive') }}
                                                     </span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="f-s-12">
+                                                <div class="f-s-11">
                                                     @if($carousel->start_date)
-                                                        <div>Da: {{ $carousel->start_date->format('d/m/Y') }}</div>
+                                                        <div class="text-muted">{{ __('carousel.from') }}: {{ $carousel->start_date->format('d/m/Y') }}</div>
                                                     @endif
                                                     @if($carousel->end_date)
-                                                        <div>A: {{ $carousel->end_date->format('d/m/Y') }}</div>
+                                                        <div class="text-muted">{{ __('carousel.to') }}: {{ $carousel->end_date->format('d/m/Y') }}</div>
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm">
+                                            <td class="text-center">
+                                                <div class="app-btn-list">
                                                     <a href="{{ route('admin.carousels.edit', $carousel) }}"
-                                                       class="btn btn-outline-primary hover-effect" title="Modifica">
-                                                        <i class="ph-duotone ph-pencil f-s-14"></i>
+                                                       class="btn btn-primary icon-btn b-r-4 hover-effect" title="{{ __('carousel.edit') }}">
+                                                        <i class="ti ti-edit"></i>
                                                     </a>
                                                     <a href="{{ route('admin.carousels.show', $carousel) }}"
-                                                       class="btn btn-outline-info hover-effect" title="Visualizza">
-                                                        <i class="ph-duotone ph-eye f-s-14"></i>
+                                                       class="btn btn-secondary icon-btn b-r-4 hover-effect" title="{{ __('carousel.view') }}">
+                                                        <i class="ti ti-eye"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-outline-danger hover-effect"
-                                                            onclick="deleteCarousel({{ $carousel->id }})" title="Elimina">
-                                                        <i class="ph-duotone ph-trash f-s-14"></i>
+                                                    <button type="button" class="btn btn-danger icon-btn b-r-4 hover-effect"
+                                                            onclick="deleteCarousel({{ $carousel->id }})" title="{{ __('carousel.delete') }}">
+                                                        <i class="ti ti-trash"></i>
                                                     </button>
                                                 </div>
                                             </td>
@@ -129,13 +131,15 @@
                             </div>
                         @else
                             <div class="text-center pa-40">
-                                <i class="ph-duotone ph-images f-s-64 text-muted mb-3"></i>
-                                <h5 class="mb-3">Nessuna slide del carosello</h5>
-                                <p class="text-muted mb-4">Crea la tua prima slide per il carosello della home page</p>
-                                <a href="{{ route('admin.carousels.create') }}" class="btn btn-primary hover-effect">
-                                    <i class="ph-duotone ph-plus f-s-16 me-2"></i>
-                                    Crea Prima Slide
-                                </a>
+                                <div class="empty-state">
+                                    <i class="ph-duotone ph-images f-s-64 text-muted mb-3"></i>
+                                    <h5 class="mb-3">{{ __('carousel.no_slides') }}</h5>
+                                    <p class="text-muted mb-4">{{ __('carousel.create_first_slide') }}</p>
+                                    <a href="{{ route('admin.carousels.create') }}" class="btn btn-primary hover-effect">
+                                        <i class="ph-duotone ph-plus f-s-16 me-2"></i>
+                                        {{ __('carousel.create_first_slide_button') }}
+                                    </a>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -151,19 +155,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Conferma Eliminazione</h5>
+                <h5 class="modal-title">{{ __('carousel.delete_confirmation_title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Sei sicuro di voler eliminare questa slide del carosello?</p>
-                <p class="text-muted small">Questa azione non può essere annullata.</p>
+                <p>{{ __('carousel.delete_confirmation_message') }}</p>
+                <p class="text-muted small">{{ __('carousel.delete_confirmation_warning') }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('carousel.cancel') }}</button>
                 <form id="deleteCarouselForm" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Elimina</button>
+                    <button type="submit" class="btn btn-danger">{{ __('carousel.delete') }}</button>
                 </form>
             </div>
         </div>
@@ -177,7 +181,7 @@
 <script>
 // Sortable functionality
 new Sortable(document.getElementById('sortableCarousel'), {
-    handle: '.cursor-move',
+    handle: '.ti-arrows-move',
     animation: 150,
     onEnd: function(evt) {
         const items = Array.from(evt.to.children).map((tr, index) => ({

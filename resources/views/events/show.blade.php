@@ -181,8 +181,12 @@
                                         <div class="card card-light-success border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
-                                                        {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        @if($invitation->invitedUser->profile_photo)
+                                                            <img src="{{ $invitation->invitedUser->profile_photo_url }}" alt="{{ $invitation->invitedUser->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        @else
+                                                            {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                        @endif
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
@@ -208,8 +212,12 @@
                                         <div class="card card-light-success border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
-                                                        {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        @if($request->user->profile_photo)
+                                                            <img src="{{ $request->user->profile_photo_url }}" alt="{{ $request->user->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        @else
+                                                            {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                        @endif
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
@@ -245,8 +253,12 @@
                                         <div class="card card-light-warning border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
-                                                        {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        @if($invitation->invitedUser->profile_photo)
+                                                            <img src="{{ $invitation->invitedUser->profile_photo_url }}" alt="{{ $invitation->invitedUser->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        @else
+                                                            {{ substr($invitation->invitedUser->getDisplayName(), 0, 2) }}
+                                                        @endif
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
@@ -272,8 +284,12 @@
                                         <div class="card card-light-warning border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
-                                                        {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                        @if($request->user->profile_photo)
+                                                            <img src="{{ $request->user->profile_photo_url }}" alt="{{ $request->user->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        @else
+                                                            {{ substr($request->user->getDisplayName(), 0, 2) }}
+                                                        @endif
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
@@ -513,8 +529,12 @@
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">
-                            {{ substr($event->organizer->getDisplayName(), 0, 2) }}
+                        <div class="rounded-circle bg-white text-primary d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 40px; height: 40px; font-weight: bold;">
+                            @if($event->organizer->profile_photo)
+                                <img src="{{ $event->organizer->profile_photo_url }}" alt="{{ $event->organizer->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                {{ substr($event->organizer->getDisplayName(), 0, 2) }}
+                            @endif
                         </div>
                         <div>
                             <h6 class="mb-0 text-white">{{ $event->organizer->getDisplayName() }}</h6>

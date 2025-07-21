@@ -72,7 +72,7 @@
 	content:"Loading...";
 	color: rgb(var(--success));
 
-	
+
 
 }
 @keyframes l3 {to{background-position: 80% 100%}}
@@ -753,21 +753,32 @@
 	width: fit-content;
 	font-weight: bold;
 	font-size: 30px;
-	background: radial-gradient(circle closest-side,rgba(var(--dark)) 94%,#0000) right/calc(200% - 1em) 100%;
-	animation: l24 1s infinite alternate linear;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 }
 .loader_24::before {
-	content: "Loading...";
+	content: "Poetry Loading...";
 	line-height: 1em;
-	color: #0000;
-	background: inherit;
-	background-image: radial-gradient(circle closest-side,#fff 94%,rgba(var(--primary)));
-	-webkit-background-clip:text;
-	background-clip:text;
+	color: rgb(var(--primary));
+	font-size: 24px;
 }
 
-@keyframes l24{
-	100%{background-position: left}
+.loader_24::after {
+	content: "✍️";
+	font-size: 40px;
+	animation: penWriting 1s infinite alternate linear;
+}
+
+@keyframes penWriting {
+	0% {
+		transform: translateX(-20px) rotate(-10deg);
+	}
+	100% {
+		transform: translateX(20px) rotate(10deg);
+	}
 }
 
 
@@ -839,7 +850,7 @@
 .loader_28  {
 	width: fit-content;
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	overflow: hidden;
 	animation: l28 2s infinite;
@@ -860,7 +871,7 @@
 
 .loader_29 {
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	display: inline-grid;
 }
@@ -908,7 +919,7 @@
 
 .loader_31 {
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	display: inline-grid;
 }
@@ -935,7 +946,7 @@
 .loader_31 {
 	--w:10ch;
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	line-height: 2em;
 	letter-spacing: var(--w);
@@ -964,7 +975,7 @@
 .loader_32 {
 	width: fit-content;
 	font-weight: bold;
-	
+
 	text-shadow:
 					0 0 0 rgb(var(--primary)),
 					0 0 0 rgb(var(--secondary)),
@@ -990,7 +1001,7 @@
 .loader_33 {
 	--w:10ch;
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	letter-spacing: var(--w);
 	width: var(--w);
@@ -1070,7 +1081,7 @@
 .loader_34 {
 	width: fit-content;
 	font-weight: bold;
-	
+
 	white-space: pre;
 	font-size: 30px;
 }
@@ -1099,7 +1110,7 @@
 
 .loader_35 {
 	font-weight: bold;
-	
+
 	display: inline-grid;
 	font-size: 30px;
 }
@@ -1142,7 +1153,7 @@
 
 .loader_36 {
 	font-weight: bold;
-	
+
 	display: inline-grid;
 	font-size: 30px;
 }
@@ -1184,7 +1195,7 @@
 
 .loader_37 {
 	font-weight: bold;
-	
+
 	display: inline-grid;
 	font-size: 30px;
 }
@@ -1225,7 +1236,7 @@
 .loader_38 {
 	width: fit-content;
 	font-weight: bold;
-	
+
 	white-space: pre;
 	font-size: 30px;
 	line-height: 1.2em;
@@ -1270,7 +1281,7 @@
 .loader_40 {
 	--w:10ch;
 	font-weight: bold;
-	
+
 	font-size: 30px;
 	letter-spacing: var(--w);
 	width: var(--w);

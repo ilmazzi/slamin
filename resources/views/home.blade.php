@@ -61,11 +61,11 @@
                             @if($carousels->count() > 1)
                             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
+                                <span class="visually-hidden">{{ __('home.carousel.previous') }}</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
+                                <span class="visually-hidden">{{ __('home.carousel.next') }}</span>
                             </button>
                             @endif
                         </div>
@@ -88,7 +88,7 @@
                                             <i class="ph-duotone ph-video-camera f-s-24 text-white"></i>
                                         </div>
                                         <h4 class="mb-1 text-primary">{{ number_format($stats['total_videos']) }}</h4>
-                                        <p class="mb-0 text-muted">Video Totali</p>
+                                        <p class="mb-0 text-muted">{{ __('home.stats.total_videos') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                             <i class="ph-duotone ph-eye f-s-24 text-white"></i>
                                         </div>
                                         <h4 class="mb-1 text-success">{{ number_format($stats['total_views']) }}</h4>
-                                        <p class="mb-0 text-muted">Visualizzazioni</p>
+                                        <p class="mb-0 text-muted">{{ __('home.stats.total_views') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                             <i class="ph-duotone ph-calendar f-s-24 text-white"></i>
                                         </div>
                                         <h4 class="mb-1 text-warning">{{ number_format($stats['total_events']) }}</h4>
-                                        <p class="mb-0 text-muted">Eventi</p>
+                                        <p class="mb-0 text-muted">{{ __('home.stats.total_events') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                             <i class="ph-duotone ph-users f-s-24 text-white"></i>
                                         </div>
                                         <h4 class="mb-1 text-info">{{ number_format($stats['total_users']) }}</h4>
-                                        <p class="mb-0 text-muted">Utenti</p>
+                                        <p class="mb-0 text-muted">{{ __('home.stats.total_users') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -131,55 +131,114 @@
             </div>
         </div>
 
-        <!-- Popular Videos Section -->
-        @if($popularVideos->count() > 0)
+                <!-- Most Popular Video Section -->
+        @if($mostPopularVideo)
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card card-light-success">
-                    <div class="card-header bg-gradient-success text-white">
-                        <h5 class="card-title mb-0">
-                            <i class="ph-duotone ph-trend-up f-s-16 me-2"></i>
-                            Video Più Popolari
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @foreach($popularVideos as $video)
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card hover-effect border-success">
+                                <div class="card hover-effect border-0 shadow-sm">
+                    <div class="card-body p-0">
                                     <div class="position-relative">
-                                        @if($video->thumbnail_path)
-                                            <img src="{{ Storage::url($video->thumbnail_path) }}" alt="{{ $video->title }}" class="card-img-top">
+                            <div class="p-4">
+                                <div class="d-flex align-items-center">
+                                    <!-- Video Thumbnail with Overlay - EVEN BIGGER -->
+                                    <div class="position-relative me-4" style="min-width: 500px;">
+                                        <div class="position-relative overflow-hidden rounded-3" style="width: 500px; height: 281px;">
+                                            @if($mostPopularVideo->thumbnail_path || $mostPopularVideo->peertube_thumbnail_url)
+                                                <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
                                         @else
-                                            <div class="card-img-top bg-gradient-light d-flex align-items-center justify-content-center">
-                                                <i class="ph-duotone ph-video-camera f-s-48 text-success"></i>
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                    <div class="text-center">
+                                                        <i class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
+                                                        <p class="text-muted f-s-14 mb-0">Anteprima non disponibile</p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20"></div>
+                                            <div class="position-absolute top-50 start-50 translate-middle">
+                                                <div class="bg-white bg-opacity-90 rounded-circle p-4 d-flex-center" style="width: 90px; height: 90px;">
+                                                    <i class="ph-duotone ph-play f-s-36 text-primary"></i>
+                                                </div>
                                             </div>
-                                        @endif
-                                        <div class="position-absolute top-0 end-0 m-2">
-                                            <span class="badge bg-gradient-success f-s-11">
-                                                <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                {{ $video->view_count }} visualizzazioni
+                                        </div>
+                                        <!-- Popular Badge -->
+                                        <div class="position-absolute top-0 end-0 m-3">
+                                            <span class="badge bg-warning text-dark f-s-11 fw-bold px-3 py-2 rounded-pill shadow-sm">
+                                                <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
+                                                Più Popolare
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="card-body pa-20">
-                                        <h6 class="card-title f-w-600 f-s-16 mb-2 text-success">{{ $video->title }}</h6>
-                                        @if($video->description)
-                                            <p class="text-muted f-s-14 mb-3">{{ Str::limit($video->description, 80) }}</p>
+
+                                                                        <!-- Content -->
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div class="flex-grow-1">
+                                                <h4 class="text-dark f-w-700 mb-2 f-s-20">{{ $mostPopularVideo->title }}</h4>
+                                                @if($mostPopularVideo->description)
+                                                    <p class="text-muted mb-2 f-s-14">{{ Str::limit($mostPopularVideo->description, 80) }}</p>
                                         @endif
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted f-s-12">
-                                                <i class="ph-duotone ph-user f-s-12 me-1"></i>
-                                                {{ $video->user->name }}
-                                            </small>
-                                            <a href="{{ route('videos.play', $video) }}" class="btn btn-sm btn-gradient-success hover-effect">
-                                                <i class="ph-duotone ph-play f-s-14 me-1"></i>Guarda
-                                            </a>
+
+                                                <!-- Author Info -->
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="h-35 w-35 d-flex-center b-r-50 overflow-hidden bg-primary me-2">
+                                                        <span class="text-white fw-bold f-s-12">{{ substr($mostPopularVideo->user->name, 0, 2) }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 f-w-600 f-s-14 text-dark">{{ $mostPopularVideo->user->name }}</h6>
+                                                        <small class="text-muted f-s-11">Autore del video</small>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Watch Button -->
+                                                <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm">
+                                                    <i class="ph-duotone ph-play f-s-14 me-1"></i>
+                                                    Guarda Video
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Statistics -->
+                                        <div class="row g-2">
+                                            <div class="col-3">
+                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                                                    <div class="d-flex-center mb-1">
+                                                        <i class="ph-duotone ph-eye f-s-18 text-info"></i>
+                                                    </div>
+                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->view_count) }}</h6>
+                                                    <small class="text-muted f-s-10">Visualizzazioni</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                                                    <div class="d-flex-center mb-1">
+                                                        <i class="ph-duotone ph-thumbs-up f-s-18 text-success"></i>
+                                                    </div>
+                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->like_count) }}</h6>
+                                                    <small class="text-muted f-s-10">Mi Piace</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                                                    <div class="d-flex-center mb-1">
+                                                        <i class="ph-duotone ph-chat-circle f-s-18 text-warning"></i>
+                                                    </div>
+                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->comment_count) }}</h6>
+                                                    <small class="text-muted f-s-10">Commenti</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
+                                                    <div class="d-flex-center mb-1">
+                                                        <i class="ph-duotone ph-hands-clapping f-s-18 text-danger"></i>
+                                                    </div>
+                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->snaps()->count()) }}</h6>
+                                                    <small class="text-muted f-s-10">Snap</small>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -195,7 +254,7 @@
                     <div class="card-header bg-gradient-warning text-white">
                         <h5 class="card-title mb-0">
                             <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                            Prossimi Eventi
+                            {{ __('home.recent_events.title') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -226,7 +285,7 @@
                                                 {{ $event->start_datetime->format('H:i') }}
                                             </small>
                                             <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-gradient-warning hover-effect">
-                                                <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
+                                                <i class="ph-duotone ph-info f-s-14 me-1"></i>{{ __('home.recent_events.details') }}
                                             </a>
                                         </div>
                                     </div>
@@ -248,7 +307,7 @@
                     <div class="card-header bg-gradient-info text-white">
                         <h5 class="card-title mb-0">
                             <i class="ph-duotone ph-crown f-s-16 me-2"></i>
-                            Poeti Più Attivi
+                            {{ __('home.top_poets.title') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -258,17 +317,23 @@
                                 <div class="card card-light-info hover-effect border-info">
                                     <div class="card-body pa-20 text-center">
                                         <div class="mb-3">
-                                            <div class="bg-gradient-info rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                                <i class="ph-duotone ph-user-circle f-s-48 text-white"></i>
-                                            </div>
+                                            @if($poet->profile_photo)
+                                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center overflow-hidden" style="width: 80px; height: 80px;">
+                                                    <img src="{{ $poet->profile_photo_url }}" alt="{{ $poet->name }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                                </div>
+                                            @else
+                                                <div class="bg-gradient-info rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                                    <span class="text-white fw-bold f-s-24">{{ substr($poet->name, 0, 2) }}</span>
+                                                </div>
+                                            @endif
                                         </div>
                                         <h6 class="card-title f-w-600 f-s-16 mb-1 text-info">{{ $poet->name }}</h6>
                                         <p class="text-muted f-s-14 mb-3">
                                             <i class="ph-duotone ph-video-camera f-s-12 me-1"></i>
-                                            {{ $poet->videos_count }} video pubblicati
+                                            {{ $poet->videos_count }} {{ __('home.top_poets.videos_count') }}
                                         </p>
                                         <a href="{{ route('user.show', $poet) }}" class="btn btn-sm btn-gradient-info hover-effect">
-                                            <i class="ph-duotone ph-user f-s-14 me-1"></i>Profilo
+                                            <i class="ph-duotone ph-user f-s-14 me-1"></i>{{ __('home.top_poets.profile') }}
                                         </a>
                                     </div>
                                 </div>
@@ -290,23 +355,23 @@
                             <div class="bg-gradient-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
                                 <i class="ph-duotone ph-users f-s-48 text-white"></i>
                             </div>
-                            <h4 class="mb-3 text-primary">Unisciti alla Community Poetry Slam</h4>
-                            <p class="text-muted mb-4">Carica i tuoi video, partecipa agli eventi e condividi la tua passione per la poesia</p>
+                            <h4 class="mb-3 text-primary">{{ __('home.call_to_action.title') }}</h4>
+                            <p class="text-muted mb-4">{{ __('home.call_to_action.description') }}</p>
                         </div>
                         <div class="d-flex justify-content-center gap-3">
                             @guest
                                 <a href="{{ route('register') }}" class="btn btn-gradient-primary hover-effect btn-lg">
-                                    <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>Registrati
+                                    <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>{{ __('home.call_to_action.register') }}
                                 </a>
                                 <a href="{{ route('login') }}" class="btn btn-outline-primary hover-effect btn-lg">
-                                    <i class="ph-duotone ph-sign-in f-s-16 me-2"></i>Accedi
+                                    <i class="ph-duotone ph-sign-in f-s-16 me-2"></i>{{ __('home.call_to_action.login') }}
                                 </a>
                             @else
                                 <a href="{{ route('videos.upload') }}" class="btn btn-gradient-success hover-effect btn-lg">
-                                    <i class="ph-duotone ph-upload f-s-16 me-2"></i>Carica Video
+                                    <i class="ph-duotone ph-upload f-s-16 me-2"></i>{{ __('home.call_to_action.upload_video') }}
                                 </a>
                                 <a href="{{ route('events.index') }}" class="btn btn-outline-success hover-effect btn-lg">
-                                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>Vedi Eventi
+                                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>{{ __('home.call_to_action.view_events') }}
                                 </a>
                             @endguest
                         </div>

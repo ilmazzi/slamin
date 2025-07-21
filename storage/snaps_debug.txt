@@ -1,0 +1,14 @@
+=== SNAP DEBUG ===
+Video ID: 7
+Snap count: 9
+Snap details:
+  - ID: 11, Timestamp: 25s, Title: fantastico
+  - ID: 10, Timestamp: 6s, Title: a sd ada sdas dasd
+  - ID: 9, Timestamp: 4s, Title: asd asd asd
+  - ID: 8, Timestamp: 4s, Title: asd asd ad a
+  - ID: 7, Timestamp: 16s, Title: asd2qdfqd123
+  - ID: 6, Timestamp: 4s, Title: asdasd
+  - ID: 5, Timestamp: 3s, Title: bello!!
+  - ID: 4, Timestamp: 8s, Title: asdad
+  - ID: 3, Timestamp: 7s, Title: qqweq
+================

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\EventRequest;
+use App\Models\SystemSetting;
 
 class ProfileController extends Controller
 {
@@ -77,21 +78,52 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
+        \Log::info('Profile update request received', [
+            'ajax' => $request->ajax(),
+            'has_file' => $request->hasFile('profile_photo'),
+            'method' => $request->method(),
+            'headers' => $request->headers->all(),
+            'all_data' => $request->all(),
+            'files' => $request->allFiles()
+        ]);
+
         $user = Auth::user();
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'bio' => 'nullable|string|max:1000',
-            'nickname' => 'nullable|string|max:50|unique:users,nickname,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255',
-            'social_facebook' => 'nullable|url|max:255',
-            'social_instagram' => 'nullable|url|max:255',
-            'social_youtube' => 'nullable|url|max:255',
-            'social_twitter' => 'nullable|url|max:255',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        // Se è una richiesta AJAX e contiene solo profile_photo, gestisci separatamente
+        if ($request->ajax() && $request->hasFile('profile_photo')) {
+            \Log::info('AJAX request with profile_photo detected, calling updateProfilePhoto');
+            return $this->updateProfilePhoto($request, $user);
+        }
+
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'bio' => 'nullable|string|max:1000',
+                'nickname' => 'nullable|string|max:50|unique:users,nickname,' . $user->id,
+                'phone' => 'nullable|string|max:20',
+                'website' => 'nullable|url|max:255',
+                'social_facebook' => 'nullable|url|max:255',
+                'social_instagram' => 'nullable|url|max:255',
+                'social_youtube' => 'nullable|url|max:255',
+                'social_twitter' => 'nullable|url|max:255',
+                'profile_photo' => 'nullable|image|max:' . SystemSetting::get('profile_photo_max_size', 5120),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error in profile update', [
+                'errors' => $e->errors()
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            throw $e;
+        }
 
         // Aggiorna dati base
         $user->update([
@@ -109,14 +141,70 @@ class ProfileController extends Controller
 
         // Gestione foto profilo
         if ($request->hasFile('profile_photo')) {
+            $file = $request->file('profile_photo');
+
+            // Verifica se il file è valido
+            if (!$file->isValid()) {
+                \Log::error('File profile_photo non valido', [
+                    'error' => $file->getError(),
+                    'error_message' => $file->getErrorMessage()
+                ]);
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'File non valido: ' . $file->getErrorMessage()
+                    ], 400);
+                }
+
+                return redirect()->back()->withErrors(['profile_photo' => 'File non valido: ' . $file->getErrorMessage()]);
+            }
+
+            \Log::info('File profile_photo ricevuto', [
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
+                'extension' => $file->getClientOriginalExtension()
+            ]);
+
             // Elimina vecchia foto se esiste
             if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
                 Storage::disk('public')->delete($user->profile_photo);
+                \Log::info('Vecchia foto eliminata', ['path' => $user->profile_photo]);
             }
 
-            // Salva nuova foto
-            $path = $request->file('profile_photo')->store('profile-photos', 'public');
-            $user->update(['profile_photo' => $path]);
+                        // Salva nuova foto
+            try {
+                $path = $file->store('profile-photos', 'public');
+                \Log::info('Nuova foto salvata', ['path' => $path]);
+
+                $user->update(['profile_photo' => $path]);
+                \Log::info('Profilo aggiornato con nuova foto', ['user_id' => $user->id, 'profile_photo' => $path]);
+            } catch (\Exception $e) {
+                \Log::error('Errore durante il salvataggio della foto', [
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]);
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Errore durante il salvataggio: ' . $e->getMessage()
+                    ], 500);
+                }
+
+                return redirect()->back()->withErrors(['profile_photo' => 'Errore durante il salvataggio: ' . $e->getMessage()]);
+            }
+        }
+
+        // Se è una richiesta AJAX, restituisci JSON
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Profilo aggiornato con successo!',
+                'profile_photo_url' => $user->profile_photo_url
+            ]);
         }
 
         return redirect()->route('profile.show')
@@ -265,5 +353,88 @@ class ProfileController extends Controller
             ->take($limit);
 
         return $activities;
+    }
+
+    /**
+     * Aggiorna solo la foto del profilo (per richieste AJAX)
+     */
+    private function updateProfilePhoto(Request $request, $user)
+    {
+        \Log::info('updateProfilePhoto chiamato', [
+            'user_id' => $user->id,
+            'has_file' => $request->hasFile('profile_photo'),
+            'all_data' => $request->all()
+        ]);
+
+        try {
+            $request->validate([
+                'profile_photo' => 'required|image|max:' . SystemSetting::get('profile_photo_max_size', 5120),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error in profile photo update', [
+                'errors' => $e->errors()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore di validazione',
+                'errors' => $e->errors()
+            ], 422);
+        }
+
+        $file = $request->file('profile_photo');
+
+        // Verifica se il file è valido
+        if (!$file->isValid()) {
+            \Log::error('File profile_photo non valido', [
+                'error' => $file->getError(),
+                'error_message' => $file->getErrorMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'File non valido: ' . $file->getErrorMessage()
+            ], 400);
+        }
+
+        \Log::info('File profile_photo ricevuto per aggiornamento AJAX', [
+            'original_name' => $file->getClientOriginalName(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'extension' => $file->getClientOriginalExtension()
+        ]);
+
+        // Elimina vecchia foto se esiste
+        if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
+            Storage::disk('public')->delete($user->profile_photo);
+            \Log::info('Vecchia foto eliminata', ['path' => $user->profile_photo]);
+        }
+
+        // Salva nuova foto
+        try {
+            $path = $file->store('profile-photos', 'public');
+            \Log::info('Nuova foto salvata', ['path' => $path]);
+
+            $user->update(['profile_photo' => $path]);
+            \Log::info('Profilo aggiornato con nuova foto', ['user_id' => $user->id, 'profile_photo' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profilo aggiornata con successo',
+                'profile_photo_url' => Storage::url($path)
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Errore durante il salvataggio della foto', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante il salvataggio: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

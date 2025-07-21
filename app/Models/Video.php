@@ -118,10 +118,23 @@ class Video extends Model
      */
     public function getThumbnailUrlAttribute()
     {
+        // Prima controlla se c'è un thumbnail locale
+        if ($this->thumbnail_path) {
+            return Storage::url($this->thumbnail_path);
+        }
+
+        // Poi controlla se c'è un thumbnail PeerTube
+        if ($this->peertube_thumbnail_url) {
+            return $this->peertube_thumbnail_url;
+        }
+
+        // Poi controlla il campo thumbnail generico
         if ($this->thumbnail) {
             return asset('storage/' . $this->thumbnail);
         }
-        return asset('assets/images/placeholder/video-thumbnail.jpg');
+
+        // Fallback: placeholder generico
+        return asset('assets/images/placeholder/placeholder-1.jpg');
     }
 
     /**
@@ -170,9 +183,33 @@ class Video extends Model
     /**
      * Incrementa le visualizzazioni
      */
+            /**
+     * Incrementa le visualizzazioni (metodo originale)
+     */
     public function incrementViews()
     {
-        $this->increment('views');
+        $this->increment('view_count');
+        return $this;
+    }
+
+    /**
+     * Incrementa le visualizzazioni solo se l'utente non è il proprietario
+     */
+    public function incrementViewsIfNotOwner($userId = null)
+    {
+        // Se non viene passato un user ID, usa quello dell'utente autenticato
+        if ($userId === null) {
+            $userId = auth()->id();
+        }
+
+        // Se l'utente è autenticato e è il proprietario del video, non incrementare
+        if ($userId !== null && $userId === $this->user_id) {
+            return false;
+        }
+
+        // Incrementa in tutti gli altri casi (utente diverso o non autenticato)
+        $this->increment('view_count');
+        return true;
     }
 
     /**

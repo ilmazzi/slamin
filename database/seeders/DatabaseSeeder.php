@@ -17,17 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PoetrySlamSeeder::class,
             TestUsersSeeder::class,
+            SystemSettingsSeeder::class,
         ]);
 
-        // Create test user with default 'audience' role
-        $testUser = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@poetryslam.com',
-        ]);
-
-        // Assign default audience role
-        $testUser->assignRole('audience');
-
-        $this->command->info('✅ Test user created: test@poetryslam.com with audience role');
+        $this->command->info('✅ Database seeded successfully!');
     }
 }

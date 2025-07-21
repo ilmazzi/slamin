@@ -98,22 +98,36 @@ return [
 
     // Commenti
     'add_comment' => 'Aggiungi Commento',
-    'comment_placeholder' => 'Scrivi un commento...',
-    'reply_to_comment' => 'Rispondi al Commento',
     'edit_comment' => 'Modifica Commento',
     'delete_comment' => 'Elimina Commento',
-    'comment_added' => 'Commento aggiunto con successo',
-    'comment_updated' => 'Commento aggiornato con successo',
-    'comment_deleted' => 'Commento eliminato con successo',
+    'reply_comment' => 'Rispondi al Commento',
+    'comment_placeholder' => 'Scrivi un commento...',
+    'comment_required' => 'Il commento è obbligatorio',
+    'comment_max' => 'Il commento non può superare i 500 caratteri',
 
-    // Snap
-    'add_snap' => 'Aggiungi Snap',
-    'snap_title' => 'Titolo Snap',
-    'snap_description' => 'Descrizione Snap',
-    'snap_timestamp' => 'Timestamp Snap',
-    'snap_added' => 'Snap aggiunto con successo',
-    'snap_updated' => 'Snap aggiornato con successo',
-    'snap_deleted' => 'Snap eliminato con successo',
+    // Test Views (per debug)
+    'test_views' => 'Test Views',
+    'incrementing_views' => 'Incrementando visualizzazioni per video',
+    'views_updated' => 'Visualizzazioni aggiornate a:',
+    'views_error' => 'Errore nell\'incremento delle visualizzazioni:',
+
+    // Delete Confirmation
+    'delete_confirm_title' => 'Conferma Eliminazione',
+    'delete_confirm_message' => 'Sei sicuro di voler eliminare questo video?',
+    'delete_error' => 'Errore durante l\'eliminazione del video',
+
+    // Upload Date
+    'uploaded_on' => 'Caricato il',
+
+    // Video Info
+    'video_info' => 'Informazioni Video',
+    'video_stats' => 'Statistiche Video',
+    'video_actions' => 'Azioni Video',
+
+    // Play Page
+    'play_video' => 'Riproduci Video',
+    'video_details' => 'Dettagli Video',
+    'video_metadata' => 'Metadati Video',
 
     // Like
     'like_video' => 'Mi Piace',

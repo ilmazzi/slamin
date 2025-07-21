@@ -97,3 +97,28 @@ Video data: {
 }
 Video created with ID: 6
 Video user_id: 4
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Video data: {
+    "user_id": 4,
+    "title": "lucna",
+    "description": "asd asd ads asd ad",
+    "video_url": "\/storage\/videos\/jy17dDcn3l8DT50TwTIyIhMYmtH1VER8JoQpjTjr.mp4",
+    "file_path": "videos\/jy17dDcn3l8DT50TwTIyIhMYmtH1VER8JoQpjTjr.mp4",
+    "thumbnail_path": null,
+    "duration": null,
+    "file_size": 1570024,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "approved",
+    "tags": null,
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 7
+Video user_id: 4

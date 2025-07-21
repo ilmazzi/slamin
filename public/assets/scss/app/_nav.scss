@@ -52,8 +52,11 @@ nav {
             padding: 1rem ;
             width: 100%;
             img {
-                width: 180px;
+                width: 100%;
+                max-width: 250px;
+                height: auto;
                 float: left;
+                object-fit: contain;
             }
         }
         .nav-profile{
@@ -84,8 +87,10 @@ nav {
     }
 
     .app-nav {
-        height: calc(100% - 162px);
-        overflow: auto;
+        height: calc(100vh - 162px);
+        max-height: calc(100vh - 162px);
+        overflow-y: auto;
+        overflow-x: hidden;
 
         .main-nav {
             > li {
@@ -689,3 +694,49 @@ nav.dark-sidebar {
 }
 
 // >>-- 04 Nav css end --<<
+
+// Responsive fixes for sidebar
+@media (max-height: 600px) {
+    nav {
+        .app-logo {
+            .logo {
+                padding: 0.5rem;
+                img {
+                    max-width: 200px;
+                }
+            }
+            .nav-profile {
+                padding: 0.5rem !important;
+            }
+        }
+
+        .app-nav {
+            height: calc(100vh - 120px);
+            max-height: calc(100vh - 120px);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        .app-logo {
+            .logo {
+                img {
+                    max-width: 180px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    nav {
+        .app-logo {
+            .logo {
+                img {
+                    max-width: 150px;
+                }
+            }
+        }
+    }
+}

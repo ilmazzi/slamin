@@ -51,7 +51,7 @@
                                 <h5 class="card-title mb-1">{{ $video->title }}</h5>
                                 <p class="text-muted mb-0">
                                     <i class="ph-duotone ph-eye f-s-14 me-1"></i>
-                                    <span id="viewCount">{{ $video->view_count }}</span> visualizzazioni
+                                    <span id="viewCount">{{ $video->view_count }}</span> {{ __('videos.views') }}
                                 </p>
                             </div>
                             <div class="d-flex gap-2">
@@ -88,17 +88,19 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">
                                 <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                Caricato il {{ $video->created_at->format('d/m/Y') }}
+                                {{ __('videos.uploaded_on') }} {{ $video->created_at->format('d/m/Y') }}
                             </small>
 
                             @if(auth()->id() === $video->user_id)
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-info" onclick="incrementVideoViews()">
-                                        <i class="ph-duotone ph-eye f-s-14"></i> Test Views
+                                        <i class="ph-duotone ph-eye f-s-14"></i> {{ __('videos.test_views') }}
                                     </button>
+                                    @if(auth()->check() && (auth()->id() === $video->user_id || auth()->user()->hasRole('admin')))
                                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteVideo({{ $video->id }})">
-                                        <i class="ph-duotone ph-trash f-s-14"></i>
+                                        <i class="ph-duotone ph-trash f-s-14"></i> {{ __('videos.delete_video') }}
                                     </button>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -120,7 +122,7 @@
                             <div class="col-4">
                                 <div class="border-end">
                                     <h5 class="mb-1" id="viewCountStats">{{ $video->view_count }}</h5>
-                                    <small class="text-muted">Visualizzazioni</small>
+                                    <small class="text-muted">{{ __('videos.views') }}</small>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -182,7 +184,7 @@
 <script>
 // Funzione globale per incrementare le visualizzazioni
 function incrementVideoViews() {
-    console.log('Incrementing views for video {{ $video->id }}');
+    console.log('{{ __('videos.incrementing_views') }} {{ $video->id }}');
 
     fetch('{{ route("videos.increment-views", $video) }}', {
         method: 'POST',
@@ -209,7 +211,7 @@ function incrementVideoViews() {
 }
 
 function deleteVideo(videoId) {
-    if (confirm('Sei sicuro di voler eliminare questo video?')) {
+    if (confirm('{{ __('videos.delete_confirm_message') }}')) {
         fetch(`/profile/videos/${videoId}`, {
             method: 'DELETE',
             headers: {
