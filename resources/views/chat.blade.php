@@ -752,7 +752,7 @@
                             <div class="d-lg-none">
                                 <a class="me-3 toggle-btn" role="button"><i class="ti ti-align-justified"></i></a>
                             </div>
-                            <a href="{{route('profile')}}">
+                            <a href="{{route('profile.show')}}">
                         <span class="profileimg h-45 w-45 d-flex-center b-r-50 position-relative bg-light">
                           <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
                           <span

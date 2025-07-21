@@ -79,8 +79,8 @@
                         <span class="ripple-effect"></span>
                         <div class="overflow-hidden">
                             <h3 class="text-primary mb-1 f-w-600">{{ $stats['organized_events'] }}</h3>
-                            <p class="f-w-500 text-dark-800 f-s-13 mb-1">Eventi Organizzati</p>
-                            <span class="badge bg-light-primary f-s-11">🎭 Organizer</span>
+                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.organized_events') }}</p>
+                            <span class="badge bg-light-primary f-s-11">{{ __('dashboard.role_organizer') }}</span>
                         </div>
                     </div>
                 </div>
@@ -95,8 +95,8 @@
                         <span class="ripple-effect"></span>
                         <div class="overflow-hidden">
                             <h3 class="text-danger mb-1 f-w-600">{{ $stats['participated_events'] }}</h3>
-                            <p class="f-w-500 text-dark-800 f-s-13 mb-1">Eventi Partecipati</p>
-                            <span class="badge bg-light-danger f-s-11">🎤 Partecipante</span>
+                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.participated_events') }}</p>
+                            <span class="badge bg-light-danger f-s-11">{{ __('dashboard.role_participant') }}</span>
                         </div>
                     </div>
                 </div>
@@ -111,8 +111,8 @@
                         <span class="ripple-effect"></span>
                         <div class="overflow-hidden">
                             <h3 class="text-success mb-1 f-w-600">{{ $stats['pending_invitations'] }}</h3>
-                            <p class="f-w-500 text-dark-800 f-s-13 mb-1">Inviti in Attesa</p>
-                            <span class="badge bg-light-success f-s-11">📨 Inviti</span>
+                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.pending_invitations') }}</p>
+                            <span class="badge bg-light-success f-s-11">{{ __('dashboard.role_invitations') }}</span>
                         </div>
                     </div>
                 </div>
@@ -127,8 +127,8 @@
                         <span class="ripple-effect"></span>
                         <div class="overflow-hidden">
                             <h3 class="text-warning mb-1 f-w-600">{{ $stats['unread_notifications'] }}</h3>
-                            <p class="f-w-500 text-dark-800 f-s-13 mb-1">Notifiche Non Lette</p>
-                            <span class="badge bg-light-warning f-s-11">🔔 Notifiche</span>
+                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.unread_notifications') }}</p>
+                            <span class="badge bg-light-warning f-s-11">{{ __('dashboard.role_notifications') }}</span>
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                         'key' => 'upload_performance',
                         'color' => 'info',
                         'icon' => 'ph ph-upload',
-                        'link' => '#'
+                        'link' => route('videos.upload')
                     ],
                     [
                         'key' => 'manage_venue',

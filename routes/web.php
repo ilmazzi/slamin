@@ -5,13 +5,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
-});
+// Public Routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 
 
@@ -429,7 +428,104 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/export', [AnalyticsController::class, 'export'])->name('export');
         Route::get('/realtime', [AnalyticsController::class, 'realtime'])->name('realtime');
     });
+
+        // Permissions Management Routes
+    Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'admin.access'])->group(function () {
+        Route::get('/', [App\Http\Controllers\PermissionController::class, 'index'])->name('index');
+        Route::get('/roles', [App\Http\Controllers\PermissionController::class, 'roles'])->name('roles');
+        Route::get('/permissions', [App\Http\Controllers\PermissionController::class, 'permissions'])->name('permissions');
+        Route::get('/users', [App\Http\Controllers\PermissionController::class, 'users'])->name('users');
+
+        // Role management
+        Route::get('/roles/index', [App\Http\Controllers\PermissionController::class, 'rolesIndex'])->name('roles.index');
+        Route::post('/roles', [App\Http\Controllers\PermissionController::class, 'storeRole'])->name('roles.store');
+        Route::get('/roles/{role}/edit', [App\Http\Controllers\PermissionController::class, 'editRole'])->name('roles.edit');
+        Route::put('/roles/{role}', [App\Http\Controllers\PermissionController::class, 'updateRole'])->name('roles.update');
+        Route::delete('/roles/{role}', [App\Http\Controllers\PermissionController::class, 'deleteRole'])->name('roles.delete');
+
+        // Permission management
+        Route::get('/permissions/index', [App\Http\Controllers\PermissionController::class, 'permissionsIndex'])->name('permissions.index');
+        Route::post('/permissions', [App\Http\Controllers\PermissionController::class, 'storePermission'])->name('permissions.store');
+        Route::get('/permissions/{permission}/edit', [App\Http\Controllers\PermissionController::class, 'editPermission'])->name('permissions.edit');
+        Route::put('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'updatePermission'])->name('permissions.update');
+        Route::delete('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'deletePermission'])->name('permissions.delete');
+
+        // User role/permission assignment
+        Route::get('/users/index', [App\Http\Controllers\PermissionController::class, 'usersIndex'])->name('users.index');
+        Route::put('/users/{user}/roles', [App\Http\Controllers\PermissionController::class, 'assignUserRoles'])->name('users.roles');
+        Route::put('/users/{user}/permissions', [App\Http\Controllers\PermissionController::class, 'assignUserPermissions'])->name('users.permissions');
+
+        // API routes
+        Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
+    });
+
+    // Carousel Management (Admin only)
+    Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+        Route::resource('carousels', App\Http\Controllers\Admin\CarouselController::class)->names('carousels');
+        Route::post('/carousels/order', [App\Http\Controllers\Admin\CarouselController::class, 'updateOrder'])->name('carousels.order');
+    });
+
+    // Profile Routes (accessibili a tutti gli utenti autenticati)
+    Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
+        Route::get('/', [App\Http\Controllers\ProfileController::class, 'show'])->name('show');
+        Route::get('/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('edit');
+        Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
+        Route::get('/videos', [App\Http\Controllers\ProfileController::class, 'videos'])->name('videos');
+        Route::post('/videos/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('videos.upload');
+        Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
+        Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
+    });
+
+    // Video Upload Routes
+    Route::prefix('videos')->name('videos.')->middleware('auth')->group(function () {
+        Route::get('/', function() {
+            return redirect()->route('profile.videos');
+        })->name('index');
+        Route::get('/upload', [App\Http\Controllers\VideoUploadController::class, 'create'])->name('upload');
+        Route::post('/upload', [App\Http\Controllers\VideoUploadController::class, 'store'])->name('store');
+        Route::get('/upload-limit', [App\Http\Controllers\VideoUploadController::class, 'uploadLimit'])->name('upload-limit');
+        Route::get('/test-connection', [App\Http\Controllers\VideoUploadController::class, 'testConnection'])->name('test-connection');
+
+        // Video playback and views
+        Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
+        Route::get('/{video}/play', [App\Http\Controllers\VideoController::class, 'play'])->name('play');
+        Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
+        Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
+    });
+
+    // Premium Routes
+    Route::prefix('premium')->name('premium.')->middleware('auth')->group(function () {
+        Route::get('/', [App\Http\Controllers\PremiumController::class, 'index'])->name('index');
+        Route::get('/packages/{package}', [App\Http\Controllers\PremiumController::class, 'show'])->name('show');
+        Route::get('/checkout/{package}', [App\Http\Controllers\PremiumController::class, 'checkout'])->name('checkout');
+        Route::post('/purchase/{package}', [App\Http\Controllers\PremiumController::class, 'processPurchase'])->name('purchase');
+        Route::get('/success/{subscription}', [App\Http\Controllers\PremiumController::class, 'success'])->name('success');
+        Route::get('/manage', [App\Http\Controllers\PremiumController::class, 'manage'])->name('manage');
+        Route::post('/cancel/{subscription}', [App\Http\Controllers\PremiumController::class, 'cancel'])->name('cancel');
+        Route::post('/renew/{subscription}', [App\Http\Controllers\PremiumController::class, 'renew'])->name('renew');
+        Route::get('/compare', [App\Http\Controllers\PremiumController::class, 'compare'])->name('compare');
+        Route::get('/faq', [App\Http\Controllers\PremiumController::class, 'faq'])->name('faq');
+    });
+
+    // Public Profile Routes (accessibili a tutti)
+    Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
 });
+
+// Test Routes (solo in ambiente locale)
+if (app()->environment('local')) {
+    Route::prefix('test')->name('test.')->middleware('auth')->group(function () {
+        Route::get('/simple', function () {
+            return view('test.simple');
+        })->name('simple');
+        Route::get('/upload', function () {
+            $user = Auth::user();
+            return view('test.upload', compact('user'));
+        })->name('upload');
+        Route::post('/upload-video', [App\Http\Controllers\TestVideoController::class, 'testUpload'])->name('upload-video');
+        Route::post('/purchase-package/{package}', [App\Http\Controllers\TestVideoController::class, 'testPurchase'])->name('purchase-package');
+        Route::get('/dashboard', [App\Http\Controllers\TestVideoController::class, 'testDashboard'])->name('dashboard');
+    });
+}
 
 // DEBUG: Simula esattamente la route events.create
 Route::get('/debug-simulate-create', function () {

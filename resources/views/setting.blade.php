@@ -150,7 +150,7 @@
                                 <div class="text-secondary f-s-12">Web Developer</div>
                             </div>
                             <div>
-                                <a href="{{route('profile')}}">
+                                <a href="{{route('profile.show')}}">
                                                 <span>
                                                     <i class="ph-bold  ph-arrow-square-out f-s-20"></i>
                                                 </span>

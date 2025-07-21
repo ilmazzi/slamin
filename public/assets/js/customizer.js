@@ -15,7 +15,7 @@ $(function () {
 $(document).on("click", ".sidebar-option > li", function () {
     const sidebarClassName = $(this).attr('class');
     try {
-        $("nav").removeClass("horizontal-sidebar vertical-sidebar dark-sidebar").addClass(sidebarClassName);
+        $("nav:not(#breadcrumb-nav)").removeClass("horizontal-sidebar vertical-sidebar dark-sidebar").addClass(sidebarClassName);
         setLocalStorageItem("sidebar-option", sidebarClassName);
 
         if (sidebarClassName === "vertical-sidebar") {

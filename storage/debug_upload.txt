@@ -1,0 +1,7 @@
+Controller chiamato: 2025-07-21 12:00:54
+User ottenuto: 4
+Limite OK
+Validazione OK
+File ottenuto: SampleVideo_1280x720_1mb.mp4
+File salvato: videos/ubDI79rARkuKIpvgKKXBm2bDzMxPgaB26GM49PQk.mp4
+Errore: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'file_path' in 'field list' (Connection: mysql, SQL: insert into `videos` (`user_id`, `title`, `description`, `video_url`, `file_path`, `thumbnail_path`, `duration`, `file_size`, `resolution`, `is_public`, `status`, `moderation_status`, `tags`, `view_count`, `like_count`, `dislike_count`, `comment_count`, `updated_at`, `created_at`) values (4, asd ad asd asd asd, asd ad asda sasd asd, /storage/videos/ubDI79rARkuKIpvgKKXBm2bDzMxPgaB26GM49PQk.mp4, videos/ubDI79rARkuKIpvgKKXBm2bDzMxPgaB26GM49PQk.mp4, ?, ?, 1055736, ?, 1, uploaded, pending, ?, 0, 0, 0, 0, 2025-07-21 12:00:54, 2025-07-21 12:00:54))

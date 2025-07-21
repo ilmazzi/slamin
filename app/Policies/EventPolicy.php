@@ -22,12 +22,12 @@ class EventPolicy
     public function view(User $user, Event $event): bool
     {
         // Super admins can view any event
-        if ($user->hasPermissionTo('manage events')) {
+        if ($user->hasAnyRole(['admin', 'moderator'])) {
             return true;
         }
 
         // Organizers can view their own events
-        if ($event->organizer_id === $user->id && $user->hasPermissionTo('view events')) {
+        if ($event->organizer_id === $user->id && $user->hasAnyRole(['admin', 'moderator', 'organizer'])) {
             return true;
         }
 
@@ -40,7 +40,7 @@ class EventPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create events');
+        return $user->hasAnyRole(['admin', 'moderator', 'organizer']);
     }
 
     /**
@@ -49,12 +49,12 @@ class EventPolicy
     public function update(User $user, Event $event): bool
     {
         // Super admins can update any event
-        if ($user->hasPermissionTo('manage events')) {
+        if ($user->hasAnyRole(['admin', 'moderator'])) {
             return true;
         }
 
         // Organizers can update their own events
-        if ($event->organizer_id === $user->id && $user->hasPermissionTo('edit events')) {
+        if ($event->organizer_id === $user->id && $user->hasAnyRole(['admin', 'moderator', 'organizer'])) {
             return true;
         }
 
@@ -66,7 +66,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
-        return $event->organizer_id === $user->id && $user->hasPermissionTo('delete events');
+        return $event->organizer_id === $user->id && $user->hasAnyRole(['admin', 'moderator', 'organizer']);
     }
 
     /**
@@ -75,7 +75,7 @@ class EventPolicy
     public function invite(User $user, Event $event): bool
     {
         // Only event organizers can invite
-        if (!$user->hasPermissionTo('send invitations')) {
+        if (!$user->hasAnyRole(['admin', 'moderator', 'organizer'])) {
             return false;
         }
 
@@ -94,7 +94,7 @@ class EventPolicy
         }
 
         // User must have participate permission
-        if (!$user->hasPermission('events.participate')) {
+        if (!$user->hasAnyRole(['admin', 'moderator', 'organizer', 'poet', 'audience'])) {
             return false;
         }
 
@@ -164,7 +164,7 @@ class EventPolicy
         // Only organizer can publish their draft events
         return $event->organizer_id === $user->id &&
                $event->status === Event::STATUS_DRAFT &&
-               $user->hasPermissionTo('edit events');
+               $user->hasAnyRole(['admin', 'moderator', 'organizer']);
     }
 
     /**
@@ -174,7 +174,7 @@ class EventPolicy
     {
         // Organizer and admins can view analytics
         return $event->organizer_id === $user->id ||
-               $user->hasPermissionTo('manage events');
+               $user->hasAnyRole(['admin', 'moderator']);
     }
 
     /**

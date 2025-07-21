@@ -353,7 +353,7 @@
                                                  src="{{asset('../assets/images/landing/profile.jpg')}}">
                                             <div class="demo-box">
                                                 <h6 class="m-0 f-w-500 f-s-18">Profile</h6>
-                                                <a class="btn btn-primary icon-btn b-r-22" href="{{route('profile')}}"
+                                                <a class="btn btn-primary icon-btn b-r-22" href="{{route('profile.show')}}"
                                                    role="button"
                                                    target="_blank">
                                                     <i class="ph-bold  ph-caret-right"></i>

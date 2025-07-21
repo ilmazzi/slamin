@@ -32,6 +32,16 @@ return [
     'following_count' => 'Seguiti',
     'events_attended' => 'Eventi partecipati',
     'performances_count' => 'Performance',
+    'organized_events' => 'Eventi Organizzati',
+    'participated_events' => 'Eventi Partecipati',
+    'pending_invitations' => 'Inviti in Attesa',
+    'unread_notifications' => 'Notifiche Non Lette',
+
+    // Badge Ruoli Dashboard
+    'role_organizer' => '🎭 Organizer',
+    'role_participant' => '🎤 Partecipante',
+    'role_invitations' => '📨 Inviti',
+    'role_notifications' => '🔔 Notifiche',
 
     // Attività Recente
     'recent_activity' => 'Attività Recente',

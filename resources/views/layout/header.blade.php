@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="d-flex-center text-center">
                                         <a class="text-light-success w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('profile')}}"
+                                           href="{{route('profile.show')}}"
                                            target="_blank">
                                                         <span>
                                                           <i class="ph-light  ph-users-three f-s-30"></i>

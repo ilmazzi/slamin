@@ -1,0 +1,99 @@
+Video data: {
+    "user_id": 4,
+    "title": "asd asd asd asd",
+    "description": "asd asd ad asd ads",
+    "video_url": "\/storage\/videos\/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4",
+    "file_path": "videos\/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4",
+    "thumbnail_path": null,
+    "duration": null,
+    "file_size": 1055736,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "pending",
+    "tags": [],
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Error: Array to string conversion (Connection: mysql, SQL: insert into `videos` (`user_id`, `title`, `description`, `video_url`, `file_path`, `thumbnail_path`, `duration`, `file_size`, `resolution`, `is_public`, `status`, `moderation_status`, `tags`, `view_count`, `like_count`, `dislike_count`, `comment_count`, `updated_at`, `created_at`) values (4, asd asd asd asd, asd asd ad asd ads, /storage/videos/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4, videos/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4, ?, ?, 1055736, ?, 1, uploaded, pending, ?, 0, 0, 0, 0, 2025-07-21 12:09:53, 2025-07-21 12:09:53))
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Video data: {
+    "user_id": 4,
+    "title": "asd asd ada ad ad",
+    "description": "a dad ad ad ad ad",
+    "video_url": "\/storage\/videos\/U0fyS0toOVJnqsBNt7SGhYp6gb1xMgx23cUgp4E8.mp4",
+    "file_path": "videos\/U0fyS0toOVJnqsBNt7SGhYp6gb1xMgx23cUgp4E8.mp4",
+    "thumbnail_path": null,
+    "duration": null,
+    "file_size": 1055736,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "pending",
+    "tags": null,
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 4
+Video user_id: 4
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Video data: {
+    "user_id": 4,
+    "title": "asd a dwqed qda ds",
+    "description": "ad asd asd ad ad",
+    "video_url": "\/storage\/videos\/39grtO5G9WAcI0uUt9RtUViI3iBACwXTogauPL9C.mp4",
+    "file_path": "videos\/39grtO5G9WAcI0uUt9RtUViI3iBACwXTogauPL9C.mp4",
+    "thumbnail_path": null,
+    "duration": null,
+    "file_size": 1055736,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "pending",
+    "tags": null,
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 5
+Video user_id: 4
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Video data: {
+    "user_id": 4,
+    "title": "as qr asd r aw asd asd",
+    "description": "asd ad awd awd aw  asd ad",
+    "video_url": "\/storage\/videos\/30YjswXsfz5Bh7cMXwRiv7A3F5n3fX8J8jJgPnod.mp4",
+    "file_path": "videos\/30YjswXsfz5Bh7cMXwRiv7A3F5n3fX8J8jJgPnod.mp4",
+    "thumbnail_path": null,
+    "duration": null,
+    "file_size": 1055736,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "approved",
+    "tags": null,
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 6
+Video user_id: 4

@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\UserSubscription;
+use App\Models\VideoComment;
+use App\Models\VideoSnap;
+use App\Models\VideoLike;
+use App\Models\Video;
 
 class User extends Authenticatable
 {
@@ -26,6 +31,13 @@ class User extends Authenticatable
         'bio',
         'location',
         'status',
+        'phone',
+        'website',
+        'profile_photo',
+        'social_facebook',
+        'social_instagram',
+        'social_youtube',
+        'social_twitter',
     ];
 
     /**
@@ -130,6 +142,14 @@ class User extends Authenticatable
     public function organizedEvents()
     {
         return $this->hasMany(Event::class, 'organizer_id');
+    }
+
+    /**
+     * Alias for organizedEvents (for compatibility)
+     */
+    public function events()
+    {
+        return $this->organizedEvents();
     }
 
     /**
@@ -294,5 +314,111 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->status !== 'suspended' && $this->status !== 'banned';
+    }
+
+    /**
+     * Get user's videos
+     */
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
+
+    /**
+     * Get user's active subscription
+     */
+    public function activeSubscription()
+    {
+        return $this->hasOne(UserSubscription::class)->active();
+    }
+
+    /**
+     * Get all user's subscriptions
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    /**
+     * Get user's video comments
+     */
+    public function videoComments()
+    {
+        return $this->hasMany(VideoComment::class);
+    }
+
+    /**
+     * Get user's video snaps
+     */
+    public function videoSnaps()
+    {
+        return $this->hasMany(VideoSnap::class);
+    }
+
+    /**
+     * Get user's video likes
+     */
+    public function videoLikes()
+    {
+        return $this->hasMany(VideoLike::class);
+    }
+
+    /**
+     * Get current video limit for user
+     */
+    public function getCurrentVideoLimitAttribute(): int
+    {
+        $subscription = $this->activeSubscription;
+
+        if ($subscription) {
+            return $subscription->effective_video_limit;
+        }
+
+        // Limite gratuito di default
+        return 3;
+    }
+
+    /**
+     * Get current video count for user
+     */
+    public function getCurrentVideoCountAttribute(): int
+    {
+        return $this->videos()->count();
+    }
+
+    /**
+     * Check if user can upload more videos
+     */
+    public function canUploadMoreVideos(): bool
+    {
+        return $this->current_video_count < $this->current_video_limit;
+    }
+
+    /**
+     * Get remaining video uploads
+     */
+    public function getRemainingVideoUploadsAttribute(): int
+    {
+        return max(0, $this->current_video_limit - $this->current_video_count);
+    }
+
+    /**
+     * Check if user has premium subscription
+     */
+    public function hasPremiumSubscription(): bool
+    {
+        return $this->activeSubscription !== null;
+    }
+
+    /**
+     * Get profile photo URL
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+        return asset('assets/images/avatar/' . ($this->id % 16 + 1) . '.png');
     }
 }

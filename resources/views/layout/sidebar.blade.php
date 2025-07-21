@@ -39,6 +39,18 @@
                         </a>
                     </li>
 
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="{{ route('profile.show') }}">
+                            <i class="ph ph-user pe-1 f-s-20"></i> Il Mio Profilo
+                        </a>
+                    </li>
+
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="{{ route('profile.edit') }}">
+                            <i class="ph ph-user-edit pe-1 f-s-20"></i> Modifica Profilo
+                        </a>
+                    </li>
+
                     <li class="app-divider-v dotted py-1"></li>
 
                     <li class="dropdown-item">
@@ -163,6 +175,82 @@
                     @endif
                 </a>
             </li>
+
+            <!-- Profile Section -->
+            <li class="menu-title">
+                <span>Profilo</span>
+            </li>
+            <li class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                <a aria-expanded="{{ request()->routeIs('profile.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#profile">
+                    <i class="ph ph-user-circle"></i>
+                    Il Mio Profilo
+                </a>
+                <ul class="collapse {{ request()->routeIs('profile.*') ? 'show' : '' }}" id="profile">
+                    <li class="{{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                        <a href="{{ route('profile.show') }}">
+                            <i class="ph ph-user me-2"></i>Visualizza Profilo
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                        <a href="{{ route('profile.edit') }}">
+                            <i class="ph ph-user-edit me-2"></i>Modifica Profilo
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('profile.videos') ? 'active' : '' }}">
+                        <a href="{{ route('profile.videos') }}">
+                            <i class="ph ph-video-camera me-2"></i>I Miei Video
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('profile.activity') ? 'active' : '' }}">
+                        <a href="{{ route('profile.activity') }}">
+                            <i class="ph ph-activity me-2"></i>Le Mie Attività
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            @if(auth()->user()->hasRole(['admin', 'moderator']))
+            <!-- Permissions Management Section -->
+            <li class="menu-title">
+                <span>Amministrazione</span>
+            </li>
+            <li class="{{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                <a aria-expanded="{{ request()->routeIs('permissions.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#permissions">
+                    <i class="ph ph-shield-check"></i>
+                    Gestione Permessi
+                </a>
+                <ul class="collapse {{ request()->routeIs('permissions.*') ? 'show' : '' }}" id="permissions">
+                    <li class="{{ request()->routeIs('permissions.index') ? 'active' : '' }}">
+                        <a href="{{ route('permissions.index') }}">
+                            <i class="ph ph-chart-line me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('permissions.roles') ? 'active' : '' }}">
+                        <a href="{{ route('permissions.roles') }}">
+                            <i class="ph ph-users me-2"></i>Ruoli
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('permissions.permissions') ? 'active' : '' }}">
+                        <a href="{{ route('permissions.permissions') }}">
+                            <i class="ph ph-shield me-2"></i>Permessi
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('permissions.users') ? 'active' : '' }}">
+                        <a href="{{ route('permissions.users') }}">
+                            <i class="ph ph-user-circle me-2"></i>Utenti
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Carousel Management -->
+            <li class="{{ request()->routeIs('admin.carousels.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.carousels.index') }}">
+                    <i class="ph ph-images"></i>
+                    Gestione Carosello
+                </a>
+            </li>
+            @endif
             @else
             <!-- Guest Menu -->
             <li class="menu-title">

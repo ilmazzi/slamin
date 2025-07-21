@@ -67,9 +67,55 @@ class PoetrySlamSeeder extends Seeder
             'system.settings',
         ];
 
-        // Create permissions
+        // Define permission groups and display names
+        $permissionGroups = [
+            'profile.manage.own' => ['display_name' => 'Gestione Profilo Proprio', 'group' => 'profile'],
+            'content.publish.own' => ['display_name' => 'Pubblica Contenuti Propri', 'group' => 'content'],
+            'content.edit.own' => ['display_name' => 'Modifica Contenuti Propri', 'group' => 'content'],
+            'content.delete.own' => ['display_name' => 'Elimina Contenuti Propri', 'group' => 'content'],
+            'content.moderate' => ['display_name' => 'Modera Contenuti', 'group' => 'content'],
+            'content.delete.any' => ['display_name' => 'Elimina Qualsiasi Contenuto', 'group' => 'content'],
+            'profile.suspend' => ['display_name' => 'Sospendi Profili', 'group' => 'users'],
+            'events.create.public' => ['display_name' => 'Crea Eventi Pubblici', 'group' => 'events'],
+            'events.create.private' => ['display_name' => 'Crea Eventi Privati', 'group' => 'events'],
+            'events.manage.own' => ['display_name' => 'Gestisce Eventi Propri', 'group' => 'events'],
+            'events.manage.any' => ['display_name' => 'Gestisce Qualsiasi Evento', 'group' => 'events'],
+            'events.view.public' => ['display_name' => 'Visualizza Eventi Pubblici', 'group' => 'events'],
+            'events.view.private' => ['display_name' => 'Visualizza Eventi Privati', 'group' => 'events'],
+            'events.invite' => ['display_name' => 'Invia Inviti Eventi', 'group' => 'events'],
+            'events.participate' => ['display_name' => 'Partecipa agli Eventi', 'group' => 'events'],
+            'events.judge' => ['display_name' => 'Giudica Eventi', 'group' => 'events'],
+            'votes.cast' => ['display_name' => 'Vota', 'group' => 'interactions'],
+            'comments.create' => ['display_name' => 'Crea Commenti', 'group' => 'interactions'],
+            'comments.moderate' => ['display_name' => 'Modera Commenti', 'group' => 'interactions'],
+            'follows.manage' => ['display_name' => 'Gestisce Seguiti', 'group' => 'interactions'],
+            'gigs.create' => ['display_name' => 'Crea Performance', 'group' => 'gigs'],
+            'gigs.manage.own' => ['display_name' => 'Gestisce Performance Proprie', 'group' => 'gigs'],
+            'gigs.apply' => ['display_name' => 'Candidatura Performance', 'group' => 'gigs'],
+            'gigs.invite' => ['display_name' => 'Invita a Performance', 'group' => 'gigs'],
+            'venues.create' => ['display_name' => 'Crea Locali', 'group' => 'venues'],
+            'venues.manage.own' => ['display_name' => 'Gestisce Locali Propri', 'group' => 'venues'],
+            'venues.book' => ['display_name' => 'Prenota Locali', 'group' => 'venues'],
+            'venues.approve.bookings' => ['display_name' => 'Approva Prenotazioni', 'group' => 'venues'],
+            'stats.view.own' => ['display_name' => 'Visualizza Statistiche Proprie', 'group' => 'analytics'],
+            'stats.view.public' => ['display_name' => 'Visualizza Statistiche Pubbliche', 'group' => 'analytics'],
+            'stats.view.all' => ['display_name' => 'Visualizza Tutte le Statistiche', 'group' => 'analytics'],
+            'admin.access' => ['display_name' => 'Accesso Amministrativo', 'group' => 'system'],
+            'users.manage' => ['display_name' => 'Gestisce Utenti', 'group' => 'users'],
+            'system.settings' => ['display_name' => 'Impostazioni Sistema', 'group' => 'system'],
+        ];
+
+        // Create permissions with display names and groups
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            $groupData = $permissionGroups[$permission] ?? ['display_name' => $permission, 'group' => null];
+            Permission::firstOrCreate(
+                ['name' => $permission],
+                [
+                    'display_name' => $groupData['display_name'],
+                    'group' => $groupData['group'],
+                    'description' => 'Permesso per ' . strtolower($groupData['display_name'])
+                ]
+            );
         }
 
         // Define roles and their permissions
@@ -158,7 +204,13 @@ class PoetrySlamSeeder extends Seeder
 
         // Create roles and assign permissions
         foreach ($roles as $roleName => $roleData) {
-            $role = Role::firstOrCreate(['name' => $roleName]);
+            $role = Role::firstOrCreate(
+                ['name' => $roleName],
+                [
+                    'display_name' => $roleData['display_name'],
+                    'description' => $roleData['description']
+                ]
+            );
 
             // Sync permissions for this role
             $role->syncPermissions($roleData['permissions']);

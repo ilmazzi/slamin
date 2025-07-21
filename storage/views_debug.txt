@@ -1,0 +1,35 @@
+=== INCREMENT VIEWS ===
+Video ID: 6
+User ID: 4
+Video User ID: 4
+Current views: 0
+User is owner, not incrementing
+New views: 0
+=== INCREMENT VIEWS ===
+Video ID: 6
+User ID: 4
+Video User ID: 4
+Current views: 0
+User is owner, not incrementing
+New views: 0
+=== INCREMENT VIEWS ===
+Video ID: 6
+User ID: 4
+Video User ID: 4
+Current views: 0
+User is owner, not incrementing
+New views: 0
+=== INCREMENT VIEWS ===
+Video ID: 6
+User ID: 4
+Video User ID: 4
+Current views: 0
+User is owner, not incrementing
+New views: 0
+=== INCREMENT VIEWS ===
+Video ID: 4
+User ID: 1
+Video User ID: 4
+Current views: 1
+Views incremented! (TEST MODE)
+New views: 2

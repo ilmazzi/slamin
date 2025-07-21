@@ -27,19 +27,19 @@ class AuthServiceProvider extends ServiceProvider
 
         // Additional gates for Poetry Slam system
         Gate::define('manage-events', function ($user) {
-            return $user->hasPermissionTo('manage events');
+            return $user->hasAnyRole(['admin', 'moderator', 'organizer']);
         });
 
         Gate::define('create-events', function ($user) {
-            return $user->hasPermissionTo('create events');
+            return $user->hasAnyRole(['admin', 'moderator', 'organizer']);
         });
 
         Gate::define('view-analytics', function ($user) {
-            return $user->hasPermissionTo('view analytics');
+            return $user->hasAnyRole(['admin', 'moderator', 'organizer']);
         });
 
         Gate::define('export-analytics', function ($user) {
-            return $user->hasPermissionTo('export analytics');
+            return $user->hasAnyRole(['admin', 'moderator']);
         });
     }
 }
