@@ -25,12 +25,23 @@
                             <div class="carousel-inner">
                                 @foreach($carousels as $index => $carousel)
                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                    @if($carousel->video_path)
+                                    @if($carousel->video_path && $carousel->videoUrl)
                                         <video class="d-block w-100" autoplay muted loop style="height: 400px; object-fit: cover;">
                                             <source src="{{ $carousel->videoUrl }}" type="video/mp4">
                                         </video>
-                                    @else
+                                    @elseif($carousel->image_path && $carousel->imageUrl)
                                         <img src="{{ $carousel->imageUrl }}" class="d-block w-100" alt="{{ $carousel->title }}" style="height: 400px; object-fit: cover;">
+                                    @else
+                                        <!-- Fallback per media mancante -->
+                                        <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
+                                            <div class="text-center text-white">
+                                                <i class="ph-duotone ph-image f-s-48 mb-3"></i>
+                                                <h5 class="f-w-600">{{ $carousel->title }}</h5>
+                                                @if($carousel->description)
+                                                    <p class="mb-0">{{ $carousel->description }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
                                     @endif
                                     <div class="carousel-caption d-none d-md-block">
                                         <h5 class="f-w-600 f-s-24 mb-3">{{ $carousel->title }}</h5>
@@ -306,4 +317,103 @@
 
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inizializza il carosello Bootstrap
+    const carousel = document.getElementById('heroCarousel');
+    if (carousel) {
+        console.log('Carousel trovato, inizializzazione...');
+
+        // Prova prima con l'approccio standard
+        try {
+            const bsCarousel = new bootstrap.Carousel(carousel, {
+                interval: 5000, // 5 secondi
+                ride: 'carousel', // Avvia automaticamente
+                wrap: true, // Loop infinito
+                keyboard: true, // Controlli da tastiera
+                pause: 'hover' // Pausa al hover
+            });
+            console.log('Carousel inizializzato con successo!');
+        } catch (error) {
+            console.log('Errore inizializzazione Bootstrap:', error);
+
+            // Fallback: carosello manuale
+            console.log('Tentativo con fallback manuale...');
+            initManualCarousel();
+        }
+
+        // Debug: mostra informazioni sul carosello
+        const slides = carousel.querySelectorAll('.carousel-item');
+        console.log('Numero di slide trovate:', slides.length);
+
+        slides.forEach((slide, index) => {
+            console.log(`Slide ${index + 1}:`, slide.classList.contains('active') ? 'ATTIVA' : 'inattiva');
+        });
+    } else {
+        console.log('Carousel non trovato nella pagina');
+    }
+
+    // Funzione fallback per carosello manuale
+    function initManualCarousel() {
+        const carousel = document.getElementById('heroCarousel');
+        const slides = carousel.querySelectorAll('.carousel-item');
+        const indicators = carousel.querySelectorAll('.carousel-indicators button');
+        const prevBtn = carousel.querySelector('.carousel-control-prev');
+        const nextBtn = carousel.querySelector('.carousel-control-next');
+
+        let currentSlide = 0;
+        let interval;
+
+        function showSlide(index) {
+            // Nascondi tutte le slide
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+
+            // Mostra la slide corrente
+            slides[index].classList.add('active');
+            if (indicators[index]) {
+                indicators[index].classList.add('active');
+            }
+
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        // Event listeners
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextSlide);
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+        }
+
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => showSlide(index));
+        });
+
+        // Auto-scroll
+        interval = setInterval(nextSlide, 5000);
+
+        // Pausa al hover
+        carousel.addEventListener('mouseenter', () => clearInterval(interval));
+        carousel.addEventListener('mouseleave', () => {
+            interval = setInterval(nextSlide, 5000);
+        });
+
+        console.log('Carousel manuale inizializzato!');
+    }
+});
+</script>
 @endsection

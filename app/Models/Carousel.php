@@ -58,6 +58,16 @@ class Carousel extends Model
      */
     public function getImageUrlAttribute()
     {
+        if (!$this->image_path) {
+            return null;
+        }
+
+        // Se il percorso inizia già con http, restituiscilo così com'è
+        if (filter_var($this->image_path, FILTER_VALIDATE_URL)) {
+            return $this->image_path;
+        }
+
+        // Altrimenti usa Storage::url
         return Storage::url($this->image_path);
     }
 
@@ -66,7 +76,17 @@ class Carousel extends Model
      */
     public function getVideoUrlAttribute()
     {
-        return $this->video_path ? Storage::url($this->video_path) : null;
+        if (!$this->video_path) {
+            return null;
+        }
+
+        // Se il percorso inizia già con http, restituiscilo così com'è
+        if (filter_var($this->video_path, FILTER_VALIDATE_URL)) {
+            return $this->video_path;
+        }
+
+        // Altrimenti usa Storage::url
+        return Storage::url($this->video_path);
     }
 
     /**
