@@ -1,7 +1,11 @@
 @extends('layout.master')
+
 @section('title', 'Kanban Board')
 @section('css')
-
+<!-- Force cache refresh -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 @endsection
 @section('main-content')
     <div class="container-fluid">
@@ -251,13 +255,37 @@
 @endsection
 
 @section('script')
-
 <!-- kanban_board hammer js-->
-<script src='../assets/vendor/kanban_board/hammer.min.js'></script>
+<script src="{{ asset('assets/vendor/kanban_board/hammer.min.js') }}?v={{ time() }}"></script>
 
 <!-- kanban_board muuri js-->
-<script src='../assets/vendor/kanban_board/muuri.min.js'></script>
+<script src="{{ asset('assets/vendor/kanban_board/muuri.min.js') }}?v={{ time() }}"></script>
 
 <!-- kanban_board js-->
-<script src="{{asset('assets/js/kanban_board.js')}}"></script>
+<script src="{{ asset('assets/js/kanban_board.js') }}?v={{ time() }}"></script>
+
+<script>
+// Setup CSRF token per tutte le richieste AJAX
+$(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Test if libraries are loaded
+    console.log('Testing Kanban libraries...');
+    if (typeof Hammer !== 'undefined') {
+        console.log('✅ Hammer.js loaded successfully');
+    } else {
+        console.log('❌ Hammer.js not loaded');
+    }
+
+    if (typeof Muuri !== 'undefined') {
+        console.log('✅ Muuri.js loaded successfully');
+    } else {
+        console.log('❌ Muuri.js not loaded');
+    }
+});
+</script>
 @endsection

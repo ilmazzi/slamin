@@ -162,6 +162,8 @@
                                     </a>
                                 </li>
 
+
+
                                 <!-- Poesie Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
@@ -206,7 +208,7 @@
                                 <!-- Kanban Board - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.kanban.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.kanban.index') }}">
-                                        <i class="ph-duotone ph-layout-board f-s-20 me-2"></i>
+                                        <i class="ph-duotone ph-kanban f-s-20 me-2"></i>
                                         Kanban Board
                                     </a>
                                 </li>

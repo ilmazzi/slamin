@@ -451,7 +451,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -547,9 +547,6 @@
 @endsection
 
 @section('script')
-<!-- Kanban Board CSS -->
-<link rel="stylesheet" href="{{ asset('assets/vendor/kanban_board/kanban_board.css') }}">
-
 <style>
 .kanban-board-container {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -676,8 +673,9 @@
 </style>
 
 <!-- Kanban Board JS -->
-<script src="{{ asset('assets/vendor/kanban_board/muuri.min.js') }}"></script>
-<script src="{{ asset('assets/js/kanban_board.js') }}"></script>
+<script src="{{ asset('assets/vendor/kanban_board/hammer.min.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/vendor/kanban_board/muuri.min.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/kanban_board.js') }}?v={{ time() }}"></script>
 
 <script>
 let currentTaskId = null;
@@ -690,7 +688,7 @@ $(document).ready(function() {
         if ($(this).hasClass('dragging')) {
             return;
         }
-        
+
         const taskId = $(this).data('task-id');
         currentTaskId = taskId;
         loadTaskDetails(taskId);
@@ -729,14 +727,14 @@ $(document).ready(function() {
             const newColumn = el.closest('.board-column');
             const columnHeader = newColumn.querySelector('.board-column-header h6').textContent.trim();
             let newStatus = 'todo';
-            
+
             // Map column headers to status values
             if (columnHeader.includes('TODO')) newStatus = 'todo';
             else if (columnHeader.includes('IN PROGRESS')) newStatus = 'in_progress';
             else if (columnHeader.includes('REVIEW')) newStatus = 'review';
             else if (columnHeader.includes('TESTING')) newStatus = 'testing';
             else if (columnHeader.includes('DONE')) newStatus = 'done';
-            
+
             const taskId = el.dataset.taskId;
             updateTaskStatus(taskId, newStatus);
 
@@ -819,7 +817,7 @@ function displayTaskDetails(task) {
             </div>
         </div>
     `;
-    
+
     $('#taskDetailsContent').html(content);
 }
 
@@ -886,13 +884,34 @@ function rejectTask() {
     }
 }
 
-// Add Task Form Handler
+// Setup CSRF token per tutte le richieste AJAX
 $(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Test if libraries are loaded
+    console.log('Testing Kanban Admin libraries...');
+    if (typeof Hammer !== 'undefined') {
+        console.log('✅ Hammer.js loaded successfully');
+    } else {
+        console.log('❌ Hammer.js not loaded');
+    }
+
+    if (typeof Muuri !== 'undefined') {
+        console.log('✅ Muuri.js loaded successfully');
+    } else {
+        console.log('❌ Muuri.js not loaded');
+    }
+
+    // Add Task Form Handler
     $('#addTaskForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         const formData = new FormData(this);
-        
+
         $.ajax({
             url: '{{ route("admin.kanban.store-task") }}',
             method: 'POST',
@@ -915,4 +934,4 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection 
+@endsection
