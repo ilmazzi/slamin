@@ -69,12 +69,37 @@
                             <div class="spinner-border spinner-border-sm text-success me-3" role="status">
                                 <span class="visually-hidden">Caricamento...</span>
                             </div>
-                            <h6 class="mb-0">Caricamento video in corso...</h6>
+                            <h6 class="mb-0" id="progressTitle">Preparazione upload...</h6>
                         </div>
-                        <div class="progress" style="height: 10px;">
+                        <div class="progress" style="height: 12px;">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar" style="width: 0%"></div>
                         </div>
-                        <small class="text-muted mt-2 d-block" id="progressText">Preparazione upload...</small>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted" id="progressText">Inizializzazione...</small>
+                            <small class="text-muted" id="progressPercent">0%</small>
+                        </div>
+                        <div class="mt-3" id="progressDetails" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <small class="text-muted">
+                                        <i class="ph-duotone ph-clock me-1"></i>
+                                        Tempo trascorso: <span id="elapsedTime">00:00</span>
+                                    </small>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <small class="text-muted">
+                                        <i class="ph-duotone ph-wifi me-1"></i>
+                                        Connessione: <span id="connectionType">--</span>
+                                    </small>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <small class="text-muted">
+                                        <i class="ph-duotone ph-timer me-1"></i>
+                                        Tempo stimato: <span id="estimatedTime">--:--</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -281,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
     }
 
-    // Form submission with progress
+    // Form submission with realistic progress
     uploadForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -290,14 +315,127 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-1"></i>Caricamento...';
 
-        // Simulate progress
-        let progress = 0;
-        const progressInterval = setInterval(function() {
-            progress += Math.random() * 15;
-            if (progress > 90) progress = 90;
-            progressBar.style.width = progress + '%';
-            progressText.textContent = `Caricamento... ${Math.round(progress)}%`;
-        }, 200);
+                // Initialize progress tracking
+        const startTime = Date.now();
+        let currentPhase = 0;
+
+        // Get connection speed and calculate realistic estimates
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const file = videoFile.files[0];
+        const fileSizeMB = file.size / (1024 * 1024);
+
+        // Connection speed multipliers (seconds per MB)
+        const speedMultipliers = {
+            'slow-2g': 15,    // Very slow: 15 seconds per MB
+            '2g': 12,         // Slow: 12 seconds per MB
+            '3g': 8,          // Medium: 8 seconds per MB
+            '4g': 4,          // Fast: 4 seconds per MB
+            '5g': 2           // Very fast: 2 seconds per MB
+        };
+
+        // Get connection type or estimate based on user agent
+        let connectionType = '4g'; // Default
+        if (connection) {
+            connectionType = connection.effectiveType || connection.type || '4g';
+        } else {
+            // Fallback: estimate based on user agent or assume 4g
+            const userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes('mobile') || userAgent.includes('android')) {
+                connectionType = '3g'; // Assume slower for mobile
+            }
+        }
+
+        const uploadSpeedMultiplier = speedMultipliers[connectionType] || 4;
+        const processingMultiplier = 3; // Processing time is less dependent on connection
+
+        // Calculate realistic durations
+        const baseUploadTime = Math.max(5000, fileSizeMB * uploadSpeedMultiplier * 1000);
+        const baseProcessingTime = Math.max(10000, fileSizeMB * processingMultiplier * 1000);
+
+        const phases = [
+            { name: 'Preparazione file...', progress: 5, duration: 2000 },
+            { name: 'Connessione a PeerTube...', progress: 15, duration: 3000 },
+            { name: 'Upload file in corso...', progress: 60, duration: baseUploadTime },
+            { name: 'Elaborazione video...', progress: 85, duration: baseProcessingTime },
+            { name: 'Finalizzazione...', progress: 95, duration: 5000 }
+        ];
+
+        const progressTitle = document.getElementById('progressTitle');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressDetails = document.getElementById('progressDetails');
+        const elapsedTime = document.getElementById('elapsedTime');
+        const estimatedTime = document.getElementById('estimatedTime');
+        const connectionTypeElement = document.getElementById('connectionType');
+
+        // Show connection type immediately
+        const connectionLabels = {
+            'slow-2g': 'Molto Lenta',
+            '2g': 'Lenta',
+            '3g': 'Media',
+            '4g': 'Veloce',
+            '5g': 'Molto Veloce'
+        };
+        connectionTypeElement.textContent = connectionLabels[connectionType] || 'Standard';
+
+        // Show details after 5 seconds
+        setTimeout(() => {
+            progressDetails.style.display = 'block';
+        }, 5000);
+
+        // Update elapsed time
+        const timeInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            elapsedTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Phase-based progress simulation
+        function updateProgress() {
+            if (currentPhase < phases.length) {
+                const phase = phases[currentPhase];
+                progressTitle.textContent = phase.name;
+                progressText.textContent = phase.name;
+                progressBar.style.width = phase.progress + '%';
+                progressPercent.textContent = phase.progress + '%';
+
+                                // Estimate remaining time based on connection speed and file size
+                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+
+                // Calculate total estimated time based on connection speed
+                const uploadTime = fileSizeMB * uploadSpeedMultiplier;
+                const processingTime = fileSizeMB * processingMultiplier;
+                const totalEstimatedSeconds = uploadTime + processingTime + 30; // 30 seconds for setup
+
+                // Adjust based on current phase
+                let remainingSeconds;
+                if (currentPhase <= 2) {
+                    // Still in upload phase
+                    remainingSeconds = totalEstimatedSeconds - elapsedSeconds;
+                } else if (currentPhase === 3) {
+                    // In processing phase
+                    remainingSeconds = (processingTime + 30) - (elapsedSeconds - (uploadTime + 30));
+                } else {
+                    // In finalization phase
+                    remainingSeconds = 30 - (elapsedSeconds - (uploadTime + processingTime + 30));
+                }
+
+                                remainingSeconds = Math.max(0, remainingSeconds);
+                const estMinutes = Math.floor(remainingSeconds / 60);
+                const estSeconds = remainingSeconds % 60;
+                estimatedTime.textContent = `${estMinutes.toString().padStart(2, '0')}:${estSeconds.toString().padStart(2, '0')}`;
+
+                currentPhase++;
+
+                if (currentPhase < phases.length) {
+                    setTimeout(updateProgress, phase.duration);
+                }
+            }
+        }
+
+        // Start progress simulation
+        updateProgress();
 
         // Submit form
         const formData = new FormData(uploadForm);
@@ -307,23 +445,41 @@ document.addEventListener('DOMContentLoaded', function() {
             body: formData
         })
         .then(response => {
-            clearInterval(progressInterval);
-            progressBar.style.width = '100%';
-            progressText.textContent = 'Completato!';
+            clearInterval(timeInterval);
 
-            if (response.redirected) {
-                window.location.href = response.url;
-            } else {
-                return response.json();
-            }
+            // Complete the progress
+            progressTitle.textContent = 'Completato!';
+            progressText.textContent = 'Video caricato con successo';
+            progressBar.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressBar.classList.remove('progress-bar-animated');
+
+            // Redirect after a short delay
+            setTimeout(() => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    return response.json();
+                }
+            }, 1500);
         })
         .catch(error => {
-            clearInterval(progressInterval);
+            clearInterval(timeInterval);
             uploadProgress.style.display = 'none';
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="ph-duotone ph-upload me-1"></i>{{ __('videos.upload_video') }}';
 
-            alert('Errore durante il caricamento: ' + error.message);
+            // Show error with SweetAlert if available
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errore durante il caricamento',
+                    text: error.message,
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                alert('Errore durante il caricamento: ' + error.message);
+            }
         });
     });
 

@@ -422,7 +422,7 @@ $('#userRolesForm').on('submit', function(e) {
     const formData = new FormData(this);
     const userId = $('#userRolesUserId').val();
 
-    fetch(`{{ route('permissions.users.roles', '') }}/${userId}`, {
+    fetch(`{{ route('permissions.users.roles', ['user' => '']) }}/${userId}`, {
         method: 'PUT',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -447,7 +447,7 @@ $('#userPermissionsForm').on('submit', function(e) {
     const formData = new FormData(this);
     const userId = $('#userPermissionsUserId').val();
 
-    fetch(`{{ route('permissions.users.permissions', '') }}/${userId}`, {
+    fetch(`{{ route('permissions.users.permissions', ['user' => '']) }}/${userId}`, {
         method: 'PUT',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',

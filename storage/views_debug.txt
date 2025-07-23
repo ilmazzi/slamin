@@ -389,3 +389,913 @@ Video User ID: 4
 Current views: 34
 Views NOT incremented! (User is owner)
 Final views: 34
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+=== INCREMENT VIEWS ===
+Views NOT incremented! (User is owner)
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Final views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Final views: 0
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 8
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 3
+User ID: 4
+Video User ID: 1
+Current views: 5
+Views incremented! (User is not owner)
+Final views: 6
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 9
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 10
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 10
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 3
+User ID: 4
+Video User ID: 1
+Current views: 7
+Views incremented! (User is not owner)
+Final views: 8
+=== INCREMENT VIEWS ===
+Video ID: 10
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 10
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 10
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 11
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 11
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 11
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 11
+User ID: 4
+Video User ID: 4
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 3
+User ID: 4
+Video User ID: 1
+Current views: 9
+Views incremented! (User is not owner)
+Final views: 10

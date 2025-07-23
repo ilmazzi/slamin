@@ -20,6 +20,6 @@
 <script src="{{asset('assets/vendor/prism/prism.min.js')}}"></script>
 
 <!-- App js-->
-<script src="{{asset('assets/js/script.js')}}"></script>
+<script src="{{asset('assets/js/script.js')}}?v={{ time() }}"></script>
 
 @yield('script')

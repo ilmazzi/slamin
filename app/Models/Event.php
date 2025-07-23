@@ -25,6 +25,7 @@ class Event extends Model
         'venue_name',
         'venue_address',
         'city',
+        'postcode',
         'country',
         'latitude',
         'longitude',

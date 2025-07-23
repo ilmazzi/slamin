@@ -459,11 +459,11 @@ function deletePermission(permissionId) {
 }
 
 function editUserRoles(userId) {
-    window.location.href = `{{ route('permissions.users') }}?edit_roles=${userId}`;
+                window.location.href = `{{ route('permissions.users') }}?edit_roles=${userId}`;
 }
 
 function editUserPermissions(userId) {
-    window.location.href = `{{ route('permissions.users') }}?edit_permissions=${userId}`;
+                window.location.href = `{{ route('permissions.users') }}?edit_permissions=${userId}`;
 }
 
 // Create Role Form Handler

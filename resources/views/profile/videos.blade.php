@@ -11,6 +11,57 @@
     width: auto !important;
     height: auto !important;
 }
+
+/* Stili per i pulsanti delle azioni */
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+/* Effetti per l'anteprima video */
+.video-preview {
+    transition: all 0.3s ease;
+}
+
+.video-preview:hover {
+    transform: scale(1.02);
+}
+
+.video-preview:hover .play-button {
+    background-color: #667eea !important;
+    transform: scale(1.1);
+}
+
+.video-preview:hover .play-button i {
+    color: white !important;
+}
+
+/* Effetti per thumbnail con play button */
+.position-relative[onclick] {
+    transition: all 0.3s ease;
+}
+
+.position-relative[onclick]:hover {
+    transform: scale(1.02);
+}
+
+.position-relative[onclick]:hover .play-button {
+    background-color: #667eea !important;
+    transform: scale(1.1);
+}
+
+.position-relative[onclick]:hover .play-button i {
+    color: white !important;
+}
+
+.play-button {
+    transition: all 0.3s ease;
+}
 </style>
 @endsection
 
@@ -83,7 +134,48 @@
             <div class="card hover-effect">
                 <div class="position-relative">
                     @if($video->thumbnail_path)
-                        <img src="{{ Storage::url($video->thumbnail_path) }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <!-- Thumbnail con overlay play -->
+                        <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                            <img src="{{ Storage::url($video->thumbnail_path) }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <!-- Overlay play button -->
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                                    <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                </div>
+                            </div>
+                            <!-- Duration overlay -->
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                                <small class="text-white f-s-12">
+                                    <i class="ph-duotone ph-clock me-1"></i>
+                                    @if($video->duration && $video->duration > 0)
+                                        {{ $video->formatted_duration }}
+                                    @else
+                                        <span title="Durata non disponibile">--:--</span>
+                                    @endif
+                                </small>
+                            </div>
+                        </div>
+                    @elseif($video->peertube_uuid)
+                        <!-- Anteprima video con overlay play -->
+                        <div class="card-img-top video-preview bg-gradient-primary d-flex align-items-center justify-content-center position-relative"
+                             style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;"
+                             onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                                    <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                                <small class="text-white f-s-12">
+                                    <i class="ph-duotone ph-clock me-1"></i>
+                                    @if($video->duration && $video->duration > 0)
+                                        {{ $video->formatted_duration }}
+                                    @else
+                                        <span title="Durata non disponibile">--:--</span>
+                                    @endif
+                                </small>
+                            </div>
+                        </div>
                     @else
                         <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                             <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
@@ -113,34 +205,22 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <small class="text-muted f-s-12">{{ $video->created_at->format('d/m/Y') }}</small>
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-outline-primary hover-effect" onclick="editVideo({{ $video->id }})" title="Modifica">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary hover-effect btn-sm" onclick="editVideo({{ $video->id }})" title="Modifica">
                                 <i class="ph ph-pencil f-s-14"></i>
                             </button>
-                                                            <button class="btn btn-outline-success hover-effect" onclick="window.location.href='{{ route('videos.show', $video) }}'" title="Visualizza">
-                                <i class="ph ph-play f-s-14"></i>
-                            </button>
-                            <button class="btn btn-outline-danger hover-effect" onclick="deleteVideo({{ $video->id }})" title="Elimina">
+                            <button class="btn btn-danger hover-effect btn-sm" onclick="deleteVideo({{ $video->id }})" title="Elimina">
                                 <i class="ph ph-trash f-s-14"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="d-grid">
-                        @if($video->file_path)
-                            <a href="{{ route('videos.show', $video) }}" class="btn btn-success hover-effect">
-                                <i class="ph ph-play me-2"></i>Riproduci Video
-                            </a>
-                        @elseif($video->video_url)
-                            <a href="{{ $video->video_url }}" target="_blank" class="btn btn-primary hover-effect">
-                                <i class="ph ph-external-link me-2"></i>Guarda Video
-                            </a>
-                        @else
-                            <button class="btn btn-secondary hover-effect" disabled>
-                                <i class="ph ph-warning me-2"></i>Video non disponibile
-                            </button>
-                        @endif
-                    </div>
+                    @if(!($video->file_path || $video->peertube_uuid))
+                        <div class="alert alert-warning mb-0">
+                            <i class="ph ph-warning me-2"></i>
+                            <small>Video non disponibile</small>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

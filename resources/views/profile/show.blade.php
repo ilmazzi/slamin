@@ -53,7 +53,7 @@
                             <div class="text-center text-md-start">
                                 <h3 class="mb-2 f-w-600">{{ $user->getDisplayName() }}</h3>
                                 @if($user->nickname && $user->nickname !== $user->name)
-                                <p class="text-muted mb-2 f-s-14">@{{ $user->nickname }}</p>
+                                <p class="text-muted mb-2 f-s-14">{{ $user->nickname }}</p>
                                 @endif
 
                                 <!-- Roles -->

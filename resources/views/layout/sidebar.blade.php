@@ -150,18 +150,26 @@
                                             $isCreateEvent = request()->routeIs('events.create');
                                         @endphp
                                         <li class="{{ $isAllEvents ? 'active' : '' }}">
-                                            <a href="{{ route('events.index') }}">{{ __('events.all_events') }}</a>
+                                            <a href="{{ route('events.index') }}">
+                                                <i class="ph-duotone ph-list me-2"></i>{{ __('events.all_events') }}
+                                            </a>
                                         </li>
                                         <li class="{{ $isMyEvents ? 'active' : '' }}">
-                                            <a href="{{ route('events.index', ['filter' => 'my']) }}">{{ __('sidebar.my_events') }}</a>
+                                            <a href="{{ route('events.index', ['filter' => 'my']) }}">
+                                                <i class="ph-duotone ph-calendar me-2"></i>{{ __('sidebar.my_events') }}
+                                            </a>
                                         </li>
                                         @can('create', App\Models\Event::class)
                                             <li class="{{ $isCreateEvent ? 'active' : '' }}">
-                                                <a href="{{ route('events.create') }}">{{ __('events.create_event') }}</a>
+                                                <a href="{{ route('events.create') }}">
+                                                    <i class="ph-duotone ph-plus-circle me-2"></i>{{ __('events.create_event') }}
+                                                </a>
                                             </li>
                                         @endcan
                                         <li class="{{ $isUpcomingEvents ? 'active' : '' }}">
-                                            <a href="{{ route('events.index', ['filter' => 'upcoming']) }}">{{ __('events.upcoming_events') }}</a>
+                                            <a href="{{ route('events.index', ['filter' => 'upcoming']) }}">
+                                                <i class="ph-duotone ph-clock me-2"></i>{{ __('events.upcoming_events') }}
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -185,10 +193,14 @@
                                     </a>
                                     <ul class="collapse {{ request()->routeIs('invitations.*') || request()->routeIs('requests.*') ? 'show' : '' }}" id="invitations">
                                         <li class="{{ request()->routeIs('invitations.index') ? 'active' : '' }}">
-                                            <a href="{{ route('invitations.index') }}">{{ __('sidebar.my_invitations') }}</a>
+                                            <a href="{{ route('invitations.index') }}">
+                                                <i class="ph-duotone ph-envelope me-2"></i>{{ __('sidebar.my_invitations') }}
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('requests.index') ? 'active' : '' }}">
-                                            <a href="{{ route('requests.index') }}">{{ __('sidebar.received_requests') }}</a>
+                                            <a href="{{ route('requests.index') }}">
+                                                <i class="ph-duotone ph-handshake me-2"></i>{{ __('sidebar.received_requests') }}
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -220,16 +232,24 @@
                                     </a>
                                     <ul class="collapse {{ request()->routeIs('profile.*') ? 'show' : '' }}" id="profile">
                                         <li class="{{ request()->routeIs('profile.show') ? 'active' : '' }}">
-                                            <a href="{{ route('profile.show') }}">Visualizza Profilo</a>
+                                            <a href="{{ route('profile.show') }}">
+                                                <i class="ph-duotone ph-eye me-2"></i>Visualizza Profilo
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('profile.edit') ? 'active' : '' }}">
-                                            <a href="{{ route('profile.edit') }}">Modifica Profilo</a>
+                                            <a href="{{ route('profile.edit') }}">
+                                                <i class="ph-duotone ph-pencil me-2"></i>Modifica Profilo
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('profile.videos') ? 'active' : '' }}">
-                                            <a href="{{ route('profile.videos') }}">I Miei Video</a>
+                                            <a href="{{ route('profile.videos') }}">
+                                                <i class="ph-duotone ph-video-camera me-2"></i>I Miei Video
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('profile.activity') ? 'active' : '' }}">
-                                            <a href="{{ route('profile.activity') }}">Le Mie Attività</a>
+                                            <a href="{{ route('profile.activity') }}">
+                                                <i class="ph-duotone ph-activity me-2"></i>Le Mie Attività
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -248,38 +268,66 @@
                                     </a>
                                     <ul class="collapse {{ request()->routeIs('permissions.*') ? 'show' : '' }}" id="permissions">
                                         <li class="{{ request()->routeIs('permissions.index') ? 'active' : '' }}">
-                                            <a href="{{ route('permissions.index') }}">Dashboard</a>
+                                            <a href="{{ route('permissions.index') }}">
+                                                <i class="ph-duotone ph-gauge me-2"></i>Dashboard
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('permissions.roles') ? 'active' : '' }}">
-                                            <a href="{{ route('permissions.roles') }}">Ruoli</a>
+                                            <a href="{{ route('permissions.roles') }}">
+                                                <i class="ph-duotone ph-users me-2"></i>Ruoli
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('permissions.permissions') ? 'active' : '' }}">
-                                            <a href="{{ route('permissions.permissions') }}">Permessi</a>
+                                            <a href="{{ route('permissions.permissions') }}">
+                                                <i class="ph-duotone ph-shield-check me-2"></i>Permessi
+                                            </a>
                                         </li>
                                         <li class="{{ request()->routeIs('permissions.users') ? 'active' : '' }}">
-                                            <a href="{{ route('permissions.users') }}">Utenti</a>
+                                            <a href="{{ route('permissions.users') }}">
+                                                <i class="ph-duotone ph-user-circle me-2"></i>Utenti
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
 
-                                <!-- Carousel Management -->
-                                <li class="{{ request()->routeIs('admin.carousels.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.carousels.index') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#squares"></use>
-                                        </svg>
-                                        Gestione Carosello
-                                    </a>
-                                </li>
-
-                                <!-- System Settings -->
-                                <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.settings.index') }}">
+                                <!-- System Settings Group -->
+                                <li class="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
+                                    <a aria-expanded="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#system-settings">
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#gear"></use>
                                         </svg>
-                                        Impostazioni Sistema
+                                        Impostazioni
                                     </a>
+                                    <ul class="collapse {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'show' : '' }}" id="system-settings">
+                                        <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.settings.index') }}">
+                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
+                                                    <use xlink:href="../assets/svg/_sprite.svg#gear"></use>
+                                                </svg>Impostazioni Generali
+                                            </a>
+                                        </li>
+                                        <li class="{{ request()->routeIs('admin.carousels.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.carousels.index') }}">
+                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
+                                                    <use xlink:href="../assets/svg/_sprite.svg#squares"></use>
+                                                </svg>Gestione Carosello
+                                            </a>
+                                        </li>
+                                        <li class="{{ request()->routeIs('admin.translations.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.translations.index') }}">
+                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
+                                                    <use xlink:href="../assets/svg/_sprite.svg#translate"></use>
+                                                </svg>Gestione Traduzioni
+                                            </a>
+                                        </li>
+                                        <li class="{{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
+                                            <a href="{{ route('admin.peertube.config') }}">
+                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
+                                                    <use xlink:href="../assets/svg/_sprite.svg#video-camera"></use>
+                                                </svg>Configurazione PeerTube
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 @endif
                                 @else

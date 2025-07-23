@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test JavaScript Semplice</title>
+</head>
+<body>
+    <h1>Test JavaScript</h1>
+
+    <select id="testSelect">
+        <option value="">Seleziona...</option>
+        <option value="video">Video</option>
+        <option value="event">Eventi</option>
+    </select>
+
+    <button id="testButton">Test Button</button>
+
+    <div id="result"></div>
+
+    <script>
+        console.log('Test script loaded');
+        alert('Test script loaded!');
+
+        document.getElementById('testSelect').addEventListener('change', function() {
+            console.log('Select changed to:', this.value);
+            document.getElementById('result').innerHTML = 'Selezionato: ' + this.value;
+        });
+
+        document.getElementById('testButton').addEventListener('click', function() {
+            console.log('Button clicked');
+            alert('Button clicked!');
+        });
+    </script>
+</body>
+</html>

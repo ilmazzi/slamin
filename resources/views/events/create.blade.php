@@ -15,42 +15,77 @@
         <div class="card-body">
             <div class="text-center mb-4">
                 <h2 class="mb-2">
-                    <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }} Poetry Slam
+                    <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }} Slam in
                 </h2>
-                <p class="text-muted mb-0">Segui i passaggi per creare il tuo evento</p>
+                <p class="text-muted mb-0">{{ __('events.create_event_help') }}</p>
             </div>
 
-                        <!-- Wizard Steps -->
-            <div class="row justify-content-center mb-4">
-                <div class="col-lg-10">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <div class="text-center" data-step="1">
-                            <i class="ph ph-info fs-1 text-primary mb-2"></i>
-                            <div class="small fw-bold text-primary">Informazioni</div>
+                        <!-- Wizard Steps - Mobile First -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <!-- Desktop Steps -->
+                                <div class="d-none d-lg-flex align-items-center justify-content-center">
+                                    <div class="text-center" data-step="1">
+                                        <i class="ph ph-info fs-1 text-primary mb-2"></i>
+                                        <div class="small fw-bold text-primary">{{ __('events.step_1') }}</div>
+                                    </div>
+                                    <i class="ph ph-arrow-right text-muted mx-3"></i>
+                                    <div class="text-center" data-step="2">
+                                        <i class="ph ph-calendar-check fs-1 text-muted mb-2"></i>
+                                        <div class="small fw-bold text-muted">{{ __('events.step_2') }}</div>
+                                    </div>
+                                    <i class="ph ph-arrow-right text-muted mx-3"></i>
+                                    <div class="text-center" data-step="3">
+                                        <i class="ph ph-gear fs-1 text-muted mb-2"></i>
+                                        <div class="small fw-bold text-muted">{{ __('events.step_3') }}</div>
+                                    </div>
+                                    <i class="ph ph-arrow-right text-muted mx-3"></i>
+                                    <div class="text-center" data-step="4">
+                                        <i class="ph ph-users fs-1 text-muted mb-2"></i>
+                                        <div class="small fw-bold text-muted">{{ __('events.step_4') }}</div>
+                                    </div>
+                                    <i class="ph ph-arrow-right text-muted mx-3"></i>
+                                    <div class="text-center" data-step="5">
+                                        <i class="ph ph-eye fs-1 text-muted mb-2"></i>
+                                        <div class="small fw-bold text-muted">{{ __('events.step_5') }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Mobile Steps -->
+                                <div class="d-lg-none">
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="text-center flex-fill" data-step="1">
+                                                    <i class="ph ph-info f-s-24 text-primary mb-1"></i>
+                                                    <div class="f-s-10 fw-bold text-primary">{{ __('events.step_1_short') }}</div>
+                                                </div>
+                                                <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
+                                                <div class="text-center flex-fill" data-step="2">
+                                                    <i class="ph ph-calendar-check f-s-24 text-muted mb-1"></i>
+                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_2_short') }}</div>
+                                                </div>
+                                                <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
+                                                <div class="text-center flex-fill" data-step="3">
+                                                    <i class="ph ph-gear f-s-24 text-muted mb-1"></i>
+                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_3_short') }}</div>
+                                                </div>
+                                                <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
+                                                <div class="text-center flex-fill" data-step="4">
+                                                    <i class="ph ph-users f-s-24 text-muted mb-1"></i>
+                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_4_short') }}</div>
+                                                </div>
+                                                <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
+                                                <div class="text-center flex-fill" data-step="5">
+                                                    <i class="ph ph-eye f-s-24 text-muted mb-1"></i>
+                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_5_short') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <i class="ph ph-arrow-right text-muted mx-3"></i>
-                        <div class="text-center" data-step="2">
-                            <i class="ph ph-calendar-check fs-1 text-muted mb-2"></i>
-                            <div class="small fw-bold text-muted">Data & Luogo</div>
-                        </div>
-                        <i class="ph ph-arrow-right text-muted mx-3"></i>
-                        <div class="text-center" data-step="3">
-                            <i class="ph ph-gear fs-1 text-muted mb-2"></i>
-                            <div class="small fw-bold text-muted">Dettagli</div>
-                        </div>
-                        <i class="ph ph-arrow-right text-muted mx-3"></i>
-                        <div class="text-center" data-step="4">
-                            <i class="ph ph-users fs-1 text-muted mb-2"></i>
-                            <div class="small fw-bold text-muted">Inviti</div>
-                        </div>
-                        <i class="ph ph-arrow-right text-muted mx-3"></i>
-                        <div class="text-center" data-step="5">
-                            <i class="ph ph-eye fs-1 text-muted mb-2"></i>
-                            <div class="small fw-bold text-muted">Anteprima</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -65,7 +100,7 @@
                 <div class="card" id="step-1">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-info me-2"></i>Informazioni Base
+                            <i class="ph ph-info me-2"></i>{{ __('events.step_basic_info') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -80,27 +115,27 @@
 
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
-                                    <textarea name="description" id="description" class="form-control" style="height: 120px" placeholder="Descrizione" required></textarea>
-                                    <label for="description">{{ __('events.description_event') }} *</label>
+                                    <textarea name="description" id="description" class="form-control" style="height: 120px" placeholder="Descrizione"></textarea>
+                                    <label for="description">{{ __('events.description_event') }}</label>
                                 </div>
-                                <small class="text-muted">Descrivi il tuo evento, cosa aspettarsi, il formato, ecc.</small>
+                                <small class="text-muted">Descrivi il tuo evento, cosa aspettarsi, il formato, ecc. (opzionale)</small>
                                 <div class="error-feedback" id="description-error"></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Tipo di Evento *</label>
+                                <label class="form-label">{{ __('events.event_type') }} *</label>
                                 <div class="form-check">
                                     <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
                                     <label for="public" class="form-check-label">
-                                        <i class="ph ph-globe me-2"></i>Pubblico
+                                        <i class="ph ph-globe me-2"></i>{{ __('events.public') }}
                                         <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
                                     <label for="private" class="form-check-label">
-                                        <i class="ph ph-lock me-2"></i>Privato
-                                        <small class="d-block text-muted">Solo su invito</small>
+                                        <i class="ph ph-lock me-2"></i>{{ __('events.private') }}
+                                        <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
                                     </label>
                                 </div>
                             </div>
@@ -163,20 +198,28 @@
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
 
-                            <div class="col-md-8 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-floating">
-                                                                    <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
-                                <label for="venue_address">{{ __('events.venue_address') }} *</label>
+                                    <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
+                                    <label for="venue_address">{{ __('events.venue_address') }} *</label>
                                 </div>
                                 <div class="error-feedback" id="venue_address-error"></div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <div class="form-floating">
-                                                                    <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('events.city_placeholder') }}" required>
-                                <label for="city">{{ __('events.city') }} *</label>
+                                    <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('events.city_placeholder') }}" required>
+                                    <label for="city">{{ __('events.city') }} *</label>
                                 </div>
                                 <div class="error-feedback" id="city-error"></div>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <div class="form-floating">
+                                    <input type="text" name="postcode" id="postcode" class="form-control" placeholder="{{ __('events.postcode_placeholder') }}" required>
+                                    <label for="postcode">{{ __('events.postcode') }} *</label>
+                                </div>
+                                <div class="error-feedback" id="postcode-error"></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -188,16 +231,69 @@
                                         <option value="ES">Spagna</option>
                                         <option value="DE">Germania</option>
                                         <option value="CH">Svizzera</option>
+                                        <option value="AT">Austria</option>
+                                        <option value="BE">Belgio</option>
+                                        <option value="NL">Paesi Bassi</option>
+                                        <option value="PT">Portogallo</option>
+                                        <option value="GB">Regno Unito</option>
+                                        <option value="IE">Irlanda</option>
+                                        <option value="SE">Svezia</option>
+                                        <option value="NO">Norvegia</option>
+                                        <option value="DK">Danimarca</option>
+                                        <option value="FI">Finlandia</option>
+                                        <option value="PL">Polonia</option>
+                                        <option value="CZ">Repubblica Ceca</option>
+                                        <option value="SK">Slovacchia</option>
+                                        <option value="HU">Ungheria</option>
+                                        <option value="RO">Romania</option>
+                                        <option value="BG">Bulgaria</option>
+                                        <option value="HR">Croazia</option>
+                                        <option value="SI">Slovenia</option>
+                                        <option value="GR">Grecia</option>
+                                        <option value="CY">Cipro</option>
+                                        <option value="MT">Malta</option>
+                                        <option value="US">Stati Uniti</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="MX">Messico</option>
+                                        <option value="BR">Brasile</option>
+                                        <option value="AR">Argentina</option>
+                                        <option value="CL">Cile</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="NZ">Nuova Zelanda</option>
+                                        <option value="JP">Giappone</option>
+                                        <option value="KR">Corea del Sud</option>
+                                        <option value="CN">Cina</option>
+                                        <option value="IN">India</option>
+                                        <option value="TH">Thailandia</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="MY">Malesia</option>
+                                        <option value="ID">Indonesia</option>
+                                        <option value="PH">Filippine</option>
+                                        <option value="VN">Vietnam</option>
+                                        <option value="RU">Russia</option>
+                                        <option value="UA">Ucraina</option>
+                                        <option value="BY">Bielorussia</option>
+                                        <option value="TR">Turchia</option>
+                                        <option value="IL">Israele</option>
+                                        <option value="AE">Emirati Arabi Uniti</option>
+                                        <option value="SA">Arabia Saudita</option>
+                                        <option value="EG">Egitto</option>
+                                        <option value="ZA">Sudafrica</option>
+                                        <option value="NG">Nigeria</option>
+                                        <option value="KE">Kenya</option>
+                                        <option value="MA">Marocco</option>
+                                        <option value="TN">Tunisia</option>
+                                        <option value="DZ">Algeria</option>
                                     </select>
                                     <label for="country">Paese *</label>
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <button type="button" class="btn btn-outline-primary w-100" id="detectLocation">
-                                    <i class="ph ph-crosshair me-2"></i>Rileva Posizione Automatica
-                                </button>
-                                <small class="text-muted">Rileva automaticamente le tue coordinate GPS</small>
+                            <div class="col-12 mb-3">
+                                <div class="alert alert-info">
+                                    <i class="ph ph-info me-2"></i>
+                                    <strong>{{ __('events.auto_positioning_title') }}:</strong> {{ __('events.auto_positioning_description') }}
+                                </div>
                             </div>
 
                             <!-- Hidden coordinates -->
@@ -206,11 +302,11 @@
 
                             <!-- Map -->
                             <div class="col-12 mb-3">
-                                <label class="form-label">Posizione sulla Mappa</label>
+                                <label class="form-label">{{ __('events.map_location') }}</label>
                                 <div id="locationMap" class="border rounded" style="height: 300px;"></div>
-                                <small class="text-muted">Clicca sulla mappa per impostare la posizione esatta. L'indirizzo inserito verrà cercato automaticamente.</small>
+                                <small class="text-muted">{{ __('events.map_auto_positioning_help') }}</small>
                                 <div id="geocoding-status" class="small text-info mt-1" style="display: none;">
-                                    <i class="ph ph-spinner-gap me-1"></i> Ricerca indirizzo...
+                                    <i class="ph ph-spinner-gap me-1"></i> {{ __('events.auto_positioning_status') }}
                                 </div>
                             </div>
 
@@ -237,7 +333,7 @@
                 <div class="card d-none" id="step-3">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-gear me-2"></i>Dettagli Evento
+                            <i class="ph ph-gear me-2"></i>{{ __('events.step_event_details') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -246,18 +342,18 @@
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
                                     <textarea name="requirements" id="requirements" class="form-control" style="height: 100px" placeholder="Requisiti"></textarea>
-                                    <label for="requirements">Requisiti per Partecipanti (Opzionale)</label>
+                                    <label for="requirements">{{ __('events.requirements_participants') }}</label>
                                 </div>
-                                <small class="text-muted">Es: esperienza minima, età, materiale necessario</small>
+                                <small class="text-muted">{{ __('events.requirements_help') }}</small>
                             </div>
 
                             <!-- Participants and Fee -->
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="number" name="max_participants" id="max_participants" class="form-control" min="1" placeholder="Numero massimo">
-                                    <label for="max_participants">Partecipanti Massimi (Opzionale)</label>
+                                    <label for="max_participants">{{ __('events.max_participants_optional') }}</label>
                                 </div>
-                                <small class="text-muted">Lascia vuoto per nessun limite</small>
+                                <small class="text-muted">{{ __('events.no_limit_help') }}</small>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -271,17 +367,17 @@
                             <!-- Tags -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">{{ __('events.tags_event') }}</label>
-                                <input type="text" id="tagTextInput" class="form-control" placeholder="Scrivi un tag e premi Enter...">
+                                <input type="text" id="tagTextInput" class="form-control" placeholder="{{ __('events.tags_input_placeholder') }}">
                                 <div class="mt-2" id="tagsDisplay"></div>
                                 <input type="hidden" name="tags" id="tagsHidden">
-                                <small class="text-muted">Es: poetry slam, open mic, competizione, principianti</small>
+                                <small class="text-muted">{{ __('events.tags_help') }}</small>
                             </div>
 
                             <!-- Image Upload -->
                             <div class="col-12 mb-3">
                                 <label class="form-label">{{ __('events.event_image') }} ({{ __('common.optional') }})</label>
                                 <input type="file" name="event_image" id="event_image" class="form-control" accept="image/*">
-                                <small class="text-muted">Formato consigliato: 16:9, max 2MB</small>
+                                <small class="text-muted">{{ __('events.image_format_help') }}</small>
                                 <div class="mt-2" id="imagePreview" style="display: none;">
                                     <img id="previewImg" src="" class="img-thumbnail" style="max-height: 200px;">
                                 </div>
@@ -289,19 +385,19 @@
 
                             <!-- Event Status -->
                             <div class="col-12 mb-3">
-                                <label class="form-label">Stato Evento</label>
+                                <label class="form-label">{{ __('events.event_status') }}</label>
                                 <div class="form-check">
                                     <input type="radio" name="status" id="published" value="published" class="form-check-input" checked>
                                     <label for="published" class="form-check-label">
-                                        <i class="ph ph-globe me-2"></i>Pubblica Immediatamente
-                                        <small class="d-block text-muted">L'evento sarà visibile subito</small>
+                                        <i class="ph ph-globe me-2"></i>{{ __('events.publish_immediately') }}
+                                        <small class="d-block text-muted">{{ __('events.publish_immediately_help') }}</small>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" name="status" id="draft" value="draft" class="form-check-input">
                                     <label for="draft" class="form-check-label">
-                                        <i class="ph ph-note-pencil me-2"></i>Salva come Bozza
-                                        <small class="d-block text-muted">Potrai pubblicarlo in seguito</small>
+                                        <i class="ph ph-note-pencil me-2"></i>{{ __('events.save_as_draft') }}
+                                        <small class="d-block text-muted">{{ __('events.save_as_draft_help') }}</small>
                                     </label>
                                 </div>
                             </div>
@@ -433,9 +529,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
                                 <button type="button" class="btn btn-primary" onclick="confirmInvitation()">
-                                    <i class="ph ph-paper-plane me-2"></i>Invia Invito
+                                    <i class="ph ph-paper-plane me-2"></i>{{ __('events.send_invitation') }}
                                 </button>
                             </div>
                         </div>
@@ -460,7 +556,7 @@
                             </button>
                             <div class="mt-2" id="submitStatus" style="display: none;">
                                 <small class="text-muted">
-                                    <i class="ph ph-spinner-gap me-1"></i>Creazione in corso...
+                                    <i class="ph ph-spinner-gap me-1"></i>{{ __('events.creation_in_progress') }}
                                 </small>
                             </div>
                         </div>
@@ -473,33 +569,33 @@
                 <div class="card position-sticky" style="top: 20px;">
                     <div class="card-header">
                         <h6 class="mb-0">
-                            <i class="ph ph-navigation-arrow me-2"></i>Navigazione
+                            <i class="ph ph-navigation-arrow me-2"></i>{{ __('events.navigation') }}
                         </h6>
                     </div>
                     <div class="card-body">
                         <!-- Step Navigation -->
                         <div class="d-flex justify-content-between mb-4">
                             <button type="button" class="btn btn-light-secondary" id="prevStep" disabled>
-                                <i class="ph ph-arrow-left me-1"></i>Indietro
+                                <i class="ph ph-arrow-left me-1"></i>{{ __('events.previous_step') }}
                             </button>
                             <button type="button" class="btn btn-light-primary" id="nextStep">
-                                Avanti<i class="ph ph-arrow-right ms-1"></i>
+                                {{ __('events.next_step') }}<i class="ph ph-arrow-right ms-1"></i>
                             </button>
                         </div>
 
                         <!-- Progress -->
                         <div class="mb-3">
-                            <label class="form-label">Progresso</label>
+                            <label class="form-label">{{ __('events.progress') }}</label>
                             <div class="progress">
                                 <div class="progress-bar bg-primary" id="progressBar" style="width: 25%"></div>
                             </div>
-                            <small class="text-muted">Step <span id="currentStep">1</span> di 5</small>
+                            <small class="text-muted">{{ __('events.step_progress') }} <span id="currentStep">1</span> {{ __('events.of') }} 5</small>
                         </div>
 
                         <!-- Quick Tips -->
                         <div class="alert alert-light-info" role="alert">
                             <h6 class="text-info">
-                                <i class="ph ph-lightbulb me-2"></i>Suggerimento
+                                <i class="ph ph-lightbulb me-2"></i>{{ __('events.tip') }}
                             </h6>
                             <p class="mb-0 small text-info" id="stepTip">
                                 Scegli un titolo accattivante che descriva chiaramente il tuo evento.
@@ -510,7 +606,7 @@
                         <div class="text-center">
                             <small class="text-muted">
                                 <i class="ph ph-floppy-disk me-1"></i>
-                                <span id="autosaveStatus">Salvaggio automatico: attivo</span>
+                                <span id="autosaveStatus">{{ __('events.autosave_status') }}</span>
                             </small>
                         </div>
                     </div>
@@ -531,11 +627,11 @@ let tags = [];
 let selectedInvitations = [];
 
 const stepTips = {
-    1: "Scegli un titolo accattivante che descriva chiaramente il tuo evento.",
-    2: "Assicurati che data e luogo siano accurati per facilitare la partecipazione.",
-    3: "Aggiungi dettagli che aiutino i partecipanti a prepararsi al meglio.",
-    4: "Invita artisti specifici al tuo evento per garantire partecipanti di qualità.",
-    5: "Controlla tutte le informazioni prima di pubblicare l'evento."
+    1: "{{ __('events.title_help') }}",
+    2: "{{ __('events.date_help') }}",
+    3: "{{ __('events.description_help') }}",
+    4: "{{ __('events.invitations_help') }}",
+    5: "{{ __('events.review_help') }}"
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -623,29 +719,39 @@ function setupEventListeners() {
         });
     }
 
-    // Location detection
-    const detectLocationBtn = document.getElementById('detectLocation');
-    if (detectLocationBtn) {
-        detectLocationBtn.addEventListener('click', detectLocation);
-    }
 
 
 
-    // Address geocoding (when user types address)
-    const venueAddressInput = document.getElementById('venue_address');
-    if (venueAddressInput) {
-        let geocodeTimeout;
-        venueAddressInput.addEventListener('input', function() {
-            clearTimeout(geocodeTimeout);
-            const address = this.value.trim();
 
-            if (address.length > 5) {
+        // Automatic geocoding when all fields are filled
+    let geocodeTimeout;
+    const addressFields = ['venue_address', 'city', 'postcode', 'country'];
+
+    addressFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', function() {
+                clearTimeout(geocodeTimeout);
+
+                // Wait 1 second after user stops typing
                 geocodeTimeout = setTimeout(() => {
-                    geocodeAddress(address);
-                }, 1000); // Wait 1 second after user stops typing
-            }
-        });
-    }
+                    const address = document.getElementById('venue_address').value.trim();
+                    const city = document.getElementById('city').value.trim();
+                    const postcode = document.getElementById('postcode').value.trim();
+                    const country = document.getElementById('country').value;
+
+                    // Only geocode if we have at least address and city
+                    if (address && city) {
+                        let fullAddress = address + ', ' + city;
+                        if (postcode) fullAddress += ', ' + postcode;
+                        if (country) fullAddress += ', ' + country;
+
+                        geocodeAddress(fullAddress);
+                    }
+                }, 1000);
+            });
+        }
+    });
 
     // Tag system
     const tagTextInput = document.getElementById('tagTextInput');
@@ -812,10 +918,8 @@ function validateCurrentStep() {
             isValid = false;
         }
 
-        if (!description) {
-            showError('description', 'La descrizione è obbligatoria');
-            isValid = false;
-        } else if (description.length < 20) {
+        // Description is optional, but if provided must be at least 20 characters
+        if (description && description.length < 20) {
             showError('description', 'La descrizione deve essere di almeno 20 caratteri');
             isValid = false;
         }
@@ -867,38 +971,7 @@ function showError(fieldId, message) {
     }
 }
 
-function detectLocation() {
-    if (navigator.geolocation) {
-        const btn = document.getElementById('detectLocation');
-        btn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i>Rilevamento...';
-        btn.disabled = true;
 
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                setMapLocation(lat, lng);
-
-                btn.innerHTML = '<i class="ph ph-check me-2"></i>Posizione Rilevata';
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="ph ph-crosshair me-2"></i>Rileva Posizione Automatica';
-                    btn.disabled = false;
-                }, 2000);
-            },
-            function(error) {
-                console.error('Geolocation error:', error);
-                btn.innerHTML = '<i class="ph ph-warning me-2"></i>Errore Rilevamento';
-                btn.disabled = false;
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="ph ph-crosshair me-2"></i>Rileva Posizione Automatica';
-                }, 2000);
-            }
-        );
-    } else {
-        alert('Geolocalizzazione non supportata dal browser');
-    }
-}
 
 function setMapLocation(lat, lng) {
     document.getElementById('latitude').value = lat;
@@ -916,54 +989,148 @@ function geocodeAddress(address) {
     if (!address || address.length < 3) return;
 
     const statusEl = document.getElementById('geocoding-status');
-    if (statusEl) statusEl.style.display = 'block';
+    if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> Ricerca posizione sulla mappa...';
+        statusEl.className = 'small text-info mt-1';
+    }
 
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`)
+    // Usa un endpoint più dettagliato per ottenere informazioni complete (tutti i paesi)
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&addressdetails=1`)
         .then(response => response.json())
         .then(data => {
             if (data && data.length > 0) {
                 const result = data[0];
                 setMapLocation(parseFloat(result.lat), parseFloat(result.lon));
 
-                // Aggiorna anche la città se non è stata ancora inserita
-                const cityInput = document.getElementById('city');
-                if (cityInput && !cityInput.value.trim()) {
-                    // Estrae la città dal display_name
-                    const addressParts = result.display_name.split(',');
-                    if (addressParts.length > 1) {
-                        cityInput.value = addressParts[1].trim();
-                    }
-                }
+                // NON aggiorniamo i campi - solo posizioniamo sulla mappa
+                // updateAddressFields(result);
 
-                // Mostra successo brevemente
+                // Mostra successo
                 if (statusEl) {
-                    statusEl.innerHTML = '<i class="ph ph-check me-1"></i> Indirizzo trovato!';
+                    statusEl.innerHTML = '<i class="ph ph-check me-1"></i> Posizione trovata sulla mappa!';
                     statusEl.className = 'small text-success mt-1';
                     setTimeout(() => {
                         statusEl.style.display = 'none';
-                        statusEl.className = 'small text-info mt-1';
-                        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> Ricerca indirizzo...';
-                    }, 2000);
+                    }, 3000);
                 }
             } else {
                 // Indirizzo non trovato
                 if (statusEl) {
-                    statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> Indirizzo non trovato';
+                    statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> Indirizzo non trovato sulla mappa';
                     statusEl.className = 'small text-warning mt-1';
                     setTimeout(() => {
                         statusEl.style.display = 'none';
-                        statusEl.className = 'small text-info mt-1';
-                        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> Ricerca indirizzo...';
                     }, 3000);
                 }
             }
         })
         .catch(error => {
-            console.log('Geocoding non riuscito per:', address);
+            console.error('Geocoding error:', error);
             if (statusEl) {
-                statusEl.style.display = 'none';
+                statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> Errore nella ricerca';
+                statusEl.className = 'small text-danger mt-1';
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
             }
         });
+}
+
+function updateAddressFields(result) {
+    // Aggiorna il campo indirizzo (solo via e numero)
+    const venueAddressInput = document.getElementById('venue_address');
+    if (venueAddressInput && result.address) {
+        const addressParts = [];
+
+        if (result.address.house_number) {
+            addressParts.push(result.address.house_number);
+        }
+        if (result.address.road) {
+            addressParts.push(result.address.road);
+        }
+        if (result.address.suburb) {
+            addressParts.push(result.address.suburb);
+        }
+
+        // Se abbiamo parti dell'indirizzo, aggiorna il campo
+        if (addressParts.length > 0) {
+            const cleanAddress = addressParts.join(', ');
+            // Aggiorna solo se il campo è vuoto o se l'indirizzo è diverso
+            if (!venueAddressInput.value.trim() || venueAddressInput.value.trim() !== cleanAddress) {
+                venueAddressInput.value = cleanAddress;
+            }
+        }
+    }
+
+    // Aggiorna il campo città
+    const cityInput = document.getElementById('city');
+    if (cityInput && result.address) {
+        let city = '';
+
+        // Priorità: city > town > village > municipality > county > state
+        city = result.address.city ||
+               result.address.town ||
+               result.address.village ||
+               result.address.municipality ||
+               result.address.county ||
+               result.address.state ||
+               '';
+
+        // Se non troviamo la città nei dettagli, prova a estrarla dal display_name
+        if (!city && result.display_name) {
+            const parts = result.display_name.split(',');
+            // Cerca la parte che sembra una città (non troppo lunga, non numeri, non codici postali)
+            for (let i = 1; i < Math.min(parts.length, 5); i++) {
+                const part = parts[i].trim();
+                // Escludi codici postali, numeri e parti troppo lunghe
+                if (part.length > 2 && part.length < 50 &&
+                    !/^\d+$/.test(part) &&
+                    !/^\d{5}$/.test(part) && // Codici postali italiani
+                    !/^\d{4}$/.test(part) && // Codici postali europei
+                    !/^[A-Z]{2}$/.test(part)) { // Codici paese
+                    city = part;
+                    break;
+                }
+            }
+        }
+
+        // Aggiorna solo se il campo è vuoto o se abbiamo trovato una città valida
+        if (city && (!cityInput.value.trim() || city.length > 2)) {
+            cityInput.value = city;
+        }
+    }
+
+    // Aggiorna il campo CAP
+    const postcodeInput = document.getElementById('postcode');
+    if (postcodeInput && result.address && result.address.postcode) {
+        // Aggiorna solo se il campo è vuoto
+        if (!postcodeInput.value.trim()) {
+            postcodeInput.value = result.address.postcode;
+        }
+    }
+
+    // Aggiorna il campo paese
+    const countryInput = document.getElementById('country');
+    if (countryInput && result.address && result.address.country_code) {
+        // Aggiorna solo se il campo è vuoto
+        if (!countryInput.value.trim()) {
+            countryInput.value = result.address.country_code.toUpperCase();
+        }
+    }
+
+    // Aggiorna anche il nome del venue se è vuoto
+    const venueNameInput = document.getElementById('venue_name');
+    if (venueNameInput && !venueNameInput.value.trim() && result.address) {
+        // Prova a estrarre il nome del venue dall'indirizzo
+        const venueName = result.address.house_number ||
+                         result.address.road ||
+                         result.address.suburb ||
+                         '';
+        if (venueName) {
+            venueNameInput.value = venueName;
+        }
+    }
 }
 
 
@@ -1334,14 +1501,14 @@ function removeInvitation(userId) {
     if (!invitation) return;
 
     Swal.fire({
-        title: 'Rimuovere Invito?',
-        text: `Vuoi rimuovere l'invito per ${invitation.name}?`,
+        title: '{{ __('events.remove_invitation_title') }}',
+        text: `{{ __('events.remove_invitation_confirm') }} ${invitation.name}?`,
         icon: 'question',
         showCancelButton: true,
                 confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Sì, Rimuovi',
-        cancelButtonText: 'Annulla'
+        confirmButtonText: '{{ __('events.yes_remove') }}',
+        cancelButtonText: '{{ __('common.cancel') }}'
     }).then((result) => {
         if (result.isConfirmed) {
             selectedInvitations = selectedInvitations.filter(inv => inv.user_id !== userId);
@@ -1350,8 +1517,8 @@ function removeInvitation(userId) {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Invito Rimosso',
-                text: `L'invito per ${invitation.name} è stato rimosso`,
+                title: '{{ __('events.invitation_removed') }}',
+                text: `{{ __('events.invitation_removed_message') }} ${invitation.name} {{ __('events.has_been_removed') }}`,
                 timer: 2000,
                 showConfirmButton: false,
                 toast: true,
@@ -1425,12 +1592,12 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
         // Validate start datetime
     if (!startDateTime) {
-        document.getElementById('start_datetime-error').textContent = 'La data di inizio è obbligatoria.';
+        document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_required') }}';
         document.getElementById('start_datetime').classList.add('is-invalid');
         document.getElementById('start_datetime').classList.remove('is-valid');
         hasErrors = true;
     } else if (startDate && startDate <= now) {
-        document.getElementById('start_datetime-error').textContent = 'La data di inizio deve essere nel futuro.';
+        document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_future') }}';
         document.getElementById('start_datetime').classList.add('is-invalid');
         document.getElementById('start_datetime').classList.remove('is-valid');
         hasErrors = true;
@@ -1441,12 +1608,12 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Validate end datetime
     if (!endDateTime) {
-        document.getElementById('end_datetime-error').textContent = 'La data di fine è obbligatoria.';
+        document.getElementById('end_datetime-error').textContent = '{{ __('events.end_datetime_required') }}';
         document.getElementById('end_datetime').classList.add('is-invalid');
         document.getElementById('end_datetime').classList.remove('is-valid');
         hasErrors = true;
     } else if (startDate && endDate && endDate <= startDate) {
-        document.getElementById('end_datetime-error').textContent = 'La data di fine deve essere dopo la data di inizio.';
+        document.getElementById('end_datetime-error').textContent = '{{ __('events.end_datetime_after_start') }}';
         document.getElementById('end_datetime').classList.add('is-invalid');
         document.getElementById('end_datetime').classList.remove('is-valid');
         hasErrors = true;
@@ -1457,7 +1624,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Validate registration deadline
     if (regDeadline && startDate && regDeadline >= startDate) {
-        document.getElementById('registration_deadline-error').textContent = 'La scadenza iscrizioni deve essere prima della data di inizio.';
+        document.getElementById('registration_deadline-error').textContent = '{{ __('events.registration_deadline_before_start') }}';
         document.getElementById('registration_deadline').classList.add('is-invalid');
         document.getElementById('registration_deadline').classList.remove('is-valid');
         hasErrors = true;
@@ -1477,9 +1644,9 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         // Show error alert
         Swal.fire({
             icon: 'error',
-            title: 'Errore di Validazione',
-            text: 'Controlla i campi evidenziati in rosso e riprova.',
-            confirmButtonText: 'OK'
+            title: '{{ __('events.validation_error') }}',
+            text: '{{ __('events.validation_error_message') }}',
+            confirmButtonText: '{{ __('common.ok') }}'
         });
         return;
     }
@@ -1493,7 +1660,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Show loading state
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i>Creazione...';
+    submitBtn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i>{{ __('events.creating') }}';
     submitStatus.style.display = 'block';
 
     // Submit the form
@@ -1520,7 +1687,7 @@ function startAutoSave() {
         localStorage.setItem('eventDraft', JSON.stringify(data));
 
         document.getElementById('autosaveStatus').innerHTML =
-            '<i class="ph ph-check me-1"></i>Salvato ' + new Date().toLocaleTimeString();
+            '<i class="ph ph-check me-1"></i>{{ __('events.saved') }} ' + new Date().toLocaleTimeString();
     }, 30000); // Save every 30 seconds
 }
 

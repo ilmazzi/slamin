@@ -9,6 +9,7 @@ use App\Models\VideoComment;
 use App\Models\VideoLike;
 use App\Models\VideoSnap;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http; // Added for PeerTube direct URL
 
 class VideoController extends Controller
 {
@@ -66,30 +67,105 @@ class VideoController extends Controller
         $video->refresh();
         file_put_contents(storage_path('views_debug.txt'), 'Final views: ' . $video->view_count . "\n", FILE_APPEND);
 
+        // Restituisci sempre JSON, anche se le views non sono state incrementate
         return response()->json([
             'success' => true,
-            'view_count' => $video->view_count
+            'view_count' => $video->view_count,
+            'incremented' => $incremented
         ]);
     }
 
 
 
     /**
-     * Scarica il video (solo per il proprietario o admin)
+     * Download del video
      */
     public function download(Video $video)
     {
-        $user = Auth::user();
-
-        if ($user->id !== $video->user_id && !$user->isAdmin()) {
-            abort(403, 'Non autorizzato');
+        // Se il video è su PeerTube, reindirizza all'URL PeerTube
+        if ($video->isUploadedToPeerTube() && $video->peertube_url) {
+            return redirect($video->peertube_url);
         }
 
-        if (!Storage::disk('public')->exists($video->file_path)) {
-            abort(404, 'File non trovato');
+        // Altrimenti, scarica dal file locale
+        if ($video->file_path && Storage::exists($video->file_path)) {
+            return Storage::download($video->file_path, $video->title . '.mp4');
         }
 
-        return Storage::disk('public')->download($video->file_path, $video->title . '.mp4');
+        return back()->withErrors(['error' => 'Video non disponibile per il download.']);
+    }
+
+    /**
+     * Ottiene l'URL diretto del video PeerTube
+     */
+    public function getPeerTubeDirectUrl(Video $video)
+    {
+        if (!$video->isUploadedToPeerTube() || !$video->peertube_uuid) {
+            return response()->json(['error' => 'Video non disponibile su PeerTube'], 404);
+        }
+
+        try {
+            $baseUrl = \App\Models\PeerTubeConfig::getValue('peertube_url', 'https://video.slamin.it');
+
+            // Usa l'endpoint corretto dell'API PeerTube per ottenere l'URL diretto
+            // Secondo la documentazione: /api/v1/videos/{id}/download
+            $downloadUrl = $baseUrl . '/api/v1/videos/' . $video->peertube_uuid . '/download';
+
+            // Ottieni token di accesso se necessario
+            $peerTubeService = new \App\Services\PeerTubeService();
+            $token = $peerTubeService->getAccessToken();
+
+            // Verifica se il video è accessibile
+            $response = Http::timeout(10)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])
+                ->get($baseUrl . '/api/v1/videos/' . $video->peertube_uuid);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                // Ottieni informazioni sui file disponibili
+                $files = [];
+                if (isset($data['files']) && is_array($data['files'])) {
+                    foreach ($data['files'] as $file) {
+                        if (isset($file['fileUrl'])) {
+                            $files[] = [
+                                'url' => $file['fileUrl'],
+                                'resolution' => $file['resolution']['label'] ?? 'unknown',
+                                'size' => $file['size'] ?? 0,
+                                'type' => 'direct'
+                            ];
+                        }
+                    }
+                }
+
+                // Se non ci sono file diretti, usa l'URL di download
+                if (empty($files)) {
+                    $files[] = [
+                        'url' => $downloadUrl,
+                        'resolution' => 'best',
+                        'size' => 0,
+                        'type' => 'download'
+                    ];
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'files' => $files,
+                    'video_info' => [
+                        'title' => $data['name'] ?? $video->title,
+                        'duration' => $data['duration'] ?? $video->duration,
+                        'description' => $data['description'] ?? $video->description
+                    ]
+                ]);
+            }
+
+            return response()->json(['error' => 'Impossibile ottenere informazioni del video'], 500);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Errore durante il recupero del video: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

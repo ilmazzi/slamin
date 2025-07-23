@@ -260,18 +260,27 @@ class ProfileController extends Controller
      */
     public function deleteVideo($videoId)
     {
-        $user = Auth::user();
-        $video = $user->videos()->findOrFail($videoId);
+        try {
+            $user = Auth::user();
+            $video = $user->videos()->findOrFail($videoId);
 
-        // Elimina thumbnail se esiste
-        if ($video->thumbnail && Storage::disk('public')->exists($video->thumbnail)) {
-            Storage::disk('public')->delete($video->thumbnail);
+            // Elimina thumbnail se esiste
+            if ($video->thumbnail && Storage::disk('public')->exists($video->thumbnail)) {
+                Storage::disk('public')->delete($video->thumbnail);
+            }
+
+            $video->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Video eliminato con successo!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'eliminazione del video: ' . $e->getMessage()
+            ], 500);
         }
-
-        $video->delete();
-
-        return redirect()->route('profile.videos')
-            ->with('success', 'Video eliminato con successo!');
     }
 
     /**

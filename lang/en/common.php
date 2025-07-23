@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'languages' => [
         'it' => 'Italiano',
         'en' => 'English',
@@ -8,12 +9,9 @@ return [
         'es' => 'Español',
         'de' => 'Deutsch',
     ],
-
     'language' => 'Language',
     'select_language' => 'Select language',
     'change_language' => 'Change language',
-
-    // Common Actions
     'create' => 'Create',
     'read' => 'Read',
     'update' => 'Update',
@@ -33,8 +31,6 @@ return [
     'continue' => 'Continue',
     'optional' => 'Optional',
     'manage' => 'Manage',
-
-    // States
     'active' => 'Active',
     'inactive' => 'Inactive',
     'pending' => 'Pending',
@@ -44,10 +40,41 @@ return [
     'draft' => 'Draft',
     'private' => 'Private',
     'public' => 'Public',
-
-    // System Messages
     'success' => 'Operation completed successfully!',
     'error' => 'An error occurred',
     'warning' => 'Warning',
     'info' => 'Information',
+    'loading' => '',
+    'no_data' => '',
+    'no_results' => '',
+    'try_again' => '',
+    'are_you_sure' => '',
+    'confirm_delete' => '',
+    'confirm_action' => '',
+    'yes' => '',
+    'no' => '',
+    'ok' => '',
+    'today' => '',
+    'yesterday' => '',
+    'tomorrow' => '',
+    'this_week' => '',
+    'last_week' => '',
+    'next_week' => '',
+    'this_month' => '',
+    'last_month' => '',
+    'next_month' => '',
+    'minute' => '',
+    'minutes' => '',
+    'hour' => '',
+    'hours' => '',
+    'day' => '',
+    'days' => '',
+    'week' => '',
+    'weeks' => '',
+    'month' => '',
+    'months' => '',
+    'year' => '',
+    'years' => '',
+    'page_under_construction' => '',
+
 ];

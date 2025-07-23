@@ -461,16 +461,53 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
-    // Carousel Management (Admin only)
+        // Carousel Management (Admin only)
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+        // Rota di test temporanea per debug (DEVE essere PRIMA del resource)
+        Route::get('/carousels/test-search', function(\Illuminate\Http\Request $request) {
+            return response()->json([
+                'message' => 'Test route working',
+                'user' => auth()->user() ? auth()->user()->name : 'Not authenticated',
+                'is_admin' => auth()->user() ? auth()->user()->is_admin : false,
+                'params' => $request->all()
+            ]);
+        })->name('carousels.test-search');
+
+        // Test del metodo searchContent
+        Route::get('/carousels/test-search-content', [App\Http\Controllers\Admin\CarouselController::class, 'searchContent'])->name('carousels.test-search-content');
+
+        // Rota search-content DEVE essere PRIMA del resource
+        Route::get('/carousels/search-content', [App\Http\Controllers\Admin\CarouselController::class, 'searchContent'])->name('carousels.search-content');
+
         Route::resource('carousels', App\Http\Controllers\Admin\CarouselController::class)->names('carousels');
         Route::post('/carousels/order', [App\Http\Controllers\Admin\CarouselController::class, 'updateOrder'])->name('carousels.order');
 
         // System Settings
         Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
-        Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
-        Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
-        Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
+Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
+Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
+
+        // Translation Management
+        Route::get('/translations', [App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('translations.index');
+        Route::get('/translations/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'show'])->name('translations.show');
+        Route::put('/translations/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'update'])->name('translations.update');
+        Route::post('/translations/language', [App\Http\Controllers\Admin\TranslationController::class, 'createLanguage'])->name('translations.create-language');
+        Route::delete('/translations/language/{language}', [App\Http\Controllers\Admin\TranslationController::class, 'deleteLanguage'])->name('translations.delete-language');
+        Route::post('/translations/sync', [App\Http\Controllers\Admin\TranslationController::class, 'syncLanguages'])->name('translations.sync');
+
+        // PeerTube Configuration
+        Route::get('/peertube/config', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'index'])->name('peertube.config');
+        Route::put('/peertube/config', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'update'])->name('peertube.config.update');
+        Route::post('/peertube/config/test-connection', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'testConnection'])->name('peertube.config.test-connection');
+        Route::post('/peertube/config/test-auth', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'testAuthentication'])->name('peertube.config.test-auth');
+        Route::post('/peertube/config/reset', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'reset'])->name('peertube.config.reset');
+
+        // PeerTube ID Finder
+        Route::get('/peertube/accounts', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'getAccounts'])->name('peertube.accounts');
+        Route::get('/peertube/channels', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'getChannels'])->name('peertube.channels');
+        Route::post('/peertube/find-account', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findAccount'])->name('peertube.find-account');
+        Route::post('/peertube/find-channel', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findChannel'])->name('peertube.find-channel');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)
@@ -498,6 +535,7 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
         Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
+Route::get('/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeDirectUrl'])->name('peertube-url');
 
         // Video interactions (comments, likes, snaps)
         Route::post('/{video}/comments', [App\Http\Controllers\VideoController::class, 'addComment'])->name('add-comment');

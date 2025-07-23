@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Carousel Search</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .result { margin: 10px 0; padding: 10px; background: #f5f5f5; border-radius: 3px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Test Carousel Search API</h1>
+
+    <div class="test-section">
+        <h3>Test 1: Ricerca Video</h3>
+        <button onclick="testVideoSearch()">Testa Ricerca Video</button>
+        <div id="videoResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 2: Ricerca Utenti</h3>
+        <button onclick="testUserSearch()">Testa Ricerca Utenti</button>
+        <div id="userResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 3: Ricerca Eventi</h3>
+        <button onclick="testEventSearch()">Testa Ricerca Eventi</button>
+        <div id="eventResult" class="result"></div>
+    </div>
+
+    <script>
+        async function testSearch(type, query = '') {
+            try {
+                const response = await fetch(`/admin/carousels/search-content?type=${type}&query=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return { success: true, data };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function testVideoSearch() {
+            const resultDiv = document.getElementById('videoResult');
+            resultDiv.innerHTML = 'Testando...';
+
+            const result = await testSearch('video');
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">✅ Successo! Trovati ${result.data.length} video</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">❌ Errore: ${result.error}</div>`;
+            }
+        }
+
+        async function testUserSearch() {
+            const resultDiv = document.getElementById('userResult');
+            resultDiv.innerHTML = 'Testando...';
+
+            const result = await testSearch('user');
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">✅ Successo! Trovati ${result.data.length} utenti</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">❌ Errore: ${result.error}</div>`;
+            }
+        }
+
+        async function testEventSearch() {
+            const resultDiv = document.getElementById('eventResult');
+            resultDiv.innerHTML = 'Testando...';
+
+            const result = await testSearch('event');
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">✅ Successo! Trovati ${result.data.length} eventi</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">❌ Errore: ${result.error}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

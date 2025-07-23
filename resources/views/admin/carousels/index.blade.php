@@ -69,11 +69,16 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="position-relative">
-                                                        <img src="{{ $carousel->imageUrl }}" alt="{{ $carousel->title }}"
+                                                        <img src="{{ $carousel->imageUrl }}" alt="{{ $carousel->display_title }}"
                                                              class="rounded" style="width: 50px; height: 35px; object-fit: cover;">
                                                         @if($carousel->video_path)
                                                             <div class="position-absolute top-0 end-0">
                                                                 <i class="ph-duotone ph-video-camera f-s-10 text-primary bg-white rounded-circle p-1"></i>
+                                                            </div>
+                                                        @endif
+                                                        @if($carousel->isContentReference())
+                                                            <div class="position-absolute bottom-0 start-0">
+                                                                <span class="badge bg-info f-s-8">{{ ucfirst($carousel->content_type) }}</span>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -81,9 +86,15 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                    <h6 class="mb-1 f-s-14 f-w-600">{{ $carousel->title }}</h6>
-                                                    @if($carousel->description)
-                                                        <p class="text-muted f-s-12 mb-0">{{ Str::limit($carousel->description, 40) }}</p>
+                                                    <h6 class="mb-1 f-s-14 f-w-600">{{ $carousel->display_title }}</h6>
+                                                    @if($carousel->display_description)
+                                                        <p class="text-muted f-s-12 mb-0">{{ Str::limit($carousel->display_description, 40) }}</p>
+                                                    @endif
+                                                    @if($carousel->isContentReference())
+                                                        <small class="text-info f-s-10">
+                                                            <i class="ph-duotone ph-link f-s-10 me-1"></i>
+                                                            Contenuto referenziato
+                                                        </small>
                                                     @endif
                                                 </div>
                                             </td>

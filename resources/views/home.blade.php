@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Poetry Slam - Home')
+@section('title', 'Slam in - Home')
 
 @section('main-content')
 <div class="page-content">
@@ -131,63 +131,78 @@
             </div>
         </div>
 
-                <!-- Most Popular Video Section -->
+        <!-- Most Popular Video Section -->
         @if($mostPopularVideo)
         <div class="row mb-4">
             <div class="col-12">
-                                <div class="card hover-effect border-0 shadow-sm">
+                <div class="card hover-effect border-0 shadow-sm">
                     <div class="card-body p-0">
-                                    <div class="position-relative">
-                            <div class="p-4">
-                                <div class="d-flex align-items-center">
-                                    <!-- Video Thumbnail with Overlay - EVEN BIGGER -->
-                                    <div class="position-relative me-4" style="min-width: 500px;">
-                                        <div class="position-relative overflow-hidden rounded-3" style="width: 500px; height: 281px;">
-                                            @if($mostPopularVideo->thumbnail_path || $mostPopularVideo->peertube_thumbnail_url)
-                                                <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
-                                        @else
-                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                    <div class="text-center">
-                                                        <i class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
-                                                        <p class="text-muted f-s-14 mb-0">Anteprima non disponibile</p>
+                        <div class="position-relative">
+                            <div class="p-3 p-md-4">
+                                <!-- Mobile First Layout -->
+                                <div class="row">
+                                    <!-- Video Thumbnail Column -->
+                                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                                        <div class="position-relative">
+                                            <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
+                                                @if($mostPopularVideo->thumbnail_path || $mostPopularVideo->peertube_thumbnail_url)
+                                                    <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
+                                                @else
+                                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                        <div class="text-center">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
+                                                            <p class="text-muted f-s-14 mb-0">Anteprima non disponibile</p>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20"></div>
+                                                <div class="position-absolute top-50 start-50 translate-middle">
+                                                    <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center" style="width: 70px; height: 70px;">
+                                                        <i class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
                                                     </div>
                                                 </div>
-                                            @endif
-                                            <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20"></div>
-                                            <div class="position-absolute top-50 start-50 translate-middle">
-                                                <div class="bg-white bg-opacity-90 rounded-circle p-4 d-flex-center" style="width: 90px; height: 90px;">
-                                                    <i class="ph-duotone ph-play f-s-36 text-primary"></i>
-                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Popular Badge -->
-                                        <div class="position-absolute top-0 end-0 m-3">
-                                            <span class="badge bg-warning text-dark f-s-11 fw-bold px-3 py-2 rounded-pill shadow-sm">
-                                                <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
-                                                Più Popolare
-                                            </span>
+                                            <!-- Popular Badge -->
+                                            <div class="position-absolute top-0 end-0 m-2 m-md-3">
+                                                <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 px-md-3 py-1 py-md-2 rounded-pill shadow-sm">
+                                                    <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
+                                                    Più Popolare
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                                                        <!-- Content -->
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div class="flex-grow-1">
-                                                <h4 class="text-dark f-w-700 mb-2 f-s-20">{{ $mostPopularVideo->title }}</h4>
+                                    <!-- Content Column -->
+                                    <div class="col-12 col-lg-6">
+                                        <div class="h-100 d-flex flex-column justify-content-between">
+                                            <!-- Title and Description -->
+                                            <div class="mb-3">
+                                                <h4 class="text-dark f-w-700 mb-2 f-s-18 f-s-md-20">{{ $mostPopularVideo->title }}</h4>
                                                 @if($mostPopularVideo->description)
-                                                    <p class="text-muted mb-2 f-s-14">{{ Str::limit($mostPopularVideo->description, 80) }}</p>
-                                        @endif
+                                                    <p class="text-muted mb-3 f-s-14">{{ Str::limit($mostPopularVideo->description, 120) }}</p>
+                                                @endif
 
                                                 <!-- Author Info -->
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <div class="h-35 w-35 d-flex-center b-r-50 overflow-hidden bg-primary me-2">
-                                                        <span class="text-white fw-bold f-s-12">{{ substr($mostPopularVideo->user->name, 0, 2) }}</span>
+                                                <a href="{{ route('user.show', $mostPopularVideo->user) }}" class="text-decoration-none hover-effect">
+                                                    <div class="d-flex align-items-center mb-3 p-2 rounded-3 transition-all">
+                                                        @if($mostPopularVideo->user->profile_photo)
+                                                            <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3">
+                                                                <img src="{{ $mostPopularVideo->user->profile_photo_url }}" alt="{{ $mostPopularVideo->user->name }}" class="w-100 h-100" style="object-fit: cover;">
+                                                            </div>
+                                                        @else
+                                                            <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-gradient-primary me-3">
+                                                                <span class="text-white fw-bold f-s-16">{{ substr($mostPopularVideo->user->name, 0, 2) }}</span>
+                                                            </div>
+                                                        @endif
+                                                        <div>
+                                                            <h6 class="mb-0 f-w-600 f-s-14 text-dark">{{ $mostPopularVideo->user->name }}</h6>
+                                                            <small class="text-muted f-s-11">Autore del video</small>
+                                                        </div>
+                                                        <div class="ms-auto">
+                                                            <i class="ph-duotone ph-arrow-right f-s-16 text-muted"></i>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <h6 class="mb-0 f-w-600 f-s-14 text-dark">{{ $mostPopularVideo->user->name }}</h6>
-                                                        <small class="text-muted f-s-11">Autore del video</small>
-                                                    </div>
-                                                </div>
+                                                </a>
 
                                                 <!-- Watch Button -->
                                                 <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm">
@@ -195,44 +210,44 @@
                                                     Guarda Video
                                                 </a>
                                             </div>
-                                        </div>
 
-                                        <!-- Statistics -->
-                                        <div class="row g-2">
-                                            <div class="col-3">
-                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
-                                                    <div class="d-flex-center mb-1">
-                                                        <i class="ph-duotone ph-eye f-s-18 text-info"></i>
+                                            <!-- Statistics -->
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-3">
+                                                    <div class="text-center p-2 rounded-3 txt-bg-success">
+                                                        <div class="d-flex-center mb-1">
+                                                            <i class="ph-duotone ph-eye f-s-16 f-s-md-18 text-info"></i>
+                                                        </div>
+                                                        <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->view_count) }}</h6>
+                                                        <small class="text-muted f-s-10">Visualizzazioni</small>
                                                     </div>
-                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->view_count) }}</h6>
-                                                    <small class="text-muted f-s-10">Visualizzazioni</small>
                                                 </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
-                                                    <div class="d-flex-center mb-1">
-                                                        <i class="ph-duotone ph-thumbs-up f-s-18 text-success"></i>
+                                                <div class="col-6 col-md-3">
+                                                    <div class="text-center p-2 rounded-3 txt-bg-success">
+                                                        <div class="d-flex-center mb-1">
+                                                            <i class="ph-duotone ph-thumbs-up f-s-16 f-s-md-18 text-success"></i>
+                                                        </div>
+                                                        <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->like_count) }}</h6>
+                                                        <small class="text-muted f-s-10">Mi Piace</small>
                                                     </div>
-                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->like_count) }}</h6>
-                                                    <small class="text-muted f-s-10">Mi Piace</small>
                                                 </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
-                                                    <div class="d-flex-center mb-1">
-                                                        <i class="ph-duotone ph-chat-circle f-s-18 text-warning"></i>
+                                                <div class="col-6 col-md-3">
+                                                    <div class="text-center p-2 rounded-3 txt-bg-success">
+                                                        <div class="d-flex-center mb-1">
+                                                            <i class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
+                                                        </div>
+                                                        <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->comment_count) }}</h6>
+                                                        <small class="text-muted f-s-10">Commenti</small>
                                                     </div>
-                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->comment_count) }}</h6>
-                                                    <small class="text-muted f-s-10">Commenti</small>
                                                 </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="text-center p-2 rounded-3" style="background-color: #f8f9fa;">
-                                                    <div class="d-flex-center mb-1">
-                                                        <i class="ph-duotone ph-hands-clapping f-s-18 text-danger"></i>
+                                                <div class="col-6 col-md-3">
+                                                    <div class="text-center p-2 rounded-3 txt-bg-success">
+                                                        <div class="d-flex-center mb-1">
+                                                            <i class="ph-duotone ph-hands-clapping f-s-16 f-s-md-18 text-danger"></i>
+                                                        </div>
+                                                        <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->snaps()->count()) }}</h6>
+                                                        <small class="text-muted f-s-10">Snap</small>
                                                     </div>
-                                                    <h6 class="mb-1 text-dark f-w-700">{{ number_format($mostPopularVideo->snaps()->count()) }}</h6>
-                                                    <small class="text-muted f-s-10">Snap</small>
                                                 </div>
                                             </div>
                                         </div>

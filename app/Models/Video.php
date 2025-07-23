@@ -22,8 +22,9 @@ class Video extends Model
         'is_public',
         'status',
         'tags',
-        // Campi PeerTube
+        // Campi PeerTube esistenti
         'peertube_id',
+        'peertube_uuid',
         'peertube_url',
         'peertube_embed_url',
         'peertube_thumbnail_url',
@@ -36,6 +37,18 @@ class Video extends Model
         'comment_count',
         'moderation_status',
         'moderation_notes',
+        // Nuovi campi PeerTube
+        'peertube_access_token',
+        'peertube_channel_id',
+        'peertube_account_id',
+        'upload_status',
+        'upload_error',
+        'uploaded_at',
+        'last_sync_at',
+        'needs_sync',
+        'peertube_privacy',
+        'peertube_tags',
+        'peertube_description',
     ];
 
     protected $casts = [
@@ -47,6 +60,10 @@ class Video extends Model
         'like_count' => 'integer',
         'dislike_count' => 'integer',
         'comment_count' => 'integer',
+        'needs_sync' => 'boolean',
+        'peertube_tags' => 'array',
+        'uploaded_at' => 'datetime',
+        'last_sync_at' => 'datetime',
     ];
 
     /**
@@ -337,5 +354,113 @@ class Video extends Model
     public function incrementPeerTubeComments(): void
     {
         $this->increment('comment_count');
+    }
+
+    /**
+     * Verifica se il video è stato caricato su PeerTube
+     */
+    public function isUploadedToPeerTube(): bool
+    {
+        return $this->upload_status === 'completed' && !empty($this->peertube_id);
+    }
+
+    /**
+     * Verifica se il video è in fase di upload
+     */
+    public function isUploading(): bool
+    {
+        return in_array($this->upload_status, ['pending', 'uploading', 'processing']);
+    }
+
+    /**
+     * Verifica se l'upload è fallito
+     */
+    public function hasUploadFailed(): bool
+    {
+        return $this->upload_status === 'failed';
+    }
+
+    /**
+     * Ottiene l'URL del video PeerTube
+     */
+    public function getPeerTubeVideoUrlAttribute(): ?string
+    {
+        if ($this->isUploadedToPeerTube()) {
+            return $this->peertube_url;
+        }
+        return null;
+    }
+
+    /**
+     * Ottiene l'URL di embed PeerTube
+     */
+    public function getPeerTubeEmbedUrlAttribute(): ?string
+    {
+        if ($this->isUploadedToPeerTube() && $this->peertube_uuid) {
+            // Costruisci sempre l'URL di embed usando l'UUID
+            $baseUrl = \App\Models\PeerTubeConfig::getValue('peertube_url', 'https://video.slamin.it');
+            return $baseUrl . '/videos/embed/' . $this->peertube_uuid;
+        }
+        return null;
+    }
+
+    /**
+     * Marca il video come necessitante sincronizzazione
+     */
+    public function markForSync(): void
+    {
+        $this->update(['needs_sync' => true]);
+    }
+
+    /**
+     * Marca il video come sincronizzato
+     */
+    public function markAsSynced(): void
+    {
+        $this->update([
+            'needs_sync' => false,
+            'last_sync_at' => now()
+        ]);
+    }
+
+    /**
+     * Ottiene lo stato upload formattato
+     */
+    public function getUploadStatusTextAttribute(): string
+    {
+        $statuses = [
+            'pending' => 'In attesa',
+            'uploading' => 'Caricamento in corso',
+            'processing' => 'Elaborazione',
+            'completed' => 'Completato',
+            'failed' => 'Fallito'
+        ];
+
+        return $statuses[$this->upload_status] ?? 'Sconosciuto';
+    }
+
+    /**
+     * Scope per video caricati su PeerTube
+     */
+    public function scopeOnPeerTube($query)
+    {
+        return $query->where('upload_status', 'completed')
+                    ->whereNotNull('peertube_id');
+    }
+
+    /**
+     * Scope per video che necessitano sincronizzazione
+     */
+    public function scopeNeedsSync($query)
+    {
+        return $query->where('needs_sync', true);
+    }
+
+    /**
+     * Scope per video con upload fallito
+     */
+    public function scopeUploadFailed($query)
+    {
+        return $query->where('upload_status', 'failed');
     }
 }

@@ -1,87 +1,15 @@
-Video data: {
-    "user_id": 4,
-    "title": "asd asd asd asd",
-    "description": "asd asd ad asd ads",
-    "video_url": "\/storage\/videos\/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4",
-    "file_path": "videos\/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4",
-    "thumbnail_path": null,
-    "duration": null,
-    "file_size": 1055736,
-    "resolution": null,
-    "is_public": true,
-    "status": "uploaded",
-    "moderation_status": "pending",
-    "tags": [],
-    "view_count": 0,
-    "like_count": 0,
-    "dislike_count": 0,
-    "comment_count": 0
-}
-Error: Array to string conversion (Connection: mysql, SQL: insert into `videos` (`user_id`, `title`, `description`, `video_url`, `file_path`, `thumbnail_path`, `duration`, `file_size`, `resolution`, `is_public`, `status`, `moderation_status`, `tags`, `view_count`, `like_count`, `dislike_count`, `comment_count`, `updated_at`, `created_at`) values (4, asd asd asd asd, asd asd ad asd ads, /storage/videos/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4, videos/VqudIfVB9q2MLmuM5EAYnXTfPGTZJNGVH7P5mU7r.mp4, ?, ?, 1055736, ?, 1, uploaded, pending, ?, 0, 0, 0, 0, 2025-07-21 12:09:53, 2025-07-21 12:09:53))
 === UPLOAD START ===
 Auth check: YES
 User ID: 4
 User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+PeerTube result: {"id":2,"uuid":"0550a795-d17d-4f4d-8e11-22ad2ae07e23","url":"https:\/\/video.slamin.it\/videos\/watch\/0550a795-d17d-4f4d-8e11-22ad2ae07e23","embedUrl":"https:\/\/video.slamin.it\/videos\/embed\/0550a795-d17d-4f4d-8e11-22ad2ae07e23","duration":null,"resolution":null,"thumbnailPath":null,"success":true}
 Video data: {
     "user_id": 4,
-    "title": "asd asd ada ad ad",
-    "description": "a dad ad ad ad ad",
-    "video_url": "\/storage\/videos\/U0fyS0toOVJnqsBNt7SGhYp6gb1xMgx23cUgp4E8.mp4",
-    "file_path": "videos\/U0fyS0toOVJnqsBNt7SGhYp6gb1xMgx23cUgp4E8.mp4",
-    "thumbnail_path": null,
-    "duration": null,
-    "file_size": 1055736,
-    "resolution": null,
-    "is_public": true,
-    "status": "uploaded",
-    "moderation_status": "pending",
-    "tags": null,
-    "view_count": 0,
-    "like_count": 0,
-    "dislike_count": 0,
-    "comment_count": 0
-}
-Video created with ID: 4
-Video user_id: 4
-=== UPLOAD START ===
-Auth check: YES
-User ID: 4
-User name: Davide Mazzitelli (PoetDavide84)
-=== UPLOAD START ===
-Auth check: YES
-User ID: 4
-User name: Davide Mazzitelli (PoetDavide84)
-Video data: {
-    "user_id": 4,
-    "title": "asd a dwqed qda ds",
-    "description": "ad asd asd ad ad",
-    "video_url": "\/storage\/videos\/39grtO5G9WAcI0uUt9RtUViI3iBACwXTogauPL9C.mp4",
-    "file_path": "videos\/39grtO5G9WAcI0uUt9RtUViI3iBACwXTogauPL9C.mp4",
-    "thumbnail_path": null,
-    "duration": null,
-    "file_size": 1055736,
-    "resolution": null,
-    "is_public": true,
-    "status": "uploaded",
-    "moderation_status": "pending",
-    "tags": null,
-    "view_count": 0,
-    "like_count": 0,
-    "dislike_count": 0,
-    "comment_count": 0
-}
-Video created with ID: 5
-Video user_id: 4
-=== UPLOAD START ===
-Auth check: YES
-User ID: 4
-User name: Davide Mazzitelli (PoetDavide84)
-Video data: {
-    "user_id": 4,
-    "title": "as qr asd r aw asd asd",
-    "description": "asd ad awd awd aw  asd ad",
-    "video_url": "\/storage\/videos\/30YjswXsfz5Bh7cMXwRiv7A3F5n3fX8J8jJgPnod.mp4",
-    "file_path": "videos\/30YjswXsfz5Bh7cMXwRiv7A3F5n3fX8J8jJgPnod.mp4",
+    "title": "sad ads asd",
+    "description": "a sda sdads asdasd",
+    "video_url": "https:\/\/video.slamin.it\/videos\/watch\/0550a795-d17d-4f4d-8e11-22ad2ae07e23",
+    "file_path": null,
     "thumbnail_path": null,
     "duration": null,
     "file_size": 1055736,
@@ -89,36 +17,154 @@ Video data: {
     "is_public": true,
     "status": "uploaded",
     "moderation_status": "approved",
-    "tags": null,
+    "tags": "[\"poetry\",\"slam\",\"poetry-slam\"]",
+    "peertube_id": 2,
+    "peertube_uuid": "0550a795-d17d-4f4d-8e11-22ad2ae07e23",
+    "peertube_url": "https:\/\/video.slamin.it\/videos\/watch\/0550a795-d17d-4f4d-8e11-22ad2ae07e23",
+    "peertube_embed_url": "https:\/\/video.slamin.it\/videos\/embed\/0550a795-d17d-4f4d-8e11-22ad2ae07e23",
+    "upload_status": "completed",
+    "uploaded_at": "2025-07-22T13:57:15.162750Z",
+    "peertube_privacy": "public",
+    "peertube_tags": [
+        "poetry",
+        "slam",
+        "poetry-slam"
+    ],
+    "peertube_description": "a sda sdads asdasd",
     "view_count": 0,
     "like_count": 0,
     "dislike_count": 0,
     "comment_count": 0
 }
-Video created with ID: 6
+Video created with ID: 8
 Video user_id: 4
 === UPLOAD START ===
 Auth check: YES
 User ID: 4
 User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+PeerTube result: {"id":5,"uuid":"67deb6bc-6c88-4e14-a4f3-9240481f8778","url":"https:\/\/video.slamin.it\/videos\/watch\/67deb6bc-6c88-4e14-a4f3-9240481f8778","embedUrl":"https:\/\/video.slamin.it\/videos\/embed\/67deb6bc-6c88-4e14-a4f3-9240481f8778","duration":null,"resolution":null,"thumbnailPath":null,"success":true}
 Video data: {
     "user_id": 4,
-    "title": "lucna",
-    "description": "asd asd ads asd ad",
-    "video_url": "\/storage\/videos\/jy17dDcn3l8DT50TwTIyIhMYmtH1VER8JoQpjTjr.mp4",
-    "file_path": "videos\/jy17dDcn3l8DT50TwTIyIhMYmtH1VER8JoQpjTjr.mp4",
+    "title": "teast r  a",
+    "description": "d asd sa",
+    "video_url": "https:\/\/video.slamin.it\/videos\/watch\/67deb6bc-6c88-4e14-a4f3-9240481f8778",
+    "file_path": null,
     "thumbnail_path": null,
     "duration": null,
-    "file_size": 1570024,
+    "file_size": 21928132,
     "resolution": null,
-    "is_public": true,
+    "is_public": false,
     "status": "uploaded",
     "moderation_status": "approved",
-    "tags": null,
+    "tags": "[\"poetry\",\"slam\",\"poetry-slam\"]",
+    "peertube_id": 5,
+    "peertube_uuid": "67deb6bc-6c88-4e14-a4f3-9240481f8778",
+    "peertube_url": "https:\/\/video.slamin.it\/videos\/watch\/67deb6bc-6c88-4e14-a4f3-9240481f8778",
+    "peertube_embed_url": "https:\/\/video.slamin.it\/videos\/embed\/67deb6bc-6c88-4e14-a4f3-9240481f8778",
+    "upload_status": "completed",
+    "uploaded_at": "2025-07-22T15:51:17.840795Z",
+    "peertube_privacy": "private",
+    "peertube_tags": [
+        "poetry",
+        "slam",
+        "poetry-slam"
+    ],
+    "peertube_description": "d asd sa",
     "view_count": 0,
     "like_count": 0,
     "dislike_count": 0,
     "comment_count": 0
 }
-Video created with ID: 7
+Video created with ID: 9
+Video user_id: 4
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+PeerTube result: {"id":6,"uuid":"a24be19c-037a-4a5f-83b8-f762b3cc024a","url":"https:\/\/video.slamin.it\/videos\/watch\/a24be19c-037a-4a5f-83b8-f762b3cc024a","embedUrl":"https:\/\/video.slamin.it\/videos\/embed\/a24be19c-037a-4a5f-83b8-f762b3cc024a","duration":31,"resolution":null,"thumbnailPath":"\/lazy-static\/thumbnails\/6a63652b-73c3-4dee-8cff-31f0d7246701.jpg","success":true}
+Video data: {
+    "user_id": 4,
+    "title": "ultimo test di upload peertube",
+    "description": "ultimo test di caricamento",
+    "video_url": "https:\/\/video.slamin.it\/videos\/watch\/a24be19c-037a-4a5f-83b8-f762b3cc024a",
+    "file_path": null,
+    "thumbnail_path": null,
+    "duration": 31,
+    "file_size": 17839845,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "approved",
+    "tags": "[\"poetry\",\"slam\",\"poetry-slam\"]",
+    "peertube_id": 6,
+    "peertube_uuid": "a24be19c-037a-4a5f-83b8-f762b3cc024a",
+    "peertube_url": "https:\/\/video.slamin.it\/videos\/watch\/a24be19c-037a-4a5f-83b8-f762b3cc024a",
+    "peertube_embed_url": "https:\/\/video.slamin.it\/videos\/embed\/a24be19c-037a-4a5f-83b8-f762b3cc024a",
+    "upload_status": "completed",
+    "uploaded_at": "2025-07-22T20:59:59.992151Z",
+    "peertube_privacy": "public",
+    "peertube_tags": [
+        "poetry",
+        "slam",
+        "poetry-slam"
+    ],
+    "peertube_description": "ultimo test di caricamento",
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 10
+Video user_id: 4
+=== UPLOAD START ===
+Auth check: YES
+User ID: 4
+User name: Davide Mazzitelli (PoetDavide84)
+Uploading to PeerTube...
+PeerTube result: {"id":7,"uuid":"a2e0fe47-6763-4764-a813-d693a12a306b","url":"https:\/\/video.slamin.it\/videos\/watch\/a2e0fe47-6763-4764-a813-d693a12a306b","embedUrl":"https:\/\/video.slamin.it\/videos\/embed\/a2e0fe47-6763-4764-a813-d693a12a306b","duration":5,"resolution":null,"thumbnailPath":"\/lazy-static\/thumbnails\/9b694812-6101-454f-9e76-3e401074e06e.jpg","success":true}
+Video data: {
+    "user_id": 4,
+    "title": "test thumbnail",
+    "description": "test thumbnail",
+    "video_url": "https:\/\/video.slamin.it\/videos\/watch\/a2e0fe47-6763-4764-a813-d693a12a306b",
+    "file_path": null,
+    "thumbnail_path": null,
+    "duration": 5,
+    "file_size": 1055736,
+    "resolution": null,
+    "is_public": true,
+    "status": "uploaded",
+    "moderation_status": "approved",
+    "tags": "[\"poetry\",\"slam\",\"poetry-slam\"]",
+    "peertube_id": 7,
+    "peertube_uuid": "a2e0fe47-6763-4764-a813-d693a12a306b",
+    "peertube_url": "https:\/\/video.slamin.it\/videos\/watch\/a2e0fe47-6763-4764-a813-d693a12a306b",
+    "peertube_embed_url": "https:\/\/video.slamin.it\/videos\/embed\/a2e0fe47-6763-4764-a813-d693a12a306b",
+    "upload_status": "completed",
+    "uploaded_at": "2025-07-22T22:06:29.104190Z",
+    "peertube_privacy": "public",
+    "peertube_tags": [
+        "poetry",
+        "slam",
+        "poetry-slam"
+    ],
+    "peertube_description": "test thumbnail",
+    "view_count": 0,
+    "like_count": 0,
+    "dislike_count": 0,
+    "comment_count": 0
+}
+Video created with ID: 11
 Video user_id: 4

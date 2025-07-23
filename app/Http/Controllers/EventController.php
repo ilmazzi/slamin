@@ -189,7 +189,7 @@ class EventController extends Controller
         try {
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
-                'description' => 'required|string',
+                'description' => 'nullable|string',
                 'requirements' => 'nullable|string',
                 'start_datetime' => 'required|date_format:Y-m-d H:i|after:now',
                 'end_datetime' => 'required|date_format:Y-m-d H:i|after:start_datetime',
@@ -197,6 +197,7 @@ class EventController extends Controller
                 'venue_name' => 'required|string|max:255',
                 'venue_address' => 'required|string',
                 'city' => 'required|string|max:255',
+                'postcode' => 'required|string|max:10',
                 'country' => 'required|string|size:2',
                 'latitude' => 'nullable|numeric|between:-90,90',
                 'longitude' => 'nullable|numeric|between:-180,180',

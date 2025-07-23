@@ -1,0 +1,122 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Panel Language Lines - ITALIANO
+    |--------------------------------------------------------------------------
+    |
+    | Traduzioni per il pannello di amministrazione
+    |
+    */
+
+    // Titoli principali
+    'admin_panel' => 'Pannello Amministrazione',
+    'dashboard' => 'Dashboard',
+    'settings' => 'Impostazioni',
+    'translations' => 'Traduzioni',
+    'carousels' => 'Caroselli',
+    'users' => 'Utenti',
+    'permissions' => 'Permessi',
+
+    // Gestione Traduzioni
+    'translation_management' => 'Gestione Traduzioni',
+    'translation_management_description' => 'Gestisci le traduzioni del sistema in tutte le lingue',
+    'available_languages' => 'Lingue Disponibili',
+    'translation_files' => 'File di Traduzione',
+    'add_language' => 'Aggiungi Lingua',
+    'edit_translations' => 'Modifica Traduzioni',
+    'delete_language' => 'Elimina Lingua',
+    'language_code' => 'Codice Lingua',
+    'language_name' => 'Nome Lingua',
+    'language_code_help' => 'Codice ISO 639-1 (2 caratteri)',
+    'language_name_help' => 'Nome completo della lingua',
+    'create_language' => 'Crea Lingua',
+    'new_language_note' => 'La nuova lingua sarà creata copiando tutte le traduzioni dall\'italiano. Potrai poi modificarle individualmente.',
+    'language_created_success' => 'Lingua creata con successo!',
+    'language_deleted_success' => 'Lingua eliminata con successo!',
+    'language_exists_error' => 'La lingua esiste già.',
+    'language_not_found_error' => 'Lingua non trovata.',
+    'cannot_delete_italian' => 'Non puoi eliminare la lingua italiana (lingua di riferimento).',
+    'delete_language_confirm' => 'Sei sicuro di voler eliminare questa lingua?',
+
+    // Modifica Traduzioni
+    'edit_translations_title' => 'Modifica Traduzioni',
+    'translation_keys' => 'Chiavi di Traduzione',
+    'reference_italian' => 'Riferimento (Italiano)',
+    'translation_language' => 'Traduzione',
+    'enter_translation' => 'Inserisci la traduzione...',
+    'save_translations' => 'Salva Traduzioni',
+    'translations_saved_success' => 'Traduzioni salvate con successo!',
+    'translation_file_not_found' => 'File di traduzione non trovato.',
+    'save_error' => 'Errore nel salvataggio delle traduzioni',
+
+    // Azioni e Pulsanti
+    'show_hide_all' => 'Mostra/Nascondi Tutte',
+    'copy_from_italian' => 'Copia da Italiano',
+    'clear_all' => 'Svuota Tutte',
+    'show_untranslated' => 'Mostra Non Tradotte',
+    'back_to_list' => 'Torna alla Lista',
+    'cancel' => 'Annulla',
+    'save' => 'Salva',
+
+    // Statistiche e Progresso
+    'statistics' => 'Statistiche',
+    'total_keys' => 'Chiavi Totali',
+    'translated' => 'Tradotte',
+    'progress' => 'Progresso',
+    'completed' => 'completato',
+
+    // Suggerimenti
+    'tips' => 'Suggerimenti',
+    'tip_use_reference' => 'Usa il testo italiano come riferimento',
+    'tip_maintain_length' => 'Mantieni la stessa lunghezza quando possibile',
+    'tip_check_grammar' => 'Controlla la grammatica e l\'ortografia',
+    'tip_save_often' => 'Salva spesso per non perdere le modifiche',
+
+    // Messaggi di Conferma
+    'copy_from_reference_confirm' => 'Vuoi copiare tutte le traduzioni dall\'italiano? Questo sovrascriverà le traduzioni esistenti.',
+    'clear_all_confirm' => 'Vuoi svuotare tutte le traduzioni? Questa azione non può essere annullata.',
+
+    // File di Traduzione
+    'file_auth' => 'Autenticazione',
+    'file_common' => 'Comune',
+    'file_dashboard' => 'Dashboard',
+    'file_events' => 'Eventi',
+    'file_videos' => 'Video',
+    'file_carousel' => 'Carousel',
+
+    // Nomi Lingue
+    'language_it' => 'Italiano',
+    'language_en' => 'English',
+    'language_es' => 'Español',
+    'language_fr' => 'Français',
+    'language_de' => 'Deutsch',
+
+    // Breadcrumb
+    'translations_breadcrumb' => 'Traduzioni',
+    'edit_breadcrumb' => 'Modifica',
+
+    // Informazioni
+    'information' => 'Informazioni',
+    'quick_actions' => 'Azioni Rapide',
+
+    // Auto-save
+    'auto_save_completed' => 'Auto-save completato',
+    'auto_save_error' => 'Errore auto-save',
+
+    // Sincronizzazione Lingue
+    'sync_languages' => 'Sincronizza Lingue',
+    'sync_languages_description' => 'Aggiungi le chiavi mancanti a tutte le lingue',
+    'sync_completed' => 'Sincronizzazione completata!',
+    'sync_confirm' => 'Sincronizzare tutte le lingue con le chiavi italiane?',
+    'files_updated' => 'file aggiornati',
+    'missing_keys' => 'Chiavi Mancanti',
+    'missing_keys_description' => 'Chiavi presenti in italiano ma non tradotte',
+    'view_missing_keys' => 'Vedi Chiavi Mancanti',
+    'complete' => 'Completa',
+    'keys_missing' => 'chiavi mancanti',
+    'sync_this_language' => 'Sincronizza Questa Lingua',
+
+];
