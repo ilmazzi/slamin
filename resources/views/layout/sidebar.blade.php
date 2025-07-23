@@ -1,7 +1,7 @@
 <!-- Menu Navigation starts -->
 <nav class="vertical-sidebar">
     <div class="app-logo">
-        <a class="logo d-inline-block" href="{{ route('index') }}">
+        <a class="logo d-inline-block" href="/">
             <!-- Logo orizzontale per desktop -->
             <img alt="Slam In" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}" class="logo-full w-75">
             <!-- Loghino per mobile/sidebar collassata -->
