@@ -92,14 +92,6 @@
                 </ul>
             </div>
         </div>
-        @else
-        <div class="d-flex align-items-center nav-profile p-3">
-            <div class="text-center w-100">
-                <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
-                    <i class="ph ph-sign-in me-1"></i> {{ __('sidebar.login') }}
-                </a>
-            </div>
-        </div>
         @endauth
     </div>
     <div class="app-nav simplebar-scrollable-y" id="app-simple-bar" data-simplebar="init">
@@ -113,6 +105,7 @@
                         <div class="simplebar-content" style="padding: 0px;">
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
                                 @auth
+                                <!-- Dashboard - Solo per utenti autenticati -->
                                 <li class="menu-title">
                                     <span>{{ __('dashboard.dashboard') }}</span>
                                 </li>
@@ -124,8 +117,9 @@
                                         {{ __('dashboard.dashboard') }}
                                     </a>
                                 </li>
+                                @endauth
 
-                                <!-- Poetry Slam Events Section -->
+                                <!-- Eventi Section -->
                                 <li class="menu-title">
                                     <span>{{ __('events.events_poetry_slam') }}</span>
                                 </li>
@@ -135,11 +129,13 @@
                                             <use xlink:href="../assets/svg/_sprite.svg#stack"></use>
                                         </svg>
                                         {{ __('events.events') }}
+                                        @auth
                                         @if(auth()->user()->organizedEvents()->where('start_datetime', '>', now())->count() > 0)
                                             <span class="badge bg-primary badge-notification ms-2">
                                                 {{ auth()->user()->organizedEvents()->where('start_datetime', '>', now())->count() }}
                                             </span>
                                         @endif
+                                        @endauth
                                     </a>
                                     <ul class="collapse {{ request()->routeIs('events.*') ? 'show' : '' }}" id="events">
                                         @php
@@ -154,6 +150,7 @@
                                                 <i class="ph-duotone ph-list me-2"></i>{{ __('events.all_events') }}
                                             </a>
                                         </li>
+                                        @auth
                                         <li class="{{ $isMyEvents ? 'active' : '' }}">
                                             <a href="{{ route('events.index', ['filter' => 'my']) }}">
                                                 <i class="ph-duotone ph-calendar me-2"></i>{{ __('sidebar.my_events') }}
@@ -166,6 +163,7 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                        @endauth
                                         <li class="{{ $isUpcomingEvents ? 'active' : '' }}">
                                             <a href="{{ route('events.index', ['filter' => 'upcoming']) }}">
                                                 <i class="ph-duotone ph-clock me-2"></i>{{ __('events.upcoming_events') }}
@@ -174,52 +172,143 @@
                                     </ul>
                                 </li>
 
-                                <li class="{{ request()->routeIs('invitations.*') || request()->routeIs('requests.*') ? 'active' : '' }}">
-                                    <a aria-expanded="{{ request()->routeIs('invitations.*') || request()->routeIs('requests.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#invitations">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#chat-bubble"></use>
-                                        </svg>
-                                        {{ __('sidebar.invitations_and_requests') }}
-                                        @php
-                                            $pendingInvitations = auth()->user()->receivedInvitations()->where('status', \App\Models\EventInvitation::STATUS_PENDING)->count();
-                                            $pendingRequests = \App\Models\EventRequest::whereHas('event', function($q) {
-                                                $q->where('organizer_id', auth()->id());
-                                            })->where('status', \App\Models\EventRequest::STATUS_PENDING)->count();
-                                            $pendingCount = $pendingInvitations + $pendingRequests;
-                                        @endphp
-                                        @if($pendingCount > 0)
-                                            <span class="badge bg-warning badge-notification ms-2">{{ $pendingCount }}</span>
-                                        @endif
+                                @auth
+                                <!-- Gigs Section - DISABILITATO (non implementato) -->
+                                <li class="menu-title">
+                                    <span>Gigs <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">Gigs</span>
                                     </a>
-                                    <ul class="collapse {{ request()->routeIs('invitations.*') || request()->routeIs('requests.*') ? 'show' : '' }}" id="invitations">
-                                        <li class="{{ request()->routeIs('invitations.index') ? 'active' : '' }}">
-                                            <a href="{{ route('invitations.index') }}">
-                                                <i class="ph-duotone ph-envelope me-2"></i>{{ __('sidebar.my_invitations') }}
+                                    <ul class="collapse" id="gigs">
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-list me-2 text-muted"></i><span class="text-muted">Tutti i Gigs</span>
                                             </a>
                                         </li>
-                                        <li class="{{ request()->routeIs('requests.index') ? 'active' : '' }}">
-                                            <a href="{{ route('requests.index') }}">
-                                                <i class="ph-duotone ph-handshake me-2"></i>{{ __('sidebar.received_requests') }}
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-calendar me-2 text-muted"></i><span class="text-muted">I Miei Gigs</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-plus-circle me-2 text-muted"></i><span class="text-muted">Crea Gig</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @endauth
+
+                                <!-- News Section - DISABILITATO (non implementato) -->
+                                <li class="menu-title">
+                                    <span>News <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">News</span>
+                                    </a>
+                                    <ul class="collapse" id="news">
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-list me-2 text-muted"></i><span class="text-muted">Tutti gli Articoli</span>
+                                            </a>
+                                        </li>
+                                        @auth
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-pencil me-2 text-muted"></i><span class="text-muted">I Miei Articoli</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-plus-circle me-2 text-muted"></i><span class="text-muted">Scrivi Articolo</span>
+                                            </a>
+                                        </li>
+                                        @endauth
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-clock me-2 text-muted"></i><span class="text-muted">Ultime News</span>
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
 
-                                <li class="{{ request()->routeIs('notifications.index') ? 'active' : '' }}">
-                                    <a href="{{ route('notifications.index') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#exclamation-circle"></use>
-                                        </svg>
-                                        {{ __('sidebar.notifications') }}
-                                        @if(auth()->user()->notifications()->where('is_read', false)->count() > 0)
-                                            <span class="badge bg-danger badge-notification ms-2">
-                                                {{ auth()->user()->notifications()->where('is_read', false)->count() }}
-                                            </span>
-                                        @endif
+                                <!-- Media Section -->
+                                <li class="menu-title">
+                                    <span>Media</span>
+                                </li>
+                                <li class="{{ request()->routeIs('videos.*') ? 'active' : '' }}">
+                                    <a aria-expanded="{{ request()->routeIs('videos.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#media">
+                                        <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
+                                        Media
                                     </a>
+                                    <ul class="collapse {{ request()->routeIs('videos.*') ? 'show' : '' }}" id="media">
+                                        <li class="{{ request()->routeIs('videos.show') ? 'active' : '' }}">
+                                            <a href="{{ route('videos.show', ['video' => 1]) }}">
+                                                <i class="ph-duotone ph-list me-2"></i>Tutti i Video
+                                            </a>
+                                        </li>
+                                        @auth
+                                        <li class="{{ request()->routeIs('profile.videos') ? 'active' : '' }}">
+                                            <a href="{{ route('profile.videos') }}">
+                                                <i class="ph-duotone ph-video-camera me-2"></i>I Miei Video
+                                            </a>
+                                        </li>
+                                        <li class="{{ request()->routeIs('videos.upload') ? 'active' : '' }}">
+                                            <a href="{{ route('videos.upload') }}">
+                                                <i class="ph-duotone ph-upload me-2"></i>Carica Video
+                                            </a>
+                                        </li>
+                                        @endauth
+                                        <li>
+                                            <a href="{{ route('gallery') }}" class="text-muted">
+                                                <i class="ph-duotone ph-images me-2"></i>Galleria
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
 
-                                <!-- Profile Section -->
+                                <!-- Poesie Section - DISABILITATO (non implementato) -->
+                                <li class="menu-title">
+                                    <span>Poesie <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-book-open text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">Poesie</span>
+                                    </a>
+                                    <ul class="collapse" id="poems">
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-list me-2 text-muted"></i><span class="text-muted">Tutte le Poesie</span>
+                                            </a>
+                                        </li>
+                                        @auth
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-pencil me-2 text-muted"></i><span class="text-muted">Le Mie Poesie</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-plus-circle me-2 text-muted"></i><span class="text-muted">Scrivi Poesia</span>
+                                            </a>
+                                        </li>
+                                        @endauth
+                                        <li class="nav-item disabled">
+                                            <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                                <i class="ph-duotone ph-star me-2 text-muted"></i><span class="text-muted">Poesie in Evidenza</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                @auth
+                                <!-- Profile Section - Solo per utenti autenticati -->
                                 <li class="menu-title">
                                     <span>Profilo</span>
                                 </li>
@@ -255,7 +344,7 @@
                                 </li>
 
                                 @if(auth()->user()->hasRole(['admin', 'moderator']))
-                                <!-- Permissions Management Section -->
+                                <!-- Permissions Management Section - Solo per admin/moderator -->
                                 <li class="menu-title">
                                     <span>Amministrazione</span>
                                 </li>
@@ -290,7 +379,7 @@
                                     </ul>
                                 </li>
 
-                                <!-- System Settings Group -->
+                                <!-- System Settings Group - Solo per admin/moderator -->
                                 <li class="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a aria-expanded="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#system-settings">
                                         <i class="ph-duotone ph-gear"></i>
@@ -321,7 +410,7 @@
                                 </li>
                                 @endif
                                 @else
-                                <!-- Guest Menu -->
+                                <!-- Guest Menu - Login in basso -->
                                 <li class="menu-title">
                                     <span>{{ __('sidebar.guest_menu_title') }}</span>
                                 </li>
@@ -333,14 +422,6 @@
                                         {{ __('events.events') }}
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('login') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#window"></use>
-                                        </svg>
-                                        {{ __('sidebar.login') }}
-                                    </a>
-                                </li>
                                 @endauth
                             </ul>
                         </div>
@@ -350,12 +431,17 @@
         </div>
         <div class="simplebar-placeholder" style="width: 288px; height: 1261px;"></div>
     </div>
-    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-        <div class="simplebar-scrollbar" style="width: 0px; display: none; transform: translate3d(0px, 0px, 0px);"></div>
+
+    <!-- Login Button per utenti non autenticati - In basso -->
+    @guest
+    <div class="sidebar-footer p-3 border-top">
+        <div class="text-center">
+            <a href="{{ route('login') }}" class="btn btn-primary w-100">
+                <i class="ph ph-sign-in me-2"></i> {{ __('sidebar.login') }}
+            </a>
+        </div>
     </div>
-    <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
-        <div class="simplebar-scrollbar" style="height: 975px; display: block; transform: translate3d(0px, 0px, 0px);"></div>
-    </div>
+    @endguest
 
     <div class="menu-navs">
         <span class="menu-previous d-none"><i class="ti ti-chevron-left"></i></span>

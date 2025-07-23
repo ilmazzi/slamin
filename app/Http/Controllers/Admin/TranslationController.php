@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class TranslationController extends Controller
 {
@@ -44,7 +45,10 @@ class TranslationController extends Controller
         $translations = include $filePath;
         $referenceTranslations = $this->getReferenceTranslations($file);
 
-        return view('admin.translations.edit', compact('language', 'file', 'translations', 'referenceTranslations'));
+        // Calcola le chiavi mancanti per questa lingua e file specifico
+        $missingKeys = $this->getMissingKeysForFile($language, $file, $referenceTranslations, $translations);
+
+        return view('admin.translations.edit', compact('language', 'file', 'translations', 'referenceTranslations', 'missingKeys'));
     }
 
     /**
@@ -82,7 +86,7 @@ class TranslationController extends Controller
                 cache()->forget("translations.{$language}.{$file}");
             }
 
-            Log::info("Traduzioni aggiornate per {$language}/{$file} da " . auth()->user()?->email);
+            Log::info("Traduzioni aggiornate per {$language}/{$file} da " . Auth::user()?->email);
 
             return redirect()->route('admin.translations.show', [$language, $file])
                 ->with('success', 'Traduzioni salvate con successo!');
@@ -129,7 +133,7 @@ class TranslationController extends Controller
                 }
             }
 
-            Log::info("Nuova lingua creata: {$languageCode} da " . auth()->user()?->email);
+            Log::info("Nuova lingua creata: {$languageCode} da " . Auth::user()?->email);
 
             return redirect()->route('admin.translations.index')
                 ->with('success', "Lingua {$request->language_name} creata con successo!");
@@ -167,7 +171,7 @@ class TranslationController extends Controller
             // Elimina la directory
             File::deleteDirectory($languagePath);
 
-            Log::info("Lingua eliminata: {$language} da " . auth()->user()?->email);
+            Log::info("Lingua eliminata: {$language} da " . Auth::user()?->email);
 
             return redirect()->route('admin.translations.index')
                 ->with('success', "Lingua {$language} eliminata con successo!");
@@ -319,55 +323,146 @@ class TranslationController extends Controller
      */
     public function syncLanguages()
     {
-        $languages = $this->getAvailableLanguages();
-        $translationFiles = $this->getTranslationFiles();
-        $syncedCount = 0;
+        try {
+            $languages = $this->getAvailableLanguages();
+            $translationFiles = $this->getTranslationFiles();
+            $syncedCount = 0;
+            $errors = [];
 
-        foreach ($languages as $languageCode => $languageName) {
-            if ($languageCode === 'it') continue; // Salta l'italiano
+            foreach ($languages as $languageCode => $languageName) {
+                if ($languageCode === 'it') continue; // Salta l'italiano
 
-            foreach ($translationFiles as $file => $displayName) {
-                $italianFile = lang_path("it/{$file}.php");
-                $targetFile = lang_path("{$languageCode}/{$file}.php");
+                foreach ($translationFiles as $file => $displayName) {
+                    try {
+                        $italianFile = lang_path("it/{$file}.php");
+                        $targetFile = lang_path("{$languageCode}/{$file}.php");
 
-                if (!File::exists($italianFile)) continue;
+                        if (!File::exists($italianFile)) {
+                            Log::warning("File italiano non trovato: {$italianFile}");
+                            continue;
+                        }
 
-                $italianTranslations = include $italianFile;
-                $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
+                        $italianTranslations = include $italianFile;
+                        if (!is_array($italianTranslations)) {
+                            Log::warning("File italiano non contiene array valido: {$italianFile}");
+                            continue;
+                        }
 
-                // Aggiungi solo le chiavi mancanti
-                $updated = false;
-                foreach ($italianTranslations as $key => $value) {
-                    if (!array_key_exists($key, $targetTranslations)) {
-                        $targetTranslations[$key] = ''; // Chiave vuota da tradurre
-                        $updated = true;
+                        $targetTranslations = [];
+                        if (File::exists($targetFile)) {
+                            $targetTranslations = include $targetFile;
+                            if (!is_array($targetTranslations)) {
+                                $targetTranslations = [];
+                            }
+                        }
+
+                        // Aggiungi solo le chiavi mancanti
+                        $updated = false;
+                        foreach ($italianTranslations as $key => $value) {
+                            if (!array_key_exists($key, $targetTranslations)) {
+                                $targetTranslations[$key] = ''; // Chiave vuota da tradurre
+                                $updated = true;
+                            }
+                        }
+
+                        if ($updated) {
+                            $phpContent = $this->generatePhpContent($targetTranslations, $file);
+                            
+                            // Crea la directory se non esiste
+                            $targetDir = dirname($targetFile);
+                            if (!File::exists($targetDir)) {
+                                File::makeDirectory($targetDir, 0755, true);
+                            }
+                            
+                            File::put($targetFile, $phpContent);
+                            $syncedCount++;
+                            Log::info("File sincronizzato: {$languageCode}/{$file}.php");
+                        }
+                    } catch (\Exception $e) {
+                        $errorMsg = "Errore nel file {$languageCode}/{$file}.php: " . $e->getMessage();
+                        $errors[] = $errorMsg;
+                        Log::error($errorMsg);
                     }
                 }
-
-                if ($updated) {
-                    $phpContent = $this->generatePhpContent($targetTranslations, $file);
-                    File::put($targetFile, $phpContent);
-                    $syncedCount++;
-                }
             }
+
+            Log::info("Sincronizzazione lingue completata da " . Auth::user()?->email . " - {$syncedCount} file aggiornati");
+
+            // Pulisci la cache delle traduzioni
+            if (function_exists('cache')) {
+                cache()->flush();
+            }
+
+            $message = "Sincronizzazione completata! {$syncedCount} file aggiornati.";
+            if (!empty($errors)) {
+                $message .= " Errori: " . implode(', ', $errors);
+            }
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'synced_count' => $syncedCount,
+                    'errors' => $errors
+                ]);
+            }
+
+            return redirect()->route('admin.translations.index')
+                ->with('success', $message);
+
+        } catch (\Exception $e) {
+            $errorMsg = "Errore generale nella sincronizzazione: " . $e->getMessage();
+            Log::error($errorMsg);
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $errorMsg
+                ], 500);
+            }
+
+            return redirect()->route('admin.translations.index')
+                ->with('error', $errorMsg);
         }
-
-        Log::info("Sincronizzazione lingue completata da " . auth()->user()?->email . " - {$syncedCount} file aggiornati");
-
-        return redirect()->route('admin.translations.index')
-            ->with('success', "Sincronizzazione completata! {$syncedCount} file aggiornati.");
     }
 
     /**
-     * Calcola le chiavi mancanti per ogni lingua
+     * Calcola le chiavi mancanti per un file specifico
+     */
+    private function getMissingKeysForFile($language, $file, $referenceTranslations, $translations)
+    {
+        $missingKeys = [];
+        
+        if ($language === 'it') {
+            // Per l'italiano, controlla solo le chiavi vuote o mancanti
+            foreach ($referenceTranslations as $key => $italianValue) {
+                if (empty($italianValue) || $italianValue === '') {
+                    $missingKeys[] = $key;
+                }
+            }
+        } else {
+            // Per le altre lingue, controlla solo se la traduzione è vuota o mancante
+            // NON considerare uguale all'italiano come mancante (alcune parole sono uguali in più lingue)
+            foreach ($referenceTranslations as $key => $italianValue) {
+                if (!array_key_exists($key, $translations) || 
+                    empty($translations[$key]) || 
+                    $translations[$key] === '') {
+                    $missingKeys[] = $key;
+                }
+            }
+        }
+        
+        return $missingKeys;
+    }
+
+    /**
+     * Calcola le traduzioni mancanti per ogni lingua
      */
     private function getMissingKeys($languages, $translationFiles)
     {
         $missingKeys = [];
 
         foreach ($languages as $languageCode => $languageName) {
-            if ($languageCode === 'it') continue; // Salta l'italiano
-
             $missingKeys[$languageCode] = [];
 
             foreach ($translationFiles as $file => $displayName) {
@@ -380,9 +475,23 @@ class TranslationController extends Controller
                 $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
 
                 $missingInFile = [];
-                foreach ($italianTranslations as $key => $value) {
-                    if (!array_key_exists($key, $targetTranslations)) {
-                        $missingInFile[] = $key;
+                
+                if ($languageCode === 'it') {
+                    // Per l'italiano, controlla solo le chiavi vuote o mancanti
+                    foreach ($italianTranslations as $key => $italianValue) {
+                        if (empty($italianValue) || $italianValue === '') {
+                            $missingInFile[] = $key;
+                        }
+                    }
+                } else {
+                    // Per le altre lingue, controlla solo se la traduzione è vuota o mancante
+                    // NON considerare uguale all'italiano come mancante (alcune parole sono uguali in più lingue)
+                    foreach ($italianTranslations as $key => $italianValue) {
+                        if (!array_key_exists($key, $targetTranslations) || 
+                            empty($targetTranslations[$key]) || 
+                            $targetTranslations[$key] === '') {
+                            $missingInFile[] = $key;
+                        }
                     }
                 }
 

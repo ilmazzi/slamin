@@ -366,7 +366,7 @@ $('#roleForm').on('submit', function(e) {
     const formData = new FormData(this);
     const roleId = $('#roleId').val();
             const url = roleId ? `{{ route('permissions.roles.update', ['role' => ':roleId']) }}`.replace(':roleId', roleId) : '{{ route("permissions.roles.store") }}';
-    const method = roleId ? 'PUT' : 'POST';
+    const method = roleId ? 'POST' : 'POST';
 
     fetch(url, {
         method: method,

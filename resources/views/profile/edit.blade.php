@@ -36,7 +36,7 @@
                 <div class="card-header">
                     <h5 class="mb-0 f-w-600 text-dark">
                         <i class="ph ph-user-edit me-2"></i>
-                        Informazioni Personali
+                        {{ __('profile.personal_info') }}
                     </h5>
                 </div>
                 <div class="card-body pa-30">
@@ -48,7 +48,7 @@
                             <!-- Basic Info -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Nome Completo *</label>
+                                    <label class="form-label f-w-600">{{ __('profile.full_name') }} *</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
                                            name="name" value="{{ old('name', $user->name) }}" required>
                                     @error('name')
@@ -59,14 +59,14 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Nickname</label>
+                                    <label class="form-label f-w-600">{{ __('profile.nickname') }}</label>
                                     <input type="text" class="form-control @error('nickname') is-invalid @enderror"
                                            name="nickname" value="{{ old('nickname', $user->nickname) }}"
-                                           placeholder="Il tuo nome d'arte">
+                                           placeholder="{{ __('profile.nickname_placeholder') }}">
                                     @error('nickname')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <small class="text-muted f-s-12">Nome che apparirà nel tuo profilo pubblico</small>
+                                    <small class="text-muted f-s-12">{{ __('profile.nickname_help') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Email *</label>
+                                    <label class="form-label f-w-600">{{ __('profile.email') }} *</label>
                                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                                            name="email" value="{{ old('email', $user->email) }}" required>
                                     @error('email')
@@ -85,7 +85,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Telefono</label>
+                                    <label class="form-label f-w-600">{{ __('profile.phone') }}</label>
                                     <input type="tel" class="form-control @error('phone') is-invalid @enderror"
                                            name="phone" value="{{ old('phone', $user->phone) }}">
                                     @error('phone')
@@ -96,23 +96,23 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label f-w-600">Bio</label>
+                            <label class="form-label f-w-600">{{ __('profile.bio') }}</label>
                             <textarea class="form-control @error('bio') is-invalid @enderror"
                                       name="bio" rows="4"
-                                      placeholder="Racconta qualcosa di te, la tua passione per la poesia, i tuoi interessi...">{{ old('bio', $user->bio) }}</textarea>
+                                      placeholder="{{ __('profile.bio_placeholder') }}">{{ old('bio', $user->bio) }}</textarea>
                             @error('bio')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            <small class="text-muted f-s-12">Massimo 1000 caratteri</small>
+                            <small class="text-muted f-s-12">{{ __('profile.bio_help') }}</small>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Località</label>
+                                    <label class="form-label f-w-600">{{ __('profile.location') }}</label>
                                     <input type="text" class="form-control @error('location') is-invalid @enderror"
                                            name="location" value="{{ old('location', $user->location) }}"
-                                           placeholder="Città, Regione">
+                                           placeholder="{{ __('profile.location_placeholder') }}">
                                     @error('location')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -121,10 +121,10 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">Sito Web</label>
+                                    <label class="form-label f-w-600">{{ __('profile.website') }}</label>
                                     <input type="url" class="form-control @error('website') is-invalid @enderror"
                                            name="website" value="{{ old('website', $user->website) }}"
-                                           placeholder="https://tuosito.com">
+                                           placeholder="{{ __('profile.website_placeholder') }}">
                                     @error('website')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -134,18 +134,18 @@
 
                         <!-- Social Media -->
                         <div class="app-divider-v">
-                            <span class="text-primary f-w-600">Social Media</span>
+                            <span class="text-primary f-w-600">{{ __('profile.social_media') }}</span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label f-w-600">
-                                        <i class="ph ph-facebook-logo text-primary me-2"></i>Facebook
+                                        <i class="ph ph-facebook-logo text-primary me-2"></i>{{ __('profile.social_facebook') }}
                                     </label>
                                     <input type="url" class="form-control @error('social_facebook') is-invalid @enderror"
                                            name="social_facebook" value="{{ old('social_facebook', $user->social_facebook) }}"
-                                           placeholder="https://facebook.com/tuoprofilo">
+                                           placeholder="{{ __('profile.facebook_placeholder') }}">
                                     @error('social_facebook')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -155,11 +155,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label f-w-600">
-                                        <i class="ph ph-instagram-logo text-danger me-2"></i>Instagram
+                                        <i class="ph ph-instagram-logo text-danger me-2"></i>{{ __('profile.social_instagram') }}
                                     </label>
                                     <input type="url" class="form-control @error('social_instagram') is-invalid @enderror"
                                            name="social_instagram" value="{{ old('social_instagram', $user->social_instagram) }}"
-                                           placeholder="https://instagram.com/tuoprofilo">
+                                           placeholder="{{ __('profile.instagram_placeholder') }}">
                                     @error('social_instagram')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -171,11 +171,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label f-w-600">
-                                        <i class="ph ph-youtube-logo text-danger me-2"></i>YouTube
+                                        <i class="ph ph-youtube-logo text-danger me-2"></i>{{ __('profile.social_youtube') }}
                                     </label>
                                     <input type="url" class="form-control @error('social_youtube') is-invalid @enderror"
                                            name="social_youtube" value="{{ old('social_youtube', $user->social_youtube) }}"
-                                           placeholder="https://youtube.com/@tuocanale">
+                                           placeholder="{{ __('profile.youtube_placeholder') }}">
                                     @error('social_youtube')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -185,11 +185,11 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label f-w-600">
-                                        <i class="ph ph-twitter-logo text-info me-2"></i>Twitter/X
+                                        <i class="ph ph-twitter-logo text-info me-2"></i>{{ __('profile.social_twitter') }}
                                     </label>
                                     <input type="url" class="form-control @error('social_twitter') is-invalid @enderror"
                                            name="social_twitter" value="{{ old('social_twitter', $user->social_twitter) }}"
-                                           placeholder="https://twitter.com/tuoprofilo">
+                                           placeholder="{{ __('profile.twitter_placeholder') }}">
                                     @error('social_twitter')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -199,10 +199,10 @@
 
                         <div class="d-flex justify-content-end gap-2">
                             <a href="{{ route('profile.show') }}" class="btn btn-secondary hover-effect">
-                                <i class="ph ph-x me-2"></i>Annulla
+                                <i class="ph ph-x me-2"></i>{{ __('profile.cancel') }}
                             </a>
                             <button type="submit" class="btn btn-primary hover-effect">
-                                <i class="ph ph-check me-2"></i>Salva Modifiche
+                                <i class="ph ph-check me-2"></i>{{ __('profile.save') }}
                             </button>
                         </div>
                     </form>
@@ -216,7 +216,7 @@
                 <div class="card-header">
                     <h5 class="mb-0 f-w-600 text-dark">
                         <i class="ph ph-camera me-2"></i>
-                        Foto Profilo
+                        {{ __('profile.profile_photo') }}
                     </h5>
                 </div>
                 <div class="card-body pa-30 text-center">
@@ -232,18 +232,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label f-w-600">Carica Nuova Foto</label>
+                        <label class="form-label f-w-600">{{ __('profile.upload_new_photo') }}</label>
                         <input type="file" id="profile-photo-input" name="profile_photo" class="form-control" accept="image/*" onchange="previewImage(this)">
-                        <small class="text-muted f-s-12">Formati supportati: Tutti i formati immagine (JPG, PNG, GIF, WebP, ecc.). Max {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) / 1024 }}MB</small>
+                        <small class="text-muted f-s-12">{{ __('profile.photo_formats_supported', ['size' => \App\Models\SystemSetting::get('profile_photo_max_size', 5120) / 1024]) }}</small>
                     </div>
 
                     <div class="text-start">
-                        <h6 class="f-w-600 mb-2">Suggerimenti per una buona foto:</h6>
+                        <h6 class="f-w-600 mb-2">{{ __('profile.photo_tips_title') }}</h6>
                         <ul class="text-muted f-s-12">
-                            <li>Usa una foto chiara e ben illuminata</li>
-                            <li>Mostra il tuo viso chiaramente</li>
-                            <li>Evita foto troppo scure o sfocate</li>
-                            <li>Formato quadrato funziona meglio</li>
+                            <li>{{ __('profile.photo_tip_clear') }}</li>
+                            <li>{{ __('profile.photo_tip_face') }}</li>
+                            <li>{{ __('profile.photo_tip_avoid') }}</li>
+                            <li>{{ __('profile.photo_tip_square') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -254,19 +254,19 @@
                 <div class="card-header">
                     <h5 class="mb-0 f-w-600 text-dark">
                         <i class="ph ph-lightning me-2"></i>
-                        Azioni Rapide
+                        {{ __('profile.quick_actions') }}
                     </h5>
                 </div>
                 <div class="card-body pa-20">
                     <div class="d-flex flex-column gap-2">
                         <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
-                            <i class="ph ph-video-camera me-2"></i>Gestisci Video
+                            <i class="ph ph-video-camera me-2"></i>{{ __('profile.manage_videos') }}
                         </a>
                         <a href="{{ route('profile.activity') }}" class="btn btn-info hover-effect">
-                            <i class="ph ph-activity me-2"></i>Le Mie Attività
+                            <i class="ph ph-activity me-2"></i>{{ __('profile.my_activities') }}
                         </a>
                         <a href="{{ route('profile.show') }}" class="btn btn-outline-primary hover-effect">
-                            <i class="ph ph-eye me-2"></i>Vedi Profilo Pubblico
+                            <i class="ph ph-eye me-2"></i>{{ __('profile.view_public_profile') }}
                         </a>
                     </div>
                 </div>

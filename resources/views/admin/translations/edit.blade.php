@@ -11,7 +11,7 @@
                 <i class="ph ph-pencil me-2"></i>
                 Modifica Traduzioni
             </h4>
-            <ul class="app-line-breadcrumbs mb-3">
+            <ul class="app-line-breadcrumbs mb-2">
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
@@ -33,26 +33,50 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <div class="row mb-4">
+    <!-- Header compatto -->
+    <div class="row mb-3">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="mb-2">
-                        <i class="ph ph-pencil me-2"></i>Modifica Traduzioni
-                    </h2>
-                    <p class="text-muted mb-0">
-                        Lingua: <strong>{{ $language === 'it' ? 'Italiano' : strtoupper($language) }}</strong> |
-                        File: <strong>{{ $file }}.php</strong>
-                    </p>
+            <div class="d-flex justify-content-between align-items-center p-2 bg-light-secondary rounded">
+                <div class="d-flex align-items-center gap-3">
+                    <small class="text-muted">
+                        <i class="ph ph-flag me-1"></i>{{ $language === 'it' ? 'Italiano' : strtoupper($language) }}
+                    </small>
+                    <small class="text-muted">
+                        <i class="ph ph-file me-1"></i>{{ $file }}.php
+                    </small>
+                    @if(isset($missingKeys) && count($missingKeys) > 0)
+                        <span class="badge bg-warning text-dark f-s-11">
+                            <i class="ph ph-warning me-1"></i>{{ count($missingKeys) }} mancanti
+                        </span>
+                    @endif
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.translations.index') }}" class="btn btn-light-secondary">
-                        <i class="ph ph-arrow-left me-2"></i>Torna alla Lista
-                    </a>
-                    <button type="submit" form="translationForm" class="btn btn-primary">
-                        <i class="ph ph-floppy-disk me-2"></i>Salva Traduzioni
+                    <button type="button" class="btn btn-light-primary btn-sm" onclick="copyFromReference()">
+                        <i class="ph ph-copy me-1"></i>Copia
                     </button>
+                    <button type="button" class="btn btn-light-danger btn-sm" onclick="clearAllTranslations()">
+                        <i class="ph ph-trash me-1"></i>Svuota
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="showUntranslated()">
+                        <i class="ph ph-eye me-1"></i>Non Tradotte
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress bar compatta -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">Progresso</small>
+                <small class="text-muted" id="progressText">
+                    {{ count($referenceTranslations) > 0 ? round((count(array_filter($translations, function($value) { return !empty($value); })) / count($referenceTranslations)) * 100) : 0 }}%
+                </small>
+            </div>
+            <div class="progress" style="height: 4px;">
+                <div class="progress-bar bg-success" id="progressBar"
+                     style="width: {{ count($referenceTranslations) > 0 ? (count(array_filter($translations, function($value) { return !empty($value); })) / count($referenceTranslations)) * 100 : 0 }}%">
                 </div>
             </div>
         </div>
@@ -64,62 +88,70 @@
         @method('PUT')
 
         <div class="row">
-            <!-- Translation Keys -->
-            <div class="col-lg-8">
-                <div class="card hover-effect border-0 shadow-sm">
-                    <div class="card-header">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent py-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">
-                                <i class="ph ph-list me-2"></i>Chiavi di Traduzione
-                            </h5>
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-light-secondary btn-sm" onclick="toggleAllTranslations()">
-                                    <i class="ph ph-eye me-1"></i>Mostra/Nascondi Tutte
+                            <h6 class="mb-0 f-s-14">
+                                <i class="ph ph-list me-1"></i>Chiavi di Traduzione
+                            </h6>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-light-primary btn-sm" onclick="toggleAllTranslations()">
+                                    <i class="ph ph-eye me-1"></i>Mostra/Nascondi
                                 </button>
-                                <button type="button" class="btn btn-light-secondary btn-sm" onclick="copyFromReference()">
-                                    <i class="ph ph-copy me-1"></i>Copia da Italiano
+                                <a href="{{ route('admin.translations.index') }}" class="btn btn-light-secondary btn-sm">
+                                    <i class="ph ph-arrow-left me-1"></i>Indietro
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="ph ph-floppy-disk me-1"></i>Salva
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3">
+                    <div class="card-body p-0">
+                        <div class="accordion app-accordion accordion-primary" id="translationAccordion">
                             @foreach($referenceTranslations as $key => $referenceValue)
-                            <div class="col-12">
-                                <div class="card card-light-primary border-0">
-                                    <div class="card-header bg-transparent">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="mb-0 text-primary">{{ $key }}</h6>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox"
-                                                       id="toggle_{{ $loop->index }}"
-                                                       onchange="toggleTranslation({{ $loop->index }})" checked>
-                                                <label class="form-check-label" for="toggle_{{ $loop->index }}">
-                                                    <small>Mostra</small>
-                                                </label>
-                                            </div>
+                            @php
+                                $isMissing = isset($missingKeys) && in_array($key, $missingKeys);
+                                $isTranslated = !empty($translations[$key]) && !$isMissing;
+                            @endphp
+                            <div class="accordion-item border-0 border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }} py-2" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#collapse{{ $loop->index }}"
+                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}" 
+                                            aria-controls="collapse{{ $loop->index }}">
+                                        <div class="d-flex justify-content-between align-items-center w-100 me-2">
+                                            <span class="fw-semibold f-s-13 {{ $isMissing ? 'text-warning' : '' }}">{{ $key }}</span>
+                                            <span class="badge {{ $isMissing ? 'bg-warning text-dark' : ($isTranslated ? 'bg-light-success text-success' : 'bg-light-primary text-primary') }} f-s-10">
+                                                {{ $isMissing ? 'Mancante' : ($isTranslated ? 'Tradotta' : 'Da tradurre') }}
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div class="card-body" id="translation_{{ $loop->index }}">
-                                        <div class="row">
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $loop->index }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}"
+                                     data-bs-parent="#translationAccordion">
+                                    <div class="accordion-body py-2">
+                                        <div class="row g-2">
                                             <div class="col-md-6">
-                                                <label class="form-label">
+                                                <label class="form-label f-s-11 f-w-500 mb-1">
                                                     <i class="ph ph-flag me-1"></i>Riferimento (Italiano)
                                                 </label>
-                                                <div class="form-control-plaintext bg-light p-2 rounded">
+                                                <div class="form-control-plaintext bg-light-secondary p-2 rounded f-s-12" style="min-height: 40px;">
                                                     {{ $referenceValue }}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label">
+                                                <label class="form-label f-s-11 f-w-500 mb-1">
                                                     <i class="ph ph-translate me-1"></i>Traduzione ({{ strtoupper($language) }})
                                                 </label>
                                                 <textarea name="translations[{{ $key }}]"
-                                                          class="form-control"
+                                                          class="form-control f-s-12"
                                                           rows="2"
                                                           placeholder="Inserisci la traduzione..."
                                                           data-key="{{ $key }}"
-                                                          data-reference="{{ $referenceValue }}">{{ $translations[$key] ?? '' }}</textarea>
+                                                          data-reference="{{ $referenceValue }}"
+                                                          onchange="updateProgress()">{{ $translations[$key] ?? '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -130,194 +162,197 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </form>
 
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <div class="card position-sticky" style="top: 20px;">
-                    <div class="card-header">
-                        <h6 class="mb-0">
-                            <i class="ph ph-info me-2"></i>Informazioni
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <h6>Statistiche</h6>
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <div class="text-center p-2 rounded bg-light">
-                                        <div class="h4 mb-1 text-primary">{{ count($referenceTranslations) }}</div>
-                                        <small class="text-muted">Chiavi Totali</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="text-center p-2 rounded bg-light">
-                                        <div class="h4 mb-1 text-success" id="translatedCount">
-                                            {{ count(array_filter($translations, function($value) { return !empty($value); })) }}
-                                        </div>
-                                        <small class="text-muted">Tradotte</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <h6>Progresso</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar bg-success" id="progressBar"
-                                     style="width: {{ count($referenceTranslations) > 0 ? (count(array_filter($translations, function($value) { return !empty($value); })) / count($referenceTranslations)) * 100 : 0 }}%">
-                                </div>
-                            </div>
-                            <small class="text-muted" id="progressText">
-                                {{ count($referenceTranslations) > 0 ? round((count(array_filter($translations, function($value) { return !empty($value); })) / count($referenceTranslations)) * 100) : 0 }}% completato
-                            </small>
-                        </div>
-
-                        <div class="mb-3">
-                            <h6>Azioni Rapide</h6>
-                            <div class="d-grid gap-2">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="copyFromReference()">
-                                    <i class="ph ph-copy me-1"></i>Copia da Italiano
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearAllTranslations()">
-                                    <i class="ph ph-trash me-1"></i>Svuota Tutte
-                                </button>
-                                <button type="button" class="btn btn-outline-info btn-sm" onclick="showUntranslated()">
-                                    <i class="ph ph-eye me-1"></i>Mostra Non Tradotte
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-info">
-                            <h6 class="text-info">
-                                <i class="ph ph-lightbulb me-2"></i>Suggerimenti
-                            </h6>
-                            <ul class="mb-0 small">
-                                <li>Usa il testo italiano come riferimento</li>
-                                <li>Mantieni la stessa lunghezza quando possibile</li>
-                                <li>Controlla la grammatica e l'ortografia</li>
-                                <li>Salva spesso per non perdere le modifiche</li>
-                            </ul>
-                        </div>
+    <!-- Suggerimenti compatti -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="alert alert-light-primary py-2">
+                <div class="d-flex align-items-start">
+                    <i class="ph ph-lightbulb me-2 mt-1 text-primary f-s-14"></i>
+                    <div class="f-s-12">
+                        <strong class="text-primary">Suggerimenti:</strong> Usa il testo italiano come riferimento, mantieni la stessa lunghezza quando possibile, controlla grammatica e ortografia.
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
-@endsection
 
-@section('script')
 <script>
-let allTranslations = document.querySelectorAll('textarea[name^="translations["]');
-let translatedCount = {{ count(array_filter($translations, function($value) { return !empty($value); })) }};
-let totalCount = {{ count($referenceTranslations) }};
+let allExpanded = true;
 
-// Aggiorna il contatore delle traduzioni
-function updateTranslationCount() {
-    let count = 0;
-    allTranslations.forEach(textarea => {
-        if (textarea.value.trim() !== '') {
-            count++;
-        }
-    });
-    translatedCount = count;
-
-    document.getElementById('translatedCount').textContent = count;
-    document.getElementById('progressBar').style.width = (count / totalCount * 100) + '%';
-    document.getElementById('progressText').textContent = Math.round(count / totalCount * 100) + '% completato';
-}
-
-// Toggle singola traduzione
-function toggleTranslation(index) {
-    const element = document.getElementById('translation_' + index);
-    const checkbox = document.getElementById('toggle_' + index);
-
-    if (checkbox.checked) {
-        element.style.display = 'block';
-    } else {
-        element.style.display = 'none';
-    }
-}
-
-// Toggle tutte le traduzioni
 function toggleAllTranslations() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const isAnyHidden = Array.from(checkboxes).some(cb => !cb.checked);
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = !isAnyHidden;
-        toggleTranslation(checkbox.id.replace('toggle_', ''));
-    });
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    const toggleButton = event.target.closest('button');
+    
+    if (allExpanded) {
+        // Collapse all
+        accordionButtons.forEach(button => {
+            if (!button.classList.contains('collapsed')) {
+                button.click();
+            }
+        });
+        toggleButton.innerHTML = '<i class="ph ph-eye me-1"></i>Mostra Tutte';
+    } else {
+        // Expand all
+        accordionButtons.forEach(button => {
+            if (button.classList.contains('collapsed')) {
+                button.click();
+            }
+        });
+        toggleButton.innerHTML = '<i class="ph ph-eye me-1"></i>Nascondi Tutte';
+    }
+    
+    allExpanded = !allExpanded;
 }
 
-// Copia da riferimento (italiano)
 function copyFromReference() {
     if (confirm('Vuoi copiare tutte le traduzioni dall\'italiano? Questo sovrascriverà le traduzioni esistenti.')) {
-        allTranslations.forEach(textarea => {
+        const textareas = document.querySelectorAll('textarea[name^="translations"]');
+        textareas.forEach(textarea => {
             const reference = textarea.getAttribute('data-reference');
             textarea.value = reference;
         });
-        updateTranslationCount();
+        updateProgress();
+        showNotification('Traduzioni copiate dall\'italiano', 'success');
     }
 }
 
-// Svuota tutte le traduzioni
 function clearAllTranslations() {
     if (confirm('Vuoi svuotare tutte le traduzioni? Questa azione non può essere annullata.')) {
-        allTranslations.forEach(textarea => {
+        const textareas = document.querySelectorAll('textarea[name^="translations"]');
+        textareas.forEach(textarea => {
             textarea.value = '';
         });
-        updateTranslationCount();
+        updateProgress();
+        showNotification('Tutte le traduzioni sono state svuotate', 'warning');
     }
 }
 
-// Mostra solo quelle non tradotte
 function showUntranslated() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    const textareas = document.querySelectorAll('textarea[name^="translations"]');
+    let untranslatedCount = 0;
+    
+    // First collapse all
+    accordionButtons.forEach(button => {
+        if (!button.classList.contains('collapsed')) {
+            button.click();
+        }
+    });
+    
+    // Wait a bit for collapse animation, then expand untranslated ones
+    setTimeout(() => {
+        textareas.forEach((textarea, index) => {
+            const button = accordionButtons[index];
+            const badge = button.querySelector('.badge');
+            
+            // Check if it's missing or empty
+            if (!textarea.value.trim() || (badge && badge.textContent.includes('Mancante'))) {
+                if (button.classList.contains('collapsed')) {
+                    button.click();
+                    untranslatedCount++;
+                }
+            }
+        });
+        
+        if (untranslatedCount > 0) {
+            showNotification(`Mostrate ${untranslatedCount} chiavi non tradotte/mancanti`, 'info');
+        } else {
+            showNotification('Tutte le chiavi sono già tradotte!', 'success');
+        }
+    }, 300);
+}
 
-    checkboxes.forEach((checkbox, index) => {
-        const textarea = document.querySelector(`textarea[name="translations[${checkbox.getAttribute('data-key')}]"]`);
-        const isEmpty = !textarea || textarea.value.trim() === '';
-
-        checkbox.checked = isEmpty;
-        toggleTranslation(index);
+function updateProgress() {
+    const textareas = document.querySelectorAll('textarea[name^="translations"]');
+    const totalKeys = textareas.length;
+    let translatedCount = 0;
+    
+    textareas.forEach(textarea => {
+        if (textarea.value.trim()) {
+            translatedCount++;
+        }
+    });
+    
+    const progress = totalKeys > 0 ? (translatedCount / totalKeys) * 100 : 0;
+    
+    // Update progress bar
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+        progressBar.style.width = progress + '%';
+    }
+    
+    // Update counters
+    const translatedCountElement = document.getElementById('translatedCount');
+    if (translatedCountElement) {
+        translatedCountElement.textContent = translatedCount;
+    }
+    
+    const progressTextElement = document.getElementById('progressText');
+    if (progressTextElement) {
+        progressTextElement.textContent = Math.round(progress) + '%';
+    }
+    
+    // Update badges
+    textareas.forEach((textarea, index) => {
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        if (accordionButtons[index]) {
+            const button = accordionButtons[index];
+            const badge = button.querySelector('.badge');
+            const keyName = button.querySelector('.fw-semibold').textContent;
+            
+            if (badge) {
+                // Check if this key was originally missing
+                const wasMissing = badge.textContent.includes('Mancante');
+                
+                if (textarea.value.trim()) {
+                    if (wasMissing) {
+                        badge.textContent = 'Tradotta';
+                        badge.className = 'badge bg-light-success text-success f-s-10';
+                        button.querySelector('.fw-semibold').classList.remove('text-warning');
+                    } else {
+                        badge.textContent = 'Tradotta';
+                        badge.className = 'badge bg-light-success text-success f-s-10';
+                    }
+                } else {
+                    if (wasMissing) {
+                        badge.textContent = 'Mancante';
+                        badge.className = 'badge bg-warning text-dark f-s-10';
+                        button.querySelector('.fw-semibold').classList.add('text-warning');
+                    } else {
+                        badge.textContent = 'Da tradurre';
+                        badge.className = 'badge bg-light-primary text-primary f-s-10';
+                    }
+                }
+            }
+        }
     });
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Aggiorna contatore quando cambia il testo
-    allTranslations.forEach(textarea => {
-        textarea.addEventListener('input', updateTranslationCount);
-    });
-
-    // Aggiungi data-key agli checkbox
-    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
-        const textarea = document.querySelector(`textarea[name="translations[${Object.keys(@json($referenceTranslations))[index]}]"]`);
-        if (textarea) {
-            checkbox.setAttribute('data-key', textarea.getAttribute('data-key'));
+function showNotification(message, type = 'info') {
+    // Simple notification - you can replace with SweetAlert or other library
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
         }
-    });
+    }, 3000);
+}
 
-    // Auto-save ogni 30 secondi
-    setInterval(() => {
-        const form = document.getElementById('translationForm');
-        const formData = new FormData(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        }).then(response => {
-            if (response.ok) {
-                console.log('Auto-save completato');
-            }
-        }).catch(error => {
-            console.error('Errore auto-save:', error);
-        });
-    }, 30000);
+// Initialize progress on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateProgress();
 });
 </script>
 @endsection

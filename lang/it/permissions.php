@@ -2,50 +2,59 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Permissions Language Lines - ITALIANO
-    |--------------------------------------------------------------------------
-    |
-    | Traduzioni per la gestione ruoli e permessi
-    |
-    */
-
-    // Generale
     'permissions' => 'Permessi',
     'roles' => 'Ruoli',
     'users' => 'Utenti',
     'management' => 'Gestione',
-
-    // Statistiche
     'total_roles' => 'Ruoli Totali',
     'total_permissions' => 'Permessi Totali',
     'total_users' => 'Utenti Totali',
     'roles_with_permissions' => 'Ruoli Attivi',
-
-    // Badge Ruoli
     'role_management' => '👥 Gestione',
     'role_security' => '🔐 Sicurezza',
     'role_users' => '👤 Utenti',
     'role_statistics' => '📊 Statistiche',
-
-    // Azioni
     'create_role' => 'Crea Ruolo',
     'edit_role' => 'Modifica Ruolo',
     'delete_role' => 'Elimina Ruolo',
     'assign_permissions' => 'Assegna Permessi',
     'view_users' => 'Visualizza Utenti',
     'manage_users' => 'Gestisci Utenti',
-
-    // Messaggi
     'role_created' => 'Ruolo creato con successo',
     'role_updated' => 'Ruolo aggiornato con successo',
     'role_deleted' => 'Ruolo eliminato con successo',
     'permissions_assigned' => 'Permessi assegnati con successo',
-
-    // Errori
     'role_exists' => 'Il ruolo esiste già',
     'role_not_found' => 'Ruolo non trovato',
     'cannot_delete_role' => 'Impossibile eliminare il ruolo',
+    
+    // Chiavi aggiuntive trovate nelle pagine
+    'users_description' => 'Gestisci tutti gli utenti del sistema e assegna ruoli e permessi',
+    'export' => 'Esporta',
+    'bulk_assign' => 'Assegnazione di Massa',
+    'search_users' => 'Cerca Utenti',
+    'search_placeholder' => 'Cerca per nome, email o nickname...',
+    'filter_by_role' => 'Filtra per Ruolo',
+    'all_roles' => 'Tutti i Ruoli',
+    'filter_by_status' => 'Filtra per Stato',
+    'all_status' => 'Tutti gli Stati',
+    'status_active' => 'Attivo',
+    'status_inactive' => 'Inattivo',
+    'items_per_page' => 'Elementi per Pagina',
+    'system_users' => 'Utenti del Sistema',
+    'name' => 'Nome',
+    'email' => 'Email',
+    'nickname' => 'Nickname',
+    'permissions' => 'Permessi',
+    'status' => 'Stato',
+    'actions' => 'Azioni',
+    'no_nickname' => 'Nessun nickname',
+    'no_roles' => 'Nessun ruolo assegnato',
+    'no_direct_permissions' => 'Nessun permesso diretto',
+    'view_details' => 'Visualizza Dettagli',
+    'edit_roles' => 'Modifica Ruoli',
+    'edit_permissions' => 'Modifica Permessi',
+    'delete_user' => 'Elimina Utente',
+    'view' => 'Visualizza',
 
 ];

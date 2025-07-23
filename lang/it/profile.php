@@ -61,18 +61,30 @@ return [
 
     // Form Modifica Profilo
     'name' => 'Nome',
+    'full_name' => 'Nome Completo',
     'email' => 'Email',
     'nickname' => 'Nickname',
-    'bio' => 'Biografia',
+    'nickname_placeholder' => 'Il tuo nome d\'arte',
+    'nickname_help' => 'Nome che apparirà nel tuo profilo pubblico',
+    'bio' => 'Bio',
+    'bio_placeholder' => 'Racconta qualcosa di te, la tua passione per la poesia, i tuoi interessi...',
+    'bio_help' => 'Massimo 1000 caratteri',
     'phone' => 'Telefono',
     'website' => 'Sito Web',
+    'website_placeholder' => 'https://tuosito.com',
     'location' => 'Località',
+    'location_placeholder' => 'Città, Regione',
 
     // Social Media
+    'social_media' => 'Social Media',
     'social_facebook' => 'Facebook',
     'social_instagram' => 'Instagram',
     'social_youtube' => 'YouTube',
-    'social_twitter' => 'Twitter',
+    'social_twitter' => 'Twitter/X',
+    'facebook_placeholder' => 'https://facebook.com/tuoprofilo',
+    'instagram_placeholder' => 'https://instagram.com/tuoprofilo',
+    'youtube_placeholder' => 'https://youtube.com/@tuocanale',
+    'twitter_placeholder' => 'https://twitter.com/tuoprofilo',
 
     // Validazione
     'name_required' => 'Il nome è obbligatorio',
@@ -127,7 +139,7 @@ return [
 
     // Messaggi Generali
     'loading' => 'Caricamento...',
-    'save' => 'Salva',
+    'save' => 'Salva Modifiche',
     'cancel' => 'Annulla',
     'delete' => 'Elimina',
     'edit' => 'Modifica',
@@ -136,6 +148,21 @@ return [
     'confirm' => 'Conferma',
     'yes' => 'Sì',
     'no' => 'No',
+    
+    // Foto Profilo
+    'upload_new_photo' => 'Carica Nuova Foto',
+    'photo_formats_supported' => 'Formati supportati: Tutti i formati immagine (JPG, PNG, GIF, WebP, ecc.). Max :sizeMB',
+    'photo_tips_title' => 'Suggerimenti per una buona foto:',
+    'photo_tip_clear' => 'Usa una foto chiara e ben illuminata',
+    'photo_tip_face' => 'Mostra il tuo viso chiaramente',
+    'photo_tip_avoid' => 'Evita foto troppo scure o sfocate',
+    'photo_tip_square' => 'Formato quadrato funziona meglio',
+    
+    // Azioni Rapide
+    'quick_actions' => 'Azioni Rapide',
+    'manage_videos' => 'Gestisci Video',
+    'my_activities' => 'Le Mie Attività',
+    'view_public_profile' => 'Vedi Profilo Pubblico',
 
     // Funzionalità in Sviluppo
     'feature_development' => 'Funzionalità in sviluppo',

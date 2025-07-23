@@ -442,20 +442,21 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/roles/index', [App\Http\Controllers\PermissionController::class, 'rolesIndex'])->name('roles.index');
         Route::post('/roles', [App\Http\Controllers\PermissionController::class, 'storeRole'])->name('roles.store');
         Route::get('/roles/{role}/edit', [App\Http\Controllers\PermissionController::class, 'editRole'])->name('roles.edit');
-        Route::put('/roles/{role}', [App\Http\Controllers\PermissionController::class, 'updateRole'])->name('roles.update');
+        Route::post('/roles/{role}', [App\Http\Controllers\PermissionController::class, 'updateRole'])->name('roles.update');
         Route::delete('/roles/{role}', [App\Http\Controllers\PermissionController::class, 'deleteRole'])->name('roles.delete');
 
         // Permission management
         Route::get('/permissions/index', [App\Http\Controllers\PermissionController::class, 'permissionsIndex'])->name('permissions.index');
         Route::post('/permissions', [App\Http\Controllers\PermissionController::class, 'storePermission'])->name('permissions.store');
         Route::get('/permissions/{permission}/edit', [App\Http\Controllers\PermissionController::class, 'editPermission'])->name('permissions.edit');
-        Route::put('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'updatePermission'])->name('permissions.update');
+        Route::post('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'updatePermission'])->name('permissions.update');
         Route::delete('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'deletePermission'])->name('permissions.delete');
 
         // User role/permission assignment
         Route::get('/users/index', [App\Http\Controllers\PermissionController::class, 'usersIndex'])->name('users.index');
-        Route::put('/users/{user}/roles', [App\Http\Controllers\PermissionController::class, 'assignUserRoles'])->name('users.roles');
-        Route::put('/users/{user}/permissions', [App\Http\Controllers\PermissionController::class, 'assignUserPermissions'])->name('users.permissions');
+        Route::get('/users/{user}', [App\Http\Controllers\PermissionController::class, 'getUser'])->name('users.show');
+        Route::post('/users/{user}/roles', [App\Http\Controllers\PermissionController::class, 'assignUserRoles'])->name('users.roles');
+        Route::post('/users/{user}/permissions', [App\Http\Controllers\PermissionController::class, 'assignUserPermissions'])->name('users.permissions');
 
         // API routes
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');

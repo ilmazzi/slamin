@@ -290,7 +290,7 @@ $('#permissionForm').on('submit', function(e) {
     const formData = new FormData(this);
     const permissionId = $('#permissionId').val();
             const url = permissionId ? `{{ route('permissions.permissions.update', ['permission' => ':permissionId']) }}`.replace(':permissionId', permissionId) : '{{ route("permissions.permissions.store") }}';
-    const method = permissionId ? 'PUT' : 'POST';
+    const method = permissionId ? 'POST' : 'POST';
 
     fetch(url, {
         method: method,

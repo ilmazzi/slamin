@@ -3,25 +3,25 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-8 col-sm-6 d-flex align-items-center header-left p-0">
-                           <span class="header-toggle ">
-                             <i class="ph ph-squares-four"></i>
-                           </span>
+                <span class="header-toggle">
+                    <i class="ph ph-squares-four"></i>
+                </span>
 
                 <div class="header-searchbar w-100">
-                    <form action="#" class="mx-sm-3 app-form app-icon-form ">
+                    <form action="#" class="mx-sm-3 app-form app-icon-form">
                         <div class="position-relative">
-                            <input aria-label="Search" class="form-control" placeholder="Search..."
+                            <input aria-label="Search" class="form-control" placeholder="Cerca eventi, poesie, video..."
                                    type="search">
-                            <i class="ti ti-search text-dark"></i>
+                            <i class="ph ph-magnifying-glass text-dark"></i>
                         </div>
                     </form>
                 </div>
             </div>
 
             <div class="col-4 col-sm-6 d-flex align-items-center justify-content-end header-right p-0">
-
                 <ul class="d-flex align-items-center">
 
+                    <!-- Language Selector -->
                     <li class="header-language">
                         <div class="flex-shrink-0 dropdown" id="lang_selector">
                             <a aria-expanded="false" class="d-block head-icon ps-0"
@@ -71,376 +71,9 @@
                                 </li>
                             </ul>
                         </div>
-
                     </li>
 
-                    <li class="header-apps">
-                        <a aria-controls="appscanvasRights"
-                           class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                           data-bs-target="#appscanvasRights" data-bs-toggle="offcanvas"
-                           href="#" role="button">
-                            <i class="ph ph-bounding-box"></i>
-
-                        </a>
-
-                        <div aria-labelledby="appscanvasRightsLabel"
-                             class="offcanvas offcanvas-end header-apps-canvas"
-                             id="appscanvasRights"
-                             tabindex="-1">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="appscanvasRightsLabel">Shortcut</h5>
-                                <div class="app-dropdown flex-shrink-0">
-                                    <a aria-expanded="false" class=" p-1" data-bs-auto-close="outside"
-                                       data-bs-toggle="dropdown"
-                                       href="#"
-                                       role="button">
-                                        <i class="ph-bold  ph-faders-horizontal f-s-20"></i>
-
-
-                                    </a>
-                                    <ul class="dropdown-menu mb-3">
-                                        <li class="dropdown-item">
-                                            <a href="{{route('setting')}}" target="_blank">
-                                                Privacy Settings
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="{{route('setting')}}" target="_blank">
-                                                Account Settings
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="{{route('setting')}}" target="_blank">
-                                                Accessibility
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-divider"></li>
-                                        <li class="dropdown-item border-0">
-                                            <a aria-expanded="false" data-bs-toggle="dropdown" href="#"
-                                               role="button">
-                                                More Settings
-                                            </a>
-                                            <ul class="dropdown-menu sub-menu">
-                                                <li class="dropdown-item">
-                                                    <a href="{{route('setting')}}" target="_blank">
-                                                        Backup and Restore
-                                                    </a>
-                                                </li>
-                                                <li class="dropdown-item">
-                                                    <a href="{{route('setting')}}" target="_blank">
-                                                        <span>Data Usage</span>
-                                                    </a>
-                                                </li>
-                                                <li class="dropdown-item">
-                                                    <a href="{{route('setting')}}" target="_blank">
-                                                        <span>Theme</span>
-                                                    </a>
-                                                </li>
-                                                <li class="dropdown-item d-flex align-items-center justify-content-between">
-                                                    <a href="#">
-                                                        <p class="mb-0">Notification</p>
-                                                    </a>
-                                                    <div class="flex-shrink-0">
-                                                        <div class="form-check form-switch">
-                                                            <input class="form-check-input  form-check-primary"
-                                                                   id="notificationSwitch"
-                                                                   type="checkbox">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="offcanvas-body app-scroll">
-                                <div class="row row-cols-3 g-2">
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-primary w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('product')}}"
-                                           target="_blank">
-                                                          <span>
-                                                            <i class="ph-light  ph-shopping-bag-open  f-s-30"></i>
-                                                          </span>
-                                            <p class="mb-0 f-w-500 text-dark">E-shop</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-danger w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('email')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-envelope  f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Email</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-success w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('chat')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-chat-circle-text  f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Chat</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-warning w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('project_app')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-projector-screen-chart  f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Project</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-info w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('invoice')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-scroll f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Invoice</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-dark w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('blog')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-notebook f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Blog</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-danger w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('calendar')}}"
-                                           target="_blank">
-                                                         <span>
-                                                           <i class="ph-light  ph-calendar f-s-30"></i>
-                                                         </span>
-                                            <p class="mb-0 f-w-500 text-dark">Calender</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-warning w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('file_manager')}}"
-                                           target="_blank">
-                                                        <span>
-                                                          <i class="ph-light  ph-folder-open f-s-30"></i>
-                                                        </span>
-                                            <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">File
-                                                Manager</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-primary w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('gallery')}} "
-                                           target="_blank">
-                                                        <span>
-                                                          <i class="ph-light  ph-google-photos-logo f-s-30"></i>
-                                                        </span>
-                                            <p class="mb-0 f-w-500 text-dark">Gallery</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-success w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('profile.show')}}"
-                                           target="_blank">
-                                                        <span>
-                                                          <i class="ph-light  ph-users-three f-s-30"></i>
-                                                        </span>
-                                            <p class="mb-0 f-w-500 text-dark">Profile</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="text-light-secondary w-100 rounded-3 py-3 px-2 "
-                                           href="{{route('kanban_board')}}"
-                                           target="_blank">
-                                                        <span>
-                                                          <i class="ph-light  ph-selection-foreground f-s-30"></i>
-                                                        </span>
-                                            <p class="mb-0 f-w-500 text-dark">Task Board</p>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex-center text-center">
-                                        <a class="d-flex-center text-light-secondary w-100 h-100 rounded-3 p-2 dashed-1-secondary"
-                                           href="{{route('kanban_board')}}"
-                                           target="_blank">
-                                                        <span>
-                                                          <i class="ph-light  ph-plus f-s-30"></i>
-                                                        </span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="header-cart">
-                        <a aria-controls="cartcanvasRight"
-                           class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2"
-                           data-bs-target="#cartcanvasRight"
-                           data-bs-toggle="offcanvas"
-                           href="#" role="button">
-                            <i class="ph ph-shopping-cart-simple"></i>
-                            <span
-                                class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification">4</span>
-                        </a>
-                        <div aria-labelledby="cartcanvasRightLabel"
-                             class="offcanvas offcanvas-end header-cart-canvas"
-                             id="cartcanvasRight"
-                             tabindex="-1">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="cartcanvasRightLabel">Cart</h5>
-                                <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas"
-                                        type="button"></button>
-                            </div>
-                            <div class="offcanvas-body app-scroll p-0">
-                                <div class="head-container">
-                                    <div class="head-box">
-                                                  <span class="b-1-light bg-light-primary h-45 w-45 d-flex-center b-r-6">
-                                                      <img alt="cart" class="img-fluid p-1"
-                                                           src="{{asset('../assets/images/header/cart/01.png')}}">
-                                                  </span>
-
-                                        <div class="flex-grow-1 ms-2">
-                                            <a class="mb-0 f-w-600 f-s-16" href="{{route('product_details')}}"
-                                               target="_blank"> Backpacks (3<i
-                                                    class="ti ti-star-filled text-warning f-s-12"></i>)
-                                            </a>
-                                            <div>
-                                                            <span class="text-dark"><span
-                                                                    class="text-secondary f-w-400">size</span> : M</span>
-                                                <span class="text-dark ms-2"><span
-                                                        class="text-secondary f-w-400">color</span> :Pink</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <p class="text-muted f-w-500 mb-0">$600.50 x 1</p>
-                                        </div>
-                                    </div>
-                                    <div class="head-box">
-                                                    <span class="b-1-light bg-light-primary h-45 w-45 d-flex-center b-r-6">
-                                                      <img alt="cart" class="img-fluid p-1"
-                                                           src="{{asset('../assets/images/header/cart/05.png')}}">
-                                                  </span>
-                                        <div class="flex-grow-1 ms-2">
-                                            <a class="mb-0 f-w-600 f-s-16" href="{{route('product_details')}}"
-                                               target="_blank"> Women's Watch (4<i
-                                                    class="ti ti-star-filled text-warning f-s-12"></i>)</a>
-                                            <div>
-                                                            <span class="text-dark"><span
-                                                                    class="text-secondary f-w-400">size</span> : S</span>
-                                                <span class="text-dark ms-2"><span
-                                                        class="text-secondary f-w-400">color</span> :Rose Gold</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <p class="text-muted f-w-500 mb-0">$519.10 x 2</p>
-                                        </div>
-                                    </div>
-                                    <div class="head-box">
-                                                    <span class="b-1-light bg-light-primary h-45 w-45 d-flex-center b-r-6">
-                                                      <img alt="cart" class="img-fluid p-1"
-                                                           src="{{asset('../assets/images/header/cart/04.png')}}">
-                                                  </span>
-                                        <div class="flex-grow-1 ms-2">
-                                            <a class="mb-0 f-w-600 f-s-16" href="{{route('product_details')}}"
-                                               target="_blank">Sandals (5 <i
-                                                    class="ti ti-star-filled text-warning f-s-12"></i>)</a>
-                                            <div>
-                                                            <span class="text-dark"><span
-                                                                    class="text-secondary f-w-400">size</span> : 8</span>
-                                                <span class="text-dark ms-2"><span
-                                                        class="text-secondary f-w-400">color</span> :White</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <p class="text-muted f-w-500 mb-0">$390 x 2</p>
-                                        </div>
-                                    </div>
-                                    <div class="head-box ">
-                                                    <span class="b-1-light bg-light-primary h-45 w-45 d-flex-center b-r-6">
-                                                      <img alt="cart" class="img-fluid p-1"
-                                                           src="{{asset('../assets/images/header/cart/03.png')}}">
-                                                  </span>
-                                        <div class="flex-grow-1 ms-2">
-                                            <a class="mb-0 f-w-600 f-s-16" href="{{route('product_details')}}"
-                                               target="_blank"> Jackets (3<i
-                                                    class="ti ti-star-filled text-warning f-s-12"></i>)</a>
-                                            <div>
-                                                            <span class="text-dark"><span
-                                                                    class="text-secondary f-w-400">size</span> : XL</span>
-                                                <span class="text-dark ms-2"><span
-                                                        class="text-secondary f-w-400">color</span> :Blue</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <p class="text-muted f-w-500 mb-0">$300.00 x 2</p>
-                                        </div>
-                                    </div>
-                                    <div class="head-box ">
-                                                    <span class="b-1-light bg-light-primary h-45 w-45 d-flex-center b-r-6">
-                                                      <img alt="cart" class="img-fluid p-1"
-                                                           src="{{asset('../assets/images/header/cart/02.png')}}">
-                                                  </span>
-                                        <div class="flex-grow-1 ms-2">
-                                            <a class="mb-0 f-w-600 f-s-16" href="{{route('product_details')}}"
-                                               target="_blank"> Shoes (3<i
-                                                    class="ti ti-star-filled text-warning f-s-12"></i>)</a>
-                                            <div>
-                                                            <span class="text-dark"><span
-                                                                    class="text-secondary f-w-400">size</span> : 9</span>
-                                                <span class="text-dark ms-2"><span
-                                                        class="text-secondary f-w-400">color</span> :White</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <i class="ph ph-trash f-s-18 text-danger close-btn"></i>
-                                            <p class="text-muted f-w-500 mb-0">$450.00 x 1</p>
-                                        </div>
-                                    </div>
-                                    <div class="hidden-massage py-4 px-3">
-
-                                        <div>
-                                            <i class="ph-duotone  ph-shopping-bag-open f-s-50 text-primary"></i>
-                                            <h6 class="mb-0">Your Cart is Empty</h6>
-                                            <p class="text-secondary mb-0">Add some items :)</p>
-                                            <a class="btn btn-light-primary btn-xs mt-2"
-                                               href="{{route('product_details')}}">Shop
-                                                Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="offcanvas-footer">
-                                <div class="head-box-footer p-3">
-                                    <div class="mb-4">
-                                        <h6 class="text-muted f-w-600">Total <span
-                                                class="float-end text-primary">$3,468.00</span></h6>
-                                    </div>
-                                    <div class="header-cart-btn">
-                                        <a class="btn btn-primary" href="{{route('cart')}}" role="button"
-                                           target="_blank">
-                                            <i class="ti ti-eye"></i> View Cart</a>
-                                        <a class="btn btn-success" href="{{route('checkout')}}" role="button"
-                                           target="_blank">
-                                            Checkout <i class="ti ti-shopping-cart"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
+                    <!-- Theme Toggle -->
                     <li class="header-dark">
                         <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2">
                             <i class="ph ph-moon-stars"></i>
@@ -450,6 +83,70 @@
                         </div>
                     </li>
 
+                    @auth
+                    <!-- Invitations & Requests - Solo per utenti autenticati -->
+                    <li class="header-invitations">
+                        <div class="flex-shrink-0 dropdown">
+                            <a aria-expanded="false" class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2"
+                               data-bs-toggle="dropdown"
+                               href="#">
+                                <i class="ph ph-envelope"></i>
+                                @php
+                                    $pendingInvitations = auth()->user()->receivedInvitations()->where('status', \App\Models\EventInvitation::STATUS_PENDING)->count();
+                                    $pendingRequests = \App\Models\EventRequest::whereHas('event', function($q) {
+                                        $q->where('organizer_id', auth()->id());
+                                    })->where('status', \App\Models\EventRequest::STATUS_PENDING)->count();
+                                    $pendingCount = $pendingInvitations + $pendingRequests;
+                                @endphp
+                                @if($pendingCount > 0)
+                                    <span class="position-absolute translate-middle badge rounded-pill bg-warning badge-notification">{{ $pendingCount }}</span>
+                                @endif
+                            </a>
+                            <ul class="dropdown-menu header-card border-0">
+                                <li class="dropdown-header">
+                                    <h6 class="mb-0">
+                                        <i class="ph ph-envelope me-2"></i>Inviti e Richieste
+                                        @if($pendingCount > 0)
+                                            <span class="badge bg-warning ms-2">{{ $pendingCount }}</span>
+                                        @endif
+                                    </h6>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li class="dropdown-item">
+                                    <a href="{{ route('invitations.index') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-envelope me-2 text-primary"></i>
+                                        <div>
+                                            <span class="fw-semibold">I Miei Inviti</span>
+                                            @if($pendingInvitations > 0)
+                                                <small class="text-muted d-block">{{ $pendingInvitations }} in attesa</small>
+                                            @endif
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="{{ route('requests.index') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-handshake me-2 text-success"></i>
+                                        <div>
+                                            <span class="fw-semibold">Richieste Ricevute</span>
+                                            @if($pendingRequests > 0)
+                                                <small class="text-muted d-block">{{ $pendingRequests }} in attesa</small>
+                                            @endif
+                                        </div>
+                                    </a>
+                                </li>
+                                @if($pendingCount > 0)
+                                <li class="dropdown-divider"></li>
+                                <li class="dropdown-item">
+                                    <a href="{{ route('invitations.index') }}" class="btn btn-warning btn-sm w-100">
+                                        <i class="ph ph-eye me-1"></i>Vedi Tutti
+                                    </a>
+                                </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Notifications - Solo per utenti autenticati -->
                     <li class="header-notification">
                         <a aria-controls="notificationcanvasRight"
                            class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2"
@@ -516,10 +213,11 @@
                             </div>
                         </div>
                     </li>
+                    @endauth
+
                 </ul>
             </div>
         </div>
     </div>
 </header>
-
 <!-- Header Section ends -->

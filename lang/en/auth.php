@@ -47,5 +47,11 @@ return [
     'feature_community' => 'Community of poets',
     'feature_share' => 'Share your performances',
     'feature_compete' => 'Participate in competitions',
+    'role_admin' => '',
+    'role_moderator' => '',
+    'role_judge' => '',
+    'role_technician' => '',
+    'role_host' => '',
+    'role_user' => '',
 
 ];

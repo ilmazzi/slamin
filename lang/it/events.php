@@ -98,6 +98,55 @@ return [
     'step_2_short' => 'Data',
     'step_3_short' => 'Dettagli',
     'step_4_short' => 'Inviti',
+    
+    // Statistiche e contatori
+    'total_events' => 'Eventi Totali',
+    'public_events_count' => 'Eventi Pubblici',
+    'upcoming_events_count' => 'Prossimi Eventi',
+    'cities_count' => 'Città',
+    
+    // Filtri e ricerca
+    'search_events' => 'Cerca eventi...',
+    'filter_by_city' => 'Filtra per città',
+    'all_types' => 'Tutti i tipi',
+    'public_events_only' => 'Solo eventi pubblici',
+    'private_events_only' => 'Solo eventi privati',
+    'radius_km' => 'Raggio (km)',
+    'show_map' => 'Mostra Mappa',
+    'show_list' => 'Mostra Lista',
+    
+    // Filtri rapidi
+    'today' => 'Oggi',
+    'tomorrow' => 'Domani',
+    'weekend' => 'Weekend',
+    'free_events' => 'Eventi Gratuiti',
+    'nearby' => 'Nelle Vicinanze',
+    'my_private_events' => 'I Miei Eventi Privati',
+    
+    // Badge e stati
+    'public' => 'Pubblico',
+    'private' => 'Privato',
+    'free' => 'Gratuito',
+    'apply_to_event' => 'Candidati per questo evento',
+    'apply' => 'Candidati',
+    
+    // Partecipanti
+    'participants' => 'Partecipanti',
+    'participants_preview' => 'Anteprima partecipanti',
+    'participants_spots_left' => 'Posti disponibili',
+    'participants_full' => 'Evento completo',
+    'participants_roles_summary' => 'Ruoli partecipanti',
+    'no_participants' => 'Nessun partecipante',
+    'participants_accepting_applications' => 'Accetta candidature',
+    'participants_click_to_apply' => 'Clicca per candidarti',
+    
+    // Messaggi
+    'no_events_found' => 'Nessun evento trovato',
+    'no_events_message' => 'Non ci sono eventi che corrispondono ai tuoi criteri di ricerca.',
+    'create_first_event' => 'Crea il Primo Evento',
+    
+    // Dashboard
+    'dashboard' => 'Dashboard',
     'step_5_short' => 'Preview',
     'step_basic_info' => 'Informazioni Base',
     'step_date_location' => 'Data e Luogo',

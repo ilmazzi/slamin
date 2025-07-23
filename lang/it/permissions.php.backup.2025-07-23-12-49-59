@@ -1,0 +1,31 @@
+<?php
+
+return [
+
+    'permissions' => 'Permessi',
+    'roles' => 'Ruoli',
+    'users' => 'Utenti',
+    'management' => 'Gestione',
+    'total_roles' => 'Ruoli Totali',
+    'total_permissions' => 'Permessi Totali',
+    'total_users' => 'Utenti Totali',
+    'roles_with_permissions' => 'Ruoli Attivi',
+    'role_management' => '👥 Gestione',
+    'role_security' => '🔐 Sicurezza',
+    'role_users' => '👤 Utenti',
+    'role_statistics' => '📊 Statistiche',
+    'create_role' => 'Crea Ruolo',
+    'edit_role' => 'Modifica Ruolo',
+    'delete_role' => 'Elimina Ruolo',
+    'assign_permissions' => 'Assegna Permessi',
+    'view_users' => 'Visualizza Utenti',
+    'manage_users' => 'Gestisci Utenti',
+    'role_created' => 'Ruolo creato con successo',
+    'role_updated' => 'Ruolo aggiornato con successo',
+    'role_deleted' => 'Ruolo eliminato con successo',
+    'permissions_assigned' => 'Permessi assegnati con successo',
+    'role_exists' => 'Il ruolo esiste già',
+    'role_not_found' => 'Ruolo non trovato',
+    'cannot_delete_role' => 'Impossibile eliminare il ruolo',
+
+];

@@ -2,30 +2,16 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines - FRANÇAIS
-    |--------------------------------------------------------------------------
-    |
-    | Traductions pour l'authentification, connexion, inscription
-    |
-    */
-
-    // Général
     'welcome' => 'Bienvenue sur Slam In !',
     'welcome_back' => 'Content de vous revoir !',
     'welcome_community' => 'Bienvenue dans la communauté italienne de poetry slam',
     'home_for_poetry' => 'Une maison pour la poésie',
-
-    // Connexion
     'login' => 'Se connecter',
     'login_title' => 'Accédez à votre compte',
     'login_subtitle' => 'Entrez dans Slam In et découvrez le monde du poetry slam italien',
     'login_button' => 'Entrer dans Slam In',
     'login_success' => 'Connexion réussie !',
     'login_failed' => 'Identifiants invalides.',
-
-    // Inscription
     'register' => 'S\'inscrire',
     'register_title' => 'Rejoignez la communauté',
     'register_subtitle' => 'Créez votre compte et commencez votre voyage dans le poetry slam',
@@ -34,16 +20,12 @@ return [
     'already_have_account' => 'Vous avez déjà un compte ?',
     'no_account_yet' => 'Vous n\'avez pas encore de compte ?',
     'register_here' => 'Inscrivez-vous ici',
-
-    // Champs de formulaire
     'name' => 'Nom',
     'email' => 'Email',
     'password' => 'Mot de passe',
     'password_confirmation' => 'Confirmer le mot de passe',
     'remember_me' => 'Se souvenir de moi',
     'forgot_password' => 'Mot de passe oublié ?',
-
-    // Rôles
     'select_roles' => 'Sélectionnez vos rôles',
     'roles_description' => 'Vous pouvez sélectionner plusieurs rôles qui vous représentent dans la communauté poetry slam',
     'role_poet' => 'Poète',
@@ -54,22 +36,22 @@ return [
     'role_venue_owner_desc' => 'Je gère des espaces pour événements',
     'role_audience' => 'Public',
     'role_audience_desc' => 'J\'adore assister aux spectacles',
-
-    // Erreurs de validation
     'required' => 'Le champ :attribute est obligatoire.',
     'email_invalid' => 'Veuillez entrer une adresse email valide.',
     'password_min' => 'Le mot de passe doit contenir au moins :min caractères.',
     'password_confirmed' => 'Les mots de passe ne correspondent pas.',
     'name_min' => 'Le nom doit contenir au moins :min caractères.',
-
-    // Déconnexion
     'logout' => 'Se déconnecter',
     'logout_success' => 'Déconnexion réussie.',
-
-    // Fonctionnalités
     'feature_events' => 'Événements et spectacles',
     'feature_community' => 'Communauté de poètes',
     'feature_share' => 'Partagez vos performances',
     'feature_compete' => 'Participez aux concours',
+    'role_admin' => '',
+    'role_moderator' => '',
+    'role_judge' => '',
+    'role_technician' => '',
+    'role_host' => '',
+    'role_user' => '',
 
 ];

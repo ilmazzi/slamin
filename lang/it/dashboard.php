@@ -98,6 +98,17 @@ return [
     'calendar_events' => 'Eventi',
     'calendar_click_event' => 'Clicca su un evento per i dettagli',
     'create_event_button' => 'Crea Evento',
+    
+    // Sezioni Dashboard
+    'poet_section' => 'Sezione Poeta',
+    'venue_section' => 'Sezione Venue',
+    'organizer_section' => 'Sezione Organizzatore',
+    
+    // Azioni rapide aggiuntive
+    'upload_photo_desc' => 'Condividi le tue foto',
+    'discover_poets_desc' => 'Trova nuovi artisti',
+    'manage_venue_desc' => 'Controlla i tuoi spazi',
+    'organize_event_desc' => 'Crea nuovi eventi',
 
     // Posts e Contenuti
     'my_posts' => 'I miei Post',

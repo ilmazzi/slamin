@@ -26,168 +26,203 @@
         </div>
     </div>
 
-    <!-- Header -->
+    <!-- Header Actions -->
     <div class="row mb-4">
         <div class="col-12">
-                            <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2 class="mb-2">
-                            <i class="ph ph-translate me-2"></i>{{ __('admin.translation_management') }}
-                        </h2>
-                        <p class="text-muted mb-0">{{ __('admin.translation_management_description') }}</p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <form action="{{ route('admin.translations.sync') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-warning" onclick="return confirm('Sincronizzare tutte le lingue con le chiavi italiane?')">
-                                <i class="ph ph-arrows-clockwise me-2"></i>Sincronizza Lingue
-                            </button>
-                        </form>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
-                            <i class="ph ph-plus me-2"></i>{{ __('admin.add_language') }}
-                        </button>
-                    </div>
-                </div>
-        </div>
-    </div>
-
-    <!-- Languages Overview -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card hover-effect border-0 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="ph ph-globe me-2"></i>Lingue Disponibili
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        @foreach($languages as $code => $name)
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card card-light-primary border-0">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">{{ $name }}</h6>
-                                            <small class="text-muted">{{ strtoupper($code) }}</small>
-                                            @if($code !== 'it' && isset($missingKeys[$code]))
-                                                @php
-                                                    $totalMissing = 0;
-                                                    foreach($missingKeys[$code] as $file => $keys) {
-                                                        $totalMissing += count($keys);
-                                                    }
-                                                @endphp
-                                                @if($totalMissing > 0)
-                                                    <div class="mt-1">
-                                                        <span class="badge bg-warning text-dark">
-                                                            <i class="ph ph-warning me-1"></i>{{ $totalMissing }} chiavi mancanti
-                                                        </span>
-                                                    </div>
-                                                @else
-                                                    <div class="mt-1">
-                                                        <span class="badge bg-success">
-                                                            <i class="ph ph-check me-1"></i>Completa
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                            @endif
-                                        </div>
-                                        <div class="dropdown">
-                                            <button class="btn btn-light-secondary btn-sm" type="button" data-bs-toggle="dropdown">
-                                                <i class="ph ph-dots-three-vertical"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="{{ route('admin.translations.show', [$code, 'common']) }}">
-                                                    <i class="ph ph-pencil me-2"></i>Modifica Traduzioni
-                                                </a></li>
-                                                @if($code !== 'it' && isset($missingKeys[$code]))
-                                                    @if($totalMissing > 0)
-                                                        <li><a class="dropdown-item text-warning" href="#" onclick="showMissingKeys('{{ $code }}', {{ json_encode($missingKeys[$code]) }})">
-                                                            <i class="ph ph-warning me-2"></i>Vedi Chiavi Mancanti ({{ $totalMissing }})
-                                                        </a></li>
-                                                    @endif
-                                                @endif
-                                                @if($code !== 'it')
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li>
-                                                    <form action="{{ route('admin.translations.delete-language', $code) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Sei sicuro di voler eliminare questa lingua?')">
-                                                            <i class="ph ph-trash me-2"></i>Elimina Lingua
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                @endif
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="card hover-effect">
+                <div class="card-body bg-light-primary">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin.translation_management_description') }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex flex-column flex-md-row gap-2">
+                                <button type="button" class="btn btn-warning" onclick="syncLanguages()">
+                                    <i class="ph ph-arrows-clockwise me-2"></i>Sincronizza Lingue
+                                </button>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
+                                    <i class="ph ph-plus me-2"></i>{{ __('admin.add_language') }}
+                                </button>
                             </div>
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Translation Files -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card hover-effect border-0 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="ph ph-files me-2"></i>File di Traduzione
-                    </h5>
+
+
+    <!-- Languages Overview Cards -->
+    <div class="row mb-4">
+        <div class="12">
+            <h5 class="mb-3 f-w-600 text-primary">
+                <i class="ph ph-globe me-2"></i>Lingue Disponibili
+            </h5>
+        </div>
+        @foreach($languages as $code => $name)
+        <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <div class="card hover-effect">
+                                <div class="card-header position-relative overflow-hidden bg-light-primary">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h6 class="mb-0 f-w-600 text-primary">{{ $name }}</h6>
+                                <small class="text-muted f-s-12">{{ strtoupper($code) }}</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="flag-icon flag-icon-{{ 
+                                $code == 'en' ? 'gbr' : 
+                                ($code == 'de' ? 'deu' : 
+                                ($code == 'es' ? 'esp' : 
+                                ($code == 'fr' ? 'fra' : 'ita'))) 
+                            }} me-2" style="font-size: 24px;"></i>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>File</th>
-                                    <th>Descrizione</th>
-                                    <th>Lingue</th>
-                                    <th>Azioni</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($translationFiles as $file => $displayName)
-                                <tr>
-                                    <td>
-                                        <strong>{{ $file }}.php</strong>
-                                    </td>
-                                    <td>{{ $displayName }}</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            @foreach($languages as $code => $name)
-                                            <a href="{{ route('admin.translations.show', [$code, $file]) }}"
-                                               class="badge bg-primary text-decoration-none">
-                                                {{ strtoupper($code) }}
-                                            </a>
-                                            @endforeach
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group btn-group-sm">
-                                            @foreach($languages as $code => $name)
-                                            <a href="{{ route('admin.translations.show', [$code, $file]) }}"
-                                               class="btn btn-outline-primary">
-                                                {{ strtoupper($code) }}
-                                            </a>
-                                            @endforeach
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <!-- Delete Button (outside flag area) -->
+                    @if($code !== 'it')
+                    <div class="d-flex justify-content-end mb-2">
+                        
+                        <button type="button" class="btn btn-light-danger icon-btn b-r-4"onclick="deleteLanguage('{{ $code }}', '{{ $name }}')"
+                        title="Elimina lingua {{ $name }}"><i
+                            class="ti ti-trash"></i></button>
                     </div>
+                    @endif
+                    
+                    <!-- Status Badges -->
+                    @if($code === 'it')
+                        @if(isset($missingKeys[$code]) && !empty($missingKeys[$code]))
+                            @php
+                                $totalMissing = 0;
+                                foreach($missingKeys[$code] as $file => $keys) {
+                                    $totalMissing += count($keys);
+                                }
+                            @endphp
+                            @if($totalMissing > 0)
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-warning text-dark f-s-12">
+                                        <i class="ph ph-warning me-1"></i>{{ $totalMissing }} da completare
+                                    </span>
+                                    <span class="badge bg-primary f-s-12">
+                                        <i class="ph ph-star me-1"></i>Riferimento
+                                    </span>
+                                </div>
+                            @else
+                                <span class="badge bg-primary f-s-12 mb-3">
+                                    <i class="ph ph-star me-1"></i>Riferimento Completo
+                                </span>
+                            @endif
+                        @else
+                            <span class="badge bg-primary f-s-12 mb-3">
+                                <i class="ph ph-star me-1"></i>Riferimento
+                            </span>
+                        @endif
+                    @else
+                        @if(isset($missingKeys[$code]) && !empty($missingKeys[$code]))
+                            @php
+                                $totalMissing = 0;
+                                foreach($missingKeys[$code] as $file => $keys) {
+                                    $totalMissing += count($keys);
+                                }
+                            @endphp
+                            @if($totalMissing > 0)
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-warning text-dark f-s-12">
+                                        <i class="ph ph-warning me-1"></i>{{ $totalMissing }} mancanti
+                                    </span>
+                                    <span class="badge bg-success f-s-12">
+                                        <i class="ph ph-arrows-clockwise me-1"></i>Sincronizzata
+                                    </span>
+                                </div>
+                            @else
+                                <span class="badge bg-success f-s-12 mb-3">
+                                    <i class="ph ph-check me-1"></i>Sincronizzata
+                                </span>
+                            @endif
+                        @else
+                            <span class="badge bg-success f-s-12 mb-3">
+                                <i class="ph ph-check me-1"></i>Sincronizzata
+                            </span>
+                        @endif
+                    @endif
+
+                    <!-- File Selection Dropdown -->
+                    <div class="mb-3">
+                        <label class="form-label f-s-12 f-w-500">Seleziona File:</label>
+                        <select class="form-select form-select-sm" onchange="selectFile('{{ $code }}', this.value)">
+                            <option value="">Scegli un file...</option>
+                            @foreach($translationFiles as $file => $displayName)
+                                @php
+                                    $missingCount = 0;
+                                    if (isset($missingKeys[$code][$file])) {
+                                        $missingCount = count($missingKeys[$code][$file]);
+                                    }
+                                @endphp
+                                <option value="{{ $file }}" data-missing="{{ $missingCount }}">
+                                    {{ $displayName }} ({{ $file }}.php) 
+                                    @if($missingCount > 0)
+                                        @if($code === 'it')
+                                            - {{ $missingCount }} da completare
+                                        @else
+                                            - {{ $missingCount }} mancanti
+                                        @endif
+                                    @endif
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Selected File Info -->
+                    <div id="file-info-{{ $code }}" class="mb-3" style="display: none;">
+                        <div class="alert alert-light-primary p-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong id="selected-file-{{ $code }}" class="text-primary"></strong>
+                                    <br>
+                                    <small id="missing-count-{{ $code }}"></small>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" 
+                                        id="edit-btn-{{ $code }}" onclick="goToTranslation('{{ $code }}', '')">
+                                    <i class="ph ph-pencil me-1"></i>Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    @if($code === 'it')
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                                onclick="showMissingKeys('{{ $code }}')">
+                            <i class="ph ph-warning me-1"></i>Dettagli
+                        </button>
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                                onclick="showIncompleteKeys('{{ $code }}')">
+                            <i class="ph ph-list me-1"></i>Da Completare
+                        </button>
+                    </div>
+                    @else
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                                onclick="syncSingleLanguage('{{ $code }}')">
+                            <i class="ph ph-arrows-clockwise me-1"></i>Sincronizza
+                        </button>
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                                onclick="showMissingKeys('{{ $code }}')">
+                            <i class="ph ph-warning me-1"></i>Dettagli
+                        </button>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
+
+
 </div>
 
 <!-- Add Language Modal -->
@@ -279,7 +314,7 @@ function showMissingKeys(languageCode, missingKeys) {
         keys.forEach(key => {
             content += `<li class="list-group-item d-flex justify-content-between align-items-center">`;
             content += `<code>${key}</code>`;
-            content += `<a href="{{ route('admin.translations.show', ['LANG', 'FILE']) }}".replace('LANG', languageCode).replace('FILE', file) class="btn btn-sm btn-outline-primary">`;
+            content += `<a href="{{ route('admin.translations.show', ['LANG', 'FILE']) }}".replace('LANG', languageCode).replace('FILE', file) class="btn btn-sm btn-primary">`;
             content += `<i class="ph ph-pencil me-1"></i>Traduci</a>`;
             content += `</li>`;
         });
@@ -292,6 +327,305 @@ function showMissingKeys(languageCode, missingKeys) {
     document.getElementById('syncLanguageBtn').href = "{{ route('admin.translations.sync') }}";
 
     new bootstrap.Modal(document.getElementById('missingKeysModal')).show();
+}
+
+function deleteLanguage(languageCode, languageName) {
+    Swal.fire({
+        title: 'Elimina Lingua',
+        text: `Sei sicuro di voler eliminare la lingua "${languageName}" (${languageCode.toUpperCase()})?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Elimina',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("admin.translations.delete-language", "LANG") }}'.replace('LANG', languageCode);
+            
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            
+            const methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'DELETE';
+            
+            form.appendChild(csrfToken);
+            form.appendChild(methodField);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+
+function selectFile(language, file) {
+    const fileInfo = document.getElementById(`file-info-${language}`);
+    const selectedFile = document.getElementById(`selected-file-${language}`);
+    const missingCount = document.getElementById(`missing-count-${language}`);
+    const editBtn = document.getElementById(`edit-btn-${language}`);
+    
+    if (file) {
+        // Trova l'opzione selezionata per ottenere i dati
+        const select = document.querySelector(`select[onchange="selectFile('${language}', this.value)"]`);
+        const selectedOption = select.options[select.selectedIndex];
+        const missingCountValue = selectedOption.getAttribute('data-missing');
+        
+        // Mostra le informazioni del file
+        selectedFile.textContent = selectedOption.text;
+        if (missingCountValue > 0) {
+            missingCount.textContent = `${missingCountValue} traduzioni mancanti`;
+            missingCount.className = 'text-warning f-s-12';
+        } else {
+            missingCount.textContent = 'Tutte le traduzioni sono complete';
+            missingCount.className = 'text-success f-s-12';
+        }
+        
+        // Aggiorna il pulsante modifica
+        editBtn.onclick = function() {
+            goToTranslation(language, file);
+        };
+        
+        fileInfo.style.display = 'block';
+    } else {
+        fileInfo.style.display = 'none';
+    }
+}
+
+function goToTranslation(language, file) {
+    if (file) {
+        window.location.href = '{{ route("admin.translations.show", ["LANG", "FILE"]) }}'
+            .replace('LANG', language)
+            .replace('FILE', file);
+    }
+}
+
+function syncSingleLanguage(language) {
+    Swal.fire({
+        title: 'Sincronizza Lingua',
+        text: `Sincronizzare la lingua ${language.toUpperCase()} con le chiavi italiane?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Sincronizza',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Sincronizzazione in corso...',
+                text: `Sto sincronizzando la lingua ${language.toUpperCase()}`,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Invia richiesta AJAX
+            fetch('{{ route("admin.translations.sync") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ language: language })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore nella sincronizzazione');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Successo!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message || 'Errore durante la sincronizzazione',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Errore durante la sincronizzazione: ' + error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
+}
+
+function showIncompleteKeys(language) {
+    // Mostra i dettagli delle chiavi incomplete per l'italiano
+    const missingKeys = @json($missingKeys);
+    if (missingKeys[language] && Object.keys(missingKeys[language]).length > 0) {
+        let content = `<h6>Lingua: <strong>${language.toUpperCase()}</strong> (Riferimento)</h6>`;
+        content += '<div class="mt-3">';
+
+        for (const [file, keys] of Object.entries(missingKeys[language])) {
+            content += `<div class="mb-3">`;
+            content += `<h6 class="text-primary">${file}.php (${keys.length} da completare)</h6>`;
+            content += `<ul class="list-group list-group-flush">`;
+            keys.slice(0, 10).forEach(key => {
+                content += `<li class="list-group-item d-flex justify-content-between align-items-center">`;
+                content += `<code>${key}</code>`;
+                content += `<a href="{{ route('admin.translations.show', ['LANG', 'FILE']) }}".replace('LANG', language).replace('FILE', file) class="btn btn-sm btn-primary">`;
+                content += `<i class="ph ph-pencil me-1"></i>Completa</a>`;
+                content += `</li>`;
+            });
+            if (keys.length > 10) {
+                content += `<li class="list-group-item text-muted">... e altre ${keys.length - 10} chiavi</li>`;
+            }
+            content += `</ul></div>`;
+        }
+
+        content += '</div>';
+
+        Swal.fire({
+            title: 'Chiavi da Completare',
+            html: content,
+            width: '800px',
+            confirmButtonText: 'Chiudi',
+            confirmButtonColor: '#007bff'
+        });
+    } else {
+        Swal.fire({
+            title: 'Nessuna chiave da completare',
+            text: 'Tutte le traduzioni italiane sono complete!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+function showMissingKeys(language) {
+    // Mostra i dettagli delle chiavi mancanti per la lingua specifica
+    const missingKeys = @json($missingKeys);
+    if (missingKeys[language] && Object.keys(missingKeys[language]).length > 0) {
+        let content = `<h6>Lingua: <strong>${language.toUpperCase()}</strong></h6>`;
+        content += '<div class="mt-3">';
+
+        for (const [file, keys] of Object.entries(missingKeys[language])) {
+            content += `<div class="mb-3">`;
+            content += `<h6 class="text-primary">${file}.php (${keys.length} chiavi)</h6>`;
+            content += `<ul class="list-group list-group-flush">`;
+            keys.slice(0, 10).forEach(key => {
+                content += `<li class="list-group-item d-flex justify-content-between align-items-center">`;
+                content += `<code>${key}</code>`;
+                content += `<a href="{{ route('admin.translations.show', ['LANG', 'FILE']) }}".replace('LANG', language).replace('FILE', file) class="btn btn-sm btn-primary">`;
+                content += `<i class="ph ph-pencil me-1"></i>Traduci</a>`;
+                content += `</li>`;
+            });
+            if (keys.length > 10) {
+                content += `<li class="list-group-item text-muted">... e altre ${keys.length - 10} chiavi</li>`;
+            }
+            content += `</ul></div>`;
+        }
+
+        content += '</div>';
+
+        Swal.fire({
+            title: 'Chiavi Mancanti',
+            html: content,
+            width: '600px',
+            confirmButtonText: 'Chiudi'
+        });
+    } else {
+        Swal.fire({
+            title: 'Nessuna Chiave Mancante',
+            text: `La lingua ${language.toUpperCase()} è completamente sincronizzata!`,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+function syncLanguages() {
+    Swal.fire({
+        title: 'Sincronizza Lingue',
+        text: 'Sincronizzare tutte le lingue con le chiavi italiane?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ffc107',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Sincronizza',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Sincronizzazione in corso...',
+                text: 'Sto sincronizzando tutte le lingue',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Invia richiesta AJAX
+            fetch('{{ route("admin.translations.sync") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore nella sincronizzazione');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Successo!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message || 'Errore durante la sincronizzazione',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Errore durante la sincronizzazione: ' + error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
 }
 </script>
 @endsection

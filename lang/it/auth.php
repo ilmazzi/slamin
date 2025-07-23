@@ -54,6 +54,17 @@ return [
     'role_venue_owner_desc' => 'Gestisco spazi per eventi',
     'role_audience' => 'Pubblico',
     'role_audience_desc' => 'Amo assistere agli spettacoli',
+    
+    // Ruoli dinamici (usati nel dashboard)
+    'role_admin' => 'Amministratore',
+    'role_moderator' => 'Moderatore',
+    'role_organizer' => 'Organizzatore',
+    'role_poet' => 'Poeta',
+    'role_judge' => 'Giudice',
+    'role_technician' => 'Tecnico',
+    'role_venue_owner' => 'Proprietario Venue',
+    'role_host' => 'Presentatore',
+    'role_user' => 'Utente',
 
     // Errori validazione
     'required' => 'Il campo :attribute è obbligatorio.',

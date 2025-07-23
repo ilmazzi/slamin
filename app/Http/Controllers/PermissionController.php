@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
@@ -256,6 +257,18 @@ class PermissionController extends Controller
     }
 
     /**
+     * API endpoint per ottenere dati di un utente
+     */
+    public function getUser(User $user)
+    {
+        $user->load(['roles', 'permissions']);
+        
+        return response()->json([
+            'user' => $user
+        ]);
+    }
+
+    /**
      * Mostra il form di modifica permesso
      */
     public function editPermission(Permission $permission)
@@ -368,18 +381,35 @@ class PermissionController extends Controller
     public function assignUserRoles(Request $request, User $user)
     {
         $request->validate([
-            'roles' => 'array'
+            'roles' => 'nullable|array'
         ]);
 
         try {
-            $user->syncRoles($request->roles ?? []);
+            // Debug: log prima dell'assegnazione
+            Log::info('Before syncRoles - User roles:', ['user_id' => $user->id, 'current_roles' => $user->roles->pluck('name')->toArray()]);
+            Log::info('Request all data:', $request->all());
+            Log::info('Roles to assign:', ['roles' => $request->roles]);
+            
+            // Gestiamo il caso in cui roles non viene inviato (nessun checkbox selezionato)
+            $rolesToAssign = [];
+            if ($request->has('roles') && is_array($request->roles)) {
+                $rolesToAssign = $request->roles;
+            }
+            Log::info('Roles to assign (processed):', ['roles' => $rolesToAssign]);
+            
+            $user->syncRoles($rolesToAssign);
+            $user->load('roles');
+            
+            // Debug: log dopo l'assegnazione
+            Log::info('After syncRoles - User roles:', ['user_id' => $user->id, 'current_roles' => $user->roles->pluck('name')->toArray()]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Ruoli assegnati con successo!',
-                'user' => $user->load('roles')
+                'user' => $user
             ]);
         } catch (\Exception $e) {
+            Log::error('Error in assignUserRoles:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Errore durante l\'assegnazione dei ruoli: ' . $e->getMessage()
