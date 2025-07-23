@@ -26,374 +26,436 @@
         </div>
     </div>
 
-    <!-- Quick Navigation Links -->
-    <div class="row mb-4">
-        <div class="col-12">
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- Profile Tabs -->
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="ph ph-navigation-arrow me-2"></i>
-                        {{ __('profile.quick_navigation') }}
-                    </h5>
-                </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('profile.show') }}" class="card card-light-primary hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-eye f-s-30 text-primary mb-2"></i>
-                                    <h6 class="mb-1">{{ __('profile.view_profile') }}</h6>
-                                    <small class="text-muted">{{ __('profile.view_my_profile') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                        @auth
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('profile.edit') }}" class="card card-light-info hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-pencil f-s-30 text-info mb-2"></i>
-                                    <h6 class="mb-1">{{ __('profile.modify_profile') }}</h6>
-                                    <small class="text-muted">{{ __('profile.edit_my_profile') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('profile.videos') }}" class="card card-light-success hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-video-camera f-s-30 text-success mb-2"></i>
-                                    <h6 class="mb-1">{{ __('profile.my_videos') }}</h6>
-                                    <small class="text-muted">{{ __('profile.view_my_videos') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('profile.activity') }}" class="card card-light-warning hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-activity f-s-30 text-warning mb-2"></i>
-                                    <h6 class="mb-1">{{ __('profile.my_activities') }}</h6>
-                                    <small class="text-muted">{{ __('profile.view_my_activities') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                        @endauth
+                    <div class="tab-wrapper">
+                        <ul class="profile-app-tabs">
+                            <li class="tab-link fw-medium f-s-16 f-w-600 active" data-tab="1">
+                                <i class="ti ti-user fw-bold"></i> {{ __('profile.profile') }}
+                            </li>
+                            <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="2">
+                                <i class="ti ti-video-camera fw-bold"></i> {{ __('profile.my_videos') }}
+                                @if($videos->count() > 0)
+                                <span class="badge rounded-pill bg-warning badge-notification">
+                                    {{ $videos->count() }}
+                                </span>
+                                @endif
+                            </li>
+                            <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="3">
+                                <i class="ti ti-calendar-plus fw-bold"></i> {{ __('profile.organized_events') }}
+                                @if($recentEvents->count() > 0)
+                                <span class="badge rounded-pill bg-primary badge-notification">
+                                    {{ $recentEvents->count() }}
+                                </span>
+                                @endif
+                            </li>
+                            <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="4">
+                                <i class="ti ti-activity fw-bold"></i> {{ __('profile.my_activities') }}
+                                @if($recentActivity->count() > 0)
+                                <span class="badge rounded-pill bg-info badge-notification">
+                                    {{ $recentActivity->count() }}
+                                </span>
+                                @endif
+                            </li>
+                            @if($isOwnProfile)
+                            <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="5">
+                                <i class="ti ti-settings fw-bold"></i> {{ __('profile.settings') }}
+                            </li>
+                            @endif
+                        </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- Quick Actions -->
+            @if($isOwnProfile)
+            <div class="card d-lg-block d-none">
+                <div class="card-header">
+                    <h5>{{ __('profile.quick_actions') }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{{ route('profile.edit') }}" class="btn btn-primary hover-effect">
+                            <i class="ti ti-edit me-2"></i>{{ __('profile.modify_profile') }}
+                        </a>
+                        <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
+                            <i class="ti ti-video-camera me-2"></i>{{ __('profile.manage_videos') }}
+                        </a>
+                        <a href="{{ route('profile.activity') }}" class="btn btn-info hover-effect">
+                            <i class="ti ti-activity me-2"></i>{{ __('profile.view_all_activity') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
-    </div>
 
-    <!-- Profile Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card hover-effect">
-                <div class="card-body pa-30">
-                    <div class="row align-items-center">
-                        <!-- Profile Photo -->
-                        <div class="col-md-3 text-center">
-                            <div class="position-relative d-inline-block">
-                                <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50 position-relative overflow-hidden">
-                                    <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid b-r-50">
+        <div class="col-lg-5 col-xxl-6 col-box-5">
+            <!-- Profile Content -->
+            <div class="content-wrapper">
+                <!-- Tab 1: Profile -->
+                <div id="tab-1" class="tabs-content active">
+                    <div class="profile-content">
+                        <!-- Profile Header -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="profile-container">
+                                    <div class="image-details">
+                                        <div class="profile-image"></div>
+                                        <div class="profile-pic">
+                                            <div class="avatar-upload">
+                                                @if($isOwnProfile)
+                                                <div class="avatar-edit">
+                                                    <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" onchange="uploadProfilePhoto(this)">
+                                                    <label for="imageUpload"><i class="ti ti-photo-heart"></i></label>
+                                                </div>
+                                                @endif
+                                                <div class="avatar-preview">
+                                                    <div id="imgPreview">
+                                                        @if($user->profile_photo)
+                                                            <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid">
+                                                        @else
+                                                            <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50">
+                                                                <span class="text-primary fw-bold f-s-24">{{ substr($user->getDisplayName(), 0, 2) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="person-details">
+                                        <h5 class="f-w-600">{{ $user->getDisplayName() }}</h5>
+                                        @if($user->nickname && $user->nickname !== $user->name)
+                                        <p class="text-muted">{{ $user->nickname }}</p>
+                                        @endif
+
+                                        <!-- Roles -->
+                                        <div class="mb-3">
+                                            @foreach($user->getRoleNames() as $role)
+                                            <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="details">
+                                            <div>
+                                                <h4 class="text-primary">{{ $stats['total_events'] }}</h4>
+                                                <p class="text-secondary">{{ __('profile.organized_events') }}</p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-success">{{ $stats['participated_events'] }}</h4>
+                                                <p class="text-secondary">{{ __('profile.participated_events') }}</p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-warning">{{ $stats['total_videos'] }}</h4>
+                                                <p class="text-secondary">{{ __('profile.uploaded_videos') }}</p>
+                                            </div>
+                                        </div>
+
+                                        @if(!$isOwnProfile)
+                                        <div class="my-2">
+                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})">
+                                                <i class="ti ti-user-plus me-2"></i>{{ __('profile.follow') }}
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage({{ $user->id }})">
+                                                <i class="ti ti-message-circle me-2"></i>{{ __('profile.send_message') }}
+                                            </button>
+                                        </div>
+                                        @endif
+                                    </div>
                                 </div>
-                                @if($isOwnProfile)
-                                <div class="position-absolute bottom-0 end-0">
-                                    <button class="btn btn-primary btn-sm rounded-circle" onclick="document.getElementById('profile-photo-input').click()">
-                                        <i class="ph ph-camera f-s-14"></i>
-                                    </button>
-                                </div>
-                                @endif
                             </div>
                         </div>
 
-                        <!-- Profile Info -->
-                        <div class="col-md-6">
-                            <div class="text-center text-md-start">
-                                <h3 class="mb-2 f-w-600">{{ $user->getDisplayName() }}</h3>
-                                @if($user->nickname && $user->nickname !== $user->name)
-                                <p class="text-muted mb-2 f-s-14">{{ $user->nickname }}</p>
-                                @endif
-
-                                <!-- Roles -->
-                                <div class="mb-3">
-                                    @foreach($user->getRoleNames() as $role)
-                                    <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
-                                    @endforeach
-                                </div>
-
-                                <!-- Bio -->
+                        <!-- About Me -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>{{ __('profile.about_me') }}</h5>
+                            </div>
+                            <div class="card-body">
                                 @if($user->bio)
-                                <p class="text-muted f-s-14 mb-3">{{ $user->bio }}</p>
+                                <p class="text-muted f-s-13">{{ $user->bio }}</p>
+                                @else
+                                <p class="text-muted f-s-13">{{ __('profile.no_bio_available') }}</p>
                                 @endif
 
-                                <!-- Location -->
-                                @if($user->location)
-                                <p class="text-muted f-s-14 mb-0">
-                                    <i class="ph ph-map-pin me-1"></i>{{ $user->location }}
-                                </p>
+                                <div class="about-list">
+                                    @if($user->email)
+                                    <div>
+                                        <span class="fw-medium"><i class="ti ti-mail"></i> {{ __('profile.email') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->email }}</span>
+                                    </div>
+                                    @endif
+                                    @if($user->phone)
+                                    <div>
+                                        <span class="fw-medium"><i class="ti ti-phone"></i> {{ __('profile.phone') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->phone }}</span>
+                                    </div>
+                                    @endif
+                                    @if($user->location)
+                                    <div>
+                                        <span class="fw-semibold"><i class="ti ti-map-pin"></i> {{ __('profile.location') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->location }}</span>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <span class="fw-medium"><i class="ti ti-calendar"></i> {{ __('profile.member_since') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->created_at->format('M Y') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Videos -->
+                <div id="tab-2" class="tabs-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ __('profile.my_videos') }}</h5>
+                                @if($isOwnProfile)
+                                <a href="{{ route('profile.videos') }}" class="btn btn-sm btn-warning hover-effect">
+                                    {{ __('profile.manage_videos') }}
+                                </a>
                                 @endif
                             </div>
                         </div>
-
-                        <!-- Action Buttons -->
-                        <div class="col-md-3 text-center text-md-end">
-                            @if($isOwnProfile)
-                            <div class="d-flex flex-column gap-2">
-                                <a href="{{ route('profile.edit') }}" class="btn btn-primary hover-effect">
-                                    <i class="ph ph-pencil me-2"></i>{{ __('profile.modify_profile') }}
-                                </a>
-                                <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
-                                    <i class="ph ph-video-camera me-2"></i>{{ __('profile.my_videos') }}
-                                </a>
-                                <a href="{{ route('profile.activity') }}" class="btn btn-info hover-effect">
-                                    <i class="ph ph-activity me-2"></i>{{ __('profile.my_activities') }}
-                                </a>
+                        <div class="card-body">
+                            @if($videos->count() > 0)
+                            <div class="row">
+                                @foreach($videos->take(6) as $video)
+                                <div class="col-md-6 mb-3">
+                                    <div class="card hover-effect">
+                                        <div class="position-relative">
+                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top">
+                                            <div class="position-absolute top-0 end-0 m-2">
+                                                <span class="badge bg-dark f-s-11">{{ $video->views }} {{ __('profile.views') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body pa-15">
+                                            <h6 class="card-title f-w-600 f-s-14 mb-1">{{ $video->title }}</h6>
+                                            @if($video->description)
+                                            <p class="text-muted f-s-12 mb-2">{{ Str::limit($video->description, 60) }}</p>
+                                            @endif
+                                            <small class="text-muted f-s-11">{{ $video->created_at->diffForHumans() }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
                             @else
-                            <div class="d-flex flex-column gap-2">
-                                <button class="btn btn-primary hover-effect" onclick="followUser({{ $user->id }})">
-                                    <i class="ph ph-user-plus me-2"></i>{{ __('profile.follow') }}
-                                </button>
-                                <button class="btn btn-outline-primary hover-effect" onclick="sendMessage({{ $user->id }})">
-                                    <i class="ph ph-message-circle me-2"></i>{{ __('profile.send_message') }}
-                                </button>
+                            <div class="text-center py-4">
+                                <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
+                                    <i class="ti ti-video-camera-slash f-s-24 text-warning"></i>
+                                </div>
+                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_videos_uploaded') }}</p>
                             </div>
                             @endif
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-6 col-md-3">
-            <div class="card hover-effect equal-card b-t-4-primary">
-                <div class="card-body eshop-cards text-center pa-20">
-                    <div class="bg-light-primary h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                        <i class="ph ph-calendar-plus f-s-20 text-primary"></i>
-                    </div>
-                    <span class="ripple-effect"></span>
-                    <div class="overflow-hidden">
-                        <h3 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h3>
-                        <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('profile.organized_events') }}</p>
-                        <span class="badge bg-light-primary f-s-11">{{ __('profile.role_organizer') }}</span>
+                <!-- Tab 3: Organized Events -->
+                <div id="tab-3" class="tabs-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ __('profile.organized_events_title') }}</h5>
+                                <a href="#" class="btn btn-sm btn-primary hover-effect">
+                                    {{ __('profile.view_all_events') }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @if($recentEvents->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        @foreach($recentEvents as $event)
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
+                                                    <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <span class="badge bg-primary f-s-11">{{ $event->status }}</span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @else
+                            <div class="text-center py-4">
+                                <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
+                                    <i class="ti ti-calendar-x f-s-24 text-primary"></i>
+                                </div>
+                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_organized_events') }}</p>
+                            </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-6 col-md-3">
-            <div class="card hover-effect equal-card b-t-4-success">
-                <div class="card-body eshop-cards text-center pa-20">
-                    <div class="bg-light-success h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                        <i class="ph ph-users f-s-20 text-success"></i>
-                    </div>
-                    <span class="ripple-effect"></span>
-                    <div class="overflow-hidden">
-                        <h3 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h3>
-                        <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('profile.participated_events') }}</p>
-                        <span class="badge bg-light-success f-s-11">{{ __('profile.role_participant') }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-6 col-md-3">
-            <div class="card hover-effect equal-card b-t-4-warning">
-                <div class="card-body eshop-cards text-center pa-20">
-                    <div class="bg-light-warning h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                        <i class="ph ph-video-camera f-s-20 text-warning"></i>
-                    </div>
-                    <span class="ripple-effect"></span>
-                    <div class="overflow-hidden">
-                        <h3 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h3>
-                        <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('profile.uploaded_videos') }}</p>
-                        <span class="badge bg-light-warning f-s-11">{{ __('profile.role_video') }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-6 col-md-3">
-            <div class="card hover-effect equal-card b-t-4-info">
-                <div class="card-body eshop-cards text-center pa-20">
-                    <div class="bg-light-info h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                        <i class="ph ph-clock f-s-20 text-info"></i>
-                    </div>
-                    <span class="ripple-effect"></span>
-                    <div class="overflow-hidden">
-                        <h3 class="text-info mb-1 f-w-600">{{ $stats['pending_requests'] }}</h3>
-                        <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('profile.pending_requests') }}</p>
-                        <span class="badge bg-light-info f-s-11">{{ __('profile.role_pending') }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="row">
-        <!-- Recent Videos -->
-        <div class="col-lg-6 mb-4">
-            <div class="card hover-effect">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 f-w-600 text-dark">
-                            <i class="ph ph-video-camera me-2 text-warning"></i>
-                            {{ __('profile.recent_videos') }}
-                        </h5>
-                        @if($isOwnProfile)
-                        <a href="{{ route('profile.videos') }}" class="btn btn-sm btn-warning hover-effect">
-                            {{ __('profile.manage_videos') }}
-                        </a>
-                        @else
-                        <a href="#" class="btn btn-sm btn-warning hover-effect">
-                            {{ __('profile.view_all_videos') }}
-                        </a>
-                        @endif
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if($videos->count() > 0)
-                    <div class="row">
-                        @foreach($videos->take(6) as $video)
-                        <div class="col-md-6 mb-3">
-                            <div class="card hover-effect">
-                                <div class="position-relative">
-                                    <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top">
-                                    <div class="position-absolute top-0 end-0 m-2">
-                                        <span class="badge bg-dark f-s-11">{{ $video->views }} visualizzazioni</span>
+                <!-- Tab 4: Activities -->
+                <div id="tab-4" class="tabs-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ __('profile.recent_activity') }}</h5>
+                                @if($isOwnProfile)
+                                <a href="{{ route('profile.activity') }}" class="btn btn-sm btn-info hover-effect">
+                                    {{ __('profile.view_all_activity') }}
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @if($recentActivity->count() > 0)
+                            @foreach($recentActivity->take(5) as $activity)
+                            <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-light-{{ $activity['color'] }} h-35 w-35 d-flex-center rounded-circle">
+                                        <i class="ti {{ $activity['icon'] }} text-{{ $activity['color'] }} f-s-14"></i>
                                     </div>
                                 </div>
-                                <div class="card-body pa-15">
-                                    <h6 class="card-title f-w-600 f-s-14 mb-1">{{ $video->title }}</h6>
-                                    @if($video->description)
-                                    <p class="text-muted f-s-12 mb-2">{{ Str::limit($video->description, 60) }}</p>
-                                    @endif
-                                    <small class="text-muted f-s-11">{{ $video->created_at->diffForHumans() }}</small>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="mb-0 fw-500 f-s-14">{{ $activity['title'] }}</p>
+                                    <small class="text-muted f-s-12">{{ $activity['date']->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                            @endforeach
+                            @else
+                            <div class="text-center py-4">
+                                <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
+                                    <i class="ti ti-activity-slash f-s-24 text-info"></i>
+                                </div>
+                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_recent_activity') }}</p>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Settings (Only for own profile) -->
+                @if($isOwnProfile)
+                <div id="tab-5" class="tabs-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">{{ __('profile.settings') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <a href="{{ route('profile.edit') }}" class="card card-light-primary hover-effect text-decoration-none">
+                                        <div class="card-body text-center py-3">
+                                            <i class="ti ti-edit f-s-30 text-primary mb-2"></i>
+                                            <h6 class="mb-1">{{ __('profile.modify_profile') }}</h6>
+                                            <small class="text-muted">{{ __('profile.edit_my_profile') }}</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('profile.videos') }}" class="card card-light-success hover-effect text-decoration-none">
+                                        <div class="card-body text-center py-3">
+                                            <i class="ti ti-video-camera f-s-30 text-success mb-2"></i>
+                                            <h6 class="mb-1">{{ __('profile.my_videos') }}</h6>
+                                            <small class="text-muted">{{ __('profile.view_my_videos') }}</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('profile.activity') }}" class="card card-light-warning hover-effect text-decoration-none">
+                                        <div class="card-body text-center py-3">
+                                            <i class="ti ti-activity f-s-30 text-warning mb-2"></i>
+                                            <h6 class="mb-1">{{ __('profile.my_activities') }}</h6>
+                                            <small class="text-muted">{{ __('profile.view_my_activities') }}</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#" class="card card-light-info hover-effect text-decoration-none">
+                                        <div class="card-body text-center py-3">
+                                            <i class="ti ti-bell f-s-30 text-info mb-2"></i>
+                                            <h6 class="mb-1">{{ __('profile.notifications') }}</h6>
+                                            <small class="text-muted">{{ __('profile.manage_notifications') }}</small>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        @endforeach
                     </div>
-                    @else
-                    <div class="text-center py-4">
-                        <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-video-camera-slash f-s-24 text-warning"></i>
-                        </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_videos_uploaded') }}</p>
-                    </div>
-                    @endif
                 </div>
+                @endif
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="col-lg-6 mb-4">
-            <div class="card hover-effect">
+        <div class="col-lg-4 col-xxl-3 col-box-4 order-lg--1">
+            <!-- Statistics Cards -->
+            <div class="card mb-3">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 f-w-600 text-dark">
-                            <i class="ph ph-activity me-2 text-info"></i>
-                            {{ __('profile.recent_activity') }}
-                        </h5>
-                        @if($isOwnProfile)
-                        <a href="{{ route('profile.activity') }}" class="btn btn-sm btn-info hover-effect">
-                            {{ __('profile.view_all_activity') }}
-                        </a>
-                        @endif
-                    </div>
+                    <h5>{{ __('profile.statistics') }}</h5>
                 </div>
                 <div class="card-body">
-                    @if($recentActivity->count() > 0)
-                    @foreach($recentActivity->take(5) as $activity)
-                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                        <div class="flex-shrink-0">
-                            <div class="bg-light-{{ $activity['color'] }} h-35 w-35 d-flex-center rounded-circle">
-                                <i class="ph {{ $activity['icon'] }} text-{{ $activity['color'] }} f-s-14"></i>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="card card-light-primary hover-effect equal-card">
+                                <div class="card-body eshop-cards text-center pa-15">
+                                    <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ti ti-calendar-plus f-s-18 text-primary"></i>
+                                    </div>
+                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.organized_events') }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <p class="mb-0 fw-500 f-s-14">{{ $activity['title'] }}</p>
-                            <small class="text-muted f-s-12">{{ $activity['date']->diffForHumans() }}</small>
+                        <div class="col-6">
+                            <div class="card card-light-success hover-effect equal-card">
+                                <div class="card-body eshop-cards text-center pa-15">
+                                    <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ti ti-users f-s-18 text-success"></i>
+                                    </div>
+                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.participated_events') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-light-warning hover-effect equal-card">
+                                <div class="card-body eshop-cards text-center pa-15">
+                                    <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ti ti-video-camera f-s-18 text-warning"></i>
+                                    </div>
+                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.uploaded_videos') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card card-light-info hover-effect equal-card">
+                                <div class="card-body eshop-cards text-center pa-15">
+                                    <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ti ti-clock f-s-18 text-info"></i>
+                                    </div>
+                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['pending_requests'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.pending_requests') }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    @endforeach
-                    @else
-                    <div class="text-center py-4">
-                        <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-activity-slash f-s-24 text-info"></i>
-                        </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_recent_activity') }}</p>
-                    </div>
-                    @endif
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Events Section -->
-    <div class="row">
-        <!-- Organized Events -->
-        <div class="col-lg-6 mb-4">
-            <div class="card hover-effect">
+            <!-- Participated Events -->
+            <div class="card">
                 <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 f-w-600 text-dark">
-                            <i class="ph ph-calendar-plus me-2 text-primary"></i>
-                            {{ __('profile.organized_events_title') }}
-                        </h5>
-                        <a href="#" class="btn btn-sm btn-primary hover-effect">
-                            {{ __('profile.view_all_events') }}
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if($recentEvents->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <tbody>
-                                @foreach($recentEvents as $event)
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
-                                        </div>
-                                    </td>
-                                    <td class="text-end">
-                                        <span class="badge bg-primary f-s-11">{{ $event->status }}</span>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @else
-                    <div class="text-center py-4">
-                        <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-calendar-x f-s-24 text-primary"></i>
-                        </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_organized_events') }}</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Participated Events -->
-        <div class="col-lg-6 mb-4">
-            <div class="card hover-effect">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 f-w-600 text-dark">
-                            <i class="ph ph-users me-2 text-success"></i>
-                            {{ __('profile.participated_events_title') }}
-                        </h5>
-                        <a href="#" class="btn btn-sm btn-success hover-effect">
-                            {{ __('profile.view_all_events') }}
-                        </a>
-                    </div>
+                    <h5>{{ __('profile.participated_events_title') }}</h5>
                 </div>
                 <div class="card-body">
                     @if($participatedEvents->count() > 0)
@@ -409,7 +471,7 @@
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span class="badge bg-success f-s-11">Partecipato</span>
+                                        <span class="badge bg-success f-s-11">{{ __('profile.participated') }}</span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -419,7 +481,7 @@
                     @else
                     <div class="text-center py-4">
                         <div class="bg-light-success h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-users-slash f-s-24 text-success"></i>
+                            <i class="ti ti-users-slash f-s-24 text-success"></i>
                         </div>
                         <p class="text-muted f-s-14 mb-0">{{ __('profile.no_participated_events') }}</p>
                     </div>
@@ -439,6 +501,26 @@
 
 @section('script')
 <script>
+// Tab functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tabs-content');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+
+            // Remove active class from all tabs and contents
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            // Add active class to clicked tab and corresponding content
+            this.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        });
+    });
+});
+
 function followUser(userId) {
     // Implementazione follow
     Swal.fire('Info', '{{ __('profile.follow_development') }}', 'info');

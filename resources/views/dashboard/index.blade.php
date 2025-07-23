@@ -68,83 +68,136 @@
             </div>
         </div>
 
-        <!-- Statistics Cards compatte -->
-        <div class="row mb-3">
-            <div class="col-6 col-md-3">
-                <div class="card hover-effect equal-card b-t-4-primary">
-                    <div class="card-body eshop-cards text-center pa-20">
-                        <div class="bg-light-primary h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-article f-s-20 text-primary"></i>
-                        </div>
-                        <span class="ripple-effect"></span>
-                        <div class="overflow-hidden">
-                            <h3 class="text-primary mb-1 f-w-600">{{ $stats['organized_events'] }}</h3>
-                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.organized_events') }}</p>
-                            <span class="badge bg-light-primary f-s-11">{{ __('dashboard.role_organizer') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="card hover-effect equal-card b-t-4-danger">
-                    <div class="card-body eshop-cards text-center pa-20">
-                        <div class="bg-light-danger h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-heart f-s-20 text-danger"></i>
-                        </div>
-                        <span class="ripple-effect"></span>
-                        <div class="overflow-hidden">
-                            <h3 class="text-danger mb-1 f-w-600">{{ $stats['participated_events'] }}</h3>
-                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.participated_events') }}</p>
-                            <span class="badge bg-light-danger f-s-11">{{ __('dashboard.role_participant') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="card hover-effect equal-card b-t-4-success">
-                    <div class="card-body eshop-cards text-center pa-20">
-                        <div class="bg-light-success h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-users f-s-20 text-success"></i>
-                        </div>
-                        <span class="ripple-effect"></span>
-                        <div class="overflow-hidden">
-                            <h3 class="text-success mb-1 f-w-600">{{ $stats['pending_invitations'] }}</h3>
-                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.pending_invitations') }}</p>
-                            <span class="badge bg-light-success f-s-11">{{ __('dashboard.role_invitations') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3">
-                <div class="card hover-effect equal-card b-t-4-warning">
-                    <div class="card-body eshop-cards text-center pa-20">
-                        <div class="bg-light-warning h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
-                            <i class="ph ph-bell f-s-20 text-warning"></i>
-                        </div>
-                        <span class="ripple-effect"></span>
-                        <div class="overflow-hidden">
-                            <h3 class="text-warning mb-1 f-w-600">{{ $stats['unread_notifications'] }}</h3>
-                            <p class="f-w-500 text-dark f-s-13 mb-1">{{ __('dashboard.unread_notifications') }}</p>
-                            <span class="badge bg-light-warning f-s-11">{{ __('dashboard.role_notifications') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Titolo Azioni Rapide -->
-        <div class="text-center mb-3">
-            <h5 class="text-primary mb-2 f-w-600">
-                <i class="ph ph-lightning me-2"></i>{{ __('dashboard.quick_actions') }}
-            </h5>
-            <hr class="w-25 mx-auto border-primary border-2 opacity-25">
-        </div>
-
-        <!-- Quick Actions compatte -->
+        <!-- Calendario e Statistiche in riga -->
         <div class="row mb-4">
+            <!-- Calendario a sinistra -->
+            <div class="col-lg-8">
+                <div class="card hover-effect equal-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0 f-w-600">
+                            <i class="ph ph-calendar me-2 text-warning"></i>{{ __('dashboard.my_calendar') }}
+                        </h6>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-light-warning btn-sm" id="calendarPrev">
+                                <i class="ph ph-caret-left"></i>
+                            </button>
+                            <button class="btn btn-light-warning btn-sm" id="calendarNext">
+                                <i class="ph ph-caret-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body pa-20">
+                        <div id="dashboardCalendar" style="height: 300px;"></div>
+                        <div class="text-center mt-3">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ route('events.create') }}" class="btn btn-success btn-sm">
+                                    <i class="ph ph-plus me-1"></i>{{ __('dashboard.create_event_button') }}
+                                </a>
+                                <a href="{{ route('calendar') }}" class="btn btn-light-warning btn-sm">
+                                    <i class="ph ph-calendar me-1"></i>{{ __('dashboard.view_full_calendar') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiche a destra in griglia 2x2 -->
+            <div class="col-lg-4">
+                <div class="card hover-effect equal-card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0 f-w-600">
+                            <i class="ph ph-chart-bar me-2 text-primary"></i>{{ __('dashboard.statistics') }}
+                        </h6>
+                    </div>
+                    <div class="card-body pa-20">
+                        <div class="row g-3">
+                            <!-- Statistica 1 - Eventi Organizzati -->
+                            <div class="col-6">
+                                <div class="card hover-effect equal-card b-t-4-primary">
+                                    <div class="card-body eshop-cards text-center pa-15">
+                                        <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                            <i class="ph ph-article f-s-18 text-primary"></i>
+                                        </div>
+                                        <span class="ripple-effect"></span>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-primary mb-1 f-w-600">{{ $stats['organized_events'] }}</h4>
+                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.organized_events') }}</p>
+                                            <span class="badge bg-light-primary f-s-10">{{ __('dashboard.role_organizer') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistica 2 - Eventi Partecipati -->
+                            <div class="col-6">
+                                <div class="card hover-effect equal-card b-t-4-danger">
+                                    <div class="card-body eshop-cards text-center pa-15">
+                                        <div class="bg-light-danger h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                            <i class="ph ph-heart f-s-18 text-danger"></i>
+                                        </div>
+                                        <span class="ripple-effect"></span>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-danger mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
+                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.participated_events') }}</p>
+                                            <span class="badge bg-light-danger f-s-10">{{ __('dashboard.role_participant') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistica 3 - Inviti Pendenti -->
+                            <div class="col-6">
+                                <div class="card hover-effect equal-card b-t-4-success">
+                                    <div class="card-body eshop-cards text-center pa-15">
+                                        <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                            <i class="ph ph-users f-s-18 text-success"></i>
+                                        </div>
+                                        <span class="ripple-effect"></span>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-success mb-1 f-w-600">{{ $stats['pending_invitations'] }}</h4>
+                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.pending_invitations') }}</p>
+                                            <span class="badge bg-light-success f-s-10">{{ __('dashboard.role_invitations') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistica 4 - Notifiche Non Lette -->
+                            <div class="col-6">
+                                <div class="card hover-effect equal-card b-t-4-warning">
+                                    <div class="card-body eshop-cards text-center pa-15">
+                                        <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                            <i class="ph ph-bell f-s-18 text-warning"></i>
+                                        </div>
+                                        <span class="ripple-effect"></span>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-warning mb-1 f-w-600">{{ $stats['unread_notifications'] }}</h4>
+                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.unread_notifications') }}</p>
+                                            <span class="badge bg-light-warning f-s-10">{{ __('dashboard.role_notifications') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenuto sotto il calendario e statistiche -->
+        <div class="row">
+            <!-- Titolo Azioni Rapide -->
+            <div class="col-12 mb-3">
+                <div class="text-center">
+                    <h5 class="text-primary mb-2 f-w-600">
+                        <i class="ph ph-lightning me-2"></i>{{ __('dashboard.quick_actions') }}
+                    </h5>
+                    <hr class="w-25 mx-auto border-primary border-2 opacity-25">
+                </div>
+            </div>
+
+            <!-- Quick Actions compatte -->
             @php
                 $actionCards = [
                     [
@@ -201,10 +254,10 @@
             @endforeach
         </div>
 
-        <!-- Dashboard Overview -->
-        <div class="row">
-            <!-- Recent Activity compatta -->
-            <div class="col-lg-6 mb-4">
+        <!-- Recent Activity e Role-Specific Sections -->
+        <div class="row mt-4">
+            <!-- Attività Recenti -->
+            <div class="col-lg-4">
                 <div class="card hover-effect equal-card">
                     <!-- Solo ribbon importante per novità -->
                     <div class="ribbon-top top-left ribbon-primary">
@@ -247,87 +300,64 @@
                 </div>
             </div>
 
-            <!-- Interactive Calendar -->
-            <div class="col-lg-6 mb-4">
-                <div class="card hover-effect equal-card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="card-title mb-0 f-w-600">
-                            <i class="ph ph-calendar me-2 text-warning"></i>{{ __('dashboard.my_calendar') }}
-                        </h6>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-light-warning btn-sm" id="calendarPrev">
-                                <i class="ph ph-caret-left"></i>
-                            </button>
-                            <button class="btn btn-light-warning btn-sm" id="calendarNext">
-                                <i class="ph ph-caret-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body pa-20">
-                        <div id="dashboardCalendar" style="height: 300px;"></div>
-                        <div class="text-center mt-3">
-                            <div class="d-flex gap-2 justify-content-center">
-                                <a href="{{ route('events.create') }}" class="btn btn-success btn-sm">
-                                    <i class="ph ph-plus me-1"></i>{{ __('dashboard.create_event_button') }}
-                                </a>
-                                <a href="{{ route('calendar') }}" class="btn btn-light-warning btn-sm">
-                                    <i class="ph ph-calendar me-1"></i>{{ __('dashboard.view_full_calendar') }}
-                                </a>
+            <!-- Role-Specific Sections -->
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    @if(isset($roleContent['poet']))
+                        <div class="col-md-6">
+                            <div class="card card-light-success hover-effect equal-card">
+                                <div class="card-body text-center pa-20">
+                                    <div class="bg-success h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ph ph-pen-nib f-s-20 text-white"></i>
+                                    </div>
+                                    <h6 class="text-success f-w-600 mb-1">{{ __('dashboard.poet_section') }}</h6>
+                                    <p class="text-muted f-s-12 mb-2">Sezione specifica per poeti in sviluppo...</p>
+                                    <a href="#" class="btn btn-success btn-sm">
+                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+
+                    @if(isset($roleContent['organizer']))
+                        <div class="col-md-6">
+                            <div class="card card-light-danger hover-effect equal-card">
+                                <div class="card-body text-center pa-20">
+                                    <div class="bg-danger h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ph ph-calendar-plus f-s-20 text-white"></i>
+                                    </div>
+                                    <h6 class="text-danger f-w-600 mb-1">{{ __('dashboard.organizer_section') }}</h6>
+                                    <p class="text-muted f-s-12 mb-2">Sezione organizzatori eventi in sviluppo...</p>
+                                    <a href="#" class="btn btn-danger btn-sm">
+                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if(isset($roleContent['venue_owner']))
+                        <div class="col-md-6">
+                            <div class="card card-light-info hover-effect equal-card">
+                                <div class="card-body text-center pa-20">
+                                    <div class="bg-info h-45 w-45 d-flex-center rounded-circle m-auto mb-2">
+                                        <i class="ph ph-buildings f-s-20 text-white"></i>
+                                    </div>
+                                    <h6 class="text-info f-w-600 mb-1">{{ __('dashboard.venue_section') }}</h6>
+                                    <p class="text-muted f-s-12 mb-2">Sezione gestione venue in sviluppo...</p>
+                                    <a href="#" class="btn btn-info btn-sm">
+                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Role-Specific Sections compatte -->
-        @if(isset($roleContent['poet']))
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card card-light-success hover-effect">
-                        <div class="card-body text-center pa-25">
-                            <div class="bg-success h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                                <i class="ph ph-pen-nib f-s-24 text-white"></i>
-                            </div>
-                            <h6 class="text-success f-w-600 mb-1">{{ __('dashboard.poet_section') }}</h6>
-                            <p class="text-muted f-s-13 mb-0">Sezione specifica per poeti in sviluppo...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
 
-        @if(isset($roleContent['venue_owner']))
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card card-light-info hover-effect">
-                        <div class="card-body text-center pa-25">
-                            <div class="bg-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                                <i class="ph ph-buildings f-s-24 text-white"></i>
-                            </div>
-                            <h6 class="text-info f-w-600 mb-1">{{ __('dashboard.venue_section') }}</h6>
-                            <p class="text-muted f-s-13 mb-0">Sezione gestione venue in sviluppo...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        @if(isset($roleContent['organizer']))
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card card-light-danger hover-effect">
-                        <div class="card-body text-center pa-25">
-                            <div class="bg-danger h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                                <i class="ph ph-calendar-plus f-s-24 text-white"></i>
-                            </div>
-                            <h6 class="text-danger f-w-600 mb-1">{{ __('dashboard.organizer_section') }}</h6>
-                            <p class="text-muted f-s-13 mb-0">Sezione organizzatori eventi in sviluppo...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
 @endsection
 

@@ -2,29 +2,20 @@
 <header class="header-main">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-8 col-sm-6 d-flex align-items-center header-left p-0">
+            <div class="col-6 d-flex align-items-center header-left p-0">
                 <span class="header-toggle">
                     <i class="ph ph-squares-four"></i>
                 </span>
-
-                <div class="header-searchbar w-100">
-                    <form action="#" class="mx-sm-3 app-form app-icon-form">
-                        <div class="position-relative">
-                            <input aria-label="Search" class="form-control" placeholder="Cerca eventi, poesie, video..."
-                                   type="search">
-                            <i class="ph ph-magnifying-glass text-dark"></i>
-                        </div>
-                    </form>
-                </div>
             </div>
 
-            <div class="col-4 col-sm-6 d-flex align-items-center justify-content-end header-right p-0">
+            <div class="col-6 d-flex align-items-center justify-content-end header-right p-0">
                 <ul class="d-flex align-items-center">
 
                     @auth
                     <!-- Dashboard - Solo per utenti autenticati -->
                     <li class="header-dashboard">
-                        <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2" title="Dashboard">
+                        <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard">
                             <i class="ph ph-gauge"></i>
                         </a>
                     </li>
@@ -34,7 +25,7 @@
                         <div class="flex-shrink-0 dropdown">
                             <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
                                data-bs-toggle="dropdown"
-                               href="#" title="Scorciatoie">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scorciatoie">
                                 <i class="ph ph-lightning"></i>
                             </a>
                             <ul class="dropdown-menu header-card border-0">
@@ -84,7 +75,7 @@
                            href="#"
                            role="button"
                            id="notificationTrigger"
-                           title="Notifiche">
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifiche">
                             <i class="ph ph-bell"></i>
                             <!-- Dynamic notification badge -->
                             <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
@@ -147,10 +138,12 @@
 
                     <!-- Theme Toggle - Per tutti gli utenti -->
                     <li class="header-dark">
-                        <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2" title="Tema Scuro">
+                        <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tema Scuro">
                             <i class="ph ph-moon-stars"></i>
                         </div>
-                        <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2" title="Tema Chiaro">
+                        <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tema Chiaro">
                             <i class="ph ph-sun-dim"></i>
                         </div>
                     </li>
@@ -160,7 +153,7 @@
                         <div class="flex-shrink-0 dropdown" id="lang_selector">
                             <a aria-expanded="false" class="d-block head-icon ps-0"
                                data-bs-toggle="dropdown"
-                               href="#" title="Lingua">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lingua">
                                 <div class="lang-flag lang-{{ app()->getLocale() }}">
                                     <span class="flag rounded-circle overflow-hidden">
                                         <i class="flag-icon flag-icon-{{
@@ -210,21 +203,27 @@
                     @auth
                     <!-- Wiki - Prossimamente - Solo per utenti autenticati -->
                     <li class="header-wiki">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled" title="Wiki (Prossimamente)" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wiki (Prossimamente)"
+                           style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-book-open"></i>
                         </a>
                     </li>
 
                     <!-- Corsi - Prossimamente - Solo per utenti autenticati -->
                     <li class="header-courses">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled" title="Corsi (Prossimamente)" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Corsi (Prossimamente)"
+                           style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-graduation-cap"></i>
                         </a>
                     </li>
 
                     <!-- Forum - Prossimamente - Solo per utenti autenticati -->
                     <li class="header-forum">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled" title="Forum (Prossimamente)" style="opacity: 0.5; cursor: not-allowed;">
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Forum (Prossimamente)"
+                           style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-chats-circle"></i>
                         </a>
                     </li>

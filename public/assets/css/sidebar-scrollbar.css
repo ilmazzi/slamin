@@ -1,0 +1,101 @@
+/* Sidebar Scrollbar Management */
+.vertical-sidebar .app-nav {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Nascondi scrollbar di default */
+.vertical-sidebar .app-nav::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.vertical-sidebar .app-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.vertical-sidebar .app-nav::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+/* Nascondi sempre la scrollbar di default */
+.vertical-sidebar .app-nav::-webkit-scrollbar {
+    width: 0px !important;
+    background: transparent !important;
+}
+
+.vertical-sidebar .app-nav::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.vertical-sidebar .app-nav::-webkit-scrollbar-thumb {
+    background: transparent !important;
+}
+
+/* Per Firefox - nascondi sempre */
+.vertical-sidebar .app-nav {
+    scrollbar-width: none !important;
+}
+
+/* Assicura che il contenuto della sidebar non causi overflow orizzontale */
+.vertical-sidebar .main-nav {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Layout della sidebar senza max-height problematici */
+.vertical-sidebar {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Rimuovi completamente i max-height dal template */
+.vertical-sidebar .app-nav,
+nav .app-nav {
+    flex: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Logo responsive */
+.vertical-sidebar .logo-full {
+    max-width: 200px !important;
+    width: 200px !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* Nascondi logo grande quando loghino è visibile */
+.vertical-sidebar .logo-icon[style*="display: block"] ~ .logo-full,
+.vertical-sidebar .logo-icon[style*="display: block"] + .logo-full {
+    display: none !important;
+}
+
+.vertical-sidebar .logo-icon {
+    max-width: 120px;
+    width: 120px;
+    height: auto;
+}
+
+/* Mobile logo */
+@media (max-width: 768px) {
+    .vertical-sidebar .logo-full {
+        display: none !important;
+    }
+
+    .vertical-sidebar .logo-icon {
+        display: block !important;
+    }
+}
+
+/* Collapsed sidebar logo */
+.vertical-sidebar.collapsed .logo-full {
+    display: none !important;
+}
+
+.vertical-sidebar.collapsed .logo-icon {
+    display: block !important;
+}

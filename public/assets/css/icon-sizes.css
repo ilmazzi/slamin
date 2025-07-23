@@ -1,0 +1,25 @@
+/* Dimensioni icone sidebar */
+
+/* Icone nella sidebar normale */
+.vertical-sidebar .app-nav .main-nav > li > a svg,
+.vertical-sidebar .app-nav .main-nav > li > a i,
+.vertical-sidebar .app-nav .main-nav > li > a .ph,
+.vertical-sidebar .app-nav .main-nav > li > a .ti {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+}
+
+/* Icone nella sidebar collassata - più grandi */
+.vertical-sidebar.semi-nav .app-nav .main-nav > li > a svg,
+.vertical-sidebar.semi-nav .app-nav .main-nav > li > a i,
+.vertical-sidebar.semi-nav .app-nav .main-nav > li > a .ph,
+.vertical-sidebar.semi-nav .app-nav .main-nav > li > a .ti {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+}

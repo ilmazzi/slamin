@@ -148,7 +148,7 @@ return [
     'confirm' => 'Conferma',
     'yes' => 'Sì',
     'no' => 'No',
-    
+
     // Foto Profilo
     'upload_new_photo' => 'Carica Nuova Foto',
     'photo_formats_supported' => 'Formati supportati: Tutti i formati immagine (JPG, PNG, GIF, WebP, ecc.). Max :sizeMB',
@@ -157,12 +157,27 @@ return [
     'photo_tip_face' => 'Mostra il tuo viso chiaramente',
     'photo_tip_avoid' => 'Evita foto troppo scure o sfocate',
     'photo_tip_square' => 'Formato quadrato funziona meglio',
-    
+
     // Azioni Rapide
     'quick_actions' => 'Azioni Rapide',
     'manage_videos' => 'Gestisci Video',
     'my_activities' => 'Le Mie Attività',
     'view_public_profile' => 'Vedi Profilo Pubblico',
+
+    // Nuove chiavi per il profilo tabbed
+    'settings' => 'Impostazioni',
+    'statistics' => 'Statistiche',
+    'about_me' => 'Chi Sono',
+    'no_bio_available' => 'Nessuna bio disponibile',
+    'member_since' => 'Membro dal',
+    'participated' => 'Partecipato',
+    'views' => 'visualizzazioni',
+    'notifications' => 'Notifiche',
+    'manage_notifications' => 'Gestisci Notifiche',
+    'view_my_profile' => 'Vedi il mio profilo',
+    'edit_my_profile' => 'Modifica il mio profilo',
+    'view_my_videos' => 'Vedi i miei video',
+    'view_my_activities' => 'Vedi le mie attività',
 
     // Funzionalità in Sviluppo
     'feature_development' => 'Funzionalità in sviluppo',

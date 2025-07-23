@@ -31,6 +31,12 @@
 <!-- App css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/app.css') }}">
 
+<!-- Icon sizes css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/icon-sizes.css') }}">
+
+<!-- Sidebar scrollbar css-->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/sidebar-scrollbar.css') }}">
+
 @yield('css')
 
 @vite(['public/assets/scss/style.scss'])
