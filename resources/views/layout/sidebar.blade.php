@@ -109,7 +109,7 @@
                                 <li class="menu-title">
                                     <span>{{ __('dashboard.dashboard') }}</span>
                                 </li>
-                                <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <li class="no-sub {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('dashboard') }}">
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#home"></use>
@@ -120,9 +120,7 @@
                                 @endauth
 
                                 <!-- Eventi Section -->
-                                <li class="menu-title">
-                                    <span>{{ __('events.events_poetry_slam') }}</span>
-                                </li>
+                               
                                 <li class="{{ request()->routeIs('events.*') ? 'active' : '' }}">
                                     <a aria-expanded="{{ request()->routeIs('events.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#events">
                                         <svg stroke="currentColor" stroke-width="1.5">
@@ -174,9 +172,7 @@
 
                                 @auth
                                 <!-- Gigs Section - DISABILITATO (non implementato) -->
-                                <li class="menu-title">
-                                    <span>Gigs <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
-                                </li>
+                                
                                 <li class="nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
@@ -203,9 +199,7 @@
                                 @endauth
 
                                 <!-- News Section - DISABILITATO (non implementato) -->
-                                <li class="menu-title">
-                                    <span>News <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
-                                </li>
+                               
                                 <li class="nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
@@ -238,9 +232,7 @@
                                 </li>
 
                                 <!-- Media Section -->
-                                <li class="menu-title">
-                                    <span>Media</span>
-                                </li>
+                                
                                 <li class="{{ request()->routeIs('videos.*') ? 'active' : '' }}">
                                     <a aria-expanded="{{ request()->routeIs('videos.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#media">
                                         <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
@@ -273,9 +265,7 @@
                                 </li>
 
                                 <!-- Poesie Section - DISABILITATO (non implementato) -->
-                                <li class="menu-title">
-                                    <span>Poesie <span class="badge bg-light-warning text-dark f-s-10">Prossimamente</span></span>
-                                </li>
+                             
                                 <li class="nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-book-open text-muted f-s-20 me-2"></i>
@@ -309,9 +299,7 @@
 
                                 @auth
                                 <!-- Profile Section - Solo per utenti autenticati -->
-                                <li class="menu-title">
-                                    <span>Profilo</span>
-                                </li>
+                                
                                 <li class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
                                     <a aria-expanded="{{ request()->routeIs('profile.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#profile">
                                         <svg stroke="currentColor" stroke-width="1.5">
@@ -414,7 +402,7 @@
                                 <li class="menu-title">
                                     <span>{{ __('sidebar.guest_menu_title') }}</span>
                                 </li>
-                                <li>
+                                <li class="no-sub">
                                     <a href="{{ route('events.index') }}">
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#stack"></use>
