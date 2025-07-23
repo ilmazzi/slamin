@@ -73,6 +73,64 @@
         </div>
     </div>
 
+    <!-- Quick Navigation Links -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-navigation-arrow me-2"></i>
+                        {{ __('events.quick_navigation') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('events.index') }}" class="card card-light-primary hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-list f-s-30 text-primary mb-2"></i>
+                                    <h6 class="mb-1">{{ __('events.all_events') }}</h6>
+                                    <small class="text-muted">{{ __('events.view_all_events') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        @auth
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('events.index', ['filter' => 'my']) }}" class="card card-light-info hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-calendar f-s-30 text-info mb-2"></i>
+                                    <h6 class="mb-1">{{ __('sidebar.my_events') }}</h6>
+                                    <small class="text-muted">{{ __('events.view_my_events') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        @can('create', App\Models\Event::class)
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('events.create') }}" class="card card-light-success hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-plus-circle f-s-30 text-success mb-2"></i>
+                                    <h6 class="mb-1">{{ __('events.create_event') }}</h6>
+                                    <small class="text-muted">{{ __('events.create_new_event') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        @endcan
+                        @endauth
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('events.index', ['filter' => 'upcoming']) }}" class="card card-light-warning hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-clock f-s-30 text-warning mb-2"></i>
+                                    <h6 class="mb-1">{{ __('events.upcoming_events') }}</h6>
+                                    <small class="text-muted">{{ __('events.view_upcoming') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filters -->
     <div class="row mb-4">
         <div class="col-12">

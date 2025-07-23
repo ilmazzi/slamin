@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Http\Request;
 
 // Public Routes
@@ -510,6 +511,13 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/peertube/channels', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'getChannels'])->name('peertube.channels');
         Route::post('/peertube/find-account', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findAccount'])->name('peertube.find-account');
         Route::post('/peertube/find-channel', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findChannel'])->name('peertube.find-channel');
+
+        // Kanban Board Routes
+        Route::get('/kanban', [App\Http\Controllers\Admin\KanbanController::class, 'index'])->name('kanban.index');
+        Route::post('/kanban/update-status', [App\Http\Controllers\Admin\KanbanController::class, 'updateTaskStatus'])->name('kanban.update-status');
+        Route::post('/kanban/task-details', [App\Http\Controllers\Admin\KanbanController::class, 'getTaskDetails'])->name('kanban.task-details');
+        Route::post('/kanban/tasks', [App\Http\Controllers\Admin\KanbanController::class, 'storeTask'])->name('kanban.store-task');
+        Route::post('/kanban/comments', [App\Http\Controllers\Admin\KanbanController::class, 'addComment'])->name('kanban.add-comment');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)
@@ -546,6 +554,13 @@ Route::get('/{video}/peertube-url', [App\Http\Controllers\VideoController::class
         Route::delete('/comments/{comment}', [App\Http\Controllers\VideoController::class, 'deleteComment'])->name('delete-comment');
         Route::delete('/snaps/{snap}', [App\Http\Controllers\VideoController::class, 'deleteSnap'])->name('delete-snap');
         Route::post('/snaps/{snap}/like', [App\Http\Controllers\VideoController::class, 'toggleSnapLike'])->name('snap-like');
+    });
+
+    // Media Routes (pubbliche)
+    Route::prefix('media')->name('media.')->group(function () {
+        Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
+        Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
+        Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
     });
 
     // Premium Routes

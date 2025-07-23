@@ -26,6 +26,60 @@
         </div>
     </div>
 
+    <!-- Quick Navigation Links -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-navigation-arrow me-2"></i>
+                        {{ __('permissions.quick_navigation') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('permissions.index') }}" class="card card-light-primary hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-gauge f-s-30 text-primary mb-2"></i>
+                                    <h6 class="mb-1">{{ __('permissions.dashboard') }}</h6>
+                                    <small class="text-muted">{{ __('permissions.overview') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('permissions.roles') }}" class="card card-light-info hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-users f-s-30 text-info mb-2"></i>
+                                    <h6 class="mb-1">{{ __('permissions.roles') }}</h6>
+                                    <small class="text-muted">{{ __('permissions.manage_roles') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('permissions.permissions') }}" class="card card-light-success hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-shield-check f-s-30 text-success mb-2"></i>
+                                    <h6 class="mb-1">{{ __('permissions.permissions') }}</h6>
+                                    <small class="text-muted">{{ __('permissions.manage_permissions') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('permissions.users') }}" class="card card-light-warning hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-user-circle f-s-30 text-warning mb-2"></i>
+                                    <h6 class="mb-1">{{ __('permissions.users') }}</h6>
+                                    <small class="text-muted">{{ __('permissions.manage_users') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Header Actions -->
     <div class="row mb-4">
         <div class="col-12">

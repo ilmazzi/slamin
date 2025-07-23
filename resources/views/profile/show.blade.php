@@ -26,6 +26,62 @@
         </div>
     </div>
 
+    <!-- Quick Navigation Links -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-navigation-arrow me-2"></i>
+                        {{ __('profile.quick_navigation') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('profile.show') }}" class="card card-light-primary hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-eye f-s-30 text-primary mb-2"></i>
+                                    <h6 class="mb-1">{{ __('profile.view_profile') }}</h6>
+                                    <small class="text-muted">{{ __('profile.view_my_profile') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        @auth
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('profile.edit') }}" class="card card-light-info hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-pencil f-s-30 text-info mb-2"></i>
+                                    <h6 class="mb-1">{{ __('profile.modify_profile') }}</h6>
+                                    <small class="text-muted">{{ __('profile.edit_my_profile') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('profile.videos') }}" class="card card-light-success hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-video-camera f-s-30 text-success mb-2"></i>
+                                    <h6 class="mb-1">{{ __('profile.my_videos') }}</h6>
+                                    <small class="text-muted">{{ __('profile.view_my_videos') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('profile.activity') }}" class="card card-light-warning hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-activity f-s-30 text-warning mb-2"></i>
+                                    <h6 class="mb-1">{{ __('profile.my_activities') }}</h6>
+                                    <small class="text-muted">{{ __('profile.view_my_activities') }}</small>
+                                </div>
+                            </a>
+                        </div>
+                        @endauth
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Profile Header -->
     <div class="row mb-4">
         <div class="col-12">

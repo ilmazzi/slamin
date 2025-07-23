@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PoetrySlamSeeder::class,
             TestUsersSeeder::class,
             SystemSettingsSeeder::class,
+            PhotoSeeder::class,
         ]);
 
         $this->command->info('✅ Database seeded successfully!');
