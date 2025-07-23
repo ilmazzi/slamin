@@ -240,7 +240,7 @@ function deletePermission(permissionId) {
         cancelButtonText: 'Annulla'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`{{ route('permissions.permissions.delete', '') }}/${permissionId}`, {
+            fetch(`{{ route('permissions.permissions.delete', ['permission' => ':permissionId']) }}`.replace(':permissionId', permissionId), {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -289,7 +289,7 @@ $('#permissionForm').on('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
     const permissionId = $('#permissionId').val();
-    const url = permissionId ? `{{ route('permissions.permissions.update', '') }}/${permissionId}` : '{{ route("permissions.permissions.store") }}';
+            const url = permissionId ? `{{ route('permissions.permissions.update', ['permission' => ':permissionId']) }}`.replace(':permissionId', permissionId) : '{{ route("permissions.permissions.store") }}';
     const method = permissionId ? 'PUT' : 'POST';
 
     fetch(url, {

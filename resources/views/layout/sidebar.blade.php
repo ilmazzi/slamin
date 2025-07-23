@@ -293,38 +293,28 @@
                                 <!-- System Settings Group -->
                                 <li class="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a aria-expanded="{{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'true' : 'false' }}" data-bs-toggle="collapse" href="#system-settings">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#gear"></use>
-                                        </svg>
+                                        <i class="ph-duotone ph-gear"></i>
                                         Impostazioni
                                     </a>
                                     <ul class="collapse {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'show' : '' }}" id="system-settings">
                                         <li class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.settings.index') }}">
-                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
-                                                    <use xlink:href="../assets/svg/_sprite.svg#gear"></use>
-                                                </svg>Impostazioni Generali
+                                                <i class="ph-duotone ph-gear me-2"></i>Impostazioni Generali
                                             </a>
                                         </li>
                                         <li class="{{ request()->routeIs('admin.carousels.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.carousels.index') }}">
-                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
-                                                    <use xlink:href="../assets/svg/_sprite.svg#squares"></use>
-                                                </svg>Gestione Carosello
+                                                <i class="ph-duotone ph-squares-four me-2"></i>Gestione Carosello
                                             </a>
                                         </li>
                                         <li class="{{ request()->routeIs('admin.translations.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.translations.index') }}">
-                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
-                                                    <use xlink:href="../assets/svg/_sprite.svg#translate"></use>
-                                                </svg>Gestione Traduzioni
+                                                <i class="ph-duotone ph-translate me-2"></i>Gestione Traduzioni
                                             </a>
                                         </li>
                                         <li class="{{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                             <a href="{{ route('admin.peertube.config') }}">
-                                                <svg stroke="currentColor" stroke-width="1.5" class="me-2" style="width: 16px; height: 16px;">
-                                                    <use xlink:href="../assets/svg/_sprite.svg#video-camera"></use>
-                                                </svg>Configurazione PeerTube
+                                                <i class="ph-duotone ph-video-camera me-2"></i>Configurazione PeerTube
                                             </a>
                                         </li>
                                     </ul>

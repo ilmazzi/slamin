@@ -484,9 +484,10 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
 
         // System Settings
         Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
-Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
-Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
-Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
+        Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
+        Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+        Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
+        Route::post('/settings/thumbnails', [App\Http\Controllers\Admin\SystemSettingsController::class, 'manageThumbnails'])->name('settings.thumbnails');
 
         // Translation Management
         Route::get('/translations', [App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('translations.index');

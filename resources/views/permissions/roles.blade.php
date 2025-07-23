@@ -288,7 +288,7 @@ function deleteRole(roleId) {
         cancelButtonText: 'Annulla'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`{{ route('permissions.roles.delete', '') }}/${roleId}`, {
+            fetch(`{{ route('permissions.roles.delete', ['role' => ':roleId']) }}`.replace(':roleId', roleId), {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -365,7 +365,7 @@ $('#roleForm').on('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
     const roleId = $('#roleId').val();
-    const url = roleId ? `{{ route('permissions.roles.update', '') }}/${roleId}` : '{{ route("permissions.roles.store") }}';
+            const url = roleId ? `{{ route('permissions.roles.update', ['role' => ':roleId']) }}`.replace(':roleId', roleId) : '{{ route("permissions.roles.store") }}';
     const method = roleId ? 'PUT' : 'POST';
 
     fetch(url, {

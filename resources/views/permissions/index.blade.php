@@ -400,7 +400,7 @@ function deleteRole(roleId) {
         cancelButtonText: 'Annulla'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`{{ route('permissions.roles.delete', '') }}/${roleId}`, {
+            fetch(`{{ route('permissions.roles.delete', ['role' => ':roleId']) }}`.replace(':roleId', roleId), {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -437,7 +437,7 @@ function deletePermission(permissionId) {
         cancelButtonText: 'Annulla'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`{{ route('permissions.permissions.delete', '') }}/${permissionId}`, {
+            fetch(`{{ route('permissions.permissions.delete', ['permission' => ':permissionId']) }}`.replace(':permissionId', permissionId), {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
