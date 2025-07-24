@@ -99,7 +99,24 @@ class PeerTubeConfig extends Model
             $config->is_encrypted = $isEncrypted;
         }
 
-        $config->value = $value;
+        // Converti il valore in stringa se necessario
+        if ($type === 'json' && is_array($value)) {
+            $value = json_encode($value);
+        } elseif ($type === 'boolean') {
+            $value = (bool) $value;
+        } elseif ($type === 'integer') {
+            $value = (int) $value;
+        } elseif ($type === 'datetime' && $value instanceof \Carbon\Carbon) {
+            $value = $value->toDateTimeString();
+        }
+
+        // Cripta se necessario (evita la doppia criptazione)
+        if ($isEncrypted && $value !== null) {
+            $value = Crypt::encryptString($value);
+        }
+
+        // Imposta direttamente l'attributo per evitare il mutator
+        $config->attributes['value'] = $value;
         $config->save();
 
         return $config;
