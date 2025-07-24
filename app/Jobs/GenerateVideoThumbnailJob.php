@@ -35,6 +35,12 @@ class GenerateVideoThumbnailJob implements ShouldQueue
         Log::info("Starting thumbnail generation job for video {$this->video->id}");
 
         try {
+            // Se il video ha già un URL PeerTube valido, non sovrascriverlo
+            if ($this->video->thumbnail_path && filter_var($this->video->thumbnail_path, FILTER_VALIDATE_URL)) {
+                Log::info("Video {$this->video->id} ha già un URL thumbnail valido: {$this->video->thumbnail_path}");
+                return;
+            }
+
             // Usa il metodo con fallback che garantisce sempre una thumbnail
             $thumbnailPath = $thumbnailService->generateThumbnailWithFallback($this->video);
 

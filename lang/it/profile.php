@@ -98,6 +98,8 @@ return [
     // Messaggi di Successo
     'profile_updated' => 'Profilo aggiornato con successo',
     'photo_updated' => 'Foto profilo aggiornata con successo',
+    'banner_updated' => 'Immagine di sfondo aggiornata con successo',
+    'change_banner' => 'Cambia Sfondo',
 
     // Messaggi di Errore
     'update_error' => 'Errore durante l\'aggiornamento del profilo',

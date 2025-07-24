@@ -135,12 +135,17 @@ class Video extends Model
      */
     public function getThumbnailUrlAttribute()
     {
-        // Prima controlla se c'è un thumbnail locale
+        // Prima controlla se c'è un thumbnail PeerTube (URL completo)
+        if ($this->thumbnail_path && filter_var($this->thumbnail_path, FILTER_VALIDATE_URL)) {
+            return $this->thumbnail_path;
+        }
+
+        // Poi controlla se c'è un thumbnail locale
         if ($this->thumbnail_path) {
             return Storage::url($this->thumbnail_path);
         }
 
-        // Poi controlla se c'è un thumbnail PeerTube
+        // Poi controlla se c'è un thumbnail PeerTube specifico
         if ($this->peertube_thumbnail_url) {
             return $this->peertube_thumbnail_url;
         }

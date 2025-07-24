@@ -90,7 +90,7 @@
                                    class="glightbox story" data-glightbox="type: video; zoomable: true;">
                                     <div class="position-relative">
                                         <video src="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}" 
-                                               poster="{{ $media['item']->thumbnail_path ? Storage::url($media['item']->thumbnail_path) : '' }}"
+                                               poster="{{ $media['item']->thumbnail_path ? $media['item']->thumbnail_url : '' }}"
                                                class="rounded img-fluid">
                                         </video>
                                         <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
@@ -178,12 +178,12 @@
                                     <div class="left-main-img img-box">
                                         <a href="{{ $firstVideo['item']->peertube_embed_url ?? asset('storage/' . $firstVideo['item']->file_path) }}" 
                                            class="glightbox" data-glightbox="type: video">
-                                            <img src="{{ $firstVideo['item']->thumbnail_path ? Storage::url($firstVideo['item']->thumbnail_path) : asset('assets/images/placeholder.jpg') }}" 
+                                            <img src="{{ $firstVideo['item']->thumbnail_path ? $firstVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
                                                  alt="{{ $firstVideo['item']->title }}">
                                             <div class="transparent-box">
                                                 <div class="caption">
                                                     <div class="d-flex align-items-center">
-                                                        <a href="{{ route('profile.show', $firstVideo['user']->id) }}" class="text-decoration-none me-2">
+                                                        <a href="{{ route('user.show', $firstVideo['user']->id) }}" class="text-decoration-none me-2">
                                                             <img src="{{ $firstVideo['user']->profile_photo_url }}" 
                                                                  alt="{{ $firstVideo['user']->getDisplayName() }}" 
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
@@ -200,12 +200,12 @@
                                     <div class="right-main-img img-box">
                                         <a href="{{ $secondVideo['item']->peertube_embed_url ?? asset('storage/' . $secondVideo['item']->file_path) }}" 
                                            class="glightbox" data-glightbox="type: video">
-                                            <img src="{{ $secondVideo['item']->thumbnail_path ? Storage::url($secondVideo['item']->thumbnail_path) : asset('assets/images/placeholder.jpg') }}" 
+                                            <img src="{{ $secondVideo['item']->thumbnail_path ? $secondVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
                                                  alt="{{ $secondVideo['item']->title }}">
                                             <div class="transparent-box">
                                                 <div class="caption">
                                                     <div class="d-flex align-items-center">
-                                                        <a href="{{ route('profile.show', $secondVideo['user']->id) }}" class="text-decoration-none me-2">
+                                                        <a href="{{ route('user.show', $secondVideo['user']->id) }}" class="text-decoration-none me-2">
                                                             <img src="{{ $secondVideo['user']->profile_photo_url }}" 
                                                                  alt="{{ $secondVideo['user']->getDisplayName() }}" 
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
@@ -252,7 +252,7 @@
                                             <div class="transparent-box2">
                                                 <div class="captions">
                                                     <div class="d-flex align-items-center">
-                                                        <a href="{{ route('profile.show', $firstPhoto['user']->id) }}" class="text-decoration-none me-2">
+                                                        <a href="{{ route('user.show', $firstPhoto['user']->id) }}" class="text-decoration-none me-2">
                                                             <img src="{{ $firstPhoto['user']->profile_photo_url }}" 
                                                                  alt="{{ $firstPhoto['user']->getDisplayName() }}" 
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
@@ -277,7 +277,7 @@
                                                         <div class="transparent-box2">
                                                             <div class="captions">
                                                                 <div class="d-flex align-items-center">
-                                                                    <a href="{{ route('profile.show', $photo['user']->id) }}" class="text-decoration-none me-2">
+                                                                    <a href="{{ route('user.show', $photo['user']->id) }}" class="text-decoration-none me-2">
                                                                         <img src="{{ $photo['user']->profile_photo_url }}" 
                                                                              alt="{{ $photo['user']->getDisplayName() }}" 
                                                                              class="rounded-circle" style="width: 25px; height: 25px;">
@@ -343,13 +343,13 @@
                                     <div class="card hover-effect">
                                         <div class="card-header p-2">
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ route('profile.show', $media['user']->id) }}" class="text-decoration-none">
+                                                <a href="{{ route('user.show', $media['user']->id) }}" class="text-decoration-none">
                                                     <img src="{{ $media['user']->profile_photo_url }}" 
                                                          alt="{{ $media['user']->getDisplayName() }}" 
                                                          class="rounded-circle me-2" style="width: 32px; height: 32px;">
                                                 </a>
                                                 <div>
-                                                    <a href="{{ route('profile.show', $media['user']->id) }}" class="text-decoration-none">
+                                                    <a href="{{ route('user.show', $media['user']->id) }}" class="text-decoration-none">
                                                         <h6 class="mb-0 text-dark small">{{ $media['user']->getDisplayName() }}</h6>
                                                     </a>
                                                     <small class="text-muted">{{ $media['created_at']->diffForHumans() }}</small>
@@ -368,7 +368,7 @@
                                                 <a href="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}" 
                                                    class="glightbox" data-glightbox="type: video">
                                                     <div class="position-relative">
-                                                        <img src="{{ $media['item']->thumbnail_path ? Storage::url($media['item']->thumbnail_path) : asset('assets/images/placeholder.jpg') }}" 
+                                                        <img src="{{ $media['item']->thumbnail_path ? $media['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
                                                              alt="{{ $media['item']->title }}" 
                                                              class="img-fluid rounded">
                                                         <div class="position-absolute top-50 start-50 translate-middle">

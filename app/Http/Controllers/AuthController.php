@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Services\PeerTubeService;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -64,36 +66,107 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // Crea l'utente
-        $user = User::create([
-            'name' => $request->name,
-            'nickname' => $request->nickname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'status' => 'active',
-        ]);
+        try {
+            // Crea l'utente
+            $user = User::create([
+                'name' => $request->name,
+                'nickname' => $request->nickname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'status' => 'active',
+            ]);
 
-        // Assegna i ruoli selezionati
-        $selectedRoles = $request->roles ?? [];
+            // Assegna i ruoli selezionati
+            $selectedRoles = $request->roles ?? [];
 
-        // Se non ha selezionato ruoli, assegna 'audience' come default
-        if (empty($selectedRoles)) {
-            $selectedRoles = ['audience'];
+            // Se non ha selezionato ruoli, assegna 'audience' come default
+            if (empty($selectedRoles)) {
+                $selectedRoles = ['audience'];
+            }
+
+            // Assegna i ruoli
+            $user->assignRole($selectedRoles);
+
+            // Crea account PeerTube automaticamente
+            $this->createPeerTubeAccount($user, $request->password);
+
+            // Login automatico
+            Auth::login($user);
+
+            // Messaggio di benvenuto personalizzato
+            $roleText = count($selectedRoles) > 1 ?
+                count($selectedRoles) . ' ruoli' :
+                $this->getRoleDisplayName($selectedRoles[0]);
+
+            return redirect()->route('dashboard')
+                ->with('success', "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi e il tuo account PeerTube è stato creato automaticamente.");
+
+        } catch (Exception $e) {
+            // Se c'è un errore con PeerTube, elimina l'utente appena creato
+            if (isset($user)) {
+                $user->delete();
+            }
+
+            return redirect()->back()
+                ->withErrors(['error' => 'Errore durante la registrazione: ' . $e->getMessage()])
+                ->withInput();
         }
+    }
 
-        // Assegna i ruoli
-        $user->assignRole($selectedRoles);
+    /**
+     * Crea automaticamente l'account PeerTube per l'utente
+     */
+    private function createPeerTubeAccount(User $user, string $password)
+    {
+        try {
+            $peerTubeService = new PeerTubeService();
+            
+            // Verifica se PeerTube è configurato
+            if (!$peerTubeService->isConfigured()) {
+                // Se PeerTube non è configurato, non blocchiamo la registrazione
+                return;
+            }
 
-        // Login automatico
-        Auth::login($user);
+            // Verifica connessione PeerTube
+            if (!$peerTubeService->testConnection()) {
+                // Se non riesce a connettersi, non blocchiamo la registrazione
+                return;
+            }
 
-        // Messaggio di benvenuto personalizzato
-        $roleText = count($selectedRoles) > 1 ?
-            count($selectedRoles) . ' ruoli' :
-            $this->getRoleDisplayName($selectedRoles[0]);
+            // Genera username PeerTube basato su nickname o email
+            $peertubeUsername = $user->nickname ?: strtolower(str_replace(['@', '.'], ['', '_'], $user->email));
+            $peertubeUsername = preg_replace('/[^a-zA-Z0-9_]/', '', $peertubeUsername);
+            
+            // Se l'username è vuoto o troppo corto, usa un fallback
+            if (strlen($peertubeUsername) < 3) {
+                $peertubeUsername = 'user_' . $user->id;
+            }
 
-        return redirect()->route('dashboard')
-            ->with('success', "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi.");
+            // Crea utente su PeerTube
+            $peerTubeUserData = [
+                'peertube_username' => $peertubeUsername,
+                'email' => $user->email,
+                'peertube_password' => $password, // Usa la stessa password del sito
+                'peertube_display_name' => $user->name,
+            ];
+
+            $peerTubeUser = $peerTubeService->createUser($peerTubeUserData);
+
+            // Aggiorna utente locale con i dati PeerTube (password già criptata dal service)
+            $user->update([
+                'peertube_user_id' => $peerTubeUser['peertube_user_id'],
+                'peertube_username' => $peerTubeUser['peertube_username'],
+                'peertube_display_name' => $peerTubeUser['peertube_display_name'],
+                'peertube_password' => $peerTubeUser['peertube_password'], // Password criptata
+            ]);
+
+        } catch (Exception $e) {
+            // Log dell'errore ma non blocchiamo la registrazione
+            \Log::warning('Errore creazione account PeerTube per utente ' . $user->id . ': ' . $e->getMessage());
+            
+            // Non rilanciamo l'eccezione per non bloccare la registrazione
+            // L'utente potrà creare l'account PeerTube successivamente
+        }
     }
 
     /**

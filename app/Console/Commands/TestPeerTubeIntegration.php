@@ -4,155 +4,144 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
-use App\Models\Video;
 use App\Services\PeerTubeService;
 use Exception;
 
 class TestPeerTubeIntegration extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'test:peertube-integration';
+    protected $signature = 'test:peertube-integration {--user-id=} {--create-user}';
+    protected $description = 'Testa l\'integrazione PeerTube nel sistema principale';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Testa l\'integrazione con PeerTube video.slamin.it';
-
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
-        $this->info('🧪 TEST INTEGRAZIONE PEERTUBE SLAMIN');
-        $this->info('=====================================');
+        $this->info('🧪 TEST INTEGRAZIONE PEERTUBE NEL SISTEMA PRINCIPALE');
+        $this->info('==================================================');
         $this->newLine();
 
-        // 1. Test Configurazione
-        $this->info('1. Test Configurazione:');
-        $this->line('✅ URL Base: ' . config('peertube.base_url'));
-        $this->line('✅ Username: ' . (config('peertube.username') ?: 'Non configurato'));
-        $this->line('✅ Password: ' . (config('peertube.password') ? 'Configurata' : 'Non configurata'));
-        $this->line('✅ Channel ID: ' . (config('peertube.channel_id') ?: 'Non configurato'));
-        $this->newLine();
-
-        // 2. Test Connessione PeerTube
-        $this->info('2. Test Connessione PeerTube:');
-        $peertubeService = new PeerTubeService();
-
-        if ($peertubeService->testConnection()) {
-            $this->line('✅ Connessione PeerTube: OK');
+        // Test configurazione
+        $this->info('1. Test configurazione PeerTube:');
+        $service = new PeerTubeService();
+        
+        if ($service->isConfigured()) {
+            $this->info('   ✅ PeerTube configurato correttamente');
+            
+            if ($service->testConnection()) {
+                $this->info('   ✅ Connessione PeerTube OK');
+            } else {
+                $this->error('   ❌ Connessione PeerTube FALLITA');
+                return 1;
+            }
         } else {
-            $this->line('❌ Connessione PeerTube: FALLITA');
-            $this->error('Impossibile connettersi a PeerTube. Verifica l\'URL.');
+            $this->error('   ❌ PeerTube NON configurato');
             return 1;
         }
 
-        // 3. Test Autenticazione OAuth2
-        $this->info('3. Test Autenticazione OAuth2:');
-        if (config('peertube.username') && config('peertube.password')) {
+        $this->newLine();
+
+        // Test utente esistente o creazione
+        if ($this->option('create-user')) {
+            $this->info('2. Creazione nuovo utente di test:');
+            $user = $this->createTestUser();
+        } else {
+            $userId = $this->option('user-id');
+            if (!$userId) {
+                $this->error('❌ Specifica --user-id o --create-user');
+                return 1;
+            }
+            
+            $user = User::find($userId);
+            if (!$user) {
+                $this->error('❌ Utente non trovato');
+                return 1;
+            }
+            
+            $this->info('2. Test con utente esistente:');
+            $this->info('   ID: ' . $user->id);
+            $this->info('   Nome: ' . $user->name);
+            $this->info('   Email: ' . $user->email);
+        }
+
+        $this->newLine();
+
+        // Test account PeerTube
+        $this->info('3. Test account PeerTube:');
+        if ($user->hasPeerTubeAccount()) {
+            $this->info('   ✅ Utente ha già account PeerTube');
+            $this->info('   Username: ' . $user->peertube_username);
+            $this->info('   User ID: ' . $user->peertube_user_id);
+            $this->info('   Account ID: ' . $user->peertube_account_id);
+            $this->info('   Channel ID: ' . $user->peertube_channel_id);
+        } else {
+            $this->info('   ⚠️  Utente NON ha account PeerTube');
+            $this->info('   Creazione account PeerTube...');
+            
             try {
-                if ($peertubeService->testAuthentication()) {
-                    $this->line('✅ Autenticazione OAuth2: OK');
-                } else {
-                    $this->line('❌ Autenticazione OAuth2: FALLITA');
-                    $this->error('Credenziali non valide o utente non admin.');
-                }
+                $this->createPeerTubeAccount($user);
+                $this->info('   ✅ Account PeerTube creato con successo!');
             } catch (Exception $e) {
-                $this->line('❌ Autenticazione OAuth2: ERRORE');
-                $this->error('Errore: ' . $e->getMessage());
+                $this->error('   ❌ Errore creazione account: ' . $e->getMessage());
+                return 1;
             }
-        } else {
-            $this->line('⚠️  Autenticazione: Credenziali non configurate');
-        }
-        $this->newLine();
-
-        // 4. Test Utente
-        $this->info('4. Test Utente:');
-        $user = User::where('email', 'organizer@poetryslam.it')->first();
-
-        if ($user) {
-            $this->info("✅ Utente trovato: {$user->name}");
-            $this->info("   - Video attuali: {$user->current_video_count}");
-            $this->info("   - Limite video: {$user->current_video_limit}");
-            $this->info("   - Può caricare altri video: " . ($user->canUploadMoreVideos() ? 'Sì' : 'No'));
-            $this->info("   - Video rimanenti: {$user->remaining_video_uploads}");
-        } else {
-            $this->error('❌ Utente non trovato');
-        }
-        $this->newLine();
-
-        // 5. Test Video Esistenti
-        $this->info('5. Test Video Esistenti:');
-        $videos = Video::all();
-        $this->info("✅ Video nel database: {$videos->count()}");
-
-        foreach ($videos as $video) {
-            $this->info("   - {$video->title}");
-            $this->info("     • PeerTube ID: " . ($video->peertube_id ?: 'Non configurato'));
-            $this->info("     • Moderazione: {$video->moderation_status}");
-            $this->info("     • Visualizzazioni: {$video->view_count}");
-        }
-        $this->newLine();
-
-        // 6. Test Service Methods
-        $this->info('6. Test Service Methods:');
-
-        // Test getVideo (se abbiamo un video con peertube_id)
-        $peerTubeVideo = Video::whereNotNull('peertube_id')->first();
-        if ($peerTubeVideo) {
-            try {
-                $videoInfo = $peertubeService->getVideo($peerTubeVideo->peertube_id);
-                $this->info("✅ getVideo(): OK - Video ID {$peerTubeVideo->peertube_id}");
-            } catch (\Exception $e) {
-                $this->error("❌ getVideo(): ERRORE - " . $e->getMessage());
-            }
-        } else {
-            $this->info("ℹ️  getVideo(): Nessun video PeerTube per testare");
-        }
-
-        // Test getVideoStats
-        if ($peerTubeVideo) {
-            try {
-                $stats = $peertubeService->getVideoStats($peerTubeVideo->peertube_id);
-                $this->info("✅ getVideoStats(): OK");
-            } catch (\Exception $e) {
-                $this->error("❌ getVideoStats(): ERRORE - " . $e->getMessage());
-            }
-        } else {
-            $this->info("ℹ️  getVideoStats(): Nessun video PeerTube per testare");
-        }
-        $this->newLine();
-
-        // 7. Test Configurazione Ambiente
-        $this->info('7. Test Configurazione Ambiente:');
-        $this->info("✅ Ambiente: " . app()->environment());
-        $this->info("✅ Debug: " . (config('app.debug') ? 'Attivo' : 'Disattivo'));
-        $this->info("✅ Cache: " . (config('cache.default')));
-        $this->newLine();
-
-        // 8. Raccomandazioni
-        $this->info('8. Raccomandazioni:');
-
-        if (!config('peertube.username') || !config('peertube.password')) {
-            $this->warn("⚠️  Configura PEERTUBE_USERNAME e PEERTUBE_PASSWORD nel file .env");
-        }
-
-        if (!config('peertube.channel_id')) {
-            $this->warn("⚠️  Configura PEERTUBE_CHANNEL_ID nel file .env");
-        }
-
-        if (!$peertubeService->testConnection()) {
-            $this->warn("⚠️  Verifica la connessione a " . config('peertube.base_url'));
         }
 
         $this->newLine();
-        $this->info('🎉 Test completato!');
-        $this->info('Per testare l\'upload, vai su: http://127.0.0.1:8000/videos/upload');
+        $this->info('✅ Test completato con successo!');
+        return 0;
+    }
+
+    private function createTestUser()
+    {
+        $username = 'test_user_' . time();
+        $email = 'test' . time() . '@example.com';
+        
+        $user = User::create([
+            'name' => 'Test User',
+            'nickname' => $username,
+            'email' => $email,
+            'password' => bcrypt('testpass123'),
+            'status' => 'active',
+        ]);
+
+        $user->assignRole('poet');
+        
+        $this->info('   ✅ Utente creato:');
+        $this->info('   ID: ' . $user->id);
+        $this->info('   Username: ' . $username);
+        $this->info('   Email: ' . $email);
+        
+        return $user;
+    }
+
+    private function createPeerTubeAccount(User $user)
+    {
+        $service = new PeerTubeService();
+        
+        // Genera username PeerTube
+        $peertubeUsername = $user->nickname ?: strtolower(str_replace(['@', '.'], ['', '_'], $user->email));
+        $peertubeUsername = preg_replace('/[^a-zA-Z0-9_]/', '', $peertubeUsername);
+        
+        if (strlen($peertubeUsername) < 3) {
+            $peertubeUsername = 'user_' . $user->id;
+        }
+
+        // Crea utente su PeerTube
+        $peerTubeUserData = [
+            'username' => $peertubeUsername,
+            'email' => $user->email,
+            'password' => 'testpass123', // Password di test
+            'display_name' => $user->name,
+        ];
+
+        $peerTubeUser = $service->createUser($peerTubeUserData);
+
+        // Aggiorna utente locale
+        $user->update([
+            'peertube_user_id' => $peerTubeUser['user_id'],
+            'peertube_username' => $peerTubeUser['username'],
+            'peertube_display_name' => $peerTubeUser['display_name'],
+            'peertube_account_id' => $peerTubeUser['account_id'],
+            'peertube_channel_id' => $peerTubeUser['channel_id'],
+            'peertube_password' => 'testpass123',
+        ]);
     }
 }

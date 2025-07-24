@@ -189,10 +189,10 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card hover-effect">
                 <div class="position-relative">
-                    @if($video->thumbnail_path)
+                    @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
                         <!-- Thumbnail con overlay play -->
                         <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                            <img src="{{ Storage::url($video->thumbnail_path) }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                             <!-- Overlay play button -->
                             <div class="position-absolute top-50 start-50 translate-middle">
                                 <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">

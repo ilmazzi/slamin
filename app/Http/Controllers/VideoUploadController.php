@@ -37,6 +37,12 @@ class VideoUploadController extends Controller
             return redirect()->route('videos.upload-limit');
         }
 
+        // Verifica che l'utente abbia un account PeerTube
+        if (!$user->hasPeerTubeAccount()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
+        }
+
         return view('videos.upload', compact('user'));
     }
 
@@ -62,6 +68,13 @@ class VideoUploadController extends Controller
         if (!$user->canUploadMoreVideos()) {
             file_put_contents(storage_path('video_debug.txt'), 'ERROR: User cannot upload more videos' . "\n", FILE_APPEND);
             return redirect()->route('videos.upload-limit');
+        }
+
+        // Verifica che l'utente abbia un account PeerTube
+        if (!$user->hasPeerTubeAccount()) {
+            file_put_contents(storage_path('video_debug.txt'), 'ERROR: User does not have PeerTube account' . "\n", FILE_APPEND);
+            return redirect()->route('dashboard')
+                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
         }
 
         // Validazione
@@ -98,14 +111,14 @@ class VideoUploadController extends Controller
                 'name' => $request->title,
                 'description' => $request->description ?: 'Video Poetry Slam',
                 'tags' => $validTags,
-                'privacy' => 'public',
-                'channelId' => PeerTubeConfig::getValue('peertube_channel_id'),
+                'privacy' => 1, // 1 = Public, 2 = Unlisted, 3 = Private
+                'channelId' => $user->peertube_channel_id, // Usa il channel ID dell'utente
                 'thumbnailfile' => $request->hasFile('thumbnail') ? $request->file('thumbnail') : null,
             ];
 
-            // Upload su PeerTube
-            file_put_contents(storage_path('video_debug.txt'), 'Uploading to PeerTube...' . "\n", FILE_APPEND);
-            $peerTubeResult = $this->peerTubeService->uploadVideo($videoFile, $metadata);
+            // Upload su PeerTube usando l'utente loggato
+            file_put_contents(storage_path('video_debug.txt'), 'Uploading to PeerTube with user: ' . $user->peertube_username . "\n", FILE_APPEND);
+            $peerTubeResult = $this->peerTubeService->uploadVideo($user, $videoFile, $metadata);
             file_put_contents(storage_path('video_debug.txt'), 'PeerTube result: ' . json_encode($peerTubeResult) . "\n", FILE_APPEND);
 
             // Gestione thumbnail locale (per compatibilità)
@@ -119,22 +132,22 @@ class VideoUploadController extends Controller
                 'user_id' => $user->id,
                 'title' => $request->title,
                 'description' => $request->description,
-                'video_url' => $peerTubeResult['url'] ?? null,
-                'file_path' => null, // Non più necessario per storage locale
-                'thumbnail_path' => $thumbnailPath,
-                'duration' => $peerTubeResult['duration'] ?? $this->getVideoDuration($videoFile),
+                'video_url' => $peerTubeResult['url'] ?? '', // Stringa vuota invece di null
+                'file_path' => '', // Stringa vuota invece di null
+                'thumbnail_path' => $thumbnailPath ?? '',
+                'duration' => $peerTubeResult['duration'] ?? 0,
                 'file_size' => $videoFile->getSize(),
-                'resolution' => $peerTubeResult['resolution'] ?? null,
+                'resolution' => $peerTubeResult['resolution'] ?? '',
                 'is_public' => $request->boolean('is_public', true),
                 'status' => 'uploaded',
                 'moderation_status' => 'approved',
                 'tags' => json_encode($allTags),
 
                 // Campi PeerTube
-                'peertube_id' => $peerTubeResult['id'] ?? null,
+                'peertube_id' => $peerTubeResult['video_id'] ?? null,
                 'peertube_uuid' => $peerTubeResult['uuid'] ?? null,
-                'peertube_url' => $peerTubeResult['url'] ?? null,
-                'peertube_embed_url' => $peerTubeResult['embedUrl'] ?? null,
+                'peertube_url' => $peerTubeResult['url'] ?? '',
+                'peertube_embed_url' => $peerTubeResult['embedUrl'] ?? '',
                 'upload_status' => 'completed',
                 'uploaded_at' => now(),
                 'peertube_privacy' => $metadata['privacy'],

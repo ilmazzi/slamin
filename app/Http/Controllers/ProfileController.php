@@ -95,6 +95,12 @@ class ProfileController extends Controller
             return $this->updateProfilePhoto($request, $user);
         }
 
+        // Se è una richiesta AJAX e contiene solo banner_image, gestisci separatamente
+        if ($request->ajax() && $request->hasFile('banner_image')) {
+            \Log::info('AJAX request with banner_image detected, calling updateBannerImage');
+            return $this->updateBannerImage($request, $user);
+        }
+
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -108,6 +114,7 @@ class ProfileController extends Controller
                 'social_youtube' => 'nullable|url|max:255',
                 'social_twitter' => 'nullable|url|max:255',
                 'profile_photo' => 'nullable|image|max:' . SystemSetting::get('profile_photo_max_size', 5120),
+                'banner_image' => 'nullable|image|max:' . SystemSetting::get('banner_image_max_size', 10240),
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation error in profile update', [
@@ -435,6 +442,89 @@ class ProfileController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Errore durante il salvataggio della foto', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante il salvataggio: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Aggiorna solo l'immagine di sfondo (per richieste AJAX)
+     */
+    private function updateBannerImage(Request $request, $user)
+    {
+        \Log::info('updateBannerImage chiamato', [
+            'user_id' => $user->id,
+            'has_file' => $request->hasFile('banner_image'),
+            'all_data' => $request->all()
+        ]);
+
+        try {
+            $request->validate([
+                'banner_image' => 'required|image|max:' . SystemSetting::get('banner_image_max_size', 10240),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error in banner image update', [
+                'errors' => $e->errors()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore di validazione',
+                'errors' => $e->errors()
+            ], 422);
+        }
+
+        $file = $request->file('banner_image');
+
+        // Verifica se il file è valido
+        if (!$file->isValid()) {
+            \Log::error('File banner_image non valido', [
+                'error' => $file->getError(),
+                'error_message' => $file->getErrorMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'File non valido: ' . $file->getErrorMessage()
+            ], 400);
+        }
+
+        \Log::info('File banner_image ricevuto per aggiornamento AJAX', [
+            'original_name' => $file->getClientOriginalName(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'extension' => $file->getClientOriginalExtension()
+        ]);
+
+        // Elimina vecchia immagine se esiste
+        if ($user->banner_image && Storage::disk('public')->exists($user->banner_image)) {
+            Storage::disk('public')->delete($user->banner_image);
+            \Log::info('Vecchia immagine di sfondo eliminata', ['path' => $user->banner_image]);
+        }
+
+        // Salva nuova immagine
+        try {
+            $path = $file->store('banner-images', 'public');
+            \Log::info('Nuova immagine di sfondo salvata', ['path' => $path]);
+
+            $user->update(['banner_image' => $path]);
+            \Log::info('Profilo aggiornato con nuova immagine di sfondo', ['user_id' => $user->id, 'banner_image' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Immagine di sfondo aggiornata con successo',
+                'banner_image_url' => Storage::url($path)
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Errore durante il salvataggio dell\'immagine di sfondo', [
                 'error' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine()

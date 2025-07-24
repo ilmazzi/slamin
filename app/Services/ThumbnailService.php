@@ -128,16 +128,18 @@ class ThumbnailService
      */
     public function generatePeerTubeThumbnail(Video $video): ?string
     {
-        // Se c'è già un URL thumbnail PeerTube, scaricalo
+        // Se c'è già un URL thumbnail PeerTube, usalo direttamente
         if ($video->peertube_thumbnail_url) {
-            return $this->downloadThumbnailFromUrl($video->peertube_thumbnail_url, $video, 'peertube');
+            Log::info("✅ Usando URL thumbnail PeerTube esistente per video {$video->id}: {$video->peertube_thumbnail_url}");
+            return $video->peertube_thumbnail_url;
         }
 
         // Se non c'è URL thumbnail ma c'è ID PeerTube, prova a recuperarlo
         if ($video->peertube_id && !$video->peertube_thumbnail_url) {
             $thumbnailUrl = $this->getPeerTubeThumbnailUrl($video);
             if ($thumbnailUrl) {
-                return $this->downloadThumbnailFromUrl($thumbnailUrl, $video, 'peertube');
+                Log::info("✅ URL thumbnail PeerTube recuperato per video {$video->id}: {$thumbnailUrl}");
+                return $thumbnailUrl;
             }
         }
 
@@ -152,7 +154,7 @@ class ThumbnailService
     /**
      * Recupera l'URL della thumbnail da PeerTube
      */
-    protected function getPeerTubeThumbnailUrl(Video $video): ?string
+    public function getPeerTubeThumbnailUrl(Video $video): ?string
     {
         try {
             if (!$video->peertube_id) {

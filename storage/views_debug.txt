@@ -1327,3 +1327,45 @@ Video User ID: 4
 Current views: 0
 Views NOT incremented! (User is owner)
 Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0
+=== INCREMENT VIEWS ===
+Video ID: 14
+User ID: 15
+Video User ID: 15
+Current views: 0
+Views NOT incremented! (User is owner)
+Final views: 0

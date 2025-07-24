@@ -395,8 +395,8 @@
                         @foreach($snaps->take(5) as $snap)
                             <div class="d-flex align-items-center mb-2">
                                 <div class="flex-shrink-0 position-relative">
-                                    @if($video->thumbnail_path)
-                                        <img src="{{ Storage::url($video->thumbnail_path) }}" alt="Snap" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                                                    @if($video->thumbnail_path)
+                                    <img src="{{ $video->thumbnail_url }}" alt="Snap" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
                                     @elseif($video->peertube_thumbnail_url)
                                         <img src="{{ $video->peertube_thumbnail_url }}" alt="Snap" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
                                     @else

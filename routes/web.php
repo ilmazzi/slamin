@@ -7,6 +7,8 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\PeerTubeController;
+
 use Illuminate\Http\Request;
 
 // Public Routes
@@ -675,4 +677,11 @@ Route::post('/test-upload', function (Request $request) {
     ], 400);
 })->middleware('auth');
 
-
+// PeerTube Routes (solo funzionalità aggiuntive)
+Route::prefix('peertube')->name('peertube.')->middleware('auth')->group(function () {
+    Route::get('/test-connection', [PeerTubeController::class, 'testConnection'])->name('test-connection');
+    Route::get('/upload-video', [PeerTubeController::class, 'showUploadVideo'])->name('upload-video');
+    Route::post('/upload-video', [PeerTubeController::class, 'uploadVideo'])->name('upload-video.process');
+    Route::get('/my-videos', [PeerTubeController::class, 'myVideos'])->name('my-videos');
+    Route::get('/upload-limit', [PeerTubeController::class, 'uploadLimit'])->name('upload-limit');
+});

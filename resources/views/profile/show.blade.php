@@ -104,7 +104,16 @@
                             <div class="card-body">
                                 <div class="profile-container">
                                     <div class="image-details">
-                                        <div class="profile-image"></div>
+                                        <div class="profile-image" style="background-image: url('{{ $user->banner_image_url }}')">
+                                            @if($isOwnProfile)
+                                            <div class="banner-edit">
+                                                <input type="file" id="bannerUpload" accept=".png, .jpg, .jpeg" onchange="uploadBannerImage(this)">
+                                                <label for="bannerUpload" class="btn btn-light btn-sm">
+                                                    <i class="ti ti-photo-heart me-1"></i>{{ __('profile.change_banner') }}
+                                                </label>
+                                            </div>
+                                            @endif
+                                        </div>
                                         <div class="profile-pic">
                                             <div class="avatar-upload">
                                                 @if($isOwnProfile)
@@ -540,15 +549,61 @@ function uploadProfilePhoto(input) {
 
         fetch('{{ route("profile.update") }}', {
             method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 location.reload();
             } else {
                 Swal.fire('Errore', data.message, 'error');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Errore', 'Errore durante il caricamento della foto', 'error');
+        });
+    }
+}
+
+function uploadBannerImage(input) {
+    if (input.files && input.files[0]) {
+        const formData = new FormData();
+        formData.append('banner_image', input.files[0]);
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('_method', 'PUT');
+
+        fetch('{{ route("profile.update") }}', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                Swal.fire('Errore', data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Errore', 'Errore durante il caricamento dell\'immagine', 'error');
         });
     }
 }

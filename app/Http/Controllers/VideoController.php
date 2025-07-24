@@ -107,19 +107,9 @@ class VideoController extends Controller
         try {
             $baseUrl = \App\Models\PeerTubeConfig::getValue('peertube_url', 'https://video.slamin.it');
 
-            // Usa l'endpoint corretto dell'API PeerTube per ottenere l'URL diretto
-            // Secondo la documentazione: /api/v1/videos/{id}/download
-            $downloadUrl = $baseUrl . '/api/v1/videos/' . $video->peertube_uuid . '/download';
-
-            // Ottieni token di accesso se necessario
-            $peerTubeService = new \App\Services\PeerTubeService();
-            $token = $peerTubeService->getAccessToken();
-
-            // Verifica se il video è accessibile
+            // Per i video pubblici, non serve autenticazione
+            // Usa l'endpoint pubblico dell'API PeerTube
             $response = Http::timeout(10)
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $token
-                ])
                 ->get($baseUrl . '/api/v1/videos/' . $video->peertube_uuid);
 
             if ($response->successful()) {
@@ -140,13 +130,13 @@ class VideoController extends Controller
                     }
                 }
 
-                // Se non ci sono file diretti, usa l'URL di download
+                // Se non ci sono file diretti, usa l'URL di embed
                 if (empty($files)) {
                     $files[] = [
-                        'url' => $downloadUrl,
+                        'url' => $video->peertube_embed_url,
                         'resolution' => 'best',
                         'size' => 0,
-                        'type' => 'download'
+                        'type' => 'embed'
                     ];
                 }
 

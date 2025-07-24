@@ -116,5 +116,18 @@ return [
     'photo_tip_square' => '',
     'quick_actions' => '',
     'view_public_profile' => '',
+    'settings' => '',
+    'statistics' => '',
+    'about_me' => '',
+    'no_bio_available' => '',
+    'member_since' => '',
+    'participated' => '',
+    'views' => '',
+    'notifications' => '',
+    'manage_notifications' => '',
+    'view_my_profile' => '',
+    'edit_my_profile' => '',
+    'view_my_videos' => '',
+    'view_my_activities' => '',
 
 ];
