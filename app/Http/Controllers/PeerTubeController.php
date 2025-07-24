@@ -52,18 +52,7 @@ class PeerTubeController extends Controller
     public function showUploadVideo()
     {
         $user = Auth::user();
-        
-        if (!$user->hasPeerTubeAccount()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
-        }
-
-        if (!$user->canUploadMoreVideosToPeerTube()) {
-            return redirect()->route('peertube.upload-limit')
-                ->with('error', 'Hai raggiunto il limite di video caricabili.');
-        }
-
-        return view('peertube.upload-video', compact('user'));
+        return view('videos.upload', compact('user'));
     }
 
     /**
@@ -72,15 +61,6 @@ class PeerTubeController extends Controller
     public function uploadVideo(Request $request)
     {
         $user = Auth::user();
-        
-        if (!$user->hasPeerTubeAccount()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
-        }
-
-        if (!$user->canUploadMoreVideosToPeerTube()) {
-            return redirect()->route('peertube.upload-limit');
-        }
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -145,12 +125,6 @@ class PeerTubeController extends Controller
     public function myVideos()
     {
         $user = Auth::user();
-        
-        if (!$user->hasPeerTubeAccount()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
-        }
-
         $videos = $user->videos()->whereNotNull('peertube_video_id')->latest()->paginate(12);
 
         return view('peertube.my-videos', compact('user', 'videos'));

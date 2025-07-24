@@ -135,35 +135,59 @@ class PeerTubeService
     public function createUser(array $userData): array
     {
         try {
-            // Genera una password sicura per PeerTube
+            // Genera una password sicura per PeerTube se non fornita
             $peerTubePassword = $userData['peertube_password'] ?? Str::random(12);
             
             // Cripta la password per il database locale
             $encryptedPassword = encrypt($peerTubePassword);
             
-            // Valida e pulisci username (solo lettere minuscole e numeri, 3-20 caratteri)
-            $username = preg_replace('/[^a-zA-Z0-9]/', '', $userData['peertube_username']); // Rimuovi underscore
-            $username = strtolower($username); // Converti in minuscolo
-            if (strlen($username) < 3) {
-                $username = 'user' . $username;
+            // Valida e pulisci username secondo la documentazione PeerTube
+            // Username: [1..50] caratteri, solo a-z, 0-9, punti e underscore
+            $username = preg_replace('/[^a-z0-9._]/', '', strtolower($userData['peertube_username']));
+            
+            // Se l'username è vuoto o troppo corto, usa un fallback
+            if (strlen($username) < 1) {
+                $username = 'user_' . time();
             }
-            if (strlen($username) > 20) {
-                $username = substr($username, 0, 20);
+            if (strlen($username) > 50) {
+                $username = substr($username, 0, 50);
             }
             
+            // Prepara il payload secondo la documentazione ufficiale PeerTube
             $payload = [
                 'username' => $username,
                 'email' => $userData['email'],
-                'password' => $peerTubePassword, // Password in chiaro solo per PeerTube
-                'displayName' => $userData['peertube_display_name'] ?? $userData['name'],
-                'role' => 1, // User role (1 = User, 2 = Moderator, 3 = Administrator)
+                'password' => $peerTubePassword,
+                'role' => 2, // User role (0=Admin, 1=Moderator, 2=User)
+                'videoQuota' => -1, // Quota illimitata
+                'videoQuotaDaily' => -1, // Quota giornaliera illimitata
             ];
+            
+            // Aggiungi channelName se fornito
+            if (!empty($userData['peertube_channel_name'])) {
+                $channelName = preg_replace('/[^a-zA-Z0-9\-_.:]/', '', $userData['peertube_channel_name']);
+                
+                // Assicurati che il nome del canale non sia uguale all'username
+                if (strtolower($channelName) === strtolower($username)) {
+                    $channelName = $channelName . '_channel';
+                }
+                
+                if (strlen($channelName) >= 1 && strlen($channelName) <= 50) {
+                    $payload['channelName'] = $channelName;
+                } else {
+                    Log::warning('PeerTube: Nome canale non valido, saltando', [
+                        'original_channel_name' => $userData['peertube_channel_name'],
+                        'cleaned_channel_name' => $channelName,
+                        'username' => $username
+                    ]);
+                }
+            }
             
             Log::info('PeerTube: Tentativo creazione utente', [
                 'original_username' => $userData['peertube_username'],
                 'cleaned_username' => $username,
                 'email' => $userData['email'],
-                'payload' => $payload
+                'payload' => array_merge($payload, ['password' => '***HIDDEN***'])
             ]);
             
             $response = Http::withHeaders([
@@ -175,19 +199,49 @@ class PeerTubeService
                 $userInfo = $response->json();
                 
                 // Determina l'ID utente dalla risposta
-                $userId = $userInfo['id'] ?? $userInfo['userId'] ?? $userInfo['user']['id'] ?? null;
+                $userId = $userInfo['user']['id'] ?? $userInfo['id'] ?? null;
                 
                 if (!$userId) {
                     throw new Exception('Impossibile determinare l\'ID utente dalla risposta PeerTube');
                 }
 
+                // Recupera le informazioni complete dell'utente appena creato
+                $completeUserInfo = $this->getUserInfo($userId);
+                
+                if (!$completeUserInfo) {
+                    Log::warning('Impossibile recuperare informazioni complete utente PeerTube', [
+                        'user_id' => $userId,
+                        'username' => $username
+                    ]);
+                }
+
+                // Estrai informazioni del canale se disponibili
+                $channelId = null;
+                $channelName = null;
+                if ($completeUserInfo && isset($completeUserInfo['videoChannels']) && !empty($completeUserInfo['videoChannels'])) {
+                    $channel = $completeUserInfo['videoChannels'][0];
+                    $channelId = $channel['id'] ?? null;
+                    $channelName = $channel['name'] ?? null;
+                }
+
+                Log::info('PeerTube: Utente creato con successo', [
+                    'user_id' => $userId,
+                    'username' => $username,
+                    'channel_id' => $channelId,
+                    'channel_name' => $channelName
+                ]);
+
                 return [
                     'success' => true,
                     'peertube_user_id' => $userId,
-                    'peertube_username' => $userData['peertube_username'],
+                    'peertube_username' => $username,
                     'peertube_display_name' => $userData['peertube_display_name'] ?? $userData['name'],
                     'peertube_password' => $encryptedPassword, // Password criptata per il database
                     'peertube_password_plain' => $peerTubePassword, // Password in chiaro solo per uso immediato
+                    'peertube_channel_id' => $channelId,
+                    'peertube_channel_name' => $channelName,
+                    'peertube_account_id' => $completeUserInfo['account']['id'] ?? null,
+                    'complete_user_info' => $completeUserInfo,
                 ];
             } else {
                 $errorResponse = $response->json();
@@ -195,12 +249,14 @@ class PeerTubeService
                     'status' => $response->status(),
                     'response' => $errorResponse,
                     'body' => $response->body(),
-                    'username' => $userData['peertube_username']
+                    'username' => $username
                 ]);
                 
                 $errorMessage = 'Errore nella creazione dell\'utente PeerTube: ' . $response->status();
                 if ($errorResponse && isset($errorResponse['detail'])) {
                     $errorMessage .= ' - ' . $errorResponse['detail'];
+                } elseif ($errorResponse && isset($errorResponse['message'])) {
+                    $errorMessage .= ' - ' . $errorResponse['message'];
                 } elseif ($errorResponse) {
                     $errorMessage .= ' - ' . json_encode($errorResponse);
                 } else {
@@ -475,7 +531,6 @@ class PeerTubeService
                     'name' => $channelData['name'] ?? $user->peertube_username . '_channel',
                     'displayName' => $channelData['display_name'] ?? $user->name . ' Channel',
                     'description' => $channelData['description'] ?? 'Canale di ' . $user->name,
-                    'support' => $channelData['support'] ?? '',
                     'privacy' => $channelData['privacy'] ?? 1, // 1 = Public
                 ]);
 
@@ -557,10 +612,59 @@ class PeerTubeService
                 ])
                 ->delete("{$this->baseUrl}/api/v1/users/{$userId}");
 
-            return $response->successful();
+            if ($response->successful()) {
+                Log::info('PeerTube: Utente eliminato con successo', ['user_id' => $userId]);
+                return true;
+            } else {
+                Log::warning('PeerTube: Errore eliminazione utente', [
+                    'user_id' => $userId,
+                    'status' => $response->status(),
+                    'response' => $response->body()
+                ]);
+                return false;
+            }
 
         } catch (Exception $e) {
             Log::error('PeerTube deleteUser error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Elimina utente di test per pulizia
+     */
+    public function deleteTestUser(string $username): bool
+    {
+        try {
+            // Prima trova l'utente per username
+            $token = $this->authenticate();
+            
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get("{$this->baseUrl}/api/v1/users", [
+                    'search' => $username,
+                    'count' => 10
+                ]);
+
+            if ($response->successful()) {
+                $users = $response->json();
+                
+                if (isset($users['data']) && !empty($users['data'])) {
+                    foreach ($users['data'] as $user) {
+                        if ($user['username'] === $username) {
+                            return $this->deleteUser($user['id']);
+                        }
+                    }
+                }
+            }
+
+            Log::warning('PeerTube: Utente di test non trovato', ['username' => $username]);
+            return false;
+
+        } catch (Exception $e) {
+            Log::error('PeerTube deleteTestUser error: ' . $e->getMessage());
             return false;
         }
     }

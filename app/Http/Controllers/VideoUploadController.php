@@ -37,11 +37,7 @@ class VideoUploadController extends Controller
             return redirect()->route('videos.upload-limit');
         }
 
-        // Verifica che l'utente abbia un account PeerTube
-        if (!$user->hasPeerTubeAccount()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
-        }
+
 
         return view('videos.upload', compact('user'));
     }
@@ -70,12 +66,7 @@ class VideoUploadController extends Controller
             return redirect()->route('videos.upload-limit');
         }
 
-        // Verifica che l'utente abbia un account PeerTube
-        if (!$user->hasPeerTubeAccount()) {
-            file_put_contents(storage_path('video_debug.txt'), 'ERROR: User does not have PeerTube account' . "\n", FILE_APPEND);
-            return redirect()->route('dashboard')
-                ->with('error', 'Il tuo account PeerTube non è ancora stato creato. Contatta l\'amministratore.');
-        }
+
 
         // Validazione
         $request->validate([
