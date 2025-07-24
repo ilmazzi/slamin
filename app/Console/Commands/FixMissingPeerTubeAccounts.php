@@ -203,7 +203,6 @@ class FixMissingPeerTubeAccounts extends Command
                     'email' => $user->email,
                     'peertube_password' => $tempPassword,
                     'peertube_display_name' => $user->name,
-                    'peertube_channel_name' => $channelName,
                 ];
 
                 try {

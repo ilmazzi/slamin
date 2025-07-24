@@ -171,25 +171,8 @@ class PeerTubeService
                 'videoQuotaDaily' => -1, // Quota giornaliera illimitata
             ];
             
-            // Aggiungi channelName se fornito
-            if (!empty($userData['peertube_channel_name'])) {
-                $channelName = preg_replace('/[^a-zA-Z0-9\-_.:]/', '', $userData['peertube_channel_name']);
-                
-                // Assicurati che il nome del canale non sia uguale all'username
-                if (strtolower($channelName) === strtolower($username)) {
-                    $channelName = $channelName . '_channel';
-                }
-                
-                if (strlen($channelName) >= 1 && strlen($channelName) <= 50) {
-                    $payload['channelName'] = $channelName;
-                } else {
-                    Log::warning('PeerTube: Nome canale non valido, saltando', [
-                        'original_channel_name' => $userData['peertube_channel_name'],
-                        'cleaned_channel_name' => $channelName,
-                        'username' => $username
-                    ]);
-                }
-            }
+            // Nota: PeerTube crea automaticamente un canale con lo stesso nome dell'username
+            // Non è necessario specificare channelName nell'API
             
             Log::info('PeerTube: Tentativo creazione utente', [
                 'original_username' => $userData['peertube_username'],
