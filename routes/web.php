@@ -460,6 +460,7 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/users/{user}', [App\Http\Controllers\PermissionController::class, 'getUser'])->name('users.show');
         Route::post('/users/{user}/roles', [App\Http\Controllers\PermissionController::class, 'assignUserRoles'])->name('users.roles');
         Route::post('/users/{user}/permissions', [App\Http\Controllers\PermissionController::class, 'assignUserPermissions'])->name('users.permissions');
+        Route::delete('/users/{user}', [App\Http\Controllers\PermissionController::class, 'deleteUser'])->name('users.delete');
 
         // API routes
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
@@ -520,6 +521,11 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/kanban/task-details', [App\Http\Controllers\Admin\KanbanController::class, 'getTaskDetails'])->name('kanban.task-details');
         Route::post('/kanban/tasks', [App\Http\Controllers\Admin\KanbanController::class, 'storeTask'])->name('kanban.store-task');
         Route::post('/kanban/comments', [App\Http\Controllers\Admin\KanbanController::class, 'addComment'])->name('kanban.add-comment');
+
+        // User Management Routes
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
+        Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');
+        Route::get('/users/export', [App\Http\Controllers\Admin\UserController::class, 'export'])->name('users.export');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)

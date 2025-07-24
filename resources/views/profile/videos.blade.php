@@ -121,7 +121,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('videos.upload') }}" class="card card-light-success hover-effect text-decoration-none">
+                            <a href="{{ route('peertube.upload-video') }}" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-upload f-s-30 text-success mb-2"></i>
                                     <h6 class="mb-1">{{ __('videos.upload_video') }}</h6>
@@ -175,7 +175,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0 f-w-600">Gestione Video</h4>
-                <a href="{{ route('videos.upload') }}" class="btn btn-primary hover-effect">
+                <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary hover-effect">
                     <i class="ph ph-plus me-2"></i>Carica Nuovo Video
                 </a>
             </div>
@@ -288,7 +288,7 @@
                     <i class="ph-duotone ph-video-camera f-s-64 text-muted mb-3"></i>
                     <h5 class="mb-3">Nessun video caricato</h5>
                     <p class="text-muted mb-4">Non hai ancora caricato nessun video. Inizia subito caricando il tuo primo video!</p>
-                    <a href="{{ route('videos.upload') }}" class="btn btn-primary hover-effect">
+                    <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary hover-effect">
                         <i class="ph ph-plus me-2"></i>Carica il tuo primo video
                     </a>
                 </div>

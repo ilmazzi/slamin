@@ -102,7 +102,7 @@
                     </div>
                     <div class="card-body">
                         <div class="d-grid gap-2">
-                            <a href="{{ route('videos.upload') }}" class="btn btn-primary">
+                            <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary">
                                 <i class="ph-duotone ph-upload me-1"></i>
                                 {{ __('videos.upload_video') }}
                             </a>
@@ -184,7 +184,7 @@
         <!-- Call to Action -->
         <div class="row mt-4">
             <div class="col-12 text-center">
-                <a href="{{ route('videos.upload') }}" class="btn btn-primary btn-lg me-3">
+                <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary btn-lg me-3">
                     <i class="ph-duotone ph-upload me-2"></i>
                     {{ __('videos.upload_video') }}
                 </a>

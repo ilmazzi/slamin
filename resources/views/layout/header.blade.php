@@ -36,7 +36,7 @@
                                 </li>
                                 <li class="dropdown-divider"></li>
                                 <li class="dropdown-item">
-                                    <a href="{{ route('videos.upload') }}" class="d-flex align-items-center text-decoration-none">
+                                    <a href="{{ route('peertube.upload-video') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-video-camera me-2 text-primary"></i>
                                         <span>Carica Video</span>
                                     </a>

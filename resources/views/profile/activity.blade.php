@@ -111,7 +111,7 @@
                             <a href="{{ route('events.index') }}" class="btn btn-primary hover-effect">
                                 <i class="ph ph-calendar me-2"></i>Vedi Eventi
                             </a>
-                            <a href="{{ route('videos.upload') }}" class="btn btn-success hover-effect">
+                            <a href="{{ route('peertube.upload-video') }}" class="btn btn-success hover-effect">
                                 <i class="ph ph-video-camera me-2"></i>Carica Video
                             </a>
                         </div>

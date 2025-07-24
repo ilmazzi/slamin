@@ -80,12 +80,35 @@ class UserController extends Controller
             ], 400);
         }
 
-        $user->delete();
+        try {
+            // 1. Elimina account PeerTube se esiste
+            if ($user->hasPeerTubeAccount()) {
+                $this->deletePeerTubeAccount($user);
+            }
 
-        return response()->json([
-            'success' => true,
-            'message' => __('admin.user_deleted_successfully')
-        ]);
+            // 2. Elimina file associati
+            $this->deleteUserFiles($user);
+
+            // 3. Elimina l'utente dal database (cascade eliminerà tutti i dati associati)
+            $user->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('admin.user_deleted_successfully')
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Errore durante l\'eliminazione utente', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function bulkAssign(Request $request)
@@ -152,5 +175,76 @@ class UserController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Elimina l'account PeerTube dell'utente
+     */
+    private function deletePeerTubeAccount(User $user)
+    {
+        try {
+            if (!$user->peertube_user_id) {
+                return;
+            }
+
+            $peerTubeService = new \App\Services\PeerTubeService();
+            
+            if (!$peerTubeService->isConfigured()) {
+                \Log::warning('PeerTube non configurato, impossibile eliminare account per utente ' . $user->id);
+                return;
+            }
+
+            // Elimina l'utente da PeerTube
+            $peerTubeService->deleteUser($user->peertube_user_id);
+            
+            \Log::info('Account PeerTube eliminato per utente ' . $user->id . ' (PeerTube User ID: ' . $user->peertube_user_id . ')');
+
+        } catch (\Exception $e) {
+            \Log::warning('Errore eliminazione account PeerTube per utente ' . $user->id . ': ' . $e->getMessage());
+            // Non blocchiamo l'eliminazione dell'utente se fallisce l'eliminazione PeerTube
+        }
+    }
+
+    /**
+     * Elimina tutti i file associati all'utente
+     */
+    private function deleteUserFiles(User $user)
+    {
+        try {
+            // Elimina foto profilo
+            if ($user->profile_photo) {
+                \Storage::disk('public')->delete($user->profile_photo);
+                \Log::info('Foto profilo eliminata per utente ' . $user->id . ': ' . $user->profile_photo);
+            }
+
+            // Elimina immagine banner
+            if ($user->banner_image) {
+                \Storage::disk('public')->delete($user->banner_image);
+                \Log::info('Banner eliminato per utente ' . $user->id . ': ' . $user->banner_image);
+            }
+
+            // Elimina video dell'utente
+            foreach ($user->videos as $video) {
+                if ($video->video_path) {
+                    \Storage::disk('public')->delete($video->video_path);
+                }
+                if ($video->thumbnail_path && !filter_var($video->thumbnail_path, FILTER_VALIDATE_URL)) {
+                    \Storage::disk('public')->delete($video->thumbnail_path);
+                }
+            }
+
+            // Elimina foto dell'utente
+            foreach ($user->photos as $photo) {
+                if ($photo->photo_path) {
+                    \Storage::disk('public')->delete($photo->photo_path);
+                }
+            }
+
+            \Log::info('File eliminati per utente ' . $user->id);
+
+        } catch (\Exception $e) {
+            \Log::warning('Errore eliminazione file per utente ' . $user->id . ': ' . $e->getMessage());
+            // Non blocchiamo l'eliminazione dell'utente se fallisce l'eliminazione file
+        }
     }
 } 

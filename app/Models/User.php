@@ -337,6 +337,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Photos uploaded by this user
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
+    }
+
+    /**
      * Get user's active subscription
      */
     public function activeSubscription()
@@ -481,7 +489,7 @@ class User extends Authenticatable
     public function canUploadMoreVideosToPeerTube(): bool
     {
         $maxVideos = config('peertube.max_videos_per_user', 10);
-        $currentVideos = $this->videos()->whereNotNull('peertube_video_id')->count();
+        $currentVideos = $this->videos()->whereNotNull('peertube_id')->count();
         return $currentVideos < $maxVideos;
     }
 

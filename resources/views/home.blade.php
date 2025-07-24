@@ -382,7 +382,7 @@
                                     <i class="ph-duotone ph-sign-in f-s-16 me-2"></i>{{ __('home.call_to_action.login') }}
                                 </a>
                             @else
-                                <a href="{{ route('videos.upload') }}" class="btn btn-gradient-success hover-effect btn-lg">
+                                <a href="{{ route('peertube.upload-video') }}" class="btn btn-gradient-success hover-effect btn-lg">
                                     <i class="ph-duotone ph-upload f-s-16 me-2"></i>{{ __('home.call_to_action.upload_video') }}
                                 </a>
                                 <a href="{{ route('events.index') }}" class="btn btn-outline-success hover-effect btn-lg">

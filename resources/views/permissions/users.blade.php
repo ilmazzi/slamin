@@ -736,6 +736,57 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * Elimina un utente
+ */
+function deleteUser(userId) {
+    Swal.fire({
+        title: 'Sei sicuro?',
+        text: "Questa operazione eliminerà definitivamente l'utente e tutti i suoi dati associati (video, foto, commenti, like, etc.)!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loader
+            Swal.fire({
+                title: 'Eliminazione in corso...',
+                text: 'Sto eliminando l\'utente e tutti i suoi dati...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Chiamata AJAX per eliminare l'utente
+            fetch(`{{ route('permissions.users.delete', ['user' => ':userId']) }}`.replace(':userId', userId), {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Eliminato!', data.message, 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Errore!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Errore!', 'Si è verificato un errore durante l\'eliminazione.', 'error');
+            });
+        }
+    });
+}
+
 // Hide loader as fallback
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
