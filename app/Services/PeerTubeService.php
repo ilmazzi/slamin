@@ -591,9 +591,17 @@ class PeerTubeService
     public function testAuthentication(): bool
     {
         try {
-            $this->authenticate();
+            Log::info('PeerTube: Test autenticazione iniziato');
+            $token = $this->authenticate();
+            Log::info('PeerTube: Test autenticazione completato con successo', [
+                'token_length' => strlen($token)
+            ]);
             return true;
         } catch (Exception $e) {
+            Log::error('PeerTube: Test autenticazione fallito', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return false;
         }
     }
