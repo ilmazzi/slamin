@@ -7,7 +7,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
-use App\Http\Controllers\PeerTubeController;
+
 
 use Illuminate\Http\Request;
 
@@ -502,18 +502,7 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::delete('/translations/language/{language}', [App\Http\Controllers\Admin\TranslationController::class, 'deleteLanguage'])->name('translations.delete-language');
         Route::post('/translations/sync', [App\Http\Controllers\Admin\TranslationController::class, 'syncLanguages'])->name('translations.sync');
 
-        // PeerTube Configuration
-        Route::get('/peertube/config', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'index'])->name('peertube.config');
-        Route::put('/peertube/config', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'update'])->name('peertube.config.update');
-        Route::post('/peertube/config/test-connection', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'testConnection'])->name('peertube.config.test-connection');
-        Route::post('/peertube/config/test-auth', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'testAuthentication'])->name('peertube.config.test-auth');
-        Route::post('/peertube/config/reset', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'reset'])->name('peertube.config.reset');
 
-        // PeerTube ID Finder
-        Route::get('/peertube/accounts', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'getAccounts'])->name('peertube.accounts');
-        Route::get('/peertube/channels', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'getChannels'])->name('peertube.channels');
-        Route::post('/peertube/find-account', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findAccount'])->name('peertube.find-account');
-        Route::post('/peertube/find-channel', [App\Http\Controllers\Admin\PeerTubeConfigController::class, 'findChannel'])->name('peertube.find-channel');
 
         // Kanban Board Routes
         Route::get('/kanban', [App\Http\Controllers\Admin\KanbanController::class, 'index'])->name('kanban.index');
@@ -539,21 +528,17 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
     });
 
-    // Video Upload Routes
+    // Video Routes
     Route::prefix('videos')->name('videos.')->middleware('auth')->group(function () {
         Route::get('/', function() {
             return redirect()->route('profile.videos');
         })->name('index');
-        Route::get('/upload', [App\Http\Controllers\VideoUploadController::class, 'create'])->name('upload');
-        Route::post('/upload', [App\Http\Controllers\VideoUploadController::class, 'store'])->name('store');
-        Route::get('/upload-limit', [App\Http\Controllers\VideoUploadController::class, 'uploadLimit'])->name('upload-limit');
-        Route::get('/test-connection', [App\Http\Controllers\VideoUploadController::class, 'testConnection'])->name('test-connection');
 
         // Video playback and views
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
         Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
-Route::get('/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeDirectUrl'])->name('peertube-url');
+
 
         // Video interactions (comments, likes, snaps)
         Route::post('/{video}/comments', [App\Http\Controllers\VideoController::class, 'addComment'])->name('add-comment');
@@ -599,9 +584,7 @@ if (app()->environment('local')) {
             $user = Auth::user();
             return view('test.upload', compact('user'));
         })->name('upload');
-        Route::post('/upload-video', [App\Http\Controllers\TestVideoController::class, 'testUpload'])->name('upload-video');
-        Route::post('/purchase-package/{package}', [App\Http\Controllers\TestVideoController::class, 'testPurchase'])->name('purchase-package');
-        Route::get('/dashboard', [App\Http\Controllers\TestVideoController::class, 'testDashboard'])->name('dashboard');
+
     });
 }
 
@@ -683,11 +666,4 @@ Route::post('/test-upload', function (Request $request) {
     ], 400);
 })->middleware('auth');
 
-// PeerTube Routes (solo funzionalità aggiuntive)
-Route::prefix('peertube')->name('peertube.')->middleware('auth')->group(function () {
-    Route::get('/test-connection', [PeerTubeController::class, 'testConnection'])->name('test-connection');
-    Route::get('/upload-video', [PeerTubeController::class, 'showUploadVideo'])->name('upload-video');
-    Route::post('/upload-video', [PeerTubeController::class, 'uploadVideo'])->name('upload-video.process');
-    Route::get('/my-videos', [PeerTubeController::class, 'myVideos'])->name('my-videos');
-    Route::get('/upload-limit', [PeerTubeController::class, 'uploadLimit'])->name('upload-limit');
-});
+

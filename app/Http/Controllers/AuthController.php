@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-use App\Services\PeerTubeService;
+
 use Exception;
 
 class AuthController extends Controller
@@ -88,8 +88,7 @@ class AuthController extends Controller
             // Assegna i ruoli
             $user->assignRole($selectedRoles);
 
-            // Crea account PeerTube automaticamente
-            $this->createPeerTubeAccount($user, $request->password);
+
 
             // Login automatico
             Auth::login($user);
@@ -99,141 +98,19 @@ class AuthController extends Controller
                 count($selectedRoles) . ' ruoli' :
                 $this->getRoleDisplayName($selectedRoles[0]);
 
-            // Verifica se l'utente ha ruoli che necessitano PeerTube
-            $userRoles = $user->getRoleNames()->toArray();
-            $peerTubeRoles = ['poet', 'organizer'];
-            $hasPeerTubeRole = !empty(array_intersect($userRoles, $peerTubeRoles));
-            
             $welcomeMessage = "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi.";
-            
-            if ($hasPeerTubeRole) {
-                $welcomeMessage .= " Il tuo account PeerTube è stato creato automaticamente per caricare video.";
-            } else {
-                $welcomeMessage .= " Per caricare video, dovrai creare un account PeerTube successivamente.";
-            }
 
             return redirect()->route('dashboard')
                 ->with('success', $welcomeMessage);
 
         } catch (Exception $e) {
-            // Se c'è un errore con PeerTube, elimina l'utente appena creato
-            if (isset($user)) {
-                $user->delete();
-            }
-
             return redirect()->back()
                 ->withErrors(['error' => 'Errore durante la registrazione: ' . $e->getMessage()])
                 ->withInput();
         }
     }
 
-    /**
-     * Crea automaticamente l'account PeerTube per l'utente (solo per poet e organizer)
-     */
-    private function createPeerTubeAccount(User $user, string $password)
-    {
-        // Verifica se l'utente ha ruoli che necessitano di account PeerTube
-        $userRoles = $user->getRoleNames()->toArray();
-        $peerTubeRoles = ['poet', 'organizer'];
-        
-        $hasPeerTubeRole = !empty(array_intersect($userRoles, $peerTubeRoles));
-        
-        if (!$hasPeerTubeRole) {
-            // Se l'utente non ha ruoli che necessitano PeerTube, salta la creazione
-            Log::info('Utente ' . $user->id . ' non ha ruoli PeerTube (' . implode(', ', $userRoles) . '), salto creazione account');
-            return;
-        }
 
-        try {
-            $peerTubeService = new PeerTubeService();
-            
-            // Verifica se PeerTube è configurato
-            if (!$peerTubeService->isConfigured()) {
-                            // Se PeerTube non è configurato, non blocchiamo la registrazione
-            Log::warning('PeerTube non configurato, salto creazione account per utente ' . $user->id);
-                return;
-            }
-
-            // Verifica connessione PeerTube
-            if (!$peerTubeService->testConnection()) {
-                            // Se non riesce a connettersi, non blocchiamo la registrazione
-            Log::warning('Connessione PeerTube fallita, salto creazione account per utente ' . $user->id);
-                return;
-            }
-
-            // Genera username PeerTube basato su nickname o email
-            $peertubeUsername = $user->nickname ?: strtolower(str_replace(['@', '.'], ['', '_'], $user->email));
-            $peertubeUsername = preg_replace('/[^a-zA-Z0-9_]/', '', $peertubeUsername);
-            
-            // Se l'username è vuoto o troppo corto, usa un fallback
-            if (strlen($peertubeUsername) < 3) {
-                $peertubeUsername = 'user_' . $user->id;
-            }
-
-            // Genera nome canale basato sul nome utente, ma diverso dall'username
-            $channelName = $user->nickname ?: $user->name;
-            $channelName = preg_replace('/[^a-zA-Z0-9\-_.:]/', '', $channelName);
-            
-            // Se il nome del canale è uguale all'username, aggiungi un suffisso
-            if (strtolower($channelName) === strtolower($peertubeUsername)) {
-                $channelName = $channelName . '_channel';
-            }
-            
-            // Se il nome del canale è ancora troppo corto, usa un fallback
-            if (strlen($channelName) < 1) {
-                $channelName = 'channel_' . $user->id;
-            }
-            
-            // Assicurati che il nome del canale non superi i 50 caratteri
-            if (strlen($channelName) > 50) {
-                $channelName = substr($channelName, 0, 50);
-            }
-
-            // Crea utente su PeerTube
-            $peerTubeUserData = [
-                'peertube_username' => $peertubeUsername,
-                'email' => $user->email,
-                'peertube_password' => $password, // Usa la stessa password del sito
-                'peertube_display_name' => $user->name,
-                'peertube_channel_name' => $channelName,
-            ];
-
-            $peerTubeUser = $peerTubeService->createUser($peerTubeUserData);
-
-            // Aggiorna utente locale con i dati PeerTube
-            $updateData = [
-                'peertube_user_id' => $peerTubeUser['peertube_user_id'],
-                'peertube_username' => $peerTubeUser['peertube_username'],
-                'peertube_display_name' => $peerTubeUser['peertube_display_name'],
-                'peertube_password' => $peerTubeUser['peertube_password'], // Password criptata
-            ];
-
-            // Aggiungi informazioni del canale se disponibili
-            if (!empty($peerTubeUser['peertube_channel_id'])) {
-                $updateData['peertube_channel_id'] = $peerTubeUser['peertube_channel_id'];
-            }
-            if (!empty($peerTubeUser['peertube_account_id'])) {
-                $updateData['peertube_account_id'] = $peerTubeUser['peertube_account_id'];
-            }
-
-            $user->update($updateData);
-
-            Log::info('Account PeerTube creato con successo per utente ' . $user->id, [
-                'user_id' => $peerTubeUser['peertube_user_id'],
-                'username' => $peerTubeUser['peertube_username'],
-                'channel_id' => $peerTubeUser['peertube_channel_id'] ?? 'N/A',
-                'account_id' => $peerTubeUser['peertube_account_id'] ?? 'N/A',
-                'roles' => implode(', ', $userRoles)
-            ]);
-
-        } catch (Exception $e) {
-            // Log dell'errore ma non blocchiamo la registrazione
-            Log::warning('Errore creazione account PeerTube per utente ' . $user->id . ': ' . $e->getMessage());
-            
-            // Non rilanciamo l'eccezione per non bloccare la registrazione
-            // L'utente potrà creare l'account PeerTube successivamente
-        }
-    }
 
     /**
      * Login semplice per testing

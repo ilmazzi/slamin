@@ -80,12 +80,7 @@ return [
     'current_limit' => 'Limite Attuale',
     'videos_remaining' => 'Video Rimanenti',
 
-    // PeerTube
-    'peertube_integration' => 'Integrazione PeerTube',
-    'peertube_connection_ok' => 'Connessione PeerTube OK',
-    'peertube_connection_failed' => 'Connessione PeerTube fallita',
-    'peertube_upload_success' => 'Video caricato su PeerTube con successo',
-    'peertube_upload_error' => 'Errore durante l\'upload su PeerTube',
+
 
     // Player
     'video_player' => 'Player Video',

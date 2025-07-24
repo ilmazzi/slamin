@@ -40,16 +40,7 @@ class User extends Authenticatable
         'social_instagram',
         'social_youtube',
         'social_twitter',
-        // Campi PeerTube
-        'peertube_user_id',
-        'peertube_username',
-        'peertube_display_name',
-        'peertube_token',
-        'peertube_refresh_token',
-        'peertube_token_expires_at',
-        'peertube_account_id',
-        'peertube_channel_id',
-        'peertube_password',
+
     ];
 
     /**
@@ -453,94 +444,5 @@ class User extends Authenticatable
         return asset('assets/images/profile-app/28.jpg');
     }
 
-    /**
-     * PeerTube specific helper methods
-     */
 
-    /**
-     * Check if user has PeerTube account
-     */
-    public function hasPeerTubeAccount(): bool
-    {
-        return !empty($this->peertube_user_id) && !empty($this->peertube_username);
-    }
-
-    /**
-     * Check if user has valid PeerTube token
-     */
-    public function hasValidPeerTubeToken(): bool
-    {
-        return !empty($this->peertube_token) && 
-               !empty($this->peertube_token_expires_at) && 
-               $this->peertube_token_expires_at->isFuture();
-    }
-
-    /**
-     * Get PeerTube display name
-     */
-    public function getPeerTubeDisplayName(): string
-    {
-        return $this->peertube_display_name ?? $this->name ?? $this->peertube_username ?? 'Unknown';
-    }
-
-    /**
-     * Check if user can upload more videos (PeerTube limit)
-     */
-    public function canUploadMoreVideosToPeerTube(): bool
-    {
-        $maxVideos = config('peertube.max_videos_per_user', 10);
-        $currentVideos = $this->videos()->whereNotNull('peertube_id')->count();
-        return $currentVideos < $maxVideos;
-    }
-
-    /**
-     * Check if user can create live streams
-     */
-    public function canCreateLiveOnPeerTube(): bool
-    {
-        return $this->hasPeerTubeAccount() && $this->hasValidPeerTubeToken();
-    }
-
-    /**
-     * Get PeerTube account info
-     */
-    public function getPeerTubeAccountInfo(): array
-    {
-        if (!$this->hasPeerTubeAccount()) {
-            return [];
-        }
-
-        return [
-            'user_id' => $this->peertube_user_id,
-            'username' => $this->peertube_username,
-            'display_name' => $this->peertube_display_name,
-            'account_id' => $this->peertube_account_id,
-            'channel_id' => $this->peertube_channel_id,
-            'has_valid_token' => $this->hasValidPeerTubeToken(),
-        ];
-    }
-
-    /**
-     * Update PeerTube token
-     */
-    public function updatePeerTubeToken(string $token, string $refreshToken = null, int $expiresIn = 3600): void
-    {
-        $this->update([
-            'peertube_token' => $token,
-            'peertube_refresh_token' => $refreshToken,
-            'peertube_token_expires_at' => now()->addSeconds($expiresIn),
-        ]);
-    }
-
-    /**
-     * Clear PeerTube token
-     */
-    public function clearPeerTubeToken(): void
-    {
-        $this->update([
-            'peertube_token' => null,
-            'peertube_refresh_token' => null,
-            'peertube_token_expires_at' => null,
-        ]);
-    }
 }

@@ -228,7 +228,7 @@
                         'key' => 'upload_performance',
                         'color' => 'info',
                         'icon' => 'ph ph-upload',
-                        'link' => route('peertube.upload-video')
+                        'link' => '#'
                     ],
                     [
                         'key' => 'manage_venue',

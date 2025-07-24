@@ -84,6 +84,6 @@ return [
     'complete' => 'Completa',
     'keys_missing' => 'chiavi mancanti',
     'sync_this_language' => 'Sincronizza Questa Lingua',
-    'peertube_config' => 'Configurazione PeerTube',
+
 
 ];

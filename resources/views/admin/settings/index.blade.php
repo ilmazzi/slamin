@@ -65,15 +65,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.peertube.config') }}" class="card card-light-warning hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-video-camera f-s-30 text-warning mb-2"></i>
-                                    <h6 class="mb-1">{{ __('admin.peertube_config') }}</h6>
-                                    <small class="text-muted">{{ __('admin.configure_peertube') }}</small>
-                                </div>
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             </div>

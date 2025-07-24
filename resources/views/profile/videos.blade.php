@@ -121,7 +121,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('peertube.upload-video') }}" class="card card-light-success hover-effect text-decoration-none">
+                            <a href="#" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-upload f-s-30 text-success mb-2"></i>
                                     <h6 class="mb-1">{{ __('videos.upload_video') }}</h6>
@@ -175,7 +175,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0 f-w-600">Gestione Video</h4>
-                <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary hover-effect">
+                <a href="#" class="btn btn-primary hover-effect">
                     <i class="ph ph-plus me-2"></i>Carica Nuovo Video
                 </a>
             </div>
