@@ -184,13 +184,43 @@ class PeerTubeService
     }
 
     /**
-     * Ottieni informazioni account (legacy)
+     * Ottieni informazioni account per username (legacy)
      */
-    public function getAccountInfo(string $username): ?array
+    public function getAccountInfoByUsername(string $username): ?array
     {
         try {
             $response = Http::timeout($this->timeout)
                 ->get("{$this->baseUrl}/api/v1/accounts/{$username}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return null;
+        } catch (Exception $e) {
+            Log::error('PeerTube getAccountInfoByUsername error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Ottieni informazioni dell'account configurato
+     */
+    public function getAccountInfo(): ?array
+    {
+        try {
+            $accountId = PeerTubeConfig::getValue('peertube_account_id');
+            if (!$accountId) {
+                return null;
+            }
+
+            $token = $this->authenticate();
+            
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get("{$this->baseUrl}/api/v1/accounts/{$accountId}");
 
             if ($response->successful()) {
                 return $response->json();
@@ -492,6 +522,131 @@ class PeerTubeService
         } catch (Exception $e) {
             Log::error('PeerTube getVideoStats error: ' . $e->getMessage());
             return [];
+        }
+    }
+
+    /**
+     * Testa l'autenticazione PeerTube
+     */
+    public function testAuthentication(): bool
+    {
+        try {
+            $this->authenticate();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Ottieni informazioni del canale
+     */
+    public function getChannelInfo(): ?array
+    {
+        try {
+            $channelId = PeerTubeConfig::getValue('peertube_channel_id');
+            if (!$channelId) {
+                return null;
+            }
+
+            $token = $this->authenticate();
+            
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get("{$this->baseUrl}/api/v1/video-channels/{$channelId}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return null;
+        } catch (Exception $e) {
+            Log::error('PeerTube getChannelInfo error: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+
+
+    /**
+     * Ottieni lista account
+     */
+    public function getAccounts(int $count = 20): array
+    {
+        try {
+            $token = $this->authenticate();
+            
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get("{$this->baseUrl}/api/v1/accounts", [
+                    'count' => $count,
+                    'start' => 0,
+                    'sort' => '-createdAt'
+                ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return ['data' => []];
+        } catch (Exception $e) {
+            Log::error('PeerTube getAccounts error: ' . $e->getMessage());
+            return ['data' => []];
+        }
+    }
+
+    /**
+     * Ottieni lista canali
+     */
+    public function getChannels(int $count = 20): array
+    {
+        try {
+            $token = $this->authenticate();
+            
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->get("{$this->baseUrl}/api/v1/video-channels", [
+                    'count' => $count,
+                    'start' => 0,
+                    'sort' => '-createdAt'
+                ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return ['data' => []];
+        } catch (Exception $e) {
+            Log::error('PeerTube getChannels error: ' . $e->getMessage());
+            return ['data' => []];
+        }
+    }
+
+
+
+    /**
+     * Trova canale per nome
+     */
+    public function getChannelByName(string $name): ?array
+    {
+        try {
+            $response = Http::timeout($this->timeout)
+                ->get("{$this->baseUrl}/api/v1/video-channels/{$name}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return null;
+        } catch (Exception $e) {
+            Log::error('PeerTube getChannelByName error: ' . $e->getMessage());
+            return null;
         }
     }
 }

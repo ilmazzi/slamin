@@ -256,7 +256,7 @@ class PeerTubeConfigController extends Controller
                 ]);
             }
 
-            $account = $this->peerTubeService->getAccountByUsername($request->username);
+            $account = $this->peerTubeService->getAccountInfoByUsername($request->username);
             
             if ($account) {
                 return response()->json([
