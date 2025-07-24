@@ -175,7 +175,7 @@ class VideoUploadController extends Controller
             }
 
             return redirect()->route('profile.videos')
-                ->with('success', 'Video caricato con successo!');
+                ->with('success', 'Video caricato con successo! Il video sarà disponibile a breve una volta completata la finalizzazione.');
 
         } catch (Exception $e) {
             // Debug: salva l'errore

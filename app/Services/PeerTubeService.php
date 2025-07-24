@@ -54,9 +54,17 @@ class PeerTubeService
     }
 
     /**
+     * Get the base URL
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    /**
      * Autenticazione con PeerTube
      */
-    private function authenticate(): string
+    public function authenticate(): string
     {
         if ($this->accessToken) {
             return $this->accessToken;

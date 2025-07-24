@@ -108,6 +108,22 @@
         <!-- Upload Form -->
         <div class="row">
             <div class="col-12">
+                <!-- Info Alert -->
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="ph-duotone ph-info f-s-20 me-3 mt-1"></i>
+                        <div>
+                            <h6 class="alert-heading mb-2">Informazioni sull'upload</h6>
+                            <p class="mb-2">Il tuo video verrà caricato su PeerTube e sarà disponibile a breve una volta completata la finalizzazione.</p>
+                            <ul class="mb-0 small">
+                                <li>Formati supportati: MP4, AVI, MOV, MKV, WEBM, FLV</li>
+                                <li>Dimensione massima: 100MB</li>
+                                <li>Tempo di elaborazione: 2-5 minuti (dipende dalla dimensione)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
