@@ -237,6 +237,11 @@ class ProfileController extends Controller
      */
     public function uploadVideo(Request $request)
     {
+        \Log::info('🎬 Inizio processo upload video', [
+            'user_id' => Auth::id(),
+            'request_data' => $request->only(['title', 'description', 'is_public', 'tags'])
+        ]);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
@@ -246,20 +251,38 @@ class ProfileController extends Controller
             'is_public' => 'boolean',
         ]);
 
+        \Log::info('✅ Validazione completata');
+
         $user = Auth::user();
 
         try {
+            \Log::info('🔍 Verifica account PeerTube', ['user_id' => $user->id]);
+
             // Verifica che l'utente abbia un account PeerTube
             if (!$user->hasPeerTubeAccount()) {
+                \Log::warning('❌ Utente senza account PeerTube', ['user_id' => $user->id]);
                 return back()->withErrors(['error' => 'Devi avere un account PeerTube per caricare video. Contatta l\'amministratore.']);
             }
 
+            \Log::info('✅ Account PeerTube verificato');
+
             // Salva temporaneamente il file video
+            \Log::info('📁 Salvataggio file video temporaneo');
+
             $videoFile = $request->file('video_file');
             $tempPath = $videoFile->store('temp-videos', 'local');
             $fullTempPath = Storage::disk('local')->path($tempPath);
 
+            \Log::info('✅ File video salvato temporaneamente', [
+                'original_name' => $videoFile->getClientOriginalName(),
+                'size' => $videoFile->getSize(),
+                'temp_path' => $tempPath,
+                'full_path' => $fullTempPath
+            ]);
+
             // Prepara i dati per PeerTube
+            \Log::info('📋 Preparazione dati per PeerTube');
+
             $videoData = [
                 'name' => $request->title,
                 'description' => $request->description ?? '',
@@ -272,29 +295,56 @@ class ProfileController extends Controller
                 'nsfw' => false,
             ];
 
+            \Log::info('✅ Dati PeerTube preparati', ['video_data' => $videoData]);
+
             // Aggiungi tags se presenti
             if ($request->tags) {
+                \Log::info('🏷️ Elaborazione tags', ['raw_tags' => $request->tags]);
+
                 $tags = array_map('trim', explode(',', $request->tags));
                 $tags = array_filter($tags, function($tag) {
                     return strlen($tag) >= 2 && strlen($tag) <= 30;
                 });
                 if (!empty($tags)) {
                     $videoData['tags'] = array_slice($tags, 0, 5); // Max 5 tags
+                    \Log::info('✅ Tags elaborati', ['final_tags' => $videoData['tags']]);
                 }
             }
 
             // Gestione thumbnail
             if ($request->hasFile('thumbnail')) {
+                \Log::info('🖼️ Elaborazione thumbnail');
+
                 $thumbnailPath = $request->file('thumbnail')->store('temp-thumbnails', 'local');
                 $fullThumbnailPath = Storage::disk('local')->path($thumbnailPath);
                 $videoData['thumbnail_path'] = $fullThumbnailPath;
+
+                \Log::info('✅ Thumbnail salvato', [
+                    'thumbnail_path' => $thumbnailPath,
+                    'full_path' => $fullThumbnailPath
+                ]);
+            } else {
+                \Log::info('ℹ️ Nessun thumbnail fornito');
             }
 
             // Upload su PeerTube
+            \Log::info('🚀 Inizio upload su PeerTube', [
+                'user_id' => $user->id,
+                'file_path' => $fullTempPath,
+                'video_data' => $videoData
+            ]);
+
             $peerTubeService = new \App\Services\PeerTubeService();
             $peerTubeVideo = $peerTubeService->uploadVideo($user, $fullTempPath, $videoData);
 
+            \Log::info('📡 Risposta upload PeerTube', [
+                'success' => !empty($peerTubeVideo),
+                'response' => $peerTubeVideo
+            ]);
+
             if (!$peerTubeVideo) {
+                \Log::error('❌ Upload PeerTube fallito');
+
                 // Pulisci i file temporanei
                 Storage::disk('local')->delete($tempPath);
                 if (isset($thumbnailPath)) {
@@ -304,11 +354,19 @@ class ProfileController extends Controller
                 return back()->withErrors(['error' => 'Errore durante l\'upload su PeerTube. Riprova più tardi.']);
             }
 
+            \Log::info('✅ Upload PeerTube completato con successo');
+
             // Costruisci l'URL del video PeerTube
+            \Log::info('🔗 Costruzione URL video PeerTube');
+
             $peerTubeService = new \App\Services\PeerTubeService();
             $videoUrl = $peerTubeService->getBaseUrl() . '/videos/watch/' . ($peerTubeVideo['shortUUID'] ?? $peerTubeVideo['uuid']);
 
+            \Log::info('✅ URL video costruito', ['video_url' => $videoUrl]);
+
             // Salva il video nel database locale
+            \Log::info('💾 Salvataggio video nel database locale');
+
             $localVideoData = [
                 'title' => $request->title,
                 'description' => $request->description,
@@ -321,27 +379,52 @@ class ProfileController extends Controller
                 'status' => 'processing', // PeerTube processa il video
             ];
 
+            \Log::info('📋 Dati video preparati per il database', ['local_video_data' => $localVideoData]);
+
             // Salva thumbnail se presente
             if ($request->hasFile('thumbnail')) {
+                \Log::info('🖼️ Salvataggio thumbnail permanente');
+
                 $thumbnailPath = $request->file('thumbnail')->store('video-thumbnails', 'public');
                 $localVideoData['thumbnail'] = $thumbnailPath;
+
+                \Log::info('✅ Thumbnail salvato permanentemente', ['thumbnail_path' => $thumbnailPath]);
             }
 
+            \Log::info('💾 Creazione record video nel database');
             $video = $user->videos()->create($localVideoData);
 
+            \Log::info('✅ Video creato nel database', [
+                'video_id' => $video->id,
+                'peertube_video_id' => $video->peertube_video_id,
+                'peertube_uuid' => $video->peertube_uuid
+            ]);
+
             // Pulisci i file temporanei
+            \Log::info('🧹 Pulizia file temporanei');
+
             Storage::disk('local')->delete($tempPath);
             if (isset($thumbnailPath)) {
                 Storage::disk('local')->delete($thumbnailPath);
             }
 
+            \Log::info('✅ File temporanei puliti');
+
+            \Log::info('🎉 Upload video completato con successo', [
+                'video_id' => $video->id,
+                'user_id' => $user->id,
+                'title' => $video->title
+            ]);
+
             return redirect()->route('profile.videos')
                 ->with('success', 'Video caricato con successo! Il video sarà disponibile a breve una volta completata l\'elaborazione.');
 
         } catch (\Exception $e) {
-            \Log::error('Errore upload video', [
+            \Log::error('💥 Errore critico durante upload video', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
 
