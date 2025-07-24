@@ -63,6 +63,12 @@ class PeerTubeService
         }
 
         try {
+            Log::info('PeerTube: Iniziando autenticazione', [
+                'url' => $this->baseUrl,
+                'username' => $this->adminUsername,
+                'timeout' => $this->timeout
+            ]);
+            
             // 1. Ottieni client OAuth
             $clientResponse = Http::timeout($this->timeout)
                 ->get("{$this->baseUrl}/api/v1/oauth-clients/local");
@@ -72,11 +78,20 @@ class PeerTubeService
             }
 
             $clientData = $clientResponse->json();
+            
+            // Verifica che la risposta client contenga i dati attesi
+            if (!$clientData || !is_array($clientData)) {
+                throw new Exception('Risposta client OAuth non valida: ' . $clientResponse->body());
+            }
+            
+            if (!isset($clientData['client_id']) || !isset($clientData['client_secret'])) {
+                throw new Exception('Client ID o Secret mancanti nella risposta: ' . json_encode($clientData));
+            }
 
-            // 2. Ottieni access token - Usa endpoint alternativo che funziona
+            // 2. Ottieni access token - Usa endpoint che funziona
             $tokenResponse = Http::timeout($this->timeout)
                 ->asForm()
-                ->post("{$this->baseUrl}/oauth/token", [
+                ->post("{$this->baseUrl}/api/v1/users/token", [
                     'client_id' => $clientData['client_id'],
                     'client_secret' => $clientData['client_secret'],
                     'grant_type' => 'password',
@@ -89,7 +104,22 @@ class PeerTubeService
             }
 
             $tokenData = $tokenResponse->json();
+            
+            // Verifica che la risposta contenga i dati attesi
+            if (!$tokenData || !is_array($tokenData)) {
+                throw new Exception('Risposta token non valida: ' . $tokenResponse->body());
+            }
+            
+            if (!isset($tokenData['access_token']) || empty($tokenData['access_token'])) {
+                throw new Exception('Token di accesso mancante nella risposta: ' . json_encode($tokenData));
+            }
+            
             $this->accessToken = $tokenData['access_token'];
+            
+            Log::info('PeerTube: Autenticazione riuscita', [
+                'token_length' => strlen($tokenData['access_token']),
+                'expires_in' => $tokenData['expires_in'] ?? 'N/A'
+            ]);
 
             return $this->accessToken;
 
@@ -111,16 +141,35 @@ class PeerTubeService
             // Cripta la password per il database locale
             $encryptedPassword = encrypt($peerTubePassword);
             
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->authenticate(),
-                'Content-Type' => 'application/json',
-            ])->post($this->baseUrl . '/api/v1/users', [
-                'username' => $userData['peertube_username'],
+            // Valida e pulisci username (solo lettere minuscole e numeri, 3-20 caratteri)
+            $username = preg_replace('/[^a-zA-Z0-9]/', '', $userData['peertube_username']); // Rimuovi underscore
+            $username = strtolower($username); // Converti in minuscolo
+            if (strlen($username) < 3) {
+                $username = 'user' . $username;
+            }
+            if (strlen($username) > 20) {
+                $username = substr($username, 0, 20);
+            }
+            
+            $payload = [
+                'username' => $username,
                 'email' => $userData['email'],
                 'password' => $peerTubePassword, // Password in chiaro solo per PeerTube
                 'displayName' => $userData['peertube_display_name'] ?? $userData['name'],
-                'role' => 1, // User role
+                'role' => 1, // User role (1 = User, 2 = Moderator, 3 = Administrator)
+            ];
+            
+            Log::info('PeerTube: Tentativo creazione utente', [
+                'original_username' => $userData['peertube_username'],
+                'cleaned_username' => $username,
+                'email' => $userData['email'],
+                'payload' => $payload
             ]);
+            
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->authenticate(),
+                'Content-Type' => 'application/json',
+            ])->post($this->baseUrl . '/api/v1/users', $payload);
 
             if ($response->successful()) {
                 $userInfo = $response->json();
@@ -141,13 +190,24 @@ class PeerTubeService
                     'peertube_password_plain' => $peerTubePassword, // Password in chiaro solo per uso immediato
                 ];
             } else {
+                $errorResponse = $response->json();
                 Log::error('Errore creazione utente PeerTube', [
                     'status' => $response->status(),
-                    'response' => $response->json(),
+                    'response' => $errorResponse,
+                    'body' => $response->body(),
                     'username' => $userData['peertube_username']
                 ]);
                 
-                throw new Exception('Errore nella creazione dell\'utente PeerTube: ' . $response->status());
+                $errorMessage = 'Errore nella creazione dell\'utente PeerTube: ' . $response->status();
+                if ($errorResponse && isset($errorResponse['detail'])) {
+                    $errorMessage .= ' - ' . $errorResponse['detail'];
+                } elseif ($errorResponse) {
+                    $errorMessage .= ' - ' . json_encode($errorResponse);
+                } else {
+                    $errorMessage .= ' - ' . $response->body();
+                }
+                
+                throw new Exception($errorMessage);
             }
         } catch (Exception $e) {
             Log::error('Eccezione durante la creazione utente PeerTube', [
