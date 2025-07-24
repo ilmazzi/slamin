@@ -15,7 +15,7 @@ class TestUploadWithoutTranscoding extends Command
      *
      * @var string
      */
-    protected $signature = 'peertube:test-upload-no-transcoding {--user-id=} {--file=} {--title=Test Video No Transcoding}';
+    protected $signature = 'peertube:test-upload-no-transcoding {--user-id=} {--file=} {--title=Test Video No Transcoding} {--require-file}';
 
     /**
      * The console command description.
@@ -36,6 +36,7 @@ class TestUploadWithoutTranscoding extends Command
         $userId = $this->option('user-id');
         $filePath = $this->option('file');
         $title = $this->option('title');
+        $requireFile = $this->option('require-file');
 
         try {
             $peerTubeService = new PeerTubeService();
@@ -81,11 +82,17 @@ class TestUploadWithoutTranscoding extends Command
             $this->info('✅ PeerTube User ID: ' . $user->peertube_user_id);
             $this->info('✅ PeerTube Username: ' . $user->peertube_username);
 
-            // Se non è specificato un file, crea un file di test
+            // Se non è specificato un file
             if (!$filePath) {
-                $this->info('📁 Creazione file di test...');
-                $filePath = $this->createTestVideoFile();
-                $this->info('✅ File di test creato: ' . $filePath);
+                if ($requireFile) {
+                    $this->error('❌ File richiesto ma non specificato!');
+                    $this->info('💡 Usa --file=/path/to/video.mp4 per specificare un file video');
+                    return 1;
+                } else {
+                    $this->info('📁 Creazione file di test...');
+                    $filePath = $this->createTestVideoFile();
+                    $this->info('✅ File di test creato: ' . $filePath);
+                }
             } else {
                 if (!file_exists($filePath)) {
                     $this->error('❌ File non trovato: ' . $filePath);
@@ -172,13 +179,14 @@ class TestUploadWithoutTranscoding extends Command
 
     private function createTestVideoFile(): string
     {
-        $tempFile = tempnam(sys_get_temp_dir(), 'test_video_');
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_video_') . '.mp4';
         
-        // Crea un file MP4 minimo (header falso ma valido)
-        $mp4Header = "\x00\x00\x00\x20ftypmp41\x00\x00\x00\x00mp41isom";
-        $videoData = str_repeat("\x00", 1024 * 10); // 10KB di dati
+        // Crea un file MP4 minimo ma valido
+        $mp4Data = "\x00\x00\x00\x20ftypmp41\x00\x00\x00\x00mp41isom\x00\x00\x00\x00\x00\x00\x00\x00";
+        $mp4Data .= "\x00\x00\x00\x08mdat";
+        $mp4Data .= str_repeat("\x00", 1024 * 50); // 50KB di dati video finti
         
-        file_put_contents($tempFile, $mp4Header . $videoData);
+        file_put_contents($tempFile, $mp4Data);
         
         return $tempFile;
     }
