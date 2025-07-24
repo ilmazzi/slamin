@@ -73,10 +73,10 @@ class PeerTubeService
 
             $clientData = $clientResponse->json();
 
-            // 2. Ottieni access token
+            // 2. Ottieni access token - Usa endpoint alternativo che funziona
             $tokenResponse = Http::timeout($this->timeout)
                 ->asForm()
-                ->post("{$this->baseUrl}/api/v1/users/token", [
+                ->post("{$this->baseUrl}/oauth/token", [
                     'client_id' => $clientData['client_id'],
                     'client_secret' => $clientData['client_secret'],
                     'grant_type' => 'password',

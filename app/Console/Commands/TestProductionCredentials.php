@@ -110,7 +110,7 @@ class TestProductionCredentials extends Command
             $this->line("   Testando autenticazione...");
             $tokenResponse = Http::timeout(30)
                 ->asForm()
-                ->post("{$url}/api/v1/users/token", [
+                ->post("{$url}/oauth/token", [
                     'client_id' => $clientData['client_id'],
                     'client_secret' => $clientData['client_secret'],
                     'grant_type' => 'password',

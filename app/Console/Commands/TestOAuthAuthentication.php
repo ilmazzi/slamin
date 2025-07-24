@@ -107,8 +107,8 @@ class TestOAuthAuthentication extends Command
         $formats = [
             'form' => [
                 'method' => 'asForm',
-                'endpoint' => '/api/v1/users/token',
-                'description' => 'Form data standard'
+                'endpoint' => '/oauth/token',
+                'description' => 'Form data standard (endpoint corretto)'
             ],
             'json' => [
                 'method' => 'asJson',
@@ -167,11 +167,11 @@ class TestOAuthAuthentication extends Command
     private function testEndpoints($url, $clientData, $username, $password)
     {
         $endpoints = [
-            '/api/v1/users/token' => 'Endpoint utenti standard',
-            '/api/v1/oauth/token' => 'Endpoint OAuth standard',
-            '/api/v1/auth/token' => 'Endpoint auth alternativo',
-            '/oauth/token' => 'Endpoint OAuth root',
-            '/users/token' => 'Endpoint utenti root'
+            '/oauth/token' => 'Endpoint OAuth root (FUNZIONA)',
+            '/users/token' => 'Endpoint utenti root (FUNZIONA)',
+            '/api/v1/users/token' => 'Endpoint utenti standard (NON FUNZIONA)',
+            '/api/v1/oauth/token' => 'Endpoint OAuth standard (NON FUNZIONA)',
+            '/api/v1/auth/token' => 'Endpoint auth alternativo (NON FUNZIONA)'
         ];
 
         foreach ($endpoints as $endpoint => $description) {

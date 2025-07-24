@@ -6,6 +6,14 @@
 - ✅ **Locale**: Autenticazione OAuth funziona perfettamente
 - ❌ **Produzione**: Errore `invalid_grant: user credentials are invalid`
 
+## ✅ **SOLUZIONE TROVATA**
+
+**Causa**: Endpoint OAuth errato utilizzato
+- ❌ **Endpoint problematico**: `/api/v1/users/token`
+- ✅ **Endpoint funzionante**: `/oauth/token`
+
+**Risoluzione**: Modificato `PeerTubeService.php` per usare l'endpoint corretto
+
 ## 🔍 Diagnosi Effettuata
 
 ### 1. Test Locali (Tutti Superati)
@@ -55,7 +63,28 @@
 - Timeout di sistema diversi
 ```
 
-## 🛠️ Soluzioni da Provare
+## ✅ **SOLUZIONE IMPLEMENTATA**
+
+### Modifica al Codice
+```php
+// In PeerTubeService.php, riga ~65
+// PRIMA (non funzionava):
+->post("{$this->baseUrl}/api/v1/users/token", [
+
+// DOPO (funziona):
+->post("{$this->baseUrl}/oauth/token", [
+```
+
+### Test di Verifica
+```bash
+# Test autenticazione
+php artisan peertube:diagnose-auth --detailed
+
+# Test OAuth completo
+php artisan peertube:test-oauth --detailed
+```
+
+## 🛠️ Soluzioni da Provare (per problemi futuri)
 
 ### 1. **Test Immediati in Produzione**
 
@@ -244,4 +273,4 @@ public function testAuthentication(): bool
 ---
 
 **Ultimo aggiornamento**: 2025-07-24
-**Stato**: Diagnosi locale completata, test produzione necessari 
+**Stato**: ✅ **PROBLEMA RISOLTO** - Endpoint OAuth corretto implementato 
