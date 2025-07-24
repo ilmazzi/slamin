@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\EventRequest;
 use App\Models\SystemSetting;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class ProfileController extends Controller
 {
@@ -237,29 +240,121 @@ class ProfileController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'video_url' => 'required|url|max:500',
+            'video_file' => 'required|file|mimes:mp4,avi,mov,mkv,webm,flv|max:102400', // 100MB max
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
+            'tags' => 'nullable|string|max:255',
+            'is_public' => 'boolean',
         ]);
 
         $user = Auth::user();
 
-        $videoData = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'video_url' => $request->video_url,
-            'user_id' => $user->id,
-        ];
+        try {
+            // Verifica che l'utente abbia un account PeerTube
+            if (!$user->hasPeerTubeAccount()) {
+                return back()->withErrors(['error' => 'Devi avere un account PeerTube per caricare video. Contatta l\'amministratore.']);
+            }
 
-        // Gestione thumbnail
-        if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('video-thumbnails', 'public');
-            $videoData['thumbnail'] = $path;
+            // Salva temporaneamente il file video
+            $videoFile = $request->file('video_file');
+            $tempPath = $videoFile->store('temp-videos', 'local');
+            $fullTempPath = Storage::disk('local')->path($tempPath);
+
+            // Prepara i dati per PeerTube
+            $videoData = [
+                'name' => $request->title,
+                'description' => $request->description ?? '',
+                'privacy' => $request->is_public ? 1 : 3, // 1 = Public, 3 = Private
+                'category' => 1, // Music
+                'licence' => 1, // Attribution
+                'language' => 'it',
+                'downloadEnabled' => true,
+                'commentsPolicy' => 1, // Enabled
+                'nsfw' => false,
+            ];
+
+            // Aggiungi tags se presenti
+            if ($request->tags) {
+                $tags = array_map('trim', explode(',', $request->tags));
+                $tags = array_filter($tags, function($tag) {
+                    return strlen($tag) >= 2 && strlen($tag) <= 30;
+                });
+                if (!empty($tags)) {
+                    $videoData['tags'] = array_slice($tags, 0, 5); // Max 5 tags
+                }
+            }
+
+            // Gestione thumbnail
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailPath = $request->file('thumbnail')->store('temp-thumbnails', 'local');
+                $fullThumbnailPath = Storage::disk('local')->path($thumbnailPath);
+                $videoData['thumbnail_path'] = $fullThumbnailPath;
+            }
+
+            // Upload su PeerTube
+            $peerTubeService = new \App\Services\PeerTubeService();
+            $peerTubeVideo = $peerTubeService->uploadVideo($user, $fullTempPath, $videoData);
+
+            if (!$peerTubeVideo) {
+                // Pulisci i file temporanei
+                Storage::disk('local')->delete($tempPath);
+                if (isset($thumbnailPath)) {
+                    Storage::disk('local')->delete($thumbnailPath);
+                }
+
+                return back()->withErrors(['error' => 'Errore durante l\'upload su PeerTube. Riprova più tardi.']);
+            }
+
+            // Costruisci l'URL del video PeerTube
+            $peerTubeService = new \App\Services\PeerTubeService();
+            $videoUrl = $peerTubeService->getBaseUrl() . '/videos/watch/' . ($peerTubeVideo['shortUUID'] ?? $peerTubeVideo['uuid']);
+
+            // Salva il video nel database locale
+            $localVideoData = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'user_id' => $user->id,
+                'video_url' => $videoUrl, // URL del video PeerTube
+                'peertube_video_id' => $peerTubeVideo['id'],
+                'peertube_uuid' => $peerTubeVideo['uuid'],
+                'peertube_short_uuid' => $peerTubeVideo['shortUUID'] ?? null,
+                'is_public' => $request->is_public,
+                'status' => 'processing', // PeerTube processa il video
+            ];
+
+            // Salva thumbnail se presente
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailPath = $request->file('thumbnail')->store('video-thumbnails', 'public');
+                $localVideoData['thumbnail'] = $thumbnailPath;
+            }
+
+            $video = $user->videos()->create($localVideoData);
+
+            // Pulisci i file temporanei
+            Storage::disk('local')->delete($tempPath);
+            if (isset($thumbnailPath)) {
+                Storage::disk('local')->delete($thumbnailPath);
+            }
+
+            return redirect()->route('profile.videos')
+                ->with('success', 'Video caricato con successo! Il video sarà disponibile a breve una volta completata l\'elaborazione.');
+
+        } catch (\Exception $e) {
+            \Log::error('Errore upload video', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Pulisci i file temporanei in caso di errore
+            if (isset($tempPath)) {
+                Storage::disk('local')->delete($tempPath);
+            }
+            if (isset($thumbnailPath)) {
+                Storage::disk('local')->delete($thumbnailPath);
+            }
+
+            return back()->withErrors(['error' => 'Errore durante l\'upload del video: ' . $e->getMessage()]);
         }
-
-        $user->videos()->create($videoData);
-
-        return redirect()->route('profile.videos')
-            ->with('success', 'Video caricato con successo!');
     }
 
     /**

@@ -817,19 +817,48 @@ async function initializeVideoPlayer() {
         const response = await fetch(`/videos/${videoId}/peertube-url`);
         const data = await response.json();
 
+        // Gestisci il caso in cui il video è ancora in elaborazione
+        if (data.status === 'processing') {
+            console.log('⏳ Video ancora in elaborazione su PeerTube');
+
+            // Nascondi loading e mostra messaggio di elaborazione
+            if (loading) loading.style.display = 'none';
+            if (error) {
+                error.style.display = 'block';
+                document.getElementById('errorMessage').textContent =
+                    'Il video è ancora in elaborazione su PeerTube. Riprova tra qualche minuto.';
+            }
+            return;
+        }
+
         if (data.success && data.files && data.files.length > 0) {
             // Usa il primo file disponibile (migliore qualità)
             const videoFile = data.files[0];
             console.log('✅ URL video ottenuto:', videoFile.url);
+
+            // Test se l'URL è accessibile
+            console.log('🔍 Test accessibilità URL video...');
+            fetch(videoFile.url, { method: 'HEAD' })
+                .then(response => {
+                    console.log('✅ URL video accessibile - Status:', response.status);
+                })
+                .catch(error => {
+                    console.error('❌ URL video non accessibile:', error);
+                });
 
             // Crea l'elemento source
             const source = document.createElement('source');
             source.src = videoFile.url;
             source.type = 'video/mp4';
 
+            console.log('🎬 Impostazione source video:', videoFile.url);
+
             // Rimuovi eventuali source esistenti e aggiungi quello nuovo
             videoPlayer.innerHTML = '';
             videoPlayer.appendChild(source);
+
+            // Forza il caricamento del video
+            videoPlayer.load();
 
             // Aggiorna la durata se disponibile
             if (data.video_info && data.video_info.duration) {
@@ -868,6 +897,26 @@ function setupVideoEventListeners() {
     videoPlayer.addEventListener('loadedmetadata', function() {
         console.log('🎬 Video caricato - Durata:', videoPlayer.duration);
         videoDuration = videoPlayer.duration || videoDuration;
+    });
+
+    // Event listener per quando il video inizia a caricare
+    videoPlayer.addEventListener('loadstart', function() {
+        console.log('🔄 Inizio caricamento video');
+    });
+
+    // Event listener per quando i dati del video sono disponibili
+    videoPlayer.addEventListener('loadeddata', function() {
+        console.log('✅ Dati video caricati');
+    });
+
+    // Event listener per quando il video può essere riprodotto
+    videoPlayer.addEventListener('canplay', function() {
+        console.log('▶️ Video pronto per la riproduzione');
+    });
+
+    // Event listener per quando il video può essere riprodotto senza interruzioni
+    videoPlayer.addEventListener('canplaythrough', function() {
+        console.log('🎯 Video può essere riprodotto completamente');
     });
 
     // Event listener per play

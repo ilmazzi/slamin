@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 
 use Exception;
+use App\Services\PeerTubeService;
 
 class AuthController extends Controller
 {
@@ -88,7 +89,49 @@ class AuthController extends Controller
             // Assegna i ruoli
             $user->assignRole($selectedRoles);
 
+            // Crea utente PeerTube se ha ruoli poet o organizer
+            $shouldCreatePeerTubeUser = false;
+            foreach ($selectedRoles as $role) {
+                if (in_array($role, ['poet', 'organizer'])) {
+                    $shouldCreatePeerTubeUser = true;
+                    break;
+                }
+            }
 
+            if ($shouldCreatePeerTubeUser) {
+                try {
+                    Log::info('Creazione utente PeerTube durante registrazione', [
+                        'user_id' => $user->id,
+                        'email' => $user->email,
+                        'roles' => $selectedRoles
+                    ]);
+
+                    $peerTubeService = new PeerTubeService();
+
+                    // Genera una password sicura per PeerTube
+                    $peerTubePassword = \Illuminate\Support\Str::random(12);
+
+                    // Crea l'utente su PeerTube
+                    $peerTubeUser = $peerTubeService->createPeerTubeUser($user, $peerTubePassword);
+
+                    if ($peerTubeUser) {
+                        Log::info('Utente PeerTube creato con successo durante registrazione', [
+                            'user_id' => $user->id,
+                            'peertube_user_id' => $user->peertube_user_id
+                        ]);
+                    } else {
+                        Log::warning('Fallimento creazione utente PeerTube durante registrazione', [
+                            'user_id' => $user->id
+                        ]);
+                    }
+                } catch (Exception $e) {
+                    Log::error('Errore creazione utente PeerTube durante registrazione', [
+                        'user_id' => $user->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Non blocchiamo la registrazione se PeerTube fallisce
+                }
+            }
 
             // Login automatico
             Auth::login($user);
@@ -99,6 +142,11 @@ class AuthController extends Controller
                 $this->getRoleDisplayName($selectedRoles[0]);
 
             $welcomeMessage = "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi.";
+
+            // Aggiungi messaggio PeerTube se applicabile
+            if ($shouldCreatePeerTubeUser && $user->peertube_user_id) {
+                $welcomeMessage .= " 🎬 Il tuo account PeerTube è stato creato automaticamente per caricare i tuoi video!";
+            }
 
             return redirect()->route('dashboard')
                 ->with('success', $welcomeMessage);

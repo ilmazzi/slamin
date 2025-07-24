@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
@@ -132,7 +132,7 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <form action="{{ route('videos.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                             @csrf
 
                             <!-- Video File Upload -->

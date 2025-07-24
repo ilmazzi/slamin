@@ -40,7 +40,21 @@ class User extends Authenticatable
         'social_instagram',
         'social_youtube',
         'social_twitter',
-
+        // PeerTube fields
+        'peertube_user_id',
+        'peertube_username',
+        'peertube_display_name',
+        'peertube_token',
+        'peertube_refresh_token',
+        'peertube_token_expires_at',
+        'peertube_account_id',
+        'peertube_channel_id',
+        'peertube_email',
+        'peertube_role',
+        'peertube_video_quota',
+        'peertube_video_quota_daily',
+        'peertube_created_at',
+        'peertube_password',
     ];
 
     /**
@@ -63,6 +77,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'peertube_token_expires_at' => 'datetime',
+            'peertube_created_at' => 'datetime',
         ];
     }
 
@@ -444,5 +460,19 @@ class User extends Authenticatable
         return asset('assets/images/profile-app/28.jpg');
     }
 
+    /**
+     * Verifica se l'utente ha un account PeerTube
+     */
+    public function hasPeerTubeAccount(): bool
+    {
+        return !empty($this->peertube_user_id);
+    }
 
+    /**
+     * Verifica se l'utente può avere un account PeerTube (ruoli poet/organizer)
+     */
+    public function canHavePeerTubeAccount(): bool
+    {
+        return $this->hasAnyRole(['poet', 'organizer']);
+    }
 }
