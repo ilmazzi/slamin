@@ -636,6 +636,162 @@
     </div>
 </div>
 
+<!-- Edit Task Modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaskModalLabel">
+                    <i class="ph ph-pencil me-2"></i>Modifica Task
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editTaskForm" enctype="multipart/form-data">
+                <input type="hidden" id="editTaskId" name="task_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="editTaskTitle" class="form-label">Titolo *</label>
+                                <input type="text" class="form-control" id="editTaskTitle" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="editTaskPriority" class="form-label">Priorità</label>
+                                <select class="form-select" id="editTaskPriority" name="priority">
+                                    <option value="low">Bassa</option>
+                                    <option value="medium" selected>Media</option>
+                                    <option value="high">Alta</option>
+                                    <option value="urgent">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskCategory" class="form-label">Categoria</label>
+                                <select class="form-select" id="editTaskCategory" name="category">
+                                    <option value="frontend">Frontend</option>
+                                    <option value="backend">Backend</option>
+                                    <option value="database">Database</option>
+                                    <option value="design">Design</option>
+                                    <option value="testing">Testing</option>
+                                    <option value="deployment">Deployment</option>
+                                    <option value="documentation">Documentazione</option>
+                                    <option value="bug_fix">Bug Fix</option>
+                                    <option value="feature">Nuova Feature</option>
+                                    <option value="maintenance">Manutenzione</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskStatus" class="form-label">Stato</label>
+                                <select class="form-select" id="editTaskStatus" name="status">
+                                    <option value="todo">TODO</option>
+                                    <option value="in_progress">IN PROGRESS</option>
+                                    <option value="review">REVIEW</option>
+                                    <option value="testing">TESTING</option>
+                                    <option value="done">DONE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskAssignedTo" class="form-label">Assegna a</label>
+                                <select class="form-select" id="editTaskAssignedTo" name="assigned_to">
+                                    <option value="">Seleziona utente...</option>
+                                    @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->getDisplayName() }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskDueDate" class="form-label">Data Scadenza</label>
+                                <input type="date" class="form-control" id="editTaskDueDate" name="due_date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskEstimatedHours" class="form-label">Ore Stimate</label>
+                                <input type="number" class="form-control" id="editTaskEstimatedHours" name="estimated_hours" min="0" step="0.5">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editTaskProgress" class="form-label">Progresso (%)</label>
+                                <input type="number" class="form-control" id="editTaskProgress" name="progress_percentage" min="0" max="100" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editTaskDescription" class="form-label">Descrizione</label>
+                        <textarea class="form-control" id="editTaskDescription" name="description" rows="4" placeholder="Descrivi il task in dettaglio..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editTaskNotes" class="form-label">Note</label>
+                        <textarea class="form-control" id="editTaskNotes" name="notes" rows="3" placeholder="Note aggiuntive..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editTaskTags" class="form-label">Tags</label>
+                        <input type="text" class="form-control" id="editTaskTags" name="tags" placeholder="tag1, tag2, tag3...">
+                    </div>
+
+                    <!-- Immagini esistenti -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="ph-bold ph-image me-2"></i>Immagini esistenti
+                        </label>
+                        <div id="existingImagesContainer" class="row g-2">
+                            <!-- Le immagini esistenti verranno caricate qui -->
+                        </div>
+                    </div>
+
+                    <!-- Aggiungi nuove immagini -->
+                    <div class="mb-3">
+                        <label for="editTaskImages" class="form-label">
+                            <i class="ph-bold ph-plus me-2"></i>Aggiungi nuove immagini
+                        </label>
+                        <div class="border-2 border-dashed border-secondary rounded p-3 text-center" style="border-style: dashed;">
+                            <input type="file" class="form-control" id="editTaskImages" name="images[]" multiple accept="image/*" style="display: none;">
+                            <div class="upload-area" onclick="document.getElementById('editTaskImages').click()" style="cursor: pointer;">
+                                <i class="ph-bold ph-upload-simple f-s-48 text-muted mb-2"></i>
+                                <p class="text-muted mb-2">Clicca per selezionare nuove immagini</p>
+                                <p class="text-muted small">o trascina qui i file</p>
+                                <p class="text-muted small">Formati: JPEG, PNG, JPG, GIF, WebP (max 2MB ciascuna)</p>
+                            </div>
+                            <div id="editTaskImagePreview" class="mt-3" style="display: none;">
+                                <h6>Nuove immagini selezionate:</h6>
+                                <div id="editTaskImageList" class="row g-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-check me-2"></i>Salva Modifiche
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -1036,6 +1192,22 @@ function displayTaskDetails(task) {
     }
 
     const content = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+                <i class="ph ph-clipboard-text me-2"></i>Dettagli Task
+            </h5>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary btn-sm" onclick="editTask(${task.id})">
+                    <i class="ph ph-pencil me-2"></i>Modifica
+                </button>
+                <button type="button" class="btn btn-success btn-sm" onclick="completeTask(${task.id})">
+                    <i class="ph ph-check me-2"></i>Completa
+                </button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="rejectTask()">
+                    <i class="ph ph-arrow-counter-clockwise me-2"></i>Rifiuta
+                </button>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <h6 class="border-bottom pb-2 mb-3">
@@ -1181,6 +1353,98 @@ function deleteTaskImage(taskId, imageIndex) {
                 showNotification(errorMessage, 'error');
             }
         });
+    }
+}
+
+// Funzione per aprire il modal di modifica task
+function editTask(taskId) {
+    // Chiudi l'overlay dei dettagli
+    closeTaskOverlay();
+    
+    // Carica i dati del task per il form di modifica
+    $.ajax({
+        url: '{{ route("admin.kanban.task-details") }}',
+        method: 'POST',
+        data: {
+            task_id: taskId,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.success) {
+                populateEditForm(response.task);
+                $('#editTaskModal').modal('show');
+            } else {
+                showNotification('Errore nel caricamento del task: ' + response.message, 'error');
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = 'Errore nel caricamento del task';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            showNotification(errorMessage, 'error');
+        }
+    });
+}
+
+// Funzione per popolare il form di modifica
+function populateEditForm(task) {
+    // Popola i campi del form
+    $('#editTaskId').val(task.id);
+    $('#editTaskTitle').val(task.title);
+    $('#editTaskDescription').val(task.description);
+    $('#editTaskPriority').val(task.priority);
+    $('#editTaskCategory').val(task.category);
+    $('#editTaskStatus').val(task.status);
+    $('#editTaskAssignedTo').val(task.assigned_to);
+    $('#editTaskDueDate').val(task.due_date ? task.due_date.split('T')[0] : '');
+    $('#editTaskEstimatedHours').val(task.estimated_hours);
+    $('#editTaskProgress').val(task.progress_percentage);
+    $('#editTaskNotes').val(task.notes);
+    $('#editTaskTags').val(task.tags);
+    
+    // Popola le immagini esistenti
+    populateExistingImages(task.attachments);
+}
+
+// Funzione per popolare le immagini esistenti
+function populateExistingImages(attachments) {
+    const container = $('#existingImagesContainer');
+    container.empty();
+    
+    if (attachments && attachments.length > 0) {
+        const images = attachments.filter(att => att.type === 'image');
+        
+        if (images.length > 0) {
+            images.forEach((image, index) => {
+                const imageHtml = `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="position-relative">
+                            <img src="/storage/${image.path}" 
+                                 class="img-fluid rounded shadow-sm" 
+                                 alt="${image.original_name}"
+                                 style="width: 100%; height: 100px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-1">
+                                <button class="btn btn-sm btn-danger" 
+                                        onclick="deleteTaskImage(${currentTaskId}, ${index})"
+                                        title="Elimina immagine">
+                                    <i class="ph ph-x"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted d-block">${image.original_name}</small>
+                                <small class="text-muted">${formatFileSize(image.size)}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(imageHtml);
+            });
+        } else {
+            container.html('<div class="col-12"><p class="text-muted">Nessuna immagine presente</p></div>');
+        }
+    } else {
+        container.html('<div class="col-12"><p class="text-muted">Nessuna immagine presente</p></div>');
     }
 }
 
@@ -1426,11 +1690,23 @@ $(document).ready(function() {
     setupImageUpload('taskImages', 'taskImagePreview', 'taskImageList');
     setupDragAndDrop('taskImages', 'taskImagePreview', 'taskImageList');
     
+    // Setup edit task image upload functionality
+    setupImageUpload('editTaskImages', 'editTaskImagePreview', 'editTaskImageList');
+    setupDragAndDrop('editTaskImages', 'editTaskImagePreview', 'editTaskImageList');
+    
     // Reset form when modal is closed
     $('#addTaskModal').on('hidden.bs.modal', function() {
         $('#addTaskForm')[0].reset();
         $('#taskImagePreview').hide();
         $('#taskImageList').empty();
+    });
+    
+    // Reset edit form when modal is closed
+    $('#editTaskModal').on('hidden.bs.modal', function() {
+        $('#editTaskForm')[0].reset();
+        $('#editTaskImagePreview').hide();
+        $('#editTaskImageList').empty();
+        $('#existingImagesContainer').empty();
     });
     
     // Setup CSRF token
@@ -1490,6 +1766,53 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 let errorMessage = 'Errore nella creazione del task';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                showNotification(errorMessage, 'error');
+            },
+            complete: function() {
+                // Restore button state
+                submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+
+    // Edit Task Form Handler
+    $('#editTaskForm').on('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+
+        // Show loading state
+        submitBtn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Salvataggio in corso...
+        `);
+
+        $.ajax({
+            url: '{{ route("admin.kanban.update-task") }}',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    $('#editTaskModal').modal('hide');
+                    showNotification('Task aggiornato con successo!', 'success');
+
+                    // Refresh the page to show updated data
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('Errore nell\'aggiornamento del task: ' + response.message, 'error');
+                }
+            },
+            error: function(xhr) {
+                let errorMessage = 'Errore nell\'aggiornamento del task';
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 }
