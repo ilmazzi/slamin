@@ -3,6 +3,58 @@
 @section('title', $user->getDisplayName() . ' - ' . __('profile.profile') . ' - Slamin')
 
 @section('css')
+<style>
+/* Stili per i pulsanti delle azioni */
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+/* Effetti per l'anteprima video */
+.video-preview {
+    transition: all 0.3s ease;
+}
+
+.video-preview:hover {
+    transform: scale(1.02);
+}
+
+.video-preview:hover .play-button {
+    background-color: #667eea !important;
+    transform: scale(1.1);
+}
+
+.video-preview:hover .play-button i {
+    color: white !important;
+}
+
+/* Effetti per thumbnail con play button */
+.position-relative[onclick] {
+    transition: all 0.3s ease;
+}
+
+.position-relative[onclick]:hover {
+    transform: scale(1.02);
+}
+
+.position-relative[onclick]:hover .play-button {
+    background-color: #667eea !important;
+    transform: scale(1.1);
+}
+
+.position-relative[onclick]:hover .play-button i {
+    color: white !important;
+}
+
+.play-button {
+    transition: all 0.3s ease;
+}
+</style>
 @endsection
 
 @section('main-content')
@@ -240,10 +292,74 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top">
-                                            <div class="position-absolute top-0 end-0 m-2">
-                                                <span class="badge bg-dark f-s-11">{{ $video->views }} {{ __('profile.views') }}</span>
-                                            </div>
+                                            @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
+                                                <!-- Thumbnail con overlay play -->
+                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                                                    <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                                    <!-- Overlay play button -->
+                                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                                        <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                                                            <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Duration overlay -->
+                                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                                                        <small class="text-white f-s-12">
+                                                            <i class="ph-duotone ph-clock me-1"></i>
+                                                            @if($video->duration && $video->duration > 0)
+                                                                {{ $video->formatted_duration }}
+                                                            @else
+                                                                <span title="Durata non disponibile">--:--</span>
+                                                            @endif
+                                                        </small>
+                                                    </div>
+                                                    <!-- Views badge -->
+                                                    <div class="position-absolute top-0 end-0 m-2">
+                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                    </div>
+                                                </div>
+                                            @elseif($video->peertube_uuid)
+                                                <!-- Anteprima video con overlay play -->
+                                                <div class="card-img-top video-preview bg-gradient-primary d-flex align-items-center justify-content-center position-relative"
+                                                     style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;"
+                                                     onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                                        <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                                                            <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                                                        <small class="text-white f-s-12">
+                                                            <i class="ph-duotone ph-clock me-1"></i>
+                                                            @if($video->duration && $video->duration > 0)
+                                                                {{ $video->formatted_duration }}
+                                                            @else
+                                                                <span title="Durata non disponibile">--:--</span>
+                                                            @endif
+                                                        </small>
+                                                    </div>
+                                                    <!-- Views badge -->
+                                                    <div class="position-absolute top-0 end-0 m-2">
+                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <!-- Fallback per video senza thumbnail -->
+                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                        <div class="text-center">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
+                                                            <div class="play-button bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                                                                <i class="ph-duotone ph-play f-s-24 text-white"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Views badge -->
+                                                    <div class="position-absolute top-0 end-0 m-2">
+                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="card-body pa-15">
                                             <h6 class="card-title f-w-600 f-s-14 mb-1">{{ $video->title }}</h6>

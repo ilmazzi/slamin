@@ -31,6 +31,16 @@ class Video extends Model
         'comment_count',
         'moderation_status',
         'moderation_notes',
+        // Campi PeerTube
+        'peertube_video_id',
+        'peertube_uuid',
+        'peertube_short_uuid',
+        'peertube_url',
+        'peertube_thumbnail_url',
+        'peertube_tags',
+        'peertube_status',
+        'peertube_uploaded_at',
+        'peertube_processed_at',
     ];
 
     protected $casts = [
@@ -46,6 +56,8 @@ class Video extends Model
         'peertube_tags' => 'array',
         'uploaded_at' => 'datetime',
         'last_sync_at' => 'datetime',
+        'peertube_uploaded_at' => 'datetime',
+        'peertube_processed_at' => 'datetime',
     ];
 
     /**
@@ -305,5 +317,99 @@ class Video extends Model
         return round(($this->like_count / $total) * 100, 1);
     }
 
+    /**
+     * Verifica se il video è caricato su PeerTube
+     */
+    public function isUploadedToPeerTube(): bool
+    {
+        return !empty($this->peertube_video_id) && !empty($this->peertube_uuid);
+    }
 
+    /**
+     * Verifica se il video è in elaborazione su PeerTube
+     */
+    public function isProcessingOnPeerTube(): bool
+    {
+        // Se lo stato locale è già 'ready', non è in elaborazione
+        if ($this->peertube_status === 'ready' || $this->peertube_status === 'published') {
+            return false;
+        }
+
+        // Se lo stato locale è 'processing', controlla PeerTube
+        if ($this->peertube_status === 'processing') {
+            try {
+                $peerTubeService = new \App\Services\PeerTubeService();
+                $baseUrl = $peerTubeService->getBaseUrl();
+                $response = \Illuminate\Support\Facades\Http::timeout(10)
+                    ->get($baseUrl . '/api/v1/videos/' . $this->peertube_uuid);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+
+                    // Se il video ha files o streamingPlaylists, è pronto
+                    $hasFiles = !empty($data['files']);
+                    $hasStreamingPlaylists = !empty($data['streamingPlaylists']);
+
+                    if ($hasFiles || $hasStreamingPlaylists) {
+                        // Aggiorna lo stato nel database
+                        $this->update(['peertube_status' => 'ready']);
+                        return false; // Non è più in elaborazione
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Errore controllo stato video PeerTube', [
+                    'video_id' => $this->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return $this->peertube_status === 'processing';
+    }
+
+    /**
+     * Verifica se il video è pronto su PeerTube
+     */
+    public function isReadyOnPeerTube(): bool
+    {
+        return $this->peertube_status === 'ready' || $this->peertube_status === 'published';
+    }
+
+    /**
+     * Ottiene l'URL del video PeerTube
+     */
+    public function getPeerTubeUrlAttribute(): ?string
+    {
+        if ($this->isUploadedToPeerTube()) {
+            // Se abbiamo già l'URL salvato nel database, usalo
+            if ($this->getRawOriginal('peertube_url')) {
+                return $this->getRawOriginal('peertube_url');
+            }
+
+            // Altrimenti costruiscilo dall'UUID
+            $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
+            return $peerTubeUrl . '/videos/watch/' . $this->peertube_uuid;
+        }
+
+        return null;
+    }
+
+    /**
+     * Ottiene l'URL di embed del video PeerTube
+     */
+    public function getPeerTubeEmbedUrlAttribute(): ?string
+    {
+        if ($this->isUploadedToPeerTube()) {
+            // Se abbiamo già l'URL di embed salvato nel database, usalo
+            if ($this->getRawOriginal('peertube_embed_url')) {
+                return $this->getRawOriginal('peertube_embed_url');
+            }
+
+            // Altrimenti costruiscilo dall'UUID
+            $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
+            return $peerTubeUrl . '/videos/embed/' . $this->peertube_uuid;
+        }
+
+        return null;
+    }
 }

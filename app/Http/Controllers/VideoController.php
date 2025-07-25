@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['getVideoData']);
     }
 
     /**
@@ -93,6 +93,148 @@ class VideoController extends Controller
         }
 
         return back()->withErrors(['error' => 'Video non disponibile per il download.']);
+    }
+
+    /**
+     * Ottiene i dati del video per API
+     */
+    public function getVideoData(Video $video)
+    {
+        return response()->json([
+            'id' => $video->id,
+            'title' => $video->title,
+            'description' => $video->description,
+            'views' => $video->view_count,
+            'created_at' => $video->created_at,
+            'embed_url' => $video->embed_url,
+            'is_uploaded_to_peertube' => $video->isUploadedToPeerTube(),
+            'peertube_url' => $video->peer_tube_url,
+            'peertube_embed_url' => $video->peer_tube_embed_url,
+            'status' => $video->status,
+            'is_public' => $video->is_public,
+        ]);
+    }
+
+    /**
+     * Ottiene l'URL diretto del video PeerTube
+     */
+    public function getPeerTubeUrl(Video $video)
+    {
+        try {
+            if (!$video->isUploadedToPeerTube()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Video non caricato su PeerTube'
+                ], 404);
+            }
+
+            // Se il video è ancora in elaborazione, restituisci un messaggio
+            if ($video->isProcessingOnPeerTube()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Video ancora in elaborazione su PeerTube',
+                    'status' => 'processing'
+                ], 202);
+            }
+
+            // Ottieni l'URL diretto del video da PeerTube
+            $peerTubeService = new \App\Services\PeerTubeService();
+            $baseUrl = $peerTubeService->getBaseUrl();
+            $videoUuid = $video->peertube_uuid ?? $video->peertube_short_uuid;
+
+                        // Chiamata API a PeerTube per ottenere i dettagli del video
+            $apiUrl = $baseUrl . '/api/v1/videos/' . $videoUuid;
+
+            $response = \Illuminate\Support\Facades\Http::timeout(10)
+                ->get($apiUrl);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                // Estrai gli URL diretti dei file video
+                $files = [];
+
+                // Prima controlla i file diretti
+                if (isset($data['files']) && is_array($data['files'])) {
+                    foreach ($data['files'] as $file) {
+                        if (isset($file['fileUrl'])) {
+                            $files[] = [
+                                'url' => $file['fileUrl'],
+                                'type' => 'video/mp4',
+                                'quality' => $file['resolution']['label'] ?? 'best'
+                            ];
+                        }
+                    }
+                }
+
+                // Se non ci sono file diretti, controlla i streaming playlists (HLS)
+                if (empty($files) && isset($data['streamingPlaylists']) && is_array($data['streamingPlaylists'])) {
+                    foreach ($data['streamingPlaylists'] as $playlist) {
+                        if (isset($playlist['files']) && is_array($playlist['files'])) {
+                            foreach ($playlist['files'] as $file) {
+                                if (isset($file['fileUrl'])) {
+                                    $files[] = [
+                                        'url' => $file['fileUrl'],
+                                        'type' => 'video/mp4',
+                                        'quality' => $file['resolution']['label'] ?? 'best'
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Se non ci sono file diretti, usa l'URL della pagina come fallback
+                if (empty($files)) {
+                    $files[] = [
+                        'url' => $video->video_url,
+                        'type' => 'video/mp4',
+                        'quality' => 'best'
+                    ];
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'video_url' => $video->video_url,
+                    'embed_url' => $baseUrl . '/videos/embed/' . ($video->peertube_short_uuid ?? $video->peertube_uuid),
+                    'files' => $files,
+                    'video_info' => [
+                        'duration' => $data['duration'] ?? $video->duration,
+                        'title' => $data['name'] ?? $video->title,
+                        'description' => $data['description'] ?? $video->description
+                    ]
+                ]);
+            } else {
+                // Fallback: usa l'URL salvato nel database
+                return response()->json([
+                    'success' => true,
+                    'video_url' => $video->video_url,
+                    'embed_url' => $baseUrl . '/videos/embed/' . ($video->peertube_short_uuid ?? $video->peertube_uuid),
+                    'files' => [
+                        [
+                            'url' => $video->video_url,
+                            'type' => 'video/mp4',
+                            'quality' => 'best'
+                        ]
+                    ],
+                    'video_info' => [
+                        'duration' => $video->duration,
+                        'title' => $video->title,
+                        'description' => $video->description
+                    ]
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Errore ottenimento URL PeerTube', [
+                'video_id' => $video->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Errore nel recupero dell\'URL del video: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

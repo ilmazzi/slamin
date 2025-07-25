@@ -55,7 +55,7 @@ class KanbanController extends Controller
         try {
             $task = Task::findOrFail($request->task_id);
             $oldStatus = $task->status;
-            
+
             $task->update([
                 'status' => $request->new_status,
                 'started_at' => $request->new_status === 'in_progress' && $oldStatus === 'todo' ? now() : $task->started_at,
@@ -70,10 +70,13 @@ class KanbanController extends Controller
                 'type' => 'status_update',
             ]);
 
+            // Reload the task with all relationships for frontend update
+            $task->load(['assignedTo', 'createdBy', 'reviewedBy']);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Task status updated successfully',
-                'task' => $task->load(['assignedTo', 'createdBy'])
+                'task' => $task
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -180,4 +183,4 @@ class KanbanController extends Controller
             ], 500);
         }
     }
-} 
+}

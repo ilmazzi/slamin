@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
@@ -516,6 +517,13 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/kanban/tasks', [App\Http\Controllers\Admin\KanbanController::class, 'storeTask'])->name('kanban.store-task');
         Route::post('/kanban/comments', [App\Http\Controllers\Admin\KanbanController::class, 'addComment'])->name('kanban.add-comment');
 
+        // PeerTube Management Routes
+        Route::get('/peertube', [App\Http\Controllers\Admin\PeerTubeController::class, 'index'])->name('peertube.index');
+        Route::put('/peertube', [App\Http\Controllers\Admin\PeerTubeController::class, 'update'])->name('peertube.update');
+        Route::get('/peertube/test-connection', [App\Http\Controllers\Admin\PeerTubeController::class, 'testConnectionApi'])->name('peertube.test-connection');
+        Route::get('/peertube/statistics', [App\Http\Controllers\Admin\PeerTubeController::class, 'statistics'])->name('peertube.statistics');
+        Route::get('/peertube/users', [App\Http\Controllers\Admin\PeerTubeController::class, 'users'])->name('peertube.users');
+
         // User Management Routes
         Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
         Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');
@@ -528,7 +536,6 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('edit');
         Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
         Route::get('/videos', [App\Http\Controllers\ProfileController::class, 'videos'])->name('videos');
-        Route::post('/videos/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('videos.upload');
         Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
     });
@@ -539,10 +546,20 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
             return redirect()->route('profile.videos');
         })->name('index');
 
+        // Video upload page
+        Route::get('/upload', function() {
+            $user = Auth::user();
+            return view('videos.upload', compact('user'));
+        })->name('upload');
+
+        // Video upload processing
+        Route::post('/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('upload');
+
         // Video playback and views
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
         Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
+        Route::get('/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeUrl'])->name('peertube-url');
 
 
         // Video interactions (comments, likes, snaps)
@@ -554,12 +571,23 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/snaps/{snap}/like', [App\Http\Controllers\VideoController::class, 'toggleSnapLike'])->name('snap-like');
     });
 
+    // API routes for videos (without auth middleware)
+    Route::prefix('api/videos')->group(function () {
+        Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'getVideoData'])->name('api.videos.get');
+    });
+
     // Media Routes (pubbliche)
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
         Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
         Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
     });
+
+    // PeerTube upload route alias
+    Route::get('/peertube/upload', function() {
+        $user = Auth::user();
+        return view('videos.upload', compact('user'));
+    })->name('peertube.upload-video')->middleware('auth');
 
     // Premium Routes
     Route::prefix('premium')->name('premium.')->middleware('auth')->group(function () {

@@ -208,6 +208,14 @@
                                     </a>
                                 </li>
 
+                                <!-- PeerTube Configuration - Solo per admin/moderator -->
+                                <li class="no-sub {{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.peertube.index') }}">
+                                        <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
+                                        PeerTube
+                                    </a>
+                                </li>
+
                                 <!-- Kanban Board - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.kanban.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.kanban.index') }}">

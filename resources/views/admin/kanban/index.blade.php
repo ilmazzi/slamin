@@ -3,6 +3,9 @@
 @section('title', 'Kanban Board - Admin')
 
 @section('main-content')
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="container-fluid">
     <!-- Breadcrumbs -->
     <div class="row">
@@ -398,26 +401,26 @@
     </div>
 </div>
 
-<!-- Task Details Modal -->
-<div class="modal fade" id="taskDetailsModal" tabindex="-1" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="taskDetailsModalLabel">Dettagli Task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="taskDetailsContent">
-                <!-- Content will be loaded here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                <button type="button" class="btn btn-success" onclick="approveTask()">
-                    <i class="ph ph-check me-2"></i>Completa
-                </button>
-                <button type="button" class="btn btn-warning" onclick="rejectTask()">
-                    <i class="ph ph-arrow-left me-2"></i>Riporta a TODO
-                </button>
-            </div>
+<!-- Task Details Overlay (Complete Modal) -->
+<div id="taskDetailsOverlay" class="task-overlay" style="display: none;">
+    <div class="task-overlay-content">
+        <div class="task-overlay-header">
+            <h5 class="task-overlay-title">Dettagli Task</h5>
+            <button type="button" class="task-overlay-close" onclick="closeTaskOverlay()">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <div class="task-overlay-body" id="taskDetailsContent">
+            <!-- Content will be loaded here -->
+        </div>
+        <div class="task-overlay-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeTaskOverlay()">Chiudi</button>
+            <button type="button" class="btn btn-success" onclick="approveTask()">
+                <i class="ph ph-check me-2"></i>Completa
+            </button>
+            <button type="button" class="btn btn-warning" onclick="rejectTask()">
+                <i class="ph ph-arrow-left me-2"></i>Riporta a TODO
+            </button>
         </div>
     </div>
 </div>
@@ -670,6 +673,119 @@
     background-color: #f8fff9;
     border-color: #28a745;
 }
+
+/* Custom Overlay Styles */
+.task-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.task-overlay-content {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+}
+
+.task-overlay-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.task-overlay-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.task-overlay-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.task-overlay-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.task-overlay-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.task-overlay-footer {
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .task-overlay-content {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .task-overlay-body {
+        padding: 1rem;
+    }
+
+    .task-overlay-footer {
+        flex-direction: column;
+    }
+
+    .task-overlay-footer .btn {
+        width: 100%;
+    }
+}
 </style>
 
 <!-- Kanban Board JS -->
@@ -682,88 +798,76 @@ let currentTaskId = null;
 
 // Initialize custom kanban functionality
 $(document).ready(function() {
-    // Add click handler for task items
-    $('.board-item').on('click', function(e) {
-        // Don't trigger click when dragging
-        if ($(this).hasClass('dragging')) {
+    console.log('Document ready!');
+    console.log('jQuery version:', $.fn.jquery);
+
+    // Add click handler for task items with better timing
+    $(document).on('click', '.board-item-content', function(e) {
+        console.log('Board item content clicked!');
+
+        // Don't trigger if dragging
+        if ($(this).closest('.board-item').hasClass('dragging')) {
+            console.log('Item is dragging, ignoring click');
             return;
         }
 
-        const taskId = $(this).data('task-id');
-        currentTaskId = taskId;
-        loadTaskDetails(taskId);
+        // Don't trigger if it's a drag operation
+        if (e.which !== 1) { // Only left click
+            return;
+        }
+
+        const $boardItem = $(this).closest('.board-item');
+        const taskId = $boardItem.data('task-id');
+
+        console.log('Task content clicked, ID:', taskId);
+
+        if (taskId) {
+            currentTaskId = taskId;
+            showTaskOverlay(taskId);
+        }
     });
 
-    // Initialize Muuri drag and drop
-    const itemContainers = Array.from(document.querySelectorAll('.board-column-content'));
-    const columnGrids = [];
-    let boardGrid;
+    // Muuri is already initialized in kanban_board.js
+    // The drag and drop functionality is handled there
 
-    itemContainers.forEach((container) => {
-        const grid = new Muuri(container, {
-            items: '.board-item',
-            layoutDuration: 400,
-            layoutEasing: 'ease',
-            dragEnabled: true,
-            dragSort: () => columnGrids,
-            dragSortInterval: 0,
-            dragContainer: document.body,
-            dragReleaseDuration: 400,
-            dragReleaseEasing: 'ease'
-        })
-        .on('dragStart', (item) => {
-            const el = item.getElement();
-            el.style.width = `${item.getWidth()}px`;
-            el.style.height = `${item.getHeight()}px`;
-            el.classList.add('dragging');
-        })
-        .on('dragReleaseEnd', (item) => {
-            const el = item.getElement();
-            el.style.width = '';
-            el.style.height = '';
-            el.classList.remove('dragging');
-
-            // Get the new column and update task status
-            const newColumn = el.closest('.board-column');
-            const columnHeader = newColumn.querySelector('.board-column-header h6').textContent.trim();
-            let newStatus = 'todo';
-
-            // Map column headers to status values
-            if (columnHeader.includes('TODO')) newStatus = 'todo';
-            else if (columnHeader.includes('IN PROGRESS')) newStatus = 'in_progress';
-            else if (columnHeader.includes('REVIEW')) newStatus = 'review';
-            else if (columnHeader.includes('TESTING')) newStatus = 'testing';
-            else if (columnHeader.includes('DONE')) newStatus = 'done';
-
-            const taskId = el.dataset.taskId;
-            updateTaskStatus(taskId, newStatus);
-
-            columnGrids.forEach((grid) => {
-                grid.refreshItems();
-            });
-        })
-        .on('layoutStart', () => {
-            if (boardGrid) {
-                boardGrid.refreshItems().layout();
-            }
-        });
-
-        columnGrids.push(grid);
-    });
-
-    boardGrid = new Muuri('.board', {
-        layout: {
-            horizontal: true,
-        },
-        layoutDuration: 400,
-        layoutEasing: 'ease',
-        dragEnabled: false, // Disable column dragging
-        dragReleaseDuration: 400,
-        dragReleaseEasing: 'ease'
+    // Overlay event handlers
+    $('#taskDetailsOverlay').on('click', function(e) {
+        if (e.target === this) {
+            closeTaskOverlay();
+        }
     });
 });
 
+// Show task overlay
+function showTaskOverlay(taskId) {
+    console.log('Showing task overlay for ID:', taskId);
+
+    // Show loading state
+    $('#taskDetailsContent').html(`
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="mt-2">Caricamento dettagli task...</p>
+        </div>
+    `);
+
+    // Show overlay
+    $('#taskDetailsOverlay').show();
+
+    // Load task details
+    loadTaskDetails(taskId);
+}
+
+function closeTaskOverlay() {
+    $('#taskDetailsOverlay').hide();
+    $('#taskDetailsContent').empty();
+    currentTaskId = null;
+}
+
 function loadTaskDetails(taskId) {
+    console.log('Loading task details for ID:', taskId);
+
     $.ajax({
         url: '{{ route("admin.kanban.task-details") }}',
         method: 'POST',
@@ -772,13 +876,30 @@ function loadTaskDetails(taskId) {
             _token: '{{ csrf_token() }}'
         },
         success: function(response) {
+            console.log('Task details response:', response);
             if (response.success) {
                 displayTaskDetails(response.task);
-                $('#taskDetailsModal').modal('show');
+            } else {
+                $('#taskDetailsContent').html(`
+                    <div class="alert alert-danger">
+                        <i class="ph ph-warning me-2"></i>
+                        Errore nel caricamento dei dettagli: ${response.message}
+                    </div>
+                `);
             }
         },
-        error: function() {
-            alert('Errore nel caricamento dei dettagli');
+        error: function(xhr) {
+            console.log('Task details error:', xhr);
+            let errorMessage = 'Errore nel caricamento dei dettagli';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            $('#taskDetailsContent').html(`
+                <div class="alert alert-danger">
+                    <i class="ph ph-warning me-2"></i>
+                    ${errorMessage}
+                </div>
+            `);
         }
     });
 }
@@ -787,7 +908,9 @@ function displayTaskDetails(task) {
     const content = `
         <div class="row">
             <div class="col-md-6">
-                <h6>Informazioni Task</h6>
+                <h6 class="border-bottom pb-2 mb-3">
+                    <i class="ph ph-info me-2"></i>Informazioni Task
+                </h6>
                 <p><strong>Titolo:</strong> ${task.title}</p>
                 <p><strong>Descrizione:</strong> ${task.description || 'N/A'}</p>
                 <p><strong>Categoria:</strong> <span class="badge bg-info">${task.category}</span></p>
@@ -796,7 +919,9 @@ function displayTaskDetails(task) {
                 <p><strong>Progresso:</strong> <span class="badge bg-${getProgressColor(task.progress_percentage)}">${task.progress_percentage}%</span></p>
             </div>
             <div class="col-md-6">
-                <h6>Assegnazione e Date</h6>
+                <h6 class="border-bottom pb-2 mb-3">
+                    <i class="ph ph-users me-2"></i>Assegnazione e Date
+                </h6>
                 <p><strong>Creato da:</strong> ${task.created_by ? task.created_by.name : 'N/A'}</p>
                 <p><strong>Assegnato a:</strong> ${task.assigned_to ? task.assigned_to.name : 'Non assegnato'}</p>
                 <p><strong>Data creazione:</strong> ${new Date(task.created_at).toLocaleDateString()}</p>
@@ -807,12 +932,16 @@ function displayTaskDetails(task) {
         </div>
         <div class="row mt-3">
             <div class="col-md-6">
-                <h6>Time Tracking</h6>
+                <h6 class="border-bottom pb-2 mb-3">
+                    <i class="ph ph-clock me-2"></i>Time Tracking
+                </h6>
                 <p><strong>Ore stimate:</strong> ${task.estimated_hours || 'Non specificato'}</p>
                 <p><strong>Ore effettive:</strong> ${task.actual_hours || 'Non registrato'}</p>
             </div>
             <div class="col-md-6">
-                <h6>Note</h6>
+                <h6 class="border-bottom pb-2 mb-3">
+                    <i class="ph ph-note me-2"></i>Note
+                </h6>
                 <p>${task.notes || 'Nessuna nota'}</p>
             </div>
         </div>
@@ -850,6 +979,21 @@ function getProgressColor(progress) {
 }
 
 function updateTaskStatus(taskId, newStatus) {
+    // Show loading indicator
+    const taskElement = $(`.board-item[data-task-id="${taskId}"]`);
+    const originalContent = taskElement.html();
+
+    taskElement.html(`
+        <div class="board-item-content card shadow-sm border-0">
+            <div class="card-body p-3 text-center">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                    <span class="visually-hidden">Aggiornamento...</span>
+                </div>
+                <p class="mt-2 mb-0 small text-muted">Aggiornamento stato...</p>
+            </div>
+        </div>
+    `);
+
     $.ajax({
         url: '{{ route("admin.kanban.update-status") }}',
         method: 'POST',
@@ -860,32 +1004,129 @@ function updateTaskStatus(taskId, newStatus) {
         },
         success: function(response) {
             if (response.success) {
-                // Refresh the page to show updated data
-                location.reload();
+                // Update the task element with new data
+                updateTaskElement(taskElement, response.task);
+
+                // Show success message
+                showNotification('Stato aggiornato con successo!', 'success');
+            } else {
+                // Restore original content on error
+                taskElement.html(originalContent);
+                showNotification('Errore nell\'aggiornamento dello stato: ' + response.message, 'error');
             }
         },
-        error: function() {
-            alert('Errore nell\'aggiornamento dello stato');
+        error: function(xhr) {
+            // Restore original content on error
+            taskElement.html(originalContent);
+
+            let errorMessage = 'Errore nell\'aggiornamento dello stato';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            showNotification(errorMessage, 'error');
         }
     });
+}
+
+function updateTaskElement(taskElement, task) {
+    // Update the task element with new data without page reload
+    const newContent = `
+        <div class="board-item-content card shadow-sm border-0 hover-effect">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="flex-shrink-0">
+                        <i class="${getCategoryIcon(task.category)} f-s-20"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <h6 class="mb-1 f-w-600">${task.title.length > 35 ? task.title.substring(0, 35) + '...' : task.title}</h6>
+                        ${task.description ? `<p class="text-muted mb-2 f-s-12">${task.description.length > 60 ? task.description.substring(0, 60) + '...' : task.description}</p>` : ''}
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-1">
+                    <span class="badge text-bg-${getPriorityColor(task.priority)} f-s-11">
+                        <i class="ph ph-flag me-1"></i>${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                    </span>
+                    ${task.assigned_to ? `<span class="badge text-bg-info f-s-11">
+                        <i class="ph ph-user me-1"></i>${task.assigned_to.name.length > 15 ? task.assigned_to.name.substring(0, 15) + '...' : task.assigned_to.name}
+                    </span>` : ''}
+                    ${task.due_date ? `<span class="badge text-bg-${isOverdue(task.due_date) ? 'danger' : 'warning'} f-s-11">
+                        <i class="ph ph-calendar me-1"></i>${new Date(task.due_date).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}
+                    </span>` : ''}
+                    ${task.progress_percentage > 0 ? `<span class="badge text-bg-${getProgressColor(task.progress_percentage)} f-s-11">
+                        <i class="ph ph-percent me-1"></i>${task.progress_percentage}%
+                    </span>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    taskElement.html(newContent);
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        'frontend': 'ph ph-browser',
+        'backend': 'ph ph-gear',
+        'database': 'ph ph-database',
+        'design': 'ph ph-palette',
+        'testing': 'ph ph-test-tube',
+        'deployment': 'ph ph-rocket',
+        'documentation': 'ph ph-file-text',
+        'bug_fix': 'ph ph-bug',
+        'feature': 'ph ph-star',
+        'maintenance': 'ph ph-wrench'
+    };
+    return icons[category] || 'ph ph-list';
+}
+
+function isOverdue(dueDate) {
+    return new Date(dueDate) < new Date();
+}
+
+function showNotification(message, type) {
+    // Create notification element
+    const notification = $(`
+        <div class="alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed"
+             style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+            <i class="ph ph-${type === 'error' ? 'warning' : 'check-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `);
+
+    // Add to body
+    $('body').append(notification);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.alert('close');
+    }, 5000);
 }
 
 function approveTask() {
     if (currentTaskId) {
         updateTaskStatus(currentTaskId, 'done');
-        $('#taskDetailsModal').modal('hide');
+        closeTaskOverlay();
     }
 }
 
 function rejectTask() {
     if (currentTaskId) {
         updateTaskStatus(currentTaskId, 'todo');
-        $('#taskDetailsModal').modal('hide');
+        closeTaskOverlay();
     }
 }
 
+// Keyboard event handler for ESC key
+$(document).on('keydown', function(e) {
+    if (e.key === 'Escape' && $('#taskDetailsOverlay').is(':visible')) {
+        closeTaskOverlay();
+    }
+});
+
 // Setup CSRF token per tutte le richieste AJAX
 $(document).ready(function() {
+    // Setup CSRF token
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -911,6 +1152,14 @@ $(document).ready(function() {
         e.preventDefault();
 
         const formData = new FormData(this);
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+
+        // Show loading state
+        submitBtn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Creazione in corso...
+        `);
 
         $.ajax({
             url: '{{ route("admin.kanban.store-task") }}',
@@ -922,16 +1171,38 @@ $(document).ready(function() {
                 if (response.success) {
                     $('#addTaskModal').modal('hide');
                     $('#addTaskForm')[0].reset();
-                    location.reload();
+                    showNotification('Task creato con successo!', 'success');
+
+                    // Refresh only the specific column where the task was added
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 } else {
-                    alert('Errore nella creazione del task: ' + response.message);
+                    showNotification('Errore nella creazione del task: ' + response.message, 'error');
                 }
             },
-            error: function() {
-                alert('Errore nella creazione del task');
+            error: function(xhr) {
+                let errorMessage = 'Errore nella creazione del task';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                showNotification(errorMessage, 'error');
+            },
+            complete: function() {
+                // Restore button state
+                submitBtn.prop('disabled', false).html(originalText);
             }
         });
+    });
+
+    // Overlay event handlers
+    $('#taskDetailsOverlay').on('click', function(e) {
+        if (e.target === this) {
+            closeTaskOverlay();
+        }
     });
 });
 </script>
 @endsection
+
+
