@@ -690,6 +690,9 @@ class EventController extends Controller
                     'longitude' => (float) $event->longitude,
                     'organizer' => $event->organizer ? $event->organizer->getDisplayName() : 'N/A',
                     'url' => route('events.show', $event),
+                    'category' => $event->category,
+                    'category_name' => $event->category ? __('events.category_' . $event->category) : null,
+                    'category_color_class' => $event->category_color_class,
                 ];
             });
 

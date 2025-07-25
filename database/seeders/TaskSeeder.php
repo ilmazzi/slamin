@@ -14,125 +14,96 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get first admin user
-        $admin = User::whereHas('roles', function($query) {
-            $query->where('name', 'admin');
-        })->first();
-
-        if (!$admin) {
-            $admin = User::first();
+        $users = User::all();
+        
+        if ($users->isEmpty()) {
+            $this->command->warn('Nessun utente trovato. Creazione di un utente di esempio...');
+            $user = User::factory()->create([
+                'name' => 'Admin User',
+                'email' => 'admin@example.com',
+                'password' => bcrypt('password'),
+            ]);
+            $users = collect([$user]);
         }
 
-        if (!$admin) {
-            return;
-        }
-
-        // Create sample tasks
-        $tasks = [
-            [
-                'title' => 'Implementare sistema di autenticazione',
-                'description' => 'Creare sistema di login e registrazione con validazione completa',
-                'priority' => 'high',
-                'status' => 'todo',
-                'category' => 'backend',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(7),
-                'estimated_hours' => 8,
-                'progress_percentage' => 0,
-                'notes' => 'Priorità alta per la sicurezza del sistema',
-                'tags' => 'auth,security,backend'
-            ],
-            [
-                'title' => 'Design responsive per mobile',
-                'description' => 'Ottimizzare il design per dispositivi mobili e tablet',
-                'priority' => 'medium',
-                'status' => 'in_progress',
-                'category' => 'frontend',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(5),
-                'estimated_hours' => 6,
-                'progress_percentage' => 30,
-                'notes' => 'Testare su diversi dispositivi',
-                'tags' => 'responsive,mobile,design'
-            ],
-            [
-                'title' => 'Ottimizzare query database',
-                'description' => 'Analizzare e ottimizzare le query per migliorare le performance',
-                'priority' => 'medium',
-                'status' => 'review',
-                'category' => 'database',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(3),
-                'estimated_hours' => 4,
-                'progress_percentage' => 80,
-                'notes' => 'Verificare indici e query complesse',
-                'tags' => 'database,performance,optimization'
-            ],
-            [
-                'title' => 'Test unitari per API',
-                'description' => 'Scrivere test unitari per tutte le API endpoints',
-                'priority' => 'low',
-                'status' => 'testing',
-                'category' => 'testing',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(10),
-                'estimated_hours' => 12,
-                'progress_percentage' => 60,
-                'notes' => 'Copertura test almeno 80%',
-                'tags' => 'testing,api,unit-tests'
-            ],
-            [
-                'title' => 'Aggiornare documentazione',
-                'description' => 'Aggiornare la documentazione del progetto con le nuove funzionalità',
-                'priority' => 'low',
-                'status' => 'done',
-                'category' => 'documentation',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->subDays(2),
-                'estimated_hours' => 3,
-                'progress_percentage' => 100,
-                'completed_at' => now()->subDays(1),
-                'actual_hours' => 2.5,
-                'notes' => 'Documentazione completata e pubblicata',
-                'tags' => 'documentation,update'
-            ],
-            [
-                'title' => 'Fix bug login mobile',
-                'description' => 'Risolvere problema di login su dispositivi mobili',
-                'priority' => 'urgent',
-                'status' => 'todo',
-                'category' => 'bug_fix',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(1),
-                'estimated_hours' => 2,
-                'progress_percentage' => 0,
-                'notes' => 'Bug critico segnalato da utenti',
-                'tags' => 'bugfix,mobile,urgent'
-            ],
-            [
-                'title' => 'Implementare notifiche push',
-                'description' => 'Aggiungere sistema di notifiche push per eventi importanti',
-                'priority' => 'high',
-                'status' => 'in_progress',
-                'category' => 'feature',
-                'assigned_to' => $admin->id,
-                'created_by' => $admin->id,
-                'due_date' => now()->addDays(14),
-                'estimated_hours' => 10,
-                'progress_percentage' => 45,
-                'notes' => 'Integrare con servizio esterno',
-                'tags' => 'notifications,push,feature'
-            ]
+        $categories = [
+            'frontend', 'backend', 'database', 'design', 'testing', 
+            'deployment', 'documentation', 'bug_fix', 'feature', 
+            'maintenance', 'optimization', 'security'
         ];
 
-        foreach ($tasks as $taskData) {
-            Task::create($taskData);
+        $priorities = ['low', 'medium', 'high', 'urgent'];
+        $statuses = ['todo', 'in_progress', 'review', 'testing', 'done'];
+
+        $taskTitles = [
+            'Implementare sistema di autenticazione',
+            'Creare dashboard responsive',
+            'Ottimizzare query database',
+            'Design nuovo logo aziendale',
+            'Testare funzionalità di upload',
+            'Deploy su server di produzione',
+            'Scrivere documentazione API',
+            'Risolvere bug nel login',
+            'Aggiungere notifiche push',
+            'Aggiornare dipendenze di sicurezza',
+            'Migliorare performance frontend',
+            'Implementare sistema di backup',
+            'Creare template email',
+            'Testare compatibilità mobile',
+            'Configurare CI/CD pipeline'
+        ];
+
+        $taskDescriptions = [
+            'Implementare un sistema di autenticazione sicuro con JWT tokens',
+            'Creare una dashboard responsive che funzioni su tutti i dispositivi',
+            'Ottimizzare le query del database per migliorare le performance',
+            'Designare un nuovo logo aziendale che rappresenti i valori dell\'azienda',
+            'Testare la funzionalità di upload file con diversi formati',
+            'Deployare l\'applicazione sul server di produzione',
+            'Scrivere la documentazione completa delle API',
+            'Risolvere il bug che impedisce il login su alcuni browser',
+            'Aggiungere notifiche push per gli aggiornamenti importanti',
+            'Aggiornare le dipendenze per risolvere vulnerabilità di sicurezza',
+            'Migliorare le performance del frontend ottimizzando il caricamento',
+            'Implementare un sistema di backup automatico dei dati',
+            'Creare template email professionali per le comunicazioni',
+            'Testare la compatibilità dell\'app su dispositivi mobile',
+            'Configurare la pipeline CI/CD per il deployment automatico'
+        ];
+
+        for ($i = 0; $i < 20; $i++) {
+            $status = $statuses[array_rand($statuses)];
+            $priority = $priorities[array_rand($priorities)];
+            $category = $categories[array_rand($categories)];
+            $titleIndex = array_rand($taskTitles);
+            
+            $task = Task::create([
+                'title' => $taskTitles[$titleIndex],
+                'description' => $taskDescriptions[$titleIndex],
+                'priority' => $priority,
+                'status' => $status,
+                'category' => $category,
+                'assigned_to' => $users->random()->id,
+                'created_by' => $users->random()->id,
+                'due_date' => now()->addDays(rand(1, 30)),
+                'estimated_hours' => rand(1, 8),
+                'progress_percentage' => $status === 'done' ? 100 : rand(0, 90),
+                'attachments' => [], // Per ora senza immagini
+                'tags' => ['web', 'development', 'feature'],
+            ]);
+
+            // Aggiungi date specifiche in base allo status
+            if ($status === 'in_progress' || $status === 'review' || $status === 'testing' || $status === 'done') {
+                $task->started_at = now()->subDays(rand(1, 10));
+                $task->save();
+            }
+
+            if ($status === 'done') {
+                $task->completed_at = now()->subDays(rand(1, 5));
+                $task->save();
+            }
         }
+
+        $this->command->info('Task di esempio creati con successo!');
     }
 }

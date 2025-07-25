@@ -152,7 +152,21 @@
                                     <div class="board-column-content">
                                         @foreach($data['todo_tasks'] as $task)
                                         <div class="board-item mb-3" data-task-id="{{ $task->id }}" data-status="todo">
-                                            <div class="board-item-content card shadow-sm border-0 hover-effect">
+                                            <div class="board-item-content card shadow-sm border-0 hover-effect {{ $task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0 ? 'p-0' : '' }}">
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                    <div class="position-relative">
+                                                        @php
+                                                            $images = array_filter($task->attachments, fn($a) => $a['type'] === 'image');
+                                                            $firstImage = reset($images);
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $firstImage['path']) }}" class="img-fluid" alt="{{ $firstImage['original_name'] }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                                        @if(count($images) > 1)
+                                                            <div class="position-absolute top-0 end-0 m-2">
+                                                                <span class="badge bg-dark">{{ count($images) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="card-body p-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <div class="flex-shrink-0">
@@ -203,7 +217,21 @@
                                     <div class="board-column-content">
                                         @foreach($data['in_progress_tasks'] as $task)
                                         <div class="board-item mb-3" data-task-id="{{ $task->id }}" data-status="in_progress">
-                                            <div class="board-item-content card shadow-sm border-0 hover-effect">
+                                            <div class="board-item-content card shadow-sm border-0 hover-effect {{ $task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0 ? 'p-0' : '' }}">
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                    <div class="position-relative">
+                                                        @php
+                                                            $images = array_filter($task->attachments, fn($a) => $a['type'] === 'image');
+                                                            $firstImage = reset($images);
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $firstImage['path']) }}" class="img-fluid" alt="{{ $firstImage['original_name'] }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                                        @if(count($images) > 1)
+                                                            <div class="position-absolute top-0 end-0 m-2">
+                                                                <span class="badge bg-dark">{{ count($images) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="card-body p-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <div class="flex-shrink-0">
@@ -254,7 +282,21 @@
                                     <div class="board-column-content">
                                         @foreach($data['review_tasks'] as $task)
                                         <div class="board-item mb-3" data-task-id="{{ $task->id }}" data-status="review">
-                                            <div class="board-item-content card shadow-sm border-0 hover-effect">
+                                            <div class="board-item-content card shadow-sm border-0 hover-effect {{ $task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0 ? 'p-0' : '' }}">
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                    <div class="position-relative">
+                                                        @php
+                                                            $images = array_filter($task->attachments, fn($a) => $a['type'] === 'image');
+                                                            $firstImage = reset($images);
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $firstImage['path']) }}" class="img-fluid" alt="{{ $firstImage['original_name'] }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                                        @if(count($images) > 1)
+                                                            <div class="position-absolute top-0 end-0 m-2">
+                                                                <span class="badge bg-dark">{{ count($images) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="card-body p-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <div class="flex-shrink-0">
@@ -305,7 +347,21 @@
                                     <div class="board-column-content">
                                         @foreach($data['testing_tasks'] as $task)
                                         <div class="board-item mb-3" data-task-id="{{ $task->id }}" data-status="testing">
-                                            <div class="board-item-content card shadow-sm border-0 hover-effect">
+                                            <div class="board-item-content card shadow-sm border-0 hover-effect {{ $task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0 ? 'p-0' : '' }}">
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                    <div class="position-relative">
+                                                        @php
+                                                            $images = array_filter($task->attachments, fn($a) => $a['type'] === 'image');
+                                                            $firstImage = reset($images);
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $firstImage['path']) }}" class="img-fluid" alt="{{ $firstImage['original_name'] }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                                        @if(count($images) > 1)
+                                                            <div class="position-absolute top-0 end-0 m-2">
+                                                                <span class="badge bg-dark">{{ count($images) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="card-body p-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <div class="flex-shrink-0">
@@ -356,7 +412,21 @@
                                     <div class="board-column-content">
                                         @foreach($data['done_tasks']->take(10) as $task)
                                         <div class="board-item mb-3" data-task-id="{{ $task->id }}" data-status="done">
-                                            <div class="board-item-content card shadow-sm border-0 hover-effect">
+                                            <div class="board-item-content card shadow-sm border-0 hover-effect {{ $task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0 ? 'p-0' : '' }}">
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                    <div class="position-relative">
+                                                        @php
+                                                            $images = array_filter($task->attachments, fn($a) => $a['type'] === 'image');
+                                                            $firstImage = reset($images);
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $firstImage['path']) }}" class="img-fluid" alt="{{ $firstImage['original_name'] }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                                                        @if(count($images) > 1)
+                                                            <div class="position-absolute top-0 end-0 m-2">
+                                                                <span class="badge bg-dark">{{ count($images) }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="card-body p-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <div class="flex-shrink-0">
@@ -433,7 +503,7 @@
                 <h5 class="modal-title" id="addTaskModalLabel">Nuovo Task</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="addTaskForm">
+            <form id="addTaskForm" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-8">
@@ -534,6 +604,25 @@
                     <div class="mb-3">
                         <label for="taskTags" class="form-label">Tags</label>
                         <input type="text" class="form-control" id="taskTags" name="tags" placeholder="tag1, tag2, tag3...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="taskImages" class="form-label">
+                            <i class="ph-bold ph-image me-2"></i>Immagini
+                        </label>
+                        <div class="border-2 border-dashed border-secondary rounded p-3 text-center" style="border-style: dashed;">
+                            <input type="file" class="form-control" id="taskImages" name="images[]" multiple accept="image/*" style="display: none;">
+                            <div class="upload-area" onclick="document.getElementById('taskImages').click()" style="cursor: pointer;">
+                                <i class="ph-bold ph-upload-simple f-s-48 text-muted mb-2"></i>
+                                <p class="text-muted mb-2">Clicca per selezionare le immagini</p>
+                                <p class="text-muted small">o trascina qui i file</p>
+                                <p class="text-muted small">Formati: JPEG, PNG, JPG, GIF, WebP (max 2MB ciascuna)</p>
+                            </div>
+                            <div id="taskImagePreview" class="mt-3" style="display: none;">
+                                <h6>Immagini selezionate:</h6>
+                                <div id="taskImageList" class="row g-2"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -905,6 +994,47 @@ function loadTaskDetails(taskId) {
 }
 
 function displayTaskDetails(task) {
+    // Preparazione sezione immagini
+    let imagesSection = '';
+    if (task.attachments && task.attachments.length > 0) {
+        const images = task.attachments.filter(att => att.type === 'image');
+        if (images.length > 0) {
+            imagesSection = `
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6 class="border-bottom pb-2 mb-3">
+                            <i class="ph ph-image me-2"></i>Immagini (${images.length})
+                        </h6>
+                        <div class="row g-3">
+                            ${images.map((image, index) => `
+                                <div class="col-md-4 col-lg-3">
+                                    <div class="position-relative">
+                                        <img src="/storage/${image.path}" 
+                                             class="img-fluid rounded shadow-sm" 
+                                             alt="${image.original_name}"
+                                             style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
+                                             onclick="openImageModal('/storage/${image.path}', '${image.original_name}')">
+                                        <div class="position-absolute top-0 end-0 m-1">
+                                            <button class="btn btn-sm btn-danger" 
+                                                    onclick="deleteTaskImage(${task.id}, ${index})"
+                                                    title="Elimina immagine">
+                                                <i class="ph ph-x"></i>
+                                            </button>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="text-muted d-block">${image.original_name}</small>
+                                            <small class="text-muted">${formatFileSize(image.size)}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
     const content = `
         <div class="row">
             <div class="col-md-6">
@@ -945,6 +1075,7 @@ function displayTaskDetails(task) {
                 <p>${task.notes || 'Nessuna nota'}</p>
             </div>
         </div>
+        ${imagesSection}
     `;
 
     $('#taskDetailsContent').html(content);
@@ -976,6 +1107,81 @@ function getProgressColor(progress) {
     if (progress >= 75) return 'info';
     if (progress >= 50) return 'warning';
     return 'danger';
+}
+
+// Funzione per formattare la dimensione del file
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Funzione per aprire il modal dell'immagine
+function openImageModal(imageSrc, imageName) {
+    const modal = `
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">
+                            <i class="ph ph-image me-2"></i>${imageName}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="${imageSrc}" class="img-fluid" alt="${imageName}" style="max-height: 70vh;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Rimuovi modal esistenti
+    $('#imageModal').remove();
+    
+    // Aggiungi nuovo modal
+    $('body').append(modal);
+    
+    // Mostra modal
+    $('#imageModal').modal('show');
+    
+    // Rimuovi modal quando viene chiuso
+    $('#imageModal').on('hidden.bs.modal', function() {
+        $(this).remove();
+    });
+}
+
+// Funzione per eliminare un'immagine dal task
+function deleteTaskImage(taskId, imageIndex) {
+    if (confirm('Sei sicuro di voler eliminare questa immagine?')) {
+        $.ajax({
+            url: '{{ route("admin.kanban.delete-image") }}',
+            method: 'POST',
+            data: {
+                task_id: taskId,
+                image_index: imageIndex,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    showNotification('Immagine eliminata con successo!', 'success');
+                    // Ricarica i dettagli del task
+                    loadTaskDetails(taskId);
+                } else {
+                    showNotification('Errore nell\'eliminazione: ' + response.message, 'error');
+                }
+            },
+            error: function(xhr) {
+                let errorMessage = 'Errore nell\'eliminazione dell\'immagine';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                showNotification(errorMessage, 'error');
+            }
+        });
+    }
 }
 
 function updateTaskStatus(taskId, newStatus) {
@@ -1124,8 +1330,109 @@ $(document).on('keydown', function(e) {
     }
 });
 
+// Image upload preview functionality
+function setupImageUpload(inputId, previewId, listId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const list = document.getElementById(listId);
+    
+    if (input) {
+        input.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                preview.style.display = 'block';
+                list.innerHTML = '';
+                
+                files.forEach((file, index) => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const div = document.createElement('div');
+                            div.className = 'col-md-3';
+                            div.innerHTML = `
+                                <div class="position-relative">
+                                    <img src="${e.target.result}" class="img-fluid rounded" alt="${file.name}" style="height: 100px; object-fit: cover;">
+                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" 
+                                            onclick="removeImage(${index}, '${inputId}')" style="margin: 2px;">
+                                        <i class="ph-bold ph-x"></i>
+                                    </button>
+                                    <small class="d-block text-muted mt-1">${file.name}</small>
+                                </div>
+                            `;
+                            list.appendChild(div);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    }
+}
+
+function setupDragAndDrop(inputId, previewId, listId) {
+    const uploadArea = document.querySelector(`#${inputId}`).parentElement;
+    
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--primary)';
+        uploadArea.style.backgroundColor = 'rgba(var(--primary-rgb), 0.1)';
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--secondary)';
+        uploadArea.style.backgroundColor = 'transparent';
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--secondary)';
+        uploadArea.style.backgroundColor = 'transparent';
+        
+        const files = Array.from(e.dataTransfer.files);
+        const input = document.getElementById(inputId);
+        
+        // Create a new FileList-like object
+        const dt = new DataTransfer();
+        files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                dt.items.add(file);
+            }
+        });
+        
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+    });
+}
+
+// Remove image function
+window.removeImage = function(index, inputId) {
+    const input = document.getElementById(inputId);
+    const dt = new DataTransfer();
+    const files = Array.from(input.files);
+    
+    files.splice(index, 1);
+    files.forEach(file => dt.items.add(file));
+    
+    input.files = dt.files;
+    input.dispatchEvent(new Event('change'));
+};
+
 // Setup CSRF token per tutte le richieste AJAX
 $(document).ready(function() {
+    // Setup image upload functionality
+    setupImageUpload('taskImages', 'taskImagePreview', 'taskImageList');
+    setupDragAndDrop('taskImages', 'taskImagePreview', 'taskImageList');
+    
+    // Reset form when modal is closed
+    $('#addTaskModal').on('hidden.bs.modal', function() {
+        $('#addTaskForm')[0].reset();
+        $('#taskImagePreview').hide();
+        $('#taskImageList').empty();
+    });
+    
     // Setup CSRF token
     $.ajaxSetup({
         headers: {

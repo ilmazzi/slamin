@@ -11,6 +11,8 @@ use App\Models\Task;
 use App\Models\TaskComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class KanbanController extends Controller
 {
@@ -110,7 +112,7 @@ class KanbanController extends Controller
 
     public function storeTask(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high,urgent',
@@ -122,7 +124,15 @@ class KanbanController extends Controller
             'progress_percentage' => 'nullable|integer|min:0|max:100',
             'notes' => 'nullable|string',
             'tags' => 'nullable|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
         try {
             $task = Task::create([
@@ -139,6 +149,28 @@ class KanbanController extends Controller
                 'notes' => $request->notes,
                 'tags' => $request->tags,
             ]);
+
+            // Gestione upload immagini
+            $attachments = [];
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $path = $image->storeAs('kanban/tasks', $filename, 'public');
+                    
+                    $attachments[] = [
+                        'type' => 'image',
+                        'filename' => $filename,
+                        'original_name' => $image->getClientOriginalName(),
+                        'path' => $path,
+                        'size' => $image->getSize(),
+                        'mime_type' => $image->getMimeType(),
+                        'uploaded_at' => now()->toISOString(),
+                    ];
+                }
+            }
+
+            $task->attachments = $attachments;
+            $task->save();
 
             return response()->json([
                 'success' => true,
@@ -180,6 +212,182 @@ class KanbanController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error adding comment: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update task with new images
+     */
+    public function updateTask(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'task_id' => 'required|integer|exists:tasks,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'priority' => 'required|in:low,medium,high,urgent',
+            'category' => 'required|in:frontend,backend,database,design,testing,deployment,documentation,bug_fix,feature,maintenance',
+            'assigned_to' => 'nullable|exists:users,id',
+            'due_date' => 'nullable|date',
+            'estimated_hours' => 'nullable|numeric|min:0',
+            'progress_percentage' => 'nullable|integer|min:0|max:100',
+            'notes' => 'nullable|string',
+            'tags' => 'nullable|string',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $task = Task::findOrFail($request->task_id);
+            
+            $task->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'priority' => $request->priority,
+                'category' => $request->category,
+                'assigned_to' => $request->assigned_to,
+                'due_date' => $request->due_date,
+                'estimated_hours' => $request->estimated_hours,
+                'progress_percentage' => $request->progress_percentage ?? 0,
+                'notes' => $request->notes,
+                'tags' => $request->tags,
+            ]);
+
+            // Gestione upload nuove immagini
+            $currentAttachments = $task->attachments ?? [];
+            
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $path = $image->storeAs('kanban/tasks', $filename, 'public');
+                    
+                    $currentAttachments[] = [
+                        'type' => 'image',
+                        'filename' => $filename,
+                        'original_name' => $image->getClientOriginalName(),
+                        'path' => $path,
+                        'size' => $image->getSize(),
+                        'mime_type' => $image->getMimeType(),
+                        'uploaded_at' => now()->toISOString(),
+                    ];
+                }
+            }
+
+            $task->attachments = $currentAttachments;
+            $task->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Task updated successfully',
+                'task' => $task->load(['assignedTo', 'createdBy'])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating task: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete an image from task
+     */
+    public function deleteImage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'task_id' => 'required|integer|exists:tasks,id',
+            'image_index' => 'required|integer|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $task = Task::findOrFail($request->task_id);
+            $attachments = $task->attachments ?? [];
+            $imageIndex = $request->image_index;
+
+            if (!isset($attachments[$imageIndex])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Immagine non trovata'
+                ], 404);
+            }
+
+            $imageToDelete = $attachments[$imageIndex];
+
+            // Elimina il file dal filesystem
+            if (Storage::disk('public')->exists($imageToDelete['path'])) {
+                Storage::disk('public')->delete($imageToDelete['path']);
+            }
+
+            // Rimuovi l'immagine dall'array
+            unset($attachments[$imageIndex]);
+            $attachments = array_values($attachments); // Reindex array
+
+            $task->attachments = $attachments;
+            $task->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Immagine eliminata con successo',
+                'task' => $task->load(['assignedTo', 'createdBy'])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting image: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a task
+     */
+    public function deleteTask(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'task_id' => 'required|integer|exists:tasks,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $task = Task::findOrFail($request->task_id);
+
+            // Elimina tutte le immagini associate
+            $attachments = $task->attachments ?? [];
+            foreach ($attachments as $attachment) {
+                if ($attachment['type'] === 'image' && Storage::disk('public')->exists($attachment['path'])) {
+                    Storage::disk('public')->delete($attachment['path']);
+                }
+            }
+
+            $task->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Task eliminato con successo'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting task: ' . $e->getMessage()
             ], 500);
         }
     }

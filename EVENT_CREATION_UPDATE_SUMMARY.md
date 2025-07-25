@@ -98,6 +98,9 @@ php artisan tinker --execute="DB::statement('SET FOREIGN_KEY_CHECKS=0;'); App\Mo
 4. **Utenti suggeriti** automatici
 5. **Gestione inviti** (aggiunta/rimozione)
 6. **Colori categoria** visibili su mappa e liste
+7. **Badge categorie** in lista eventi e dettaglio evento
+8. **Immagini eventi** con upload e visualizzazione
+9. **Fallback grafico** per eventi senza immagine
 
 ## 🚀 **Prossimi Passi**
 - ✅ **Testare il form di creazione eventi**
@@ -115,6 +118,8 @@ php artisan tinker --execute="DB::statement('SET FOREIGN_KEY_CHECKS=0;'); App\Mo
 - ✅ **Interfaccia corretta** - Componenti template utilizzati (h-40 w-40 bg-dark flex-shrink-0, fw-medium txt-ellipsis-1, btn-light-primary icon-btn b-r-4) - RIMOSSO card-light-primary
 - ✅ **Link profili pubblici** - Avatar cliccabili che aprono profilo pubblico in nuova tab
 - ✅ **Sistema inviti migliorato** - Debug logging e feedback visivo per inviti
+- ✅ **Badge categorie implementati** - Colori delle categorie visibili in lista eventi, dettaglio e mappa
+- ✅ **Gestione immagini eventi migliorata** - Anteprima e visualizzazione immagini con fallback grafico
 
 ---
 

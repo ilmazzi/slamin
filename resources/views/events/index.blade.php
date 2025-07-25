@@ -421,6 +421,13 @@
                                 <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
                             </span>
                         @endif
+                        
+                        <!-- Category Badge -->
+                        @if($event->category)
+                            <span class="badge {{ $event->category_color_class }} ms-1" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ __('events.category') }}">
+                                {{ __('events.category_' . $event->category) }}
+                            </span>
+                        @endif
                     </div>
 
                     <!-- Event Image with Overlay Info -->
@@ -429,7 +436,12 @@
                             <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="position-absolute w-100 h-100" style="object-fit: cover;">
                             <div class="position-absolute w-100 h-100" style="background: linear-gradient(135deg, rgba(15, 98, 106, 0.7) 0%, rgba(12, 78, 85, 0.7) 100%);"></div>
                         @else
-                            <div class="position-absolute w-100 h-100 bg-primary" style="background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);"></div>
+                            <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);">
+                                <div class="text-center text-white">
+                                    <i class="ph ph-calendar f-s-48 mb-2"></i>
+                                    <div class="f-s-14 f-w-500">{{ $event->title }}</div>
+                                </div>
+                            </div>
                         @endif
                         <div class="position-absolute bottom-0 start-0 text-white p-3 w-100" style="z-index: 2;">
                             <h6 class="mb-1 text-white">{{ $event->venue_name }}</h6>
@@ -876,6 +888,7 @@ function loadEventsOnMapWithFilter(params) {
                     .bindPopup(`
                         <div class="p-2">
                             <h6>${event.title}</h6>
+                            ${event.category ? `<span class="badge ${event.category_color_class} mb-2">${event.category_name}</span>` : ''}
                             <p class="mb-1"><i class="ph ph-calendar me-1"></i>${event.start_datetime}</p>
                             <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
                             <small class="text-muted d-block">Organizzato da: ${event.organizer}</small>

@@ -18,6 +18,7 @@ return [
     'edit_event' => 'Modifica Evento',
     'manage_event' => 'Gestisci Evento',
     'event_details' => 'Dettagli Evento',
+    'event_information' => 'Informazioni Evento',
     'my_events' => 'I Miei Eventi',
 
     // Navigazione e breadcrumbs
@@ -54,6 +55,7 @@ return [
     'event_type' => 'Tipo di Evento',
     'event_mode' => 'Modalità',
     'event_category' => 'Categoria',
+    'category' => 'Categoria',
     'event_status' => 'Stato Evento',
     'event_image' => 'Immagine Evento',
     'tags' => 'Tags',

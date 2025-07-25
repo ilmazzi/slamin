@@ -25,7 +25,12 @@
                     <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="position-absolute w-100 h-100" style="object-fit: cover;">
                     <div class="position-absolute w-100 h-100" style="background: linear-gradient(135deg, rgba(15, 98, 106, 0.7) 0%, rgba(12, 78, 85, 0.7) 100%);"></div>
                 @else
-                    <div class="position-absolute w-100 h-100" style="background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);"></div>
+                    <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);">
+                        <div class="text-center text-white">
+                            <i class="ph ph-calendar f-s-72 mb-3"></i>
+                            <div class="f-s-24 f-w-600">{{ $event->title }}</div>
+                        </div>
+                    </div>
                 @endif
                 @if($event->is_public)
                     <span class="badge bg-success position-absolute top-0 end-0 m-4 fs-6">
@@ -34,6 +39,13 @@
                 @else
                     <span class="badge bg-warning position-absolute top-0 end-0 m-4 fs-6">
                         <i class="ph ph-lock me-1"></i> {{ __('events.event_private_badge') }}
+                    </span>
+                @endif
+                
+                <!-- Category Badge -->
+                @if($event->category)
+                    <span class="badge {{ $event->category_color_class }} position-absolute top-0 start-0 m-4 fs-6">
+                        <i class="ph ph-tag me-1"></i> {{ __('events.category_' . $event->category) }}
                     </span>
                 @endif
 
@@ -72,6 +84,52 @@
                     </div>
                 </div>
             @endif
+
+            <!-- Event Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-info me-2"></i>{{ __('events.event_information') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if($event->category)
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-tag me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">{{ __('events.category') }}</small>
+                                    <span class="badge {{ $event->category_color_class }} fs-6">{{ __('events.category_' . $event->category) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        @if($event->entry_fee > 0)
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-currency-eur me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">{{ __('events.entry_fee') }}</small>
+                                    <span class="fw-semibold">{{ number_format($event->entry_fee, 2) }}€</span>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-currency-eur me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">{{ __('events.entry_fee') }}</small>
+                                    <span class="badge bg-success">Gratuito</span>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
 
             <!-- Event Description -->
             <div class="card mb-4">

@@ -34,19 +34,11 @@ itemContainers.forEach((container) => {
 
             // Get the new column and update task status
             const newColumn = el.closest('.board-column');
-            const columnHeader = newColumn.querySelector('.board-column-header h6').textContent.trim();
-            let newStatus = 'todo';
-
-            // Map column headers to status values
-            if (columnHeader.includes('TODO')) newStatus = 'todo';
-            else if (columnHeader.includes('IN PROGRESS')) newStatus = 'in_progress';
-            else if (columnHeader.includes('REVIEW')) newStatus = 'review';
-            else if (columnHeader.includes('TESTING')) newStatus = 'testing';
-            else if (columnHeader.includes('DONE')) newStatus = 'done';
-
+            const columnStatus = newColumn.dataset.status;
             const taskId = el.dataset.taskId;
-            if (taskId && typeof updateTaskStatus === 'function') {
-                updateTaskStatus(taskId, newStatus);
+            
+            if (taskId && columnStatus) {
+                updateTaskStatus(taskId, columnStatus);
             }
 
             columnGrids.forEach((grid) => {
@@ -71,4 +63,55 @@ boardGrid = new Muuri('.board', {
     dragEnabled: false, // Disable column dragging for admin kanban
     dragReleaseDuration: 400,
     dragReleaseEasing: 'ease'
+});
+
+// Function to update task status via AJAX
+function updateTaskStatus(taskId, newStatus) {
+    fetch(`/tasks/${taskId}/status`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                           document.querySelector('input[name="_token"]')?.value
+        },
+        body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Task ${taskId} status updated to ${newStatus}`);
+            
+            // Update the task count badges
+            updateColumnCounts();
+        } else {
+            console.error('Error updating task status:', data.message);
+            // Revert the drag if there was an error
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error updating task status:', error);
+        // Revert the drag if there was an error
+        location.reload();
+    });
+}
+
+// Function to update column counts
+function updateColumnCounts() {
+    const columns = document.querySelectorAll('.board-column');
+    columns.forEach(column => {
+        const status = column.dataset.status;
+        const content = column.querySelector('.board-column-content');
+        const count = content.querySelectorAll('.board-item').length;
+        const badge = column.querySelector('.board-column-header .badge');
+        
+        if (badge) {
+            badge.textContent = count;
+        }
+    });
+}
+
+// Initialize column counts on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateColumnCounts();
 });

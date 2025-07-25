@@ -117,7 +117,7 @@ Route::view('input_groups', 'input_groups')->name('input_groups');
 Route::view('input_masks', 'input_masks')->name('input_masks');
 Route::view('invoice', 'invoice')->name('invoice');
 
-Route::view('kanban_board', 'kanban_board')->name('kanban_board');
+Route::get('kanban_board', [App\Http\Controllers\TaskController::class, 'index'])->name('kanban_board');
 
 Route::view('landing', 'landing')->name('landing');
 Route::view('leaflet_map', 'leaflet_map')->name('leaflet_map');
@@ -434,6 +434,17 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/users/suggested', [App\Http\Controllers\Api\UserController::class, 'suggested'])->name('users.suggested');
     });
 
+    // Task/Kanban routes
+    Route::prefix('tasks')->name('tasks.')->group(function () {
+        Route::get('/', [App\Http\Controllers\TaskController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
+        Route::get('/{task}', [App\Http\Controllers\TaskController::class, 'show'])->name('show');
+        Route::put('/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
+        Route::patch('/{task}/status', [App\Http\Controllers\TaskController::class, 'updateStatus'])->name('update-status');
+        Route::delete('/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])->name('destroy');
+        Route::delete('/{task}/image', [App\Http\Controllers\TaskController::class, 'deleteImage'])->name('delete-image');
+    });
+
     // Analytics routes
     Route::prefix('analytics')->name('analytics.')->middleware('auth')->group(function () {
         Route::get('/', [AnalyticsController::class, 'index'])->name('index');
@@ -532,6 +543,9 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/kanban/task-details', [App\Http\Controllers\Admin\KanbanController::class, 'getTaskDetails'])->name('kanban.task-details');
         Route::post('/kanban/tasks', [App\Http\Controllers\Admin\KanbanController::class, 'storeTask'])->name('kanban.store-task');
         Route::post('/kanban/comments', [App\Http\Controllers\Admin\KanbanController::class, 'addComment'])->name('kanban.add-comment');
+        Route::post('/kanban/update-task', [App\Http\Controllers\Admin\KanbanController::class, 'updateTask'])->name('kanban.update-task');
+        Route::post('/kanban/delete-image', [App\Http\Controllers\Admin\KanbanController::class, 'deleteImage'])->name('kanban.delete-image');
+        Route::post('/kanban/delete-task', [App\Http\Controllers\Admin\KanbanController::class, 'deleteTask'])->name('kanban.delete-task');
 
         // PeerTube Management Routes
         Route::get('/peertube', [App\Http\Controllers\Admin\PeerTubeController::class, 'index'])->name('peertube.index');
