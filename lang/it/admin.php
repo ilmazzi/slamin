@@ -84,6 +84,28 @@ return [
     'complete' => 'Completa',
     'keys_missing' => 'chiavi mancanti',
     'sync_this_language' => 'Sincronizza Questa Lingua',
-
+    
+    // Auto Translation
+    'auto_translation' => 'Traduzione Automatica',
+    'auto_translation_description' => 'Traduci automaticamente le chiavi mancanti usando AI',
+    'auto_translate_file' => 'Traduci File',
+    'auto_translate_all' => 'Traduci Tutto',
+    'test_translation_service' => 'Test Servizio',
+    'translation_service_configured' => 'Servizio configurato',
+    'translation_service_not_configured' => 'Servizio non configurato',
+    'auto_translation_success' => 'Traduzione automatica completata',
+    'auto_translation_error' => 'Errore traduzione automatica',
+    'translation_provider' => 'Provider Traduzione',
+    'translation_api_key' => 'API Key Traduzione',
+    'configure_translation_service' => 'Configura Servizio Traduzione',
+    'translation_stats' => 'Statistiche Traduzione',
+    'total_translations' => 'Traduzioni Totali',
+    'translation_quality' => 'Qualità Traduzione',
+    'translation_cost' => 'Costo Stimato',
+    'translation_providers' => [
+        'google' => 'Google Translate',
+        'deepl' => 'DeepL',
+        'openai' => 'OpenAI GPT'
+    ],
 
 ];

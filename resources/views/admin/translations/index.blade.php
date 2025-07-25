@@ -37,6 +37,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex flex-column flex-md-row gap-2">
+                                <button type="button" class="btn btn-info" onclick="testTranslationService()">
+                                    <i class="ph ph-gear me-2"></i>{{ __('admin.test_translation_service') }}
+                                </button>
                                 <button type="button" class="btn btn-warning" onclick="syncLanguages()">
                                     <i class="ph ph-arrows-clockwise me-2"></i>Sincronizza Lingue
                                 </button>
@@ -213,6 +216,14 @@
                         <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
                                 onclick="showMissingKeys('{{ $code }}')">
                             <i class="ph ph-warning me-1"></i>Dettagli
+                        </button>
+                    </div>
+                    
+                    <!-- Auto Translation Actions -->
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="button" class="btn btn-light-success btn-sm flex-fill" 
+                                onclick="autoTranslateLanguage('{{ $code }}')">
+                            <i class="ph ph-robot me-1"></i>{{ __('admin.auto_translate_file') }}
                         </button>
                     </div>
                     @endif
@@ -620,6 +631,124 @@ function syncLanguages() {
                 Swal.fire({
                     title: 'Errore',
                     text: 'Errore durante la sincronizzazione: ' + error.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
+}
+
+function testTranslationService() {
+    Swal.fire({
+        title: 'Test Servizio Traduzione',
+        text: 'Testando la connessione al servizio di traduzione automatica...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    fetch('{{ route("admin.translations.test-service") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: '✅ Servizio OK',
+                html: `
+                    <div class="text-start">
+                        <p><strong>Test:</strong> ${data.test_text}</p>
+                        <p><strong>Traduzione:</strong> ${data.translation}</p>
+                        <p><strong>Provider:</strong> ${data.stats.provider}</p>
+                        <p><strong>Traduzioni totali:</strong> ${data.stats.total_translations}</p>
+                    </div>
+                `,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            Swal.fire({
+                title: '❌ Servizio Non Configurato',
+                text: data.message,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            title: '❌ Errore',
+            text: 'Errore durante il test: ' + error.message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+
+function autoTranslateLanguage(language) {
+    Swal.fire({
+        title: 'Traduzione Automatica',
+        text: `Traduci automaticamente tutte le chiavi mancanti per ${language.toUpperCase()}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Traduci',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Traduzione in corso...',
+                text: 'Sto traducendo automaticamente le chiavi mancanti',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Traduci tutti i file per questa lingua
+            fetch('{{ route("admin.translations.auto-translate-all") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    target_language: language
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: '✅ Traduzione Completata',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: '❌ Errore',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: '❌ Errore',
+                    text: 'Errore durante la traduzione: ' + error.message,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AutoTranslationService;
 
 class TranslationController extends Controller
 {
@@ -453,6 +454,229 @@ class TranslationController extends Controller
         }
         
         return $missingKeys;
+    }
+
+    /**
+     * Traduzione automatica di un file
+     */
+    public function autoTranslate(Request $request, $language, $file)
+    {
+        if ($language === 'it') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Non è possibile tradurre automaticamente la lingua di riferimento (italiano)'
+            ], 400);
+        }
+
+        $translationService = new AutoTranslationService();
+        
+        if (!$translationService->isConfigured()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Servizio di traduzione automatica non configurato'
+            ], 400);
+        }
+
+        try {
+            $italianFile = lang_path("it/{$file}.php");
+            $targetFile = lang_path("{$language}/{$file}.php");
+
+            if (!File::exists($italianFile)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'File di riferimento italiano non trovato'
+                ], 404);
+            }
+
+            $italianTranslations = include $italianFile;
+            $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
+
+            // Traduci solo le chiavi mancanti o vuote
+            $keysToTranslate = [];
+            foreach ($italianTranslations as $key => $italianValue) {
+                if (!array_key_exists($key, $targetTranslations) || 
+                    empty($targetTranslations[$key]) || 
+                    $targetTranslations[$key] === '') {
+                    $keysToTranslate[$key] = $italianValue;
+                }
+            }
+
+            if (empty($keysToTranslate)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Nessuna traduzione necessaria',
+                    'translated_count' => 0
+                ]);
+            }
+
+            // Traduci le chiavi
+            $translatedKeys = $translationService->translateArray($keysToTranslate, 'it', $language);
+
+            // Unisci con le traduzioni esistenti
+            $finalTranslations = array_merge($targetTranslations, $translatedKeys);
+
+            // Salva il file
+            $phpContent = $this->generatePhpContent($finalTranslations, $file);
+            File::put($targetFile, $phpContent);
+
+            // Pulisci la cache
+            if (function_exists('cache')) {
+                cache()->forget("translations.{$language}.{$file}");
+            }
+
+            $translatedCount = count($keysToTranslate);
+            Log::info("Traduzione automatica completata", [
+                'language' => $language,
+                'file' => $file,
+                'translated_keys' => $translatedCount,
+                'user' => Auth::user()?->email
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Traduzione automatica completata! {$translatedCount} chiavi tradotte.",
+                'translated_count' => $translatedCount
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error("Errore traduzione automatica: " . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la traduzione automatica: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Traduzione automatica di tutte le lingue
+     */
+    public function autoTranslateAll(Request $request)
+    {
+        $translationService = new AutoTranslationService();
+        
+        if (!$translationService->isConfigured()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Servizio di traduzione automatica non configurato'
+            ], 400);
+        }
+
+        try {
+            $languages = $this->getAvailableLanguages();
+            $translationFiles = $this->getTranslationFiles();
+            $totalTranslated = 0;
+            $errors = [];
+
+            foreach ($languages as $languageCode => $languageName) {
+                if ($languageCode === 'it') continue; // Salta l'italiano
+
+                foreach ($translationFiles as $file => $displayName) {
+                    try {
+                        $italianFile = lang_path("it/{$file}.php");
+                        $targetFile = lang_path("{$languageCode}/{$file}.php");
+
+                        if (!File::exists($italianFile)) continue;
+
+                        $italianTranslations = include $italianFile;
+                        $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
+
+                        // Trova chiavi da tradurre
+                        $keysToTranslate = [];
+                        foreach ($italianTranslations as $key => $italianValue) {
+                            if (!array_key_exists($key, $targetTranslations) || 
+                                empty($targetTranslations[$key]) || 
+                                $targetTranslations[$key] === '') {
+                                $keysToTranslate[$key] = $italianValue;
+                            }
+                        }
+
+                        if (!empty($keysToTranslate)) {
+                            $translatedKeys = $translationService->translateArray($keysToTranslate, 'it', $languageCode);
+                            $finalTranslations = array_merge($targetTranslations, $translatedKeys);
+                            
+                            $phpContent = $this->generatePhpContent($finalTranslations, $file);
+                            File::put($targetFile, $phpContent);
+                            
+                            $totalTranslated += count($keysToTranslate);
+                        }
+                    } catch (\Exception $e) {
+                        $errorMsg = "Errore nel file {$languageCode}/{$file}.php: " . $e->getMessage();
+                        $errors[] = $errorMsg;
+                        Log::error($errorMsg);
+                    }
+                }
+            }
+
+            // Pulisci la cache
+            if (function_exists('cache')) {
+                cache()->flush();
+            }
+
+            Log::info("Traduzione automatica globale completata", [
+                'total_translated' => $totalTranslated,
+                'user' => Auth::user()?->email
+            ]);
+
+            $message = "Traduzione automatica completata! {$totalTranslated} chiavi tradotte.";
+            if (!empty($errors)) {
+                $message .= " Errori: " . implode(', ', $errors);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'total_translated' => $totalTranslated,
+                'errors' => $errors
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error("Errore traduzione automatica globale: " . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la traduzione automatica: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Test del servizio di traduzione
+     */
+    public function testTranslationService(Request $request)
+    {
+        $translationService = new AutoTranslationService();
+        
+        if (!$translationService->isConfigured()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Servizio di traduzione automatica non configurato',
+                'configured' => false
+            ]);
+        }
+
+        try {
+            $testText = 'Hello world';
+            $translation = $translationService->translate($testText, 'en', 'it');
+            
+            $success = !empty($translation) && $translation !== $testText;
+            
+            return response()->json([
+                'success' => $success,
+                'message' => $success ? 'Test connessione riuscito' : 'Test connessione fallito',
+                'configured' => true,
+                'test_text' => $testText,
+                'translation' => $translation,
+                'stats' => $translationService->getUsageStats()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore test connessione: ' . $e->getMessage(),
+                'configured' => true
+            ], 500);
+        }
     }
 
     /**

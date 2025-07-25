@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'translation' => [
+        'provider' => env('TRANSLATION_PROVIDER', 'google'),
+        'api_key' => env('TRANSLATION_API_KEY'),
+        'base_url' => env('TRANSLATION_BASE_URL'),
+    ],
+
 ];

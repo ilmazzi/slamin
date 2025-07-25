@@ -501,6 +501,11 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/translations/language', [App\Http\Controllers\Admin\TranslationController::class, 'createLanguage'])->name('translations.create-language');
         Route::delete('/translations/language/{language}', [App\Http\Controllers\Admin\TranslationController::class, 'deleteLanguage'])->name('translations.delete-language');
         Route::post('/translations/sync', [App\Http\Controllers\Admin\TranslationController::class, 'syncLanguages'])->name('translations.sync');
+        
+        // Auto Translation Routes
+        Route::post('/translations/auto-translate/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslate'])->name('translations.auto-translate');
+        Route::post('/translations/auto-translate-all', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslateAll'])->name('translations.auto-translate-all');
+        Route::post('/translations/test-service', [App\Http\Controllers\Admin\TranslationController::class, 'testTranslationService'])->name('translations.test-service');
 
 
 
