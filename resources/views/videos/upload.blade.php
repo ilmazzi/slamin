@@ -37,7 +37,7 @@
                 <div class="card card-light-info">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <h6 class="mb-2">
                                     <i class="ph-duotone ph-upload f-s-16 me-2"></i>
                                     {{ __('videos.upload_status') }}
@@ -46,7 +46,7 @@
                                     {{ __('videos.videos_remaining') }}: <strong>{{ $user->remaining_video_uploads }}</strong>
                                 </p>
                             </div>
-                            <div class="col-md-6 text-md-end">
+                            <div class="col-12 col-md-6">
                                 <div class="progress mb-2" style="height: 8px;">
                                     <div class="progress-bar bg-success" style="width: {{ ($user->current_video_count / $user->current_video_limit) * 100 }}%"></div>
                                 </div>
@@ -60,56 +60,10 @@
             </div>
         </div>
 
-        <!-- Upload Progress (Hidden by default) -->
-        <div class="row mb-4" id="uploadProgress" style="display: none;">
+        <!-- Info Alert -->
+        <div class="row mb-4">
             <div class="col-12">
-                <div class="card card-light-success">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="spinner-border spinner-border-sm text-success me-3" role="status">
-                                <span class="visually-hidden">Caricamento...</span>
-                            </div>
-                            <h6 class="mb-0" id="progressTitle">Preparazione upload...</h6>
-                        </div>
-                        <div class="progress" style="height: 12px;">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar" style="width: 0%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <small class="text-muted" id="progressText">Inizializzazione...</small>
-                            <small class="text-muted" id="progressPercent">0%</small>
-                        </div>
-                        <div class="mt-3" id="progressDetails" style="display: none;">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <small class="text-muted">
-                                        <i class="ph-duotone ph-clock me-1"></i>
-                                        Tempo trascorso: <span id="elapsedTime">00:00</span>
-                                    </small>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <small class="text-muted">
-                                        <i class="ph-duotone ph-wifi me-1"></i>
-                                        Connessione: <span id="connectionType">--</span>
-                                    </small>
-                                </div>
-                                <div class="col-md-4 text-md-end">
-                                    <small class="text-muted">
-                                        <i class="ph-duotone ph-timer me-1"></i>
-                                        Tempo stimato: <span id="estimatedTime">--:--</span>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upload Form -->
-        <div class="row">
-            <div class="col-12">
-                <!-- Info Alert -->
-                <div class="alert alert-info mb-4">
+                <div class="alert alert-info">
                     <div class="d-flex align-items-start">
                         <i class="ph-duotone ph-info f-s-20 me-3 mt-1"></i>
                         <div>
@@ -123,7 +77,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <!-- Upload Form -->
+        <div class="row">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
@@ -135,30 +94,74 @@
                         <form action="{{ route('videos.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                             @csrf
 
-                            <!-- Video File Upload -->
+                            <!-- Video File Upload with Integrated Progress -->
                             <div class="row mb-4">
                                 <div class="col-12">
                                     <label for="videoFile" class="form-label">{{ __('videos.video_file') }} *</label>
-                                    <div class="upload-area border-2 border-dashed border-secondary rounded p-4 text-center" id="uploadArea">
-                                        <i class="ph-duotone ph-cloud-arrow-up f-s-48 text-muted mb-3"></i>
-                                        <h6 class="mb-2">Trascina qui il tuo video o clicca per selezionare</h6>
-                                        <p class="text-muted mb-3">{{ __('videos.supported_formats') }}: MP4, AVI, MOV, MKV, WEBM, FLV</p>
-                                        <p class="text-muted f-s-12">{{ __('videos.max_size') }}: 100MB</p>
-                                        <input type="file" name="video_file" id="videoFile" accept="video/*" class="d-none" required>
-                                        <button type="button" class="btn btn-outline-success" onclick="document.getElementById('videoFile').click()">
-                                            <i class="ph-duotone ph-folder-open me-2"></i>Seleziona File
-                                        </button>
+                                    <div class="upload-area border-2 border-dashed border-secondary rounded p-4 text-center position-relative" id="uploadArea">
+                                        <!-- Upload State -->
+                                        <div id="uploadState">
+                                            <i class="ph-duotone ph-cloud-arrow-up f-s-48 text-muted mb-3"></i>
+                                            <h6 class="mb-2">Trascina qui il tuo video o clicca per selezionare</h6>
+                                            <p class="text-muted mb-3">{{ __('videos.supported_formats') }}: MP4, AVI, MOV, MKV, WEBM, FLV</p>
+                                            <p class="text-muted f-s-12">{{ __('videos.max_size') }}: 100MB</p>
+                                            <input type="file" name="video_file" id="videoFile" accept="video/*" class="d-none" required>
+                                            <button type="button" class="btn btn-outline-success" onclick="document.getElementById('videoFile').click()">
+                                                <i class="ph-duotone ph-folder-open me-2"></i>Seleziona File
+                                            </button>
+                                        </div>
+
+                                        <!-- Progress State (Hidden by default) -->
+                                        <div id="progressState" style="display: none;">
+                                            <div class="d-flex align-items-center justify-content-center mb-3">
+                                                <div class="spinner-border spinner-border-sm text-success me-3" role="status">
+                                                    <span class="visually-hidden">Caricamento...</span>
+                                                </div>
+                                                <h6 class="mb-0" id="progressTitle">Preparazione upload...</h6>
+                                            </div>
+                                            <div class="progress mb-3" style="height: 12px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar" style="width: 0%"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <small class="text-muted" id="progressText">Inizializzazione...</small>
+                                                <small class="text-muted" id="progressPercent">0%</small>
+                                            </div>
+                                            <div id="progressDetails" style="display: none;">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">
+                                                            <i class="ph-duotone ph-clock me-1"></i>
+                                                            Trascorso: <span id="elapsedTime">00:00</span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted d-block">
+                                                            <i class="ph-duotone ph-timer me-1"></i>
+                                                            Rimanente: <span id="estimatedTime">--:--</span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <small class="text-muted d-block">
+                                                            <i class="ph-duotone ph-wifi me-1"></i>
+                                                            Connessione: <span id="connectionType">--</span>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <!-- File Info -->
                                     <div id="fileInfo" class="mt-3" style="display: none;">
                                         <div class="alert alert-success">
                                             <div class="d-flex align-items-center">
                                                 <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
-                                                <div>
+                                                <div class="flex-grow-1">
                                                     <strong id="fileName"></strong>
                                                     <br>
                                                     <small class="text-muted" id="fileSize"></small>
                                                 </div>
-                                                <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onclick="removeFile()">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFile()">
                                                     <i class="ph-duotone ph-x"></i>
                                                 </button>
                                             </div>
@@ -167,70 +170,66 @@
                                 </div>
                             </div>
 
-                            <!-- Video Details -->
+                            <!-- Video Details - Mobile First Layout -->
                             <div class="row">
-                                <div class="col-md-8">
-                                    <!-- Title -->
-                                    <div class="mb-3">
-                                        <label for="title" class="form-label">{{ __('videos.title') }} *</label>
-                                        <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required maxlength="255">
-                                        <div class="form-text">{{ __('videos.title_help') }}</div>
-                                    </div>
+                                <!-- Title -->
+                                <div class="col-12 mb-3">
+                                    <label for="title" class="form-label">{{ __('videos.title') }} *</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required maxlength="255">
+                                    <div class="form-text">{{ __('videos.title_help') }}</div>
+                                </div>
 
-                                    <!-- Description -->
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label">{{ __('videos.description') }}</label>
-                                        <textarea class="form-control" id="description" name="description" rows="4" maxlength="1000">{{ old('description') }}</textarea>
-                                        <div class="form-text">{{ __('videos.description_help') }}</div>
-                                    </div>
+                                <!-- Description -->
+                                <div class="col-12 mb-3">
+                                    <label for="description" class="form-label">{{ __('videos.description') }}</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" maxlength="1000">{{ old('description') }}</textarea>
+                                    <div class="form-text">{{ __('videos.description_help') }}</div>
+                                </div>
 
-                                    <!-- Tags -->
-                                    <div class="mb-3">
-                                        <label for="tags" class="form-label">{{ __('videos.tags') }}</label>
-                                        <input type="text" class="form-control" id="tags" name="tags" value="{{ old('tags') }}" placeholder="{{ __('videos.tags_placeholder') }}">
-                                        <div class="form-text">{{ __('videos.tags_help') }}</div>
+                                <!-- Tags -->
+                                <div class="col-12 mb-3">
+                                    <label for="tags" class="form-label">{{ __('videos.tags') }}</label>
+                                    <input type="text" class="form-control" id="tags" name="tags" value="{{ old('tags') }}" placeholder="{{ __('videos.tags_placeholder') }}">
+                                    <div class="form-text">{{ __('videos.tags_help') }}</div>
+                                </div>
+
+                                <!-- Thumbnail -->
+                                <div class="col-12 mb-3">
+                                    <label for="thumbnail" class="form-label">{{ __('videos.thumbnail') }}</label>
+                                    <div class="thumbnail-upload" id="thumbnailArea">
+                                        <div class="thumbnail-placeholder text-center p-3 border rounded">
+                                            <i class="ph-duotone ph-image f-s-24 text-muted mb-2"></i>
+                                            <p class="text-muted small mb-2">{{ __('videos.thumbnail_help') }}</p>
+                                            <button type="button" class="btn btn-sm btn-outline-success" onclick="document.getElementById('thumbnail').click()">
+                                                {{ __('videos.select_thumbnail') }}
+                                            </button>
+                                            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="d-none">
+                                        </div>
+                                        <div class="thumbnail-preview d-none" id="thumbnailPreview">
+                                            <img src="" alt="Thumbnail" class="img-fluid rounded" id="thumbnailImg">
+                                            <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-1" onclick="removeThumbnail()">
+                                                <i class="ph-duotone ph-x"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <!-- Thumbnail -->
-                                    <div class="mb-3">
-                                        <label for="thumbnail" class="form-label">{{ __('videos.thumbnail') }}</label>
-                                        <div class="thumbnail-upload" id="thumbnailArea">
-                                            <div class="thumbnail-placeholder text-center p-3 border rounded">
-                                                <i class="ph-duotone ph-image f-s-24 text-muted mb-2"></i>
-                                                <p class="text-muted small mb-2">{{ __('videos.thumbnail_help') }}</p>
-                                                <button type="button" class="btn btn-sm btn-outline-success" onclick="document.getElementById('thumbnail').click()">
-                                                    {{ __('videos.select_thumbnail') }}
-                                                </button>
-                                                <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="d-none">
-                                            </div>
-                                            <div class="thumbnail-preview d-none" id="thumbnailPreview">
-                                                <img src="" alt="Thumbnail" class="img-fluid rounded" id="thumbnailImg">
-                                                <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-1" onclick="removeThumbnail()">
-                                                    <i class="ph-duotone ph-x"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                                <!-- Privacy -->
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">{{ __('videos.privacy') }}</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="is_public" id="public" value="1" {{ old('is_public', '1') == '1' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="public">
+                                            <i class="ph-duotone ph-globe f-s-14 me-1"></i>
+                                            {{ __('videos.public') }}
+                                        </label>
                                     </div>
-
-                                    <!-- Privacy -->
-                                    <div class="mb-3">
-                                        <label class="form-label">{{ __('videos.privacy') }}</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_public" id="public" value="1" {{ old('is_public', '1') == '1' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="public">
-                                                <i class="ph-duotone ph-globe f-s-14 me-1"></i>
-                                                {{ __('videos.public') }}
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_public" id="private" value="0" {{ old('is_public') == '0' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="private">
-                                                <i class="ph-duotone ph-lock f-s-14 me-1"></i>
-                                                {{ __('videos.private') }}
-                                            </label>
-                                        </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="is_public" id="private" value="0" {{ old('is_public') == '0' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="private">
+                                            <i class="ph-duotone ph-lock f-s-14 me-1"></i>
+                                            {{ __('videos.private') }}
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +237,7 @@
                             <!-- Submit Buttons -->
                             <div class="row mt-4">
                                 <div class="col-12">
-                                    <div class="d-flex justify-content-between">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
                                         <a href="{{ route('videos.index') }}" class="btn btn-secondary">
                                             <i class="ph-duotone ph-arrow-left me-1"></i>
                                             {{ __('common.cancel') }}
@@ -265,13 +264,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoFile = document.getElementById('videoFile');
     const submitBtn = document.getElementById('submitBtn');
     const uploadForm = document.getElementById('uploadForm');
-    const uploadProgress = document.getElementById('uploadProgress');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
     const fileInfo = document.getElementById('fileInfo');
     const fileName = document.getElementById('fileName');
     const fileSize = document.getElementById('fileSize');
     const uploadArea = document.getElementById('uploadArea');
+    const uploadState = document.getElementById('uploadState');
+    const progressState = document.getElementById('progressState');
 
     // Drag and drop functionality
     uploadArea.addEventListener('dragover', function(e) {
@@ -322,16 +322,17 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
     }
 
-    // Form submission with realistic progress
+    // Form submission with integrated progress
     uploadForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Show progress
-        uploadProgress.style.display = 'block';
+        // Show progress in upload area
+        uploadState.style.display = 'none';
+        progressState.style.display = 'block';
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-1"></i>Caricamento...';
 
-                // Initialize progress tracking
+        // Initialize progress tracking
         const startTime = Date.now();
         let currentPhase = 0;
 
@@ -377,7 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const progressTitle = document.getElementById('progressTitle');
-        const progressText = document.getElementById('progressText');
         const progressPercent = document.getElementById('progressPercent');
         const progressDetails = document.getElementById('progressDetails');
         const elapsedTime = document.getElementById('elapsedTime');
@@ -394,10 +394,10 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         connectionTypeElement.textContent = connectionLabels[connectionType] || 'Standard';
 
-        // Show details after 5 seconds
+        // Show details after 3 seconds
         setTimeout(() => {
             progressDetails.style.display = 'block';
-        }, 5000);
+        }, 3000);
 
         // Update elapsed time
         const timeInterval = setInterval(() => {
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 progressBar.style.width = phase.progress + '%';
                 progressPercent.textContent = phase.progress + '%';
 
-                                // Estimate remaining time based on connection speed and file size
+                // Estimate remaining time based on connection speed and file size
                 const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
 
                 // Calculate total estimated time based on connection speed
@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     remainingSeconds = 30 - (elapsedSeconds - (uploadTime + processingTime + 30));
                 }
 
-                                remainingSeconds = Math.max(0, remainingSeconds);
+                remainingSeconds = Math.max(0, remainingSeconds);
                 const estMinutes = Math.floor(remainingSeconds / 60);
                 const estSeconds = remainingSeconds % 60;
                 estimatedTime.textContent = `${estMinutes.toString().padStart(2, '0')}:${estSeconds.toString().padStart(2, '0')}`;
@@ -481,7 +481,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             clearInterval(timeInterval);
-            uploadProgress.style.display = 'none';
+
+            // Reset to upload state
+            progressState.style.display = 'none';
+            uploadState.style.display = 'block';
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="ph-duotone ph-upload me-1"></i>{{ __('videos.upload_video') }}';
 

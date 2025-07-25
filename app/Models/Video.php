@@ -330,6 +330,40 @@ class Video extends Model
      */
     public function isProcessingOnPeerTube(): bool
     {
+        // Se lo stato locale è già 'ready', non è in elaborazione
+        if ($this->peertube_status === 'ready' || $this->peertube_status === 'published') {
+            return false;
+        }
+
+        // Se lo stato locale è 'processing', controlla PeerTube
+        if ($this->peertube_status === 'processing') {
+            try {
+                $peerTubeService = new \App\Services\PeerTubeService();
+                $baseUrl = $peerTubeService->getBaseUrl();
+                $response = \Illuminate\Support\Facades\Http::timeout(10)
+                    ->get($baseUrl . '/api/v1/videos/' . $this->peertube_uuid);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+
+                    // Se il video ha files o streamingPlaylists, è pronto
+                    $hasFiles = !empty($data['files']);
+                    $hasStreamingPlaylists = !empty($data['streamingPlaylists']);
+
+                    if ($hasFiles || $hasStreamingPlaylists) {
+                        // Aggiorna lo stato nel database
+                        $this->update(['peertube_status' => 'ready']);
+                        return false; // Non è più in elaborazione
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Errore controllo stato video PeerTube', [
+                    'video_id' => $this->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
         return $this->peertube_status === 'processing';
     }
 
