@@ -123,21 +123,33 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">{{ __('events.event_type') }} *</label>
+                                <label class="form-label">{{ __('events.event_mode') }} *</label>
                                 <div class="form-check">
                                     <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
                                     <label for="public" class="form-check-label">
-                                        <i class="ph ph-globe me-2"></i>{{ __('events.public') }}
+                                        <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
                                         <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
                                     <label for="private" class="form-check-label">
-                                        <i class="ph ph-lock me-2"></i>{{ __('events.private') }}
+                                        <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
                                         <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
                                     </label>
                                 </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ __('events.event_category') }} *</label>
+                                <select name="category" id="category" class="form-select" required>
+                                    <option value="">{{ __('events.category_placeholder') }}</option>
+                                    @foreach(App\Models\Event::getCategories() as $key => $name)
+                                        <option value="{{ $key }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="text-muted">{{ __('events.category_help') }}</small>
+                                <div class="error-feedback" id="category-error"></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -149,6 +161,62 @@
                                     </label>
                                 </div>
                                 <small class="text-muted">Gli artisti possono richiedere di partecipare</small>
+                            </div>
+
+                            <!-- Inviti per eventi privati -->
+                            <div class="col-12 mb-3" id="private-invites-section" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">
+                                            <i class="ph ph-users me-2"></i>{{ __('events.invite_users') }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-muted mb-3">{{ __('events.invite_users_help') }}</p>
+                                        
+                                        <!-- Barra di ricerca -->
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ __('events.search_users') }}</label>
+                                            <div class="input-group">
+                                                <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
+                                                <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
+                                                    <i class="ph ph-magnifying-glass"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Risultati ricerca -->
+                                        <div id="searchResultsInvite" class="mb-3" style="display: none;">
+                                            <h6>Risultati Ricerca</h6>
+                                            <div id="searchResultsListInvite" class="list-group">
+                                                <!-- Risultati qui -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Utenti suggeriti -->
+                                        <div class="mb-3">
+                                            <h6>{{ __('events.suggested_users') }}</h6>
+                                            <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
+                                            <div id="suggestedUsersList" class="row g-2">
+                                                <!-- Utenti suggeriti qui -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Utenti invitati -->
+                                        <div>
+                                            <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
+                                            <div id="invitedUsersList" class="row g-2">
+                                                <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                                                    <i class="ph ph-user-plus f-s-24 mb-2"></i>
+                                                    <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hidden input per i dati degli inviti -->
+                                        <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -364,14 +432,7 @@
                             <small class="text-muted">{{ __('events.entry_fee_help') }}</small>
                             </div>
 
-                            <!-- Tags -->
-                            <div class="col-12 mb-3">
-                                <label class="form-label">{{ __('events.tags_event') }}</label>
-                                <input type="text" id="tagTextInput" class="form-control" placeholder="{{ __('events.tags_input_placeholder') }}">
-                                <div class="mt-2" id="tagsDisplay"></div>
-                                <input type="hidden" name="tags" id="tagsHidden">
-                                <small class="text-muted">{{ __('events.tags_help') }}</small>
-                            </div>
+
 
                             <!-- Image Upload -->
                             <div class="col-12 mb-3">
@@ -794,10 +855,22 @@ function setupEventListeners() {
     document.querySelectorAll('input[name="is_public"]').forEach(radio => {
         radio.addEventListener('change', function() {
             const allowRequests = document.getElementById('allow_requests');
+            const privateInvitesSection = document.getElementById('private-invites-section');
+            
             if (allowRequests) {
                 allowRequests.disabled = this.value === '0';
                 if (this.value === '0') {
                     allowRequests.checked = false;
+                }
+            }
+            
+            // Mostra/nascondi sezione inviti per eventi privati
+            if (privateInvitesSection) {
+                if (this.value === '0') {
+                    privateInvitesSection.style.display = 'block';
+                    loadSuggestedUsers();
+                } else {
+                    privateInvitesSection.style.display = 'none';
                 }
             }
         });
@@ -1805,6 +1878,250 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Funzioni per gestione inviti eventi privati
+let invitedUsers = [];
+let suggestedUsers = [];
+
+// Carica utenti suggeriti
+function loadSuggestedUsers() {
+    fetch('/api/users/suggested', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        suggestedUsers = data.users || [];
+        displaySuggestedUsers();
+    })
+    .catch(error => {
+        console.error('Errore nel caricamento utenti suggeriti:', error);
+    });
+}
+
+// Mostra utenti suggeriti
+function displaySuggestedUsers() {
+    const container = document.getElementById('suggestedUsersList');
+    if (!container) return;
+
+    if (suggestedUsers.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center text-muted py-2">
+                <i class="ph ph-users f-s-16 mb-1"></i>
+                <p class="mb-0 small">{{ __('events.no_suggested_users') }}</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = suggestedUsers.map(user => `
+        <div class="col-md-6 col-lg-4 mb-2">
+            <div class="card hover-effect">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
+                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" 
+                                 alt="${user.name}" class="img-fluid">
+                        </a>
+                        <div class="flex-grow-1 ps-2">
+                            <div class="fw-medium txt-ellipsis-1">${user.name}</div>
+                            <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
+                        </div>
+                        <button type="button" class="btn btn-light-primary icon-btn b-r-4" 
+                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')" 
+                                title="{{ __('events.invite_user') }}">
+                            <i class="ph ph-plus f-s-12"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Cerca utenti per invito
+function searchUsersForInvite() {
+    const searchTerm = document.getElementById('userSearchInput').value.trim();
+    if (!searchTerm) return;
+
+    fetch(`/api/users/search?q=${encodeURIComponent(searchTerm)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        displaySearchResults(data.users || []);
+    })
+    .catch(error => {
+        console.error('Errore nella ricerca utenti:', error);
+    });
+}
+
+// Mostra risultati ricerca
+function displaySearchResults(users) {
+    const container = document.getElementById('searchResultsListInvite');
+    const resultsDiv = document.getElementById('searchResultsInvite');
+    
+    if (!container || !resultsDiv) return;
+
+    if (users.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted py-3">
+                <i class="ph ph-magnifying-glass f-s-24 mb-2"></i>
+                <p class="mb-0">Nessun utente trovato</p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = users.map(user => `
+            <div class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3 text-decoration-none">
+                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" 
+                             alt="${user.name}" class="img-fluid">
+                    </a>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
+                        <small class="text-muted f-s-12">${user.email}</small>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button type="button" class="btn btn-primary btn-sm hover-effect" 
+                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')">
+                            <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    resultsDiv.style.display = 'block';
+}
+
+// Invita utente
+function inviteUser(userId, userName, userEmail) {
+    console.log('Inviting user:', userId, userName, userEmail);
+    
+    // Controlla se l'utente è già stato invitato
+    if (invitedUsers.some(user => user.id === userId)) {
+        console.log('User already invited');
+        return;
+    }
+
+    const user = {
+        id: userId,
+        name: userName,
+        email: userEmail
+    };
+
+    invitedUsers.push(user);
+    console.log('Current invited users:', invitedUsers);
+    
+    updateInvitedUsersDisplay();
+    updateInvitedUsersData();
+    
+    // Mostra feedback visivo
+    const button = event.target.closest('button');
+    if (button) {
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="ph ph-check f-s-12"></i>';
+        button.classList.remove('btn-light-primary');
+        button.classList.add('btn-light-success');
+        button.disabled = true;
+        
+        setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.classList.remove('btn-light-success');
+            button.classList.add('btn-light-primary');
+            button.disabled = false;
+        }, 2000);
+    }
+}
+
+// Rimuovi invito
+function removeInvite(userId) {
+    console.log('Removing invite for user:', userId);
+    
+    invitedUsers = invitedUsers.filter(user => user.id !== userId);
+    console.log('Remaining invited users:', invitedUsers);
+    
+    updateInvitedUsersDisplay();
+    updateInvitedUsersData();
+}
+
+// Aggiorna visualizzazione utenti invitati
+function updateInvitedUsersDisplay() {
+    console.log('Updating invited users display, count:', invitedUsers.length);
+    
+    const container = document.getElementById('invitedUsersList');
+    const countElement = document.getElementById('inviteCount');
+    
+    if (!container) {
+        console.error('Container invitedUsersList not found');
+        return;
+    }
+    
+    if (!countElement) {
+        console.error('Element inviteCount not found');
+        return;
+    }
+
+    if (invitedUsers.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                <i class="ph ph-user-plus f-s-24 mb-2"></i>
+                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = invitedUsers.map(user => `
+            <div class="col-md-6 col-lg-4 mb-2">
+                <div class="card hover-effect">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center">
+                            <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
+                                <img src="/assets/images/avatar/default.png" 
+                                     alt="${user.name}" class="img-fluid">
+                            </a>
+                            <div class="flex-grow-1 ps-2">
+                                <div class="fw-medium txt-ellipsis-1">${user.name}</div>
+                                <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
+                            </div>
+                            <button type="button" class="btn btn-light-danger icon-btn b-r-4" 
+                                    onclick="removeInvite(${user.id})" title="{{ __('events.remove_invite') }}">
+                                <i class="ph ph-x f-s-12"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    countElement.textContent = invitedUsers.length;
+    console.log('Display updated, count element shows:', countElement.textContent);
+}
+
+// Aggiorna dati nascosti
+function updateInvitedUsersData() {
+    const hiddenInput = document.getElementById('invitedUsersData');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(invitedUsers);
+    }
+}
+
+// Gestisce il tasto Invio nella ricerca utenti
+function handleUserSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Previene il submit del form
+        searchUsersForInvite(); // Esegue la ricerca invece
+    }
+}
 </script>
 
 <!-- Flatpickr JS -->

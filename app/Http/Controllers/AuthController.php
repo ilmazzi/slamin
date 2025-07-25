@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 use Exception;
 use App\Services\PeerTubeService;
+use App\Services\LoggingService;
 
 class AuthController extends Controller
 {
@@ -136,6 +137,14 @@ class AuthController extends Controller
             // Login automatico
             Auth::login($user);
 
+            // Log registration
+            LoggingService::logAuth('register', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'roles' => $selectedRoles,
+                'peertube_created' => $shouldCreatePeerTubeUser && $user->peertube_user_id
+            ], 'App\Models\User', $user->id);
+
             // Messaggio di benvenuto personalizzato
             $roleText = count($selectedRoles) > 1 ?
                 count($selectedRoles) . ' ruoli' :
@@ -152,6 +161,13 @@ class AuthController extends Controller
                 ->with('success', $welcomeMessage);
 
         } catch (Exception $e) {
+            // Log registration error
+            LoggingService::logError('registration_failed', [
+                'email' => $request->email,
+                'error' => $e->getMessage(),
+                'roles' => $request->roles ?? []
+            ]);
+
             return redirect()->back()
                 ->withErrors(['error' => 'Errore durante la registrazione: ' . $e->getMessage()])
                 ->withInput();
@@ -183,9 +199,22 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
+            // Log successful login
+            LoggingService::logAuth('login', [
+                'user_id' => $user->id,
+                'email' => $request->email,
+                'ip' => $request->ip()
+            ], 'App\Models\User', $user->id);
+
             return redirect()->route('dashboard')
                 ->with('success', "Ti diamo il bentornato, {$user->name}!");
         }
+
+        // Log failed login attempt
+        LoggingService::logAuth('login_failed', [
+            'email' => $request->email,
+            'ip' => $request->ip()
+        ]);
 
         return back()->withErrors([
             'email' => 'Credenziali non valide.',
@@ -197,6 +226,17 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        
+        // Log logout before destroying session
+        if ($user) {
+            LoggingService::logAuth('logout', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'ip' => $request->ip()
+            ], 'App\Models\User', $user->id);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

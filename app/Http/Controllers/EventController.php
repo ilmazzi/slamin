@@ -197,22 +197,26 @@ class EventController extends Controller
                 'venue_name' => 'required|string|max:255',
                 'venue_address' => 'required|string',
                 'city' => 'required|string|max:255',
-                'postcode' => 'required|string|max:10',
+                'postcode' => 'nullable|string|max:10',
                 'country' => 'required|string|size:2',
                 'latitude' => 'nullable|numeric|between:-90,90',
                 'longitude' => 'nullable|numeric|between:-180,180',
                 'is_public' => 'required|in:0,1',
+                'category' => 'required|string|in:' . implode(',', array_keys(Event::getCategories())),
                 'max_participants' => 'nullable|integer|min:1',
                 'entry_fee' => 'nullable|numeric|min:0',
                 'venue_owner_id' => 'nullable|exists:users,id',
                 'allow_requests' => 'nullable',
-                            'tags' => 'nullable|string',
-            'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'invitations' => 'nullable|string', // JSON string of invitations
+                'tags' => 'nullable|string',
+                'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'invitations' => 'nullable|string', // JSON string of invitations
+                'invited_users' => 'nullable|string', // JSON string of invited users for private events
             ], [
                 'start_datetime.after' => 'La data di inizio deve essere nel futuro.',
                 'end_datetime.after' => 'La data di fine deve essere dopo la data di inizio.',
                 'registration_deadline.before' => 'La scadenza iscrizioni deve essere prima della data di inizio.',
+                'category.required' => 'La categoria è obbligatoria.',
+                'category.in' => 'La categoria selezionata non è valida.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Event validation failed', [
@@ -227,12 +231,14 @@ class EventController extends Controller
             'validated_data' => $validated
         ]);
 
-        // Process tags
-        if ($validated['tags']) {
+        // Process tags (if present)
+        if (isset($validated['tags']) && $validated['tags']) {
             $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
+        } else {
+            $validated['tags'] = []; // Set empty array if no tags
         }
 
-                // Convert is_public to boolean explicitly
+        // Convert is_public to boolean explicitly
         $validated['is_public'] = $validated['is_public'] === '1' || $validated['is_public'] === 1;
 
         // Convert allow_requests to boolean
@@ -268,11 +274,26 @@ class EventController extends Controller
             }
         }
 
-        // Remove invitations from validated data as it's not part of Event model
-        unset($validated['invitations']);
+        // Process invited users for private events
+        $invitedUsers = [];
+        if (!$validated['is_public'] && !empty($validated['invited_users'])) {
+            try {
+                $invitedUsers = json_decode($validated['invited_users'], true);
+                if (!is_array($invitedUsers)) {
+                    $invitedUsers = [];
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse invited users JSON: ' . $e->getMessage());
+                $invitedUsers = [];
+            }
+        }
 
-        DB::transaction(function () use ($validated, $invitations, &$event) {
-                        // Create the event
+        // Remove invitations and invited_users from validated data as they're not part of Event model
+        unset($validated['invitations']);
+        unset($validated['invited_users']);
+
+        DB::transaction(function () use ($validated, $invitations, $invitedUsers, &$event) {
+            // Create the event
             $event = Event::create($validated);
 
 
@@ -316,12 +337,58 @@ class EventController extends Controller
                     }
                 }
             }
+
+            // Create invitations for private event users
+            foreach ($invitedUsers as $invitedUser) {
+                if (isset($invitedUser['id'])) {
+                    // Verify user exists
+                    $user = User::find($invitedUser['id']);
+                    if ($user) {
+                        // Create invitation for audience role
+                        $eventInvitation = EventInvitation::create([
+                            'event_id' => $event->id,
+                            'invited_user_id' => $invitedUser['id'],
+                            'inviter_id' => Auth::id(),
+                            'role' => 'audience', // Default role for private event invitations
+                            'message' => "Sei invitato al nostro evento privato!",
+                            'status' => EventInvitation::STATUS_PENDING,
+                            'expires_at' => Carbon::parse($event->start_datetime)->subDays(1), // Expires 1 day before event
+                        ]);
+
+                        // Create notification
+                        Notification::createEventInvitation($eventInvitation);
+
+                        // Send email invitation
+                        try {
+                            Mail::to($user->email)->send(new EventInvitationMail($eventInvitation));
+                            Log::info('Private event invitation email sent', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitedUser['id'],
+                                'email' => $user->email
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Failed to send private event invitation email', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitedUser['id'],
+                                'email' => $user->email,
+                                'error' => $e->getMessage()
+                            ]);
+                        }
+                    }
+                }
+            }
         });
 
         $invitationCount = count($invitations);
+        $invitedUsersCount = count($invitedUsers);
         $successMessage = __('events.event_created_success');
+        
         if ($invitationCount > 0) {
             $successMessage .= ' ' . __('events.invitations_sent_success', ['count' => $invitationCount]);
+        }
+        
+        if ($invitedUsersCount > 0) {
+            $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $invitedUsersCount]);
         }
 
         return redirect()
@@ -480,9 +547,11 @@ class EventController extends Controller
             'status' => ['required', Rule::in([Event::STATUS_DRAFT, Event::STATUS_PUBLISHED, Event::STATUS_CANCELLED])],
         ]);
 
-        // Process tags
-        if ($validated['tags']) {
+        // Process tags (if present)
+        if (isset($validated['tags']) && $validated['tags']) {
             $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
+        } else {
+            $validated['tags'] = []; // Set empty array if no tags
         }
 
         $event->update($validated);

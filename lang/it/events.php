@@ -52,6 +52,8 @@ return [
     'no_limit_help' => 'Lascia vuoto per nessun limite',
     'entry_fee' => 'Costo Ingresso',
     'event_type' => 'Tipo di Evento',
+    'event_mode' => 'Modalità',
+    'event_category' => 'Categoria',
     'event_status' => 'Stato Evento',
     'event_image' => 'Immagine Evento',
     'tags' => 'Tags',
@@ -439,6 +441,37 @@ return [
 
     // Descrizioni evento
     'public_event_description' => 'Visibile a tutti, accetta richieste',
+    'private_event_description' => 'Solo per invitati, richiede inviti specifici',
+    'mode_public' => 'Pubblico',
+    'mode_private' => 'Privato',
+    'category_placeholder' => 'Seleziona una categoria...',
+    'category_help' => 'La categoria determina il colore dell\'evento e aiuta gli utenti a identificarlo rapidamente',
+    
+    // Categorie evento
+    'category_concert' => 'Concerto (musica)',
+    'category_conference' => 'Conferenza/Tavola rotonda',
+    'category_festival' => 'Festival',
+    'category_workshop' => 'Laboratorio/Corso',
+    'category_open_mic' => 'Open mic',
+    'category_poetry_art' => 'Poesia + altra arte',
+    'category_poetry_slam' => 'Poetry Slam',
+    'category_book_presentation' => 'Presentazione libro',
+    'category_reading' => 'Reading',
+    'category_residency' => 'Residenza',
+    'category_spoken_word' => 'Spoken Word',
+    
+    // Inviti per eventi privati
+    'invite_users' => 'Invita Utenti',
+    'invite_users_help' => 'Per eventi privati, invita utenti specifici',
+    'search_users' => 'Cerca utenti...',
+    'suggested_users' => 'Utenti Suggeriti',
+    'suggested_users_help' => 'Utenti che segui o che ti seguono, più attivi',
+    'no_suggested_users' => 'Nessun utente suggerito disponibile',
+    'invite_user' => 'Invita',
+    'remove_invite' => 'Rimuovi',
+    'invited_users' => 'Utenti Invitati',
+    'no_invited_users' => 'Nessun utente invitato',
+    'private_invitations_sent_success' => 'e :count inviti per evento privato inviati.',
     'private_event_description' => 'Solo su invito',
 
     // Breadcrumb

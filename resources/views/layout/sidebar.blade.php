@@ -223,6 +223,14 @@
                                         Kanban Board
                                     </a>
                                 </li>
+
+                                <!-- System Logs - Solo per admin/moderator -->
+                                <li class="no-sub {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.logs.index') }}">
+                                        <i class="ph-duotone ph-journal-text f-s-20 me-2"></i>
+                                        System Logs
+                                    </a>
+                                </li>
                                 @endif
                                 @else
                                 <!-- Guest Menu - Login in basso -->

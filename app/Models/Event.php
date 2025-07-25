@@ -37,6 +37,7 @@ class Event extends Model
         'venue_owner_id',
         'allow_requests',
         'tags',
+        'category',
         'image_url',
     ];
 
@@ -62,6 +63,21 @@ class Event extends Model
     const STATUS_PUBLISHED = 'published';
     const STATUS_CANCELLED = 'cancelled';
     const STATUS_COMPLETED = 'completed';
+
+    /**
+     * Event category constants
+     */
+    const CATEGORY_CONCERT = 'concert';
+    const CATEGORY_CONFERENCE = 'conference';
+    const CATEGORY_FESTIVAL = 'festival';
+    const CATEGORY_WORKSHOP = 'workshop';
+    const CATEGORY_OPEN_MIC = 'open_mic';
+    const CATEGORY_POETRY_ART = 'poetry_art';
+    const CATEGORY_POETRY_SLAM = 'poetry_slam';
+    const CATEGORY_BOOK_PRESENTATION = 'book_presentation';
+    const CATEGORY_READING = 'reading';
+    const CATEGORY_RESIDENCY = 'residency';
+    const CATEGORY_SPOKEN_WORD = 'spoken_word';
 
     /**
      * Get the organizer of the event
@@ -230,5 +246,67 @@ class Event extends Model
         }
 
         return $this->start_datetime > Carbon::now();
+    }
+
+    /**
+     * Get all available categories
+     */
+    public static function getCategories(): array
+    {
+        return [
+            self::CATEGORY_CONCERT => 'Concerto (musica)',
+            self::CATEGORY_CONFERENCE => 'Conferenza/Tavola rotonda',
+            self::CATEGORY_FESTIVAL => 'Festival',
+            self::CATEGORY_WORKSHOP => 'Laboratorio/Corso',
+            self::CATEGORY_OPEN_MIC => 'Open mic',
+            self::CATEGORY_POETRY_ART => 'Poesia + altra arte',
+            self::CATEGORY_POETRY_SLAM => 'Poetry Slam',
+            self::CATEGORY_BOOK_PRESENTATION => 'Presentazione libro',
+            self::CATEGORY_READING => 'Reading',
+            self::CATEGORY_RESIDENCY => 'Residenza',
+            self::CATEGORY_SPOKEN_WORD => 'Spoken Word',
+        ];
+    }
+
+    /**
+     * Get category color class
+     */
+    public function getCategoryColorClassAttribute(): string
+    {
+        return match($this->category) {
+            self::CATEGORY_CONCERT => 'bg-primary',
+            self::CATEGORY_CONFERENCE => 'bg-info',
+            self::CATEGORY_FESTIVAL => 'bg-success',
+            self::CATEGORY_WORKSHOP => 'bg-warning',
+            self::CATEGORY_OPEN_MIC => 'bg-secondary',
+            self::CATEGORY_POETRY_ART => 'bg-purple',
+            self::CATEGORY_POETRY_SLAM => 'bg-danger',
+            self::CATEGORY_BOOK_PRESENTATION => 'bg-teal',
+            self::CATEGORY_READING => 'bg-indigo',
+            self::CATEGORY_RESIDENCY => 'bg-pink',
+            self::CATEGORY_SPOKEN_WORD => 'bg-orange',
+            default => 'bg-secondary',
+        };
+    }
+
+    /**
+     * Get category light color class
+     */
+    public function getCategoryLightColorClassAttribute(): string
+    {
+        return match($this->category) {
+            self::CATEGORY_CONCERT => 'bg-light-primary',
+            self::CATEGORY_CONFERENCE => 'bg-light-info',
+            self::CATEGORY_FESTIVAL => 'bg-light-success',
+            self::CATEGORY_WORKSHOP => 'bg-light-warning',
+            self::CATEGORY_OPEN_MIC => 'bg-light-secondary',
+            self::CATEGORY_POETRY_ART => 'bg-light-purple',
+            self::CATEGORY_POETRY_SLAM => 'bg-light-danger',
+            self::CATEGORY_BOOK_PRESENTATION => 'bg-light-teal',
+            self::CATEGORY_READING => 'bg-light-indigo',
+            self::CATEGORY_RESIDENCY => 'bg-light-pink',
+            self::CATEGORY_SPOKEN_WORD => 'bg-light-orange',
+            default => 'bg-light-secondary',
+        };
     }
 }

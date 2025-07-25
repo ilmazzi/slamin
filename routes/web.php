@@ -428,6 +428,12 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/notifications/test', [NotificationController::class, 'test'])->name('notifications.test');
     }
 
+    // API routes for user search and suggestions
+    Route::prefix('api')->name('api.')->middleware('auth')->group(function () {
+        Route::get('/users/search', [App\Http\Controllers\Api\UserController::class, 'search'])->name('users.search');
+        Route::get('/users/suggested', [App\Http\Controllers\Api\UserController::class, 'suggested'])->name('users.suggested');
+    });
+
     // Analytics routes
     Route::prefix('analytics')->name('analytics.')->middleware('auth')->group(function () {
         Route::get('/', [AnalyticsController::class, 'index'])->name('index');
@@ -492,6 +498,16 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
         Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
         Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+
+        // System Logs
+        Route::prefix('logs')->name('logs.')->middleware('logging')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\LogController::class, 'index'])->name('index');
+            Route::get('/{log}', [App\Http\Controllers\Admin\LogController::class, 'show'])->name('show');
+            Route::get('/export/csv', [App\Http\Controllers\Admin\LogController::class, 'export'])->name('export');
+            Route::get('/stats', [App\Http\Controllers\Admin\LogController::class, 'stats'])->name('stats');
+            Route::post('/clear', [App\Http\Controllers\Admin\LogController::class, 'clear'])->name('clear');
+            Route::get('/realtime', [App\Http\Controllers\Admin\LogController::class, 'realtime'])->name('realtime');
+        });
         Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
         Route::post('/settings/thumbnails', [App\Http\Controllers\Admin\SystemSettingsController::class, 'manageThumbnails'])->name('settings.thumbnails');
 
