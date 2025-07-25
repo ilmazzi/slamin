@@ -107,7 +107,7 @@
                                     @else
                                         <img src="{{ $carousel->imageUrl }}" class="d-block w-100" alt="{{ $carousel->title }}">
                                     @endif
-                                    <div class="carousel-caption d-none d-md-block">
+                                    <div class="bg-light-success carousel-caption d-none d-md-block ">
                                         <h5 class="f-w-600">{{ $carousel->title }}</h5>
                                         @if($carousel->description)
                                             <p class="mb-3">{{ $carousel->description }}</p>

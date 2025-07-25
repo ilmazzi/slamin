@@ -446,7 +446,7 @@ class User extends Authenticatable
         if ($this->profile_photo) {
             return asset('storage/' . $this->profile_photo);
         }
-        return asset('assets/images/avatar/' . ($this->id % 16 + 1) . '.png');
+        return asset('assets/images/avatar/default-avatar.webp');
     }
 
     /**
@@ -457,7 +457,7 @@ class User extends Authenticatable
         if ($this->banner_image) {
             return asset('storage/' . $this->banner_image);
         }
-        return asset('assets/images/profile-app/28.jpg');
+        return asset('assets/images/avatar/default-banner.webp');
     }
 
     /**
