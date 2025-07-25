@@ -729,4 +729,46 @@ Route::post('/test-upload', function (Request $request) {
     ], 400);
 })->middleware('auth');
 
+// Routes per le poesie
+Route::prefix('poems')->name('poems.')->group(function () {
+    // Routes pubbliche
+    Route::get('/', [App\Http\Controllers\PoemController::class, 'index'])->name('index');
+    Route::get('/search', [App\Http\Controllers\PoemController::class, 'search'])->name('search');
+    Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
+    
+    // Routes autenticate
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', [App\Http\Controllers\PoemController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\PoemController::class, 'store'])->name('store');
+        Route::get('/{poem}/edit', [App\Http\Controllers\PoemController::class, 'edit'])->name('edit');
+        Route::put('/{poem}', [App\Http\Controllers\PoemController::class, 'update'])->name('update');
+        Route::delete('/{poem}', [App\Http\Controllers\PoemController::class, 'destroy'])->name('destroy');
+        
+        // Poesie personali
+        Route::get('/my/poems', [App\Http\Controllers\PoemController::class, 'myPoems'])->name('my-poems');
+        Route::get('/my/drafts', [App\Http\Controllers\PoemController::class, 'drafts'])->name('drafts');
+        
+        // Azioni social
+        Route::post('/{poem}/like', [App\Http\Controllers\PoemActionController::class, 'toggleLike'])->name('like');
+        Route::post('/{poem}/bookmark', [App\Http\Controllers\PoemActionController::class, 'toggleBookmark'])->name('bookmark');
+        Route::post('/{poem}/share', [App\Http\Controllers\PoemActionController::class, 'share'])->name('share');
+        Route::post('/{poem}/request-translation', [App\Http\Controllers\PoemActionController::class, 'requestTranslation'])->name('request-translation');
+        
+        // Segnalibri e preferiti
+        Route::get('/my/bookmarks', [App\Http\Controllers\PoemActionController::class, 'bookmarks'])->name('bookmarks');
+        Route::get('/my/liked', [App\Http\Controllers\PoemActionController::class, 'liked'])->name('liked');
+        
+        // Commenti
+        Route::get('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
+        Route::post('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
+        Route::put('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'update'])->name('comments.update');
+        Route::delete('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'destroy'])->name('comments.destroy');
+        Route::post('/comments/{comment}/like', [App\Http\Controllers\PoemCommentController::class, 'toggleLike'])->name('comments.like');
+        
+        // Moderazione commenti (solo admin)
+        Route::middleware('can:moderate,App\Models\PoemComment')->group(function () {
+            Route::post('/comments/{comment}/moderate', [App\Http\Controllers\PoemCommentController::class, 'moderate'])->name('comments.moderate');
+        });
+    });
+});
 

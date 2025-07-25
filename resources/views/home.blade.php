@@ -494,7 +494,7 @@ $(document).ready(function() {
                                                     </div>
                                                 </div>
                                                 <div class="flex-shrink-0">
-                                                    <a href="#" class="btn btn-sm btn-gradient-info hover-effect" onclick="showPoem('{{ $poem->id }}')">
+                                                    <a href="{{ route('poems.show', $poem) }}" class="btn btn-sm btn-gradient-info hover-effect">
                                                         <i class="ph-duotone ph-book-open f-s-12"></i>
                                                     </a>
                                                 </div>
@@ -544,7 +544,7 @@ $(document).ready(function() {
                                                     </div>
                                                 </div>
                                                 <div class="flex-shrink-0">
-                                                    <a href="#" class="btn btn-sm btn-gradient-info hover-effect" onclick="showPoem('{{ $poem->id }}')">
+                                                    <a href="{{ route('poems.show', $poem) }}" class="btn btn-sm btn-gradient-info hover-effect">
                                                         <i class="ph-duotone ph-book-open f-s-12"></i>
                                                     </a>
                                                 </div>
@@ -554,6 +554,14 @@ $(document).ready(function() {
                                 </div>
                                 @endforeach
                             </div>
+                        </div>
+                        
+                        <!-- Footer with link to all poems -->
+                        <div class="text-center mt-3">
+                            <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
+                                <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
+                                Vedi tutte le poesie
+                            </a>
                         </div>
                     </div>
                 </div>

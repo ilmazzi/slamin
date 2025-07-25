@@ -391,6 +391,32 @@ class User extends Authenticatable
         return $this->hasMany(VideoLike::class);
     }
 
+    // Relazioni per le poesie
+    public function poems()
+    {
+        return $this->hasMany(Poem::class);
+    }
+
+    public function poemComments()
+    {
+        return $this->hasMany(PoemComment::class);
+    }
+
+    public function likedPoems()
+    {
+        return $this->belongsToMany(Poem::class, 'poem_likes')->withTimestamps();
+    }
+
+    public function bookmarkedPoems()
+    {
+        return $this->belongsToMany(Poem::class, 'poem_bookmarks')->withTimestamps();
+    }
+
+    public function likedPoemComments()
+    {
+        return $this->belongsToMany(PoemComment::class, 'poem_comment_likes')->withTimestamps();
+    }
+
     /**
      * Get current video limit for user
      */
