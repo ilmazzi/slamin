@@ -4,6 +4,46 @@
 
 @section('title', 'Slam in - Home')
 
+@section('css')
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+@endsection
+
+@section('script')
+<!-- Slick JS -->
+<script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
+<script src="{{ asset('assets/js/slick.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+    // Inizializza lo slider degli eventi
+    $('#events-slider').slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        dots: false,
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
+});
+</script>
+@endsection
+
 @section('main-content')
 <div class="page-content">
     <div class="container-fluid">
@@ -19,7 +59,7 @@
                             <div class="carousel-indicators">
                                 @foreach($carousels as $index => $carousel)
                                 <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}"
-                                        class="{{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                                        class="bg-primary {{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : 'false' }}"
                                         aria-label="Slide {{ $index + 1 }}"></button>
                                 @endforeach
                             </div>
@@ -45,10 +85,10 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5 class="f-w-600 f-s-24 mb-3">{{ $carousel->title }}</h5>
+                                    <div class="carousel-caption d-none d-md-block bg-light-success bg-opacity-75 rounded-3 p-4 mx-auto">
+                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->title }}</h5>
                                         @if($carousel->description)
-                                            <p class="mb-4 f-s-16">{{ $carousel->description }}</p>
+                                            <p class="mb-4 f-s-16 text-primary">{{ $carousel->description }}</p>
                                         @endif
                                         @if($carousel->link_url && $carousel->link_text)
                                             <a href="{{ $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
@@ -62,11 +102,11 @@
                             </div>
                             @if($carousels->count() > 1)
                             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <i class="ph ph-arrow-circle-left f-s-24 text-primary"></i>
                                 <span class="visually-hidden">{{ __('home.carousel.previous') }}</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <i class="ph ph-arrow-circle-right f-s-24 text-primary"></i>
                                 <span class="visually-hidden">{{ __('home.carousel.next') }}</span>
                             </button>
                             @endif
@@ -81,52 +121,60 @@
         @if($recentEvents->count() > 0)
         <div class="row mb-4">
             <div class="col-12">
-                <h5 class="text-warning mb-3">
-                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                    Prossimi Eventi
-                </h5>
-            </div>
-            @foreach($recentEvents->take(4) as $event)
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="card overflow-hidden hover-effect">
-                    @if($event->image_path)
-                        <img src="{{ asset('storage/' . $event->image_path) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
-                    @else
-                        @php
-                            $fallbackImages = [
-                                'assets/images/background/default-event-1.webp',
-                                'assets/images/background/default-event-2.webp',
-                                'assets/images/background/default-event-3.webp',
-                                'assets/images/background/default-event-4.webp'
-                            ];
-                            $randomImage = $fallbackImages[array_rand($fallbackImages)];
-                        @endphp
-                        <img src="{{ asset($randomImage) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
-                    @endif
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
+                            Prossimi Eventi
+                        </h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title f-w-600">{{ $event->title }}</h5>
-                        <p class="card-text text-muted f-s-14">
-                            <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
-                            {{ $event->venue_name }}
-                        </p>
-                        @if($event->description)
-                            <p class="card-text">{{ Str::limit($event->description, 80) }}</p>
-                        @endif
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="card-text">
-                                <small class="text-body-secondary">
-                                    <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
-                                </small>
-                            </p>
-                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
-                                <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
-                            </a>
+                        <div class="autoplay-slider app-arrow" id="events-slider">
+                            @foreach($recentEvents->take(10) as $event)
+                            <div class="autoplay-item">
+                                <div class="card overflow-hidden hover-effect">
+                                    @if($event->image_path)
+                                        <img src="{{ asset('storage/' . $event->image_path) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                                    @else
+                                        @php
+                                            $fallbackImages = [
+                                                'assets/images/background/default-event-1.webp',
+                                                'assets/images/background/default-event-2.webp',
+                                                'assets/images/background/default-event-3.webp',
+                                                'assets/images/background/default-event-4.webp'
+                                            ];
+                                            $randomImage = $fallbackImages[array_rand($fallbackImages)];
+                                        @endphp
+                                        <img src="{{ asset($randomImage) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                                    @endif
+                                    <div class="card-body">
+                                        <h5 class="card-title f-w-600">{{ $event->title }}</h5>
+                                        <p class="card-text text-muted f-s-14">
+                                            <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
+                                            {{ $event->venue_name }}
+                                        </p>
+                                        @if($event->description)
+                                            <p class="card-text">{{ Str::limit($event->description, 80) }}</p>
+                                        @endif
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="card-text">
+                                                <small class="text-body-secondary">
+                                                    <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
+                                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                </small>
+                                            </p>
+                                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
+                                                <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-            @endforeach
         </div>
         @endif
 
