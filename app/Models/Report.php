@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use App\Services\LoggingService;
 
 class Report extends Model
 {
@@ -26,6 +27,28 @@ class Report extends Model
     protected $casts = [
         'resolved_at' => 'datetime',
     ];
+
+    /**
+     * Boot del modello
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($report) {
+            LoggingService::logAdmin('report_created', [
+                'report_id' => $report->id,
+                'content_type' => $report->content_type,
+                'content_id' => $report->reportable_id,
+                'content_title' => $report->reportable_title,
+                'reason' => $report->reason,
+                'reason_text' => $report->reason_text,
+                'reporter_id' => $report->user_id,
+                'reporter_name' => $report->user->name ?? 'N/A',
+                'description' => $report->description
+            ], $report->reportable_type, $report->reportable_id);
+        });
+    }
 
     // Status constants
     const STATUS_PENDING = 'pending';

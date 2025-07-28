@@ -577,6 +577,22 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
             Route::get('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'settings'])->name('settings');
             Route::post('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'updateSettings'])->name('settings.update');
         });
+
+        // API routes for user search
+        Route::get('/api/users/search', function (Illuminate\Http\Request $request) {
+            $query = $request->get('q');
+
+            if (!$query || strlen($query) < 2) {
+                return response()->json(['users' => []]);
+            }
+
+            $users = App\Models\User::where('name', 'like', "%{$query}%")
+                        ->orWhere('email', 'like', "%{$query}%")
+                        ->limit(10)
+                        ->get(['id', 'name', 'email']);
+
+            return response()->json(['users' => $users]);
+        })->name('api.users.search');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)

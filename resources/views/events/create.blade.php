@@ -173,7 +173,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p class="text-muted mb-3">{{ __('events.invite_users_help') }}</p>
-                                        
+
                                         <!-- Barra di ricerca -->
                                         <div class="mb-3">
                                             <label class="form-label">{{ __('events.search_users') }}</label>
@@ -678,9 +678,13 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
 <script>
+// Test di base per verificare se il JavaScript si carica
+console.log('=== JAVASCRIPT LOADED ===');
+alert('JavaScript si è caricato!');
+
 let currentStep = 1;
 let map = null;
 let marker = null;
@@ -688,22 +692,39 @@ let tags = [];
 let selectedInvitations = [];
 
 const stepTips = {
-    1: "{{ __('events.title_help') }}",
-    2: "{{ __('events.date_help') }}",
-    3: "{{ __('events.description_help') }}",
-    4: "{{ __('events.invitations_help') }}",
-    5: "{{ __('events.review_help') }}"
+    1: "Scegli un titolo accattivante che descriva chiaramente il tuo evento.",
+    2: "Imposta data, ora e luogo dell'evento. La mappa ti aiuterà a trovare la posizione esatta.",
+    3: "Aggiungi dettagli, tag e configura le impostazioni dell'evento.",
+    4: "Invita artisti specifici al tuo evento. Potrai sempre farlo anche dopo.",
+    5: "Rivedi tutti i dettagli prima di pubblicare l'evento."
 };
 
+// Global error handler
+window.addEventListener('error', function(e) {
+    console.error('Global JavaScript error:', e.error);
+    console.error('Error details:', {
+        message: e.message,
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno,
+        stack: e.error ? e.error.stack : 'No stack available'
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Starting initialization');
+
     // Aspetta un momento per essere sicuri che tutto il DOM sia pronto
     setTimeout(() => {
         try {
+            console.log('Initializing form...');
             initializeForm();
+            console.log('Setting up event listeners...');
             setupEventListeners();
-            startAutoSave();
+            console.log('Initialization completed successfully');
         } catch (error) {
             console.error('Errore durante l\'inizializzazione:', error);
+            console.error('Stack trace:', error.stack);
         }
     }, 100);
 });
@@ -751,8 +772,30 @@ function setupEventListeners() {
     const nextStepBtn = document.getElementById('nextStep');
     const prevStepBtn = document.getElementById('prevStep');
 
-    if (nextStepBtn) nextStepBtn.addEventListener('click', nextStep);
-    if (prevStepBtn) prevStepBtn.addEventListener('click', prevStep);
+    if (nextStepBtn) {
+        console.log('Next step button found, adding event listener');
+        console.log('Button text:', nextStepBtn.textContent);
+        console.log('Button disabled:', nextStepBtn.disabled);
+        console.log('Button style:', nextStepBtn.style.display);
+
+        nextStepBtn.addEventListener('click', function(e) {
+            console.log('Next step button clicked!');
+            e.preventDefault();
+            nextStep();
+        });
+    } else {
+        console.error('Next step button not found!');
+        console.error('Available buttons:', document.querySelectorAll('button').length);
+        document.querySelectorAll('button').forEach((btn, index) => {
+            console.log(`Button ${index}:`, btn.id, btn.textContent);
+        });
+    }
+    if (prevStepBtn) {
+        console.log('Prev step button found, adding event listener');
+        prevStepBtn.addEventListener('click', prevStep);
+    } else {
+        console.error('Prev step button not found!');
+    }
 
     // Direct step navigation (clicking on wizard steps)
     document.querySelectorAll('.wizard-step').forEach(stepEl => {
@@ -840,6 +883,12 @@ function setupEventListeners() {
         }
     });
 
+    // User search functionality
+    const userSearchInput = document.getElementById('userSearch');
+    if (userSearchInput) {
+        userSearchInput.addEventListener('keydown', handleUserSearchKeydown);
+    }
+
     // Image upload preview
     const imageInput = document.getElementById('event_image');
     if (imageInput) {
@@ -856,14 +905,14 @@ function setupEventListeners() {
         radio.addEventListener('change', function() {
             const allowRequests = document.getElementById('allow_requests');
             const privateInvitesSection = document.getElementById('private-invites-section');
-            
+
             if (allowRequests) {
                 allowRequests.disabled = this.value === '0';
                 if (this.value === '0') {
                     allowRequests.checked = false;
                 }
             }
-            
+
             // Mostra/nascondi sezione inviti per eventi privati
             if (privateInvitesSection) {
                 if (this.value === '0') {
@@ -878,15 +927,23 @@ function setupEventListeners() {
 }
 
 function nextStep() {
+    console.log('nextStep called, currentStep:', currentStep);
+
     if (validateCurrentStep()) {
+        console.log('Validation passed, proceeding to next step');
         if (currentStep < 5) {
             currentStep++;
+            console.log('Moving to step:', currentStep);
             showStep(currentStep);
             updateProgress();
             if (currentStep === 5) {
                 updatePreview();
             }
+        } else {
+            console.log('Already at last step');
         }
+    } else {
+        console.log('Validation failed, cannot proceed');
     }
 }
 
@@ -976,6 +1033,8 @@ function validateCurrentStep() {
     const step = currentStep;
     let isValid = true;
 
+    console.log('Validating step:', step);
+
     // Clear previous errors
     document.querySelectorAll('.error-feedback').forEach(el => el.textContent = '');
 
@@ -983,16 +1042,21 @@ function validateCurrentStep() {
         const title = document.getElementById('title').value.trim();
         const description = document.getElementById('description').value.trim();
 
+        console.log('Step 1 validation - title:', title, 'description:', description);
+
         if (!title) {
+            console.log('Title is empty');
             showError('title', 'Il titolo è obbligatorio');
             isValid = false;
         } else if (title.length < 5) {
+            console.log('Title too short:', title.length);
             showError('title', 'Il titolo deve essere di almeno 5 caratteri');
             isValid = false;
         }
 
         // Description is optional, but if provided must be at least 20 characters
         if (description && description.length < 20) {
+            console.log('Description too short:', description.length);
             showError('description', 'La descrizione deve essere di almeno 20 caratteri');
             isValid = false;
         }
@@ -1034,6 +1098,7 @@ function validateCurrentStep() {
         }
     }
 
+    console.log('Validation result:', isValid);
     return isValid;
 }
 
@@ -1923,15 +1988,15 @@ function displaySuggestedUsers() {
                 <div class="card-body p-3">
                     <div class="d-flex align-items-center">
                         <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" 
+                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
                                  alt="${user.name}" class="img-fluid">
                         </a>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
-                        <button type="button" class="btn btn-light-primary icon-btn b-r-4" 
-                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')" 
+                        <button type="button" class="btn btn-light-primary icon-btn b-r-4"
+                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -1967,7 +2032,7 @@ function searchUsersForInvite() {
 function displaySearchResults(users) {
     const container = document.getElementById('searchResultsListInvite');
     const resultsDiv = document.getElementById('searchResultsInvite');
-    
+
     if (!container || !resultsDiv) return;
 
     if (users.length === 0) {
@@ -1982,7 +2047,7 @@ function displaySearchResults(users) {
             <div class="list-group-item">
                 <div class="d-flex align-items-center">
                     <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3 text-decoration-none">
-                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" 
+                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
                              alt="${user.name}" class="img-fluid">
                     </a>
                     <div class="flex-grow-1">
@@ -1990,7 +2055,7 @@ function displaySearchResults(users) {
                         <small class="text-muted f-s-12">${user.email}</small>
                     </div>
                     <div class="flex-shrink-0">
-                        <button type="button" class="btn btn-primary btn-sm hover-effect" 
+                        <button type="button" class="btn btn-primary btn-sm hover-effect"
                                 onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
@@ -1999,14 +2064,14 @@ function displaySearchResults(users) {
             </div>
         `).join('');
     }
-    
+
     resultsDiv.style.display = 'block';
 }
 
 // Invita utente
 function inviteUser(userId, userName, userEmail) {
     console.log('Inviting user:', userId, userName, userEmail);
-    
+
     // Controlla se l'utente è già stato invitato
     if (invitedUsers.some(user => user.id === userId)) {
         console.log('User already invited');
@@ -2021,10 +2086,10 @@ function inviteUser(userId, userName, userEmail) {
 
     invitedUsers.push(user);
     console.log('Current invited users:', invitedUsers);
-    
+
     updateInvitedUsersDisplay();
     updateInvitedUsersData();
-    
+
     // Mostra feedback visivo
     const button = event.target.closest('button');
     if (button) {
@@ -2033,7 +2098,7 @@ function inviteUser(userId, userName, userEmail) {
         button.classList.remove('btn-light-primary');
         button.classList.add('btn-light-success');
         button.disabled = true;
-        
+
         setTimeout(() => {
             button.innerHTML = originalContent;
             button.classList.remove('btn-light-success');
@@ -2046,10 +2111,10 @@ function inviteUser(userId, userName, userEmail) {
 // Rimuovi invito
 function removeInvite(userId) {
     console.log('Removing invite for user:', userId);
-    
+
     invitedUsers = invitedUsers.filter(user => user.id !== userId);
     console.log('Remaining invited users:', invitedUsers);
-    
+
     updateInvitedUsersDisplay();
     updateInvitedUsersData();
 }
@@ -2057,25 +2122,25 @@ function removeInvite(userId) {
 // Aggiorna visualizzazione utenti invitati
 function updateInvitedUsersDisplay() {
     console.log('Updating invited users display, count:', invitedUsers.length);
-    
-    const container = document.getElementById('invitedUsersList');
-    const countElement = document.getElementById('inviteCount');
-    
+
+    const container = document.getElementById('invitationsList');
+    const countElement = document.getElementById('invitationCount');
+
     if (!container) {
-        console.error('Container invitedUsersList not found');
+        console.error('Container invitationsList not found');
         return;
     }
-    
+
     if (!countElement) {
-        console.error('Element inviteCount not found');
+        console.error('Element invitationCount not found');
         return;
     }
 
     if (invitedUsers.length === 0) {
         container.innerHTML = `
-            <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
-                <i class="ph ph-user-plus f-s-24 mb-2"></i>
-                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+            <div class="col-12 text-center text-muted py-4" id="noInvitations">
+                <i class="ph ph-user-plus display-4 mb-2"></i>
+                <p>Nessun artista selezionato ancora.<br>Cerca e aggiungi artisti da invitare.</p>
             </div>
         `;
     } else {
@@ -2085,15 +2150,16 @@ function updateInvitedUsersDisplay() {
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center">
                             <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                                <img src="/assets/images/avatar/default.png" 
+                                <img src="/assets/images/avatar/default.png"
                                      alt="${user.name}" class="img-fluid">
                             </a>
                             <div class="flex-grow-1 ps-2">
                                 <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                                 <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
+                                <div class="text-muted f-s-10 txt-ellipsis-1">${user.role || 'performer'}</div>
                             </div>
-                            <button type="button" class="btn btn-light-danger icon-btn b-r-4" 
-                                    onclick="removeInvite(${user.id})" title="{{ __('events.remove_invite') }}">
+                            <button type="button" class="btn btn-light-danger icon-btn b-r-4"
+                                    onclick="removeInvite(${user.id})" title="Rimuovi invito">
                                 <i class="ph ph-x f-s-12"></i>
                             </button>
                         </div>
@@ -2102,14 +2168,14 @@ function updateInvitedUsersDisplay() {
             </div>
         `).join('');
     }
-    
+
     countElement.textContent = invitedUsers.length;
     console.log('Display updated, count element shows:', countElement.textContent);
 }
 
 // Aggiorna dati nascosti
 function updateInvitedUsersData() {
-    const hiddenInput = document.getElementById('invitedUsersData');
+    const hiddenInput = document.getElementById('invitationsData');
     if (hiddenInput) {
         hiddenInput.value = JSON.stringify(invitedUsers);
     }
@@ -2119,11 +2185,126 @@ function updateInvitedUsersData() {
 function handleUserSearchKeydown(event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Previene il submit del form
-        searchUsersForInvite(); // Esegue la ricerca invece
+        searchUsers(); // Esegue la ricerca invece
     }
+}
+
+// Cerca utenti per inviti
+function searchUsers() {
+    const searchTerm = document.getElementById('userSearch').value.trim();
+    const resultsDiv = document.getElementById('searchResults');
+    const resultsList = document.getElementById('searchResultsList');
+
+    if (!searchTerm) {
+        alert('Inserisci un termine di ricerca');
+        return;
+    }
+
+    console.log('Searching users for:', searchTerm);
+
+    // Simula una ricerca (in produzione dovrebbe essere una chiamata AJAX)
+    fetch(`/api/users/search?q=${encodeURIComponent(searchTerm)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Search results:', data);
+
+        if (data.users && data.users.length > 0) {
+            resultsList.innerHTML = data.users.map(user => `
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-bold">${user.name}</div>
+                        <small class="text-muted">${user.email}</small>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                            onclick="selectUserForInvitation(${user.id}, '${user.name}', '${user.email}')">
+                        <i class="ph ph-plus me-1"></i>Seleziona
+                    </button>
+                </div>
+            `).join('');
+            resultsDiv.style.display = 'block';
+        } else {
+            resultsList.innerHTML = '<div class="list-group-item text-center text-muted">Nessun utente trovato</div>';
+            resultsDiv.style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Search error:', error);
+        resultsList.innerHTML = '<div class="list-group-item text-center text-danger">Errore durante la ricerca</div>';
+        resultsDiv.style.display = 'block';
+    });
+}
+
+// Seleziona utente per invito
+function selectUserForInvitation(userId, userName, userEmail) {
+    console.log('Selecting user for invitation:', userId, userName, userEmail);
+
+    // Controlla se l'utente è già stato invitato
+    if (invitedUsers.some(user => user.id === userId)) {
+        alert('Questo utente è già stato invitato');
+        return;
+    }
+
+    // Mostra il modal per selezionare il ruolo
+    document.getElementById('selectedUserInitials').textContent = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('selectedUserName').textContent = userName;
+    document.getElementById('selectedUserEmail').textContent = userEmail;
+
+    // Salva i dati dell'utente selezionato
+    window.selectedUser = { id: userId, name: userName, email: userEmail };
+
+    // Mostra il modal
+    const modal = new bootstrap.Modal(document.getElementById('roleSelectionModal'));
+    modal.show();
+}
+
+// Conferma invito
+function confirmInvitation() {
+    const selectedUser = window.selectedUser;
+    const role = document.querySelector('input[name="invitationRole"]:checked').value;
+    const message = document.getElementById('invitationMessage').value.trim();
+
+    if (!selectedUser) {
+        alert('Nessun utente selezionato');
+        return;
+    }
+
+    console.log('Confirming invitation:', selectedUser, role, message);
+
+    // Aggiungi l'utente alla lista degli invitati
+    const invitation = {
+        id: selectedUser.id,
+        name: selectedUser.name,
+        email: selectedUser.email,
+        role: role,
+        message: message
+    };
+
+    invitedUsers.push(invitation);
+    console.log('Current invited users:', invitedUsers);
+
+    // Aggiorna la visualizzazione
+    updateInvitedUsersDisplay();
+    updateInvitedUsersData();
+
+    // Chiudi il modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('roleSelectionModal'));
+    modal.hide();
+
+    // Pulisci i campi
+    document.getElementById('invitationMessage').value = '';
+    window.selectedUser = null;
+
+    // Mostra feedback
+    alert('Invito aggiunto con successo!');
 }
 </script>
 
 <!-- Flatpickr JS -->
 <script src="{{asset('assets/vendor/datepikar/flatpickr.js')}}"></script>
-@endsection
+@endpush

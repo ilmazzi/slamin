@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
+use App\Services\LoggingService;
 
 trait HasModeration
 {
@@ -110,7 +111,20 @@ trait HasModeration
             $this->moderation_notes = $notes;
         }
 
-        return $this->save();
+        $result = $this->save();
+
+        if ($result && $moderator) {
+            LoggingService::logAdmin('content_auto_approved', [
+                'content_type' => $this->getContentType(),
+                'content_id' => $this->id,
+                'content_title' => $this->title ?? $this->content ?? 'N/A',
+                'moderator_id' => $moderator->id,
+                'moderator_name' => $moderator->name,
+                'notes' => $notes
+            ], get_class($this), $this->id);
+        }
+
+        return $result;
     }
 
     /**
@@ -126,7 +140,20 @@ trait HasModeration
             $this->moderation_notes = $notes;
         }
 
-        return $this->save();
+        $result = $this->save();
+
+        if ($result && $moderator) {
+            LoggingService::logAdmin('content_auto_rejected', [
+                'content_type' => $this->getContentType(),
+                'content_id' => $this->id,
+                'content_title' => $this->title ?? $this->content ?? 'N/A',
+                'moderator_id' => $moderator->id,
+                'moderator_name' => $moderator->name,
+                'notes' => $notes
+            ], get_class($this), $this->id);
+        }
+
+        return $result;
     }
 
     /**

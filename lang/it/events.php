@@ -102,13 +102,73 @@ return [
     'step_2_short' => 'Data',
     'step_3_short' => 'Dettagli',
     'step_4_short' => 'Inviti',
-    
+    'step_5_short' => 'Anteprima',
+    'step_basic_info' => 'Informazioni Base',
+    'step_event_details' => 'Dettagli Evento',
+    'step_invite_artists' => 'Invita Artisti',
+    'step_preview_event' => 'Anteprima Evento',
+
+    // Form fields and placeholders
+    'title_placeholder' => 'Es: Poetry Slam Roma - Serata Aperta',
+    'venue_name_placeholder' => 'Es: Teatro dell\'Angelo',
+    'venue_address_placeholder' => 'Es: Via Roma 123',
+    'city_placeholder' => 'Es: Roma',
+    'postcode_placeholder' => 'Es: 00100',
+    'category_placeholder' => 'Seleziona categoria...',
+    'category_help' => 'Scegli la categoria che meglio descrive il tuo evento',
+    'entry_fee_help' => 'Lascia vuoto per evento gratuito',
+    'no_limit_help' => 'Lascia vuoto per nessun limite',
+
+    // Event modes
+    'mode_public' => 'Evento Pubblico',
+    'public_event_description' => 'Chiunque può partecipare e vedere l\'evento',
+    'mode_private' => 'Evento Privato',
+    'private_event_description' => 'Solo utenti invitati possono partecipare',
+
+    // Requests
+    'requests' => 'Richieste di Partecipazione',
+    'allows_requests' => 'Permetti richieste di partecipazione',
+
+    // Invitations
+    'invite_users' => 'Invita Utenti',
+    'invite_users_help' => 'Cerca e invita utenti specifici al tuo evento',
+    'search_users' => 'Cerca Utenti',
+    'suggested_users' => 'Utenti Suggeriti',
+    'suggested_users_help' => 'Utenti che potrebbero essere interessati al tuo evento',
+    'invited_users' => 'Utenti Invitati',
+    'no_invited_users' => 'Nessun utente invitato',
+    'no_suggested_users' => 'Nessun utente suggerito disponibile',
+    'invite_user' => 'Invita Utente',
+
+    // Navigation
+    'previous_step' => 'Precedente',
+    'next_step' => 'Successivo',
+    'preview_event' => 'Anteprima Evento',
+
+    // Map and location
+    'auto_positioning_title' => 'Posizionamento Automatico',
+    'auto_positioning_description' => 'La posizione verrà determinata automaticamente dall\'indirizzo',
+    'map_auto_positioning_help' => 'Clicca sulla mappa per impostare la posizione manualmente',
+    'auto_positioning_status' => 'Ricerca posizione...',
+
+    // Help texts
+    'create_event_help' => 'Crea un nuovo evento Poetry Slam in pochi semplici passi',
+    'title_help' => 'Scegli un titolo accattivante che descriva chiaramente il tuo evento',
+    'date_help' => 'Imposta data, ora e luogo dell\'evento',
+    'description_help' => 'Aggiungi dettagli e configura le impostazioni',
+    'invitations_help' => 'Invita artisti specifici al tuo evento',
+    'review_help' => 'Rivedi tutti i dettagli prima di pubblicare',
+    'step_1_short' => 'Info',
+    'step_2_short' => 'Data',
+    'step_3_short' => 'Dettagli',
+    'step_4_short' => 'Inviti',
+
     // Statistiche e contatori
     'total_events' => 'Eventi Totali',
     'public_events_count' => 'Eventi Pubblici',
     'upcoming_events_count' => 'Prossimi Eventi',
     'cities_count' => 'Città',
-    
+
     // Filtri e ricerca
     'search_events' => 'Cerca eventi...',
     'filter_by_city' => 'Filtra per città',
@@ -118,7 +178,7 @@ return [
     'radius_km' => 'Raggio (km)',
     'show_map' => 'Mostra Mappa',
     'show_list' => 'Mostra Lista',
-    
+
     // Filtri rapidi
     'today' => 'Oggi',
     'tomorrow' => 'Domani',
@@ -126,14 +186,14 @@ return [
     'free_events' => 'Eventi Gratuiti',
     'nearby' => 'Nelle Vicinanze',
     'my_private_events' => 'I Miei Eventi Privati',
-    
+
     // Badge e stati
     'public' => 'Pubblico',
     'private' => 'Privato',
     'free' => 'Gratuito',
     'apply_to_event' => 'Candidati per questo evento',
     'apply' => 'Candidati',
-    
+
     // Partecipanti
     'participants' => 'Partecipanti',
     'participants_preview' => 'Anteprima partecipanti',
@@ -143,12 +203,12 @@ return [
     'no_participants' => 'Nessun partecipante',
     'participants_accepting_applications' => 'Accetta candidature',
     'participants_click_to_apply' => 'Clicca per candidarti',
-    
+
     // Messaggi
     'no_events_found' => 'Nessun evento trovato',
     'no_events_message' => 'Non ci sono eventi che corrispondono ai tuoi criteri di ricerca.',
     'create_first_event' => 'Crea il Primo Evento',
-    
+
     // Dashboard
     'dashboard' => 'Dashboard',
     'step_5_short' => 'Preview',
@@ -448,7 +508,7 @@ return [
     'mode_private' => 'Privato',
     'category_placeholder' => 'Seleziona una categoria...',
     'category_help' => 'La categoria determina il colore dell\'evento e aiuta gli utenti a identificarlo rapidamente',
-    
+
     // Categorie evento
     'category_concert' => 'Concerto (musica)',
     'category_conference' => 'Conferenza/Tavola rotonda',
@@ -461,7 +521,7 @@ return [
     'category_reading' => 'Reading',
     'category_residency' => 'Residenza',
     'category_spoken_word' => 'Spoken Word',
-    
+
     // Inviti per eventi privati
     'invite_users' => 'Invita Utenti',
     'invite_users_help' => 'Per eventi privati, invita utenti specifici',

@@ -103,6 +103,25 @@ class Event extends Model
     }
 
     /**
+     * Get the image URL for the event
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        if ($this->attributes['image_url'] ?? null) {
+            return $this->attributes['image_url'];
+        }
+        return null;
+    }
+
+    /**
+     * Get the image path for the event (for backward compatibility)
+     */
+    public function getImagePathAttribute(): ?string
+    {
+        return $this->attributes['image_url'] ?? null;
+    }
+
+    /**
      * Get all invitations for this event
      */
     public function invitations(): HasMany

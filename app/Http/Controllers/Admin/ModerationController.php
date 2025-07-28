@@ -13,6 +13,7 @@ use App\Models\VideoComment;
 use App\Models\PoemComment;
 use App\Models\Report;
 use App\Models\SystemSetting;
+use App\Services\LoggingService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -72,6 +73,11 @@ class ModerationController extends Controller
         $content = $this->getContentModel($type, $id);
 
         if (!$content) {
+            LoggingService::logError('moderation_content_not_found', [
+                'type' => $type,
+                'id' => $id,
+                'user_id' => Auth::id()
+            ]);
             return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
         }
 
@@ -79,11 +85,27 @@ class ModerationController extends Controller
         $success = $content->approve(Auth::user(), $notes);
 
         if ($success) {
+            LoggingService::logAdmin('content_approved', [
+                'content_type' => $type,
+                'content_id' => $id,
+                'content_title' => $content->title ?? $content->content ?? 'N/A',
+                'moderator_id' => Auth::id(),
+                'moderator_name' => Auth::user()->name,
+                'notes' => $notes
+            ], get_class($content), $id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Contenuto approvato con successo'
             ]);
         }
+
+        LoggingService::logError('moderation_approval_failed', [
+            'content_type' => $type,
+            'content_id' => $id,
+            'moderator_id' => Auth::id(),
+            'notes' => $notes
+        ]);
 
         return response()->json(['success' => false, 'message' => 'Errore durante l\'approvazione']);
     }
@@ -96,6 +118,11 @@ class ModerationController extends Controller
         $content = $this->getContentModel($type, $id);
 
         if (!$content) {
+            LoggingService::logError('moderation_content_not_found', [
+                'type' => $type,
+                'id' => $id,
+                'user_id' => Auth::id()
+            ]);
             return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
         }
 
@@ -103,11 +130,27 @@ class ModerationController extends Controller
         $success = $content->reject(Auth::user(), $notes);
 
         if ($success) {
+            LoggingService::logAdmin('content_rejected', [
+                'content_type' => $type,
+                'content_id' => $id,
+                'content_title' => $content->title ?? $content->content ?? 'N/A',
+                'moderator_id' => Auth::id(),
+                'moderator_name' => Auth::user()->name,
+                'notes' => $notes
+            ], get_class($content), $id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Contenuto rifiutato con successo'
             ]);
         }
+
+        LoggingService::logError('moderation_rejection_failed', [
+            'content_type' => $type,
+            'content_id' => $id,
+            'moderator_id' => Auth::id(),
+            'notes' => $notes
+        ]);
 
         return response()->json(['success' => false, 'message' => 'Errore durante il rifiuto']);
     }
@@ -250,6 +293,16 @@ class ModerationController extends Controller
                 break;
         }
 
+        LoggingService::logAdmin('report_handled', [
+            'report_id' => $reportId,
+            'action' => $action,
+            'report_content' => $report->reportable_title ?? 'N/A',
+            'moderator_id' => Auth::id(),
+            'moderator_name' => Auth::user()->name,
+            'notes' => $notes,
+            'new_status' => $report->status
+        ], 'App\Models\Report', $reportId);
+
         return response()->json([
             'success' => true,
             'message' => $message
@@ -358,7 +411,29 @@ class ModerationController extends Controller
     {
         $settings = SystemSetting::getGroup('moderation');
 
-        return view('admin.moderation.settings', compact('settings'));
+        // Mappa le chiavi dal formato database al formato form
+        $formSettings = [];
+
+        // Mappa inversa per convertire le chiavi
+        $reverseKeyMapping = [
+            'moderation.videos.auto_approve' => 'videos_auto_approve',
+            'moderation.poems.auto_approve' => 'poems_auto_approve',
+            'moderation.events.auto_approve' => 'events_auto_approve',
+            'moderation.photos.auto_approve' => 'photos_auto_approve',
+            'moderation.carousels.auto_approve' => 'carousels_auto_approve',
+            'moderation.video_comments.auto_approve' => 'comments_auto_approve',
+            'moderation.general.notify_on_pending' => 'email_notifications',
+            'moderation.general.items_per_page' => 'items_per_page',
+            'moderation.general.reports_retention_days' => 'reports_retention_days',
+            'moderation.general.auto_archive_rejected' => 'auto_archive_rejected',
+        ];
+
+        foreach ($settings as $key => $value) {
+            $formKey = $reverseKeyMapping[$key] ?? $key;
+            $formSettings[$formKey] = $value;
+        }
+
+        return view('admin.moderation.settings', compact('settings', 'formSettings'));
     }
 
     /**
@@ -380,16 +455,31 @@ class ModerationController extends Controller
         ]);
 
         $updated = 0;
+
+        // Mappa delle chiavi per convertire dal formato form al formato del trait
+        $keyMapping = [
+            'videos_auto_approve' => 'moderation.videos.auto_approve',
+            'poems_auto_approve' => 'moderation.poems.auto_approve',
+            'events_auto_approve' => 'moderation.events.auto_approve',
+            'photos_auto_approve' => 'moderation.photos.auto_approve',
+            'carousels_auto_approve' => 'moderation.carousels.auto_approve',
+            'comments_auto_approve' => 'moderation.video_comments.auto_approve', // Per i commenti video
+            'email_notifications' => 'moderation.general.notify_on_pending',
+            'items_per_page' => 'moderation.general.items_per_page',
+            'reports_retention_days' => 'moderation.general.reports_retention_days',
+            'auto_archive_rejected' => 'moderation.general.auto_archive_rejected',
+        ];
+
         foreach ($validated as $key => $value) {
             if ($request->has($key)) {
-                // Usa il metodo set del modello che gestisce automaticamente display_name
+                $settingKey = $keyMapping[$key] ?? $key;
                 $type = in_array($key, ['items_per_page', 'reports_retention_days']) ? 'integer' : 'boolean';
                 $settingValue = $type === 'boolean' ? ($value ? true : false) : $value;
 
-                SystemSetting::set($key, $settingValue, $type);
+                SystemSetting::set($settingKey, $settingValue, $type);
 
                 // Aggiorna il gruppo se necessario
-                $setting = SystemSetting::where('key', $key)->first();
+                $setting = SystemSetting::where('key', $settingKey)->first();
                 if ($setting && $setting->group !== 'moderation') {
                     $setting->group = 'moderation';
                     $setting->save();
@@ -398,6 +488,13 @@ class ModerationController extends Controller
                 $updated++;
             }
         }
+
+        LoggingService::logSettings('moderation_settings_updated', [
+            'updated_count' => $updated,
+            'settings' => array_keys($validated),
+            'admin_id' => Auth::id(),
+            'admin_name' => Auth::user()->name
+        ]);
 
         return redirect()->route('admin.moderation.settings')
             ->with('success', "Impostazioni aggiornate con successo ({$updated} modificate)");

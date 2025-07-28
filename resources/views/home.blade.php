@@ -133,8 +133,8 @@ $(document).ready(function() {
                             @foreach($recentEvents->take(10) as $event)
                             <div class="autoplay-item">
                                 <div class="card overflow-hidden hover-effect">
-                                    @if($event->image_path)
-                                        <img src="{{ asset('storage/' . $event->image_path) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                                    @if($event->image_url)
+                                        <img src="{{ $event->image_url }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
                                     @else
                                         @php
                                             $fallbackImages = [
