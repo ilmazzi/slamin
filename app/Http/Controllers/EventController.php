@@ -209,7 +209,7 @@ class EventController extends Controller
                 'venue_owner_id' => 'nullable|exists:users,id',
                 'allow_requests' => 'nullable',
                 'tags' => 'nullable|string',
-                'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'event_image' => 'nullable',
                 'invitations' => 'nullable|string', // JSON string of invitations
                 'invited_users' => 'nullable|string', // JSON string of invited users for private events
                 // Recurrence fields
@@ -253,7 +253,7 @@ class EventController extends Controller
         $validated['is_public'] = $validated['is_public'] === '1' || $validated['is_public'] === 1;
 
         // Convert allow_requests to boolean
-        $validated['allow_requests'] = isset($validated['allow_requests']) && ($validated['allow_requests'] === 'on' || $validated['allow_requests'] === true);
+        $validated['allow_requests'] = isset($validated['allow_requests']) && ($validated['allow_requests'] === 'on' || $validated['allow_requests'] === '1' || $validated['allow_requests'] === 1 || $validated['allow_requests'] === true);
 
         // Convert is_recurring to boolean
         $validated['is_recurring'] = isset($validated['is_recurring']) && ($validated['is_recurring'] === '1' || $validated['is_recurring'] === 1 || $validated['is_recurring'] === true);
@@ -272,9 +272,15 @@ class EventController extends Controller
         // Handle image upload
         if ($request->hasFile('event_image')) {
             $image = $request->file('event_image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('events', $imageName, 'public');
-            $validated['image_url'] = '/storage/' . $imagePath;
+            if (is_array($image)) {
+                // Se è un array, prendi il primo elemento
+                $image = $image[0] ?? null;
+            }
+            if ($image && $image->isValid()) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imagePath = $image->storeAs('events', $imageName, 'public');
+                $validated['image_url'] = '/storage/' . $imagePath;
+            }
         }
 
         // Set organizer
