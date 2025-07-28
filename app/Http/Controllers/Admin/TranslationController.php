@@ -11,7 +11,7 @@ use App\Services\AutoTranslationService;
 
 class TranslationController extends Controller
 {
-    public function __construct()
+        public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('admin');
@@ -36,20 +36,88 @@ class TranslationController extends Controller
      */
     public function show(Request $request, $language, $file)
     {
-        $filePath = lang_path("{$language}/{$file}.php");
+        try {
+            // Log iniziale per debug
+            Log::info("Tentativo di accesso alle traduzioni", [
+                'language' => $language,
+                'file' => $file,
+                'user' => Auth::user()?->email
+            ]);
 
-        if (!File::exists($filePath)) {
+            $filePath = lang_path("{$language}/{$file}.php");
+            Log::info("Percorso file", ['filePath' => $filePath]);
+
+            if (!File::exists($filePath)) {
+                Log::warning("File non trovato", ['filePath' => $filePath]);
+                return redirect()->route('admin.translations.index')
+                    ->with('error', __('admin.translation_file_not_found'));
+            }
+
+            // Verifica che il file sia un array PHP valido
+            Log::info("Caricamento file di traduzione");
+            $translations = include $filePath;
+
+            if (!is_array($translations)) {
+                Log::error("File di traduzione non valido", [
+                    'language' => $language,
+                    'file' => $file,
+                    'filePath' => $filePath,
+                    'type' => gettype($translations)
+                ]);
+                return redirect()->route('admin.translations.index')
+                    ->with('error', 'File di traduzione non valido');
+            }
+
+            Log::info("Caricamento traduzioni di riferimento");
+            $referenceTranslations = $this->getReferenceTranslations($file);
+
+            if (!is_array($referenceTranslations)) {
+                Log::error("File di riferimento non valido", [
+                    'language' => $language,
+                    'file' => $file,
+                    'type' => gettype($referenceTranslations)
+                ]);
+                return redirect()->route('admin.translations.index')
+                    ->with('error', 'File di riferimento non valido');
+            }
+
+            // Appiattisci le traduzioni per la visualizzazione
+            Log::info("Appiattimento traduzioni");
+            $flattenedTranslations = $this->flattenArray($translations);
+            $flattenedReferenceTranslations = $this->flattenArray($referenceTranslations);
+
+            // Calcola le chiavi mancanti per questa lingua e file specifico
+            Log::info("Calcolo chiavi mancanti");
+            $missingKeys = $this->getMissingKeysForFile($language, $file, $flattenedReferenceTranslations, $flattenedTranslations);
+
+            // Verifica che la vista esista
+            Log::info("Verifica esistenza vista");
+            if (!view()->exists('admin.translations.edit')) {
+                Log::error("Vista non trovata", [
+                    'view' => 'admin.translations.edit',
+                    'language' => $language,
+                    'file' => $file
+                ]);
+                return redirect()->route('admin.translations.index')
+                    ->with('error', 'Vista di modifica non trovata');
+            }
+
+            Log::info("Rendering vista");
+            return view('admin.translations.edit', compact('language', 'file', 'translations', 'referenceTranslations', 'flattenedTranslations', 'flattenedReferenceTranslations', 'missingKeys'));
+
+                } catch (\Exception $e) {
+            Log::error("Errore nella visualizzazione traduzioni: " . $e->getMessage(), [
+                'language' => $language,
+                'file' => $file,
+                'filePath' => $filePath ?? 'not set',
+                'trace' => $e->getTraceAsString(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+
             return redirect()->route('admin.translations.index')
-                ->with('error', __('admin.translation_file_not_found'));
+                ->with('error', 'Errore nel caricamento delle traduzioni: ' . $e->getMessage());
         }
-
-        $translations = include $filePath;
-        $referenceTranslations = $this->getReferenceTranslations($file);
-
-        // Calcola le chiavi mancanti per questa lingua e file specifico
-        $missingKeys = $this->getMissingKeysForFile($language, $file, $referenceTranslations, $translations);
-
-        return view('admin.translations.edit', compact('language', 'file', 'translations', 'referenceTranslations', 'missingKeys'));
     }
 
     /**
@@ -71,8 +139,11 @@ class TranslationController extends Controller
             return $value !== null && $value !== '';
         });
 
+        // Converti le chiavi appiattite di nuovo in array annidati
+        $nestedTranslations = $this->unflattenArray($translations);
+
         // Genera il contenuto PHP
-        $phpContent = $this->generatePhpContent($translations, $file);
+        $phpContent = $this->generatePhpContent($nestedTranslations, $file);
 
         try {
             // Crea il backup
@@ -368,13 +439,13 @@ class TranslationController extends Controller
 
                         if ($updated) {
                             $phpContent = $this->generatePhpContent($targetTranslations, $file);
-                            
+
                             // Crea la directory se non esiste
                             $targetDir = dirname($targetFile);
                             if (!File::exists($targetDir)) {
                                 File::makeDirectory($targetDir, 0755, true);
                             }
-                            
+
                             File::put($targetFile, $phpContent);
                             $syncedCount++;
                             Log::info("File sincronizzato: {$languageCode}/{$file}.php");
@@ -433,7 +504,7 @@ class TranslationController extends Controller
     private function getMissingKeysForFile($language, $file, $referenceTranslations, $translations)
     {
         $missingKeys = [];
-        
+
         if ($language === 'it') {
             // Per l'italiano, controlla solo le chiavi vuote o mancanti
             foreach ($referenceTranslations as $key => $italianValue) {
@@ -445,14 +516,14 @@ class TranslationController extends Controller
             // Per le altre lingue, controlla solo se la traduzione è vuota o mancante
             // NON considerare uguale all'italiano come mancante (alcune parole sono uguali in più lingue)
             foreach ($referenceTranslations as $key => $italianValue) {
-                if (!array_key_exists($key, $translations) || 
-                    empty($translations[$key]) || 
+                if (!array_key_exists($key, $translations) ||
+                    empty($translations[$key]) ||
                     $translations[$key] === '') {
                     $missingKeys[] = $key;
                 }
             }
         }
-        
+
         return $missingKeys;
     }
 
@@ -469,7 +540,7 @@ class TranslationController extends Controller
         }
 
         $translationService = new AutoTranslationService();
-        
+
         if (!$translationService->isConfigured()) {
             return response()->json([
                 'success' => false,
@@ -494,8 +565,8 @@ class TranslationController extends Controller
             // Traduci solo le chiavi mancanti o vuote
             $keysToTranslate = [];
             foreach ($italianTranslations as $key => $italianValue) {
-                if (!array_key_exists($key, $targetTranslations) || 
-                    empty($targetTranslations[$key]) || 
+                if (!array_key_exists($key, $targetTranslations) ||
+                    empty($targetTranslations[$key]) ||
                     $targetTranslations[$key] === '') {
                     $keysToTranslate[$key] = $italianValue;
                 }
@@ -540,7 +611,7 @@ class TranslationController extends Controller
 
         } catch (\Exception $e) {
             Log::error("Errore traduzione automatica: " . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Errore durante la traduzione automatica: ' . $e->getMessage()
@@ -554,7 +625,7 @@ class TranslationController extends Controller
     public function autoTranslateAll(Request $request)
     {
         $translationService = new AutoTranslationService();
-        
+
         if (!$translationService->isConfigured()) {
             return response()->json([
                 'success' => false,
@@ -584,8 +655,8 @@ class TranslationController extends Controller
                         // Trova chiavi da tradurre
                         $keysToTranslate = [];
                         foreach ($italianTranslations as $key => $italianValue) {
-                            if (!array_key_exists($key, $targetTranslations) || 
-                                empty($targetTranslations[$key]) || 
+                            if (!array_key_exists($key, $targetTranslations) ||
+                                empty($targetTranslations[$key]) ||
                                 $targetTranslations[$key] === '') {
                                 $keysToTranslate[$key] = $italianValue;
                             }
@@ -594,10 +665,10 @@ class TranslationController extends Controller
                         if (!empty($keysToTranslate)) {
                             $translatedKeys = $translationService->translateArray($keysToTranslate, 'it', $languageCode);
                             $finalTranslations = array_merge($targetTranslations, $translatedKeys);
-                            
+
                             $phpContent = $this->generatePhpContent($finalTranslations, $file);
                             File::put($targetFile, $phpContent);
-                            
+
                             $totalTranslated += count($keysToTranslate);
                         }
                     } catch (\Exception $e) {
@@ -632,7 +703,7 @@ class TranslationController extends Controller
 
         } catch (\Exception $e) {
             Log::error("Errore traduzione automatica globale: " . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Errore durante la traduzione automatica: ' . $e->getMessage()
@@ -646,7 +717,7 @@ class TranslationController extends Controller
     public function testTranslationService(Request $request)
     {
         $translationService = new AutoTranslationService();
-        
+
         if (!$translationService->isConfigured()) {
             return response()->json([
                 'success' => false,
@@ -658,9 +729,9 @@ class TranslationController extends Controller
         try {
             $testText = 'Hello world';
             $translation = $translationService->translate($testText, 'en', 'it');
-            
+
             $success = !empty($translation) && $translation !== $testText;
-            
+
             return response()->json([
                 'success' => $success,
                 'message' => $success ? 'Test connessione riuscito' : 'Test connessione fallito',
@@ -699,7 +770,7 @@ class TranslationController extends Controller
                 $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
 
                 $missingInFile = [];
-                
+
                 if ($languageCode === 'it') {
                     // Per l'italiano, controlla solo le chiavi vuote o mancanti
                     foreach ($italianTranslations as $key => $italianValue) {
@@ -711,8 +782,8 @@ class TranslationController extends Controller
                     // Per le altre lingue, controlla solo se la traduzione è vuota o mancante
                     // NON considerare uguale all'italiano come mancante (alcune parole sono uguali in più lingue)
                     foreach ($italianTranslations as $key => $italianValue) {
-                        if (!array_key_exists($key, $targetTranslations) || 
-                            empty($targetTranslations[$key]) || 
+                        if (!array_key_exists($key, $targetTranslations) ||
+                            empty($targetTranslations[$key]) ||
                             $targetTranslations[$key] === '') {
                             $missingInFile[] = $key;
                         }
@@ -726,5 +797,44 @@ class TranslationController extends Controller
         }
 
         return $missingKeys;
+    }
+
+    /**
+     * Appiattisce un array multidimensionale in un array con chiavi punteggiate
+     */
+    private function flattenArray($array, $prefix = '')
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $newKey = $prefix ? $prefix . '.' . $key : $key;
+            if (is_array($value)) {
+                $result = array_merge($result, $this->flattenArray($value, $newKey));
+            } else {
+                $result[$newKey] = $value;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Converte un array con chiavi punteggiate in un array multidimensionale
+     */
+    private function unflattenArray($array)
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $keys = explode('.', $key);
+            $current = &$result;
+
+            foreach ($keys as $k) {
+                if (!isset($current[$k])) {
+                    $current[$k] = [];
+                }
+                $current = &$current[$k];
+            }
+
+            $current = $value;
+        }
+        return $result;
     }
 }

@@ -110,16 +110,16 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="accordion app-accordion accordion-primary" id="translationAccordion">
-                            @foreach($referenceTranslations as $key => $referenceValue)
+                            @foreach($flattenedReferenceTranslations as $key => $referenceValue)
                             @php
                                 $isMissing = isset($missingKeys) && in_array($key, $missingKeys);
-                                $isTranslated = !empty($translations[$key]) && !$isMissing;
+                                $isTranslated = !empty($flattenedTranslations[$key]) && !$isMissing;
                             @endphp
                             <div class="accordion-item border-0 border-bottom">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }} py-2" type="button" 
+                                    <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }} py-2" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapse{{ $loop->index }}"
-                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}" 
+                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
                                             aria-controls="collapse{{ $loop->index }}">
                                         <div class="d-flex justify-content-between align-items-center w-100 me-2">
                                             <span class="fw-semibold f-s-13 {{ $isMissing ? 'text-warning' : '' }}">{{ $key }}</span>
@@ -151,7 +151,7 @@
                                                           placeholder="Inserisci la traduzione..."
                                                           data-key="{{ $key }}"
                                                           data-reference="{{ $referenceValue }}"
-                                                          onchange="updateProgress()">{{ $translations[$key] ?? '' }}</textarea>
+                                                          onchange="updateProgress()">{{ $flattenedTranslations[$key] ?? '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -186,7 +186,7 @@ let allExpanded = true;
 function toggleAllTranslations() {
     const accordionButtons = document.querySelectorAll('.accordion-button');
     const toggleButton = event.target.closest('button');
-    
+
     if (allExpanded) {
         // Collapse all
         accordionButtons.forEach(button => {
@@ -204,7 +204,7 @@ function toggleAllTranslations() {
         });
         toggleButton.innerHTML = '<i class="ph ph-eye me-1"></i>Nascondi Tutte';
     }
-    
+
     allExpanded = !allExpanded;
 }
 
@@ -235,20 +235,20 @@ function showUntranslated() {
     const accordionButtons = document.querySelectorAll('.accordion-button');
     const textareas = document.querySelectorAll('textarea[name^="translations"]');
     let untranslatedCount = 0;
-    
+
     // First collapse all
     accordionButtons.forEach(button => {
         if (!button.classList.contains('collapsed')) {
             button.click();
         }
     });
-    
+
     // Wait a bit for collapse animation, then expand untranslated ones
     setTimeout(() => {
         textareas.forEach((textarea, index) => {
             const button = accordionButtons[index];
             const badge = button.querySelector('.badge');
-            
+
             // Check if it's missing or empty
             if (!textarea.value.trim() || (badge && badge.textContent.includes('Mancante'))) {
                 if (button.classList.contains('collapsed')) {
@@ -257,7 +257,7 @@ function showUntranslated() {
                 }
             }
         });
-        
+
         if (untranslatedCount > 0) {
             showNotification(`Mostrate ${untranslatedCount} chiavi non tradotte/mancanti`, 'info');
         } else {
@@ -270,32 +270,32 @@ function updateProgress() {
     const textareas = document.querySelectorAll('textarea[name^="translations"]');
     const totalKeys = textareas.length;
     let translatedCount = 0;
-    
+
     textareas.forEach(textarea => {
         if (textarea.value.trim()) {
             translatedCount++;
         }
     });
-    
+
     const progress = totalKeys > 0 ? (translatedCount / totalKeys) * 100 : 0;
-    
+
     // Update progress bar
     const progressBar = document.getElementById('progressBar');
     if (progressBar) {
         progressBar.style.width = progress + '%';
     }
-    
+
     // Update counters
     const translatedCountElement = document.getElementById('translatedCount');
     if (translatedCountElement) {
         translatedCountElement.textContent = translatedCount;
     }
-    
+
     const progressTextElement = document.getElementById('progressText');
     if (progressTextElement) {
         progressTextElement.textContent = Math.round(progress) + '%';
     }
-    
+
     // Update badges
     textareas.forEach((textarea, index) => {
         const accordionButtons = document.querySelectorAll('.accordion-button');
@@ -303,11 +303,11 @@ function updateProgress() {
             const button = accordionButtons[index];
             const badge = button.querySelector('.badge');
             const keyName = button.querySelector('.fw-semibold').textContent;
-            
+
             if (badge) {
                 // Check if this key was originally missing
                 const wasMissing = badge.textContent.includes('Mancante');
-                
+
                 if (textarea.value.trim()) {
                     if (wasMissing) {
                         badge.textContent = 'Tradotta';
@@ -342,7 +342,7 @@ function showNotification(message, type = 'info') {
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
     document.body.appendChild(alertDiv);
-    
+
     setTimeout(() => {
         if (alertDiv.parentNode) {
             alertDiv.remove();

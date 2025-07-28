@@ -54,7 +54,7 @@ return [
     'role_venue_owner_desc' => 'Gestisco spazi per eventi',
     'role_audience' => 'Pubblico',
     'role_audience_desc' => 'Amo assistere agli spettacoli',
-    
+
     // Ruoli dinamici (usati nel dashboard)
     'role_admin' => 'Amministratore',
     'role_moderator' => 'Moderatore',
@@ -82,5 +82,83 @@ return [
     'feature_community' => 'Community di poeti',
     'feature_share' => 'Condividi le tue performance',
     'feature_compete' => 'Partecipa ai concorsi',
+
+    // Test di registrazione e login
+    'test_login' => '🧪 Test Login',
+    'test_signup' => '🧪 Test Registrazione',
+    'back_to_main_site' => '← Back to Main Site',
+    'create_account_multi_role' => '✨ Crea un account con multi-ruolo',
+
+    // Piattaforma e community
+    'platform_italian' => 'La piattaforma italiana per',
+    'platform_description' => 'poeti, organizzatori, venue e appassionati di poetry slam',
+    'why_join_slam_in' => '🌟 Perché unirti a Slam In?',
+    'fast_registration' => 'Registrazione veloce: Solo i dati essenziali, profilo completabile dopo',
+    'flexible_roles' => 'Ruoli flessibili: Poeta, organizzatore, proprietario venue o audience',
+    'complete_ecosystem' => 'Ecosistema completo: Artisti, organizzatori, venue e pubblico insieme',
+    'four_main_roles' => '💡 Quattro ruoli principali: Poeta, Organizzatore, Proprietario Venue, Audience',
+
+    // Ruoli specifici per eventi
+    'role_event_manager' => 'Event Manager',
+    'role_judge_description' => 'Giudice della competizione',
+    'role_technician_description' => 'Supporto tecnico audio/video',
+    'role_host_description' => 'Presenterà l\'evento e gestirà il pubblico',
+
+    // Messaggi di benvenuto
+    'welcome_poetry_slam' => 'Entra in Slam In e scopri il mondo del poetry slam italiano',
+    'welcome_community_description' => 'Una casa per la poesia',
+
+    // Form di registrazione
+    'registration_form_title' => '🚀 Registrati',
+    'registration_form_subtitle' => 'Crea il tuo account e scegli i tuoi ruoli',
+    'registration_form_help' => '✏️ Potrai completare il tuo profilo con bio e località dopo la registrazione',
+    'registration_roles_help' => 'Puoi selezionare più ruoli che ti rappresentano nella community poetry slam',
+
+    // Validazione aggiuntiva
+    'name_required' => 'Il nome è obbligatorio',
+    'email_required' => 'L\'email è obbligatoria',
+    'email_unique' => 'Questa email è già registrata',
+    'password_required' => 'La password è obbligatoria',
+    'password_confirmation_required' => 'La conferma password è obbligatoria',
+    'roles_required' => 'Seleziona almeno un ruolo',
+    'terms_accepted' => 'Devi accettare i termini e condizioni',
+
+    // Messaggi di successo/errore
+    'registration_completed' => 'Registrazione completata!',
+    'registration_failed' => 'Errore durante la registrazione',
+    'login_completed' => 'Accesso effettuato!',
+    'login_failed' => 'Errore durante l\'accesso',
+    'logout_completed' => 'Disconnessione effettuata!',
+
+    // Link e navigazione
+    'login_link' => 'Login',
+    'register_link' => 'Registrati',
+    'forgot_password_link' => 'Password dimenticata?',
+    'reset_password_link' => 'Reimposta password',
+
+    // Social login (se implementato)
+    'login_with_google' => 'Accedi con Google',
+    'login_with_facebook' => 'Accedi con Facebook',
+    'login_with_github' => 'Accedi con GitHub',
+    'or_continue_with' => 'Oppure continua con',
+
+    // Password reset
+    'reset_password' => 'Reimposta Password',
+    'reset_password_title' => 'Reimposta la tua password',
+    'reset_password_subtitle' => 'Inserisci la tua email per ricevere il link di reset',
+    'send_reset_link' => 'Invia Link di Reset',
+    'reset_link_sent' => 'Link di reset inviato!',
+    'new_password' => 'Nuova Password',
+    'confirm_new_password' => 'Conferma Nuova Password',
+    'password_reset_success' => 'Password reimpostata con successo!',
+
+    // Verifica email
+    'verify_email' => 'Verifica Email',
+    'verify_email_title' => 'Verifica il tuo indirizzo email',
+    'verify_email_subtitle' => 'Abbiamo inviato un link di verifica alla tua email',
+    'resend_verification' => 'Rinvia Email di Verifica',
+    'email_verified' => 'Email verificata con successo!',
+    'email_not_verified' => 'Email non verificata',
+    'check_email_first' => 'Controlla la tua email prima di procedere',
 
 ];
