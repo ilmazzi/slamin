@@ -93,10 +93,10 @@ class LoggingMiddleware
 
             // Determine category based on path
             $category = $this->determineCategory($path);
-            
+
             // Determine action based on method and path
             $action = $this->determineAction($method, $path);
-            
+
             // Determine level based on status code
             $level = $this->determineLevel($statusCode);
 
@@ -127,6 +127,41 @@ class LoggingMiddleware
                 $details['request_data'] = $requestData;
             }
 
+            // Add error details for error responses (4xx and 5xx)
+            if ($statusCode >= 400) {
+                $errorDetails = [];
+
+                // Try to get error message from response content
+                $content = $response->getContent();
+                if ($content) {
+                    $decoded = json_decode($content, true);
+                    if ($decoded && isset($decoded['message'])) {
+                        $errorDetails['error_message'] = $decoded['message'];
+                    } elseif (is_string($content)) {
+                        // Extract error message from HTML content
+                        if (preg_match('/<title[^>]*>(.*?)<\/title>/i', $content, $matches)) {
+                            $errorDetails['error_title'] = $matches[1];
+                        }
+                        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $content, $matches)) {
+                            $errorDetails['error_body'] = strip_tags($matches[1]);
+                        }
+                    }
+                }
+
+                // Get exception details if available
+                if (app()->bound('exception')) {
+                    $exception = app('exception');
+                    if ($exception) {
+                        $errorDetails['exception_message'] = $exception->getMessage();
+                        $errorDetails['exception_file'] = $exception->getFile();
+                        $errorDetails['exception_line'] = $exception->getLine();
+                        $errorDetails['exception_trace'] = $exception->getTraceAsString();
+                    }
+                }
+
+                $details['error_details'] = $errorDetails;
+            }
+
             // Log the activity
             LoggingService::log(
                 $action,
@@ -155,35 +190,35 @@ class LoggingMiddleware
         if (str_starts_with($path, 'admin')) {
             return ActivityLog::CATEGORY_ADMIN;
         }
-        
+
         if (str_starts_with($path, 'auth') || str_starts_with($path, 'login') || str_starts_with($path, 'register')) {
             return ActivityLog::CATEGORY_AUTH;
         }
-        
+
         if (str_starts_with($path, 'events')) {
             return ActivityLog::CATEGORY_EVENTS;
         }
-        
+
         if (str_starts_with($path, 'videos')) {
             return ActivityLog::CATEGORY_VIDEOS;
         }
-        
+
         if (str_starts_with($path, 'profile')) {
             return ActivityLog::CATEGORY_USERS;
         }
-        
+
         if (str_starts_with($path, 'premium')) {
             return ActivityLog::CATEGORY_PREMIUM;
         }
-        
+
         if (str_starts_with($path, 'permissions')) {
             return ActivityLog::CATEGORY_PERMISSIONS;
         }
-        
+
         if (str_starts_with($path, 'media')) {
             return ActivityLog::CATEGORY_MEDIA;
         }
-        
+
         if (str_starts_with($path, 'dashboard')) {
             return ActivityLog::CATEGORY_ADMIN;
         }
@@ -197,7 +232,7 @@ class LoggingMiddleware
     private function determineAction(string $method, string $path): string
     {
         $action = strtolower($method);
-        
+
         // Add more specific actions based on path patterns
         if (str_contains($path, 'create')) {
             $action .= '.create';
@@ -228,11 +263,11 @@ class LoggingMiddleware
         if ($statusCode >= 500) {
             return ActivityLog::LEVEL_ERROR;
         }
-        
+
         if ($statusCode >= 400) {
             return ActivityLog::LEVEL_WARNING;
         }
-        
+
         return ActivityLog::LEVEL_INFO;
     }
 
@@ -243,7 +278,7 @@ class LoggingMiddleware
     {
         $methodText = strtoupper($method);
         $pathText = $path === '/' ? 'homepage' : $path;
-        
+
         $statusText = match(true) {
             $statusCode >= 500 => 'Server Error',
             $statusCode >= 400 => 'Client Error',
@@ -254,4 +289,4 @@ class LoggingMiddleware
 
         return "{$methodText} request to {$pathText} - {$statusText} ({$statusCode}) - {$responseTime}ms";
     }
-} 
+}
