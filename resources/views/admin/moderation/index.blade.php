@@ -261,78 +261,9 @@
 
 @endsection
 
-@push('scripts')
-<script>
-let currentAction = null;
-let currentType = null;
-let currentId = null;
 
-function approveContent(type, id) {
-    currentAction = 'approve';
-    currentType = type;
-    currentId = id;
-    $('#moderationNotes').val('');
-    $('#moderationModal').modal('show');
-}
 
-function rejectContent(type, id) {
-    currentAction = 'reject';
-    currentType = type;
-    currentId = id;
-    $('#moderationNotes').val('');
-    $('#moderationModal').modal('show');
-}
+<!-- Kanban Board JS -->
+<script src="{{ asset('assets/js/kanban_board.js') }}?v={{ time() }}"></script>
 
-$('#confirmModeration').click(function() {
-    const notes = $('#moderationNotes').val();
-    let url;
 
-    if (currentAction === 'approve') {
-        url = '{{ route("admin.moderation.approve", ["type" => ":type", "id" => ":id"]) }}'
-            .replace(':type', currentType)
-            .replace(':id', currentId);
-    } else if (currentAction === 'reject') {
-        url = '{{ route("admin.moderation.reject", ["type" => ":type", "id" => ":id"]) }}'
-            .replace(':type', currentType)
-            .replace(':id', currentId);
-    }
-
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: {
-            notes: notes,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(response) {
-            if (response.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Successo!',
-                    text: response.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Errore!',
-                    text: response.message
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Errore!',
-                text: 'Errore durante l\'operazione'
-            });
-        }
-    });
-
-    $('#moderationModal').modal('hide');
-});
-</script>
-@endpush

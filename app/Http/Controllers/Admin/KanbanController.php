@@ -32,6 +32,8 @@ class KanbanController extends Controller
         // Statistiche
         $stats = [
             'total_tasks' => Task::count(),
+            'in_progress_tasks' => Task::where('status', 'in_progress')->count(),
+            'review_tasks' => Task::where('status', 'review')->count(),
             'completed_tasks' => Task::where('status', 'done')->count(),
             'overdue_tasks' => Task::overdue()->count(),
             'tasks_due_today' => Task::dueToday()->count(),
@@ -156,7 +158,7 @@ class KanbanController extends Controller
                 foreach ($request->file('images') as $image) {
                     $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $path = $image->storeAs('kanban/tasks', $filename, 'public');
-                    
+
                     $attachments[] = [
                         'type' => 'image',
                         'filename' => $filename,
@@ -245,7 +247,7 @@ class KanbanController extends Controller
 
         try {
             $task = Task::findOrFail($request->task_id);
-            
+
             $task->update([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -261,12 +263,12 @@ class KanbanController extends Controller
 
             // Gestione upload nuove immagini
             $currentAttachments = $task->attachments ?? [];
-            
+
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $path = $image->storeAs('kanban/tasks', $filename, 'public');
-                    
+
                     $currentAttachments[] = [
                         'type' => 'image',
                         'filename' => $filename,
