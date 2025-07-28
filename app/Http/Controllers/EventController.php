@@ -283,6 +283,9 @@ class EventController extends Controller
                 'event_image' => 'nullable',
                 'invitations' => 'nullable|string', // JSON string of invitations
                 'invited_users' => 'nullable|string', // JSON string of invited users for private events
+                // Nuovi campi per inviti e ingaggi
+                'invitation_deadline' => 'nullable|date_format:Y-m-d H:i|after:now',
+                'gig_positions' => 'nullable|string', // JSON string of gig positions
                 // Recurrence fields
                 'is_recurring' => 'nullable|boolean',
                 'recurrence_type' => 'nullable|in:daily,weekly,monthly,yearly',
@@ -299,6 +302,7 @@ class EventController extends Controller
                 'category.in' => 'La categoria selezionata non è valida.',
                 'recurrence_type.in' => 'Il tipo di ricorrenza selezionato non è valido.',
                 'recurrence_count.max' => 'Il numero di occorrenze non può superare 100.',
+                'invitation_deadline.after' => 'La scadenza inviti deve essere nel futuro.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Event validation failed', [

@@ -49,6 +49,8 @@ return [
     'location' => 'Posizione',
     'map_location' => 'Posizione sulla Mappa',
     'registration_deadline' => 'Scadenza Iscrizioni',
+    'invitation_deadline' => 'Risposte entro il',
+    'invitation_deadline_help' => 'Data limite per le risposte agli inviti',
     'max_participants' => 'Max Partecipanti',
     'max_participants_optional' => 'Partecipanti Massimi (Opzionale)',
     'no_limit_help' => 'Lascia vuoto per nessun limite',
@@ -97,7 +99,15 @@ return [
     'step_1' => 'Informazioni Base',
     'step_2' => 'Data e Luogo',
     'step_3' => 'Dettagli Evento',
-    'step_4' => 'Inviti',
+    'step_4' => 'Inviti e Ingaggi',
+    'step_5' => 'Anteprima',
+    'step_1_short' => 'Info',
+    'step_2_short' => 'Data',
+    'step_3_short' => 'Dettagli',
+    'step_4_short' => 'Inviti',
+    'step_5_short' => 'Preview',
+    'step_event_details' => 'Dettagli Evento',
+    'step_event_invitations' => 'Inviti e Ingaggi',
 
     // Step titles and descriptions
     'step_basic_info' => 'Informazioni Base',
@@ -810,4 +820,67 @@ return [
     'current_image' => 'Immagine Attuale',
     'current_image_help' => 'L\'immagine attuale dell\'evento',
     'please_correct_errors' => 'Per favore correggi gli errori prima di procedere',
+
+    // Recurrence
+    'recurrence_preview_placeholder' => 'Seleziona le opzioni di ricorrenza per vedere l\'anteprima',
+    'recurrence_preview_title' => 'Anteprima Ricorrenza',
+    'recurrence_preview_help' => 'Prime occorrenze generate automaticamente',
+
+    // Inviti e Ingaggi
+    'invitations_and_gigs' => 'Inviti e Ingaggi',
+    'invitations_section' => 'Inviti Artisti',
+    'invitations_specific' => 'Inviti Specifici',
+    'invitations_specific_help' => 'Invita artisti specifici al tuo evento. Se accettano, il loro nome apparirà confermato (se la lineup è pubblica). Se rifiutano, riceverai una notifica per aprire posizioni d\'ingaggio.',
+    'search_artists' => 'Cerca Artisti da Invitare',
+    'search_artists_placeholder' => 'Cerca per nome o email...',
+    'search_artists_help' => 'Cerca poeti, giudici, tecnici e host da invitare al tuo evento',
+    'selected_artists' => 'Artisti Selezionati',
+    'no_artists_selected' => 'Nessun artista selezionato ancora.',
+    'no_artists_selected_help' => 'Cerca e aggiungi artisti da invitare.',
+
+    // Posizioni d'Ingaggio
+    'gig_positions' => 'Apri Posizioni d\'Ingaggio',
+    'gig_positions_open' => 'Posizioni Aperte',
+    'gig_positions_help' => 'Crea posizioni d\'ingaggio per trovare artisti e professionisti. Ogni tipologia creerà una posizione nell\'area Gig.',
+    'add_gig_position' => 'Aggiungi Posizione d\'Ingaggio',
+    'gig_position' => 'Posizione d\'Ingaggio',
+    'gig_position_type' => 'Tipologia',
+    'gig_position_quantity' => 'Quantità',
+    'gig_position_language' => 'Lingua richiesta',
+    'gig_position_language_optional' => 'Lingua richiesta (opzionale)',
+    'gig_position_language_help' => 'Nessuna preferenza',
+    'gig_position_cachet' => 'Cachet',
+    'gig_position_cachet_amount' => 'Ammontare',
+    'gig_position_cachet_currency' => 'Valuta',
+    'gig_position_travel' => 'Spese di viaggio',
+    'gig_position_travel_max' => 'Tetto massimo copertura biglietti',
+    'gig_position_accommodation' => 'Vitto e alloggio',
+    'gig_position_accommodation_details' => 'Dettagli vitto e alloggio',
+    'gig_position_accommodation_placeholder' => 'Descrivi le condizioni di vitto e alloggio offerte...',
+
+    // Tipologie posizioni d'ingaggio
+    'gig_type_fonica' => 'Fonica/Fonico',
+    'gig_type_illustratrice' => 'Illustratrice/Illustratore',
+    'gig_type_musicista' => 'Musicista',
+    'gig_type_mc' => 'MC - Presentatrice/Presentatore',
+    'gig_type_poeta' => 'Poeta',
+    'gig_type_traduttrice' => 'Traduttrice/Traduttore',
+    'gig_type_videomaker' => 'Videomaker',
+    'gig_type_volontaria' => 'Volontaria/Volontario',
+    'gig_type_relatrice' => 'Relatrice/Relatore',
+
+    // Lingue
+    'language_italiano' => 'Italiano',
+    'language_inglese' => 'Inglese',
+    'language_francese' => 'Francese',
+    'language_tedesco' => 'Tedesco',
+    'language_spagnolo' => 'Spagnolo',
+    'language_portoghese' => 'Portoghese',
+    'language_altro' => 'Altro',
+    'language_' => 'Nessuna preferenza',
+
+    // Valute
+    'currency_eur' => 'EUR (€)',
+    'currency_usd' => 'USD ($)',
+    'currency_gbp' => 'GBP (£)',
 ];

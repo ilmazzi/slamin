@@ -53,10 +53,6 @@
                                 {{ __('permissions.users_description') ?? 'Gestisci utenti e permessi' }} -
                                 Mostrando {{ $users->firstItem() ?? 0 }}-{{ $users->lastItem() ?? 0 }} di {{ $users->total() }} utenti
                             </p>
-                            <!-- Debug temporaneo -->
-                            <small class="text-info d-block mt-1">
-                                Debug: {{ $users->count() }} utenti caricati, {{ $users->total() }} totali nel database
-                            </small>
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex flex-column flex-md-row gap-2">

@@ -410,6 +410,138 @@
                 </div>
             </div>
 
+            <!-- Posizioni d'Ingaggio -->
+            @php
+                $gigPositions = $event->gig_positions;
+                if (is_string($gigPositions)) {
+                    $gigPositions = json_decode($gigPositions, true);
+                }
+            @endphp
+            @if($gigPositions && is_array($gigPositions) && count($gigPositions) > 0)
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-briefcase me-2"></i>Posizioni d'Ingaggio Aperte
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-border-success mb-3" role="alert">
+                        <h6>
+                            <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
+                            Opportunità di Collaborazione
+                        </h6>
+                        <p class="mb-0">
+                            Questo evento ha posizioni d'ingaggio aperte. Se sei interessato, contatta l'organizzatore.
+                        </p>
+                    </div>
+
+                    <!-- Scadenza Risposte -->
+                    @if($event->invitation_deadline)
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="alert alert-border-info" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="ph ph-clock f-s-18 me-2 text-info"></i>
+                                    <div>
+                                        <strong>Risposte entro il:</strong>
+                                        {{ $event->invitation_deadline->format('d/m/Y H:i') }}
+                                        @php
+                                            $daysLeft = now()->diffInDays($event->invitation_deadline, false);
+                                        @endphp
+                                        @if($daysLeft > 0)
+                                            <span class="badge bg-info ms-2">
+                                                {{ $daysLeft }} {{ $daysLeft == 1 ? 'giorno' : 'giorni' }} rimasti
+                                            </span>
+                                        @elseif($daysLeft == 0)
+                                            <span class="badge bg-warning ms-2">
+                                                Scade oggi!
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary ms-2">
+                                                Scaduto
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="row">
+                        @foreach($gigPositions as $index => $position)
+                        <div class="col-12 mb-3">
+                            <div class="card card-light-success">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">
+                                            <i class="ph ph-briefcase me-2"></i>
+                                            {{ __('events.gig_type_' . $position['type']) }}
+                                        </h6>
+                                        <span class="badge bg-success">
+                                            {{ $position['quantity'] }} {{ $position['quantity'] == 1 ? 'posizione' : 'posizioni' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @if(!empty($position['language']))
+                                        <div class="col-md-6 mb-2">
+                                            <small class="text-muted">
+                                                <i class="ph ph-translate me-1"></i>
+                                                Lingua: {{ __('events.language_' . $position['language']) }}
+                                            </small>
+                                        </div>
+                                        @endif
+
+                                        @if(!empty($position['cachet_amount']))
+                                        <div class="col-md-6 mb-2">
+                                            <small class="text-success">
+                                                <i class="ph ph-currency-eur me-1"></i>
+                                                Cachet: {{ $position['cachet_amount'] }} {{ $position['cachet_currency'] }}
+                                            </small>
+                                        </div>
+                                        @endif
+
+                                        @if(!empty($position['travel_max']))
+                                        <div class="col-md-6 mb-2">
+                                            <small class="text-info">
+                                                <i class="ph ph-airplane me-1"></i>
+                                                Viaggio: fino a {{ $position['travel_max'] }} {{ $position['cachet_currency'] ?? 'EUR' }}
+                                            </small>
+                                        </div>
+                                        @endif
+
+                                        @if(!empty($position['accommodation_details']))
+                                        <div class="col-12 mt-2">
+                                            <small class="text-muted">
+                                                <i class="ph ph-house me-1"></i>
+                                                <strong>Vitto e Alloggio:</strong><br>
+                                                {{ $position['accommodation_details'] }}
+                                            </small>
+                                        </div>
+                                        @endif
+                                    </div>
+
+                                    @auth
+                                        @if($event->organizer_id !== auth()->id())
+                                        <div class="mt-3">
+                                            <button class="btn btn-sm btn-outline-success" onclick="contactOrganizer('{{ $event->organizer->email }}', '{{ __('events.gig_type_' . $position['type']) }}')">
+                                                <i class="ph ph-envelope me-1"></i>
+                                                Contatta Organizzatore
+                                            </button>
+                                        </div>
+                                        @endif
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Location Map -->
             @if($event->latitude && $event->longitude)
             <div class="card mb-4">
@@ -437,6 +569,86 @@
 
             <!-- Action Buttons -->
             <div class="position-sticky" style="top: 20px;">
+
+                <!-- Posizioni d'Ingaggio Riepilogo -->
+                @if($gigPositions && is_array($gigPositions) && count($gigPositions) > 0)
+                <div class="card mb-4">
+                    <div class="card-header bg-light-success">
+                        <h6 class="mb-0">
+                            <i class="ph ph-briefcase me-2"></i>Posizioni Aperte
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="ph ph-info-circle me-1"></i>
+                                {{ count($gigPositions) }} {{ count($gigPositions) == 1 ? 'posizione' : 'posizioni' }} d'ingaggio disponibili
+                            </small>
+                        </div>
+
+                        @foreach($gigPositions as $position)
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="f-s-14">
+                                <i class="ph ph-briefcase me-1"></i>
+                                {{ __('events.gig_type_' . $position['type']) }}
+                            </span>
+                            <span class="badge bg-success f-s-12">
+                                {{ $position['quantity'] }}
+                            </span>
+                        </div>
+                        @endforeach
+
+                        @auth
+                            @if($event->organizer_id !== auth()->id())
+                            <div class="mt-3">
+                                <button class="btn btn-sm btn-success w-100" onclick="contactOrganizer('{{ $event->organizer->email }}', 'Posizioni d\'Ingaggio')">
+                                    <i class="ph ph-envelope me-1"></i>
+                                    Contatta Organizzatore
+                                </button>
+                            </div>
+                            @endif
+                        @endauth
+                    </div>
+                </div>
+                @endif
+
+                <!-- Scadenza Inviti -->
+                @if($event->invitation_deadline)
+                <div class="card mb-4">
+                    <div class="card-header bg-light-info">
+                        <h6 class="mb-0">
+                            <i class="ph ph-clock me-2"></i>Scadenza Inviti
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="f-s-18 f-w-600 text-info mb-2">
+                                {{ $event->invitation_deadline->format('d/m/Y') }}
+                            </div>
+                            <div class="f-s-14 text-muted mb-2">
+                                {{ $event->invitation_deadline->format('H:i') }}
+                            </div>
+                            @php
+                                $daysLeft = now()->diffInDays($event->invitation_deadline, false);
+                            @endphp
+                            @if($daysLeft > 0)
+                                <span class="badge bg-info">
+                                    {{ $daysLeft }} {{ $daysLeft == 1 ? 'giorno' : 'giorni' }} rimasti
+                                </span>
+                            @elseif($daysLeft == 0)
+                                <span class="badge bg-warning">
+                                    Scade oggi!
+                                </span>
+                            @else
+                                <span class="badge bg-secondary">
+                                    Scaduto
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="card mb-4">
                     <div class="card-body">
                         @auth
@@ -952,5 +1164,26 @@ function showNotification(message, type) {
 
 // Wishlist è gestita globalmente da WishlistManager
 // Non serve codice duplicato qui
+
+// Funzione per contattare l'organizzatore per posizioni d'ingaggio
+function contactOrganizer(email, positionType) {
+    const subject = encodeURIComponent(`Interesse per posizione: ${positionType} - Evento: {{ $event->title }}`);
+    const body = encodeURIComponent(`Ciao!
+
+Sono interessato alla posizione di ${positionType} per il tuo evento "{{ $event->title }}" che si terrà il {{ $event->start_datetime->format('d/m/Y H:i') }}.
+
+Potresti fornirmi maggiori dettagli su:
+- Requisiti specifici per la posizione
+- Modalità di selezione
+- Contratto e condizioni
+
+Grazie per l'attenzione!
+
+Cordiali saluti,
+{{ auth()->user()->name ?? 'Un utente' }}`);
+
+    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+    window.open(mailtoLink);
+}
 </script>
 @endsection

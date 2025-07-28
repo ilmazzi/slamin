@@ -579,57 +579,105 @@
                     </div>
                 </div>
 
-                <!-- Step 4: Invite Artists -->
+                <!-- Step 4: Inviti e Ingaggi -->
                 <div class="card d-none" id="step-4">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-users me-2"></i>Invita Artisti
+                            <i class="ph ph-users me-2"></i>Inviti e Ingaggi
                         </h5>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-border-primary" role="alert">
-                            <h6>
-                                <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
-                                Inviti Opzionali
-                            </h6>
-                            <p class="mb-0">
-                                Puoi invitare artisti specifici al tuo evento. Potrai sempre farlo anche dopo aver creato l'evento dalla pagina di gestione.
-                            </p>
-                        </div>
-
-                        <!-- Search Users -->
+                        <!-- Sezione Inviti -->
                         <div class="mb-4">
-                            <label class="form-label">Cerca Artisti da Invitare</label>
-                            <div class="input-group">
-                                <input type="text" id="userSearch" class="form-control" placeholder="Cerca per nome o email...">
-                                <button type="button" class="btn btn-outline-primary" onclick="searchUsers()">
-                                    <i class="ph ph-magnifying-glass"></i>
-                                </button>
+                            <h6 class="text-primary mb-3">
+                                <i class="ph ph-envelope me-2"></i>Inviti Artisti
+                            </h6>
+                            <div class="alert alert-border-primary" role="alert">
+                                <h6>
+                                    <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
+                                    Inviti Specifici
+                                </h6>
+                                <p class="mb-0">
+                                    Invita artisti specifici al tuo evento. Se accettano, il loro nome apparirà confermato (se la lineup è pubblica). Se rifiutano, riceverai una notifica per aprire posizioni d'ingaggio.
+                                </p>
                             </div>
-                            <small class="text-muted">Cerca poeti, giudici, tecnici e host da invitare al tuo evento</small>
-                        </div>
 
-                        <!-- Search Results -->
-                        <div id="searchResults" class="mb-4" style="display: none;">
-                            <h6>Risultati Ricerca</h6>
-                            <div id="searchResultsList" class="list-group">
-                                <!-- Results will be populated here -->
+                            <!-- Search Users -->
+                            <div class="mb-4">
+                                <label class="form-label">Cerca Artisti da Invitare</label>
+                                <div class="input-group">
+                                    <input type="text" id="userSearch" class="form-control" placeholder="Cerca per nome o email...">
+                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsers()">
+                                        <i class="ph ph-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                                <small class="text-muted">Cerca poeti, giudici, tecnici e host da invitare al tuo evento</small>
                             </div>
-                        </div>
 
-                        <!-- Selected Invitations -->
-                        <div id="selectedInvitations">
-                            <h6>Artisti Selezionati <span id="invitationCount" class="badge bg-primary">0</span></h6>
-                            <div id="invitationsList" class="row">
-                                <div class="col-12 text-center text-muted py-4" id="noInvitations">
-                                    <i class="ph ph-user-plus display-4 mb-2"></i>
-                                    <p>Nessun artista selezionato ancora.<br>Cerca e aggiungi artisti da invitare.</p>
+                            <!-- Search Results -->
+                            <div id="searchResults" class="mb-4" style="display: none;">
+                                <h6>Risultati Ricerca</h6>
+                                <div id="searchResultsList" class="list-group">
+                                    <!-- Results will be populated here -->
                                 </div>
                             </div>
+
+                            <!-- Selected Invitations -->
+                            <div id="selectedInvitations">
+                                <h6>Artisti Selezionati <span id="invitationCount" class="badge bg-primary">0</span></h6>
+                                <div id="invitationsList" class="row">
+                                    <div class="col-12 text-center text-muted py-4" id="noInvitations">
+                                        <i class="ph ph-user-plus display-4 mb-2"></i>
+                                        <p>Nessun artista selezionato ancora.<br>Cerca e aggiungi artisti da invitare.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Risposte entro il -->
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="datetime-local" name="invitation_deadline" id="invitation_deadline" class="form-control">
+                                        <label for="invitation_deadline">Risposte entro il</label>
+                                    </div>
+                                    <small class="text-muted">Data limite per le risposte agli inviti</small>
+                                </div>
+                            </div>
+
+                            <!-- Hidden input for invitations data -->
+                            <input type="hidden" name="invitations" id="invitationsData" value="[]">
                         </div>
 
-                        <!-- Hidden input for invitations data -->
-                        <input type="hidden" name="invitations" id="invitationsData" value="[]">
+                        <!-- Sezione Posizioni d'Ingaggio -->
+                        <div class="mb-4">
+                            <h6 class="text-success mb-3">
+                                <i class="ph ph-briefcase me-2"></i>Apri Posizioni d'Ingaggio
+                            </h6>
+                            <div class="alert alert-border-success" role="alert">
+                                <h6>
+                                    <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
+                                    Posizioni Aperte
+                                </h6>
+                                <p class="mb-0">
+                                    Crea posizioni d'ingaggio per trovare artisti e professionisti. Ogni tipologia creerà una posizione nell'area Gig.
+                                </p>
+                            </div>
+
+                            <!-- Container per le posizioni d'ingaggio -->
+                            <div id="gigPositionsContainer">
+                                <!-- Le posizioni verranno aggiunte qui dinamicamente -->
+                            </div>
+
+                            <!-- Pulsante per aggiungere nuova posizione -->
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn btn-success" onclick="addGigPosition()">
+                                    <i class="ph ph-plus me-2"></i>Aggiungi Posizione d'Ingaggio
+                                </button>
+                            </div>
+
+                            <!-- Hidden input for gig positions data -->
+                            <input type="hidden" name="gig_positions" id="gigPositionsData" value="[]">
+                        </div>
                     </div>
                 </div>
 
@@ -2782,6 +2830,183 @@ function updateRecurrencePreview() {
         previewDiv.innerHTML = `<span class="text-warning">${previewText}</span>`;
     }
 }
+
+// ===== GESTIONE POSIZIONI D'INGAGGIO =====
+
+let gigPositionCounter = 0;
+
+// Aggiunge una nuova posizione d'ingaggio
+function addGigPosition() {
+    gigPositionCounter++;
+    const positionId = `gig-position-${gigPositionCounter}`;
+
+    const positionHtml = `
+        <div class="card mb-3" id="${positionId}">
+            <div class="card-header bg-light-success">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="ph ph-briefcase me-2"></i>Posizione d'Ingaggio #${gigPositionCounter}
+                    </h6>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeGigPosition('${positionId}')">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Tipologia -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipologia *</label>
+                        <select class="form-select" name="gig_positions[${gigPositionCounter}][type]" required>
+                            <option value="">Seleziona tipologia</option>
+                            <option value="fonica">Fonica/Fonico</option>
+                            <option value="illustratrice">Illustratrice/Illustratore</option>
+                            <option value="musicista">Musicista</option>
+                            <option value="mc">MC - Presentatrice/Presentatore</option>
+                            <option value="poeta">Poeta</option>
+                            <option value="traduttrice">Traduttrice/Traduttore</option>
+                            <option value="videomaker">Videomaker</option>
+                            <option value="volontaria">Volontaria/Volontario</option>
+                            <option value="relatrice">Relatrice/Relatore</option>
+                        </select>
+                    </div>
+
+                    <!-- Quantità -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quantità *</label>
+                        <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][quantity]" min="1" value="1" required>
+                    </div>
+
+                    <!-- Lingua richiesta -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Lingua richiesta (opzionale)</label>
+                        <select class="form-select" name="gig_positions[${gigPositionCounter}][language]">
+                            <option value="">Nessuna preferenza</option>
+                            <option value="italiano">Italiano</option>
+                            <option value="inglese">Inglese</option>
+                            <option value="francese">Francese</option>
+                            <option value="tedesco">Tedesco</option>
+                            <option value="spagnolo">Spagnolo</option>
+                            <option value="portoghese">Portoghese</option>
+                            <option value="altro">Altro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cachet -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cachet-${gigPositionCounter}" onchange="toggleCachetFields(${gigPositionCounter})">
+                            <label class="form-check-label" for="cachet-${gigPositionCounter}">
+                                <strong>Cachet</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="cachet-amount-${gigPositionCounter}" style="display: none;">
+                        <label class="form-label">Ammontare</label>
+                        <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][cachet_amount]" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="col-md-6" id="cachet-currency-${gigPositionCounter}" style="display: none;">
+                        <label class="form-label">Valuta</label>
+                        <select class="form-select" name="gig_positions[${gigPositionCounter}][cachet_currency]">
+                            <option value="EUR">EUR (€)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="GBP">GBP (£)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Spese di viaggio -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="travel-${gigPositionCounter}" onchange="toggleTravelFields(${gigPositionCounter})">
+                            <label class="form-check-label" for="travel-${gigPositionCounter}">
+                                <strong>Spese di viaggio</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="travel-max-${gigPositionCounter}" style="display: none;">
+                        <label class="form-label">Tetto massimo copertura biglietti</label>
+                        <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][travel_max]" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+
+                <!-- Vitto e alloggio -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="accommodation-${gigPositionCounter}" onchange="toggleAccommodationFields(${gigPositionCounter})">
+                            <label class="form-check-label" for="accommodation-${gigPositionCounter}">
+                                <strong>Vitto e alloggio</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12" id="accommodation-details-${gigPositionCounter}" style="display: none;">
+                        <label class="form-label">Dettagli vitto e alloggio</label>
+                        <textarea class="form-control" name="gig_positions[${gigPositionCounter}][accommodation_details]" rows="3" placeholder="Descrivi le condizioni di vitto e alloggio offerte..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('gigPositionsContainer').insertAdjacentHTML('beforeend', positionHtml);
+    updateGigPositionsData();
+}
+
+// Rimuove una posizione d'ingaggio
+function removeGigPosition(positionId) {
+    document.getElementById(positionId).remove();
+    updateGigPositionsData();
+}
+
+// Toggle campi cachet
+function toggleCachetFields(positionNumber) {
+    const isChecked = document.getElementById(`cachet-${positionNumber}`).checked;
+    document.getElementById(`cachet-amount-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
+    document.getElementById(`cachet-currency-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
+}
+
+// Toggle campi spese di viaggio
+function toggleTravelFields(positionNumber) {
+    const isChecked = document.getElementById(`travel-${positionNumber}`).checked;
+    document.getElementById(`travel-max-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
+}
+
+// Toggle campi vitto e alloggio
+function toggleAccommodationFields(positionNumber) {
+    const isChecked = document.getElementById(`accommodation-${positionNumber}`).checked;
+    document.getElementById(`accommodation-details-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
+}
+
+// Aggiorna i dati delle posizioni d'ingaggio
+function updateGigPositionsData() {
+    const positions = [];
+    const positionCards = document.querySelectorAll('#gigPositionsContainer .card');
+
+    positionCards.forEach(card => {
+        const positionData = {
+            type: card.querySelector('select[name*="[type]"]').value,
+            quantity: card.querySelector('input[name*="[quantity]"]').value,
+            language: card.querySelector('select[name*="[language]"]').value,
+            cachet_amount: card.querySelector('input[name*="[cachet_amount]"]').value,
+            cachet_currency: card.querySelector('select[name*="[cachet_currency]"]').value,
+            travel_max: card.querySelector('input[name*="[travel_max]"]').value,
+            accommodation_details: card.querySelector('textarea[name*="[accommodation_details]"]').value
+        };
+        positions.push(positionData);
+    });
+
+    document.getElementById('gigPositionsData').value = JSON.stringify(positions);
+}
+
+// Aggiungi event listener per aggiornare i dati quando cambiano i campi
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('gigPositionsContainer').addEventListener('change', updateGigPositionsData);
+    document.getElementById('gigPositionsContainer').addEventListener('input', updateGigPositionsData);
+});
 </script>
 
 <!-- Flatpickr JS -->
