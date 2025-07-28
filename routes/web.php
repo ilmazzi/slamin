@@ -554,6 +554,11 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/kanban/delete-image', [App\Http\Controllers\Admin\KanbanController::class, 'deleteImage'])->name('kanban.delete-image');
         Route::post('/kanban/delete-task', [App\Http\Controllers\Admin\KanbanController::class, 'deleteTask'])->name('kanban.delete-task');
 
+        // Nuove route per le funzionalità interattive
+        Route::get('/kanban/task/{taskId}/details', [App\Http\Controllers\Admin\KanbanController::class, 'getTaskDetailsForOverlay'])->name('kanban.task-details-overlay');
+        Route::get('/kanban/task/{taskId}/edit', [App\Http\Controllers\Admin\KanbanController::class, 'getTaskForEdit'])->name('kanban.task-edit');
+        Route::post('/kanban/task/comment', [App\Http\Controllers\Admin\KanbanController::class, 'addTaskComment'])->name('kanban.task-comment');
+
         // PeerTube Management Routes
         Route::get('/peertube', [App\Http\Controllers\Admin\PeerTubeController::class, 'index'])->name('peertube.index');
         Route::put('/peertube', [App\Http\Controllers\Admin\PeerTubeController::class, 'update'])->name('peertube.update');

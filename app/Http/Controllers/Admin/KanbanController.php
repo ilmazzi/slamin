@@ -393,4 +393,81 @@ class KanbanController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get task details for overlay
+     */
+    public function getTaskDetailsForOverlay($taskId)
+    {
+        try {
+            $task = Task::with(['assignedTo', 'createdBy', 'reviewedBy', 'comments.user'])
+                ->findOrFail($taskId);
+
+            $html = view('admin.kanban.task-details', compact('task'))->render();
+
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'task' => $task
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving task details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get task data for editing
+     */
+    public function getTaskForEdit($taskId)
+    {
+        try {
+            $task = Task::with(['assignedTo', 'createdBy'])
+                ->findOrFail($taskId);
+
+            return response()->json([
+                'success' => true,
+                'task' => $task
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving task: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Add comment to task
+     */
+    public function addTaskComment(Request $request)
+    {
+        $request->validate([
+            'task_id' => 'required|integer|exists:tasks,id',
+            'content' => 'required|string|max:1000',
+        ]);
+
+        try {
+            $comment = TaskComment::create([
+                'task_id' => $request->task_id,
+                'user_id' => Auth::id(),
+                'content' => $request->content,
+                'type' => 'comment',
+                'is_internal' => false,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Commento aggiunto con successo',
+                'comment' => $comment->load('user')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error adding comment: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

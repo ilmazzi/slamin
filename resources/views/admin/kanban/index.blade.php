@@ -1,5 +1,142 @@
 @extends('layout.master')
 
+@section('css')
+<style>
+.task-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.task-overlay-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.task-overlay-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-overlay-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.task-overlay-header .btn-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-overlay-body {
+    padding: 1.5rem;
+    max-height: calc(90vh - 80px);
+    overflow-y: auto;
+}
+
+.task-details-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.task-main-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.task-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.task-sidebar-section {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.task-sidebar-section h6 {
+    margin-bottom: 0.75rem;
+    color: #495057;
+    font-weight: 600;
+}
+
+.task-comments {
+    margin-top: 2rem;
+}
+
+.comment-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #667eea;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #495057;
+}
+
+.comment-date {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.comment-content {
+    color: #495057;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .task-details-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .task-overlay-content {
+        width: 95%;
+        margin: 1rem;
+    }
+}
+</style>
+@endsection
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Page Header -->
@@ -139,7 +276,7 @@
                                     <div class="board-column-content">
                                         @foreach($data['todo_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="todo">
-                                            <div class="board-item-content">
+                                            <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -176,7 +313,7 @@
                                     <div class="board-column-content">
                                         @foreach($data['in_progress_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="in_progress">
-                                            <div class="board-item-content">
+                                            <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -213,7 +350,7 @@
                                     <div class="board-column-content">
                                         @foreach($data['review_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="review">
-                                            <div class="board-item-content">
+                                            <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -250,7 +387,7 @@
                                     <div class="board-column-content">
                                         @foreach($data['testing_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="testing">
-                                            <div class="board-item-content">
+                                            <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -287,7 +424,7 @@
                                     <div class="board-column-content">
                                         @foreach($data['done_tasks']->take(10) as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="done">
-                                            <div class="board-item-content">
+                                            <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -322,6 +459,213 @@
         </div>
     </div>
 </div>
+
+<!-- Task Details Overlay -->
+<div id="taskDetailsOverlay" class="task-overlay" style="display: none;">
+    <div class="task-overlay-content">
+        <div class="task-overlay-header">
+            <h4 id="taskDetailsTitle">Dettagli Task</h4>
+            <button type="button" class="btn-close" onclick="closeTaskOverlay()"></button>
+        </div>
+        <div class="task-overlay-body" id="taskDetailsContent">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">
+                    <i class="ph ph-plus-circle me-2"></i>Nuovo Task
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addTaskForm" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Titolo *</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Priorità *</label>
+                                <select class="form-select" id="priority" name="priority" required>
+                                    <option value="">Seleziona priorità</option>
+                                    <option value="low">Bassa</option>
+                                    <option value="medium">Media</option>
+                                    <option value="high">Alta</option>
+                                    <option value="urgent">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="assigned_to" class="form-label">Assegnato a</label>
+                                <select class="form-select" id="assigned_to" name="assigned_to">
+                                    <option value="">Seleziona utente</option>
+                                    @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->getDisplayName() }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="due_date" class="form-label">Data di scadenza</label>
+                                <input type="date" class="form-control" id="due_date" name="due_date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="estimated_hours" class="form-label">Ore stimate</label>
+                                <input type="number" class="form-control" id="estimated_hours" name="estimated_hours" min="0" step="0.5">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status iniziale</label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="todo">To Do</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="review">Review</option>
+                                    <option value="testing">Testing</option>
+                                    <option value="done">Done</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="attachments" class="form-label">Allegati</label>
+                        <input type="file" class="form-control" id="attachments" name="attachments[]" multiple>
+                        <div class="form-text">Puoi selezionare più file</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-plus me-2"></i>Creare Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Task Modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaskModalLabel">
+                    <i class="ph ph-pencil me-2"></i>Modifica Task
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editTaskForm" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" id="edit_task_id" name="task_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="edit_title" class="form-label">Titolo *</label>
+                                <input type="text" class="form-control" id="edit_title" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit_priority" class="form-label">Priorità *</label>
+                                <select class="form-select" id="edit_priority" name="priority" required>
+                                    <option value="low">Bassa</option>
+                                    <option value="medium">Media</option>
+                                    <option value="high">Alta</option>
+                                    <option value="urgent">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label">Descrizione</label>
+                        <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_assigned_to" class="form-label">Assegnato a</label>
+                                <select class="form-select" id="edit_assigned_to" name="assigned_to">
+                                    <option value="">Seleziona utente</option>
+                                    @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->getDisplayName() }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_due_date" class="form-label">Data di scadenza</label>
+                                <input type="date" class="form-control" id="edit_due_date" name="due_date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit_estimated_hours" class="form-label">Ore stimate</label>
+                                <input type="number" class="form-control" id="edit_estimated_hours" name="estimated_hours" min="0" step="0.5">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit_actual_hours" class="form-label">Ore effettive</label>
+                                <input type="number" class="form-control" id="edit_actual_hours" name="actual_hours" min="0" step="0.5">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="edit_progress_percentage" class="form-label">Progresso (%)</label>
+                                <input type="number" class="form-control" id="edit_progress_percentage" name="progress_percentage" min="0" max="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_attachments" class="form-label">Nuovi allegati</label>
+                        <input type="file" class="form-control" id="edit_attachments" name="attachments[]" multiple>
+                        <div class="form-text">Puoi selezionare più file</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-check me-2"></i>Salvare Modifiche
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -341,5 +685,195 @@ function showNotification(message, type = 'info') {
         showConfirmButton: false
     });
 }
+
+// Open task details overlay
+function openTaskDetails(taskId) {
+    fetch(`/admin/kanban/task/${taskId}/details`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('taskDetailsContent').innerHTML = data.html;
+                document.getElementById('taskDetailsOverlay').style.display = 'flex';
+            } else {
+                showNotification('Errore nel caricamento dei dettagli del task', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Errore nel caricamento dei dettagli del task', 'error');
+        });
+}
+
+// Close task details overlay
+function closeTaskOverlay() {
+    document.getElementById('taskDetailsOverlay').style.display = 'none';
+}
+
+// Edit task function
+function editTask(taskId) {
+    fetch(`/admin/kanban/task/${taskId}/edit`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Populate edit form
+                document.getElementById('edit_task_id').value = taskId;
+                document.getElementById('edit_title').value = data.task.title;
+                document.getElementById('edit_description').value = data.task.description || '';
+                document.getElementById('edit_priority').value = data.task.priority;
+                document.getElementById('edit_assigned_to').value = data.task.assigned_to || '';
+                document.getElementById('edit_due_date').value = data.task.due_date || '';
+                document.getElementById('edit_estimated_hours').value = data.task.estimated_hours || '';
+                document.getElementById('edit_actual_hours').value = data.task.actual_hours || '';
+                document.getElementById('edit_progress_percentage').value = data.task.progress_percentage || 0;
+
+                // Show edit modal
+                new bootstrap.Modal(document.getElementById('editTaskModal')).show();
+            } else {
+                showNotification('Errore nel caricamento del task', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Errore nel caricamento del task', 'error');
+        });
+}
+
+// Add comment function
+function addComment(taskId) {
+    const commentText = document.getElementById('commentText').value;
+    if (!commentText.trim()) {
+        showNotification('Inserisci un commento', 'warning');
+        return;
+    }
+
+    fetch('/admin/kanban/task/comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            task_id: taskId,
+            content: commentText
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('commentText').value = '';
+            showNotification('Commento aggiunto con successo', 'success');
+            // Refresh task details
+            openTaskDetails(taskId);
+        } else {
+            showNotification('Errore nell\'aggiunta del commento', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Errore nell\'aggiunta del commento', 'error');
+    });
+}
+
+// Add Task Form Handler
+$('#addTaskForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const submitBtn = $(this).find('button[type="submit"]');
+    const originalText = submitBtn.html();
+
+    // Show loading state
+    submitBtn.prop('disabled', true).html(`
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        Creazione in corso...
+    `);
+
+    $.ajax({
+        url: '{{ route("admin.kanban.store-task") }}',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                $('#addTaskModal').modal('hide');
+                $('#addTaskForm')[0].reset();
+                showNotification('Task creato con successo!', 'success');
+
+                // Refresh only the specific column where the task was added
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                showNotification('Errore nella creazione del task: ' + response.message, 'error');
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = 'Errore nella creazione del task';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            showNotification(errorMessage, 'error');
+        },
+        complete: function() {
+            // Restore button state
+            submitBtn.prop('disabled', false).html(originalText);
+        }
+    });
+});
+
+// Edit Task Form Handler
+$('#editTaskForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const submitBtn = $(this).find('button[type="submit"]');
+    const originalText = submitBtn.html();
+
+    // Show loading state
+    submitBtn.prop('disabled', true).html(`
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        Salvataggio in corso...
+    `);
+
+    $.ajax({
+        url: '{{ route("admin.kanban.update-task") }}',
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                $('#editTaskModal').modal('hide');
+                showNotification('Task aggiornato con successo!', 'success');
+
+                // Refresh the page to show updated data
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                showNotification('Errore nell\'aggiornamento del task: ' + response.message, 'error');
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = 'Errore nell\'aggiornamento del task';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            }
+            showNotification(errorMessage, 'error');
+        },
+        complete: function() {
+            // Restore button state
+            submitBtn.prop('disabled', false).html(originalText);
+        }
+    });
+});
+
+// Overlay event handlers
+$('#taskDetailsOverlay').on('click', function(e) {
+    if (e.target === this) {
+        closeTaskOverlay();
+    }
+});
 </script>
 @endpush
