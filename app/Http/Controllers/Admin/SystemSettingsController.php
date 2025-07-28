@@ -20,6 +20,7 @@ class SystemSettingsController extends Controller
         $groups = [
             'upload' => 'Limiti Upload',
             'video' => 'Limiti Video',
+            'moderation' => 'Moderazione',
             'system' => 'Impostazioni'
         ];
 

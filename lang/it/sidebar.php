@@ -49,4 +49,9 @@ return [
     'profile_menu' => 'Menu profilo',
     'logout_confirm' => 'Sei sicuro di voler uscire?',
 
+    // Amministrazione
+    'administration' => 'Amministrazione',
+    'moderation' => 'Moderazione',
+    'moderation_tooltip' => 'Gestisci contenuti e segnalazioni',
+
 ];

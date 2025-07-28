@@ -421,7 +421,7 @@
                                 <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
                             </span>
                         @endif
-                        
+
                         <!-- Category Badge -->
                         @if($event->category)
                             <span class="badge {{ $event->category_color_class }} ms-1" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ __('events.category') }}">
@@ -596,18 +596,18 @@
                         <!-- Action Buttons -->
                         <div class="mt-auto">
                             <div class="row g-2">
-                                <div class="col-8">
+                                <div class="col-6">
                                     <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm w-100">
                                         <i class="ph ph-eye me-1"></i> Dettagli
                                     </a>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     @auth
                                         @if($event->organizer_id === auth()->id())
                                             <a href="{{ route('events.manage', $event) }}" class="btn btn-light-secondary btn-sm w-100">
                                                 <i class="ph ph-gear"></i>
                                             </a>
-                                                                                @elseif($event->acceptsRequests() && !$event->requests()->where('user_id', auth()->id())->exists())
+                                        @elseif($event->acceptsRequests() && !$event->requests()->where('user_id', auth()->id())->exists())
                                             <button class="btn btn-light-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#applyModal" data-event-id="{{ $event->id }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('events.participants_click_to_apply') }}">
                                                 <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
@@ -622,6 +622,9 @@
                                             <i class="ph ph-sign-in"></i>
                                         </a>
                                     @endauth
+                                </div>
+                                <div class="col-3">
+                                    <x-report-button :content="$event" type="event" size="sm" />
                                 </div>
                             </div>
                         </div>

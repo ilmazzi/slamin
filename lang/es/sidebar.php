@@ -49,4 +49,9 @@ return [
     'profile_menu' => 'Menú de perfil',
     'logout_confirm' => '¿Estás seguro de que quieres cerrar sesión?',
 
+    // Administración
+    'administration' => 'Administración',
+    'moderation' => 'Moderación',
+    'moderation_tooltip' => 'Gestionar contenido y reportes',
+
 ];

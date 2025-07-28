@@ -65,6 +65,9 @@ class DashboardController extends Controller
             'pending_invitations' => 0,
             'pending_requests' => 0,
             'unread_notifications' => 0,
+            'total_poems' => 0,
+            'published_poems' => 0,
+            'draft_poems' => 0,
         ];
 
         // Events organized
@@ -96,6 +99,11 @@ class DashboardController extends Controller
 
         // Unread notifications
         $stats['unread_notifications'] = $user->notifications()->where('is_read', false)->count();
+
+        // Poems statistics
+        $stats['total_poems'] = $user->poems()->count();
+        $stats['published_poems'] = $user->poems()->where('is_public', true)->where('is_draft', false)->count();
+        $stats['draft_poems'] = $user->poems()->where('is_draft', true)->count();
 
         return $stats;
     }

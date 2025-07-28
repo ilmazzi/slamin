@@ -28,4 +28,4 @@
 <!-- Sidebar logo responsive -->
 <script src="{{asset('assets/js/sidebar-logo.js')}}"></script>
 
-@yield('script')
+@stack('scripts')

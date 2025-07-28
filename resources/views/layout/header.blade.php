@@ -53,12 +53,31 @@
                                         <span>Profilo</span>
                                     </a>
                                 </li>
-                                @if(auth()->user()->hasRole('admin'))
+                                @if(auth()->user()->hasRole(['admin', 'moderator']))
                                 <li class="dropdown-divider"></li>
                                 <li class="dropdown-item">
-                                    <a href="{{ route('admin.kanban.index') }}" class="d-flex align-items-center text-decoration-none">
+                                    <a href="{{ route('admin.moderation.index') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-shield-check me-2 text-warning"></i>
-                                        <span>Admin Panel</span>
+                                        <span>{{ __('sidebar.moderation') }}</span>
+                                        @php
+                                            $pendingCount = \App\Models\Video::pending()->count() +
+                                                          \App\Models\Poem::pending()->count() +
+                                                          \App\Models\Event::pending()->count() +
+                                                          \App\Models\Photo::pending()->count() +
+                                                          \App\Models\Carousel::pending()->count() +
+                                                          \App\Models\Report::active()->count();
+                                        @endphp
+                                        @if($pendingCount > 0)
+                                            <span class="badge bg-warning ms-auto">{{ $pendingCount }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endif
+                                @if(auth()->user()->hasRole('admin'))
+                                <li class="dropdown-item">
+                                    <a href="{{ route('admin.kanban.index') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-kanban me-2 text-info"></i>
+                                        <span>Kanban Board</span>
                                     </a>
                                 </li>
                                 @endif

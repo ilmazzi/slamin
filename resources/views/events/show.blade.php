@@ -41,7 +41,7 @@
                         <i class="ph ph-lock me-1"></i> {{ __('events.event_private_badge') }}
                     </span>
                 @endif
-                
+
                 <!-- Category Badge -->
                 @if($event->category)
                     <span class="badge {{ $event->category_color_class }} position-absolute top-0 start-0 m-4 fs-6">
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                         @endif
-                        
+
                         @if($event->entry_fee > 0)
                         <div class="col-md-6 mb-3">
                             <div class="d-flex align-items-center">
@@ -512,6 +512,9 @@
                             <button class="btn btn-light-primary w-100 mt-2" onclick="shareEvent()">
                                 <i class="ph ph-share me-2"></i>Condividi Evento
                             </button>
+
+                            <!-- Report Button -->
+                            <x-report-button :content="$event" type="event" class="w-100 mt-2" />
 
                         @else
                             <!-- Not logged in -->

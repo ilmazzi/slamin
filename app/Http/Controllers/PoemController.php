@@ -79,7 +79,7 @@ class PoemController extends Controller
     {
         $categories = config('poems.categories', []);
         $poemTypes = config('poems.poem_types', []);
-        $languages = config('app.languages', ['it' => 'Italiano', 'en' => 'English']);
+        $languages = config('poems.languages', ['it' => 'Italiano', 'en' => 'English']);
 
         return view('poems.create', compact('categories', 'poemTypes', 'languages'));
     }
@@ -111,7 +111,7 @@ class PoemController extends Controller
         }
 
         $data = $validator->validated();
-        
+
         // Gestione thumbnail
         if ($request->hasFile('thumbnail')) {
             $thumbnailPath = $request->file('thumbnail')->store('poems/thumbnails', 'public');
@@ -225,7 +225,7 @@ class PoemController extends Controller
             if ($poem->thumbnail_path) {
                 Storage::disk('public')->delete($poem->thumbnail_path);
             }
-            
+
             $thumbnailPath = $request->file('thumbnail')->store('poems/thumbnails', 'public');
             $data['thumbnail_path'] = $thumbnailPath;
         }

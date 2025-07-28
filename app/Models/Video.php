@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\Reportable;
+use App\Traits\HasModeration;
 
 class Video extends Model
 {
-    use HasFactory;
+    use HasFactory, Reportable, HasModeration;
 
     protected $fillable = [
         'title',
@@ -31,6 +33,8 @@ class Video extends Model
         'comment_count',
         'moderation_status',
         'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         // Campi PeerTube
         'peertube_video_id',
         'peertube_uuid',
@@ -58,6 +62,7 @@ class Video extends Model
         'last_sync_at' => 'datetime',
         'peertube_uploaded_at' => 'datetime',
         'peertube_processed_at' => 'datetime',
+        'moderated_at' => 'datetime',
     ];
 
     /**

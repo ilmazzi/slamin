@@ -163,18 +163,18 @@
                                 </div>
                             </div>
 
-                            <!-- Statistica 4 - Notifiche Non Lette -->
+                            <!-- Statistica 4 - Poesie Pubblicate -->
                             <div class="col-6">
-                                <div class="card hover-effect equal-card b-t-4-warning">
+                                <div class="card hover-effect equal-card b-t-4-info">
                                     <div class="card-body eshop-cards text-center pa-15">
-                                        <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                            <i class="ph ph-bell f-s-18 text-warning"></i>
+                                        <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                            <i class="ph ph-book-open f-s-18 text-info"></i>
                                         </div>
                                         <span class="ripple-effect"></span>
                                         <div class="overflow-hidden">
-                                            <h4 class="text-warning mb-1 f-w-600">{{ $stats['unread_notifications'] }}</h4>
-                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.unread_notifications') }}</p>
-                                            <span class="badge bg-light-warning f-s-10">{{ __('dashboard.role_notifications') }}</span>
+                                            <h4 class="text-info mb-1 f-w-600">{{ $stats['published_poems'] }}</h4>
+                                            <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.published_poems') }}</p>
+                                            <span class="badge bg-light-info f-s-10">{{ __('dashboard.role_poet') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -213,6 +213,12 @@
                         'link' => route('events.index')
                     ],
                     [
+                        'key' => 'view_poems',
+                        'color' => 'info',
+                        'icon' => 'ph ph-book-open',
+                        'link' => route('poems.index')
+                    ],
+                    [
                         'key' => 'create_post',
                         'color' => 'primary',
                         'icon' => 'ph ph-plus-circle',
@@ -222,7 +228,7 @@
                         'key' => 'write_poem',
                         'color' => 'danger',
                         'icon' => 'ph ph-pen-nib',
-                        'link' => '#'
+                        'link' => route('poems.create')
                     ],
                     [
                         'key' => 'upload_performance',

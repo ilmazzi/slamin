@@ -167,11 +167,18 @@
 
 
 
-                                <!-- Poesie Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-                                        <i class="ph-duotone ph-book-open text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">Poesie</span>
+                                <!-- Poesie Section -->
+                                <li class="no-sub {{ request()->routeIs('poems.*') ? 'active' : '' }}">
+                                    <a href="{{ route('poems.index') }}">
+                                        <i class="ph-duotone ph-book-open f-s-20 me-2"></i>
+                                        {{ __('poems.title') }}
+                                        @auth
+                                        @if(auth()->user()->poems()->drafts()->count() > 0)
+                                            <span class="badge bg-warning badge-notification ms-2">
+                                                {{ auth()->user()->poems()->drafts()->count() }}
+                                            </span>
+                                        @endif
+                                        @endauth
                                     </a>
                                 </li>
 
@@ -189,7 +196,7 @@
                                 @if(auth()->user()->hasRole(['admin', 'moderator']))
                                 <!-- Permissions Management Section - Solo per admin/moderator -->
                                 <li class="menu-title">
-                                    <span>Amministrazione</span>
+                                    <span>{{ __('sidebar.administration') }}</span>
                                 </li>
                                 <li class="no-sub {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                                     <a href="{{ route('permissions.index') }}">
@@ -197,6 +204,27 @@
                                             <use xlink:href="../assets/svg/_sprite.svg#briefcase"></use>
                                         </svg>
                                         Gestione Permessi
+                                    </a>
+                                </li>
+
+                                                                <!-- Moderation Dashboard - Solo per admin/moderator -->
+                                <li class="no-sub {{ request()->routeIs('admin.moderation.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.moderation.index') }}" title="{{ __('sidebar.moderation_tooltip') }}">
+                                        <i class="ph-duotone ph-shield-check f-s-20 me-2"></i>
+                                        {{ __('sidebar.moderation') }}
+                                        @php
+                                            $pendingCount = \App\Models\Video::pending()->count() +
+                                                          \App\Models\Poem::pending()->count() +
+                                                          \App\Models\Event::pending()->count() +
+                                                          \App\Models\Photo::pending()->count() +
+                                                          \App\Models\Carousel::pending()->count() +
+                                                          \App\Models\Report::active()->count();
+                                        @endphp
+                                        @if($pendingCount > 0)
+                                            <span class="badge bg-warning badge-notification ms-2">
+                                                {{ $pendingCount }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
 

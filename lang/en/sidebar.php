@@ -49,4 +49,9 @@ return [
     'profile_menu' => 'Profile menu',
     'logout_confirm' => 'Are you sure you want to logout?',
 
+    // Administration
+    'administration' => 'Administration',
+    'moderation' => 'Moderation',
+    'moderation_tooltip' => 'Manage content and reports',
+
 ];

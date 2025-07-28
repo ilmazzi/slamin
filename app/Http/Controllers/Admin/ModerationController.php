@@ -1,0 +1,476 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Video;
+use App\Models\Poem;
+use App\Models\Event;
+use App\Models\Photo;
+use App\Models\Carousel;
+use App\Models\VideoComment;
+use App\Models\PoemComment;
+use App\Models\Report;
+use App\Models\SystemSetting;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
+class ModerationController extends Controller
+{
+        /**
+     * Mostra il dashboard di moderazione
+     */
+    public function index()
+    {
+        $stats = $this->getModerationStats();
+        $pendingContent = $this->getPendingContent();
+        $reports = $this->getActiveReports();
+
+        return view('admin.moderation.index', compact('stats', 'pendingContent', 'reports'));
+    }
+
+        /**
+     * Mostra i contenuti in attesa di moderazione e le segnalazioni
+     */
+    public function pending(Request $request)
+    {
+        $type = $request->get('type', 'all');
+        $status = $request->get('status', 'pending');
+        $filter = $request->get('filter', 'all'); // all, pending, reports
+
+        if ($type === 'all') {
+            $content = [
+                'videos' => $this->getContentByType('videos', $status)->with('user')->latest()->get(),
+                'poems' => $this->getContentByType('poems', $status)->with('user')->latest()->get(),
+                'events' => $this->getContentByType('events', $status)->with('organizer')->latest()->get(),
+                'photos' => $this->getContentByType('photos', $status)->with('user')->latest()->get(),
+                'carousels' => $this->getContentByType('carousels', $status)->latest()->get(),
+                'video_comments' => $this->getContentByType('video_comments', $status)->with(['user', 'video'])->latest()->get(),
+                'poem_comments' => $this->getContentByType('poem_comments', $status)->with(['user', 'poem'])->latest()->get(),
+            ];
+        } else {
+            $content = [
+                $type => $this->getContentByType($type, $status)->with($this->getRelationships($type))->latest()->get()
+            ];
+        }
+
+        // Filtra i report se necessario
+        $reports = collect();
+        if ($filter == 'reports' || $filter == 'all') {
+            $reports = $this->getActiveReports();
+        }
+
+        return view('admin.moderation.pending', compact('content', 'type', 'status', 'reports', 'filter'));
+    }
+
+    /**
+     * Approva un contenuto
+     */
+    public function approve(Request $request, $type, $id)
+    {
+        $content = $this->getContentModel($type, $id);
+
+        if (!$content) {
+            return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
+        }
+
+        $notes = $request->input('notes');
+        $success = $content->approve(Auth::user(), $notes);
+
+        if ($success) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Contenuto approvato con successo'
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Errore durante l\'approvazione']);
+    }
+
+    /**
+     * Rifiuta un contenuto
+     */
+    public function reject(Request $request, $type, $id)
+    {
+        $content = $this->getContentModel($type, $id);
+
+        if (!$content) {
+            return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
+        }
+
+        $notes = $request->input('notes');
+        $success = $content->reject(Auth::user(), $notes);
+
+        if ($success) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Contenuto rifiutato con successo'
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Errore durante il rifiuto']);
+    }
+
+    /**
+     * Approva tutti i contenuti di un tipo
+     */
+    public function approveAll(Request $request, $type)
+    {
+        $status = $request->get('status', 'pending');
+        $content = $this->getContentByType($type, $status);
+
+        $approved = 0;
+        foreach ($content as $item) {
+            if ($item->approve(Auth::user())) {
+                $approved++;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "{$approved} contenuti approvati con successo"
+        ]);
+    }
+
+    /**
+     * Ottiene le statistiche di moderazione
+     */
+    private function getModerationStats()
+    {
+        return [
+            'videos' => [
+                'pending' => Video::pending()->count(),
+                'approved' => Video::approved()->count(),
+                'rejected' => Video::rejected()->count(),
+            ],
+            'poems' => [
+                'pending' => Poem::pending()->count(),
+                'approved' => Poem::approved()->count(),
+                'rejected' => Poem::rejected()->count(),
+            ],
+            'events' => [
+                'pending' => Event::pending()->count(),
+                'approved' => Event::approved()->count(),
+                'rejected' => Event::rejected()->count(),
+            ],
+            'photos' => [
+                'pending' => Photo::pending()->count(),
+                'approved' => Photo::approved()->count(),
+                'rejected' => Photo::rejected()->count(),
+            ],
+            'carousels' => [
+                'pending' => Carousel::pending()->count(),
+                'approved' => Carousel::approved()->count(),
+                'rejected' => Carousel::rejected()->count(),
+            ],
+            'video_comments' => [
+                'pending' => VideoComment::pending()->count(),
+                'approved' => VideoComment::approved()->count(),
+                'rejected' => VideoComment::rejected()->count(),
+            ],
+            'poem_comments' => [
+                'pending' => PoemComment::pending()->count(),
+                'approved' => PoemComment::approved()->count(),
+                'rejected' => PoemComment::rejected()->count(),
+            ],
+        ];
+    }
+
+    /**
+     * Ottiene i contenuti in attesa
+     */
+    private function getPendingContent()
+    {
+        return [
+            'videos' => Video::pending()->with('user')->latest()->limit(5)->get(),
+            'poems' => Poem::pending()->with('user')->latest()->limit(5)->get(),
+            'events' => Event::pending()->with('organizer')->latest()->limit(5)->get(),
+            'photos' => Photo::pending()->with('user')->latest()->limit(5)->get(),
+            'carousels' => Carousel::pending()->latest()->limit(5)->get(),
+            'video_comments' => VideoComment::pending()->with(['user', 'video'])->latest()->limit(5)->get(),
+            'poem_comments' => PoemComment::pending()->with(['user', 'poem'])->latest()->limit(5)->get(),
+        ];
+    }
+
+    /**
+     * Ottiene le segnalazioni attive
+     */
+    private function getActiveReports()
+    {
+        return Report::active()
+            ->with(['user', 'reportable', 'resolver'])
+            ->latest()
+            ->get();
+    }
+
+    /**
+     * Gestisce una segnalazione
+     */
+    public function handleReport(Request $request, $reportId)
+    {
+        $request->validate([
+            'action' => 'required|in:investigate,resolve,dismiss',
+            'notes' => 'nullable|string'
+        ]);
+
+        $report = Report::findOrFail($reportId);
+        $action = $request->action;
+        $notes = $request->notes;
+
+        switch ($action) {
+            case 'investigate':
+                $report->update([
+                    'status' => Report::STATUS_INVESTIGATING,
+                    'resolved_by' => Auth::id(),
+                    'resolved_at' => now(),
+                    'resolution_notes' => $notes
+                ]);
+                $message = 'Segnalazione messa in investigazione';
+                break;
+
+            case 'resolve':
+                $report->update([
+                    'status' => Report::STATUS_RESOLVED,
+                    'resolved_by' => Auth::id(),
+                    'resolved_at' => now(),
+                    'resolution_notes' => $notes
+                ]);
+                $message = 'Segnalazione risolta';
+                break;
+
+            case 'dismiss':
+                $report->update([
+                    'status' => Report::STATUS_DISMISSED,
+                    'resolved_by' => Auth::id(),
+                    'resolved_at' => now(),
+                    'resolution_notes' => $notes
+                ]);
+                $message = 'Segnalazione respinta';
+                break;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $message
+        ]);
+    }
+
+    /**
+     * Ottiene le statistiche delle segnalazioni
+     */
+    private function getReportStats()
+    {
+        return [
+            'pending' => Report::pending()->count(),
+            'investigating' => Report::investigating()->count(),
+            'resolved' => Report::resolved()->count(),
+            'dismissed' => Report::dismissed()->count(),
+        ];
+    }
+
+    /**
+     * Ottiene i contenuti per tipo e status
+     */
+    private function getContentByType($type, $status)
+    {
+        switch ($type) {
+            case 'videos':
+                return $status === 'pending' ? Video::pending() :
+                       ($status === 'approved' ? Video::approved() : Video::rejected());
+            case 'poems':
+                return $status === 'pending' ? Poem::pending() :
+                       ($status === 'approved' ? Poem::approved() : Poem::rejected());
+            case 'events':
+                return $status === 'pending' ? Event::pending() :
+                       ($status === 'approved' ? Event::approved() : Event::rejected());
+            case 'photos':
+                return $status === 'pending' ? Photo::pending() :
+                       ($status === 'approved' ? Photo::approved() : Photo::rejected());
+            case 'carousels':
+                return $status === 'pending' ? Carousel::pending() :
+                       ($status === 'approved' ? Carousel::approved() : Carousel::rejected());
+            case 'video_comments':
+                return $status === 'pending' ? VideoComment::pending() :
+                       ($status === 'approved' ? VideoComment::approved() : VideoComment::rejected());
+            case 'poem_comments':
+                return $status === 'pending' ? PoemComment::pending() :
+                       ($status === 'approved' ? PoemComment::approved() : PoemComment::rejected());
+            default:
+                return Video::query(); // Return empty query builder
+        }
+    }
+
+    /**
+     * Ottiene le relazioni per tipo di contenuto
+     */
+    private function getRelationships($type)
+    {
+        switch ($type) {
+            case 'videos':
+                return ['user'];
+            case 'poems':
+                return ['user'];
+            case 'events':
+                return ['organizer'];
+            case 'photos':
+                return ['user'];
+            case 'carousels':
+                return [];
+            case 'video_comments':
+                return ['user', 'video'];
+            case 'poem_comments':
+                return ['user', 'poem'];
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Ottiene il modello del contenuto
+     */
+    private function getContentModel($type, $id)
+    {
+        switch ($type) {
+            case 'videos':
+                return Video::find($id);
+            case 'poems':
+                return Poem::find($id);
+            case 'events':
+                return Event::find($id);
+            case 'photos':
+                return Photo::find($id);
+            case 'carousels':
+                return Carousel::find($id);
+            case 'video_comments':
+                return VideoComment::find($id);
+            case 'poem_comments':
+                return PoemComment::find($id);
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Mostra le impostazioni di moderazione
+     */
+    public function settings()
+    {
+        $settings = SystemSetting::getGroup('moderation');
+
+        return view('admin.moderation.settings', compact('settings'));
+    }
+
+    /**
+     * Aggiorna le impostazioni di moderazione
+     */
+    public function updateSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'videos_auto_approve' => 'nullable|boolean',
+            'poems_auto_approve' => 'nullable|boolean',
+            'events_auto_approve' => 'nullable|boolean',
+            'photos_auto_approve' => 'nullable|boolean',
+            'carousels_auto_approve' => 'nullable|boolean',
+            'comments_auto_approve' => 'nullable|boolean',
+            'email_notifications' => 'nullable|boolean',
+            'items_per_page' => 'nullable|integer|min:5|max:100',
+            'reports_retention_days' => 'nullable|integer|min:1|max:365',
+            'auto_archive_rejected' => 'nullable|boolean',
+        ]);
+
+        $updated = 0;
+        foreach ($validated as $key => $value) {
+            if ($request->has($key)) {
+                // Usa il metodo set del modello che gestisce automaticamente display_name
+                $type = in_array($key, ['items_per_page', 'reports_retention_days']) ? 'integer' : 'boolean';
+                $settingValue = $type === 'boolean' ? ($value ? true : false) : $value;
+
+                SystemSetting::set($key, $settingValue, $type);
+
+                // Aggiorna il gruppo se necessario
+                $setting = SystemSetting::where('key', $key)->first();
+                if ($setting && $setting->group !== 'moderation') {
+                    $setting->group = 'moderation';
+                    $setting->save();
+                }
+
+                $updated++;
+            }
+        }
+
+        return redirect()->route('admin.moderation.settings')
+            ->with('success', "Impostazioni aggiornate con successo ({$updated} modificate)");
+    }
+
+    /**
+     * Ottiene il titolo del contenuto per la visualizzazione
+     */
+    private function getContentTitle($item, $type)
+    {
+        switch ($type) {
+            case 'videos':
+                return $item->title ?? 'Video senza titolo';
+            case 'poems':
+                return $item->title ?? 'Poesia senza titolo';
+            case 'events':
+                return $item->title ?? 'Evento senza titolo';
+            case 'photos':
+                return $item->title ?? 'Foto senza titolo';
+            case 'carousels':
+                return $item->title ?? 'Carosello senza titolo';
+            case 'video_comments':
+                return Str::limit($item->content, 50) ?? 'Commento senza contenuto';
+            case 'poem_comments':
+                return Str::limit($item->content, 50) ?? 'Commento senza contenuto';
+            default:
+                return 'Contenuto senza titolo';
+        }
+    }
+
+    /**
+     * Ottiene la descrizione del contenuto per la visualizzazione
+     */
+    private function getContentDescription($item, $type)
+    {
+        switch ($type) {
+            case 'videos':
+                return $item->description ?? null;
+            case 'poems':
+                return $item->description ?? null;
+            case 'events':
+                return $item->description ?? null;
+            case 'photos':
+                return $item->description ?? null;
+            case 'carousels':
+                return $item->description ?? null;
+            case 'video_comments':
+                return $item->content ?? null;
+            case 'poem_comments':
+                return $item->content ?? null;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Ottiene l'utente del contenuto
+     */
+    private function getContentUser($item, $type)
+    {
+        switch ($type) {
+            case 'videos':
+            case 'poems':
+            case 'photos':
+            case 'video_comments':
+            case 'poem_comments':
+                return $item->user ?? null;
+            case 'events':
+                return $item->organizer ?? null;
+            case 'carousels':
+                return null; // I caroselli potrebbero non avere un utente specifico
+            default:
+                return null;
+        }
+    }
+}

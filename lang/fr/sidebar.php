@@ -49,4 +49,9 @@ return [
     'profile_menu' => 'Menu profil',
     'logout_confirm' => 'Êtes-vous sûr de vouloir vous déconnecter?',
 
+    // Administration
+    'administration' => 'Administration',
+    'moderation' => 'Modération',
+    'moderation_tooltip' => 'Gérer le contenu et les signalements',
+
 ];

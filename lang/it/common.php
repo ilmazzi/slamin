@@ -12,13 +12,16 @@ return [
     */
 
     // Navigazione
+    'home' => 'Home',
     'language' => 'Lingua',
     'select_language' => 'Seleziona lingua',
     'change_language' => 'Cambia lingua',
+    'select' => 'Seleziona',
 
     // Azioni Comuni
     'create' => 'Crea',
     'read' => 'Leggi',
+    'edit' => 'Modifica',
     'update' => 'Aggiorna',
     'delete' => 'Elimina',
     'save' => 'Salva',
@@ -36,6 +39,7 @@ return [
     'continue' => 'Continua',
     'optional' => 'Opzionale',
     'manage' => 'Gestisci',
+    'share' => 'Condividi',
 
     // Stati
     'active' => 'Attivo',

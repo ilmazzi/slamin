@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\Reportable;
+use App\Traits\HasModeration;
 
 class Poem extends Model
 {
-    use HasFactory;
+    use HasFactory, Reportable, HasModeration;
 
     protected $fillable = [
         'title',
@@ -24,6 +26,8 @@ class Poem extends Model
         'is_public',
         'moderation_status',
         'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'view_count',
         'like_count',
         'comment_count',
@@ -62,6 +66,7 @@ class Poem extends Model
         'is_premium' => 'boolean',
         'published_at' => 'datetime',
         'draft_saved_at' => 'datetime',
+        'moderated_at' => 'datetime',
         'translation_price' => 'decimal:2',
         'price' => 'decimal:2',
     ];
@@ -106,7 +111,10 @@ class Poem extends Model
     public function scopePublished($query)
     {
         return $query->where('is_public', true)
-                    ->where('moderation_status', 'approved')
+                    ->where(function($q) {
+                        $q->where('moderation_status', 'approved')
+                          ->orWhereNull('moderation_status');
+                    })
                     ->where('is_draft', false)
                     ->whereNotNull('published_at');
     }
@@ -204,6 +212,12 @@ class Poem extends Model
             if (empty($poem->word_count)) {
                 $poem->word_count = str_word_count(strip_tags($poem->content));
             }
+
+            // Imposta il moderation_status in base alla configurazione
+            if (empty($poem->moderation_status)) {
+                $autoApprove = config('poems.moderation.auto_approve', false);
+                $poem->moderation_status = $autoApprove ? 'approved' : 'pending';
+            }
         });
 
         static::updating(function ($poem) {
@@ -264,9 +278,9 @@ class Poem extends Model
 
     public function isPublished()
     {
-        return $this->is_public && 
-               $this->moderation_status === 'approved' && 
-               !$this->is_draft && 
+        return $this->is_public &&
+               $this->moderation_status === 'approved' &&
+               !$this->is_draft &&
                $this->published_at !== null;
     }
 

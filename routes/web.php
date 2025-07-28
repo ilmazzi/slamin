@@ -17,6 +17,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// Report Routes (autenticati)
+Route::prefix('reports')->name('reports.')->middleware('auth')->group(function () {
+    Route::get('/create', [App\Http\Controllers\ReportController::class, 'showReportForm'])->name('create');
+    Route::post('/store', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+    Route::post('/remove', [App\Http\Controllers\ReportController::class, 'remove'])->name('remove');
+});
+
 
 
 // Authentication Routes (pubbliche)
@@ -529,7 +536,7 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/translations/language', [App\Http\Controllers\Admin\TranslationController::class, 'createLanguage'])->name('translations.create-language');
         Route::delete('/translations/language/{language}', [App\Http\Controllers\Admin\TranslationController::class, 'deleteLanguage'])->name('translations.delete-language');
         Route::post('/translations/sync', [App\Http\Controllers\Admin\TranslationController::class, 'syncLanguages'])->name('translations.sync');
-        
+
         // Auto Translation Routes
         Route::post('/translations/auto-translate/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslate'])->name('translations.auto-translate');
         Route::post('/translations/auto-translate-all', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslateAll'])->name('translations.auto-translate-all');
@@ -558,6 +565,18 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
         Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');
         Route::get('/users/export', [App\Http\Controllers\Admin\UserController::class, 'export'])->name('users.export');
+
+        // Moderation Routes
+        Route::prefix('moderation')->name('moderation.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\ModerationController::class, 'index'])->name('index');
+            Route::get('/pending', [App\Http\Controllers\Admin\ModerationController::class, 'pending'])->name('pending');
+            Route::post('/approve/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'approve'])->name('approve');
+            Route::post('/reject/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'reject'])->name('reject');
+            Route::post('/approve-all/{type}', [App\Http\Controllers\Admin\ModerationController::class, 'approveAll'])->name('approve-all');
+            Route::post('/reports/{report}/handle', [App\Http\Controllers\Admin\ModerationController::class, 'handleReport'])->name('reports.handle');
+            Route::get('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'settings'])->name('settings');
+            Route::post('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'updateSettings'])->name('settings.update');
+        });
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)
@@ -734,37 +753,40 @@ Route::prefix('poems')->name('poems.')->group(function () {
     // Routes pubbliche
     Route::get('/', [App\Http\Controllers\PoemController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\PoemController::class, 'search'])->name('search');
-    Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
-    
-    // Routes autenticate
+    // Spostata qui la route statica prima della dinamica
     Route::middleware('auth')->group(function () {
         Route::get('/create', [App\Http\Controllers\PoemController::class, 'create'])->name('create');
+    });
+    Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
+
+    // Routes autenticate
+    Route::middleware('auth')->group(function () {
         Route::post('/', [App\Http\Controllers\PoemController::class, 'store'])->name('store');
         Route::get('/{poem}/edit', [App\Http\Controllers\PoemController::class, 'edit'])->name('edit');
         Route::put('/{poem}', [App\Http\Controllers\PoemController::class, 'update'])->name('update');
         Route::delete('/{poem}', [App\Http\Controllers\PoemController::class, 'destroy'])->name('destroy');
-        
+
         // Poesie personali
         Route::get('/my/poems', [App\Http\Controllers\PoemController::class, 'myPoems'])->name('my-poems');
         Route::get('/my/drafts', [App\Http\Controllers\PoemController::class, 'drafts'])->name('drafts');
-        
+
         // Azioni social
         Route::post('/{poem}/like', [App\Http\Controllers\PoemActionController::class, 'toggleLike'])->name('like');
         Route::post('/{poem}/bookmark', [App\Http\Controllers\PoemActionController::class, 'toggleBookmark'])->name('bookmark');
         Route::post('/{poem}/share', [App\Http\Controllers\PoemActionController::class, 'share'])->name('share');
         Route::post('/{poem}/request-translation', [App\Http\Controllers\PoemActionController::class, 'requestTranslation'])->name('request-translation');
-        
+
         // Segnalibri e preferiti
         Route::get('/my/bookmarks', [App\Http\Controllers\PoemActionController::class, 'bookmarks'])->name('bookmarks');
         Route::get('/my/liked', [App\Http\Controllers\PoemActionController::class, 'liked'])->name('liked');
-        
+
         // Commenti
         Route::get('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
         Route::post('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
         Route::put('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'update'])->name('comments.update');
         Route::delete('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'destroy'])->name('comments.destroy');
         Route::post('/comments/{comment}/like', [App\Http\Controllers\PoemCommentController::class, 'toggleLike'])->name('comments.like');
-        
+
         // Moderazione commenti (solo admin)
         Route::middleware('can:moderate,App\Models\PoemComment')->group(function () {
             Route::post('/comments/{comment}/moderate', [App\Http\Controllers\PoemCommentController::class, 'moderate'])->name('comments.moderate');

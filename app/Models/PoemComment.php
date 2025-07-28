@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\HasModeration;
 
 class PoemComment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModeration;
 
     protected $fillable = [
         'poem_id',
@@ -20,6 +21,8 @@ class PoemComment extends Model
         'parent_id',
         'moderation_status',
         'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'like_count',
         'is_edited',
         'edited_at'
@@ -27,7 +30,8 @@ class PoemComment extends Model
 
     protected $casts = [
         'is_edited' => 'boolean',
-        'edited_at' => 'datetime'
+        'edited_at' => 'datetime',
+        'moderated_at' => 'datetime'
     ];
 
     protected $dates = [

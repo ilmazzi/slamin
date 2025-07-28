@@ -36,12 +36,14 @@ return [
     'participated_events' => 'Eventi Partecipati',
     'pending_invitations' => 'Inviti in Attesa',
     'unread_notifications' => 'Notifiche Non Lette',
+    'published_poems' => 'Poesie Pubblicate',
 
     // Badge Ruoli Dashboard
     'role_organizer' => '🎭 Organizer',
     'role_participant' => '🎤 Partecipante',
     'role_invitations' => '📨 Inviti',
     'role_notifications' => '🔔 Notifiche',
+    'role_poet' => '📝 Poeta',
 
     // Attività Recente
     'recent_activity' => 'Attività Recente',
@@ -63,6 +65,8 @@ return [
     'upload_performance_desc' => 'Mostra il tuo talento',
     'find_events' => 'Trova Eventi',
     'find_events_desc' => 'Scopri opportunità',
+    'view_poems' => 'Visualizza Poesie',
+    'view_poems_desc' => 'Esplora la poesia',
     'discover_poets' => 'Scopri Poeti',
     'discover_poets_desc' => 'Trova nuovi artisti',
     'manage_venue' => 'Gestisci Venue',
@@ -98,12 +102,12 @@ return [
     'calendar_events' => 'Eventi',
     'calendar_click_event' => 'Clicca su un evento per i dettagli',
     'create_event_button' => 'Crea Evento',
-    
+
     // Sezioni Dashboard
     'poet_section' => 'Sezione Poeta',
     'venue_section' => 'Sezione Venue',
     'organizer_section' => 'Sezione Organizzatore',
-    
+
     // Azioni rapide aggiuntive
     'upload_photo_desc' => 'Condividi le tue foto',
     'discover_poets_desc' => 'Trova nuovi artisti',

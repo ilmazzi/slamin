@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\HasModeration;
+use App\Traits\Reportable;
 use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModeration, Reportable;
 
     protected $fillable = [
         'user_id',
@@ -19,9 +21,12 @@ class Photo extends Model
         'thumbnail_path',
         'alt_text',
         'status',
+        'moderation_status',
+        'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'like_count',
         'view_count',
-        'moderation_notes',
         'metadata',
     ];
 
@@ -29,6 +34,7 @@ class Photo extends Model
         'like_count' => 'integer',
         'view_count' => 'integer',
         'metadata' => 'array',
+        'moderated_at' => 'datetime',
     ];
 
     /**
@@ -87,7 +93,7 @@ class Photo extends Model
         if (str_starts_with($this->image_path, 'http')) {
             return $this->image_path;
         }
-        
+
         return Storage::url($this->image_path);
     }
 
@@ -102,7 +108,7 @@ class Photo extends Model
             }
             return Storage::url($this->thumbnail_path);
         }
-        
+
         return $this->image_url;
     }
 

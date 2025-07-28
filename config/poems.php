@@ -3,14 +3,12 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Configurazione Poesie
+    | Categorie poesie
     |--------------------------------------------------------------------------
     |
-    | Configurazioni per il sistema di gestione poesie
+    | Definizione delle categorie disponibili per le poesie
     |
     */
-
-    // Categorie disponibili per le poesie
     'categories' => [
         'love' => 'Amore',
         'nature' => 'Natura',
@@ -30,139 +28,269 @@ return [
         'other' => 'Altro'
     ],
 
-    // Tipi di poesia
+    /*
+    |--------------------------------------------------------------------------
+    | Tipi di poesia
+    |--------------------------------------------------------------------------
+    |
+    | Definizione dei tipi di poesia disponibili
+    |
+    */
     'poem_types' => [
         'free_verse' => 'Verso libero',
         'sonnet' => 'Sonetto',
         'haiku' => 'Haiku',
         'limerick' => 'Limerick',
+        'ballad' => 'Ballata',
+        'ode' => 'Ode',
+        'elegy' => 'Elegia',
+        'epic' => 'Poema epico',
         'other' => 'Altro'
     ],
 
-    // Stati di moderazione
-    'moderation_statuses' => [
-        'pending' => 'In attesa',
-        'approved' => 'Approvata',
-        'rejected' => 'Rifiutata'
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di moderazione
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per la moderazione delle poesie
+    |
+    */
+    'moderation' => [
+        'auto_approve' => env('POEMS_AUTO_APPROVE', false),
+        'require_moderation' => env('POEMS_REQUIRE_MODERATION', true),
+        'max_pending_per_user' => env('POEMS_MAX_PENDING_PER_USER', 5),
     ],
 
-    // Lingue supportate
-    'languages' => [
-        'it' => 'Italiano',
-        'en' => 'English',
-        'es' => 'Español',
-        'fr' => 'Français',
-        'de' => 'Deutsch',
-        'pt' => 'Português',
-        'ru' => 'Русский',
-        'zh' => '中文',
-        'ja' => '日本語',
-        'ko' => '한국어',
-        'ar' => 'العربية',
-        'hi' => 'हिन्दी'
-    ],
-
-    // Limiti e configurazioni
+    /*
+    |--------------------------------------------------------------------------
+    | Limiti e restrizioni
+    |--------------------------------------------------------------------------
+    |
+    | Limiti per la creazione e gestione delle poesie
+    |
+    */
     'limits' => [
+        'max_poems_per_user' => env('POEMS_MAX_PER_USER', 50),
+        'max_drafts_per_user' => env('POEMS_MAX_DRAFTS_PER_USER', 20),
         'max_title_length' => 255,
         'min_content_length' => 10,
         'max_content_length' => 10000,
         'max_description_length' => 500,
-        'max_tags' => 10,
+        'max_tags_per_poem' => 10,
         'max_tag_length' => 50,
-        'max_thumbnail_size' => 2048, // KB
-        'max_translation_price' => 1000,
-        'max_comment_length' => 1000,
-        'min_comment_length' => 3,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di visualizzazione
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per la visualizzazione delle poesie
+    |
+    */
+    'display' => [
         'poems_per_page' => 12,
-        'comments_per_page' => 10,
-        'related_poems_limit' => 4
+        'related_poems_limit' => 4,
+        'excerpt_length' => 150,
+        'show_word_count' => true,
+        'show_reading_time' => true,
+        'words_per_minute' => 200,
     ],
 
-    // Configurazioni per l'upload
-    'upload' => [
-        'thumbnail_path' => 'poems/thumbnails',
-        'allowed_image_types' => ['jpeg', 'png', 'jpg', 'gif', 'webp'],
-        'max_image_size' => 2048, // KB
-        'image_quality' => 85,
-        'thumbnail_sizes' => [
-            'small' => [150, 150],
-            'medium' => [300, 300],
-            'large' => [600, 600]
-        ]
-    ],
-
-    // Configurazioni per la moderazione
-    'moderation' => [
-        'auto_approve_verified_users' => true,
-        'auto_approve_admin_users' => true,
-        'require_moderation_for_new_users' => true,
-        'moderation_queue_limit' => 100
-    ],
-
-    // Configurazioni per le traduzioni
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di traduzione
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per il sistema di traduzione
+    |
+    */
     'translation' => [
-        'enabled' => true,
-        'auto_translate' => false,
-        'min_price' => 5,
-        'max_price' => 1000,
-        'default_price' => 25,
-        'commission_percentage' => 10, // Percentuale trattenuta dalla piattaforma
-        'supported_target_languages' => [
-            'en', 'es', 'fr', 'de', 'pt', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi'
-        ]
+        'enabled' => env('POEMS_TRANSLATION_ENABLED', true),
+        'auto_translate' => env('POEMS_AUTO_TRANSLATE', false),
+        'max_translation_price' => 1000,
+        'min_translation_price' => 0,
+        'translation_commission' => 0.10, // 10% di commissione
     ],
 
-    // Configurazioni per l'analytics
-    'analytics' => [
-        'track_views' => true,
-        'track_time_spent' => true,
-        'track_shares' => true,
-        'track_bookmarks' => true,
-        'retention_days' => 90
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di condivisione
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per la condivisione delle poesie
+    |
+    */
+    'sharing' => [
+        'social_media' => [
+            'facebook' => true,
+            'twitter' => true,
+            'linkedin' => true,
+            'whatsapp' => true,
+        ],
+        'embed_enabled' => true,
+        'download_enabled' => false,
     ],
 
-    // Configurazioni per la ricerca
-    'search' => [
-        'enable_fulltext_search' => true,
-        'searchable_fields' => ['title', 'content', 'description', 'tags'],
-        'highlight_results' => true,
-        'max_search_results' => 100
-    ],
-
-    // Configurazioni per la cache
-    'cache' => [
-        'enabled' => true,
-        'ttl' => 3600, // 1 ora
-        'popular_poems_cache_ttl' => 1800, // 30 minuti
-        'user_poems_cache_ttl' => 600 // 10 minuti
-    ],
-
-    // Configurazioni per le notifiche
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di notifiche
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per le notifiche relative alle poesie
+    |
+    */
     'notifications' => [
+        'new_poem_published' => true,
+        'poem_liked' => true,
+        'poem_commented' => true,
+        'poem_bookmarked' => true,
+        'translation_requested' => true,
         'poem_approved' => true,
         'poem_rejected' => true,
-        'new_comment' => true,
-        'new_like' => true,
-        'translation_request' => true,
-        'translation_completed' => true
     ],
 
-    // Configurazioni per la monetizzazione
-    'monetization' => [
-        'enabled' => false,
-        'premium_poems' => false,
-        'donations' => false,
-        'subscription_required' => false,
-        'free_poems_limit' => 10
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di cache
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per la cache delle poesie
+    |
+    */
+    'cache' => [
+        'enabled' => env('POEMS_CACHE_ENABLED', true),
+        'ttl' => env('POEMS_CACHE_TTL', 3600), // 1 ora
+        'popular_poems_ttl' => env('POEMS_POPULAR_CACHE_TTL', 1800), // 30 minuti
     ],
 
-    // Configurazioni per la sicurezza
-    'security' => [
-        'rate_limit_poem_creation' => 5, // poesie per ora
-        'rate_limit_comments' => 10, // commenti per ora
-        'rate_limit_likes' => 50, // like per ora
-        'content_filtering' => true,
-        'spam_protection' => true
-    ]
-]; 
+    /*
+    |--------------------------------------------------------------------------
+    | Impostazioni di ricerca
+    |--------------------------------------------------------------------------
+    |
+    | Configurazioni per la ricerca delle poesie
+    |
+    */
+    'search' => [
+        'min_query_length' => 3,
+        'max_results' => 100,
+        'highlight_enabled' => true,
+        'fuzzy_search' => true,
+        'searchable_fields' => [
+            'title',
+            'content',
+            'description',
+            'tags',
+            'user.name'
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lingue supportate
+    |--------------------------------------------------------------------------
+    |
+    | Definizione delle lingue supportate per le poesie
+    |
+    */
+    'languages' => [
+        'it' => 'Italiano',
+        'en' => 'English',
+        'fr' => 'Français',
+        'es' => 'Español',
+        'de' => 'Deutsch',
+        'pt' => 'Português',
+        'ru' => 'Русский',
+        'ar' => 'العربية',
+        'zh' => '中文',
+        'ja' => '日本語',
+        'ko' => '한국어',
+        'hi' => 'हिन्दी',
+        'tr' => 'Türkçe',
+        'nl' => 'Nederlands',
+        'pl' => 'Polski',
+        'sv' => 'Svenska',
+        'da' => 'Dansk',
+        'no' => 'Norsk',
+        'fi' => 'Suomi',
+        'cs' => 'Čeština',
+        'sk' => 'Slovenčina',
+        'hu' => 'Magyar',
+        'ro' => 'Română',
+        'bg' => 'Български',
+        'hr' => 'Hrvatski',
+        'sl' => 'Slovenščina',
+        'et' => 'Eesti',
+        'lv' => 'Latviešu',
+        'lt' => 'Lietuvių',
+        'mt' => 'Malti',
+        'ga' => 'Gaeilge',
+        'cy' => 'Cymraeg',
+        'eu' => 'Euskara',
+        'ca' => 'Català',
+        'gl' => 'Galego',
+        'is' => 'Íslenska',
+        'fo' => 'Føroyskt',
+        'sq' => 'Shqip',
+        'mk' => 'Македонски',
+        'sr' => 'Српски',
+        'bs' => 'Bosanski',
+        'me' => 'Crnogorski',
+        'uk' => 'Українська',
+        'be' => 'Беларуская',
+        'kk' => 'Қазақша',
+        'ky' => 'Кыргызча',
+        'uz' => 'Oʻzbekcha',
+        'tg' => 'Тоҷикӣ',
+        'mn' => 'Монгол',
+        'ka' => 'ქართული',
+        'hy' => 'Հայերեն',
+        'az' => 'Azərbaycanca',
+        'fa' => 'فارسی',
+        'ps' => 'پښتو',
+        'ur' => 'اردو',
+        'bn' => 'বাংলা',
+        'si' => 'සිංහල',
+        'my' => 'မြန်မာဘာသာ',
+        'th' => 'ไทย',
+        'lo' => 'ລາວ',
+        'km' => 'ខ្មែរ',
+        'vi' => 'Tiếng Việt',
+        'id' => 'Bahasa Indonesia',
+        'ms' => 'Bahasa Melayu',
+        'tl' => 'Tagalog',
+        'ceb' => 'Cebuano',
+        'jv' => 'Basa Jawa',
+        'su' => 'Basa Sunda',
+        'he' => 'עברית',
+        'yi' => 'יידיש',
+        'am' => 'አማርኛ',
+        'sw' => 'Kiswahili',
+        'zu' => 'isiZulu',
+        'af' => 'Afrikaans',
+        'xh' => 'isiXhosa',
+        'st' => 'Sesotho',
+        'tn' => 'Setswana',
+        'ss' => 'siSwati',
+        've' => 'Tshivenda',
+        'ts' => 'Xitsonga',
+        'nr' => 'isiNdebele',
+        'sn' => 'chiShona',
+        'rw' => 'Ikinyarwanda',
+        'lg' => 'Luganda',
+        'ak' => 'Akan',
+        'yo' => 'Yorùbá',
+        'ig' => 'Igbo',
+        'ha' => 'Hausa',
+        'ff' => 'Fulfulde',
+        'wo' => 'Wolof',
+        'so' => 'Soomaali',
+        'om' => 'Afaan Oromoo',
+        'ti' => 'ትግርኛ',
+        'aa' => 'Afar',
+        'dz' => 'རྫོང་ཁ',
+        'bo' => 'བོད་ཡིག',
+    ],
+];

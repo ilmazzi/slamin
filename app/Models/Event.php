@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\HasModeration;
+use App\Traits\Reportable;
 use Carbon\Carbon;
 
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModeration, Reportable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +35,10 @@ class Event extends Model
         'max_participants',
         'entry_fee',
         'status',
+        'moderation_status',
+        'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'organizer_id',
         'venue_owner_id',
         'allow_requests',
@@ -54,6 +60,7 @@ class Event extends Model
         'entry_fee' => 'decimal:2',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
+        'moderated_at' => 'datetime',
     ];
 
     /**

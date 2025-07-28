@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\HasModeration;
+use App\Traits\Reportable;
 
 class Carousel extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModeration, Reportable;
 
     protected $fillable = [
         'title',
@@ -19,6 +21,10 @@ class Carousel extends Model
         'link_text',
         'order',
         'is_active',
+        'moderation_status',
+        'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'start_date',
         'end_date',
         // Nuovi campi per contenuti esistenti
@@ -34,6 +40,7 @@ class Carousel extends Model
         'is_active' => 'boolean',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'moderated_at' => 'datetime',
     ];
 
     // Costanti per i tipi di contenuto

@@ -223,11 +223,15 @@
                                     <span id="dislikeCount">{{ $video->dislike_count }}</span>
                                 </button>
 
-                                            <!-- Snap Button -->
-            <button type="button" class="btn btn-outline-dark hover-effect" onclick="showSnapModal()">
-                <i class="ph-duotone ph-hands-clapping f-s-14 me-1"></i>
-                Snap
-            </button>
+                                <!-- Snap Button -->
+                                <button type="button" class="btn btn-outline-dark hover-effect" onclick="showSnapModal()">
+                                    <i class="ph-duotone ph-hands-clapping f-s-14 me-1"></i>
+                                    Snap
+                                </button>
+
+                                <!-- Report Button -->
+                                <x-report-button :content="$video" type="video" />
+                            </div>
                             </div>
 
                             <small class="text-muted">

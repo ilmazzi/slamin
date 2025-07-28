@@ -9,8 +9,22 @@ return [
     'poem_details' => 'Dettagli poesia',
     'poem_management' => 'Gestione poesie',
     'poem_moderation' => 'Moderazione poesie',
-    
+
     // Form fields
+    'fields' => [
+        'title' => 'Titolo',
+        'content' => 'Contenuto',
+        'description' => 'Descrizione',
+        'category' => 'Categoria',
+        'poem_type' => 'Tipo di poesia',
+        'language' => 'Lingua',
+        'tags' => 'Tag',
+        'thumbnail' => 'Immagine di copertina',
+        'is_public' => 'Pubblica',
+        'is_draft' => 'Salva come bozza',
+        'translation_available' => 'Disponibile per traduzione',
+        'translation_price' => 'Prezzo traduzione',
+    ],
     'title_label' => 'Titolo',
     'title_placeholder' => 'Inserisci il titolo della poesia',
     'content_label' => 'Contenuto',
@@ -26,7 +40,7 @@ return [
     'thumbnail_label' => 'Immagine di copertina',
     'is_public_label' => 'Pubblica',
     'is_draft_label' => 'Salva come bozza',
-    
+
     // Categorie
     'categories' => [
         'love' => 'Amore',
@@ -46,23 +60,128 @@ return [
         'travel' => 'Viaggio',
         'other' => 'Altro'
     ],
-    
+
     // Tipi di poesia
     'poem_types' => [
         'free_verse' => 'Verso libero',
         'sonnet' => 'Sonetto',
         'haiku' => 'Haiku',
         'limerick' => 'Limerick',
+        'ballad' => 'Ballata',
+        'ode' => 'Ode',
+        'elegy' => 'Elegia',
+        'epic' => 'Poema epico',
         'other' => 'Altro'
     ],
-    
+
+    // Lingue supportate
+    'languages' => [
+        'it' => 'Italiano',
+        'en' => 'English',
+        'fr' => 'Français',
+        'es' => 'Español',
+        'de' => 'Deutsch',
+        'pt' => 'Português',
+        'ru' => 'Русский',
+        'ar' => 'العربية',
+        'zh' => '中文',
+        'ja' => '日本語',
+        'ko' => '한국어',
+        'hi' => 'हिन्दी',
+        'tr' => 'Türkçe',
+        'nl' => 'Nederlands',
+        'pl' => 'Polski',
+        'sv' => 'Svenska',
+        'da' => 'Dansk',
+        'no' => 'Norsk',
+        'fi' => 'Suomi',
+        'cs' => 'Čeština',
+        'sk' => 'Slovenčina',
+        'hu' => 'Magyar',
+        'ro' => 'Română',
+        'bg' => 'Български',
+        'hr' => 'Hrvatski',
+        'sl' => 'Slovenščina',
+        'et' => 'Eesti',
+        'lv' => 'Latviešu',
+        'lt' => 'Lietuvių',
+        'mt' => 'Malti',
+        'ga' => 'Gaeilge',
+        'cy' => 'Cymraeg',
+        'eu' => 'Euskara',
+        'ca' => 'Català',
+        'gl' => 'Galego',
+        'is' => 'Íslenska',
+        'fo' => 'Føroyskt',
+        'sq' => 'Shqip',
+        'mk' => 'Македонски',
+        'sr' => 'Српски',
+        'bs' => 'Bosanski',
+        'me' => 'Crnogorski',
+        'uk' => 'Українська',
+        'be' => 'Беларуская',
+        'kk' => 'Қазақша',
+        'ky' => 'Кыргызча',
+        'uz' => 'Oʻzbekcha',
+        'tg' => 'Тоҷикӣ',
+        'mn' => 'Монгол',
+        'ka' => 'ქართული',
+        'hy' => 'Հայերեն',
+        'az' => 'Azərbaycanca',
+        'fa' => 'فارسی',
+        'ps' => 'پښتو',
+        'ur' => 'اردو',
+        'bn' => 'বাংলা',
+        'si' => 'සිංහල',
+        'my' => 'မြန်မာဘာသာ',
+        'th' => 'ไทย',
+        'lo' => 'ລາວ',
+        'km' => 'ខ្មែរ',
+        'vi' => 'Tiếng Việt',
+        'id' => 'Bahasa Indonesia',
+        'ms' => 'Bahasa Melayu',
+        'tl' => 'Tagalog',
+        'ceb' => 'Cebuano',
+        'jv' => 'Basa Jawa',
+        'su' => 'Basa Sunda',
+        'he' => 'עברית',
+        'yi' => 'יידיש',
+        'am' => 'አማርኛ',
+        'sw' => 'Kiswahili',
+        'zu' => 'isiZulu',
+        'af' => 'Afrikaans',
+        'xh' => 'isiXhosa',
+        'st' => 'Sesotho',
+        'tn' => 'Setswana',
+        'ss' => 'siSwati',
+        've' => 'Tshivenda',
+        'ts' => 'Xitsonga',
+        'nr' => 'isiNdebele',
+        'sn' => 'chiShona',
+        'rw' => 'Ikinyarwanda',
+        'lg' => 'Luganda',
+        'ak' => 'Akan',
+        'yo' => 'Yorùbá',
+        'ig' => 'Igbo',
+        'ha' => 'Hausa',
+        'ff' => 'Fulfulde',
+        'wo' => 'Wolof',
+        'so' => 'Soomaali',
+        'om' => 'Afaan Oromoo',
+        'ti' => 'ትግርኛ',
+        'aa' => 'Afar',
+        'dz' => 'རྫོང་ཁ',
+        'bo' => 'བོད་ཡིག',
+        'ug' => 'ئۇيغۇرچە',
+    ],
+
     // Stati di moderazione
     'moderation_status' => [
         'pending' => 'In attesa',
         'approved' => 'Approvata',
         'rejected' => 'Rifiutata'
     ],
-    
+
     // Azioni
     'actions' => [
         'create' => 'Crea poesia',
@@ -86,7 +205,7 @@ return [
         'request_translation' => 'Richiedi traduzione',
         'read' => 'Leggi'
     ],
-    
+
     // Messaggi
     'messages' => [
         'created' => 'Poesia creata con successo!',
@@ -98,7 +217,6 @@ return [
         'approved' => 'Poesia approvata!',
         'rejected' => 'Poesia rifiutata!',
         'featured' => 'Poesia messa in evidenza!',
-        'unfeatured' => 'Poesia rimossa dall\'evidenza!',
         'liked' => 'Poesia aggiunta ai preferiti!',
         'unliked' => 'Poesia rimossa dai preferiti!',
         'bookmarked' => 'Poesia aggiunta ai segnalibri!',
@@ -106,9 +224,191 @@ return [
         'shared' => 'Poesia condivisa con successo!',
         'commented' => 'Commento aggiunto con successo!',
         'translation_requested' => 'Richiesta di traduzione inviata!',
-        'translation_created' => 'Traduzione creata con successo!'
     ],
-    
+
+    // Viste create
+    'create' => [
+        'title' => 'Crea nuova poesia',
+        'subtitle' => 'Scrivi e condividi la tua poesia',
+        'title_placeholder' => 'Inserisci il titolo della poesia',
+        'tags_placeholder' => 'amore, natura, vita (separati da virgole)',
+        'tags_help' => 'Inserisci i tag separati da virgole per facilitare la ricerca',
+        'description_placeholder' => 'Breve descrizione della poesia (opzionale)',
+        'description_help' => 'Una breve descrizione che aiuta i lettori a capire il contenuto',
+        'content_placeholder' => 'Scrivi qui la tua poesia...',
+        'content_help' => 'Usa gli a capo per separare le strofe. Puoi formattare il testo con HTML base.',
+        'thumbnail_help' => 'Carica un\'immagine di copertina per la tua poesia (opzionale)',
+        'publication_options' => 'Opzioni di pubblicazione',
+        'public_help' => 'Rendi la poesia visibile a tutti gli utenti',
+        'draft_help' => 'Salva come bozza per completarla in seguito',
+        'save_draft' => 'Salva bozza',
+        'publish' => 'Pubblica',
+    ],
+
+    // Viste edit
+    'edit' => [
+        'title' => 'Modifica poesia',
+        'subtitle' => 'Modifica i dettagli della tua poesia',
+        'remove_thumbnail' => 'Rimuovi immagine di copertina',
+        'status_info' => 'Informazioni di stato',
+        'save_draft' => 'Salva bozza',
+        'update' => 'Aggiorna poesia',
+    ],
+
+    // Viste my-poems
+    'my_poems' => [
+        'title' => 'Le mie poesie',
+        'total_poems' => 'Poesie totali',
+        'published' => 'Pubblicate',
+        'drafts' => 'Bozze',
+        'total_likes' => 'Mi piace totali',
+        'your_poems' => 'Le tue poesie',
+        'view_drafts' => 'Visualizza bozze',
+        'create_new' => 'Crea nuova',
+        'published_on' => 'Pubblicata il',
+        'created_on' => 'Creata il',
+        'no_poems' => 'Non hai ancora creato poesie',
+        'no_poems_description' => 'Inizia a scrivere e condividere le tue poesie con la community',
+        'create_first_poem' => 'Crea la tua prima poesia',
+    ],
+
+    // Viste drafts
+    'drafts' => [
+        'title' => 'Le mie bozze',
+        'total_drafts' => 'Bozze totali',
+        'recent_drafts' => 'Bozze recenti',
+        'near_complete' => 'Quasi complete',
+        'total_words' => 'Parole totali',
+        'your_drafts' => 'Le tue bozze',
+        'description' => 'Gestisci le tue bozze e completa le poesie in lavorazione',
+        'view_all_poems' => 'Visualizza tutte le poesie',
+        'create_new' => 'Crea nuova bozza',
+        'near_complete_badge' => 'Quasi completa',
+        'in_progress' => 'In lavorazione',
+        'untitled' => 'Senza titolo',
+        'no_content' => 'Nessun contenuto',
+        'completion' => 'Completamento',
+        'never_saved' => 'Mai salvata',
+        'publish' => 'Pubblica',
+        'duplicate' => 'Duplica',
+        'publish_confirm' => 'Sei sicuro di voler pubblicare questa bozza?',
+        'duplicate_confirm' => 'Sei sicuro di voler duplicare questa bozza?',
+        'duplicate_error' => 'Errore durante la duplicazione della bozza',
+        'no_drafts' => 'Non hai ancora bozze',
+        'no_drafts_description' => 'Inizia a scrivere una nuova poesia o crea una bozza',
+        'create_first_draft' => 'Crea la tua prima bozza',
+        'view_published_poems' => 'Visualizza poesie pubblicate',
+    ],
+
+    // Viste bookmarks
+    'bookmarks' => [
+        'title' => 'I miei segnalibri',
+        'total_bookmarks' => 'Segnalibri totali',
+        'recent_bookmarks' => 'Segnalibri recenti',
+        'authors' => 'Autori',
+        'categories' => 'Categorie',
+        'your_bookmarks' => 'I tuoi segnalibri',
+        'description' => 'Accedi rapidamente alle poesie che hai salvato',
+        'clear_all' => 'Cancella tutti',
+        'explore_poems' => 'Esplora poesie',
+        'bookmarked_on' => 'Salvata il',
+        'remove_bookmark' => 'Rimuovi segnalibro',
+        'remove_confirm' => 'Sei sicuro di voler rimuovere questa poesia dai segnalibri?',
+        'remove_error' => 'Errore durante la rimozione del segnalibro',
+        'clear_all_confirm' => 'Sei sicuro di voler cancellare tutti i segnalibri?',
+        'clear_all_error' => 'Errore durante la cancellazione dei segnalibri',
+        'no_bookmarks' => 'Non hai ancora segnalibri',
+        'no_bookmarks_description' => 'Salva le poesie che ti piacciono per ritrovarle facilmente',
+        'view_liked_poems' => 'Visualizza poesie piaciute',
+    ],
+
+    // Viste liked
+    'liked' => [
+        'title' => 'Poesie piaciute',
+        'total_liked' => 'Poesie piaciute',
+        'recent_likes' => 'Mi piace recenti',
+        'authors' => 'Autori',
+        'categories' => 'Categorie',
+        'your_liked_poems' => 'Le poesie che ti sono piaciute',
+        'description' => 'Rivedi le poesie a cui hai messo mi piace',
+        'view_bookmarks' => 'Visualizza segnalibri',
+        'explore_poems' => 'Esplora poesie',
+        'liked_on' => 'Piaciuta il',
+        'unlike' => 'Non mi piace più',
+        'unlike_confirm' => 'Sei sicuro di voler rimuovere il mi piace da questa poesia?',
+        'unlike_error' => 'Errore durante la rimozione del mi piace',
+        'no_liked_poems' => 'Non hai ancora messo mi piace a nessuna poesia',
+        'no_liked_poems_description' => 'Esplora le poesie e metti mi piace a quelle che ti piacciono',
+        'view_bookmarks' => 'Visualizza segnalibri',
+    ],
+
+    // Filtri
+    'filters' => [
+        'category' => 'Categoria',
+        'sort' => 'Ordina per',
+        'recent' => 'Più recenti',
+        'oldest' => 'Più vecchie',
+        'popular' => 'Più popolari',
+        'alphabetical' => 'Alfabetico',
+    ],
+
+    // Stati
+    'status' => [
+        'draft' => 'Bozza',
+        'published' => 'Pubblicata',
+        'private' => 'Privata',
+        'featured' => 'In evidenza',
+        'bookmarked' => 'Nei segnalibri',
+        'liked' => 'Piaciuta',
+    ],
+
+    // Condivisione
+    'share_title' => 'Condividi questa poesia',
+    'share_text' => 'Guarda questa bellissima poesia su Slamin',
+    'url_copied' => 'URL copiato negli appunti!',
+
+    // Azioni
+    'actions' => [
+        'create' => 'Crea poesia',
+        'edit' => 'Modifica',
+        'delete' => 'Elimina',
+        'publish' => 'Pubblica',
+        'unpublish' => 'Rimuovi dalla pubblicazione',
+        'approve' => 'Approva',
+        'reject' => 'Rifiuta',
+        'feature' => 'Metti in evidenza',
+        'unfeature' => 'Rimuovi dall\'evidenza',
+        'like' => 'Mi piace',
+        'unlike' => 'Non mi piace più',
+        'bookmark' => 'Aggiungi ai segnalibri',
+        'unbookmark' => 'Rimuovi dai segnalibri',
+        'share' => 'Condividi',
+        'comment' => 'Commenta',
+        'translate' => 'Traduci',
+        'search' => 'Cerca',
+        'filter' => 'Filtra',
+        'sort' => 'Ordina',
+        'view' => 'Visualizza',
+        'read' => 'Leggi',
+        'download' => 'Scarica',
+        'print' => 'Stampa',
+        'copy_link' => 'Copia link',
+        'report' => 'Segnala',
+        'save_draft' => 'Salva bozza',
+        'publish_draft' => 'Pubblica bozza',
+        'duplicate' => 'Duplica',
+        'restore' => 'Ripristina',
+        'archive' => 'Archivia',
+        'unarchive' => 'Rimuovi dall\'archivio'
+    ],
+
+    // Conferme
+    'delete_confirm' => 'Sei sicuro di voler eliminare questa poesia? Questa azione non può essere annullata.',
+    'login_to_interact' => 'Accedi per interagire con le poesie',
+    'translation_confirm' => 'Sei sicuro di voler richiedere una traduzione di questa poesia?',
+    'translation_requested' => 'Richiesta di traduzione inviata con successo!',
+    'translation_error' => 'Errore durante l\'invio della richiesta di traduzione',
+
     // Errori
     'errors' => [
         'not_found' => 'Poesia non trovata!',
@@ -120,7 +420,7 @@ return [
         'invalid_file' => 'File non valido!',
         'file_too_large' => 'File troppo grande!'
     ],
-    
+
     // Statistiche
     'stats' => [
         'views' => 'Visualizzazioni',
@@ -131,7 +431,7 @@ return [
         'word_count' => 'Parole',
         'reading_time' => 'Tempo di lettura'
     ],
-    
+
     // Traduzione
     'translation' => [
         'title' => 'Traduzione',
@@ -151,7 +451,7 @@ return [
         'translation_approved' => 'Traduzione approvata!',
         'translation_rejected' => 'Traduzione rifiutata!'
     ],
-    
+
     // Filtri e ricerca
     'filters' => [
         'all' => 'Tutte',
@@ -175,9 +475,11 @@ return [
             'most_liked' => 'Più apprezzate',
             'most_commented' => 'Più commentate',
             'alphabetical' => 'Alfabetico'
-        ]
+        ],
+        'bookmarks' => 'Segnalibri',
+        'liked' => 'Piaciute'
     ],
-    
+
     // Paginazione
     'pagination' => [
         'showing' => 'Mostrando',
@@ -186,7 +488,7 @@ return [
         'results' => 'risultati',
         'per_page' => 'per pagina'
     ],
-    
+
     // Conferme
     'confirmations' => [
         'delete' => 'Sei sicuro di voler eliminare questa poesia?',
@@ -197,7 +499,7 @@ return [
         'feature' => 'Sei sicuro di voler mettere in evidenza questa poesia?',
         'unfeature' => 'Sei sicuro di voler rimuovere dall\'evidenza questa poesia?'
     ],
-    
+
     // Placeholder e helper
     'placeholders' => [
         'title' => 'Inserisci un titolo accattivante...',
@@ -218,11 +520,13 @@ return [
     'no_bookmarks_yet_description' => 'Le poesie che aggiungi ai segnalibri appariranno qui.',
     'no_liked_poems_yet' => 'Non hai ancora messo mi piace a nessuna poesia',
     'no_liked_poems_yet_description' => 'Le poesie che ti piacciono appariranno qui.',
-    
+
     // Tooltip
     'tooltips' => [
         'like' => 'Metti mi piace a questa poesia',
         'unlike' => 'Rimuovi il mi piace',
+        'comment_placeholder' => 'Scrivi il tuo commento...',
+        'post_comment' => 'Pubblica commento',
         'bookmark' => 'Aggiungi ai segnalibri',
         'unbookmark' => 'Rimuovi dai segnalibri',
         'share' => 'Condividi questa poesia',
@@ -233,4 +537,4 @@ return [
         'feature' => 'Metti in evidenza',
         'unfeature' => 'Rimuovi dall\'evidenza'
     ]
-]; 
+];

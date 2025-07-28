@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasModeration;
 
 class VideoComment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModeration;
 
     protected $fillable = [
         'video_id',
@@ -21,12 +22,15 @@ class VideoComment extends Model
         'like_count',
         'report_count',
         'moderation_notes',
+        'moderated_by',
+        'moderated_at',
     ];
 
     protected $casts = [
         'timestamp' => 'integer',
         'like_count' => 'integer',
         'report_count' => 'integer',
+        'moderated_at' => 'datetime',
     ];
 
     /**

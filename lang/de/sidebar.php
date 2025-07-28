@@ -49,4 +49,9 @@ return [
     'profile_menu' => 'Profil-Menü',
     'logout_confirm' => 'Bist du sicher, dass du dich abmelden möchtest?',
 
+    // Verwaltung
+    'administration' => 'Verwaltung',
+    'moderation' => 'Moderation',
+    'moderation_tooltip' => 'Inhalte und Meldungen verwalten',
+
 ];

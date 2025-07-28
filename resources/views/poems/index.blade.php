@@ -1,22 +1,29 @@
-@extends('layout.app')
+@extends('layout.master')
 
 @section('title', __('poems.title'))
 
-@section('content')
+@section('main-content')
 <div class="page-wrapper">
     <div class="page-content">
-        <!-- Breadcrumb -->
-        <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">{{ __('poems.title') }}</div>
-            <div class="ps-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="ph-duotone ph-house"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('poems.title') }}</li>
-                    </ol>
-                </nav>
+        <!-- Breadcrumb start -->
+        <div class="row m-1">
+            <div class="col-12">
+                <h4 class="main-title">{{ __('poems.title') }}</h4>
+                <ul class="app-line-breadcrumbs mb-3">
+                    <li class="">
+                        <a href="{{ route('home') }}" class="f-s-14 f-w-500">
+                            <span>
+                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="#" class="f-s-14 f-w-500">{{ __('poems.title') }}</a>
+                    </li>
+                </ul>
             </div>
         </div>
+        <!-- Breadcrumb end -->
 
         <!-- Filtri e Ricerca -->
         <div class="row mb-4">
@@ -25,8 +32,8 @@
                     <div class="card-body">
                         <form action="{{ route('poems.index') }}" method="GET" class="row g-3">
                             <div class="col-md-4">
-                                <input type="text" name="search" class="form-control" 
-                                       placeholder="{{ __('poems.placeholders.search') }}" 
+                                <input type="text" name="search" class="form-control"
+                                       placeholder="{{ __('poems.placeholders.search') }}"
                                        value="{{ request('search') }}">
                             </div>
                             <div class="col-md-2">
@@ -82,7 +89,7 @@
                         </a>
                         <a href="{{ route('poems.my-poems') }}" class="btn btn-outline-primary ms-2">
                             <i class="ph-duotone ph-book-open me-2"></i>
-                            {{ __('poems.my_poems') }}
+                            {{ __('poems.my_poems.title') }}
                         </a>
                         <a href="{{ route('poems.drafts') }}" class="btn btn-outline-secondary ms-2">
                             <i class="ph-duotone ph-file-text me-2"></i>
@@ -126,16 +133,16 @@
                             </span>
                             @endif
                         </div>
-                        
+
                         <p class="card-text text-muted f-s-14 mb-2">
                             <i class="ph-duotone ph-user f-s-12 me-1"></i>
                             {{ $poem->user->name }}
                         </p>
-                        
+
                         @if($poem->description)
                         <p class="card-text">{{ Str::limit($poem->description, 100) }}</p>
                         @endif
-                        
+
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex gap-2">
                                 <span class="badge bg-light text-dark">
@@ -152,7 +159,7 @@
                                 {{ $poem->published_at->diffForHumans() }}
                             </small>
                         </div>
-                        
+
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-3">
                                 <span class="text-muted f-s-14">
@@ -168,10 +175,13 @@
                                     {{ $poem->comment_count }}
                                 </span>
                             </div>
-                            <a href="{{ route('poems.show', $poem) }}" class="btn btn-sm btn-primary">
-                                <i class="ph-duotone ph-arrow-right f-s-14 me-1"></i>
-                                {{ __('poems.actions.read') }}
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('poems.show', $poem) }}" class="btn btn-sm btn-primary">
+                                    <i class="ph-duotone ph-arrow-right f-s-14 me-1"></i>
+                                    {{ __('poems.actions.read') }}
+                                </a>
+                                <x-report-button :content="$poem" type="poem" size="sm" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -217,4 +227,4 @@
     transition: all 0.3s ease;
 }
 </style>
-@endsection 
+@endsection

@@ -163,9 +163,12 @@ $(document).ready(function() {
                                                     {{ $event->start_datetime->format('d/m/Y H:i') }}
                                                 </small>
                                             </p>
-                                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
-                                                <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
-                                            </a>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
+                                                    <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
+                                                </a>
+                                                <x-report-button :content="$event" type="event" size="sm" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -252,10 +255,13 @@ $(document).ready(function() {
                                                 </a>
 
                                                 <!-- Watch Button -->
-                                                <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm">
-                                                    <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                    Guarda Video
-                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm">
+                                                        <i class="ph-duotone ph-play f-s-14 me-1"></i>
+                                                        Guarda Video
+                                                    </a>
+                                                    <x-report-button :content="$mostPopularVideo" type="video" size="sm" />
+                                                </div>
                                             </div>
 
                                             <!-- Statistics -->
@@ -387,13 +393,13 @@ $(document).ready(function() {
                                     <div class="avatar-upload">
                                         <div class="avatar-preview">
                                             <div id="imgPreview">
-                                               
+
                                                     <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-100 h-100" style="object-fit: cover;">
-                                               
+
                                                     <div class="bg-gradient-success rounded-circle d-flex align-items-center justify-content-center w-100 h-100">
                                                         <span class="text-white fw-bold f-s-20">{{ strtoupper(substr(trim($user->name), 0, 2)) ?: 'U' }}</span>
                                                     </div>
-                                              
+
                                             </div>
                                         </div>
                                     </div>
@@ -428,13 +434,13 @@ $(document).ready(function() {
                                 </div>
                             </div>
                         </div>
-                        
-                 
+
+
                     </div>
                 </div>
             </div>
             @endforeach
-           
+
         </div>
         @endif
 
@@ -505,7 +511,7 @@ $(document).ready(function() {
                                 @endforeach
                             </div>
                         </div>
-                        
+
                         <!-- Popular Poetry Content (Hidden by default) -->
                         <div id="popularPoetryContent" style="display: none;">
                             <div class="row">
@@ -555,13 +561,21 @@ $(document).ready(function() {
                                 @endforeach
                             </div>
                         </div>
-                        
+
                         <!-- Footer with link to all poems -->
                         <div class="text-center mt-3">
-                            <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
-                                <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                Vedi tutte le poesie
-                            </a>
+                            <div class="d-flex gap-2 justify-content-center">
+                                @auth
+                                <a href="{{ route('poems.create') }}" class="btn btn-info btn-sm">
+                                    <i class="ph-duotone ph-plus f-s-12 me-1"></i>
+                                    Crea poesia
+                                </a>
+                                @endauth
+                                <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
+                                    <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
+                                    Vedi tutte le poesie
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -626,7 +640,7 @@ $(document).ready(function() {
                                 @endforeach
                             </div>
                         </div>
-                        
+
                         <!-- Popular Articles Content (Hidden by default) -->
                         <div id="popularArticlesContent" style="display: none;">
                             <div class="row">
@@ -781,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const popularContent = document.getElementById('popularPoetryContent');
         const toggle = document.getElementById('poetryToggle');
         const label = document.getElementById('poetryToggleLabel');
-        
+
         if (type === 'new') {
             newContent.style.display = 'block';
             popularContent.style.display = 'none';
@@ -800,7 +814,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const popularContent = document.getElementById('popularArticlesContent');
         const toggle = document.getElementById('articlesToggle');
         const label = document.getElementById('articlesToggleLabel');
-        
+
         if (type === 'new') {
             newContent.style.display = 'block';
             popularContent.style.display = 'none';
@@ -818,7 +832,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.followUser = function(userId) {
         // Per ora mostra un alert, in futuro implementare la logica di follow
         alert('Funzionalità Follow in sviluppo per l\'utente ID: ' + userId);
-        
+
         // TODO: Implementare chiamata AJAX per follow/unfollow
         // fetch('/api/follow/' + userId, {
         //     method: 'POST',

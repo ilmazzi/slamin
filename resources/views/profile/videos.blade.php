@@ -268,6 +268,7 @@
                             <button class="btn btn-danger hover-effect btn-sm" onclick="deleteVideo({{ $video->id }})" title="Elimina">
                                 <i class="ph ph-trash f-s-14"></i>
                             </button>
+                            <x-report-button :content="$video" type="video" size="sm" />
                         </div>
                     </div>
 
