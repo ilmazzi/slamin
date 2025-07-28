@@ -1,12 +1,33 @@
 @extends('layout.master')
 
-@section('title', __('events.events_poetry_slam'))
+@section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events.events_poetry_slam'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 @endsection
 
 @section('breadcrumb-title')
-<h3>{{ __('events.events_poetry_slam') }}</h3>
+<h3>
+    @if(request('filter'))
+        @switch(request('filter'))
+            @case('past')
+                {{ __('dashboard.past_events') }}
+                @break
+            @case('future')
+                {{ __('dashboard.future_events') }}
+                @break
+            @case('organized')
+                {{ __('dashboard.organized_events') }}
+                @break
+            @case('invitations')
+                {{ __('dashboard.pending_invitations') }}
+                @break
+            @default
+                {{ __('events.events_poetry_slam') }}
+        @endswitch
+    @else
+        {{ __('events.events_poetry_slam') }}
+    @endif
+</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -596,10 +617,17 @@
                         <!-- Action Buttons -->
                         <div class="mt-auto">
                             <div class="row g-2">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm w-100">
                                         <i class="ph ph-eye me-1"></i> Dettagli
                                     </a>
+                                </div>
+                                <div class="col-2">
+                                    @auth
+                                        <button class="btn btn-outline-danger btn-sm w-100 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                                            <i class="ph-duotone ph-heart wishlist-icon"></i>
+                                        </button>
+                                    @endauth
                                 </div>
                                 <div class="col-3">
                                     @auth
@@ -1121,5 +1149,8 @@ function showNotification(message, type) {
         alert.remove();
     }, 5000);
 }
+
+// Wishlist è gestita globalmente da WishlistManager
+// Non serve codice duplicato qui
 </script>
 @endsection

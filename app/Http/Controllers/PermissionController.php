@@ -63,9 +63,68 @@ class PermissionController extends Controller
     /**
      * Mostra la gestione degli utenti e loro ruoli
      */
-    public function users()
+    public function users(Request $request)
     {
-        $users = User::with('roles', 'permissions')->paginate(20);
+        // Gestione export
+        if ($request->has('export') || $request->has('export_all')) {
+            $users = User::with('roles', 'permissions')->get();
+
+            $filename = $request->has('export_all') ? 'tutti_utenti.csv' : 'utenti_paginati.csv';
+
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ];
+
+            $callback = function() use ($users) {
+                $file = fopen('php://output', 'w');
+
+                // Intestazioni CSV
+                fputcsv($file, [
+                    'ID', 'Nome', 'Email', 'Nickname', 'Status',
+                    'Data Registrazione', 'Ruoli', 'Permessi Diretti'
+                ]);
+
+                foreach ($users as $user) {
+                    $roles = $user->roles->pluck('display_name')->implode(', ');
+                    $permissions = $user->permissions->pluck('display_name')->implode(', ');
+
+                    fputcsv($file, [
+                        $user->id,
+                        $user->name,
+                        $user->email,
+                        $user->nickname ?? '',
+                        $user->status,
+                        $user->created_at->format('d/m/Y H:i'),
+                        $roles,
+                        $permissions
+                    ]);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
+        $perPage = $request->get('per_page', 50);
+
+        // Se per_page è 'all', mostra tutti gli utenti senza paginazione
+        if ($perPage === 'all') {
+            $users = User::with('roles', 'permissions')->get();
+
+            // Creiamo una paginazione manuale per mantenere la compatibilità
+            $users = new \Illuminate\Pagination\LengthAwarePaginator(
+                $users,
+                $users->count(),
+                $users->count(),
+                1,
+                ['path' => request()->url()]
+            );
+        } else {
+            $users = User::with('roles', 'permissions')->paginate($perPage);
+        }
+
         $roles = Role::all();
         $permissions = Permission::all();
 
@@ -262,7 +321,7 @@ class PermissionController extends Controller
     public function getUser(User $user)
     {
         $user->load(['roles', 'permissions']);
-        
+
         return response()->json([
             'user' => $user
         ]);
@@ -385,23 +444,14 @@ class PermissionController extends Controller
         ]);
 
         try {
-            // Debug: log prima dell'assegnazione
-            Log::info('Before syncRoles - User roles:', ['user_id' => $user->id, 'current_roles' => $user->roles->pluck('name')->toArray()]);
-            Log::info('Request all data:', $request->all());
-            Log::info('Roles to assign:', ['roles' => $request->roles]);
-            
             // Gestiamo il caso in cui roles non viene inviato (nessun checkbox selezionato)
             $rolesToAssign = [];
             if ($request->has('roles') && is_array($request->roles)) {
                 $rolesToAssign = $request->roles;
             }
-            Log::info('Roles to assign (processed):', ['roles' => $rolesToAssign]);
-            
+
             $user->syncRoles($rolesToAssign);
             $user->load('roles');
-            
-            // Debug: log dopo l'assegnazione
-            Log::info('After syncRoles - User roles:', ['user_id' => $user->id, 'current_roles' => $user->roles->pluck('name')->toArray()]);
 
             return response()->json([
                 'success' => true,
@@ -522,7 +572,7 @@ class PermissionController extends Controller
             }
 
             $peerTubeService = new \App\Services\PeerTubeService();
-            
+
             if (!$peerTubeService->isConfigured()) {
                 Log::warning('PeerTube non configurato, impossibile eliminare account per utente ' . $user->id);
                 return;
@@ -530,7 +580,7 @@ class PermissionController extends Controller
 
             // Elimina l'utente da PeerTube
             $peerTubeService->deleteUser($user->peertube_user_id);
-            
+
             Log::info('Account PeerTube eliminato per utente ' . $user->id . ' (PeerTube User ID: ' . $user->peertube_user_id . ')');
 
         } catch (\Exception $e) {

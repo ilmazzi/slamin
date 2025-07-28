@@ -59,10 +59,11 @@ class DashboardController extends Controller
     private function getUserStats($user)
     {
         $stats = [
-            'total_events' => 0,
+            'past_events' => 0,
+            'future_events' => 0,
             'organized_events' => 0,
-            'participated_events' => 0,
             'pending_invitations' => 0,
+            'total_events' => 0,
             'pending_requests' => 0,
             'unread_notifications' => 0,
             'total_poems' => 0,
@@ -70,25 +71,47 @@ class DashboardController extends Controller
             'draft_poems' => 0,
         ];
 
-        // Events organized
+        // Past events (organized + participated)
+        $pastOrganized = $user->organizedEvents()->where('start_datetime', '<', now())->count();
+        $pastParticipated = $user->receivedInvitations()
+                                 ->where('status', EventInvitation::STATUS_ACCEPTED)
+                                 ->whereHas('event', function($q) {
+                                     $q->where('start_datetime', '<', now());
+                                 })->count();
+        $pastRequests = $user->eventRequests()
+                             ->where('status', EventRequest::STATUS_ACCEPTED)
+                             ->whereHas('event', function($q) {
+                                 $q->where('start_datetime', '<', now());
+                             })->count();
+        $stats['past_events'] = $pastOrganized + $pastParticipated + $pastRequests;
+
+        // Future events (organized + participated)
+        $futureOrganized = $user->organizedEvents()->where('start_datetime', '>=', now())->count();
+        $futureParticipated = $user->receivedInvitations()
+                                   ->where('status', EventInvitation::STATUS_ACCEPTED)
+                                   ->whereHas('event', function($q) {
+                                       $q->where('start_datetime', '>=', now());
+                                   })->count();
+        $futureRequests = $user->eventRequests()
+                               ->where('status', EventRequest::STATUS_ACCEPTED)
+                               ->whereHas('event', function($q) {
+                                   $q->where('start_datetime', '>=', now());
+                               })->count();
+        $stats['future_events'] = $futureOrganized + $futureParticipated + $futureRequests;
+
+        // Events organized (all time)
         $stats['organized_events'] = $user->organizedEvents()->count();
 
-        // Events participated (accepted invitations + requests)
-        $acceptedInvitations = $user->receivedInvitations()
-                                   ->where('status', EventInvitation::STATUS_ACCEPTED)
-                                   ->count();
-
-        $acceptedRequests = $user->eventRequests()
-                                ->where('status', EventRequest::STATUS_ACCEPTED)
+        // Pending invitations (received + sent)
+        $pendingReceived = $user->receivedInvitations()
+                                ->where('status', EventInvitation::STATUS_PENDING)
                                 ->count();
+        $pendingSent = $user->sentInvitations()
+                            ->where('status', EventInvitation::STATUS_PENDING)
+                            ->count();
+        $stats['pending_invitations'] = $pendingReceived + $pendingSent;
 
-        $stats['participated_events'] = $acceptedInvitations + $acceptedRequests;
-        $stats['total_events'] = $stats['organized_events'] + $stats['participated_events'];
-
-        // Pending invitations received
-        $stats['pending_invitations'] = $user->receivedInvitations()
-                                            ->where('status', EventInvitation::STATUS_PENDING)
-                                            ->count();
+        $stats['total_events'] = $stats['past_events'] + $stats['future_events'];
 
         // Pending requests to own events (if organizer)
         if ($user->hasRole('organizer')) {
@@ -159,6 +182,25 @@ class DashboardController extends Controller
                 'date' => $event->start_datetime->format('d M Y, H:i'),
                 'venue' => $event->venue_name,
                 'type' => 'participating',
+                'url' => route('events.show', $event),
+                'city' => $event->city,
+            ];
+        }
+
+        // Events in user's wishlist
+        $wishlistedEvents = $user->wishlistedEvents()
+                                ->upcoming()
+                                ->published()
+                                ->orderBy('start_datetime')
+                                ->limit(5)
+                                ->get();
+
+        foreach ($wishlistedEvents as $event) {
+            $events[] = [
+                'title' => $event->title,
+                'date' => $event->start_datetime->format('d M Y, H:i'),
+                'venue' => $event->venue_name,
+                'type' => 'wishlisted',
                 'url' => route('events.show', $event),
                 'city' => $event->city,
             ];

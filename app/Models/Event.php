@@ -304,6 +304,15 @@ class Event extends Model
     }
 
     /**
+     * Get category display name
+     */
+    public function getCategoryDisplayName(): string
+    {
+        $categories = self::getCategories();
+        return $categories[$this->category] ?? 'Categoria non definita';
+    }
+
+    /**
      * Get category color class
      */
     public function getCategoryColorClassAttribute(): string
@@ -363,6 +372,22 @@ class Event extends Model
     public function childEvents(): HasMany
     {
         return $this->hasMany(Event::class, 'parent_event_id');
+    }
+
+    /**
+     * Relazione con la wishlist
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Utenti che hanno questo evento nella wishlist
+     */
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'event_id', 'user_id');
     }
 
     /**

@@ -362,6 +362,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
     Route::get('/api/events/calendar', [EventController::class, 'calendar'])->name('events.calendar');
 
+    // Wishlist routes
+    Route::prefix('wishlist')->name('wishlist.')->group(function () {
+        Route::get('/', [App\Http\Controllers\WishlistController::class, 'index'])->name('index');
+        Route::post('/{event}/add', [App\Http\Controllers\WishlistController::class, 'add'])->name('add');
+        Route::delete('/{event}/remove', [App\Http\Controllers\WishlistController::class, 'remove'])->name('remove');
+        Route::post('/{event}/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('toggle');
+        Route::get('/{event}/check', [App\Http\Controllers\WishlistController::class, 'check'])->name('check');
+        Route::get('/calendar', [App\Http\Controllers\WishlistController::class, 'calendar'])->name('calendar');
+    });
+
 // Invitation routes
 Route::get('/invitations', [InvitationController::class, 'index'])->name('invitations.index');
 Route::get('/invitations/{invitation}', [InvitationController::class, 'show'])->name('invitations.show');

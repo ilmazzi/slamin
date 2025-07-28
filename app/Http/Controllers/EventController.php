@@ -38,8 +38,12 @@ class EventController extends Controller
             'requests.user'
         ])
                      ->published()
-                     ->upcoming()
                      ->orderBy('start_datetime');
+
+        // Apply upcoming filter only if not filtering for past events or invitations
+        if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
+            $query->upcoming();
+        }
 
         // Filter by location if provided
         if ($request->has(['lat', 'lng'])) {
@@ -152,6 +156,73 @@ class EventController extends Controller
             } else {
                 // If user is not authenticated, only show public events
                 $query->where('is_public', true);
+            }
+        }
+
+        // New dashboard filters
+        if ($request->filled('filter') && $user) {
+            $userId = $user->id;
+
+            switch ($request->filter) {
+                case 'past':
+                    // Past events (organized + participated)
+                    $query->where('start_datetime', '<', now())
+                          ->where(function ($q) use ($userId) {
+                              $q->where('organizer_id', $userId)
+                                ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                                    $inviteQuery->where('invited_user_id', $userId)
+                                                ->where('status', 'accepted');
+                                })
+                                ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                                    $requestQuery->where('user_id', $userId)
+                                                 ->where('status', 'accepted');
+                                });
+                          });
+                    break;
+
+                case 'future':
+                    // Future events (organized + participated)
+                    $query->where('start_datetime', '>=', now())
+                          ->where(function ($q) use ($userId) {
+                              $q->where('organizer_id', $userId)
+                                ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                                    $inviteQuery->where('invited_user_id', $userId)
+                                                ->where('status', 'accepted');
+                                })
+                                ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                                    $requestQuery->where('user_id', $userId)
+                                                 ->where('status', 'accepted');
+                                });
+                          });
+                    break;
+
+                case 'organized':
+                    // Only events organized by user
+                    $query->where('organizer_id', $userId);
+                    break;
+
+                case 'invitations':
+                    // Events with pending invitations (received + sent)
+                    $query->where(function ($q) use ($userId) {
+                        // Events where user has received pending invitations
+                        $q->whereHas('invitations', function ($inviteQuery) use ($userId) {
+                            $inviteQuery->where('invited_user_id', $userId)
+                                        ->where('status', 'pending');
+                        })
+                        // OR events where user has sent pending invitations
+                        ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                            $inviteQuery->where('inviter_id', $userId)
+                                        ->where('status', 'pending');
+                        });
+                    });
+
+                    // Debug: Log the query for invitations filter
+                    Log::info('Invitations filter query', [
+                        'user_id' => $userId,
+                        'pending_received' => \App\Models\EventInvitation::where('invited_user_id', $userId)->where('status', 'pending')->count(),
+                        'pending_sent' => \App\Models\EventInvitation::where('inviter_id', $userId)->where('status', 'pending')->count(),
+                    ]);
+                    break;
             }
         }
 

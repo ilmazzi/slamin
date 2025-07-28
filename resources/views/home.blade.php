@@ -85,6 +85,9 @@ window.addEventListener('load', function() {
     } else {
         console.error('Slider not found!');
     }
+
+    // Wishlist è gestita globalmente da WishlistManager
+    // Non serve codice duplicato qui
 });
 </script>
 @endpush
@@ -201,20 +204,25 @@ window.addEventListener('load', function() {
                                         @if($event->description)
                                             <p class="card-text">{{ Str::limit($event->description, 80) }}</p>
                                         @endif
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <p class="card-text">
-                                                <small class="text-body-secondary">
-                                                    <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
-                                                </small>
-                                            </p>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
-                                                    <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
-                                                </a>
-                                                <x-report-button :content="$event" type="event" size="sm" />
+                                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                <p class="card-text">
+                                                    <small class="text-body-secondary">
+                                                        <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
+                                                        {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                    </small>
+                                                </p>
+                                                <div class="d-flex gap-1">
+                                                    @auth
+                                                        <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                                                            <i class="ph-duotone ph-heart wishlist-icon"></i>
+                                                        </button>
+                                                    @endauth
+                                                    <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
+                                                        <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
+                                                    </a>
+                                                    <x-report-button :content="$event" type="event" size="sm" />
+                                                </div>
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -19,6 +19,9 @@
 <!-- Bootstrap css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/bootstrap/bootstrap.min.css') }}">
 
+<!-- Select2 css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/select/select2.min.css') }}">
+
 <!-- Simplebar css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/simplebar/simplebar.css') }}">
 

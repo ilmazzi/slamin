@@ -107,10 +107,27 @@ class CarouselController extends Controller
                 // Aggiorna la cache del contenuto
                 $carousel->updateContentCache();
 
+                // Se è una richiesta AJAX, restituisci JSON
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Slide del carosello creata con successo!',
+                        'carousel' => $carousel
+                    ]);
+                }
+
                 return redirect()->route('admin.carousels.index')
                     ->with('success', 'Slide del carosello creata con successo!');
 
             } catch (\Exception $e) {
+                // Se è una richiesta AJAX, restituisci JSON con errore
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Errore durante la creazione: ' . $e->getMessage()
+                    ], 422);
+                }
+
                 return back()->withInput()
                     ->with('error', 'Errore durante la creazione: ' . $e->getMessage());
             }
@@ -154,10 +171,27 @@ class CarouselController extends Controller
 
                 $carousel = Carousel::create($carouselData);
 
+                // Se è una richiesta AJAX, restituisci JSON
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Slide del carosello creata con successo!',
+                        'carousel' => $carousel
+                    ]);
+                }
+
                 return redirect()->route('admin.carousels.index')
                     ->with('success', 'Slide del carosello creata con successo!');
 
             } catch (\Exception $e) {
+                // Se è una richiesta AJAX, restituisci JSON con errore
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Errore durante la creazione: ' . $e->getMessage()
+                    ], 422);
+                }
+
                 return back()->withInput()
                     ->with('error', 'Errore durante la creazione: ' . $e->getMessage());
             }

@@ -418,6 +418,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Relazione con la wishlist
+     */
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Eventi nella wishlist
+     */
+    public function wishlistedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'wishlists', 'user_id', 'event_id');
+    }
+
+    /**
      * Get current video limit for user
      */
     public function getCurrentVideoLimitAttribute(): int

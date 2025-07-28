@@ -130,7 +130,8 @@
                                                         <i class="ti ti-eye"></i>
                                                     </a>
                                                     <button type="button" class="btn btn-danger icon-btn b-r-4 hover-effect"
-                                                            onclick="deleteCarousel({{ $carousel->id }})" title="{{ __('carousel.delete') }}">
+                                                            onclick="deleteCarousel({{ $carousel->id }})" title="{{ __('carousel.delete') }}"
+                                                            data-carousel-id="{{ $carousel->id }}">
                                                         <i class="ti ti-trash"></i>
                                                     </button>
                                                 </div>
@@ -226,10 +227,42 @@ new Sortable(document.getElementById('sortableCarousel'), {
 });
 
 function deleteCarousel(carouselId) {
-    const modal = new bootstrap.Modal(document.getElementById('deleteCarouselModal'));
+    console.log('🗑️ Delete carousel called with ID:', carouselId);
+
+    const modalElement = document.getElementById('deleteCarouselModal');
     const form = document.getElementById('deleteCarouselForm');
-    form.action = `/admin/carousels/${carouselId}`;
-    modal.show();
+
+    if (!modalElement) {
+        console.error('❌ Modal element not found!');
+        return;
+    }
+
+    if (!form) {
+        console.error('❌ Form element not found!');
+        return;
+    }
+
+    try {
+        const modal = new bootstrap.Modal(modalElement);
+        form.action = `/admin/carousels/${carouselId}`;
+        console.log('✅ Modal action set to:', form.action);
+        modal.show();
+        console.log('✅ Modal shown successfully');
+    } catch (error) {
+        console.error('❌ Error showing modal:', error);
+    }
 }
+
+// Debug: Add event listeners to delete buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('button[onclick*="deleteCarousel"]');
+    console.log('🔍 Found', deleteButtons.length, 'delete buttons');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('🖱️ Delete button clicked:', this.dataset.carouselId);
+        });
+    });
+});
 </script>
 @endpush

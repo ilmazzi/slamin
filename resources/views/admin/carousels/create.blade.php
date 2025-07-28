@@ -361,12 +361,26 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 console.log('=== CAROUSEL CREATE SCRIPT LOADED ===');
 
 // Variabili globali
 let searchTimeout;
+
+// Funzione per inizializzare Bootstrap in modo sicuro
+function safeBootstrapInit() {
+    // Distruggi tooltip esistenti per evitare conflitti
+    if (typeof bootstrap !== 'undefined') {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            const tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+            if (tooltip) {
+                tooltip.dispose();
+            }
+        });
+    }
+}
 
 // Ripristina stato del form se ci sono errori di validazione
 if (document.getElementById('content_type').value && document.getElementById('content_id').value) {
@@ -377,9 +391,13 @@ if (document.getElementById('content_type').value && document.getElementById('co
 
     // Mostra il tab dei contenuti esistenti
     const existingTab = document.getElementById('existing-tab');
-    if (existingTab) {
-        const tab = new bootstrap.Tab(existingTab);
-        tab.show();
+    if (existingTab && typeof bootstrap !== 'undefined') {
+        try {
+            const tab = new bootstrap.Tab(existingTab);
+            tab.show();
+        } catch (error) {
+            console.error('❌ Error showing tab:', error);
+        }
     }
 }
 
@@ -448,6 +466,9 @@ function handleContentTypeChange() {
 // Attach event listener in multiple ways for maximum compatibility
 function setupEventListeners() {
     console.log('🔧 Setting up event listeners...');
+
+    // Inizializza Bootstrap in modo sicuro
+    safeBootstrapInit();
 
     const contentTypeSelect = document.getElementById('content_type_select');
     if (!contentTypeSelect) {
@@ -619,7 +640,7 @@ function displaySearchResults(data, contentType) {
                         <p class="text-muted mb-0 f-s-12">${item.description}</p>
                         ${getContentTypeSpecificInfo(item, contentType)}
                     </div>
-                    <button type="button" class="btn btn-sm btn-primary select-content-btn">
+                    <button type="button" class="btn btn-sm btn-primary select-content-btn" onclick="console.log('🖱️ Direct onclick triggered')">
                         <i class="ph-duotone ph-check f-s-14"></i>
                     </button>
                 </div>
@@ -628,10 +649,18 @@ function displaySearchResults(data, contentType) {
     `).join('');
 
     // Add click handlers
-    document.querySelectorAll('.select-content-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    console.log('🔍 Adding click handlers to', document.querySelectorAll('.select-content-btn').length, 'buttons');
+    document.querySelectorAll('.select-content-btn').forEach((btn, index) => {
+        console.log(`🔗 Adding listener to button ${index + 1}`);
+        btn.addEventListener('click', function(e) {
+            console.log('✅ Button clicked!', e);
             const item = this.closest('.content-item');
-            selectContent(item);
+            console.log('📋 Selected item:', item);
+            if (item) {
+                selectContent(item);
+            } else {
+                console.error('❌ Could not find content-item parent');
+            }
         });
     });
 }
@@ -649,6 +678,29 @@ function setupTestButton() {
         console.log('⚠️ Test button not found');
     }
 }
+
+// Global click handler as backup
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.select-content-btn')) {
+        console.log('🌐 Global click handler caught button click');
+        const btn = e.target.closest('.select-content-btn');
+        const item = btn.closest('.content-item');
+        if (item) {
+            selectContent(item);
+        }
+    }
+});
+
+// Event listener per il pulsante "Crea Slide" nel modal
+document.addEventListener('DOMContentLoaded', function() {
+    const modalCreateBtn = document.getElementById('modalCreateBtn');
+    if (modalCreateBtn) {
+        modalCreateBtn.addEventListener('click', function() {
+            console.log('🎯 Modal create button clicked');
+            submitModalForm();
+        });
+    }
+});
 
 // Search functionality
 document.getElementById('searchBtn').addEventListener('click', performSearch);
@@ -733,6 +785,12 @@ function getContentTypeSpecificInfo(item, contentType) {
 }
 
 function selectContent(item) {
+    console.log('🎯 selectContent called with item:', item);
+    console.log('📊 Item dataset:', item.dataset);
+
+    // Rimuovi l'alert per debug
+    // alert('🎯 Contenuto selezionato: ' + item.dataset.title);
+
     const contentType = document.getElementById('content_type_select').value;
     const contentId = item.dataset.id;
     const contentTitle = item.dataset.title;
@@ -740,24 +798,218 @@ function selectContent(item) {
     const contentImage = item.dataset.image;
     const contentUrl = item.dataset.url;
 
+    console.log('📋 Content data:', {
+        contentType,
+        contentId,
+        contentTitle,
+        contentDescription,
+        contentImage,
+        contentUrl
+    });
+
     // Update hidden fields
+    const contentTypeField = document.getElementById('content_type');
+    const contentIdField = document.getElementById('content_id');
+
+    if (contentTypeField && contentIdField) {
+        contentTypeField.value = contentType;
+        contentIdField.value = contentId;
+        console.log('✅ Hidden fields updated');
+    } else {
+        console.error('❌ Hidden fields not found');
+    }
+
+    // Update preview
+    const selectedImage = document.getElementById('selectedImage');
+    const selectedTitle = document.getElementById('selectedTitle');
+    const selectedDescription = document.getElementById('selectedDescription');
+    const selectedContentPreview = document.getElementById('selectedContentPreview');
+
+    if (selectedImage && selectedTitle && selectedDescription && selectedContentPreview) {
+        selectedImage.src = contentImage;
+        selectedTitle.textContent = contentTitle;
+        selectedDescription.textContent = contentDescription;
+                selectedContentPreview.style.display = 'block';
+        console.log('✅ Preview updated');
+    } else {
+        console.error('❌ Preview elements not found');
+    }
+
+    // Show override fields
+    const overrideFields = document.getElementById('overrideFields');
+    if (overrideFields) {
+                overrideFields.style.display = 'block';
+        console.log('✅ Override fields shown');
+    } else {
+        console.error('❌ Override fields not found');
+    }
+
+    // Enable create button
+    const createExistingBtn = document.getElementById('createExistingBtn');
+    if (createExistingBtn) {
+        createExistingBtn.disabled = false;
+        console.log('✅ Create button enabled');
+    } else {
+        console.error('❌ Create button not found');
+    }
+
+    // Update form action
+    const existingContentForm = document.getElementById('existingContentForm');
+    if (existingContentForm) {
+        existingContentForm.action = '{{ route("admin.carousels.store") }}';
+        console.log('✅ Form action updated');
+    } else {
+        console.error('❌ Form not found');
+    }
+
+    // Apri il modal invece di aggiornare la pagina
+    openContentSelectionModal(item);
+}
+
+// Funzione per aprire il modal di selezione contenuto
+function openContentSelectionModal(item) {
+    console.log('🎭 Opening content selection modal');
+
+    const contentType = document.getElementById('content_type_select').value;
+    const contentId = item.dataset.id;
+    const contentTitle = item.dataset.title;
+    const contentDescription = item.dataset.description;
+    const contentImage = item.dataset.image;
+    const contentUrl = item.dataset.url;
+
+    // Aggiorna il modal con i dati del contenuto
+    document.getElementById('modalSelectedImage').src = contentImage;
+    document.getElementById('modalSelectedTitle').textContent = contentTitle;
+    document.getElementById('modalSelectedDescription').textContent = contentDescription;
+
+    // Aggiungi informazioni specifiche per tipo
+    const modalSelectedInfo = document.getElementById('modalSelectedInfo');
+    switch (contentType) {
+        case 'video':
+            modalSelectedInfo.textContent = `Video • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni`;
+            break;
+        case 'event':
+            modalSelectedInfo.textContent = `Evento • ${item.dataset.organizer || 'N/A'} • ${item.dataset.date || 'N/A'} • ${item.dataset.location || 'N/A'}`;
+            break;
+        case 'user':
+            modalSelectedInfo.textContent = `Utente • ${item.dataset.videos_count || '0'} video • ${item.dataset.location || 'N/A'}`;
+            break;
+        case 'snap':
+            modalSelectedInfo.textContent = `Snap • ${item.dataset.user || 'N/A'} • ${item.dataset.likes || '0'} like • ${item.dataset.timestamp || 'N/A'}`;
+            break;
+        default:
+            modalSelectedInfo.textContent = '';
+    }
+
+    // Pre-popola i campi con i valori originali
+    document.getElementById('modal_override_title').value = contentTitle;
+    document.getElementById('modal_override_description').value = contentDescription;
+    document.getElementById('modal_override_link_url').value = contentUrl;
+
+    // Aggiorna i campi nascosti del form
     document.getElementById('content_type').value = contentType;
     document.getElementById('content_id').value = contentId;
 
-    // Update preview
-    document.getElementById('selectedImage').src = contentImage;
-    document.getElementById('selectedTitle').textContent = contentTitle;
-    document.getElementById('selectedDescription').textContent = contentDescription;
-    document.getElementById('selectedContentPreview').style.display = 'block';
+    // Apri il modal
+    const modal = new bootstrap.Modal(document.getElementById('contentSelectionModal'));
+    modal.show();
 
-    // Show override fields
-    document.getElementById('overrideFields').style.display = 'block';
+    console.log('✅ Modal opened successfully');
+}
 
-    // Enable create button
-    document.getElementById('createExistingBtn').disabled = false;
+// Funzione per inviare il form dal modal
+function submitModalForm() {
+    console.log('📤 Submitting modal form');
 
-    // Update form action
-    document.getElementById('existingContentForm').action = '{{ route("admin.carousels.store") }}';
+    // Raccogli i dati dal modal
+    const formData = new FormData();
+
+    // Campi nascosti
+    formData.append('content_type', document.getElementById('content_type').value);
+    formData.append('content_id', document.getElementById('content_id').value);
+
+    // Campi di personalizzazione
+    formData.append('title', document.getElementById('modal_override_title').value);
+    formData.append('description', document.getElementById('modal_override_description').value);
+    formData.append('link_url', document.getElementById('modal_override_link_url').value);
+    formData.append('link_text', document.getElementById('modal_override_link_text').value);
+    formData.append('order', document.getElementById('modal_order').value);
+    formData.append('is_active', document.getElementById('modal_is_active').checked ? '1' : '0');
+
+    // CSRF token
+    formData.append('_token', '{{ csrf_token() }}');
+
+    console.log('📋 Form data:', Object.fromEntries(formData));
+
+    // Mostra loading state
+    const submitBtn = document.getElementById('modalCreateBtn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-2"></i>Creazione...';
+    submitBtn.disabled = true;
+
+    // Invia la richiesta
+    fetch('{{ route("admin.carousels.store") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(response => {
+        console.log('📡 Response status:', response.status);
+        console.log('📡 Response headers:', response.headers);
+
+        // Controlla se la risposta è JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        } else {
+            // Se non è JSON, leggi il testo per debug
+            return response.text().then(text => {
+                console.error('❌ Non-JSON response received:', text.substring(0, 500));
+                throw new Error('Server returned HTML instead of JSON');
+            });
+        }
+    })
+    .then(data => {
+        console.log('✅ Carousel created successfully:', data);
+
+        if (data.success) {
+            // Chiudi il modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('contentSelectionModal'));
+            modal.hide();
+
+            // Mostra successo
+            Swal.fire({
+                icon: 'success',
+                title: 'Slide Creata!',
+                text: data.message || 'La slide del carosello è stata creata con successo.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Redirect alla lista caroselli
+                window.location.href = '{{ route("admin.carousels.index") }}';
+            });
+        } else {
+            throw new Error(data.message || 'Errore sconosciuto');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Error creating carousel:', error);
+
+        // Ripristina il pulsante
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+
+        // Mostra errore
+        Swal.fire({
+            icon: 'error',
+            title: 'Errore!',
+            text: 'Si è verificato un errore durante la creazione della slide.',
+            confirmButtonText: 'OK'
+        });
+    });
 }
 
 // Form submit handling
@@ -800,4 +1052,99 @@ document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
     });
 });
 </script>
-@endsection
+
+<!-- Modal per Selezione Contenuto -->
+<div class="modal fade" id="contentSelectionModal" tabindex="-1" aria-labelledby="contentSelectionModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary-800">
+                <h5 class="modal-title text-white" id="contentSelectionModalLabel">
+                    <i class="ph-duotone ph-check-circle f-s-16 me-2"></i>
+                    Contenuto Selezionato
+                </h5>
+                <button type="button" class="fs-5 border-0 bg-none text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark fs-3"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Preview del contenuto selezionato -->
+                <div class="mb-4">
+                    <div class="card card-light">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img id="modalSelectedImage" src="" alt="" class="rounded me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <h6 id="modalSelectedTitle" class="mb-1"></h6>
+                                    <p id="modalSelectedDescription" class="text-muted mb-0 f-s-12"></p>
+                                    <small id="modalSelectedInfo" class="text-muted"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campi di personalizzazione -->
+                <div class="card card-light">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="ph-duotone ph-pencil f-s-16 me-2"></i>
+                            Personalizza (Opzionale)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modal_override_title" class="form-label">Titolo Personalizzato</label>
+                                    <input type="text" class="form-control" id="modal_override_title" name="title" placeholder="Lascia vuoto per usare il titolo originale">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modal_override_link_url" class="form-label">URL Link Personalizzato</label>
+                                    <input type="url" class="form-control" id="modal_override_link_url" name="link_url" placeholder="Lascia vuoto per usare il link originale">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modal_override_description" class="form-label">Descrizione Personalizzata</label>
+                            <textarea class="form-control" id="modal_override_description" name="description" rows="3" placeholder="Lascia vuoto per usare la descrizione originale"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modal_override_link_text" class="form-label">Testo Link Personalizzato</label>
+                                    <input type="text" class="form-control" id="modal_override_link_text" name="link_text" value="Scopri di più" placeholder="Scopri di più">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modal_order" class="form-label">Ordine</label>
+                                    <input type="number" class="form-control" id="modal_order" name="order" value="0" min="0">
+                                    <div class="form-text">Ordine di visualizzazione (0 = primo)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="modal_is_active" name="is_active" value="1" checked>
+                                <label class="form-check-label" for="modal_is_active">Attivo</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                    <i class="ph-duotone ph-x f-s-16 me-2"></i>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-primary" id="modalCreateBtn">
+                    <i class="ph-duotone ph-plus f-s-16 me-2"></i>
+                    Crea Slide
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endpush

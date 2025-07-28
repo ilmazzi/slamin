@@ -508,6 +508,12 @@
                                 </div>
                             @endif
 
+                            <!-- Wishlist Button -->
+                            <button class="btn btn-outline-danger w-100 mb-2 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                                <i class="ph-duotone ph-heart wishlist-icon"></i>
+                                <span class="wishlist-text">Aggiungi alla Wishlist</span>
+                            </button>
+
                             <!-- Always show share button -->
                             <button class="btn btn-light-primary w-100 mt-2" onclick="shareEvent()">
                                 <i class="ph ph-share me-2"></i>Condividi Evento
@@ -943,5 +949,8 @@ function showNotification(message, type) {
         alert.remove();
     }, 5000);
 }
+
+// Wishlist è gestita globalmente da WishlistManager
+// Non serve codice duplicato qui
 </script>
 @endsection

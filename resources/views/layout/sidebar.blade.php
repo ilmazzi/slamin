@@ -109,9 +109,7 @@
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
                                 @auth
                                 <!-- Dashboard - Solo per utenti autenticati -->
-                                <li class="menu-title">
-                                    <span>{{ __('dashboard.dashboard') }}</span>
-                                </li>
+
                                 <li class="no-sub {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('dashboard') }}">
                                         <svg stroke="currentColor" stroke-width="1.5">
@@ -255,7 +253,7 @@
                                 <!-- System Logs - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.logs.index') }}">
-                                        <i class="ph-duotone ph-journal-text f-s-20 me-2"></i>
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
                                         System Logs
                                     </a>
                                 </li>

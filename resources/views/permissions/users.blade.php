@@ -46,14 +46,25 @@
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <h5 class="mb-0 f-w-600 text-primary">
-                                <i class="ph ph-users me-2"></i>{{ __('permissions.users') }}
+                                <i class="ph ph-users me-2"></i>{{ __('permissions.users') ?? 'Gestione Utenti' }}
+                                <span class="badge bg-primary ms-2">{{ $users->total() }} totali</span>
                             </h5>
-                            <p class="text-muted mb-0 f-s-14">{{ __('permissions.users_description') }}</p>
+                            <p class="text-muted mb-0 f-s-14">
+                                {{ __('permissions.users_description') ?? 'Gestisci utenti e permessi' }} -
+                                Mostrando {{ $users->firstItem() ?? 0 }}-{{ $users->lastItem() ?? 0 }} di {{ $users->total() }} utenti
+                            </p>
+                            <!-- Debug temporaneo -->
+                            <small class="text-info d-block mt-1">
+                                Debug: {{ $users->count() }} utenti caricati, {{ $users->total() }} totali nel database
+                            </small>
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex flex-column flex-md-row gap-2">
                                 <button class="btn btn-success" onclick="exportUsers()">
                                     <i class="ph ph-download me-2"></i>{{ __('permissions.export') }}
+                                </button>
+                                <button class="btn btn-info" onclick="exportAllUsers()">
+                                    <i class="ph ph-download-simple me-2"></i>Esporta Tutti
                                 </button>
                                 <button class="btn btn-primary" onclick="showBulkAssignModal()">
                                     <i class="ph ph-users-plus me-2"></i>{{ __('permissions.bulk_assign') }}
@@ -109,9 +120,10 @@
                                 <label class="form-label f-s-14 f-w-500">{{ __('permissions.items_per_page') }}</label>
                                 <select class="form-select" id="itemsPerPage">
                                     <option value="10">10</option>
-                                    <option value="25" selected>25</option>
-                                    <option value="50">50</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
                                     <option value="100">100</option>
+                                    <option value="all">Tutti</option>
                                 </select>
                             </div>
                         </div>
@@ -510,7 +522,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 function editUserRoles(userId) {
     fetch(`{{ route('permissions.users.show', ['user' => ':userId']) }}`.replace(':userId', userId))
@@ -581,10 +593,25 @@ function viewUserDetails(userId) {
 
 function showBulkAssignModal() {
     $('#bulkAssignModal').modal('show');
+
+    // Reinizializza Select2 quando il modal è visibile
+    setTimeout(function() {
+        if (typeof $.fn.select2 !== 'undefined') {
+            $('#bulkUserSelect').select2({
+                placeholder: 'Seleziona utenti...',
+                allowClear: true,
+                dropdownParent: $('#bulkAssignModal')
+            });
+        }
+    }, 100);
 }
 
 function exportUsers() {
-    window.location.href = '{{ route("permissions.users.index") }}?export=1';
+    window.location.href = '{{ route("permissions.users") }}?export=1';
+}
+
+function exportAllUsers() {
+    window.location.href = '{{ route("permissions.users") }}?export_all=1';
 }
 
 $('#userRolesForm').on('submit', function(e) {
@@ -598,7 +625,7 @@ $('#userRolesForm').on('submit', function(e) {
         console.log(key + ': ' + value);
     }
     console.log('User ID:', userId);
-    
+
     // Debug: controlla i checkbox selezionati
     console.log('Selected checkboxes:');
     $('input[name="roles[]"]:checked').each(function() {
@@ -659,19 +686,53 @@ $('#userPermissionsForm').on('submit', function(e) {
 });
 
 $(document).ready(function() {
-    // Search and Filter functionality
+    // Verifica che jQuery sia caricato
+    if (typeof $ === 'undefined') {
+        console.error('jQuery non è caricato!');
+        return;
+    }
+
+    // Verifica che Bootstrap sia caricato
+    if (typeof bootstrap === 'undefined') {
+        console.warn('Bootstrap non è caricato. I modals potrebbero non funzionare.');
+    }
+
+    // Verifica che SweetAlert sia caricato
+    if (typeof Swal === 'undefined') {
+        console.warn('SweetAlert non è caricato. Le notifiche potrebbero non funzionare.');
+    }
+
+    // Verifica che Select2 sia caricato
+    if (typeof $.fn.select2 === 'undefined') {
+        console.warn('Select2 non è caricato. I dropdown potrebbero non funzionare correttamente.');
+    }
+
+    // Inizializza i filtri
     $('#searchUsers').on('input', filterUsers);
     $('#filterRole').on('change', filterUsers);
     $('#filterStatus').on('change', filterUsers);
+    // Gestione cambio items per page
     $('#itemsPerPage').on('change', function() {
         const perPage = $(this).val();
-        window.location.href = '{{ route("permissions.users.index") }}?per_page=' + perPage;
+        let url = '{{ route("permissions.users") }}';
+        if (perPage === 'all') {
+            url += '?per_page=all';
+        } else {
+            url += '?per_page=' + perPage;
+        }
+        window.location.href = url;
     });
+
+    // Imposta il valore corretto del selettore basato sui parametri URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPerPage = urlParams.get('per_page') || '50';
+    $('#itemsPerPage').val(currentPerPage);
 
     function filterUsers() {
         const searchTerm = $('#searchUsers').val().toLowerCase();
         const roleFilter = $('#filterRole').val();
         const statusFilter = $('#filterStatus').val();
+        const perPage = $('#itemsPerPage').val();
 
         $('.user-row').each(function() {
             const $row = $(this);
@@ -697,6 +758,42 @@ $(document).ready(function() {
             // Status filter
             if (statusFilter && !userStatus.includes(statusFilter.toLowerCase())) {
                 showRow = false;
+            }
+
+            // Per page filter
+            if (perPage === 'all') {
+                showRow = true; // Always show all rows if "Tutti" is selected
+            } else {
+                const currentPage = $row.closest('.pagination').find('.page-item.active .page-link').text();
+                const totalPages = $row.closest('.pagination').find('.page-item').length - 2; // Exclude prev/next and active page
+                const currentItem = $row.closest('.pagination').find('.page-item.active .page-link').text();
+                const currentItemIndex = parseInt(currentItem) - 1;
+
+                if (perPage === '10') {
+                    if (currentItemIndex < 10) {
+                        showRow = true;
+                    } else {
+                        showRow = false;
+                    }
+                } else if (perPage === '25') {
+                    if (currentItemIndex < 25) {
+                        showRow = true;
+                    } else {
+                        showRow = false;
+                    }
+                } else if (perPage === '50') {
+                    if (currentItemIndex < 50) {
+                        showRow = true;
+                    } else {
+                        showRow = false;
+                    }
+                } else if (perPage === '100') {
+                    if (currentItemIndex < 100) {
+                        showRow = true;
+                    } else {
+                        showRow = false;
+                    }
+                }
             }
 
             $row.toggle(showRow);
@@ -726,14 +823,55 @@ $(document).ready(function() {
                 showCard = false;
             }
 
+            // Per page filter for mobile cards
+            if (perPage === 'all') {
+                showCard = true; // Always show all cards if "Tutti" is selected
+            } else {
+                const currentPage = $card.closest('.pagination').find('.page-item.active .page-link').text();
+                const totalPages = $card.closest('.pagination').find('.page-item').length - 2; // Exclude prev/next and active page
+                const currentItem = $card.closest('.pagination').find('.page-item.active .page-link').text();
+                const currentItemIndex = parseInt(currentItem) - 1;
+
+                if (perPage === '10') {
+                    if (currentItemIndex < 10) {
+                        showCard = true;
+                    } else {
+                        showCard = false;
+                    }
+                } else if (perPage === '25') {
+                    if (currentItemIndex < 25) {
+                        showCard = true;
+                    } else {
+                        showCard = false;
+                    }
+                } else if (perPage === '50') {
+                    if (currentItemIndex < 50) {
+                        showCard = true;
+                    } else {
+                        showCard = false;
+                    }
+                } else if (perPage === '100') {
+                    if (currentItemIndex < 100) {
+                        showCard = true;
+                    } else {
+                        showCard = false;
+                    }
+                }
+            }
+
             $card.closest('.col-12, .col-md-6').toggle(showCard);
         });
     }
 
-    $('#bulkUserSelect').select2({
-        placeholder: 'Seleziona utenti...',
-        allowClear: true
-    });
+    // Inizializza Select2 solo se disponibile
+    if (typeof $.fn.select2 !== 'undefined') {
+        $('#bulkUserSelect').select2({
+            placeholder: 'Seleziona utenti...',
+            allowClear: true
+        });
+    } else {
+        console.warn('Select2 non è caricato. I dropdown potrebbero non funzionare correttamente.');
+    }
 });
 
 /**
@@ -797,4 +935,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endsection
+@endpush

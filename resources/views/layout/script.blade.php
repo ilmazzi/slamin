@@ -7,6 +7,9 @@
 <!-- Bootstrap js-->
 <script src="{{asset('assets/vendor/bootstrap/bootstrap.bundle.min.js')}}"></script>
 
+<!-- Select2 js -->
+<script src="{{asset('assets/vendor/select/select2.min.js')}}"></script>
+
 <!-- phosphor js -->
 <script src="{{asset('assets/vendor/phosphor/phosphor.js')}}"></script>
 
@@ -27,5 +30,8 @@
 
 <!-- Sidebar logo responsive -->
 <script src="{{asset('assets/js/sidebar-logo.js')}}"></script>
+
+<!-- Wishlist Management -->
+<script src="{{asset('assets/js/wishlist.js')}}"></script>
 
 @stack('scripts')
