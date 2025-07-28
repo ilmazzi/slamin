@@ -367,7 +367,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script src="{{ asset('assets/vendor/fullcalendar/global.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -460,4 +460,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endsection
+@endpush
