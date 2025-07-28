@@ -116,155 +116,203 @@
     <!-- Kanban Board -->
     <div class="row">
         <div class="col-12">
-            <div class="">
-                <div class=" kanban-board-container app-scroll ">
-                    <div class="board">
-                        <div class="board-column app-scroll" data-status="todo">
-                            <div class="board-column-header">
-                                <i class="ph-fill  ph-list-bullets me-2 f-s-16"></i> To Do
-                            </div>
-                            <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach($data['todo_tasks'] as $task)
-                                    <div class="board-item">
-                                        <div class="board-item-content">
-                                            <h6 class="mb-0">{{ $task->title }}</h6>
-                                            <div class="board-footer">
-                                                <span class="badge text-bg-danger f-s-14">
-                                                    <i class="ph-bold  ph-clock-afternoon"></i> {{ $task->due_date ? $task->due_date->format('M d') : 'No date' }}
-                                                </span>
-                                                <i class="ph-bold  ph-list f-s-14 me-2"></i>
-                                                <span class="f-s-14 me-2">
-                                                    <i class="ph-bold  ph-chat-text"></i>
-                                                    <span>{{ $task->comments_count ?? 0 }}</span>
-                                                </span>
-                                                <span class="badge text-bg-primary f-s-14">
-                                                    <i class="ph-bold  ph-check-square-offset"></i> {{ $task->completed_subtasks ?? 0 }}/{{ $task->total_subtasks ?? 0 }}
-                                                </span>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0"><i class="ph ph-kanban me-2"></i>Gestione Task di Sviluppo</h4>
+                        <p class="mb-0 opacity-75">Trascina le card per cambiare lo stato dei task</p>
+                    </div>
+                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                        <i class="ph ph-plus me-2"></i>Nuovo Task
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="kanban-board-container app-scroll">
+                        <div class="board">
+                            <!-- TODO COLUMN -->
+                            <div class="board-column app-scroll" data-status="todo">
+                                <div class="board-column-header">
+                                    <i class="ph-fill ph-list-bullets me-2 f-s-16"></i> TODO
+                                    <span class="badge bg-secondary ms-2">{{ $data['todo_tasks']->count() }}</span>
+                                </div>
+                                <div class="board-column-content-wrapper">
+                                    <div class="board-column-content">
+                                        @foreach($data['todo_tasks'] as $task)
+                                        <div class="board-item" data-task-id="{{ $task->id }}" data-status="todo">
+                                            <div class="board-item-content">
+                                                <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
+                                                @if($task->description)
+                                                <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
+                                                @endif
+                                                <div class="board-footer">
+                                                    <span class="badge text-bg-{{ $task->getPriorityColor() }} f-s-14">
+                                                        <i class="ph ph-flag me-1"></i>{{ ucfirst($task->priority) }}
+                                                    </span>
+                                                    @if($task->assignedTo)
+                                                    <span class="badge text-bg-info f-s-14 ms-2">
+                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($task->assignedTo->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->due_date)
+                                                    <span class="badge text-bg-{{ $task->isOverdue() ? 'danger' : 'warning' }} f-s-14 ms-2">
+                                                        <i class="ph ph-calendar me-1"></i>{{ $task->due_date->format('M d') }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="board-column app-scroll" data-status="in_progress">
-                            <div class="board-column-header">
-                                <i class="ph-bold  ph-chart-line-up me-2 f-s-16"></i> IN PROGRESS
-                            </div>
-                            <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach($data['in_progress_tasks'] as $task)
-                                    <div class="board-item">
-                                        <div class="board-item-content">
-                                            <h6 class="mb-0">{{ $task->title }}</h6>
-                                            <div class="board-footer">
-                                                <span class="badge text-bg-danger f-s-14">
-                                                    <i class="ph-bold  ph-clock-afternoon"></i> {{ $task->due_date ? $task->due_date->format('M d') : 'No date' }}
-                                                </span>
-                                                <i class="ph-bold  ph-list f-s-14 me-2"></i>
-                                                <span class="f-s-14 me-2">
-                                                    <i class="ph-bold  ph-chat-text"></i>
-                                                    <span>{{ $task->comments_count ?? 0 }}</span>
-                                                </span>
-                                                <span class="badge text-bg-primary f-s-14">
-                                                    <i class="ph-bold  ph-check-square-offset"></i> {{ $task->completed_subtasks ?? 0 }}/{{ $task->total_subtasks ?? 0 }}
-                                                </span>
+                            <!-- IN PROGRESS COLUMN -->
+                            <div class="board-column app-scroll" data-status="in_progress">
+                                <div class="board-column-header">
+                                    <i class="ph-bold ph-chart-line-up me-2 f-s-16"></i> IN PROGRESS
+                                    <span class="badge bg-primary ms-2">{{ $data['in_progress_tasks']->count() }}</span>
+                                </div>
+                                <div class="board-column-content-wrapper">
+                                    <div class="board-column-content">
+                                        @foreach($data['in_progress_tasks'] as $task)
+                                        <div class="board-item" data-task-id="{{ $task->id }}" data-status="in_progress">
+                                            <div class="board-item-content">
+                                                <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
+                                                @if($task->description)
+                                                <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
+                                                @endif
+                                                <div class="board-footer">
+                                                    <span class="badge text-bg-{{ $task->getPriorityColor() }} f-s-14">
+                                                        <i class="ph ph-flag me-1"></i>{{ ucfirst($task->priority) }}
+                                                    </span>
+                                                    @if($task->assignedTo)
+                                                    <span class="badge text-bg-info f-s-14 ms-2">
+                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($task->assignedTo->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->progress_percentage > 0)
+                                                    <span class="badge text-bg-{{ $task->getProgressBarColor() }} f-s-14 ms-2">
+                                                        <i class="ph ph-percent me-1"></i>{{ $task->progress_percentage }}%
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="board-column app-scroll" data-status="review">
-                            <div class="board-column-header">
-                                <i class="ph-bold  ph-eye me-2 f-s-16"></i> REVIEW
-                            </div>
-                            <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach($data['review_tasks'] as $task)
-                                    <div class="board-item">
-                                        <div class="board-item-content">
-                                            <h6 class="mb-0">{{ $task->title }}</h6>
-                                            <div class="board-footer">
-                                                <span class="badge text-bg-danger f-s-14">
-                                                    <i class="ph-bold  ph-clock-afternoon"></i> {{ $task->due_date ? $task->due_date->format('M d') : 'No date' }}
-                                                </span>
-                                                <i class="ph-bold  ph-list f-s-14 me-2"></i>
-                                                <span class="f-s-14 me-2">
-                                                    <i class="ph-bold  ph-chat-text"></i>
-                                                    <span>{{ $task->comments_count ?? 0 }}</span>
-                                                </span>
-                                                <span class="badge text-bg-primary f-s-14">
-                                                    <i class="ph-bold  ph-check-square-offset"></i> {{ $task->completed_subtasks ?? 0 }}/{{ $task->total_subtasks ?? 0 }}
-                                                </span>
+                            <!-- REVIEW COLUMN -->
+                            <div class="board-column app-scroll" data-status="review">
+                                <div class="board-column-header">
+                                    <i class="ph-bold ph-eye me-2 f-s-16"></i> REVIEW
+                                    <span class="badge bg-warning ms-2">{{ $data['review_tasks']->count() }}</span>
+                                </div>
+                                <div class="board-column-content-wrapper">
+                                    <div class="board-column-content">
+                                        @foreach($data['review_tasks'] as $task)
+                                        <div class="board-item" data-task-id="{{ $task->id }}" data-status="review">
+                                            <div class="board-item-content">
+                                                <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
+                                                @if($task->description)
+                                                <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
+                                                @endif
+                                                <div class="board-footer">
+                                                    <span class="badge text-bg-{{ $task->getPriorityColor() }} f-s-14">
+                                                        <i class="ph ph-flag me-1"></i>{{ ucfirst($task->priority) }}
+                                                    </span>
+                                                    @if($task->assignedTo)
+                                                    <span class="badge text-bg-info f-s-14 ms-2">
+                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($task->assignedTo->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->reviewedBy)
+                                                    <span class="badge text-bg-success f-s-14 ms-2">
+                                                        <i class="ph ph-check me-1"></i>{{ Str::limit($task->reviewedBy->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="board-column app-scroll" data-status="done">
-                            <div class="board-column-header">
-                                <i class="ph-bold ph-check-square-offset me-2 f-s-16"></i> DONE
-                            </div>
-                            <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach($data['done_tasks'] as $task)
-                                    <div class="board-item">
-                                        <div class="board-item-content">
-                                            <h6 class="mb-0">{{ $task->title }}</h6>
-                                            <div class="board-footer">
-                                                <span class="badge text-bg-danger f-s-14">
-                                                    <i class="ph-bold  ph-clock-afternoon"></i> {{ $task->due_date ? $task->due_date->format('M d') : 'No date' }}
-                                                </span>
-                                                <i class="ph-bold  ph-list f-s-14 me-2"></i>
-                                                <span class="f-s-14 me-2">
-                                                    <i class="ph-bold  ph-chat-text"></i>
-                                                    <span>{{ $task->comments_count ?? 0 }}</span>
-                                                </span>
-                                                <span class="badge text-bg-primary f-s-14">
-                                                    <i class="ph-bold  ph-check-square-offset"></i> {{ $task->completed_subtasks ?? 0 }}/{{ $task->total_subtasks ?? 0 }}
-                                                </span>
+                            <!-- TESTING COLUMN -->
+                            <div class="board-column app-scroll" data-status="testing">
+                                <div class="board-column-header">
+                                    <i class="ph-bold ph-check-square-offset me-2 f-s-16"></i> TESTING
+                                    <span class="badge bg-info ms-2">{{ $data['testing_tasks']->count() }}</span>
+                                </div>
+                                <div class="board-column-content-wrapper">
+                                    <div class="board-column-content">
+                                        @foreach($data['testing_tasks'] as $task)
+                                        <div class="board-item" data-task-id="{{ $task->id }}" data-status="testing">
+                                            <div class="board-item-content">
+                                                <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
+                                                @if($task->description)
+                                                <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
+                                                @endif
+                                                <div class="board-footer">
+                                                    <span class="badge text-bg-{{ $task->getPriorityColor() }} f-s-14">
+                                                        <i class="ph ph-flag me-1"></i>{{ ucfirst($task->priority) }}
+                                                    </span>
+                                                    @if($task->assignedTo)
+                                                    <span class="badge text-bg-info f-s-14 ms-2">
+                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($task->assignedTo->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->estimated_hours)
+                                                    <span class="badge text-bg-secondary f-s-14 ms-2">
+                                                        <i class="ph ph-clock me-1"></i>{{ $task->getEstimatedTimeFormatted() }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="board-column app-scroll" data-status="tested">
-                            <div class="board-column-header">
-                                <i class="ph-bold  ph-check-circle me-2 f-s-16"></i> TESTED
-                            </div>
-                            <div class="board-column-content-wrapper">
-                                <div class="board-column-content">
-                                    @foreach($data['tested_tasks'] ?? [] as $task)
-                                    <div class="board-item">
-                                        <div class="board-item-content">
-                                            <h6 class="mb-0">{{ $task->title }}</h6>
-                                            <div class="board-footer">
-                                                <span class="badge text-bg-danger f-s-14">
-                                                    <i class="ph-bold  ph-clock-afternoon"></i> {{ $task->due_date ? $task->due_date->format('M d') : 'No date' }}
-                                                </span>
-                                                <i class="ph-bold  ph-list f-s-14 me-2"></i>
-                                                <span class="f-s-14 me-2">
-                                                    <i class="ph-bold  ph-chat-text"></i>
-                                                    <span>{{ $task->comments_count ?? 0 }}</span>
-                                                </span>
-                                                <span class="badge text-bg-primary f-s-14">
-                                                    <i class="ph-bold  ph-check-square-offset"></i> {{ $task->completed_subtasks ?? 0 }}/{{ $task->total_subtasks ?? 0 }}
-                                                </span>
+                            <!-- DONE COLUMN -->
+                            <div class="board-column app-scroll" data-status="done">
+                                <div class="board-column-header">
+                                    <i class="ph-bold ph-check-circle me-2 f-s-16"></i> DONE
+                                    <span class="badge bg-success ms-2">{{ $data['done_tasks']->count() }}</span>
+                                </div>
+                                <div class="board-column-content-wrapper">
+                                    <div class="board-column-content">
+                                        @foreach($data['done_tasks']->take(10) as $task)
+                                        <div class="board-item" data-task-id="{{ $task->id }}" data-status="done">
+                                            <div class="board-item-content">
+                                                <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
+                                                @if($task->description)
+                                                <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
+                                                @endif
+                                                <div class="board-footer">
+                                                    @if($task->assignedTo)
+                                                    <span class="badge text-bg-info f-s-14">
+                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($task->assignedTo->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->completed_at)
+                                                    <span class="badge text-bg-success f-s-14 ms-2">
+                                                        <i class="ph ph-check me-1"></i>{{ $task->completed_at->format('M d') }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->actual_hours)
+                                                    <span class="badge text-bg-dark f-s-14 ms-2">
+                                                        <i class="ph ph-timer me-1"></i>{{ $task->getActualTimeFormatted() }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -277,11 +325,9 @@
 @endsection
 
 @push('scripts')
-
 <!-- Kanban Board JS -->
 <script src="{{ asset('assets/vendor/kanban_board/hammer.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/kanban_board/muuri.min.js') }}"></script>
-
 <script src="{{ asset('assets/js/kanban_board.js') }}"></script>
 
 <script>
