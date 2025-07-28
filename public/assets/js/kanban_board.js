@@ -36,7 +36,7 @@ itemContainers.forEach((container) => {
             const newColumn = el.closest('.board-column');
             const columnStatus = newColumn.dataset.status;
             const taskId = el.dataset.taskId;
-            
+
             if (taskId && columnStatus) {
                 updateTaskStatus(taskId, columnStatus);
             }
@@ -67,20 +67,51 @@ boardGrid = new Muuri('.board', {
 
 // Function to update task status via AJAX
 function updateTaskStatus(taskId, newStatus) {
-    fetch(`/tasks/${taskId}/status`, {
-        method: 'PATCH',
+    // Determina se siamo nel kanban admin o pubblico
+    const isAdminKanban = window.location.pathname.includes('/admin/kanban');
+
+    let url, method, body;
+
+    if (isAdminKanban) {
+        // Kanban Admin
+        url = '/admin/kanban/update-status';
+        method = 'POST';
+        body = JSON.stringify({
+            task_id: taskId,
+            new_status: newStatus,
+            _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                    document.querySelector('input[name="_token"]')?.value
+        });
+    } else {
+        // Kanban Pubblico
+        url = `/tasks/${taskId}/status`;
+        method = 'PATCH';
+        body = JSON.stringify({
+            status: newStatus,
+            _token: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                    document.querySelector('input[name="_token"]')?.value
+        });
+    }
+
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
                            document.querySelector('input[name="_token"]')?.value
         },
-        body: JSON.stringify({ status: newStatus })
+        body: body
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             console.log(`Task ${taskId} status updated to ${newStatus}`);
-            
+
             // Update the task count badges
             updateColumnCounts();
         } else {
@@ -104,7 +135,7 @@ function updateColumnCounts() {
         const content = column.querySelector('.board-column-content');
         const count = content.querySelectorAll('.board-item').length;
         const badge = column.querySelector('.board-column-header .badge');
-        
+
         if (badge) {
             badge.textContent = count;
         }

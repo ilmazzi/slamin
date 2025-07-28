@@ -277,6 +277,21 @@
                                         @foreach($data['todo_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="todo">
                                             <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
+                                                <!-- Image Preview -->
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                <div class="mb-2">
+                                                    @php
+                                                        $firstImage = array_filter($task->attachments, fn($a) => $a['type'] === 'image')[0] ?? null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img src="{{ Storage::url($firstImage['path']) }}"
+                                                         alt="Task image"
+                                                         class="img-fluid rounded"
+                                                         style="max-height: 80px; object-fit: cover; width: 100%;">
+                                                    @endif
+                                                </div>
+                                                @endif
+
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -293,6 +308,11 @@
                                                     @if($task->due_date)
                                                     <span class="badge text-bg-{{ $task->isOverdue() ? 'danger' : 'warning' }} f-s-14 ms-2">
                                                         <i class="ph ph-calendar me-1"></i>{{ $task->due_date->format('M d') }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->attachments && count($task->attachments) > 0)
+                                                    <span class="badge text-bg-warning f-s-14 ms-2">
+                                                        <i class="ph ph-paperclip me-1"></i>{{ count($task->attachments) }}
                                                     </span>
                                                     @endif
                                                 </div>
@@ -314,6 +334,21 @@
                                         @foreach($data['in_progress_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="in_progress">
                                             <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
+                                                <!-- Image Preview -->
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                <div class="mb-2">
+                                                    @php
+                                                        $firstImage = array_filter($task->attachments, fn($a) => $a['type'] === 'image')[0] ?? null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img src="{{ Storage::url($firstImage['path']) }}"
+                                                         alt="Task image"
+                                                         class="img-fluid rounded"
+                                                         style="max-height: 80px; object-fit: cover; width: 100%;">
+                                                    @endif
+                                                </div>
+                                                @endif
+
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -330,6 +365,11 @@
                                                     @if($task->progress_percentage > 0)
                                                     <span class="badge text-bg-{{ $task->getProgressBarColor() }} f-s-14 ms-2">
                                                         <i class="ph ph-percent me-1"></i>{{ $task->progress_percentage }}%
+                                                    </span>
+                                                    @endif
+                                                    @if($task->attachments && count($task->attachments) > 0)
+                                                    <span class="badge text-bg-warning f-s-14 ms-2">
+                                                        <i class="ph ph-paperclip me-1"></i>{{ count($task->attachments) }}
                                                     </span>
                                                     @endif
                                                 </div>
@@ -351,6 +391,21 @@
                                         @foreach($data['review_tasks'] as $task)
                                         <div class="board-item" data-task-id="{{ $task->id }}" data-status="review">
                                             <div class="board-item-content" onclick="openTaskDetails({{ $task->id }})" style="cursor: pointer;">
+                                                <!-- Image Preview -->
+                                                @if($task->attachments && count(array_filter($task->attachments, fn($a) => $a['type'] === 'image')) > 0)
+                                                <div class="mb-2">
+                                                    @php
+                                                        $firstImage = array_filter($task->attachments, fn($a) => $a['type'] === 'image')[0] ?? null;
+                                                    @endphp
+                                                    @if($firstImage)
+                                                    <img src="{{ Storage::url($firstImage['path']) }}"
+                                                         alt="Task image"
+                                                         class="img-fluid rounded"
+                                                         style="max-height: 80px; object-fit: cover; width: 100%;">
+                                                    @endif
+                                                </div>
+                                                @endif
+
                                                 <h6 class="mb-0">{{ Str::limit($task->title, 35) }}</h6>
                                                 @if($task->description)
                                                 <p class="text-muted mb-2">{{ Str::limit($task->description, 60) }}</p>
@@ -367,6 +422,11 @@
                                                     @if($task->reviewedBy)
                                                     <span class="badge text-bg-success f-s-14 ms-2">
                                                         <i class="ph ph-check me-1"></i>{{ Str::limit($task->reviewedBy->getDisplayName(), 15) }}
+                                                    </span>
+                                                    @endif
+                                                    @if($task->attachments && count($task->attachments) > 0)
+                                                    <span class="badge text-bg-warning f-s-14 ms-2">
+                                                        <i class="ph ph-paperclip me-1"></i>{{ count($task->attachments) }}
                                                     </span>
                                                     @endif
                                                 </div>
@@ -515,6 +575,33 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
+                                <label for="category" class="form-label">Categoria *</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Seleziona categoria</option>
+                                    <option value="frontend">Frontend</option>
+                                    <option value="backend">Backend</option>
+                                    <option value="database">Database</option>
+                                    <option value="design">Design</option>
+                                    <option value="testing">Testing</option>
+                                    <option value="deployment">Deployment</option>
+                                    <option value="documentation">Documentation</option>
+                                    <option value="bug_fix">Bug Fix</option>
+                                    <option value="feature">Feature</option>
+                                    <option value="maintenance">Maintenance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Note</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
                                 <label for="assigned_to" class="form-label">Assegnato a</label>
                                 <select class="form-select" id="assigned_to" name="assigned_to">
                                     <option value="">Seleziona utente</option>
@@ -607,6 +694,32 @@
                     <div class="mb-3">
                         <label for="edit_description" class="form-label">Descrizione</label>
                         <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_category" class="form-label">Categoria *</label>
+                                <select class="form-select" id="edit_category" name="category" required>
+                                    <option value="frontend">Frontend</option>
+                                    <option value="backend">Backend</option>
+                                    <option value="database">Database</option>
+                                    <option value="design">Design</option>
+                                    <option value="testing">Testing</option>
+                                    <option value="deployment">Deployment</option>
+                                    <option value="documentation">Documentation</option>
+                                    <option value="bug_fix">Bug Fix</option>
+                                    <option value="feature">Feature</option>
+                                    <option value="maintenance">Maintenance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit_notes" class="form-label">Note</label>
+                                <textarea class="form-control" id="edit_notes" name="notes" rows="2"></textarea>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -720,6 +833,8 @@ function editTask(taskId) {
                 document.getElementById('edit_title').value = data.task.title;
                 document.getElementById('edit_description').value = data.task.description || '';
                 document.getElementById('edit_priority').value = data.task.priority;
+                document.getElementById('edit_category').value = data.task.category || 'feature';
+                document.getElementById('edit_notes').value = data.task.notes || '';
                 document.getElementById('edit_assigned_to').value = data.task.assigned_to || '';
                 document.getElementById('edit_due_date').value = data.task.due_date || '';
                 document.getElementById('edit_estimated_hours').value = data.task.estimated_hours || '';

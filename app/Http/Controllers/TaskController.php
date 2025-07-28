@@ -44,11 +44,11 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high,urgent',
-            'category' => 'required|string',
+            'category' => 'required|in:frontend,backend,database,design,testing,deployment,documentation,bug_fix,feature,maintenance',
             'assigned_to' => 'nullable|exists:users,id',
             'due_date' => 'nullable|date',
             'estimated_hours' => 'nullable|numeric|min:0',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -58,24 +58,13 @@ class TaskController extends Controller
             ], 422);
         }
 
-        $task = new Task();
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->priority = $request->priority;
-        $task->category = $request->category;
-        $task->assigned_to = $request->assigned_to;
-        $task->created_by = Auth::id();
-        $task->due_date = $request->due_date;
-        $task->estimated_hours = $request->estimated_hours;
-        $task->status = 'todo';
-
-        // Gestione upload immagini
+                // Gestione upload immagini
         $attachments = [];
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $image) {
                 $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $path = $image->storeAs('kanban/tasks', $filename, 'public');
-                
+
                 $attachments[] = [
                     'type' => 'image',
                     'filename' => $filename,
@@ -88,8 +77,18 @@ class TaskController extends Controller
             }
         }
 
-        $task->attachments = $attachments;
-        $task->save();
+        $task = Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'priority' => $request->priority,
+            'category' => $request->category,
+            'assigned_to' => $request->assigned_to,
+            'created_by' => Auth::id(),
+            'due_date' => $request->due_date,
+            'estimated_hours' => $request->estimated_hours,
+            'status' => 'todo',
+            'attachments' => $attachments,
+        ]);
 
         $task->load(['assignedTo', 'createdBy']);
 
@@ -146,12 +145,12 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high,urgent',
-            'category' => 'required|string',
+            'category' => 'required|in:frontend,backend,database,design,testing,deployment,documentation,bug_fix,feature,maintenance',
             'assigned_to' => 'nullable|exists:users,id',
             'due_date' => 'nullable|date',
             'estimated_hours' => 'nullable|numeric|min:0',
             'progress_percentage' => 'nullable|integer|min:0|max:100',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -170,14 +169,14 @@ class TaskController extends Controller
         $task->estimated_hours = $request->estimated_hours;
         $task->progress_percentage = $request->progress_percentage ?? 0;
 
-        // Gestione upload nuove immagini
+                // Gestione upload nuove immagini
         $currentAttachments = $task->attachments ?? [];
-        
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $image) {
                 $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $path = $image->storeAs('kanban/tasks', $filename, 'public');
-                
+
                 $currentAttachments[] = [
                     'type' => 'image',
                     'filename' => $filename,
@@ -280,4 +279,4 @@ class TaskController extends Controller
             'task' => $task
         ]);
     }
-} 
+}

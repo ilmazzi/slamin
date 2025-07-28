@@ -126,7 +126,7 @@ class KanbanController extends Controller
             'progress_percentage' => 'nullable|integer|min:0|max:100',
             'notes' => 'nullable|string',
             'tags' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -137,25 +137,10 @@ class KanbanController extends Controller
         }
 
         try {
-            $task = Task::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'priority' => $request->priority,
-                'category' => $request->category,
-                'status' => $request->status,
-                'assigned_to' => $request->assigned_to,
-                'created_by' => Auth::id(),
-                'due_date' => $request->due_date,
-                'estimated_hours' => $request->estimated_hours,
-                'progress_percentage' => $request->progress_percentage ?? 0,
-                'notes' => $request->notes,
-                'tags' => $request->tags,
-            ]);
-
             // Gestione upload immagini
             $attachments = [];
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $image) {
                     $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $path = $image->storeAs('kanban/tasks', $filename, 'public');
 
@@ -171,8 +156,21 @@ class KanbanController extends Controller
                 }
             }
 
-            $task->attachments = $attachments;
-            $task->save();
+            $task = Task::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'priority' => $request->priority,
+                'category' => $request->category,
+                'status' => $request->status,
+                'assigned_to' => $request->assigned_to,
+                'created_by' => Auth::id(),
+                'due_date' => $request->due_date,
+                'estimated_hours' => $request->estimated_hours,
+                'progress_percentage' => $request->progress_percentage ?? 0,
+                'notes' => $request->notes,
+                'tags' => $request->tags,
+                'attachments' => $attachments,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -235,7 +233,7 @@ class KanbanController extends Controller
             'progress_percentage' => 'nullable|integer|min:0|max:100',
             'notes' => 'nullable|string',
             'tags' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'attachments.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -264,8 +262,8 @@ class KanbanController extends Controller
             // Gestione upload nuove immagini
             $currentAttachments = $task->attachments ?? [];
 
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $image) {
                     $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                     $path = $image->storeAs('kanban/tasks', $filename, 'public');
 

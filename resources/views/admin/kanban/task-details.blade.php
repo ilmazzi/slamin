@@ -17,6 +17,34 @@
         </div>
         @endif
 
+        <!-- Attachments Section -->
+        @if($task->attachments && count($task->attachments) > 0)
+        <div class="mb-4">
+            <h6>Allegati</h6>
+            <div class="row g-2">
+                @foreach($task->attachments as $index => $attachment)
+                    @if($attachment['type'] === 'image')
+                    <div class="col-md-4 col-sm-6">
+                        <div class="position-relative">
+                            <img src="{{ Storage::url($attachment['path']) }}"
+                                 alt="{{ $attachment['original_name'] }}"
+                                 class="img-fluid rounded border"
+                                 style="max-height: 150px; object-fit: cover; width: 100%;">
+                            <button type="button"
+                                    class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1"
+                                    onclick="deleteImage({{ $task->id }}, {{ $index }})"
+                                    title="Elimina immagine">
+                                <i class="ph ph-x"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted d-block mt-1">{{ $attachment['original_name'] }}</small>
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- Comments Section -->
         <div class="task-comments">
             <h6 class="mb-3">Commenti</h6>
@@ -145,6 +173,48 @@
 </div>
 
 <script>
+// Delete image function
+function deleteImage(taskId, imageIndex) {
+    Swal.fire({
+        title: 'Elimina immagine?',
+        text: "Questa azione non può essere annullata!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/admin/kanban/delete-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    task_id: taskId,
+                    image_index: imageIndex
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Immagine eliminata con successo', 'success');
+                    // Refresh task details
+                    openTaskDetails(taskId);
+                } else {
+                    showNotification('Errore nell\'eliminazione dell\'immagine', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Errore nell\'eliminazione dell\'immagine', 'error');
+            });
+        }
+    });
+}
+
 // Delete task function
 function deleteTask(taskId) {
     Swal.fire({
