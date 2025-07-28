@@ -15,12 +15,10 @@ return new class extends Migration
             // Campi per eventi ricorrenti
             $table->boolean('is_recurring')->default(false)->after('status');
             $table->enum('recurrence_type', [
-                'once',           // Una volta sola
-                'count',          // X volte
-                'daily',          // Ogni giorno
-                'weekly',         // Ogni settimana
-                'monthly',        // Ogni mese
-                'yearly'          // Ogni anno
+                'daily',          // Giornaliera
+                'weekly',         // Settimanale
+                'monthly',        // Mensile
+                'yearly'          // Annuale
             ])->nullable()->after('is_recurring');
 
             $table->integer('recurrence_interval')->default(1)->after('recurrence_type'); // Intervallo (es. ogni 3 giorni)

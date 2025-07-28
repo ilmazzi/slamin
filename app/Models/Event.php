@@ -404,12 +404,10 @@ class Event extends Model
     public static function getRecurrenceTypes(): array
     {
         return [
-            'once' => 'Una volta sola',
-            'count' => 'X volte',
-            'daily' => 'Ogni giorno',
-            'weekly' => 'Ogni settimana',
-            'monthly' => 'Ogni mese',
-            'yearly' => 'Ogni anno',
+            'daily' => 'Giornaliera',
+            'weekly' => 'Settimanale',
+            'monthly' => 'Mensile',
+            'yearly' => 'Annuale',
         ];
     }
 
@@ -441,23 +439,16 @@ class Event extends Model
         $dates = [];
         $currentDate = $this->start_datetime->copy();
         $count = 0;
-        $maxCount = $this->recurrence_count ?? 10; // Default to 10 if not specified
+        $maxCount = (int)($this->recurrence_count ?? 10); // Convert to int, default to 10 if not specified
+        $interval = (int)($this->recurrence_interval ?? 1); // Convert to int, default to 1
 
         while ($count < $maxCount) {
             $dates[] = $currentDate->copy();
             $count++;
 
             switch ($this->recurrence_type) {
-                case 'once':
-                    return $dates; // Only one occurrence
-
-                case 'count':
-                    if ($count >= $maxCount) break 2;
-                    $currentDate->addDays($this->recurrence_interval);
-                    break;
-
                 case 'daily':
-                    $currentDate->addDays($this->recurrence_interval);
+                    $currentDate->addDays($interval);
                     break;
 
                 case 'weekly':
@@ -467,23 +458,23 @@ class Event extends Model
                         if (!$nextDate) break 2;
                         $currentDate = $nextDate;
                     } else {
-                        $currentDate->addWeeks($this->recurrence_interval);
+                        $currentDate->addWeeks($interval);
                     }
                     break;
 
                 case 'monthly':
                     if ($this->recurrence_monthday) {
                         // Same day of month
-                        $currentDate->addMonths($this->recurrence_interval);
-                        $currentDate->day($this->recurrence_monthday);
+                        $currentDate->addMonths($interval);
+                        $currentDate->day((int)$this->recurrence_monthday);
                     } else {
                         // Same day of week
-                        $currentDate->addMonths($this->recurrence_interval);
+                        $currentDate->addMonths($interval);
                     }
                     break;
 
                 case 'yearly':
-                    $currentDate->addYears($this->recurrence_interval);
+                    $currentDate->addYears($interval);
                     break;
             }
         }

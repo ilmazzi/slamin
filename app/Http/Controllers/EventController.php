@@ -213,7 +213,7 @@ class EventController extends Controller
                 'invited_users' => 'nullable|string', // JSON string of invited users for private events
                 // Recurrence fields
                 'is_recurring' => 'nullable|boolean',
-                'recurrence_type' => 'nullable|in:once,count,daily,weekly,monthly,yearly',
+                'recurrence_type' => 'nullable|in:daily,weekly,monthly,yearly',
                 'recurrence_interval' => 'nullable|integer|min:1',
                 'recurrence_count' => 'nullable|integer|min:1|max:100',
                 'recurrence_weekdays' => 'nullable|array',
@@ -306,13 +306,8 @@ class EventController extends Controller
             // Process recurrence settings
             if (isset($validated['is_recurring']) && $validated['is_recurring']) {
                 // Set default values for recurrence
-                $validated['recurrence_type'] = $validated['recurrence_type'] ?? 'once';
                 $validated['recurrence_interval'] = $validated['recurrence_interval'] ?? 1;
-
-                // For count type, ensure recurrence_count is set
-                if ($validated['recurrence_type'] === 'count' && empty($validated['recurrence_count'])) {
-                    $validated['recurrence_count'] = 5; // Default to 5 occurrences
-                }
+                $validated['recurrence_count'] = $validated['recurrence_count'] ?? 5; // Default to 5 occurrences
 
                 // For weekly type, ensure recurrence_weekdays is set
                 if ($validated['recurrence_type'] === 'weekly' && empty($validated['recurrence_weekdays'])) {

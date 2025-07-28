@@ -304,7 +304,7 @@ return [
     'recurring_event' => 'Evento Ricorrente',
     'recurrence_type' => 'Tipo di Ricorrenza',
     'recurrence_interval' => 'Intervallo',
-    'recurrence_count_label' => 'Numero di Occorrenze',
+    'recurrence_count_label' => 'Quante volte si ripete',
     'recurrence_weekdays' => 'Giorni della Settimana',
     'recurrence_monthday' => 'Giorno del Mese',
     'recurrence_preview' => 'Anteprima Ricorrenza',

@@ -271,11 +271,10 @@
                                     <div class="card-body" id="recurrence-settings" style="display: none;">
                                         <div class="row">
                                             <!-- Tipo di Ricorrenza -->
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label">{{ __('events.recurrence_type') }} *</label>
                                                 <select name="recurrence_type" id="recurrence_type" class="form-select">
-                                                    <option value="once">{{ __('events.recurrence_once') }}</option>
-                                                    <option value="count">{{ __('events.recurrence_count') }}</option>
+                                                    <option value="">{{ __('events.select_recurrence_type') }}</option>
                                                     <option value="daily">{{ __('events.recurrence_daily') }}</option>
                                                     <option value="weekly">{{ __('events.recurrence_weekly') }}</option>
                                                     <option value="monthly">{{ __('events.recurrence_monthly') }}</option>
@@ -284,14 +283,14 @@
                                             </div>
 
                                             <!-- Intervallo -->
-                                            <div class="col-md-6 mb-3" id="interval-field">
-                                                <label class="form-label">{{ __('events.recurrence_interval') }}</label>
+                                            <div class="col-md-4 mb-3" id="interval-field">
+                                                <label class="form-label">{{ __('events.recurrence_interval') }} *</label>
                                                 <input type="number" name="recurrence_interval" id="recurrence_interval" class="form-control" value="1" min="1" max="365">
                                                 <small class="text-muted" id="interval-help">{{ __('events.recurrence_interval_help') }}</small>
                                             </div>
 
-                                            <!-- Numero di Occorrenze (solo per tipo "count") -->
-                                            <div class="col-md-6 mb-3" id="count-field" style="display: none;">
+                                            <!-- Quante volte si ripete -->
+                                            <div class="col-md-4 mb-3">
                                                 <label class="form-label">{{ __('events.recurrence_count_label') }} *</label>
                                                 <input type="number" name="recurrence_count" id="recurrence_count" class="form-control" value="5" min="1" max="100">
                                                 <small class="text-muted">{{ __('events.recurrence_count_help') }}</small>
@@ -797,7 +796,6 @@
 <script>
 // Test di base per verificare se il JavaScript si carica
 console.log('=== JAVASCRIPT LOADED ===');
-console.log('=== TEST RICORRENZA - FILE CARICATO ===');
 
 let currentStep = 1;
 let map = null;
@@ -1139,7 +1137,10 @@ function setupEventListeners() {
 function nextStep() {
     console.log('nextStep called, currentStep:', currentStep);
 
-    if (validateCurrentStep()) {
+    const validationResult = validateCurrentStep();
+    console.log('Validation result:', validationResult);
+
+    if (validationResult) {
         console.log('Validation passed, proceeding to next step');
         if (currentStep < 5) {
             currentStep++;
@@ -1245,22 +1246,29 @@ function validateCurrentStep() {
 
     console.log('Validating step:', step);
 
-    // Clear previous errors
+    // Clear previous errors and highlighting
     document.querySelectorAll('.error-feedback').forEach(el => el.textContent = '');
+    document.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+        el.style.borderColor = '';
+    });
 
     if (step === 1) {
         const title = document.getElementById('title').value.trim();
         const description = document.getElementById('description').value.trim();
+        const category = document.getElementById('category').value;
 
-        console.log('Step 1 validation - title:', title, 'description:', description);
+        console.log('Step 1 validation - title:', title, 'description:', description, 'category:', category);
 
         if (!title) {
             console.log('Title is empty');
             showError('title', 'Il titolo è obbligatorio');
+            highlightError('title');
             isValid = false;
         } else if (title.length < 5) {
             console.log('Title too short:', title.length);
             showError('title', 'Il titolo deve essere di almeno 5 caratteri');
+            highlightError('title');
             isValid = false;
         }
 
@@ -1268,6 +1276,14 @@ function validateCurrentStep() {
         if (description && description.length < 20) {
             console.log('Description too short:', description.length);
             showError('description', 'La descrizione deve essere di almeno 20 caratteri');
+            highlightError('description');
+            isValid = false;
+        }
+
+        if (!category) {
+            console.log('Category is empty');
+            showError('category', 'La categoria è obbligatoria');
+            highlightError('category');
             isValid = false;
         }
     }
@@ -1281,30 +1297,117 @@ function validateCurrentStep() {
 
         if (!startDateTime) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
+            highlightError('start_datetime');
             isValid = false;
         }
 
         if (!endDateTime) {
             showError('end_datetime', 'Data e ora di fine sono obbligatorie');
+            highlightError('end_datetime');
             isValid = false;
         } else if (new Date(endDateTime) <= new Date(startDateTime)) {
             showError('end_datetime', 'La data di fine deve essere successiva a quella di inizio');
+            highlightError('start_datetime');
+            highlightError('end_datetime');
             isValid = false;
         }
 
         if (!venueName) {
             showError('venue_name', 'Il nome del venue è obbligatorio');
+            highlightError('venue_name');
             isValid = false;
         }
 
         if (!venueAddress) {
             showError('venue_address', 'L\'indirizzo è obbligatorio');
+            highlightError('venue_address');
             isValid = false;
         }
 
         if (!city) {
             showError('city', 'La città è obbligatoria');
+            highlightError('city');
             isValid = false;
+        }
+
+        // Validate recurrence settings if enabled
+        const isRecurring = document.getElementById('is_recurring');
+        if (isRecurring && isRecurring.checked) {
+            const recurrenceType = document.getElementById('recurrence_type').value;
+            const recurrenceInterval = document.getElementById('recurrence_interval').value;
+
+            if (!recurrenceType) {
+                showError('recurrence_type', 'Il tipo di ricorrenza è obbligatorio');
+                highlightError('recurrence_type');
+                isValid = false;
+            }
+
+            if (!recurrenceInterval || recurrenceInterval <= 0) {
+                showError('recurrence_interval', 'L\'intervallo di ricorrenza deve essere maggiore di 0');
+                highlightError('recurrence_interval');
+                isValid = false;
+            }
+
+            // Always validate recurrence_count when recurring is enabled
+            const recurrenceCount = document.getElementById('recurrence_count').value;
+            if (!recurrenceCount || recurrenceCount <= 0) {
+                showError('recurrence_count', 'Il numero di occorrenze deve essere maggiore di 0');
+                highlightError('recurrence_count');
+                isValid = false;
+            }
+
+            if (recurrenceType === 'weekly') {
+                const weekdays = document.querySelectorAll('input[name="recurrence_weekdays[]"]:checked');
+                if (weekdays.length === 0) {
+                    showError('recurrence_weekdays', 'Seleziona almeno un giorno della settimana');
+                    highlightError('recurrence_weekdays');
+                    isValid = false;
+                }
+            }
+
+            if (recurrenceType === 'monthly') {
+                const monthday = document.getElementById('recurrence_monthday').value;
+                if (!monthday) {
+                    showError('recurrence_monthday', 'Seleziona il giorno del mese');
+                    highlightError('recurrence_monthday');
+                    isValid = false;
+                }
+            }
+        }
+    }
+
+            if (step === 3) {
+        console.log('Validating step 3...');
+        const maxParticipants = document.getElementById('max_participants').value;
+
+        console.log('Max participants value:', maxParticipants);
+
+        // Il campo è opzionale, ma se viene compilato deve essere maggiore di 0
+        if (maxParticipants && maxParticipants <= 0) {
+            console.log('Max participants is invalid, showing error');
+            showError('max_participants', 'Il numero massimo di partecipanti deve essere maggiore di 0');
+            highlightError('max_participants');
+            isValid = false;
+        }
+
+        console.log('Step 3 validation result:', isValid);
+    }
+
+    if (step === 4) {
+        const imageElement = document.getElementById('image');
+        const acceptsRequestsElement = document.getElementById('accepts_requests');
+
+        // Verifica che gli elementi esistano prima di accedere alle loro proprietà
+        if (imageElement && acceptsRequestsElement) {
+            const image = imageElement.files[0];
+            const acceptsRequests = acceptsRequestsElement.checked;
+
+            if (!image && !acceptsRequests) {
+                showError('image', 'Devi caricare un\'immagine o abilitare le richieste di partecipazione');
+                highlightError('image');
+                highlightError('accepts_requests');
+                isValid = false;
+            }
         }
     }
 
@@ -1316,6 +1419,17 @@ function showError(fieldId, message) {
     const errorEl = document.getElementById(fieldId + '-error');
     if (errorEl) {
         errorEl.textContent = message;
+        errorEl.style.display = 'block';
+        errorEl.style.color = '#dc3545';
+    }
+}
+
+function highlightError(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.add('is-invalid');
+        field.style.borderColor = '#dc3545';
+        field.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
     }
 }
 
@@ -2521,24 +2635,17 @@ function confirmInvitation() {
 // Aggiorna campi visibili in base al tipo di ricorrenza
 function updateRecurrenceFields() {
     const recurrenceType = document.getElementById('recurrence_type').value;
-    const countField = document.getElementById('count-field');
     const weekdaysField = document.getElementById('weekdays-field');
     const monthdayField = document.getElementById('monthday-field');
     const intervalField = document.getElementById('interval-field');
     const intervalHelp = document.getElementById('interval-help');
 
     // Nascondi tutti i campi specifici
-    countField.style.display = 'none';
     weekdaysField.style.display = 'none';
     monthdayField.style.display = 'none';
 
     // Mostra campi appropriati
     switch (recurrenceType) {
-        case 'count':
-            countField.style.display = 'block';
-            intervalField.style.display = 'block';
-            intervalHelp.textContent = 'Intervallo tra gli eventi (in giorni)';
-            break;
         case 'daily':
             intervalField.style.display = 'block';
             intervalHelp.textContent = 'Ogni quanti giorni (es. 1 = ogni giorno, 2 = ogni 2 giorni)';
@@ -2557,9 +2664,9 @@ function updateRecurrenceFields() {
             intervalField.style.display = 'block';
             intervalHelp.textContent = 'Ogni quanti anni (es. 1 = ogni anno, 2 = ogni 2 anni)';
             break;
-        case 'once':
         default:
-            intervalField.style.display = 'none';
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Seleziona un tipo di ricorrenza';
             break;
     }
 }
@@ -2592,26 +2699,12 @@ function updateRecurrencePreview() {
     let dates = [];
 
     switch (recurrenceType) {
-        case 'once':
-            previewText = 'Evento singolo';
-            dates = [startDate];
-            break;
-        case 'count':
-            const count = parseInt(document.getElementById('recurrence_count').value) || 5;
-            const interval = parseInt(document.getElementById('recurrence_interval').value) || 1;
-            previewText = `${count} eventi, ogni ${interval} giorno${interval > 1 ? 'i' : ''}`;
-
-            for (let i = 0; i < count; i++) {
-                const newDate = new Date(startDate);
-                newDate.setDate(startDate.getDate() + (i * interval));
-                dates.push(newDate);
-            }
-            break;
         case 'daily':
             const dailyInterval = parseInt(document.getElementById('recurrence_interval').value) || 1;
-            previewText = `Ogni ${dailyInterval} giorno${dailyInterval > 1 ? 'i' : ''}`;
+            const dailyCount = parseInt(document.getElementById('recurrence_count').value) || 5;
+            previewText = `${dailyCount} eventi, ogni ${dailyInterval} giorno${dailyInterval > 1 ? 'i' : ''}`;
 
-            for (let i = 0; i < 10; i++) { // Mostra prime 10 occorrenze
+            for (let i = 0; i < Math.min(dailyCount, 10); i++) { // Mostra prime 10 occorrenze o il numero specificato
                 const newDate = new Date(startDate);
                 newDate.setDate(startDate.getDate() + (i * dailyInterval));
                 dates.push(newDate);
