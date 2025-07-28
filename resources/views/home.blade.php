@@ -8,41 +8,86 @@
 <!-- Slick CSS -->
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+<style>
+/* Stili aggiuntivi per lo slider degli eventi */
+.events-slider {
+    position: relative;
+    margin: 0 -10px;
+}
+
+.events-slider .autoplay-item {
+    padding: 0 10px;
+}
+
+.events-slider .card {
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.events-slider .card:hover {
+    transform: translateY(-5px);
+}
+</style>
 @endsection
 
-@section('script')
+@push('scripts')
 <!-- Slick JS -->
 <script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
 <script src="{{ asset('assets/js/slick.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-    // Inizializza lo slider degli eventi
-    $('#events-slider').slick({
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        arrows: true,
-        dots: false,
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2
+// Aspetta che tutto sia caricato
+window.addEventListener('load', function() {
+    // Verifica se jQuery è disponibile
+    if (typeof $ === 'undefined') {
+        console.error('jQuery non è caricato!');
+        return;
+    }
+
+    // Verifica se Slick è disponibile
+    if (typeof $.fn.slick === 'undefined') {
+        console.error('Slick non è caricato!');
+        return;
+    }
+
+    // Debug: verifica se lo slider esiste
+    const $slider = $('.events-slider');
+    console.log('Slider found:', $slider.length);
+
+    if ($slider.length > 0) {
+        // Inizializza lo slider degli eventi
+        $slider.slick({
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: true,
+            dots: false,
+            infinite: true,
+            speed: 500,
+            responsive: [
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1
+                    }
                 }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 1
-                }
-            }
-        ]
-    });
+            ]
+        });
+
+        console.log('Slider initialized successfully');
+    } else {
+        console.error('Slider not found!');
+    }
 });
 </script>
-@endsection
+@endpush
 
 @section('main-content')
 <div class="page-content">
@@ -129,7 +174,7 @@ $(document).ready(function() {
                         </h5>
                     </div>
                     <div class="card-body">
-                        <div class="autoplay-slider app-arrow" id="events-slider">
+                        <div class="events-slider app-arrow" id="events-slider">
                             @foreach($recentEvents->take(10) as $event)
                             <div class="autoplay-item">
                                 <div class="card overflow-hidden hover-effect">
