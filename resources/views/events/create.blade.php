@@ -257,6 +257,120 @@
                                 <div class="error-feedback" id="registration_deadline-error"></div>
                             </div>
 
+                            <!-- Evento Ricorrente -->
+                            <div class="col-12 mb-3">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-light-primary">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_recurring" id="is_recurring" class="form-check-input" value="1">
+                                            <label for="is_recurring" class="form-check-label f-w-600">
+                                                <i class="ph ph-repeat me-2"></i>{{ __('events.recurring_event') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="recurrence-settings" style="display: none;">
+                                        <div class="row">
+                                            <!-- Tipo di Ricorrenza -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">{{ __('events.recurrence_type') }} *</label>
+                                                <select name="recurrence_type" id="recurrence_type" class="form-select">
+                                                    <option value="once">{{ __('events.recurrence_once') }}</option>
+                                                    <option value="count">{{ __('events.recurrence_count') }}</option>
+                                                    <option value="daily">{{ __('events.recurrence_daily') }}</option>
+                                                    <option value="weekly">{{ __('events.recurrence_weekly') }}</option>
+                                                    <option value="monthly">{{ __('events.recurrence_monthly') }}</option>
+                                                    <option value="yearly">{{ __('events.recurrence_yearly') }}</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Intervallo -->
+                                            <div class="col-md-6 mb-3" id="interval-field">
+                                                <label class="form-label">{{ __('events.recurrence_interval') }}</label>
+                                                <input type="number" name="recurrence_interval" id="recurrence_interval" class="form-control" value="1" min="1" max="365">
+                                                <small class="text-muted" id="interval-help">{{ __('events.recurrence_interval_help') }}</small>
+                                            </div>
+
+                                            <!-- Numero di Occorrenze (solo per tipo "count") -->
+                                            <div class="col-md-6 mb-3" id="count-field" style="display: none;">
+                                                <label class="form-label">{{ __('events.recurrence_count_label') }} *</label>
+                                                <input type="number" name="recurrence_count" id="recurrence_count" class="form-control" value="5" min="1" max="100">
+                                                <small class="text-muted">{{ __('events.recurrence_count_help') }}</small>
+                                            </div>
+
+                                            <!-- Giorni della Settimana (solo per tipo "weekly") -->
+                                            <div class="col-12 mb-3" id="weekdays-field" style="display: none;">
+                                                <label class="form-label">{{ __('events.recurrence_weekdays') }} *</label>
+                                                <div class="row g-2">
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="1" class="form-check-input" id="weekday-1">
+                                                            <label for="weekday-1" class="form-check-label">{{ __('events.weekday_monday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="2" class="form-check-input" id="weekday-2">
+                                                            <label for="weekday-2" class="form-check-label">{{ __('events.weekday_tuesday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="3" class="form-check-input" id="weekday-3">
+                                                            <label for="weekday-3" class="form-check-label">{{ __('events.weekday_wednesday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="4" class="form-check-input" id="weekday-4">
+                                                            <label for="weekday-4" class="form-check-label">{{ __('events.weekday_thursday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="5" class="form-check-input" id="weekday-5">
+                                                            <label for="weekday-5" class="form-check-label">{{ __('events.weekday_friday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="6" class="form-check-input" id="weekday-6">
+                                                            <label for="weekday-6" class="form-check-label">{{ __('events.weekday_saturday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="recurrence_weekdays[]" value="7" class="form-check-input" id="weekday-7">
+                                                            <label for="weekday-7" class="form-check-label">{{ __('events.weekday_sunday') }}</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Giorno del Mese (solo per tipo "monthly") -->
+                                            <div class="col-md-6 mb-3" id="monthday-field" style="display: none;">
+                                                <label class="form-label">{{ __('events.recurrence_monthday') }} *</label>
+                                                <select name="recurrence_monthday" id="recurrence_monthday" class="form-select">
+                                                    @for($i = 1; $i <= 31; $i++)
+                                                        <option value="{{ $i }}" {{ $i == 15 ? 'selected' : '' }}>{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                                <small class="text-muted">{{ __('events.recurrence_monthday_help') }}</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Preview Ricorrenza -->
+                                        <div class="mt-3 p-3 bg-light rounded">
+                                            <h6 class="text-primary mb-2">
+                                                <i class="ph ph-calendar me-2"></i>{{ __('events.recurrence_preview') }}
+                                            </h6>
+                                            <div id="recurrence-preview" class="text-muted">
+                                                {{ __('events.recurrence_preview_placeholder') }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Location -->
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
@@ -683,7 +797,9 @@
 <script>
 // Test di base per verificare se il JavaScript si carica
 console.log('=== JAVASCRIPT LOADED ===');
-alert('JavaScript si è caricato!');
+console.log('=== TEST RICORRENZA - FILE CARICATO ===');
+alert('JavaScript caricato - test ricorrenza');
+
 
 let currentStep = 1;
 let map = null;
@@ -721,6 +837,37 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeForm();
             console.log('Setting up event listeners...');
             setupEventListeners();
+
+            // ========================================
+            // INIZIALIZZAZIONE EVENTI RICORRENTI
+            // ========================================
+            console.log('=== INIZIALIZZAZIONE RICORRENZA ===');
+
+            const isRecurringCheckbox = document.getElementById('is_recurring');
+            const recurrenceSettings = document.getElementById('recurrence-settings');
+
+            console.log('Checkbox found:', isRecurringCheckbox);
+            console.log('Settings found:', recurrenceSettings);
+
+            if (isRecurringCheckbox && recurrenceSettings) {
+                console.log('Setting up recurrence checkbox listener');
+                isRecurringCheckbox.addEventListener('change', function() {
+                    console.log('Checkbox changed:', this.checked);
+                    if (this.checked) {
+                        recurrenceSettings.style.display = 'block';
+                        updateRecurrencePreview();
+                    } else {
+                        recurrenceSettings.style.display = 'none';
+                    }
+                });
+            } else {
+                console.error('Recurrence elements not found!');
+                console.log('Available elements with "recurrence" in ID:');
+                document.querySelectorAll('[id*="recurrence"]').forEach(el => {
+                    console.log('-', el.id, el.tagName);
+                });
+            }
+
             console.log('Initialization completed successfully');
         } catch (error) {
             console.error('Errore durante l\'inizializzazione:', error);
@@ -820,7 +967,72 @@ function setupEventListeners() {
                 endDateTimeEl.value = endTime.toISOString().slice(0, 16);
             }
             updatePreview();
+            updateRecurrencePreview(); // Aggiorna anche l'anteprima ricorrenza
         });
+    }
+
+    // ========================================
+    // GESTIONE EVENTI RICORRENTI
+    // ========================================
+    console.log('=== SETTING UP RECURRENCE EVENT LISTENERS ===');
+
+    const isRecurringCheckbox = document.getElementById('is_recurring');
+    const recurrenceSettings = document.getElementById('recurrence-settings');
+
+    console.log('Checkbox found:', isRecurringCheckbox);
+    console.log('Settings found:', recurrenceSettings);
+
+    if (isRecurringCheckbox && recurrenceSettings) {
+        isRecurringCheckbox.addEventListener('change', function() {
+            console.log('Checkbox changed:', this.checked);
+            if (this.checked) {
+                recurrenceSettings.style.display = 'block';
+                updateRecurrencePreview();
+            } else {
+                recurrenceSettings.style.display = 'none';
+            }
+        });
+    }
+
+    // Gestione cambio tipo ricorrenza
+    const recurrenceType = document.getElementById('recurrence_type');
+    if (recurrenceType) {
+        recurrenceType.addEventListener('change', function() {
+            updateRecurrenceFields();
+            updateRecurrencePreview();
+        });
+    }
+
+    // Gestione cambio intervallo
+    const recurrenceInterval = document.getElementById('recurrence_interval');
+    if (recurrenceInterval) {
+        recurrenceInterval.addEventListener('change', updateRecurrencePreview);
+        recurrenceInterval.addEventListener('input', updateRecurrencePreview);
+    }
+
+    // Gestione cambio numero occorrenze
+    const recurrenceCount = document.getElementById('recurrence_count');
+    if (recurrenceCount) {
+        recurrenceCount.addEventListener('change', updateRecurrencePreview);
+        recurrenceCount.addEventListener('input', updateRecurrencePreview);
+    }
+
+    // Gestione cambio giorni settimana
+    const weekdayCheckboxes = document.querySelectorAll('input[name="recurrence_weekdays[]"]');
+    weekdayCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateRecurrencePreview);
+    });
+
+    // Gestione cambio giorno mese
+    const recurrenceMonthday = document.getElementById('recurrence_monthday');
+    if (recurrenceMonthday) {
+        recurrenceMonthday.addEventListener('change', updateRecurrencePreview);
+    }
+
+    // Gestione cambio date inizio/fine per ricorrenza
+    const endDateTime = document.getElementById('end_datetime');
+    if (endDateTime) {
+        endDateTime.addEventListener('change', updateRecurrencePreview);
     }
 
 
@@ -2192,7 +2404,7 @@ function handleUserSearchKeydown(event) {
 // Cerca utenti per inviti
 function searchUsers() {
     const searchTerm = document.getElementById('userSearch').value.trim();
-    const resultsDiv = document.getElementById('searchResults');
+        const resultsDiv = document.getElementById('searchResults');
     const resultsList = document.getElementById('searchResultsList');
 
     if (!searchTerm) {
@@ -2296,12 +2508,188 @@ function confirmInvitation() {
     const modal = bootstrap.Modal.getInstance(document.getElementById('roleSelectionModal'));
     modal.hide();
 
-    // Pulisci i campi
+        // Pulisci i campi
     document.getElementById('invitationMessage').value = '';
     window.selectedUser = null;
 
     // Mostra feedback
     alert('Invito aggiunto con successo!');
+}
+
+// ========================================
+// FUNZIONI PER EVENTI RICORRENTI
+// ========================================
+
+// Aggiorna campi visibili in base al tipo di ricorrenza
+function updateRecurrenceFields() {
+    const recurrenceType = document.getElementById('recurrence_type').value;
+    const countField = document.getElementById('count-field');
+    const weekdaysField = document.getElementById('weekdays-field');
+    const monthdayField = document.getElementById('monthday-field');
+    const intervalField = document.getElementById('interval-field');
+    const intervalHelp = document.getElementById('interval-help');
+
+    // Nascondi tutti i campi specifici
+    countField.style.display = 'none';
+    weekdaysField.style.display = 'none';
+    monthdayField.style.display = 'none';
+
+    // Mostra campi appropriati
+    switch (recurrenceType) {
+        case 'count':
+            countField.style.display = 'block';
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Intervallo tra gli eventi (in giorni)';
+            break;
+        case 'daily':
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Ogni quanti giorni (es. 1 = ogni giorno, 2 = ogni 2 giorni)';
+            break;
+        case 'weekly':
+            weekdaysField.style.display = 'block';
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Ogni quante settimane (es. 1 = ogni settimana, 2 = ogni 2 settimane)';
+            break;
+        case 'monthly':
+            monthdayField.style.display = 'block';
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Ogni quanti mesi (es. 1 = ogni mese, 2 = ogni 2 mesi)';
+            break;
+        case 'yearly':
+            intervalField.style.display = 'block';
+            intervalHelp.textContent = 'Ogni quanti anni (es. 1 = ogni anno, 2 = ogni 2 anni)';
+            break;
+        case 'once':
+        default:
+            intervalField.style.display = 'none';
+            break;
+    }
+}
+
+// Aggiorna anteprima ricorrenza
+function updateRecurrencePreview() {
+    const previewDiv = document.getElementById('recurrence-preview');
+    if (!previewDiv) return;
+
+    const isRecurring = document.getElementById('is_recurring').checked;
+    if (!isRecurring) {
+        previewDiv.innerHTML = '{{ __("events.recurrence_preview_placeholder") }}';
+        return;
+    }
+
+    const recurrenceType = document.getElementById('recurrence_type').value;
+    const startDateTime = document.getElementById('start_datetime').value;
+    const endDateTime = document.getElementById('end_datetime').value;
+
+    if (!startDateTime || !endDateTime) {
+        previewDiv.innerHTML = '<span class="text-warning">Seleziona prima le date di inizio e fine</span>';
+        return;
+    }
+
+    const startDate = new Date(startDateTime);
+    const endDate = new Date(endDateTime);
+    const duration = endDate - startDate;
+
+    let previewText = '';
+    let dates = [];
+
+    switch (recurrenceType) {
+        case 'once':
+            previewText = 'Evento singolo';
+            dates = [startDate];
+            break;
+        case 'count':
+            const count = parseInt(document.getElementById('recurrence_count').value) || 5;
+            const interval = parseInt(document.getElementById('recurrence_interval').value) || 1;
+            previewText = `${count} eventi, ogni ${interval} giorno${interval > 1 ? 'i' : ''}`;
+
+            for (let i = 0; i < count; i++) {
+                const newDate = new Date(startDate);
+                newDate.setDate(startDate.getDate() + (i * interval));
+                dates.push(newDate);
+            }
+            break;
+        case 'daily':
+            const dailyInterval = parseInt(document.getElementById('recurrence_interval').value) || 1;
+            previewText = `Ogni ${dailyInterval} giorno${dailyInterval > 1 ? 'i' : ''}`;
+
+            for (let i = 0; i < 10; i++) { // Mostra prime 10 occorrenze
+                const newDate = new Date(startDate);
+                newDate.setDate(startDate.getDate() + (i * dailyInterval));
+                dates.push(newDate);
+            }
+            break;
+        case 'weekly':
+            const weeklyInterval = parseInt(document.getElementById('recurrence_interval').value) || 1;
+            const selectedWeekdays = Array.from(document.querySelectorAll('input[name="recurrence_weekdays[]"]:checked'))
+                .map(cb => parseInt(cb.value));
+
+            if (selectedWeekdays.length === 0) {
+                previewText = 'Seleziona almeno un giorno della settimana';
+            } else {
+                const weekdayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+                const selectedNames = selectedWeekdays.map(d => weekdayNames[d]).join(', ');
+                previewText = `Ogni ${weeklyInterval} settimana${weeklyInterval > 1 ? 'e' : ''} (${selectedNames})`;
+
+                // Genera prime 8 occorrenze
+                let currentDate = new Date(startDate);
+                let count = 0;
+                while (dates.length < 8 && count < 56) { // Max 8 settimane
+                    if (selectedWeekdays.includes(currentDate.getDay())) {
+                        dates.push(new Date(currentDate));
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    count++;
+                }
+            }
+            break;
+        case 'monthly':
+            const monthlyInterval = parseInt(document.getElementById('recurrence_interval').value) || 1;
+            const monthday = parseInt(document.getElementById('recurrence_monthday').value) || 15;
+            previewText = `Ogni ${monthlyInterval} mese${monthlyInterval > 1 ? 'i' : ''}, giorno ${monthday}`;
+
+            for (let i = 0; i < 12; i++) { // Mostra prime 12 occorrenze
+                const newDate = new Date(startDate);
+                newDate.setMonth(startDate.getMonth() + (i * monthlyInterval));
+                newDate.setDate(monthday);
+                dates.push(newDate);
+            }
+            break;
+        case 'yearly':
+            const yearlyInterval = parseInt(document.getElementById('recurrence_interval').value) || 1;
+            previewText = `Ogni ${yearlyInterval} anno${yearlyInterval > 1 ? 'i' : ''}`;
+
+            for (let i = 0; i < 5; i++) { // Mostra prime 5 occorrenze
+                const newDate = new Date(startDate);
+                newDate.setFullYear(startDate.getFullYear() + (i * yearlyInterval));
+                dates.push(newDate);
+            }
+            break;
+    }
+
+    // Formatta le date per la visualizzazione
+    const formattedDates = dates.map(date => {
+        return date.toLocaleDateString('it-IT', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    });
+
+    // Mostra anteprima
+    if (dates.length > 0) {
+        previewDiv.innerHTML = `
+            <div class="mb-2"><strong>${previewText}</strong></div>
+            <div class="small">
+                <strong>Prime occorrenze:</strong><br>
+                ${formattedDates.slice(0, 5).join('<br>')}
+                ${formattedDates.length > 5 ? '<br><em>... e altre</em>' : ''}
+            </div>
+        `;
+    } else {
+        previewDiv.innerHTML = `<span class="text-warning">${previewText}</span>`;
+    }
 }
 </script>
 

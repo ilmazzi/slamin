@@ -45,6 +45,13 @@ class Event extends Model
         'tags',
         'category',
         'image_url',
+        'is_recurring',
+        'recurrence_type',
+        'recurrence_interval',
+        'recurrence_count',
+        'recurrence_weekdays',
+        'recurrence_monthday',
+        'parent_event_id',
     ];
 
     /**
@@ -61,6 +68,8 @@ class Event extends Model
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
         'moderated_at' => 'datetime',
+        'is_recurring' => 'boolean',
+        'recurrence_weekdays' => 'array',
     ];
 
     /**
@@ -334,5 +343,208 @@ class Event extends Model
             self::CATEGORY_SPOKEN_WORD => 'bg-light-orange',
             default => 'bg-light-secondary',
         };
+    }
+
+    // ========================================
+    // RECURRENCE METHODS
+    // ========================================
+
+    /**
+     * Get the parent event (for recurring events)
+     */
+    public function parentEvent(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'parent_event_id');
+    }
+
+    /**
+     * Get all child events (for recurring events)
+     */
+    public function childEvents(): HasMany
+    {
+        return $this->hasMany(Event::class, 'parent_event_id');
+    }
+
+    /**
+     * Get all events in the same recurrence series
+     */
+    public function recurrenceSeries(): HasMany
+    {
+        if ($this->parent_event_id) {
+            // This is a child event, get all siblings
+            return $this->parentEvent->childEvents();
+        } else {
+            // This is a parent event, get all children
+            return $this->childEvents();
+        }
+    }
+
+    /**
+     * Check if this event is part of a recurrence series
+     */
+    public function isPartOfRecurrence(): bool
+    {
+        return $this->is_recurring || $this->parent_event_id !== null;
+    }
+
+    /**
+     * Get the root event of the recurrence series
+     */
+    public function getRootEvent(): Event
+    {
+        if ($this->parent_event_id) {
+            return $this->parentEvent->getRootEvent();
+        }
+        return $this;
+    }
+
+    /**
+     * Get recurrence type options
+     */
+    public static function getRecurrenceTypes(): array
+    {
+        return [
+            'once' => 'Una volta sola',
+            'count' => 'X volte',
+            'daily' => 'Ogni giorno',
+            'weekly' => 'Ogni settimana',
+            'monthly' => 'Ogni mese',
+            'yearly' => 'Ogni anno',
+        ];
+    }
+
+    /**
+     * Get weekday options for weekly recurrence
+     */
+    public static function getWeekdayOptions(): array
+    {
+        return [
+            1 => 'Lunedì',
+            2 => 'Martedì',
+            3 => 'Mercoledì',
+            4 => 'Giovedì',
+            5 => 'Venerdì',
+            6 => 'Sabato',
+            7 => 'Domenica',
+        ];
+    }
+
+    /**
+     * Generate recurrence dates based on settings
+     */
+    public function generateRecurrenceDates(): array
+    {
+        if (!$this->is_recurring || !$this->recurrence_type) {
+            return [];
+        }
+
+        $dates = [];
+        $currentDate = $this->start_datetime->copy();
+        $count = 0;
+        $maxCount = $this->recurrence_count ?? 10; // Default to 10 if not specified
+
+        while ($count < $maxCount) {
+            $dates[] = $currentDate->copy();
+            $count++;
+
+            switch ($this->recurrence_type) {
+                case 'once':
+                    return $dates; // Only one occurrence
+
+                case 'count':
+                    if ($count >= $maxCount) break 2;
+                    $currentDate->addDays($this->recurrence_interval);
+                    break;
+
+                case 'daily':
+                    $currentDate->addDays($this->recurrence_interval);
+                    break;
+
+                case 'weekly':
+                    if ($this->recurrence_weekdays) {
+                        // Find next occurrence based on selected weekdays
+                        $nextDate = $this->findNextWeekdayOccurrence($currentDate);
+                        if (!$nextDate) break 2;
+                        $currentDate = $nextDate;
+                    } else {
+                        $currentDate->addWeeks($this->recurrence_interval);
+                    }
+                    break;
+
+                case 'monthly':
+                    if ($this->recurrence_monthday) {
+                        // Same day of month
+                        $currentDate->addMonths($this->recurrence_interval);
+                        $currentDate->day($this->recurrence_monthday);
+                    } else {
+                        // Same day of week
+                        $currentDate->addMonths($this->recurrence_interval);
+                    }
+                    break;
+
+                case 'yearly':
+                    $currentDate->addYears($this->recurrence_interval);
+                    break;
+            }
+        }
+
+        return $dates;
+    }
+
+    /**
+     * Find next weekday occurrence for weekly recurrence
+     */
+    private function findNextWeekdayOccurrence(Carbon $currentDate): ?Carbon
+    {
+        if (!$this->recurrence_weekdays) {
+            return null;
+        }
+
+        $weekdays = $this->recurrence_weekdays;
+        $nextDate = $currentDate->copy()->addDay();
+
+        // Look for next occurrence within next 8 weeks
+        for ($week = 0; $week < 8; $week++) {
+            for ($day = 0; $day < 7; $day++) {
+                if (in_array($nextDate->dayOfWeek, $weekdays)) {
+                    return $nextDate;
+                }
+                $nextDate->addDay();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Create recurring events based on current event settings
+     */
+    public function createRecurringEvents(): array
+    {
+        if (!$this->is_recurring) {
+            return [];
+        }
+
+        $dates = $this->generateRecurrenceDates();
+        $createdEvents = [];
+
+        foreach ($dates as $index => $date) {
+            if ($index === 0) continue; // Skip first date (current event)
+
+            $duration = $this->start_datetime->diffInSeconds($this->end_datetime);
+            $newStartDate = $date;
+            $newEndDate = $date->copy()->addSeconds($duration);
+
+            $newEvent = $this->replicate();
+            $newEvent->start_datetime = $newStartDate;
+            $newEvent->end_datetime = $newEndDate;
+            $newEvent->parent_event_id = $this->id;
+            $newEvent->is_recurring = false; // Child events are not recurring themselves
+            $newEvent->save();
+
+            $createdEvents[] = $newEvent;
+        }
+
+        return $createdEvents;
     }
 }

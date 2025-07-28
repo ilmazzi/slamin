@@ -359,4 +359,46 @@ return [
     'calendar_ok' => '',
     'create_new_event' => '',
 
+    // ========================================
+    // RECURRING EVENTS
+    // ========================================
+    'recurring_event' => 'Recurring Event',
+    'recurrence_type' => 'Recurrence Type',
+    'recurrence_interval' => 'Interval',
+    'recurrence_count_label' => 'Number of Occurrences',
+    'recurrence_weekdays' => 'Days of the Week',
+    'recurrence_monthday' => 'Day of the Month',
+    'recurrence_preview' => 'Recurrence Preview',
+    'recurrence_preview_placeholder' => 'Select recurrence options to see date preview',
+
+    // Recurrence types
+    'recurrence_once' => 'Once only',
+    'recurrence_count' => 'X times',
+    'recurrence_daily' => 'Every day',
+    'recurrence_weekly' => 'Every week',
+    'recurrence_monthly' => 'Every month',
+    'recurrence_yearly' => 'Every year',
+
+    // Help text
+    'recurrence_interval_help' => 'Interval between occurrences',
+    'recurrence_count_help' => 'Total number of events to create',
+    'recurrence_monthday_help' => 'Day of the month for monthly recurrence',
+
+    // Weekdays
+    'weekday_monday' => 'Monday',
+    'weekday_tuesday' => 'Tuesday',
+    'weekday_wednesday' => 'Wednesday',
+    'weekday_thursday' => 'Thursday',
+    'weekday_friday' => 'Friday',
+    'weekday_saturday' => 'Saturday',
+    'weekday_sunday' => 'Sunday',
+
+    // Recurrence messages
+    'recurrence_created' => 'Recurring event series created successfully',
+    'recurrence_updated' => 'Recurring event series updated',
+    'recurrence_deleted' => 'Recurring event series deleted',
+    'recurrence_info' => 'This event is part of a recurring series',
+    'recurrence_parent_info' => 'This is the main event of a recurring series',
+    'recurrence_child_info' => 'This event is part of a recurring series',
+
 ];

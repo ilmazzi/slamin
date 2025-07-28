@@ -211,12 +211,22 @@ class EventController extends Controller
                 'event_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'invitations' => 'nullable|string', // JSON string of invitations
                 'invited_users' => 'nullable|string', // JSON string of invited users for private events
+                // Recurrence fields
+                'is_recurring' => 'nullable|boolean',
+                'recurrence_type' => 'nullable|in:once,count,daily,weekly,monthly,yearly',
+                'recurrence_interval' => 'nullable|integer|min:1',
+                'recurrence_count' => 'nullable|integer|min:1|max:100',
+                'recurrence_weekdays' => 'nullable|array',
+                'recurrence_weekdays.*' => 'integer|in:1,2,3,4,5,6,7',
+                'recurrence_monthday' => 'nullable|integer|min:1|max:31',
             ], [
                 'start_datetime.after' => 'La data di inizio deve essere nel futuro.',
                 'end_datetime.after' => 'La data di fine deve essere dopo la data di inizio.',
                 'registration_deadline.before' => 'La scadenza iscrizioni deve essere prima della data di inizio.',
                 'category.required' => 'La categoria è obbligatoria.',
                 'category.in' => 'La categoria selezionata non è valida.',
+                'recurrence_type.in' => 'Il tipo di ricorrenza selezionato non è valido.',
+                'recurrence_count.max' => 'Il numero di occorrenze non può superare 100.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Event validation failed', [
@@ -293,8 +303,47 @@ class EventController extends Controller
         unset($validated['invited_users']);
 
         DB::transaction(function () use ($validated, $invitations, $invitedUsers, &$event) {
+            // Process recurrence settings
+            if (isset($validated['is_recurring']) && $validated['is_recurring']) {
+                // Set default values for recurrence
+                $validated['recurrence_type'] = $validated['recurrence_type'] ?? 'once';
+                $validated['recurrence_interval'] = $validated['recurrence_interval'] ?? 1;
+
+                // For count type, ensure recurrence_count is set
+                if ($validated['recurrence_type'] === 'count' && empty($validated['recurrence_count'])) {
+                    $validated['recurrence_count'] = 5; // Default to 5 occurrences
+                }
+
+                // For weekly type, ensure recurrence_weekdays is set
+                if ($validated['recurrence_type'] === 'weekly' && empty($validated['recurrence_weekdays'])) {
+                    $validated['recurrence_weekdays'] = [$validated['start_datetime']->dayOfWeek];
+                }
+
+                // For monthly type, ensure recurrence_monthday is set
+                if ($validated['recurrence_type'] === 'monthly' && empty($validated['recurrence_monthday'])) {
+                    $validated['recurrence_monthday'] = $validated['start_datetime']->day;
+                }
+            } else {
+                // Clear recurrence fields if not recurring
+                $validated['is_recurring'] = false;
+                $validated['recurrence_type'] = null;
+                $validated['recurrence_interval'] = null;
+                $validated['recurrence_count'] = null;
+                $validated['recurrence_weekdays'] = null;
+                $validated['recurrence_monthday'] = null;
+            }
+
             // Create the event
             $event = Event::create($validated);
+
+            // Create recurring events if needed
+            if ($event->is_recurring) {
+                $createdEvents = $event->createRecurringEvents();
+                Log::info('Created recurring events', [
+                    'parent_event_id' => $event->id,
+                    'created_count' => count($createdEvents)
+                ]);
+            }
 
 
 
@@ -382,11 +431,11 @@ class EventController extends Controller
         $invitationCount = count($invitations);
         $invitedUsersCount = count($invitedUsers);
         $successMessage = __('events.event_created_success');
-        
+
         if ($invitationCount > 0) {
             $successMessage .= ' ' . __('events.invitations_sent_success', ['count' => $invitationCount]);
         }
-        
+
         if ($invitedUsersCount > 0) {
             $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $invitedUsersCount]);
         }

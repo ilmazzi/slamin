@@ -297,6 +297,48 @@ return [
     'show_map' => 'Mostra Mappa',
     'show_list' => 'Mostra Lista',
      'search_events_placeholder' => 'Cerca eventi per titolo, città o organizzatore...',
+
+    // ========================================
+    // EVENTI RICORRENTI
+    // ========================================
+    'recurring_event' => 'Evento Ricorrente',
+    'recurrence_type' => 'Tipo di Ricorrenza',
+    'recurrence_interval' => 'Intervallo',
+    'recurrence_count_label' => 'Numero di Occorrenze',
+    'recurrence_weekdays' => 'Giorni della Settimana',
+    'recurrence_monthday' => 'Giorno del Mese',
+    'recurrence_preview' => 'Anteprima Ricorrenza',
+    'recurrence_preview_placeholder' => 'Seleziona le opzioni di ricorrenza per vedere l\'anteprima delle date',
+
+    // Tipi di ricorrenza
+    'recurrence_once' => 'Una volta sola',
+    'recurrence_count' => 'X volte',
+    'recurrence_daily' => 'Ogni giorno',
+    'recurrence_weekly' => 'Ogni settimana',
+    'recurrence_monthly' => 'Ogni mese',
+    'recurrence_yearly' => 'Ogni anno',
+
+    // Help text
+    'recurrence_interval_help' => 'Intervallo tra le occorrenze',
+    'recurrence_count_help' => 'Numero totale di eventi da creare',
+    'recurrence_monthday_help' => 'Giorno del mese per la ricorrenza mensile',
+
+    // Giorni della settimana
+    'weekday_monday' => 'Lunedì',
+    'weekday_tuesday' => 'Martedì',
+    'weekday_wednesday' => 'Mercoledì',
+    'weekday_thursday' => 'Giovedì',
+    'weekday_friday' => 'Venerdì',
+    'weekday_saturday' => 'Sabato',
+    'weekday_sunday' => 'Domenica',
+
+    // Messaggi di ricorrenza
+    'recurrence_created' => 'Serie di eventi ricorrenti creata con successo',
+    'recurrence_updated' => 'Serie di eventi ricorrenti aggiornata',
+    'recurrence_deleted' => 'Serie di eventi ricorrenti eliminata',
+    'recurrence_info' => 'Questo evento fa parte di una serie ricorrente',
+    'recurrence_parent_info' => 'Questo è l\'evento principale di una serie ricorrente',
+    'recurrence_child_info' => 'Questo evento fa parte di una serie ricorrente',
      'filter_by_status' => 'Filtra per stato',
      'filter_by_type' => 'Filtra per tipo',
      'filter_by_date' => 'Filtra per data',
