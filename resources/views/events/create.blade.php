@@ -798,8 +798,6 @@
 // Test di base per verificare se il JavaScript si carica
 console.log('=== JAVASCRIPT LOADED ===');
 console.log('=== TEST RICORRENZA - FILE CARICATO ===');
-alert('JavaScript caricato - test ricorrenza');
-
 
 let currentStep = 1;
 let map = null;
