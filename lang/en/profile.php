@@ -129,5 +129,7 @@ return [
     'edit_my_profile' => '',
     'view_my_videos' => '',
     'view_my_activities' => '',
+    'banner_updated' => '',
+    'change_banner' => '',
 
 ];

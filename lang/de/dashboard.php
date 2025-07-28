@@ -119,5 +119,9 @@ return [
     'show_more' => '',
     'show_less' => '',
     'upload_photo_desc' => '',
+    'published_poems' => '',
+    'role_poet' => '',
+    'view_poems' => '',
+    'view_poems_desc' => '',
 
 ];

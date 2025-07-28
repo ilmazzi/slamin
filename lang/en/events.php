@@ -6,6 +6,7 @@ return [
     'events_poetry_slam' => 'Slam In Events',
     'create_event' => 'Create Event',
     'edit_event' => 'Edit Event',
+    'edit_event_details' => 'Edit Event Details',
     'manage_event' => 'Manage Event',
     'event_details' => 'Event Details',
     'my_events' => 'My Events',
@@ -358,10 +359,6 @@ return [
     'calendar_cancel' => '',
     'calendar_ok' => '',
     'create_new_event' => '',
-
-    // ========================================
-    // RECURRING EVENTS
-    // ========================================
     'recurring_event' => 'Recurring Event',
     'recurrence_type' => 'Recurrence Type',
     'recurrence_interval' => 'Interval',
@@ -370,21 +367,15 @@ return [
     'recurrence_monthday' => 'Day of the Month',
     'recurrence_preview' => 'Recurrence Preview',
     'recurrence_preview_placeholder' => 'Select recurrence options to see date preview',
-
-    // Recurrence types
     'recurrence_once' => 'Once only',
     'recurrence_count' => 'X times',
     'recurrence_daily' => 'Every day',
     'recurrence_weekly' => 'Every week',
     'recurrence_monthly' => 'Every month',
     'recurrence_yearly' => 'Every year',
-
-    // Help text
     'recurrence_interval_help' => 'Interval between occurrences',
     'recurrence_count_help' => 'Total number of events to create',
     'recurrence_monthday_help' => 'Day of the month for monthly recurrence',
-
-    // Weekdays
     'weekday_monday' => 'Monday',
     'weekday_tuesday' => 'Tuesday',
     'weekday_wednesday' => 'Wednesday',
@@ -392,13 +383,47 @@ return [
     'weekday_friday' => 'Friday',
     'weekday_saturday' => 'Saturday',
     'weekday_sunday' => 'Sunday',
-
-    // Recurrence messages
     'recurrence_created' => 'Recurring event series created successfully',
     'recurrence_updated' => 'Recurring event series updated',
     'recurrence_deleted' => 'Recurring event series deleted',
     'recurrence_info' => 'This event is part of a recurring series',
     'recurrence_parent_info' => 'This is the main event of a recurring series',
     'recurrence_child_info' => 'This event is part of a recurring series',
+    'new_image' => 'New Image',
+    'current_image' => 'Current Image',
+    'current_image_help' => 'The current event image',
+    'please_correct_errors' => 'Please correct the errors before proceeding',
+    'event_information' => '',
+    'event_mode' => '',
+    'event_category' => '',
+    'category' => '',
+    'step_invite_artists' => '',
+    'step_preview_event' => '',
+    'category_placeholder' => '',
+    'category_help' => '',
+    'mode_public' => '',
+    'mode_private' => '',
+    'invite_users' => '',
+    'invite_users_help' => '',
+    'search_users' => '',
+    'suggested_users' => '',
+    'suggested_users_help' => '',
+    'invited_users' => '',
+    'no_invited_users' => '',
+    'no_suggested_users' => '',
+    'invite_user' => '',
+    'category_concert' => '',
+    'category_conference' => '',
+    'category_festival' => '',
+    'category_workshop' => '',
+    'category_open_mic' => '',
+    'category_poetry_art' => '',
+    'category_poetry_slam' => '',
+    'category_book_presentation' => '',
+    'category_reading' => '',
+    'category_residency' => '',
+    'category_spoken_word' => '',
+    'remove_invite' => '',
+    'private_invitations_sent_success' => '',
 
 ];

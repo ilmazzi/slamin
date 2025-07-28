@@ -16,6 +16,7 @@ return [
     'events_poetry_slam' => 'Eventi Slam In',
     'create_event' => 'Crea Evento',
     'edit_event' => 'Modifica Evento',
+    'edit_event_details' => 'Modifica Dettagli Evento',
     'manage_event' => 'Gestisci Evento',
     'event_details' => 'Dettagli Evento',
     'event_information' => 'Informazioni Evento',
@@ -635,4 +636,8 @@ return [
     'calendar_cancel' => 'Annulla',
     'calendar_ok' => 'OK',
     'create_new_event' => 'Crea Nuovo Evento',
+    'new_image' => 'Nuova Immagine',
+    'current_image' => 'Immagine Attuale',
+    'current_image_help' => 'L\'immagine attuale dell\'evento',
+    'please_correct_errors' => 'Per favore correggi gli errori prima di procedere',
 ];

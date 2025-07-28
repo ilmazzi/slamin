@@ -76,5 +76,9 @@ return [
     'year' => '',
     'years' => '',
     'page_under_construction' => '',
+    'home' => '',
+    'select' => '',
+    'edit' => '',
+    'share' => '',
 
 ];

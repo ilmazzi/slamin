@@ -75,11 +75,11 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center">
-                            <i class="flag-icon flag-icon-{{ 
-                                $code == 'en' ? 'gbr' : 
-                                ($code == 'de' ? 'deu' : 
-                                ($code == 'es' ? 'esp' : 
-                                ($code == 'fr' ? 'fra' : 'ita'))) 
+                            <i class="flag-icon flag-icon-{{
+                                $code == 'en' ? 'gbr' :
+                                ($code == 'de' ? 'deu' :
+                                ($code == 'es' ? 'esp' :
+                                ($code == 'fr' ? 'fra' : 'ita')))
                             }} me-2" style="font-size: 24px;"></i>
                         </div>
                     </div>
@@ -88,13 +88,13 @@
                     <!-- Delete Button (outside flag area) -->
                     @if($code !== 'it')
                     <div class="d-flex justify-content-end mb-2">
-                        
+
                         <button type="button" class="btn btn-light-danger icon-btn b-r-4"onclick="deleteLanguage('{{ $code }}', '{{ $name }}')"
                         title="Elimina lingua {{ $name }}"><i
                             class="ti ti-trash"></i></button>
                     </div>
                     @endif
-                    
+
                     <!-- Status Badges -->
                     @if($code === 'it')
                         @if(isset($missingKeys[$code]) && !empty($missingKeys[$code]))
@@ -165,7 +165,7 @@
                                     }
                                 @endphp
                                 <option value="{{ $file }}" data-missing="{{ $missingCount }}">
-                                    {{ $displayName }} ({{ $file }}.php) 
+                                    {{ $displayName }} ({{ $file }}.php)
                                     @if($missingCount > 0)
                                         @if($code === 'it')
                                             - {{ $missingCount }} da completare
@@ -187,7 +187,7 @@
                                     <br>
                                     <small id="missing-count-{{ $code }}"></small>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm" 
+                                <button type="button" class="btn btn-primary btn-sm"
                                         id="edit-btn-{{ $code }}" onclick="goToTranslation('{{ $code }}', '')">
                                     <i class="ph ph-pencil me-1"></i>Modifica
                                 </button>
@@ -198,30 +198,30 @@
                     <!-- Quick Actions -->
                     @if($code === 'it')
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill"
                                 onclick="showMissingKeys('{{ $code }}')">
                             <i class="ph ph-warning me-1"></i>Dettagli
                         </button>
-                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill"
                                 onclick="showIncompleteKeys('{{ $code }}')">
                             <i class="ph ph-list me-1"></i>Da Completare
                         </button>
                     </div>
                     @else
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill"
                                 onclick="syncSingleLanguage('{{ $code }}')">
                             <i class="ph ph-arrows-clockwise me-1"></i>Sincronizza
                         </button>
-                        <button type="button" class="btn btn-light-primary btn-sm flex-fill" 
+                        <button type="button" class="btn btn-light-primary btn-sm flex-fill"
                                 onclick="showMissingKeys('{{ $code }}')">
                             <i class="ph ph-warning me-1"></i>Dettagli
                         </button>
                     </div>
-                    
+
                     <!-- Auto Translation Actions -->
                     <div class="d-flex gap-2 mt-2">
-                        <button type="button" class="btn btn-light-success btn-sm flex-fill" 
+                        <button type="button" class="btn btn-light-success btn-sm flex-fill"
                                 onclick="autoTranslateLanguage('{{ $code }}')">
                             <i class="ph ph-robot me-1"></i>{{ __('admin.auto_translate_file') }}
                         </button>
@@ -302,8 +302,17 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
+// Controllo globale per assicurarsi che le funzioni siano definite
+window.selectFile = window.selectFile || function(language, file) {
+    console.error('selectFile function not properly loaded');
+};
+
+window.autoTranslateLanguage = window.autoTranslateLanguage || function(language) {
+    console.error('autoTranslateLanguage function not properly loaded');
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-uppercase language code
     const languageCodeInput = document.getElementById('language_code');
@@ -311,6 +320,19 @@ document.addEventListener('DOMContentLoaded', function() {
         languageCodeInput.addEventListener('input', function() {
             this.value = this.value.toLowerCase();
         });
+    }
+
+    // Verifica che le funzioni siano definite
+    if (typeof window.selectFile === 'function') {
+        console.log('selectFile function is available');
+    } else {
+        console.error('selectFile function is not available');
+    }
+
+    if (typeof window.autoTranslateLanguage === 'function') {
+        console.log('autoTranslateLanguage function is available');
+    } else {
+        console.error('autoTranslateLanguage function is not available');
     }
 });
 
@@ -341,6 +363,12 @@ function showMissingKeys(languageCode, missingKeys) {
 }
 
 function deleteLanguage(languageCode, languageName) {
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert is not loaded');
+        alert('Errore: SweetAlert non è caricato');
+        return;
+    }
+
     Swal.fire({
         title: 'Elimina Lingua',
         text: `Sei sicuro di voler eliminare la lingua "${languageName}" (${languageCode.toUpperCase()})?`,
@@ -355,17 +383,17 @@ function deleteLanguage(languageCode, languageName) {
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("admin.translations.delete-language", "LANG") }}'.replace('LANG', languageCode);
-            
+
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
             csrfToken.value = '{{ csrf_token() }}';
-            
+
             const methodField = document.createElement('input');
             methodField.type = 'hidden';
             methodField.name = '_method';
             methodField.value = 'DELETE';
-            
+
             form.appendChild(csrfToken);
             form.appendChild(methodField);
             document.body.appendChild(form);
@@ -375,17 +403,29 @@ function deleteLanguage(languageCode, languageName) {
 }
 
 function selectFile(language, file) {
+    console.log('selectFile called with:', language, file);
+
     const fileInfo = document.getElementById(`file-info-${language}`);
     const selectedFile = document.getElementById(`selected-file-${language}`);
     const missingCount = document.getElementById(`missing-count-${language}`);
     const editBtn = document.getElementById(`edit-btn-${language}`);
-    
+
+    if (!fileInfo || !selectedFile || !missingCount || !editBtn) {
+        console.error('Required elements not found for language:', language);
+        return;
+    }
+
     if (file) {
         // Trova l'opzione selezionata per ottenere i dati
         const select = document.querySelector(`select[onchange="selectFile('${language}', this.value)"]`);
+        if (!select) {
+            console.error('Select element not found for language:', language);
+            return;
+        }
+
         const selectedOption = select.options[select.selectedIndex];
         const missingCountValue = selectedOption.getAttribute('data-missing');
-        
+
         // Mostra le informazioni del file
         selectedFile.textContent = selectedOption.text;
         if (missingCountValue > 0) {
@@ -395,12 +435,12 @@ function selectFile(language, file) {
             missingCount.textContent = 'Tutte le traduzioni sono complete';
             missingCount.className = 'text-success f-s-12';
         }
-        
+
         // Aggiorna il pulsante modifica
         editBtn.onclick = function() {
             goToTranslation(language, file);
         };
-        
+
         fileInfo.style.display = 'block';
     } else {
         fileInfo.style.display = 'none';
@@ -416,6 +456,12 @@ function goToTranslation(language, file) {
 }
 
 function syncSingleLanguage(language) {
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert is not loaded');
+        alert('Errore: SweetAlert non è caricato');
+        return;
+    }
+
     Swal.fire({
         title: 'Sincronizza Lingua',
         text: `Sincronizzare la lingua ${language.toUpperCase()} con le chiavi italiane?`,
@@ -640,6 +686,12 @@ function syncLanguages() {
 }
 
 function testTranslationService() {
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert is not loaded');
+        alert('Errore: SweetAlert non è caricato');
+        return;
+    }
+
     Swal.fire({
         title: 'Test Servizio Traduzione',
         text: 'Testando la connessione al servizio di traduzione automatica...',
@@ -693,6 +745,19 @@ function testTranslationService() {
 }
 
 function autoTranslateLanguage(language) {
+    console.log('autoTranslateLanguage called with:', language);
+
+    if (!language) {
+        console.error('Language parameter is required');
+        return;
+    }
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert is not loaded');
+        alert('Errore: SweetAlert non è caricato');
+        return;
+    }
+
     Swal.fire({
         title: 'Traduzione Automatica',
         text: `Traduci automaticamente tutte le chiavi mancanti per ${language.toUpperCase()}?`,
@@ -757,4 +822,4 @@ function autoTranslateLanguage(language) {
     });
 }
 </script>
-@endsection
+@endpush
