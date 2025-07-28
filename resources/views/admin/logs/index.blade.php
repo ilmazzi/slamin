@@ -1,359 +1,508 @@
-@extends('layout.master')
+@extends('layout.app')
 
-@section('title', 'System Logs - Admin Panel')
+@section('title', 'Log di Attività - Admin')
 
-@section('main-content')
-<div class="page-wrapper">
-    <div class="page-content">
-        <!-- Page Title and Breadcrumb -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box d-flex align-items-center justify-content-between">
-                    <h4 class="mb-0">📊 System Logs</h4>
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">System Logs</li>
-                        </ol>
-                    </div>
+@section('content')
+<div class="container-fluid">
+    <!-- Breadcrumb -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Log di Attività</li>
+                    </ol>
                 </div>
+                <h4 class="page-title">
+                    <i class="ph-duotone ph-list-checks me-2"></i>
+                    Log di Attività
+                </h4>
             </div>
         </div>
+    </div>
 
-        <!-- Statistics Cards -->
-        <div class="row">
-            <div class="col-12 col-lg-3">
-                <div class="card card-light-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0">{{ number_format($stats['total_logs']) }}</h4>
-                                <p class="mb-0 text-muted">Total Logs</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-journal-text fs-1 text-primary"></i>
-                            </div>
+    <!-- Statistiche -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-light-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">{{ number_format($stats['total_logs']) }}</h4>
+                            <p class="text-muted mb-0">Log Totali</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-3">
-                <div class="card card-light-success">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0">{{ number_format($stats['today_logs']) }}</h4>
-                                <p class="mb-0 text-muted">Today's Logs</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-calendar-day fs-1 text-success"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-3">
-                <div class="card card-light-warning">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0">{{ number_format($stats['error_count']) }}</h4>
-                                <p class="mb-0 text-muted">Errors ({{ $stats['error_rate'] }}%)</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-lg-3">
-                <div class="card card-light-info">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h4 class="mb-0">{{ $stats['avg_response_time'] }}ms</h4>
-                                <p class="mb-0 text-muted">Avg Response Time</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-speedometer2 fs-1 text-info"></i>
-                            </div>
+                        <div class="flex-shrink-0">
+                            <i class="ph-duotone ph-list-checks f-s-24 text-primary"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Filters Card -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-funnel me-2"></i>Filters
-                </h5>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-light-success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">{{ number_format($stats['today_logs']) }}</h4>
+                            <p class="text-muted mb-0">Oggi</p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <i class="ph-duotone ph-calendar-check f-s-24 text-success"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <form method="GET" action="{{ route('admin.logs.index') }}" id="logFiltersForm">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Date From</label>
-                            <input type="date" class="form-control" name="date_from" value="{{ request('date_from') }}">
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-light-warning">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">{{ number_format($stats['error_logs']) }}</h4>
+                            <p class="text-muted mb-0">Errori</p>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Date To</label>
-                            <input type="date" class="form-control" name="date_to" value="{{ request('date_to') }}">
+                        <div class="flex-shrink-0">
+                            <i class="ph-duotone ph-warning-circle f-s-24 text-warning"></i>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Category</label>
-                            <select class="form-select" name="category">
-                                <option value="">All Categories</option>
-                                @foreach($filterOptions['categories'] as $key => $name)
-                                    <option value="{{ $key }}" {{ request('category') == $key ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-light-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">{{ number_format($stats['this_month_logs']) }}</h4>
+                            <p class="text-muted mb-0">Questo Mese</p>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Level</label>
-                            <select class="form-select" name="level">
-                                <option value="">All Levels</option>
-                                @foreach($filterOptions['levels'] as $key => $name)
-                                    <option value="{{ $key }}" {{ request('level') == $key ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="flex-shrink-0">
+                            <i class="ph-duotone ph-calendar f-s-24 text-info"></i>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">User</label>
-                            <select class="form-select" name="user_id">
-                                <option value="">All Users</option>
-                                @foreach($filterOptions['users'] as $id => $name)
-                                    <option value="{{ $id }}" {{ request('user_id') == $id ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtri -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="ph-duotone ph-funnel f-s-18 me-2"></i>
+                        Filtri
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form id="filterForm" method="GET">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Categoria</label>
+                                <select name="category" class="form-select">
+                                    <option value="">Tutte le categorie</option>
+                                    @foreach($categories as $key => $name)
+                                        <option value="{{ $key }}" {{ request('category') == $key ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Livello</label>
+                                <select name="level" class="form-select">
+                                    <option value="">Tutti i livelli</option>
+                                    @foreach($levels as $key => $name)
+                                        <option value="{{ $key }}" {{ request('level') == $key ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Utente</label>
+                                <select name="user_id" class="form-select">
+                                    <option value="">Tutti gli utenti</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Azione</label>
+                                <input type="text" name="action" class="form-control" placeholder="Cerca azione..." value="{{ request('action') }}">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Search</label>
-                            <input type="text" class="form-control" name="search" value="{{ request('search') }}" 
-                                   placeholder="Search in description, action, IP...">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Status Code</label>
-                            <select class="form-select" name="status_code">
-                                <option value="">All Codes</option>
-                                @foreach($filterOptions['status_codes'] as $code => $description)
-                                    <option value="{{ $code }}" {{ request('status_code') == $code ? 'selected' : '' }}>
-                                        {{ $description }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Action</label>
-                            <input type="text" class="form-control" name="action" value="{{ request('action') }}" 
-                                   placeholder="Filter by action...">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-search me-1"></i>Filter
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Data da</label>
+                                <input type="date" name="date_from" class="form-control" value="{{ request('date_from') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Data a</label>
+                                <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="ph-duotone ph-magnifying-glass me-1"></i>
+                                    Filtra
+                                </button>
+                                <a href="{{ route('admin.logs.index') }}" class="btn btn-light me-2">
+                                    <i class="ph-duotone ph-arrow-clockwise me-1"></i>
+                                    Reset
+                                </a>
+                                <button type="button" class="btn btn-success" onclick="exportLogs()">
+                                    <i class="ph-duotone ph-download me-1"></i>
+                                    Esporta
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Actions Card -->
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-list-ul me-2"></i>Activity Logs
-                    <span class="badge bg-secondary ms-2">{{ $logs->total() }}</span>
-                </h5>
-                <div class="btn-group">
-                    <a href="{{ route('admin.logs.export') }}?{{ http_build_query(request()->all()) }}" 
-                       class="btn btn-outline-success btn-sm">
-                        <i class="bi bi-download me-1"></i>Export CSV
-                    </a>
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#clearLogsModal">
-                        <i class="bi bi-trash me-1"></i>Clear Old Logs
-                    </button>
+                    </form>
                 </div>
             </div>
-            <div class="card-body">
-                @if($logs->count() > 0)
+        </div>
+    </div>
+
+    <!-- Tabella Log -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">
+                        <i class="ph-duotone ph-list f-s-18 me-2"></i>
+                        Log di Attività
+                    </h4>
+                    <div>
+                        <button type="button" class="btn btn-warning btn-sm" onclick="clearOldLogs()">
+                            <i class="ph-duotone ph-trash me-1"></i>
+                            Pulisci Vecchi Log
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-centered table-hover mb-0">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Date</th>
-                                    <th>User</th>
-                                    <th>Action</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Level</th>
+                                    <th>Data/Ora</th>
+                                    <th>Utente</th>
+                                    <th>Azione</th>
+                                    <th>Categoria</th>
+                                    <th>Livello</th>
+                                    <th>Descrizione</th>
                                     <th>IP</th>
-                                    <th>Response</th>
-                                    <th>Actions</th>
+                                    <th>Azioni</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($logs as $log)
+                                @forelse($logs as $log)
                                     <tr>
-                                        <td>
-                                            <span class="badge bg-secondary">{{ $log->id }}</span>
-                                        </td>
+                                        <td>{{ $log->id }}</td>
                                         <td>
                                             <small class="text-muted">
-                                                {{ $log->created_at->format('Y-m-d H:i:s') }}
+                                                {{ $log->created_at->format('d/m/Y H:i:s') }}
                                             </small>
                                         </td>
                                         <td>
                                             @if($log->user)
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $log->user->profile_photo_url }}" 
-                                                         class="rounded-circle me-2" width="24" height="24">
-                                                    <span>{{ $log->user->name }}</span>
+                                                    <img src="{{ $log->user->avatar ?? '/assets/images/avatar/default.png' }}"
+                                                         class="rounded-circle me-2" width="32" height="32">
+                                                    <div>
+                                                        <div class="fw-bold">{{ $log->user->name }}</div>
+                                                        <small class="text-muted">{{ $log->user->email }}</small>
+                                                    </div>
                                                 </div>
                                             @else
-                                                <span class="text-muted">Guest</span>
+                                                <span class="text-muted">Sistema</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <code class="small">{{ $log->action }}</code>
+                                            <span class="badge bg-light text-dark">{{ $log->action }}</span>
                                         </td>
                                         <td>
-                                            <span class="{{ $log->category_badge_class }}">{{ $log->category }}</span>
+                                            <span class="badge {{ $log->category_badge_class }}">{{ $log->category }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $log->level_badge_class }}">{{ $log->level }}</span>
                                         </td>
                                         <td>
                                             <div class="text-truncate" style="max-width: 200px;" title="{{ $log->description }}">
-                                                {{ $log->short_description }}
+                                                {{ $log->description }}
                                             </div>
-                                        </td>
-                                        <td>
-                                            <span class="{{ $log->level_badge_class }}">{{ $log->level }}</span>
                                         </td>
                                         <td>
                                             <small class="text-muted">{{ $log->ip_address }}</small>
                                         </td>
                                         <td>
-                                            @if($log->status_code)
-                                                <span class="badge {{ $log->status_code >= 400 ? 'bg-danger' : ($log->status_code >= 300 ? 'bg-warning' : 'bg-success') }}">
-                                                    {{ $log->status_code }}
-                                                </span>
-                                                @if($log->response_time)
-                                                    <br><small class="text-muted">{{ $log->response_time }}ms</small>
-                                                @endif
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('admin.logs.show', $log) }}" 
-                                               class="btn btn-outline-primary btn-sm">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    onclick="showLogDetails({{ $log->id }})">
+                                                <i class="ph-duotone ph-eye"></i>
+                                            </button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="ph-duotone ph-list-checks f-s-48 mb-3"></i>
+                                                <p>Nessun log trovato</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- Pagination -->
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $logs->appends(request()->all())->links() }}
-                    </div>
-                @else
-                    <div class="text-center py-5">
-                        <i class="bi bi-journal-x fs-1 text-muted"></i>
-                        <h5 class="mt-3">No logs found</h5>
-                        <p class="text-muted">No activity logs match your current filters.</p>
-                    </div>
-                @endif
+                    <!-- Paginazione -->
+                    @if($logs->hasPages())
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $logs->links() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiche Aggiuntive -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="ph-duotone ph-chart-bar f-s-18 me-2"></i>
+                        Top Azioni
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @forelse($topActions as $action)
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-truncate">{{ $action->action }}</span>
+                            <span class="badge bg-primary">{{ $action->count }}</span>
+                        </div>
+                    @empty
+                        <p class="text-muted">Nessun dato disponibile</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="ph-duotone ph-users f-s-18 me-2"></i>
+                        Top Utenti
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @forelse($topUsers as $userLog)
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ $userLog->user->avatar ?? '/assets/images/avatar/default.png' }}"
+                                     class="rounded-circle me-2" width="24" height="24">
+                                <span class="text-truncate">{{ $userLog->user->name }}</span>
+                            </div>
+                            <span class="badge bg-success">{{ $userLog->count }}</span>
+                        </div>
+                    @empty
+                        <p class="text-muted">Nessun dato disponibile</p>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Clear Logs Modal -->
+<!-- Modal Dettagli Log -->
+<div class="modal fade" id="logDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dettagli Log</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="logDetailsContent">
+                <!-- Contenuto caricato via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Pulisci Log -->
 <div class="modal fade" id="clearLogsModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Clear Old Logs</h5>
+                <h5 class="modal-title">Pulisci Vecchi Log</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.logs.clear') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <p>This will permanently delete log entries older than the specified number of days.</p>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Delete logs older than (days)</label>
-                        <input type="number" class="form-control" name="days" value="30" min="1" max="365">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Category (optional)</label>
-                        <select class="form-select" name="category">
-                            <option value="">All Categories</option>
-                            @foreach($filterOptions['categories'] as $key => $name)
-                                <option value="{{ $key }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Level (optional)</label>
-                        <select class="form-select" name="level">
-                            <option value="">All Levels</option>
-                            @foreach($filterOptions['levels'] as $key => $name)
-                                <option value="{{ $key }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div class="modal-body">
+                <p>Seleziona quanti giorni di log mantenere:</p>
+                <select id="clearDays" class="form-select">
+                    <option value="7">7 giorni</option>
+                    <option value="15">15 giorni</option>
+                    <option value="30" selected>30 giorni</option>
+                    <option value="60">60 giorni</option>
+                    <option value="90">90 giorni</option>
+                </select>
+                <div class="alert alert-warning mt-3">
+                    <i class="ph-duotone ph-warning-circle me-2"></i>
+                    <strong>Attenzione:</strong> Questa azione eliminerà permanentemente tutti i log più vecchi del periodo selezionato.
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Clear Logs</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-warning" onclick="confirmClearLogs()">Pulisci Log</button>
+            </div>
         </div>
     </div>
 </div>
-
 @endsection
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-submit form when filters change
-    const filterInputs = document.querySelectorAll('#logFiltersForm select, #logFiltersForm input[type="date"]');
-    filterInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            document.getElementById('logFiltersForm').submit();
+function showLogDetails(logId) {
+    fetch(`/admin/logs/${logId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const log = data.log;
+                const content = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Informazioni Base</h6>
+                            <table class="table table-sm">
+                                <tr><td><strong>ID:</strong></td><td>${log.id}</td></tr>
+                                <tr><td><strong>Data:</strong></td><td>${new Date(log.created_at).toLocaleString('it-IT')}</td></tr>
+                                <tr><td><strong>Utente:</strong></td><td>${log.user ? log.user.name : 'Sistema'}</td></tr>
+                                <tr><td><strong>Email:</strong></td><td>${log.user ? log.user.email : '-'}</td></tr>
+                                <tr><td><strong>Azione:</strong></td><td>${log.action}</td></tr>
+                                <tr><td><strong>Categoria:</strong></td><td>${log.category}</td></tr>
+                                <tr><td><strong>Livello:</strong></td><td>${log.level}</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Dettagli Tecnici</h6>
+                            <table class="table table-sm">
+                                <tr><td><strong>IP:</strong></td><td>${log.ip_address || '-'}</td></tr>
+                                <tr><td><strong>URL:</strong></td><td>${log.url || '-'}</td></tr>
+                                <tr><td><strong>Metodo:</strong></td><td>${log.method || '-'}</td></tr>
+                                <tr><td><strong>Status Code:</strong></td><td>${log.status_code || '-'}</td></tr>
+                                <tr><td><strong>Tempo Risposta:</strong></td><td>${log.response_time ? log.response_time + 'ms' : '-'}</td></tr>
+                                <tr><td><strong>User Agent:</strong></td><td>${log.user_agent || '-'}</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Descrizione</h6>
+                            <p>${log.description}</p>
+                        </div>
+                    </div>
+                    ${log.details ? `
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Dettagli</h6>
+                            <pre class="bg-light p-3 rounded">${JSON.stringify(log.details, null, 2)}</pre>
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+                document.getElementById('logDetailsContent').innerHTML = content;
+                new bootstrap.Modal(document.getElementById('logDetailsModal')).show();
+            }
+        })
+        .catch(error => {
+            console.error('Errore nel caricamento dettagli log:', error);
+            alert('Errore nel caricamento dei dettagli');
         });
-    });
+}
 
-    // Debounced search
-    let searchTimeout;
-    const searchInput = document.querySelector('input[name="search"]');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                document.getElementById('logFiltersForm').submit();
-            }, 500);
+function exportLogs() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+
+    fetch('/admin/logs/export', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Crea e scarica il file CSV
+            const csvContent = convertToCSV(data.data);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', data.filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    })
+    .catch(error => {
+        console.error('Errore nell\'export:', error);
+        alert('Errore nell\'export dei log');
+    });
+}
+
+function convertToCSV(data) {
+    if (data.length === 0) return '';
+
+    const headers = Object.keys(data[0]);
+    const csvRows = [headers.join(',')];
+
+    for (const row of data) {
+        const values = headers.map(header => {
+            const value = row[header];
+            return `"${String(value).replace(/"/g, '""')}"`;
         });
+        csvRows.push(values.join(','));
     }
-});
+
+    return csvRows.join('\n');
+}
+
+function clearOldLogs() {
+    new bootstrap.Modal(document.getElementById('clearLogsModal')).show();
+}
+
+function confirmClearLogs() {
+    const days = document.getElementById('clearDays').value;
+
+    fetch('/admin/logs/clear-old', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ days: days })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert('Errore nella pulizia dei log');
+        }
+    })
+    .catch(error => {
+        console.error('Errore nella pulizia:', error);
+        alert('Errore nella pulizia dei log');
+    });
+}
 </script>
-@endpush 
+@endpush

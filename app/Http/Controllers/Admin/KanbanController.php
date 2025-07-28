@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Services\LoggingService;
 
 class KanbanController extends Controller
 {
@@ -172,6 +173,21 @@ class KanbanController extends Controller
                 'attachments' => $attachments,
             ]);
 
+            // Log dell'attività
+            LoggingService::logAdmin('task_create', [
+                'task_id' => $task->id,
+                'task_title' => $task->title,
+                'task_category' => $task->category,
+                'task_priority' => $task->priority,
+                'task_status' => $task->status,
+                'assigned_to' => $task->assigned_to,
+                'due_date' => $task->due_date,
+                'estimated_hours' => $task->estimated_hours,
+                'attachments_count' => count($attachments),
+                'has_notes' => !empty($task->notes),
+                'has_tags' => !empty($task->tags),
+            ], 'Task', $task->id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Task created successfully',
@@ -282,6 +298,23 @@ class KanbanController extends Controller
             $task->attachments = $currentAttachments;
             $task->save();
 
+            // Log dell'attività
+            LoggingService::logAdmin('task_update', [
+                'task_id' => $task->id,
+                'task_title' => $task->title,
+                'task_category' => $task->category,
+                'task_priority' => $task->priority,
+                'assigned_to' => $task->assigned_to,
+                'due_date' => $task->due_date,
+                'estimated_hours' => $task->estimated_hours,
+                'progress_percentage' => $task->progress_percentage,
+                'attachments_count' => count($currentAttachments),
+                'new_attachments_count' => $request->hasFile('attachments') ? count($request->file('attachments')) : 0,
+                'has_notes' => !empty($task->notes),
+                'has_tags' => !empty($task->tags),
+                'updated_fields' => array_keys($request->except(['task_id', 'attachments'])),
+            ], 'Task', $task->id);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Task updated successfully',
@@ -369,6 +402,25 @@ class KanbanController extends Controller
 
         try {
             $task = Task::findOrFail($request->task_id);
+
+            // Log dell'attività prima dell'eliminazione
+            LoggingService::logAdmin('task_delete', [
+                'task_id' => $task->id,
+                'task_title' => $task->title,
+                'task_category' => $task->category,
+                'task_priority' => $task->priority,
+                'task_status' => $task->status,
+                'assigned_to' => $task->assigned_to,
+                'created_by' => $task->created_by,
+                'due_date' => $task->due_date,
+                'estimated_hours' => $task->estimated_hours,
+                'actual_hours' => $task->actual_hours,
+                'progress_percentage' => $task->progress_percentage,
+                'attachments_count' => count($task->attachments ?? []),
+                'comments_count' => $task->comments()->count(),
+                'has_notes' => !empty($task->notes),
+                'has_tags' => !empty($task->tags),
+            ], 'Task', $task->id);
 
             // Elimina tutte le immagini associate
             $attachments = $task->attachments ?? [];

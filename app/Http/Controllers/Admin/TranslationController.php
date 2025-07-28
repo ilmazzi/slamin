@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Services\LoggingService;
 use App\Services\AutoTranslationService;
 
 class TranslationController extends Controller
@@ -158,6 +159,15 @@ class TranslationController extends Controller
                 cache()->forget("translations.{$language}.{$file}");
             }
 
+            // Log dell'attività
+            LoggingService::logTranslation('update', [
+                'language' => $language,
+                'file' => $file,
+                'translations_count' => count($translations),
+                'backup_created' => true,
+                'backup_path' => $backupPath,
+            ], 'Translation', null);
+
             Log::info("Traduzioni aggiornate per {$language}/{$file} da " . Auth::user()?->email);
 
             return redirect()->route('admin.translations.show', [$language, $file])
@@ -205,6 +215,14 @@ class TranslationController extends Controller
                 }
             }
 
+            // Log dell'attività
+            LoggingService::logTranslation('create_language', [
+                'language_code' => $languageCode,
+                'language_name' => $request->language_name,
+                'files_copied' => count($files),
+                'source_language' => 'it',
+            ], 'Language', null);
+
             Log::info("Nuova lingua creata: {$languageCode} da " . Auth::user()?->email);
 
             return redirect()->route('admin.translations.index')
@@ -242,6 +260,11 @@ class TranslationController extends Controller
 
             // Elimina la directory
             File::deleteDirectory($languagePath);
+
+            // Log dell'attività
+            LoggingService::logTranslation('delete_language', [
+                'language' => $language,
+            ], 'Language', null);
 
             Log::info("Lingua eliminata: {$language} da " . Auth::user()?->email);
 
@@ -596,6 +619,16 @@ class TranslationController extends Controller
             }
 
             $translatedCount = count($keysToTranslate);
+
+            // Log dell'attività
+            LoggingService::logTranslation('auto_translate', [
+                'language' => $language,
+                'file' => $file,
+                'translated_keys' => $translatedCount,
+                'total_keys' => count($italianTranslations),
+                'service_used' => 'auto_translation',
+            ], 'Translation', null);
+
             Log::info("Traduzione automatica completata", [
                 'language' => $language,
                 'file' => $file,
@@ -683,6 +716,16 @@ class TranslationController extends Controller
             if (function_exists('cache')) {
                 cache()->flush();
             }
+
+            // Log dell'attività
+            LoggingService::logTranslation('auto_translate_all', [
+                'total_translated' => $totalTranslated,
+                'languages_processed' => count($languages) - 1, // -1 per escludere italiano
+                'files_processed' => count($translationFiles),
+                'errors_count' => count($errors),
+                'errors' => $errors,
+                'service_used' => 'auto_translation',
+            ], 'Translation', null);
 
             Log::info("Traduzione automatica globale completata", [
                 'total_translated' => $totalTranslated,

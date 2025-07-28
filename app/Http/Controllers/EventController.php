@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use App\Services\LoggingService;
 
 class EventController extends Controller
 {
@@ -425,6 +426,26 @@ class EventController extends Controller
 
         $invitationCount = count($invitations);
         $invitedUsersCount = count($invitedUsers);
+
+        // Log dell'attività
+        LoggingService::logEvent('create', [
+            'event_id' => $event->id,
+            'event_title' => $event->title,
+            'event_category' => $event->category,
+            'is_public' => $event->is_public,
+            'is_recurring' => $event->is_recurring,
+            'recurrence_type' => $event->recurrence_type,
+            'recurrence_count' => $event->recurrence_count,
+            'invitations_count' => $invitationCount,
+            'private_invitations_count' => $invitedUsersCount,
+            'has_image' => !empty($event->image_url),
+            'venue_name' => $event->venue_name,
+            'city' => $event->city,
+            'country' => $event->country,
+            'start_datetime' => $event->start_datetime,
+            'end_datetime' => $event->end_datetime,
+        ], 'Event', $event->id);
+
         $successMessage = __('events.event_created_success');
 
         if ($invitationCount > 0) {
@@ -598,7 +619,28 @@ class EventController extends Controller
             $validated['tags'] = []; // Set empty array if no tags
         }
 
+        // Log dell'attività prima dell'aggiornamento
+        $oldData = $event->toArray();
+
         $event->update($validated);
+
+        // Log dell'attività dopo l'aggiornamento
+        LoggingService::logEvent('update', [
+            'event_id' => $event->id,
+            'event_title' => $event->title,
+            'old_title' => $oldData['title'],
+            'old_status' => $oldData['status'],
+            'new_status' => $event->status,
+            'old_start_datetime' => $oldData['start_datetime'],
+            'new_start_datetime' => $event->start_datetime,
+            'old_venue_name' => $oldData['venue_name'],
+            'new_venue_name' => $event->venue_name,
+            'old_city' => $oldData['city'],
+            'new_city' => $event->city,
+            'has_image_changed' => isset($validated['image_url']),
+            'tags_changed' => isset($validated['tags']),
+            'updated_fields' => array_keys($validated),
+        ], 'Event', $event->id);
 
         // Notify participants about event update
         $this->notifyEventUpdate($event);
@@ -614,6 +656,22 @@ class EventController extends Controller
     public function destroy(Event $event): RedirectResponse
     {
         Gate::authorize('delete', $event);
+
+        // Log dell'attività prima dell'eliminazione
+        LoggingService::logEvent('delete', [
+            'event_id' => $event->id,
+            'event_title' => $event->title,
+            'event_category' => $event->category,
+            'event_status' => $event->status,
+            'organizer_id' => $event->organizer_id,
+            'venue_name' => $event->venue_name,
+            'city' => $event->city,
+            'start_datetime' => $event->start_datetime,
+            'end_datetime' => $event->end_datetime,
+            'participants_count' => $event->invitations()->where('status', 'accepted')->count(),
+            'pending_invitations_count' => $event->invitations()->where('status', 'pending')->count(),
+            'requests_count' => $event->requests()->count(),
+        ], 'Event', $event->id);
 
         // Notify all participants about cancellation
         $this->notifyEventCancellation($event);

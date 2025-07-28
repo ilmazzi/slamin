@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\ActivityLog;
 use App\Models\User;
-use App\Services\LoggingService;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -14,326 +15,263 @@ class LogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
         $this->middleware('admin');
     }
 
     /**
-     * Display the logs index page
+     * Display the activity logs
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        // Log that admin is viewing logs
-        LoggingService::logAdmin('log_view', [
-            'filters' => $request->all()
-        ]);
+        $query = ActivityLog::with('user')
+            ->orderBy('created_at', 'desc');
 
-        $query = ActivityLog::with('user');
+        // Filtri
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
 
-        // Apply filters
-        $query = $this->applyFilters($query, $request);
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
 
-        // Get paginated results
-        $logs = $query->orderBy('created_at', 'desc')->paginate(50);
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
 
-        // Get statistics
-        $stats = $this->getStats($request);
+        if ($request->filled('action')) {
+            $query->where('action', 'like', '%' . $request->action . '%');
+        }
 
-        // Get filter options
-        $filterOptions = $this->getFilterOptions();
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
 
-        return view('admin.logs.index', compact('logs', 'stats', 'filterOptions'));
-    }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
 
-    /**
-     * Show a specific log entry
-     */
-    public function show(ActivityLog $log)
-    {
-        LoggingService::logAdmin('log_detail_view', [
-            'log_id' => $log->id,
-            'log_action' => $log->action,
-            'log_category' => $log->category,
-        ]);
+        // Paginazione
+        $logs = $query->paginate(50);
 
-        return view('admin.logs.show', compact('log'));
-    }
-
-    /**
-     * Export logs to CSV
-     */
-    public function export(Request $request)
-    {
-        LoggingService::logAdmin('log_export', [
-            'filters' => $request->all()
-        ]);
-
-        $query = ActivityLog::with('user');
-        $query = $this->applyFilters($query, $request);
-
-        $logs = $query->orderBy('created_at', 'desc')->get();
-
-        $filename = 'activity_logs_' . now()->format('Y-m-d_H-i-s') . '.csv';
-
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        // Statistiche
+        $stats = [
+            'total_logs' => ActivityLog::count(),
+            'today_logs' => ActivityLog::whereDate('created_at', today())->count(),
+            'this_week_logs' => ActivityLog::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+            'this_month_logs' => ActivityLog::whereMonth('created_at', now()->month)->count(),
+            'error_logs' => ActivityLog::where('level', ActivityLog::LEVEL_ERROR)->count(),
+            'warning_logs' => ActivityLog::where('level', ActivityLog::LEVEL_WARNING)->count(),
         ];
 
-        $callback = function() use ($logs) {
-            $file = fopen('php://output', 'w');
+        // Filtri disponibili
+        $categories = ActivityLog::getCategories();
+        $levels = ActivityLog::getLevels();
+        $users = User::orderBy('name')->get();
 
-            // CSV headers
-            fputcsv($file, [
-                'ID',
-                'Date',
-                'User',
-                'Action',
-                'Category',
-                'Description',
-                'Level',
-                'IP Address',
-                'User Agent',
-                'URL',
-                'Method',
-                'Status Code',
-                'Response Time (ms)',
-                'Details'
-            ]);
+        // Top actions
+        $topActions = ActivityLog::select('action', DB::raw('count(*) as count'))
+            ->groupBy('action')
+            ->orderBy('count', 'desc')
+            ->limit(10)
+            ->get();
 
-            // CSV data
-            foreach ($logs as $log) {
-                fputcsv($file, [
-                    $log->id,
-                    $log->created_at->format('Y-m-d H:i:s'),
-                    $log->user ? $log->user->name : 'Guest',
-                    $log->action,
-                    $log->category,
-                    $log->description,
-                    $log->level,
-                    $log->ip_address,
-                    $log->user_agent,
-                    $log->url,
-                    $log->method,
-                    $log->status_code,
-                    $log->response_time,
-                    json_encode($log->details)
-                ]);
-            }
+        // Top users
+        $topUsers = ActivityLog::select('user_id', DB::raw('count(*) as count'))
+            ->with('user')
+            ->whereNotNull('user_id')
+            ->groupBy('user_id')
+            ->orderBy('count', 'desc')
+            ->limit(10)
+            ->get();
 
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return view('admin.logs.index', compact(
+            'logs',
+            'stats',
+            'categories',
+            'levels',
+            'users',
+            'topActions',
+            'topUsers'
+        ));
     }
 
     /**
-     * Get logs statistics
+     * Get logs for AJAX requests
      */
-    public function stats(Request $request)
+    public function getLogs(Request $request): JsonResponse
     {
-        $stats = $this->getStats($request);
+        $query = ActivityLog::with('user')
+            ->orderBy('created_at', 'desc');
 
-        return response()->json($stats);
+        // Applica filtri
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->filled('action')) {
+            $query->where('action', 'like', '%' . $request->action . '%');
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $logs = $query->paginate(50);
+
+        return response()->json([
+            'success' => true,
+            'logs' => $logs->items(),
+            'pagination' => [
+                'current_page' => $logs->currentPage(),
+                'last_page' => $logs->lastPage(),
+                'per_page' => $logs->perPage(),
+                'total' => $logs->total(),
+            ]
+        ]);
+    }
+
+    /**
+     * Get log details
+     */
+    public function show(ActivityLog $log): JsonResponse
+    {
+        $log->load('user');
+
+        return response()->json([
+            'success' => true,
+            'log' => $log
+        ]);
+    }
+
+    /**
+     * Export logs
+     */
+    public function export(Request $request): JsonResponse
+    {
+        $query = ActivityLog::with('user')
+            ->orderBy('created_at', 'desc');
+
+        // Applica filtri
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $logs = $query->get();
+
+        // Prepara i dati per l'export
+        $exportData = $logs->map(function ($log) {
+            return [
+                'ID' => $log->id,
+                'Data' => $log->created_at->format('d/m/Y H:i:s'),
+                'Utente' => $log->user ? $log->user->name : 'Sistema',
+                'Email' => $log->user ? $log->user->email : '-',
+                'Azione' => $log->action,
+                'Categoria' => $log->category,
+                'Livello' => $log->level,
+                'Descrizione' => $log->description,
+                'Dettagli' => json_encode($log->details, JSON_UNESCAPED_UNICODE),
+                'IP' => $log->ip_address,
+                'URL' => $log->url,
+                'Metodo' => $log->method,
+                'Status Code' => $log->status_code,
+                'Tempo Risposta' => $log->response_time ? $log->response_time . 'ms' : '-',
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $exportData,
+            'filename' => 'activity_logs_' . now()->format('Y-m-d_H-i-s') . '.csv'
+        ]);
     }
 
     /**
      * Clear old logs
      */
-    public function clear(Request $request)
+    public function clearOldLogs(Request $request): JsonResponse
     {
-        $days = $request->input('days', 30);
-        $category = $request->input('category');
-        $level = $request->input('level');
+        $days = $request->get('days', 30);
+        $date = now()->subDays($days);
 
-        $query = ActivityLog::where('created_at', '<', now()->subDays($days));
+        $deletedCount = ActivityLog::where('created_at', '<', $date)->delete();
 
-        if ($category) {
-            $query->where('category', $category);
-        }
-
-        if ($level) {
-            $query->where('level', $level);
-        }
-
-        $deletedCount = $query->count();
-        $query->delete();
-
-        LoggingService::logAdmin('log_clear', [
-            'deleted_count' => $deletedCount,
-            'days' => $days,
-            'category' => $category,
-            'level' => $level,
+        return response()->json([
+            'success' => true,
+            'message' => "Eliminati {$deletedCount} log più vecchi di {$days} giorni",
+            'deleted_count' => $deletedCount
         ]);
-
-        return redirect()->route('admin.logs.index')
-            ->with('success', "Successfully deleted {$deletedCount} log entries older than {$days} days.");
     }
 
     /**
-     * Get real-time logs (for AJAX requests)
+     * Get dashboard statistics
      */
-    public function realtime(Request $request)
+    public function getStats(): JsonResponse
     {
-        $lastId = $request->input('last_id', 0);
-        $limit = $request->input('limit', 10);
+        $stats = [
+            'total_logs' => ActivityLog::count(),
+            'today_logs' => ActivityLog::whereDate('created_at', today())->count(),
+            'this_week_logs' => ActivityLog::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+            'this_month_logs' => ActivityLog::whereMonth('created_at', now()->month)->count(),
+            'error_logs' => ActivityLog::where('level', ActivityLog::LEVEL_ERROR)->count(),
+            'warning_logs' => ActivityLog::where('level', ActivityLog::LEVEL_WARNING)->count(),
+        ];
 
-        $logs = ActivityLog::with('user')
-            ->where('id', '>', $lastId)
-            ->orderBy('created_at', 'desc')
-            ->limit($limit)
+        // Log per categoria (ultimi 7 giorni)
+        $categoryStats = ActivityLog::select('category', DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [now()->subDays(7), now()])
+            ->groupBy('category')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        // Log per livello (ultimi 7 giorni)
+        $levelStats = ActivityLog::select('level', DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [now()->subDays(7), now()])
+            ->groupBy('level')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        // Log per giorno (ultimi 30 giorni)
+        $dailyStats = ActivityLog::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [now()->subDays(30), now()])
+            ->groupBy('date')
+            ->orderBy('date')
             ->get();
 
         return response()->json([
-            'logs' => $logs,
-            'last_id' => $logs->max('id') ?? $lastId,
-            'count' => $logs->count(),
+            'success' => true,
+            'stats' => $stats,
+            'category_stats' => $categoryStats,
+            'level_stats' => $levelStats,
+            'daily_stats' => $dailyStats
         ]);
     }
-
-    /**
-     * Apply filters to the query
-     */
-    private function applyFilters($query, Request $request)
-    {
-        // Date range filter
-        if ($request->filled('date_from')) {
-            $query->where('created_at', '>=', Carbon::parse($request->date_from));
-        }
-
-        if ($request->filled('date_to')) {
-            $query->where('created_at', '<=', Carbon::parse($request->date_to)->endOfDay());
-        }
-
-        // Category filter
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
-
-        // Level filter
-        if ($request->filled('level')) {
-            $query->where('level', $request->level);
-        }
-
-        // User filter
-        if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
-        }
-
-        // Action filter
-        if ($request->filled('action')) {
-            $query->where('action', 'like', '%' . $request->action . '%');
-        }
-
-        // Search filter
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('action', 'like', "%{$search}%")
-                  ->orWhere('ip_address', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%")
-                               ->orWhere('email', 'like', "%{$search}%");
-                  });
-            });
-        }
-
-        // Status code filter
-        if ($request->filled('status_code')) {
-            $query->where('status_code', $request->status_code);
-        }
-
-        return $query;
-    }
-
-    /**
-     * Get statistics for the logs
-     */
-    private function getStats(Request $request)
-    {
-        $baseQuery = ActivityLog::query();
-        $baseQuery = $this->applyFilters($baseQuery, $request);
-
-        $totalLogs = $baseQuery->count();
-        $todayLogs = $baseQuery->whereDate('created_at', today())->count();
-        $thisWeekLogs = $baseQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
-
-        // Level distribution - create fresh query
-        $levelQuery = ActivityLog::query();
-        $levelQuery = $this->applyFilters($levelQuery, $request);
-        $levelStats = $levelQuery->select('level', DB::raw('count(*) as count'))
-            ->groupBy('level')
-            ->pluck('count', 'level')
-            ->toArray();
-
-        // Category distribution - create fresh query
-        $categoryQuery = ActivityLog::query();
-        $categoryQuery = $this->applyFilters($categoryQuery, $request);
-        $categoryStats = $categoryQuery->select('category', DB::raw('count(*) as count'))
-            ->groupBy('category')
-            ->pluck('count', 'category')
-            ->toArray();
-
-        // Top users - create fresh query
-        $topUsersQuery = ActivityLog::query();
-        $topUsersQuery = $this->applyFilters($topUsersQuery, $request);
-        $topUsers = $topUsersQuery->select('user_id', DB::raw('count(*) as count'))
-            ->whereNotNull('user_id')
-            ->groupBy('user_id')
-            ->with('user')
-            ->orderBy('count', 'desc')
-            ->limit(5)
-            ->get();
-
-        // Average response time - create fresh query
-        $responseTimeQuery = ActivityLog::query();
-        $responseTimeQuery = $this->applyFilters($responseTimeQuery, $request);
-        $avgResponseTime = $responseTimeQuery->whereNotNull('response_time')
-            ->avg('response_time');
-
-        // Error rate - create fresh query
-        $errorQuery = ActivityLog::query();
-        $errorQuery = $this->applyFilters($errorQuery, $request);
-        $errorCount = $errorQuery->whereIn('level', ['error', 'critical'])->count();
-        $errorRate = $totalLogs > 0 ? round(($errorCount / $totalLogs) * 100, 2) : 0;
-
-        return [
-            'total_logs' => $totalLogs,
-            'today_logs' => $todayLogs,
-            'this_week_logs' => $thisWeekLogs,
-            'level_stats' => $levelStats,
-            'category_stats' => $categoryStats,
-            'top_users' => $topUsers,
-            'avg_response_time' => round($avgResponseTime ?? 0, 2),
-            'error_rate' => $errorRate,
-            'error_count' => $errorCount,
-        ];
-    }
-
-    /**
-     * Get filter options for the form
-     */
-    private function getFilterOptions()
-    {
-        return [
-            'categories' => ActivityLog::getCategories(),
-            'levels' => ActivityLog::getLevels(),
-            'users' => User::orderBy('name')->pluck('name', 'id'),
-            'status_codes' => [
-                200 => '200 - OK',
-                201 => '201 - Created',
-                301 => '301 - Moved Permanently',
-                302 => '302 - Found',
-                400 => '400 - Bad Request',
-                401 => '401 - Unauthorized',
-                403 => '403 - Forbidden',
-                404 => '404 - Not Found',
-                422 => '422 - Unprocessable Entity',
-                500 => '500 - Internal Server Error',
-                502 => '502 - Bad Gateway',
-                503 => '503 - Service Unavailable',
-            ],
-        ];
-    }
-} 
+}
