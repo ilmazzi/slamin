@@ -255,6 +255,20 @@ class EventController extends Controller
         // Convert allow_requests to boolean
         $validated['allow_requests'] = isset($validated['allow_requests']) && ($validated['allow_requests'] === 'on' || $validated['allow_requests'] === true);
 
+        // Convert is_recurring to boolean
+        $validated['is_recurring'] = isset($validated['is_recurring']) && ($validated['is_recurring'] === '1' || $validated['is_recurring'] === 1 || $validated['is_recurring'] === true);
+
+        // Convert numeric recurrence fields
+        if (isset($validated['recurrence_interval'])) {
+            $validated['recurrence_interval'] = (int) $validated['recurrence_interval'];
+        }
+        if (isset($validated['recurrence_count'])) {
+            $validated['recurrence_count'] = (int) $validated['recurrence_count'];
+        }
+        if (isset($validated['recurrence_monthday'])) {
+            $validated['recurrence_monthday'] = (int) $validated['recurrence_monthday'];
+        }
+
         // Handle image upload
         if ($request->hasFile('event_image')) {
             $image = $request->file('event_image');
@@ -305,19 +319,21 @@ class EventController extends Controller
 
         DB::transaction(function () use ($validated, $invitations, $invitedUsers, &$event) {
             // Process recurrence settings
-            if (isset($validated['is_recurring']) && $validated['is_recurring']) {
+            if (isset($validated['is_recurring']) && $validated['is_recurring'] && !empty($validated['recurrence_type'])) {
                 // Set default values for recurrence
                 $validated['recurrence_interval'] = $validated['recurrence_interval'] ?? 1;
                 $validated['recurrence_count'] = $validated['recurrence_count'] ?? 5; // Default to 5 occurrences
 
                 // For weekly type, ensure recurrence_weekdays is set
                 if ($validated['recurrence_type'] === 'weekly' && empty($validated['recurrence_weekdays'])) {
-                    $validated['recurrence_weekdays'] = [$validated['start_datetime']->dayOfWeek];
+                    $startDate = Carbon::parse($validated['start_datetime']);
+                    $validated['recurrence_weekdays'] = [$startDate->dayOfWeek];
                 }
 
                 // For monthly type, ensure recurrence_monthday is set
                 if ($validated['recurrence_type'] === 'monthly' && empty($validated['recurrence_monthday'])) {
-                    $validated['recurrence_monthday'] = $validated['start_datetime']->day;
+                    $startDate = Carbon::parse($validated['start_datetime']);
+                    $validated['recurrence_monthday'] = $startDate->day;
                 }
             } else {
                 // Clear recurrence fields if not recurring
