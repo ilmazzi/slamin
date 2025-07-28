@@ -518,13 +518,13 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
 
         // System Logs
-        Route::prefix('logs')->name('logs.')->middleware('logging')->group(function () {
+        Route::prefix('logs')->name('logs.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\LogController::class, 'index'])->name('index');
+            Route::get('/get-logs', [App\Http\Controllers\Admin\LogController::class, 'getLogs'])->name('get-logs');
             Route::get('/{log}', [App\Http\Controllers\Admin\LogController::class, 'show'])->name('show');
-            Route::get('/export/csv', [App\Http\Controllers\Admin\LogController::class, 'export'])->name('export');
-            Route::get('/stats', [App\Http\Controllers\Admin\LogController::class, 'stats'])->name('stats');
-            Route::post('/clear', [App\Http\Controllers\Admin\LogController::class, 'clear'])->name('clear');
-            Route::get('/realtime', [App\Http\Controllers\Admin\LogController::class, 'realtime'])->name('realtime');
+            Route::post('/export', [App\Http\Controllers\Admin\LogController::class, 'export'])->name('export');
+            Route::post('/clear-old', [App\Http\Controllers\Admin\LogController::class, 'clearOldLogs'])->name('clear-old');
+            Route::get('/stats', [App\Http\Controllers\Admin\LogController::class, 'getStats'])->name('stats');
         });
         Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
         Route::post('/settings/thumbnails', [App\Http\Controllers\Admin\SystemSettingsController::class, 'manageThumbnails'])->name('settings.thumbnails');

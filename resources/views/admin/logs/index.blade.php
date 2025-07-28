@@ -1,8 +1,10 @@
-@extends('layout.app')
+@extends('layout.master')
 
 @section('title', 'Log di Attività - Admin')
 
-@section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+@section('main-content')
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row">
@@ -10,7 +12,7 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Log di Attività</li>
                     </ol>
                 </div>
