@@ -530,18 +530,18 @@ function loadEventsOnMapWithFilter(params) {
                     if (event.category_color_class) {
                         // Mappa le classi CSS ai colori esatti delle categorie (corrispondenti al modello Event)
                         const colorMap = {
-                            'bg-primary': '#007bff',      // Concert
-                            'bg-secondary': '#6c757d',    // Open Mic
-                            'bg-success': '#28a745',      // Festival
-                            'bg-danger': '#dc3545',       // Poetry Slam
-                            'bg-warning': '#ffc107',      // Workshop
-                            'bg-info': '#17a2b8',         // Conference
-                            'bg-light': '#f8f9fa',        // Light
-                            'bg-dark': '#343a40',         // Book Presentation
-                            'bg-purple': '#6f42c1',       // Poetry Art
-                            'bg-pink': '#e83e8c',         // Residency
-                            'bg-orange': '#fd7e14',       // Spoken Word
-                            'bg-cyan': '#0dcaf0'          // Reading
+                            'bg-primary': '#007bff',          // Concert
+                            'bg-secondary': '#6c757d',        // Open Mic
+                            'bg-success': '#28a745',          // Festival
+                            'bg-danger': '#dc3545',           // Poetry Slam
+                            'bg-warning': '#ffc107',          // Workshop
+                            'bg-info': '#17a2b8',             // Conference
+                            'bg-light': '#f8f9fa',            // Light
+                            'bg-dark': '#343a40',             // Book Presentation
+                            'bg-primary-600': '#0056b3',      // Poetry Art (blu scuro)
+                            'bg-outline-primary': '#0d6efd',  // Reading (blu con bordo)
+                            'bg-success-600': '#1e7e34',      // Residency (verde scuro)
+                            'bg-warning-600': '#e0a800'       // Spoken Word (giallo scuro)
                         };
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
                     }

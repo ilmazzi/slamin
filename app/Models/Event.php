@@ -326,17 +326,17 @@ class Event extends Model
     public function getCategoryColorClassAttribute(): string
     {
         return match($this->category) {
-            self::CATEGORY_CONCERT => 'bg-primary',
-            self::CATEGORY_CONFERENCE => 'bg-info',
-            self::CATEGORY_FESTIVAL => 'bg-success',
-            self::CATEGORY_WORKSHOP => 'bg-warning',
-            self::CATEGORY_OPEN_MIC => 'bg-secondary',
-            self::CATEGORY_POETRY_ART => 'bg-purple',
-            self::CATEGORY_POETRY_SLAM => 'bg-danger',
-            self::CATEGORY_BOOK_PRESENTATION => 'bg-dark',
-            self::CATEGORY_READING => 'bg-cyan',
-            self::CATEGORY_RESIDENCY => 'bg-pink',
-            self::CATEGORY_SPOKEN_WORD => 'bg-orange',
+            self::CATEGORY_CONCERT => 'bg-primary',           // Blu
+            self::CATEGORY_CONFERENCE => 'bg-info',           // Azzurro
+            self::CATEGORY_FESTIVAL => 'bg-success',          // Verde
+            self::CATEGORY_WORKSHOP => 'bg-warning',          // Giallo
+            self::CATEGORY_OPEN_MIC => 'bg-secondary',        // Grigio
+            self::CATEGORY_POETRY_ART => 'bg-primary-600',    // Blu scuro
+            self::CATEGORY_POETRY_SLAM => 'bg-danger',        // Rosso
+            self::CATEGORY_BOOK_PRESENTATION => 'bg-dark',    // Grigio scuro
+            self::CATEGORY_READING => 'bg-outline-primary',   // Blu con bordo
+            self::CATEGORY_RESIDENCY => 'bg-success-600',     // Verde scuro
+            self::CATEGORY_SPOKEN_WORD => 'bg-warning-600',   // Giallo scuro
             default => 'bg-secondary',
         };
     }
@@ -352,12 +352,12 @@ class Event extends Model
             self::CATEGORY_FESTIVAL => 'bg-light-success',
             self::CATEGORY_WORKSHOP => 'bg-light-warning',
             self::CATEGORY_OPEN_MIC => 'bg-light-secondary',
-            self::CATEGORY_POETRY_ART => 'bg-light-purple',
+            self::CATEGORY_POETRY_ART => 'bg-light-primary',
             self::CATEGORY_POETRY_SLAM => 'bg-light-danger',
             self::CATEGORY_BOOK_PRESENTATION => 'bg-light-dark',
-            self::CATEGORY_READING => 'bg-light-cyan',
-            self::CATEGORY_RESIDENCY => 'bg-light-pink',
-            self::CATEGORY_SPOKEN_WORD => 'bg-light-orange',
+            self::CATEGORY_READING => 'bg-light-primary',
+            self::CATEGORY_RESIDENCY => 'bg-light-success',
+            self::CATEGORY_SPOKEN_WORD => 'bg-light-warning',
             default => 'bg-light-secondary',
         };
     }
