@@ -329,6 +329,7 @@ Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/api/events/near', [EventController::class, 'near'])->name('events.near');
+Route::get('/api/events', [EventController::class, 'events'])->name('events.api');
 
 // Test endpoint semplificato
 Route::get('/api/events/test', function() {

@@ -95,13 +95,9 @@
                             <div class="col-lg-2 col-md-4">
                                 <select name="type" class="form-select">
                                     <option value="">{{ __('events.all_types') }}</option>
-                                    <option value="public" {{ request('type') == 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
-                                    <option value="private" {{ request('type') == 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
+                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
+                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
-                            </div>
-                            <div class="col-lg-2 col-md-4">
-                                <input type="number" name="radius" class="form-control"
-                                       placeholder="{{ __('events.radius_km') }}" value="{{ request('radius', 50) }}" min="1" max="200">
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <div class="d-flex gap-2 justify-content-end">
@@ -280,11 +276,11 @@
                                 <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
                                     {{ __('common.view') }}
                                     </a>
-                                </div>
-                                </div>
-                    </div>
-                </div>
-            </div>
+                            </div>
+                                            </div>
+                                        </div>
+                                            </div>
+                                        </div>
         @empty
             <div class="col-12">
                 <div class="card">
@@ -303,7 +299,7 @@
                 </div>
             </div>
         @endforelse
-    </div>
+                                </div>
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
@@ -313,63 +309,63 @@
                     <div class="d-flex align-items-center justify-content-center mb-3">
                         <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                             <i class="ph ph-calendar" style="font-size: 24px;"></i>
-            </div>
-        </div>
-                    <h4 class="mb-1">{{ $events->total() }}</h4>
+                                        </div>
+                                    </div>
+                    <h4 class="mb-1">{{ $statistics['total_events'] }}</h4>
                     <p class="text-muted mb-0">{{ __('events.total_events') }}</p>
-</div>
-            </div>
-                    </div>
+                                    </div>
+                        </div>
+                            </div>
         <div class="col-md-3 col-6 mb-3">
             <div class="card">
                 <div class="card-body text-center py-4">
                     <div class="d-flex align-items-center justify-content-center mb-3">
                         <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                             <i class="ph ph-globe" style="font-size: 24px;"></i>
-                    </div>
-                    </div>
-                    <h4 class="mb-1">{{ $events->where('is_public', true)->count() }}</h4>
+                                </div>
+                                </div>
+                    <h4 class="mb-1">{{ $statistics['public_events'] }}</h4>
                     <p class="text-muted mb-0">{{ __('events.public_events_count') }}</p>
-                        </div>
-                    </div>
-                </div>
+                                </div>
+                                </div>
+                            </div>
         <div class="col-md-3 col-6 mb-3">
             <div class="card">
                 <div class="card-body text-center py-4">
                     <div class="d-flex align-items-center justify-content-center mb-3">
                         <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                             <i class="ph ph-clock" style="font-size: 24px;"></i>
-                </div>
-        </div>
-                    <h4 class="mb-1">{{ $events->where('start_datetime', '>', now())->count() }}</h4>
+                        </div>
+                    </div>
+                    <h4 class="mb-1">{{ $statistics['upcoming_events'] }}</h4>
                     <p class="text-muted mb-0">{{ __('events.upcoming_events_count') }}</p>
-    </div>
-</div>
+                </div>
+            </div>
         </div>
         <div class="col-md-3 col-6 mb-3">
-            <div class="card">
+                <div class="card">
                 <div class="card-body text-center py-4">
                     <div class="d-flex align-items-center justify-content-center mb-3">
                         <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                             <i class="ph ph-map-pin" style="font-size: 24px;"></i>
-                        </div>
                     </div>
-                    <h4 class="mb-1">{{ $events->pluck('city')->unique()->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.cities_count') }}</p>
                 </div>
+                    <h4 class="mb-1">{{ $statistics['cities_count'] }}</h4>
+                    <p class="text-muted mb-0">{{ __('events.cities_count') }}</p>
+            </div>
+    </div>
             </div>
         </div>
-    </div>
 </div>
 
     <!-- Event Details Modal -->
     <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
                     <h5 class="modal-title" id="eventDetailsModalLabel">Dettagli Evento</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+            </div>
                 <div class="modal-body" id="eventDetailsModalBody">
                     <!-- Content will be loaded here -->
                 </div>
@@ -377,9 +373,9 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                     <a href="#" class="btn btn-primary" id="eventDetailsModalLink">Vedi Dettagli Completi</a>
                 </div>
-            </div>
         </div>
     </div>
+</div>
 
 <script>
 function changePerPage(value) {
@@ -443,16 +439,15 @@ function initMap() {
 }
 
 function loadEventsWithCurrentFilters() {
-    const center = map.getCenter();
-    const params = {
-        latitude: center.lat,
-        longitude: center.lng
-    };
+    const params = {};
     
     // Ottieni i parametri correnti dall'URL
     const urlParams = new URLSearchParams(window.location.search);
     
     // Applica i filtri correnti
+    if (urlParams.has('search')) {
+        params.search = urlParams.get('search');
+    }
     if (urlParams.has('date_from')) {
         params.date_from = urlParams.get('date_from');
     }
@@ -465,17 +460,34 @@ function loadEventsWithCurrentFilters() {
     if (urlParams.has('filter')) {
         params.filter = urlParams.get('filter');
     }
+    if (urlParams.has('city')) {
+        params.city = urlParams.get('city');
+    }
+    if (urlParams.has('type')) {
+        params.type = urlParams.get('type');
+    }
+    
+    // Applica coordinate solo se esplicitamente specificate o se è il filtro 'nearby'
     if (urlParams.has('lat') && urlParams.has('lng')) {
         params.latitude = parseFloat(urlParams.get('lat'));
         params.longitude = parseFloat(urlParams.get('lng'));
         // Centra la mappa sulla posizione del filtro
         map.setView([params.latitude, params.longitude], 12);
-    }
-    // Aggiungi radius solo se è il filtro 'nearby' o se viene specificato esplicitamente
-    if (urlParams.has('filter') && urlParams.get('filter') === 'nearby') {
-        params.radius = urlParams.get('radius') || '10';
-    } else if (urlParams.has('radius') && urlParams.get('radius') > 0) {
-        params.radius = urlParams.get('radius');
+    } else if (urlParams.has('filter') && urlParams.get('filter') === 'nearby') {
+        // Per il filtro nearby, usa la posizione dell'utente se disponibile
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                params.latitude = position.coords.latitude;
+                params.longitude = position.coords.longitude;
+                params.radius = urlParams.get('radius') || '10';
+                console.log('Loading events with nearby filter:', params);
+                loadEventsOnMapWithFilter(params);
+            }, function(error) {
+                console.log('Geolocation not available, loading without location filter');
+                loadEventsOnMapWithFilter(params);
+            });
+            return;
+        }
     }
     
     console.log('Loading events with current filters:', params);
@@ -497,7 +509,15 @@ function loadEventsOnMapWithFilter(params) {
     markers = [];
 
     // Build URL with parameters
-    const url = new URL('/api/events/near', window.location.origin);
+    let url;
+    if (params.latitude && params.longitude) {
+        // Se abbiamo coordinate, usa l'endpoint /api/events/near
+        url = new URL('/api/events/near', window.location.origin);
+    } else {
+        // Se non abbiamo coordinate, usa l'endpoint /api/events (senza filtro di posizione)
+        url = new URL('/api/events', window.location.origin);
+    }
+    
     Object.keys(params).forEach(key => {
         if (params[key] !== null && params[key] !== undefined) {
             url.searchParams.append(key, params[key]);
@@ -586,7 +606,7 @@ function loadEventsOnMapWithFilter(params) {
                         openEventDetailsModal(event);
                     });
                     
-                    markers.push(marker);
+                markers.push(marker);
                 } else {
                     console.log(`Event ${event.id} has no coordinates:`, event);
                 }
@@ -762,11 +782,30 @@ function applyFilterToList(filterType) {
         case 'nearby':
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    params.filter = 'nearby';
-                    params.lat = position.coords.latitude;
-                    params.lng = position.coords.longitude;
-                    params.radius = '10';
-                    updateEventsList(params);
+                    const form = document.getElementById('filterForm');
+                    addHiddenInput(form, 'filter', 'nearby');
+                    addHiddenInput(form, 'lat', position.coords.latitude);
+                    addHiddenInput(form, 'lng', position.coords.longitude);
+                    addHiddenInput(form, 'radius', '10');
+                    
+                    // Crea i parametri per la mappa
+                    const mapParams = {
+                        filter: 'nearby',
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        radius: '10'
+                    };
+                    
+                    // Aggiorna la mappa
+                    loadEventsOnMapWithFilter(mapParams);
+                    
+                    // Aggiorna la lista
+                    updateEventsList({
+                        filter: 'nearby',
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        radius: '10'
+                    });
                 });
                 return;
             }
@@ -781,13 +820,8 @@ function applyFilterToList(filterType) {
             break;
     }
 
-    // Aggiorna solo la mappa con i nuovi filtri
-    const center = map.getCenter();
-    const mapParams = {
-        latitude: center.lat,
-        longitude: center.lng,
-        ...params
-    };
+    // Aggiorna solo la mappa con i nuovi filtri (senza posizione automatica)
+    const mapParams = { ...params };
     
     console.log('Applying filter to map only:', filterType, mapParams);
     loadEventsOnMapWithFilter(mapParams);
@@ -857,14 +891,15 @@ function applyFilterToMap(filterType) {
     loadEventsOnMapWithFilter(params);
 }
 
+// Funzione per aggiungere campi nascosti al form
 function addHiddenInput(form, name, value) {
-    // Remove existing hidden input with same name
-    const existing = form.querySelector(`input[name="${name}"]`);
-    if (existing && existing.type === 'hidden') {
-        existing.remove();
+    // Rimuovi input esistenti con lo stesso nome
+    const existingInput = form.querySelector(`input[name="${name}"]`);
+    if (existingInput) {
+        existingInput.remove();
     }
-
-    // Add new hidden input
+    
+    // Aggiungi nuovo input
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = name;
@@ -951,5 +986,46 @@ function openEventDetailsModal(event) {
     const modal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
     modal.show();
 }
+
+// Add event listeners for quick filters
+document.addEventListener('DOMContentLoaded', function() {
+    // Quick filter click handlers
+    const quickFilters = document.querySelectorAll('[data-filter]');
+    quickFilters.forEach(filter => {
+        filter.addEventListener('click', function(e) {
+            e.preventDefault();
+            const filterType = this.getAttribute('data-filter');
+            console.log('Quick filter clicked:', filterType);
+            
+            // Update form with quick filter
+            const form = document.getElementById('filterForm');
+            addHiddenInput(form, 'quick_filter', filterType);
+            
+            // Submit form
+            form.submit();
+    });
+});
+
+    // Remove ALL auto-submit behavior
+    const form = document.getElementById('filterForm');
+    
+    // Prevent form from auto-submitting on any input change
+    form.addEventListener('submit', function(e) {
+        // Only allow submit if it's the filter button or quick filter
+        const submitter = e.submitter;
+        if (!submitter || (submitter.type !== 'submit' && !submitter.hasAttribute('data-filter'))) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Remove any existing change/input listeners that might cause auto-submit
+    const inputs = form.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        // Clone the input to remove all event listeners
+        const newInput = input.cloneNode(true);
+        input.parentNode.replaceChild(newInput, input);
+    });
+});
 </script>
 @endpush

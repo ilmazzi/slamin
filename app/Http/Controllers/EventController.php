@@ -46,13 +46,19 @@ class EventController extends Controller
             $query->upcoming();
         }
 
-        // Filter by location if provided
-        if ($request->has(['lat', 'lng'])) {
-            $query->nearLocation(
-                $request->lat,
-                $request->lng,
-                $request->radius ?? 50
-            );
+        // Filter by search term
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('venue_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('city', 'like', '%' . $searchTerm . '%')
+                  ->orWhereHas('organizer', function ($organizerQuery) use ($searchTerm) {
+                      $organizerQuery->where('name', 'like', '%' . $searchTerm . '%')
+                                    ->orWhere('nickname', 'like', '%' . $searchTerm . '%');
+                  });
+            });
         }
 
         // Filter by city
@@ -90,6 +96,34 @@ class EventController extends Controller
                     $q->orWhereJsonContains('tags', trim($tag));
                 }
             });
+        }
+
+        // Quick filters
+        if ($request->filled('quick_filter')) {
+            switch ($request->quick_filter) {
+                case 'today':
+                    $query->whereDate('start_datetime', today());
+                    break;
+                case 'tomorrow':
+                    $query->whereDate('start_datetime', today()->addDay());
+                    break;
+                case 'weekend':
+                    $query->where(function ($q) {
+                        $q->whereRaw('DAYOFWEEK(start_datetime) IN (1, 7)') // Domenica = 1, Sabato = 7
+                          ->whereDate('start_datetime', '>=', today())
+                          ->whereDate('start_datetime', '<=', today()->addDays(7));
+                    });
+                    break;
+                case 'free':
+                    $query->where(function($q) {
+                        $q->where('entry_fee', 0)
+                          ->orWhereNull('entry_fee');
+                    });
+                    break;
+                case 'nearby':
+                    // This will be handled by the map filters, not here
+                    break;
+            }
         }
 
         // Filter for "My Events" - events organized by user or where user participates
@@ -229,7 +263,18 @@ class EventController extends Controller
 
         $events = $query->paginate($request->get('per_page', 10));
 
-        return view('events.index', compact('events'));
+        // Calcola le statistiche sui dati filtrati
+        $filteredQuery = clone $query;
+        $filteredEvents = $filteredQuery->get();
+        
+        $statistics = [
+            'total_events' => $filteredEvents->count(),
+            'public_events' => $filteredEvents->where('is_public', true)->count(),
+            'upcoming_events' => $filteredEvents->where('start_datetime', '>', now())->count(),
+            'cities_count' => $filteredEvents->pluck('city')->unique()->count(),
+        ];
+
+        return view('events.index', compact('events', 'statistics'));
     }
 
     /**
@@ -588,15 +633,15 @@ class EventController extends Controller
 
         // Salva il luogo come recente solo per eventi fisici
         if (!$event->is_online && $event->venue_name) {
-            RecentVenue::saveRecentVenue([
-                'venue_name' => $event->venue_name,
-                'venue_address' => $event->venue_address,
-                'city' => $event->city,
-                'postcode' => $event->postcode,
-                'country' => $event->country,
-                'latitude' => $event->latitude,
-                'longitude' => $event->longitude,
-            ]);
+        RecentVenue::saveRecentVenue([
+            'venue_name' => $event->venue_name,
+            'venue_address' => $event->venue_address,
+            'city' => $event->city,
+            'postcode' => $event->postcode,
+            'country' => $event->country,
+            'latitude' => $event->latitude,
+            'longitude' => $event->longitude,
+        ]);
         }
 
         return redirect()
@@ -1228,6 +1273,177 @@ class EventController extends Controller
         });
 
         return response()->json($events);
+    }
+
+    /**
+     * Get events for API (without location filter)
+     */
+    public function events(Request $request): JsonResponse
+    {
+        Log::info('Events API request params: ', $request->all());
+
+        $query = Event::with(['organizer'])
+                     ->published();
+
+        // Apply upcoming filter only if not filtering for past events or invitations
+        if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
+            $query->upcoming();
+        }
+
+        // Filter by search term
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('venue_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('city', 'like', '%' . $searchTerm . '%')
+                  ->orWhereHas('organizer', function ($organizerQuery) use ($searchTerm) {
+                      $organizerQuery->where('name', 'like', '%' . $searchTerm . '%')
+                                    ->orWhere('nickname', 'like', '%' . $searchTerm . '%');
+                  });
+            });
+        }
+
+        // Filter by city
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+
+        // Filter by type (public/private)
+        if ($request->filled('type')) {
+            $query->where('is_public', $request->type === 'public');
+        }
+
+        // Filter by date range
+        if ($request->filled('date_from')) {
+            $query->whereDate('start_datetime', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('start_datetime', '<=', $request->date_to);
+        }
+
+        // Filter free events only
+        if ($request->filled('free_only') && $request->free_only == '1') {
+            $query->where(function($q) {
+                $q->where('entry_fee', 0)
+                  ->orWhereNull('entry_fee');
+            });
+        }
+
+        // Quick filters
+        if ($request->filled('quick_filter')) {
+            switch ($request->quick_filter) {
+                case 'today':
+                    $query->whereDate('start_datetime', today());
+                    break;
+                case 'tomorrow':
+                    $query->whereDate('start_datetime', today()->addDay());
+                    break;
+                case 'weekend':
+                    $query->where(function ($q) {
+                        $q->whereRaw('DAYOFWEEK(start_datetime) IN (1, 7)') // Domenica = 1, Sabato = 7
+                          ->whereDate('start_datetime', '>=', today())
+                          ->whereDate('start_datetime', '<=', today()->addDays(7));
+                    });
+                    break;
+                case 'free':
+                    $query->where(function($q) {
+                        $q->where('entry_fee', 0)
+                          ->orWhereNull('entry_fee');
+                    });
+                    break;
+            }
+        }
+
+        // Handle user-specific filters
+        $user = Auth::user();
+        if ($user) {
+            $userId = $user->id;
+
+            // Filter for "My Events"
+            if ($request->filled('filter') && $request->filter === 'my') {
+                $query->where(function ($q) use ($userId) {
+                    $q->where('organizer_id', $userId)
+                      ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                          $inviteQuery->where('invited_user_id', $userId)
+                                      ->where('status', 'accepted');
+                      })
+                      ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                          $requestQuery->where('user_id', $userId)
+                                       ->where('status', 'accepted');
+                      });
+                });
+            }
+            // Filter for "My Private Events"
+            elseif ($request->filled('filter') && $request->filter === 'my_private') {
+                $query->where('is_public', false)
+                      ->where(function ($q) use ($userId) {
+                          $q->where('organizer_id', $userId)
+                            ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                                $inviteQuery->where('invited_user_id', $userId)
+                                            ->where('status', 'accepted');
+                            })
+                            ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                                $requestQuery->where('user_id', $userId)
+                                             ->where('status', 'accepted');
+                            });
+                      });
+            } else {
+                // If not filtering for "my events", only show public events or private events where user has access
+                $query->where(function ($q) use ($userId) {
+                    $q->where('is_public', true)
+                      ->orWhere('organizer_id', $userId)
+                      ->orWhere(function ($subQ) use ($userId) {
+                          $subQ->where('is_public', false)
+                               ->whereHas('invitations', function ($inviteQuery) use ($userId) {
+                                   $inviteQuery->where('invited_user_id', $userId)
+                                               ->where('status', 'accepted');
+                               });
+                      })
+                      ->orWhere(function ($subQ) use ($userId) {
+                          $subQ->where('is_public', false)
+                               ->whereHas('requests', function ($requestQuery) use ($userId) {
+                                   $requestQuery->where('user_id', $userId)
+                                                ->where('status', 'accepted');
+                               });
+                      });
+                });
+            }
+        } else {
+            // If user is not authenticated, only show public events
+            $query->where('is_public', true);
+        }
+
+        $events = $query->get();
+
+        Log::info('Final events count: ' . $events->count());
+
+        $eventsData = $events->map(function ($event) {
+            return [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start_datetime' => $event->start_datetime->format('d/m/Y H:i'),
+                'venue_name' => $event->venue_name,
+                'city' => $event->city,
+                'organizer' => $event->organizer->name,
+                'is_online' => $event->is_online,
+                'timezone' => $event->timezone,
+                'online_url' => $event->online_url,
+                'latitude' => $event->latitude,
+                'longitude' => $event->longitude,
+                'category' => $event->category,
+                'category_name' => $event->getCategoryDisplayName(),
+                'category_color_class' => $event->category_color_class,
+                'url' => route('events.show', $event),
+                'image_url' => $event->image_url,
+                'max_participants' => $event->max_participants,
+                'entry_fee' => $event->entry_fee,
+            ];
+        });
+
+        return response()->json($eventsData);
     }
 
     /**
