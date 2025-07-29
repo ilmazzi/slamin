@@ -4,26 +4,8 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 <style>
-/* Event popup styles */
-.event-popup {
-    min-width: 200px;
-    padding: 10px;
-}
-
-.event-popup h6 {
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.event-popup p {
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-.event-popup .btn {
-    margin-top: 10px;
-}
-</style>
+            .custom-marker { background: transparent; border: none; }
+            </style>
 @endsection
 
 @section('breadcrumb-title')
@@ -199,23 +181,20 @@
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 position-relative">
                     <!-- Event Status Badge -->
-                    <div class="position-absolute top-0 end-0 m-3" style="z-index: 3;">
+                    <div class="position-absolute top-0 end-0 p-3" style="z-index: 3;">
                         @if($event->is_public)
                             <span class="badge bg-success">{{ __('events.public') }}</span>
                         @else
                             <span class="badge bg-warning">{{ __('events.private') }}</span>
                         @endif
-
                         @if($event->acceptsRequests())
-                            <span class="badge bg-info ms-1" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ __('events.apply_to_event') }}">
-                                <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
+                            <span class="badge bg-primary ms-1">
+                                <i class="ph ph-check me-1"></i>{{ __('events.apply_to_event') }}
                             </span>
                         @endif
-
-                        <!-- Category Badge -->
                         @if($event->category)
-                            <span class="badge {{ $event->category_color_class }} ms-1" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ __('events.category') }}">
-                                {{ __('events.category_' . $event->category) }}
+                            <span class="badge {{ $event->category_color_class }} ms-1">
+                                {{ $event->getCategoryDisplayName() }}
                             </span>
                         @endif
                     </div>
@@ -383,6 +362,25 @@
     </div>
 </div>
 
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailsModalLabel">Dettagli Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventDetailsModalBody">
+                    <!-- Content will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <a href="#" class="btn btn-primary" id="eventDetailsModalLink">Vedi Dettagli Completi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script>
 function changePerPage(value) {
     const url = new URL(window.location);
@@ -530,21 +528,19 @@ function loadEventsOnMapWithFilter(params) {
                     // Determina il colore del marker basato sulla categoria
                     let markerColor = '#6c757d'; // Default secondary (grigio)
                     if (event.category_color_class) {
-                        // Mappa le classi CSS ai colori esatti delle categorie
+                        // Mappa le classi CSS ai colori esatti delle categorie (corrispondenti al modello Event)
                         const colorMap = {
                             'bg-primary': '#007bff',      // Concert
                             'bg-secondary': '#6c757d',    // Open Mic
-                            'bg-success': '#28a745',      // Festival
+                            'bg-success': '#28a745',      // Festival, Book Presentation
                             'bg-danger': '#dc3545',       // Poetry Slam
                             'bg-warning': '#ffc107',      // Workshop
-                            'bg-info': '#17a2b8',         // Conference
+                            'bg-info': '#17a2b8',         // Conference, Reading
                             'bg-light': '#f8f9fa',        // Light
                             'bg-dark': '#343a40',         // Dark
-                            'bg-indigo': '#6610f2',       // Reading
                             'bg-purple': '#6f42c1',       // Poetry Art
                             'bg-pink': '#e83e8c',         // Residency
                             'bg-orange': '#fd7e14',       // Spoken Word
-                            'bg-teal': '#20c997',         // Book Presentation
                             'bg-cyan': '#0dcaf0'          // Cyan
                         };
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
@@ -585,27 +581,12 @@ function loadEventsOnMapWithFilter(params) {
                     
                     console.log(`Marker added to map at [${lat}, ${lng}]`);
                     
-                    // Create popup content
-                    let popupContent = `
-                        <div class="event-popup">
-                            <h6><strong>${event.title}</strong></h6>
-                            <p><strong>Data:</strong> ${event.start_datetime}</p>
-                    `;
+                    // Add click handler to open modal instead of popup
+                    marker.on('click', function() {
+                        openEventDetailsModal(event);
+                    });
                     
-                    if (event.is_online) {
-                        popupContent += `<p><strong>Tipo:</strong> Evento Online - ${event.timezone || 'N/A'}</p>`;
-                    } else {
-                        popupContent += `<p><strong>Luogo:</strong> ${event.venue_name || 'N/A'}, ${event.city || 'N/A'}</p>`;
-                    }
-                    
-                    popupContent += `
-                            <p><strong>Organizzatore:</strong> ${event.organizer}</p>
-                            <a href="${event.url}" class="btn btn-sm btn-primary">Dettagli</a>
-                        </div>
-                    `;
-                    
-                    marker.bindPopup(popupContent);
-                markers.push(marker);
+                    markers.push(marker);
                 } else {
                     console.log(`Event ${event.id} has no coordinates:`, event);
                 }
@@ -889,6 +870,86 @@ function addHiddenInput(form, name, value) {
     input.name = name;
     input.value = value;
     form.appendChild(input);
+}
+
+// Function to open event details modal
+function openEventDetailsModal(event) {
+    const modalBody = document.getElementById('eventDetailsModalBody');
+    const modalLink = document.getElementById('eventDetailsModalLink');
+    
+    // Create modal content with horizontal layout
+    let modalContent = `
+        <div class="row">
+            <div class="col-md-4">
+                <img src="${event.image_url || '/assets/images/events/default-event.jpg'}" 
+                     class="img-fluid rounded" 
+                     alt="${event.title}" 
+                     onerror="this.src='/assets/images/events/default-event.jpg'">
+            </div>
+            <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h4 class="mb-0">${event.title}</h4>
+                    <span class="badge ${event.category_color_class} fs-6">${event.category_name || 'N/A'}</span>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                        <strong>Data e Ora:</strong> ${event.start_datetime}
+                    </div>
+                </div>
+    `;
+    
+    if (event.is_online) {
+        modalContent += `
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <i class="fas fa-globe text-success me-2"></i>
+                        <strong class="text-success">Evento Online</strong>
+                        ${event.timezone ? `<br><small class="text-muted">Fuso orario: ${event.timezone}</small>` : ''}
+                    </div>
+                </div>
+        `;
+    } else {
+        modalContent += `
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        <strong>Luogo:</strong> ${event.venue_name || 'N/A'}
+                        ${event.city ? `<br><small class="text-muted">${event.city}</small>` : ''}
+                    </div>
+                </div>
+        `;
+    }
+    
+    modalContent += `
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <i class="fas fa-user text-info me-2"></i>
+                        <strong>Organizzatore:</strong> ${event.organizer}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <i class="fas fa-users text-warning me-2"></i>
+                        <strong>Partecipanti:</strong> ${event.max_participants || 'Illimitato'}
+                    </div>
+                    <div class="col-6">
+                        <i class="fas fa-euro-sign text-success me-2"></i>
+                        <strong>Prezzo:</strong> ${event.entry_fee ? event.entry_fee + '€' : 'Gratuito'}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modalBody.innerHTML = modalContent;
+    modalLink.href = event.url;
+    
+    // Open the modal
+    const modal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
+    modal.show();
 }
 </script>
 @endpush

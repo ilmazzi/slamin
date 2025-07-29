@@ -1083,7 +1083,7 @@ class EventController extends Controller
                 Log::info('After free_only filter - Count: ' . $query->count());
             }
 
-            // Applica filtro di distanza SOLO se esplicitamente richiesto (filtro 'nearby')
+            // Applica filtri di distanza SOLO se esplicitamente richiesto (filtro 'nearby')
             // o se viene passato un raggio specifico
             if ($request->filled('filter') && $request->filter === 'nearby') {
                 $radius = $request->radius ?? 10; // Default 10km per filtro "Vicino a me"
@@ -1122,11 +1122,14 @@ class EventController extends Controller
                     'organizer' => $event->organizer ? $event->organizer->getDisplayName() : 'N/A',
                     'url' => route('events.show', $event),
                     'category' => $event->category,
-                    'category_name' => $event->category ? __('events.category_' . $event->category) : null,
+                    'category_name' => $event->getCategoryDisplayName(),
                     'category_color_class' => $event->category_color_class,
                     'is_online' => $event->is_online,
                     'online_url' => $event->online_url,
                     'timezone' => $event->timezone,
+                    'image_url' => $event->image_url,
+                    'max_participants' => $event->max_participants,
+                    'entry_fee' => $event->entry_fee,
                 ];
             });
 
