@@ -3057,8 +3057,21 @@ function updatePreviewWithImage(imageSrc) {
     }
 }
 
-// Search users for invitations
-function searchUsers() {
+    // Disable form submission on Enter key
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+    });
+
+    // Search users for invitations
+    function searchUsers() {
     const query = document.getElementById('userSearch').value.trim();
     if (query.length < 2) {
         Swal.fire({
