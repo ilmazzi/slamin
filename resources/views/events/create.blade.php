@@ -164,17 +164,6 @@
                                 <div class="error-feedback" id="category-error"></div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">{{ __('events.requests') }}</label>
-                                <div class="form-check form-switch">
-                                    <input type="checkbox" name="allow_requests" id="allow_requests" class="form-check-input" checked>
-                                    <label for="allow_requests" class="form-check-label">
-                                        {{ __('events.allows_requests') }}
-                                    </label>
-                                </div>
-                                <small class="text-muted">Gli artisti possono richiedere di partecipare</small>
-                            </div>
-
                             <!-- Inviti per eventi privati -->
                             <div class="col-12 mb-3" id="private-invites-section" style="display: none;">
                                 <div class="card">
@@ -487,7 +476,25 @@
                                     </div>
                                 </div>
                             </div>
-
+ <!-- Recent Venues Dropdown -->
+ @if($recentVenues->count() > 0)
+ <div class="col-12 mb-3" id="recent-venues-section">
+     <div class="form-floating">
+         <select name="recent_venue" id="recent_venue" class="form-select" onchange="loadRecentVenueFromDropdown(this.value)">
+             <option value="">{{ __('events.select_recent_venue') }}</option>
+             @foreach($recentVenues as $venue)
+                 <option value="{{ $venue->id }}" data-venue="{{ json_encode($venue) }}">
+                     {{ $venue->venue_name }} - {{ $venue->venue_address }}, {{ $venue->city }} ({{ $venue->usage_count }} volte)
+                 </option>
+             @endforeach
+         </select>
+         <label for="recent_venue">
+             <i class="ph ph-clock-counter-clockwise me-2"></i>{{ __('events.recent_venues') }}
+         </label>
+     </div>
+     <small class="text-muted">{{ __('events.recent_venues_help') }}</small>
+ </div>
+ @endif
                             <!-- Location -->
                             <div class="col-12 mb-3" id="venue-name-container">
                                 <div class="form-floating">
@@ -497,39 +504,7 @@
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
 
-                            <!-- Recent Venues Dropdown -->
-                            @if($recentVenues->count() > 0)
-                            <div class="col-12 mb-3" id="recent-venues-section">
-                                <div class="card border-primary" id="recent-venues-card">
-                                    <div class="card-header bg-light-primary">
-                                        <h6 class="mb-0">
-                                            <i class="ph ph-clock-counter-clockwise me-2"></i>{{ __('events.recent_venues') }}
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <small class="text-muted mb-3 d-block">{{ __('events.recent_venues_help') }}</small>
-                                        <div class="row g-2">
-                                            @foreach($recentVenues as $venue)
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-outline-primary btn-sm w-100 text-start" 
-                                                        onclick="loadRecentVenue({{ $venue->id }})"
-                                                        title="{{ __('events.load_venue') }}">
-                                                    <div class="d-flex align-items-center">
-                                                        <i class="ph ph-map-pin me-2"></i>
-                                                        <div class="flex-grow-1">
-                                                            <div class="fw-bold">{{ $venue->venue_name }}</div>
-                                                            <small class="text-muted">{{ $venue->venue_address }}, {{ $venue->city }}</small>
-                                                        </div>
-                                                        <span class="badge bg-primary ms-2">{{ $venue->usage_count }}</span>
-                                                    </div>
-                                                </button>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
+                           
 
                             <div class="col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
@@ -1514,7 +1489,7 @@ function setupEventListeners() {
     });
 
     // User search functionality
-    const userSearchInput = document.getElementById('userSearch');
+    const userSearchInput = document.getElementById('userSearchInput');
     if (userSearchInput) {
         userSearchInput.addEventListener('keydown', handleUserSearchKeydown);
     }
@@ -1533,15 +1508,7 @@ function setupEventListeners() {
     // Public/Private toggle
     document.querySelectorAll('input[name="is_public"]').forEach(radio => {
         radio.addEventListener('change', function() {
-            const allowRequests = document.getElementById('allow_requests');
             const privateInvitesSection = document.getElementById('private-invites-section');
-
-            if (allowRequests) {
-                allowRequests.disabled = this.value === '0';
-                if (this.value === '0') {
-                    allowRequests.checked = false;
-                }
-            }
 
             // Mostra/nascondi sezione inviti per eventi privati
             if (privateInvitesSection) {
@@ -2576,11 +2543,6 @@ function startAutoSave() {
             data.is_public = isPublicRadio.value;
         }
 
-        const allowRequestsCheckbox = document.getElementById('allow_requests');
-        if (allowRequestsCheckbox) {
-            data.allow_requests = allowRequestsCheckbox.checked;
-        }
-
         // Save to localStorage
         localStorage.setItem('eventDraft', JSON.stringify(data));
 
@@ -2601,15 +2563,6 @@ window.addEventListener('load', function() {
                     const radioButton = document.querySelector(`input[name="is_public"][value="${data[key]}"]`);
                     if (radioButton) {
                         radioButton.checked = true;
-                    }
-                    return;
-                }
-
-                // Handle allow_requests checkbox
-                if (key === 'allow_requests') {
-                    const checkbox = document.getElementById(key);
-                    if (checkbox) {
-                        checkbox.checked = data[key] === 'on' || data[key] === '1' || data[key] === true;
                     }
                     return;
                 }
@@ -3463,6 +3416,43 @@ function loadRecentVenue(venueId) {
                 showNotification('{{ __("events.venue_load_error") }}', 'error');
             }
         });
+}
+
+// Carica un luogo recente dal dropdown
+function loadRecentVenueFromDropdown(venueId) {
+    if (!venueId) {
+        return; // Nessuna selezione
+    }
+    
+    const selectElement = document.getElementById('recent_venue');
+    const selectedOption = selectElement.querySelector(`option[value="${venueId}"]`);
+    
+    if (selectedOption && selectedOption.dataset.venue) {
+        try {
+            const venue = JSON.parse(selectedOption.dataset.venue);
+            
+            // Popola i campi con i dati del luogo recente
+            document.getElementById('venue_name').value = venue.venue_name;
+            document.getElementById('venue_address').value = venue.venue_address;
+            document.getElementById('city').value = venue.city;
+            document.getElementById('postcode').value = venue.postcode;
+            
+            // Se abbiamo le coordinate, posiziona sulla mappa
+            if (venue.latitude && venue.longitude) {
+                setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
+            }
+            
+            // Mostra notifica di successo
+            showNotification('{{ __("events.venue_loaded_success") }}', 'success');
+            
+        } catch (error) {
+            console.error('Error parsing venue data:', error);
+            showNotification('Errore nel caricamento dei dati del luogo', 'error');
+        }
+    } else {
+        // Fallback: usa la funzione originale se i dati non sono nel dataset
+        loadRecentVenue(venueId);
+    }
 }
 
 // Funzione per il reverse geocoding quando si clicca sulla mappa

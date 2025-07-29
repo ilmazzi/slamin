@@ -350,6 +350,7 @@ return [
     // Luoghi recenti
     'recent_venues' => 'Luoghi Recenti',
     'recent_venues_help' => 'Clicca su un luogo per caricarlo rapidamente',
+    'select_recent_venue' => 'Seleziona un luogo recente...',
     'load_venue' => 'Carica luogo',
     'venue_loaded_success' => 'Luogo caricato con successo!',
     'venue_load_error' => 'Errore nel caricamento del luogo',
