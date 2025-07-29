@@ -535,5 +535,11 @@ return [
     'postal_code_italian' => '',
     'postal_code_invalid' => '',
     'postal_code_required' => '',
+    'accepts_requests' => '',
+    'manage_event_action' => '',
+    'quick_navigation' => '',
+    'view_all_events' => '',
+    'view_my_events' => '',
+    'view_upcoming' => '',
 
 ];

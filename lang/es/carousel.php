@@ -78,5 +78,11 @@ return [
     'settings' => '',
     'status_and_settings' => '',
     'preview_placeholder' => '',
+    'delete_confirmation_title' => '',
+    'delete_confirmation_message' => '',
+    'delete_confirmation_warning' => '',
+    'slides_description' => '',
+    'create_first_slide' => '',
+    'create_first_slide_button' => '',
 
 ];

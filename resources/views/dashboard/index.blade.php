@@ -400,7 +400,7 @@
                                     <h6 class="text-success f-w-600 mb-1">{{ __('dashboard.poet_section') }}</h6>
                                     <p class="text-muted f-s-12 mb-2">{{ __('dashboard.poet_section_description') }}</p>
                                     <a href="#" class="btn btn-success btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('dashboard.access_section') }}
                                     </a>
                                 </div>
                             </div>
@@ -417,7 +417,7 @@
                                     <h6 class="text-danger f-w-600 mb-1">{{ __('dashboard.organizer_section') }}</h6>
                                     <p class="text-muted f-s-12 mb-2">{{ __('dashboard.organizer_section_description') }}</p>
                                     <a href="#" class="btn btn-danger btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('dashboard.access_section') }}
                                     </a>
                                 </div>
                             </div>
@@ -434,7 +434,7 @@
                                     <h6 class="text-info f-w-600 mb-1">{{ __('dashboard.venue_section') }}</h6>
                                     <p class="text-muted f-s-12 mb-2">{{ __('dashboard.venue_section_description') }}</p>
                                     <a href="#" class="btn btn-info btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('dashboard.access_section') }}
                                     </a>
                                 </div>
                             </div>

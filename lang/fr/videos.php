@@ -107,5 +107,7 @@ return [
     'unsupported_format' => '',
     'upload_failed' => '',
     'processing_failed' => '',
+    'max_size' => '',
+    'thumbnail' => '',
 
 ];

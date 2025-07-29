@@ -27,8 +27,6 @@ return [
     'role_exists' => '',
     'role_not_found' => '',
     'cannot_delete_role' => '',
-    
-    // Chiavi aggiuntive trovate nelle pagine
     'users_description' => '',
     'export' => '',
     'bulk_assign' => '',
@@ -45,7 +43,6 @@ return [
     'name' => '',
     'email' => '',
     'nickname' => '',
-    'permissions' => '',
     'status' => '',
     'actions' => '',
     'no_nickname' => '',
@@ -56,5 +53,7 @@ return [
     'edit_permissions' => '',
     'delete_user' => '',
     'view' => '',
+    'manage_roles' => '',
+    'manage_permissions' => '',
 
 ];

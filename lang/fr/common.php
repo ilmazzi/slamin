@@ -167,5 +167,11 @@ return [
     'until' => '',
     'between' => '',
     'and' => '',
+    'back_to_dashboard' => '',
+    'reset' => '',
+    'gigs' => '',
+    'news' => '',
+    'media_section' => '',
+    'kanban_board' => '',
 
 ];

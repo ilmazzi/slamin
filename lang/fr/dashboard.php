@@ -137,5 +137,10 @@ return [
     'view_wishlist_desc' => '',
     'my_wishlist' => '',
     'view_all' => '',
+    'statistics' => '',
+    'poet_section_description' => '',
+    'venue_section_description' => '',
+    'organizer_section_description' => '',
+    'access_section' => '',
 
 ];

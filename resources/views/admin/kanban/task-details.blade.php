@@ -53,7 +53,7 @@
                 @foreach($task->comments as $comment)
                 <div class="comment-item">
                     <div class="comment-header">
-                        <span class="comment-author">{{ $comment->user->name ?? '{{ __('permissions.user') }}' }}</span>
+                        <span class="comment-author">{{ $comment->user->name ?? __('permissions.user') }}</span>
                         <span class="comment-date">{{ $comment->created_at->format('d/m/Y H:i') }}</span>
                     </div>
                     <div class="comment-content">{{ $comment->content }}</div>

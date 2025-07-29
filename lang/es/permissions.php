@@ -53,5 +53,7 @@ return [
     'edit_permissions' => '',
     'delete_user' => '',
     'view' => '',
+    'manage_roles' => '',
+    'manage_permissions' => '',
 
 ];

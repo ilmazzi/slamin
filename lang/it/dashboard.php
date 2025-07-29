@@ -61,4 +61,5 @@ return [
     'venue_section_description' => 'Amministra la tua venue',
     'organizer_section' => 'Sezione Organizzatore',
     'organizer_section_description' => 'Organizza eventi e gestisci partecipanti',
+    'access_section' => 'Accedi alla Sezione',
 ];

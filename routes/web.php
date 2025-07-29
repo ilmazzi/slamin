@@ -126,6 +126,13 @@ Route::view('invoice', 'invoice')->name('invoice');
 
 Route::get('kanban_board', [App\Http\Controllers\TaskController::class, 'index'])->name('kanban_board');
 
+// Task/Kanban routes for public kanban
+Route::get('/tasks/{task}/details', [App\Http\Controllers\TaskController::class, 'show'])->name('tasks.details');
+Route::patch('/tasks/{task}/status', [App\Http\Controllers\TaskController::class, 'updateStatus'])->name('tasks.update-status');
+Route::put('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])->name('tasks.destroy');
+Route::post('/tasks/{task}/delete-image', [App\Http\Controllers\TaskController::class, 'deleteImage'])->name('tasks.delete-image');
+
 Route::view('landing', 'landing')->name('landing');
 Route::view('leaflet_map', 'leaflet_map')->name('leaflet_map');
 Route::view('line_chart', 'line_chart')->name('line_chart');
