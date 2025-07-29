@@ -1,8 +1,8 @@
-@extends('layout.app')
+@extends('layout.master')
 
 @section('title', __('events.edit_event'))
 
-@section('content')
+@section('main-content')
 <div class="container-fluid">
     <!-- Header -->
     <div class="row">
@@ -177,6 +177,124 @@
                             </div>
                         </div>
 
+                        <!-- Online Event Settings -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="ph ph-globe me-2"></i>{{ __('events.online_event') }}
+                                </h6>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-light-info">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_online" id="is_online" class="form-check-input" value="1" 
+                                                   {{ old('is_online', $event->is_online) ? 'checked' : '' }}>
+                                            <label for="is_online" class="form-check-label f-w-600">
+                                                <i class="ph ph-globe me-2"></i>{{ __('events.is_online') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="online-event-settings" style="display: {{ old('is_online', $event->is_online) ? 'block' : 'none' }};">
+                                        <div class="row">
+                                            <!-- Timezone -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-floating">
+                                                    <select name="timezone" id="timezone" class="form-select @error('timezone') is-invalid @enderror">
+                                                        <option value="">{{ __('events.select_timezone') }}</option>
+                                                        <option value="Europe/Rome" {{ old('timezone', $event->timezone) == 'Europe/Rome' ? 'selected' : '' }}>Europe/Rome (UTC+1/+2)</option>
+                                                        <option value="Europe/London" {{ old('timezone', $event->timezone) == 'Europe/London' ? 'selected' : '' }}>Europe/London (UTC+0/+1)</option>
+                                                        <option value="Europe/Paris" {{ old('timezone', $event->timezone) == 'Europe/Paris' ? 'selected' : '' }}>Europe/Paris (UTC+1/+2)</option>
+                                                        <option value="Europe/Berlin" {{ old('timezone', $event->timezone) == 'Europe/Berlin' ? 'selected' : '' }}>Europe/Berlin (UTC+1/+2)</option>
+                                                        <option value="Europe/Madrid" {{ old('timezone', $event->timezone) == 'Europe/Madrid' ? 'selected' : '' }}>Europe/Madrid (UTC+1/+2)</option>
+                                                        <option value="Europe/Amsterdam" {{ old('timezone', $event->timezone) == 'Europe/Amsterdam' ? 'selected' : '' }}>Europe/Amsterdam (UTC+1/+2)</option>
+                                                        <option value="Europe/Brussels" {{ old('timezone', $event->timezone) == 'Europe/Brussels' ? 'selected' : '' }}>Europe/Brussels (UTC+1/+2)</option>
+                                                        <option value="Europe/Vienna" {{ old('timezone', $event->timezone) == 'Europe/Vienna' ? 'selected' : '' }}>Europe/Vienna (UTC+1/+2)</option>
+                                                        <option value="Europe/Zurich" {{ old('timezone', $event->timezone) == 'Europe/Zurich' ? 'selected' : '' }}>Europe/Zurich (UTC+1/+2)</option>
+                                                        <option value="Europe/Stockholm" {{ old('timezone', $event->timezone) == 'Europe/Stockholm' ? 'selected' : '' }}>Europe/Stockholm (UTC+1/+2)</option>
+                                                        <option value="Europe/Oslo" {{ old('timezone', $event->timezone) == 'Europe/Oslo' ? 'selected' : '' }}>Europe/Oslo (UTC+1/+2)</option>
+                                                        <option value="Europe/Copenhagen" {{ old('timezone', $event->timezone) == 'Europe/Copenhagen' ? 'selected' : '' }}>Europe/Copenhagen (UTC+1/+2)</option>
+                                                        <option value="Europe/Helsinki" {{ old('timezone', $event->timezone) == 'Europe/Helsinki' ? 'selected' : '' }}>Europe/Helsinki (UTC+2/+3)</option>
+                                                        <option value="Europe/Warsaw" {{ old('timezone', $event->timezone) == 'Europe/Warsaw' ? 'selected' : '' }}>Europe/Warsaw (UTC+1/+2)</option>
+                                                        <option value="Europe/Prague" {{ old('timezone', $event->timezone) == 'Europe/Prague' ? 'selected' : '' }}>Europe/Prague (UTC+1/+2)</option>
+                                                        <option value="Europe/Budapest" {{ old('timezone', $event->timezone) == 'Europe/Budapest' ? 'selected' : '' }}>Europe/Budapest (UTC+1/+2)</option>
+                                                        <option value="Europe/Bucharest" {{ old('timezone', $event->timezone) == 'Europe/Bucharest' ? 'selected' : '' }}>Europe/Bucharest (UTC+2/+3)</option>
+                                                        <option value="Europe/Sofia" {{ old('timezone', $event->timezone) == 'Europe/Sofia' ? 'selected' : '' }}>Europe/Sofia (UTC+2/+3)</option>
+                                                        <option value="Europe/Zagreb" {{ old('timezone', $event->timezone) == 'Europe/Zagreb' ? 'selected' : '' }}>Europe/Zagreb (UTC+1/+2)</option>
+                                                        <option value="Europe/Ljubljana" {{ old('timezone', $event->timezone) == 'Europe/Ljubljana' ? 'selected' : '' }}>Europe/Ljubljana (UTC+1/+2)</option>
+                                                        <option value="Europe/Athens" {{ old('timezone', $event->timezone) == 'Europe/Athens' ? 'selected' : '' }}>Europe/Athens (UTC+2/+3)</option>
+                                                        <option value="Europe/Nicosia" {{ old('timezone', $event->timezone) == 'Europe/Nicosia' ? 'selected' : '' }}>Europe/Nicosia (UTC+2/+3)</option>
+                                                        <option value="Europe/Valletta" {{ old('timezone', $event->timezone) == 'Europe/Valletta' ? 'selected' : '' }}>Europe/Valletta (UTC+1/+2)</option>
+                                                        <option value="America/New_York" {{ old('timezone', $event->timezone) == 'America/New_York' ? 'selected' : '' }}>America/New_York (UTC-5/-4)</option>
+                                                        <option value="America/Chicago" {{ old('timezone', $event->timezone) == 'America/Chicago' ? 'selected' : '' }}>America/Chicago (UTC-6/-5)</option>
+                                                        <option value="America/Denver" {{ old('timezone', $event->timezone) == 'America/Denver' ? 'selected' : '' }}>America/Denver (UTC-7/-6)</option>
+                                                        <option value="America/Los_Angeles" {{ old('timezone', $event->timezone) == 'America/Los_Angeles' ? 'selected' : '' }}>America/Los_Angeles (UTC-8/-7)</option>
+                                                        <option value="America/Toronto" {{ old('timezone', $event->timezone) == 'America/Toronto' ? 'selected' : '' }}>America/Toronto (UTC-5/-4)</option>
+                                                        <option value="America/Vancouver" {{ old('timezone', $event->timezone) == 'America/Vancouver' ? 'selected' : '' }}>America/Vancouver (UTC-8/-7)</option>
+                                                        <option value="America/Mexico_City" {{ old('timezone', $event->timezone) == 'America/Mexico_City' ? 'selected' : '' }}>America/Mexico_City (UTC-6/-5)</option>
+                                                        <option value="America/Sao_Paulo" {{ old('timezone', $event->timezone) == 'America/Sao_Paulo' ? 'selected' : '' }}>America/Sao_Paulo (UTC-3/-2)</option>
+                                                        <option value="America/Buenos_Aires" {{ old('timezone', $event->timezone) == 'America/Buenos_Aires' ? 'selected' : '' }}>America/Buenos_Aires (UTC-3)</option>
+                                                        <option value="America/Santiago" {{ old('timezone', $event->timezone) == 'America/Santiago' ? 'selected' : '' }}>America/Santiago (UTC-3/-4)</option>
+                                                        <option value="Australia/Sydney" {{ old('timezone', $event->timezone) == 'Australia/Sydney' ? 'selected' : '' }}>Australia/Sydney (UTC+10/+11)</option>
+                                                        <option value="Australia/Melbourne" {{ old('timezone', $event->timezone) == 'Australia/Melbourne' ? 'selected' : '' }}>Australia/Melbourne (UTC+10/+11)</option>
+                                                        <option value="Australia/Perth" {{ old('timezone', $event->timezone) == 'Australia/Perth' ? 'selected' : '' }}>Australia/Perth (UTC+8)</option>
+                                                        <option value="Pacific/Auckland" {{ old('timezone', $event->timezone) == 'Pacific/Auckland' ? 'selected' : '' }}>Pacific/Auckland (UTC+12/+13)</option>
+                                                        <option value="Asia/Tokyo" {{ old('timezone', $event->timezone) == 'Asia/Tokyo' ? 'selected' : '' }}>Asia/Tokyo (UTC+9)</option>
+                                                        <option value="Asia/Seoul" {{ old('timezone', $event->timezone) == 'Asia/Seoul' ? 'selected' : '' }}>Asia/Seoul (UTC+9)</option>
+                                                        <option value="Asia/Shanghai" {{ old('timezone', $event->timezone) == 'Asia/Shanghai' ? 'selected' : '' }}>Asia/Shanghai (UTC+8)</option>
+                                                        <option value="Asia/Singapore" {{ old('timezone', $event->timezone) == 'Asia/Singapore' ? 'selected' : '' }}>Asia/Singapore (UTC+8)</option>
+                                                        <option value="Asia/Kuala_Lumpur" {{ old('timezone', $event->timezone) == 'Asia/Kuala_Lumpur' ? 'selected' : '' }}>Asia/Kuala_Lumpur (UTC+8)</option>
+                                                        <option value="Asia/Jakarta" {{ old('timezone', $event->timezone) == 'Asia/Jakarta' ? 'selected' : '' }}>Asia/Jakarta (UTC+7)</option>
+                                                        <option value="Asia/Manila" {{ old('timezone', $event->timezone) == 'Asia/Manila' ? 'selected' : '' }}>Asia/Manila (UTC+8)</option>
+                                                        <option value="Asia/Bangkok" {{ old('timezone', $event->timezone) == 'Asia/Bangkok' ? 'selected' : '' }}>Asia/Bangkok (UTC+7)</option>
+                                                        <option value="Asia/Ho_Chi_Minh" {{ old('timezone', $event->timezone) == 'Asia/Ho_Chi_Minh' ? 'selected' : '' }}>Asia/Ho_Chi_Minh (UTC+7)</option>
+                                                        <option value="Asia/Dubai" {{ old('timezone', $event->timezone) == 'Asia/Dubai' ? 'selected' : '' }}>Asia/Dubai (UTC+4)</option>
+                                                        <option value="Asia/Riyadh" {{ old('timezone', $event->timezone) == 'Asia/Riyadh' ? 'selected' : '' }}>Asia/Riyadh (UTC+3)</option>
+                                                        <option value="Asia/Kolkata" {{ old('timezone', $event->timezone) == 'Asia/Kolkata' ? 'selected' : '' }}>Asia/Kolkata (UTC+5:30)</option>
+                                                        <option value="Asia/Tehran" {{ old('timezone', $event->timezone) == 'Asia/Tehran' ? 'selected' : '' }}>Asia/Tehran (UTC+3:30/+4:30)</option>
+                                                        <option value="Asia/Jerusalem" {{ old('timezone', $event->timezone) == 'Asia/Jerusalem' ? 'selected' : '' }}>Asia/Jerusalem (UTC+2/+3)</option>
+                                                        <option value="Africa/Cairo" {{ old('timezone', $event->timezone) == 'Africa/Cairo' ? 'selected' : '' }}>Africa/Cairo (UTC+2/+3)</option>
+                                                        <option value="Africa/Johannesburg" {{ old('timezone', $event->timezone) == 'Africa/Johannesburg' ? 'selected' : '' }}>Africa/Johannesburg (UTC+2)</option>
+                                                        <option value="Africa/Lagos" {{ old('timezone', $event->timezone) == 'Africa/Lagos' ? 'selected' : '' }}>Africa/Lagos (UTC+1)</option>
+                                                        <option value="Africa/Nairobi" {{ old('timezone', $event->timezone) == 'Africa/Nairobi' ? 'selected' : '' }}>Africa/Nairobi (UTC+3)</option>
+                                                        <option value="Africa/Casablanca" {{ old('timezone', $event->timezone) == 'Africa/Casablanca' ? 'selected' : '' }}>Africa/Casablanca (UTC+0/+1)</option>
+                                                        <option value="Africa/Tunis" {{ old('timezone', $event->timezone) == 'Africa/Tunis' ? 'selected' : '' }}>Africa/Tunis (UTC+1/+2)</option>
+                                                        <option value="Africa/Algiers" {{ old('timezone', $event->timezone) == 'Africa/Algiers' ? 'selected' : '' }}>Africa/Algiers (UTC+1)</option>
+                                                    </select>
+                                                    <label for="timezone">{{ __('events.timezone') }} *</label>
+                                                </div>
+                                                <small class="text-muted">{{ __('events.timezone_help') }}</small>
+                                                @error('timezone')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Online URL -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-floating">
+                                                    <input type="url" name="online_url" id="online_url" class="form-control @error('online_url') is-invalid @enderror" 
+                                                           placeholder="{{ __('events.online_url_placeholder') }}" 
+                                                           value="{{ old('online_url', $event->online_url) }}">
+                                                    <label for="online_url">{{ __('events.online_url') }}</label>
+                                                </div>
+                                                <small class="text-muted">{{ __('events.online_url_help') }}</small>
+                                                @error('online_url')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Online Event Notice -->
+                                        <div class="alert alert-info">
+                                            <i class="ph ph-info me-2"></i>
+                                            <strong>{{ __('events.online_event_notice') }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Step 3: Settings -->
                         <div class="row mb-4">
                             <div class="col-12">
@@ -279,7 +397,105 @@
 <script>
 let map, marker;
 
+// Online event functionality
 document.addEventListener('DOMContentLoaded', function() {
+    const isOnlineCheckbox = document.getElementById('is_online');
+    const onlineEventSettings = document.getElementById('online-event-settings');
+    const locationFields = ['venue_name', 'venue_address', 'city'];
+    const mapContainer = document.getElementById('map');
+
+    if (isOnlineCheckbox && onlineEventSettings) {
+        isOnlineCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                onlineEventSettings.style.display = 'block';
+                makeLocationFieldsOptional();
+            } else {
+                onlineEventSettings.style.display = 'none';
+                makeLocationFieldsRequired();
+            }
+        });
+    }
+
+    // Funzione per rendere i campi del luogo opzionali
+    function makeLocationFieldsOptional() {
+        console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
+        
+        locationFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.required = false;
+                // Nascondi il campo e il suo container
+                const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
+                if (fieldContainer) {
+                    fieldContainer.style.display = 'none';
+                    console.log('Nascosto campo:', fieldId);
+                }
+                // Rimuovi l'asterisco dal label
+                const label = field.parentElement.querySelector('label');
+                if (label) {
+                    label.textContent = label.textContent.replace(' *', '');
+                }
+            }
+        });
+        
+        // Nascondi la mappa per eventi online
+        if (mapContainer) {
+            mapContainer.style.display = 'none';
+            console.log('Nascosta mappa');
+        }
+        
+        // Nascondi anche il container della mappa
+        const mapSection = mapContainer?.closest('.col-12');
+        if (mapSection) {
+            mapSection.style.display = 'none';
+        }
+        
+        console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA (EDIT) ===');
+    }
+
+    // Funzione per rendere i campi del luogo obbligatori
+    function makeLocationFieldsRequired() {
+        console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
+        
+        locationFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.required = true;
+                // Mostra il campo e il suo container
+                const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
+                if (fieldContainer) {
+                    fieldContainer.style.display = 'block';
+                    console.log('Mostrato campo:', fieldId);
+                }
+                // Aggiungi l'asterisco al label
+                const label = field.parentElement.querySelector('label');
+                if (label && !label.textContent.includes('*')) {
+                    label.textContent += ' *';
+                }
+            }
+        });
+        
+        // Mostra la mappa per eventi fisici
+        if (mapContainer) {
+            mapContainer.style.display = 'block';
+            console.log('Mostrata mappa');
+        }
+        
+        // Mostra anche il container della mappa
+        const mapSection = mapContainer?.closest('.col-12');
+        if (mapSection) {
+            mapSection.style.display = 'block';
+        }
+        
+        console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA (EDIT) ===');
+    }
+
+    // Inizializza lo stato dei campi in base al valore corrente
+    if (isOnlineCheckbox && isOnlineCheckbox.checked) {
+        makeLocationFieldsOptional();
+    }
+
+    // Inizializza la mappa e la validazione del form
     initializeMap();
     setupFormValidation();
 });
@@ -326,8 +542,19 @@ function setupFormValidation() {
             el.classList.remove('is-invalid');
         });
 
-        // Validate required fields
-        const requiredFields = ['title', 'category', 'start_datetime', 'end_datetime', 'venue_name', 'venue_address', 'city'];
+        // Check if event is online
+        const isOnline = document.getElementById('is_online').checked;
+
+        // Validate required fields based on event type
+        let requiredFields = ['title', 'category', 'start_datetime', 'end_datetime'];
+        
+        if (!isOnline) {
+            // For physical events, require location fields
+            requiredFields = requiredFields.concat(['venue_name', 'venue_address', 'city']);
+        } else {
+            // For online events, require timezone
+            requiredFields.push('timezone');
+        }
 
         requiredFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
@@ -344,6 +571,17 @@ function setupFormValidation() {
         if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
             document.getElementById('end_datetime').classList.add('is-invalid');
             isValid = false;
+        }
+
+        // Validate online URL if provided
+        const onlineUrl = document.getElementById('online_url');
+        if (onlineUrl && onlineUrl.value.trim()) {
+            try {
+                new URL(onlineUrl.value);
+            } catch (e) {
+                onlineUrl.classList.add('is-invalid');
+                isValid = false;
+            }
         }
 
         if (!isValid) {

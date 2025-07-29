@@ -5,6 +5,18 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 <!-- Flatpickr CSS -->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/datepikar/flatpickr.min.css')}}">
+<style>
+.hidden-for-online-event {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+</style>
 @endsection
 
 @section('main-content')
@@ -370,8 +382,114 @@
                                 </div>
                             </div>
 
-                            <!-- Location -->
+                            <!-- Online Event Option -->
                             <div class="col-12 mb-3">
+                                <div class="card border-info">
+                                    <div class="card-header bg-light-info">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_online" id="is_online" class="form-check-input" value="1">
+                                            <label for="is_online" class="form-check-label f-w-600">
+                                                <i class="ph ph-globe me-2"></i>{{ __('events.online_event') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="online-event-settings" style="display: none;">
+                                        <div class="row">
+                                            <!-- Timezone -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-floating">
+                                                    <select name="timezone" id="timezone" class="form-select">
+                                                        <option value="">{{ __('events.select_timezone') }}</option>
+                                                        <option value="Europe/Rome" selected>Europe/Rome (UTC+1/+2)</option>
+                                                        <option value="Europe/London">Europe/London (UTC+0/+1)</option>
+                                                        <option value="Europe/Paris">Europe/Paris (UTC+1/+2)</option>
+                                                        <option value="Europe/Berlin">Europe/Berlin (UTC+1/+2)</option>
+                                                        <option value="Europe/Madrid">Europe/Madrid (UTC+1/+2)</option>
+                                                        <option value="Europe/Amsterdam">Europe/Amsterdam (UTC+1/+2)</option>
+                                                        <option value="Europe/Brussels">Europe/Brussels (UTC+1/+2)</option>
+                                                        <option value="Europe/Vienna">Europe/Vienna (UTC+1/+2)</option>
+                                                        <option value="Europe/Zurich">Europe/Zurich (UTC+1/+2)</option>
+                                                        <option value="Europe/Stockholm">Europe/Stockholm (UTC+1/+2)</option>
+                                                        <option value="Europe/Oslo">Europe/Oslo (UTC+1/+2)</option>
+                                                        <option value="Europe/Copenhagen">Europe/Copenhagen (UTC+1/+2)</option>
+                                                        <option value="Europe/Helsinki">Europe/Helsinki (UTC+2/+3)</option>
+                                                        <option value="Europe/Warsaw">Europe/Warsaw (UTC+1/+2)</option>
+                                                        <option value="Europe/Prague">Europe/Prague (UTC+1/+2)</option>
+                                                        <option value="Europe/Budapest">Europe/Budapest (UTC+1/+2)</option>
+                                                        <option value="Europe/Bucharest">Europe/Bucharest (UTC+2/+3)</option>
+                                                        <option value="Europe/Sofia">Europe/Sofia (UTC+2/+3)</option>
+                                                        <option value="Europe/Zagreb">Europe/Zagreb (UTC+1/+2)</option>
+                                                        <option value="Europe/Ljubljana">Europe/Ljubljana (UTC+1/+2)</option>
+                                                        <option value="Europe/Athens">Europe/Athens (UTC+2/+3)</option>
+                                                        <option value="Europe/Nicosia">Europe/Nicosia (UTC+2/+3)</option>
+                                                        <option value="Europe/Valletta">Europe/Valletta (UTC+1/+2)</option>
+                                                        <option value="America/New_York">America/New_York (UTC-5/-4)</option>
+                                                        <option value="America/Chicago">America/Chicago (UTC-6/-5)</option>
+                                                        <option value="America/Denver">America/Denver (UTC-7/-6)</option>
+                                                        <option value="America/Los_Angeles">America/Los_Angeles (UTC-8/-7)</option>
+                                                        <option value="America/Toronto">America/Toronto (UTC-5/-4)</option>
+                                                        <option value="America/Vancouver">America/Vancouver (UTC-8/-7)</option>
+                                                        <option value="America/Mexico_City">America/Mexico_City (UTC-6/-5)</option>
+                                                        <option value="America/Sao_Paulo">America/Sao_Paulo (UTC-3/-2)</option>
+                                                        <option value="America/Buenos_Aires">America/Buenos_Aires (UTC-3)</option>
+                                                        <option value="America/Santiago">America/Santiago (UTC-3/-4)</option>
+                                                        <option value="Australia/Sydney">Australia/Sydney (UTC+10/+11)</option>
+                                                        <option value="Australia/Melbourne">Australia/Melbourne (UTC+10/+11)</option>
+                                                        <option value="Australia/Perth">Australia/Perth (UTC+8)</option>
+                                                        <option value="Pacific/Auckland">Pacific/Auckland (UTC+12/+13)</option>
+                                                        <option value="Asia/Tokyo">Asia/Tokyo (UTC+9)</option>
+                                                        <option value="Asia/Seoul">Asia/Seoul (UTC+9)</option>
+                                                        <option value="Asia/Shanghai">Asia/Shanghai (UTC+8)</option>
+                                                        <option value="Asia/Singapore">Asia/Singapore (UTC+8)</option>
+                                                        <option value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur (UTC+8)</option>
+                                                        <option value="Asia/Jakarta">Asia/Jakarta (UTC+7)</option>
+                                                        <option value="Asia/Manila">Asia/Manila (UTC+8)</option>
+                                                        <option value="Asia/Bangkok">Asia/Bangkok (UTC+7)</option>
+                                                        <option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh (UTC+7)</option>
+                                                        <option value="Asia/Dubai">Asia/Dubai (UTC+4)</option>
+                                                        <option value="Asia/Riyadh">Asia/Riyadh (UTC+3)</option>
+                                                        <option value="Asia/Kolkata">Asia/Kolkata (UTC+5:30)</option>
+                                                        <option value="Asia/Bangkok">Asia/Bangkok (UTC+7)</option>
+                                                        <option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh (UTC+7)</option>
+                                                        <option value="Asia/Dubai">Asia/Dubai (UTC+4)</option>
+                                                        <option value="Asia/Riyadh">Asia/Riyadh (UTC+3)</option>
+                                                        <option value="Asia/Kolkata">Asia/Kolkata (UTC+5:30)</option>
+                                                        <option value="Asia/Tehran">Asia/Tehran (UTC+3:30/+4:30)</option>
+                                                        <option value="Asia/Jerusalem">Asia/Jerusalem (UTC+2/+3)</option>
+                                                        <option value="Africa/Cairo">Africa/Cairo (UTC+2/+3)</option>
+                                                        <option value="Africa/Johannesburg">Africa/Johannesburg (UTC+2)</option>
+                                                        <option value="Africa/Lagos">Africa/Lagos (UTC+1)</option>
+                                                        <option value="Africa/Nairobi">Africa/Nairobi (UTC+3)</option>
+                                                        <option value="Africa/Casablanca">Africa/Casablanca (UTC+0/+1)</option>
+                                                        <option value="Africa/Tunis">Africa/Tunis (UTC+1/+2)</option>
+                                                        <option value="Africa/Algiers">Africa/Algiers (UTC+1)</option>
+                                                    </select>
+                                                    <label for="timezone">{{ __('events.timezone') }} *</label>
+                                                </div>
+                                                <small class="text-muted">{{ __('events.timezone_help') }}</small>
+                                            </div>
+
+                                            <!-- Online URL -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-floating">
+                                                    <input type="url" name="online_url" id="online_url" class="form-control" placeholder="{{ __('events.online_url_placeholder') }}">
+                                                    <label for="online_url">{{ __('events.online_url') }}</label>
+                                                </div>
+                                                <small class="text-muted">{{ __('events.online_url_help') }}</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Online Event Notice -->
+                                        <div class="alert alert-info">
+                                            <i class="ph ph-info me-2"></i>
+                                            <strong>{{ __('events.online_event_notice') }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-12 mb-3" id="venue-name-container">
                                 <div class="form-floating">
                                                                     <input type="text" name="venue_name" id="venue_name" class="form-control" placeholder="{{ __('events.venue_name_placeholder') }}" required>
                                 <label for="venue_name">{{ __('events.venue_name') }} *</label>
@@ -381,8 +499,8 @@
 
                             <!-- Recent Venues Dropdown -->
                             @if($recentVenues->count() > 0)
-                            <div class="col-12 mb-3">
-                                <div class="card border-primary">
+                            <div class="col-12 mb-3" id="recent-venues-section">
+                                <div class="card border-primary" id="recent-venues-card">
                                     <div class="card-header bg-light-primary">
                                         <h6 class="mb-0">
                                             <i class="ph ph-clock-counter-clockwise me-2"></i>{{ __('events.recent_venues') }}
@@ -413,7 +531,7 @@
                             </div>
                             @endif
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
                                     <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
                                     <label for="venue_address">{{ __('events.venue_address') }} *</label>
@@ -421,7 +539,7 @@
                                 <div class="error-feedback" id="venue_address-error"></div>
                             </div>
 
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3" id="city-container">
                                 <div class="form-floating">
                                     <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('events.city_placeholder') }}" required>
                                     <label for="city">{{ __('events.city') }} *</label>
@@ -429,7 +547,7 @@
                                 <div class="error-feedback" id="city-error"></div>
                             </div>
 
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3" id="postcode-container">
                                 <div class="form-floating">
                                     <input type="text" name="postcode" id="postcode" class="form-control" placeholder="{{ __('events.postcode_placeholder') }}" required>
                                     <label for="postcode">{{ __('events.postcode') }} *</label>
@@ -437,7 +555,7 @@
                                 <div class="error-feedback" id="postcode-error"></div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="country-container">
                                 <div class="form-floating">
                                     <select name="country" id="country" class="form-select" required>
                                         <option value="">Seleziona paese...</option>
@@ -504,8 +622,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 mb-3">
-                                <div class="alert alert-info">
+                            <div class="col-12 mb-3" id="map-info-banner-container">
+                                <div class="alert alert-info" id="map-info-banner">
                                     <i class="ph ph-info me-2"></i>
                                     <strong>{{ __('events.auto_positioning_title') }}:</strong> {{ __('events.auto_positioning_description') }}
                                 </div>
@@ -640,46 +758,43 @@
                             <div class="mb-4">
                                 <label class="form-label">Cerca Artisti da Invitare</label>
                                 <div class="input-group">
-                                    <input type="text" id="userSearch" class="form-control" placeholder="Cerca per nome o email...">
-                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsers()">
+                                    <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
+                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
                                         <i class="ph ph-magnifying-glass"></i>
                                     </button>
                                 </div>
-                                <small class="text-muted">Cerca poeti, giudici, tecnici e host da invitare al tuo evento</small>
                             </div>
 
                             <!-- Search Results -->
-                            <div id="searchResults" class="mb-4" style="display: none;">
+                            <div id="searchResultsInvite" class="mb-3" style="display: none;">
                                 <h6>Risultati Ricerca</h6>
-                                <div id="searchResultsList" class="list-group">
-                                    <!-- Results will be populated here -->
+                                <div id="searchResultsListInvite" class="list-group">
+                                    <!-- Risultati qui -->
                                 </div>
                             </div>
 
-                            <!-- Selected Invitations -->
-                            <div id="selectedInvitations">
-                                <h6>Artisti Selezionati <span id="invitationCount" class="badge bg-primary">0</span></h6>
-                                <div id="invitationsList" class="row">
-                                    <div class="col-12 text-center text-muted py-4" id="noInvitations">
-                                        <i class="ph ph-user-plus display-4 mb-2"></i>
-                                        <p>Nessun artista selezionato ancora.<br>Cerca e aggiungi artisti da invitare.</p>
+                            <!-- Utenti suggeriti -->
+                            <div class="mb-3">
+                                <h6>{{ __('events.suggested_users') }}</h6>
+                                <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
+                                <div id="suggestedUsersList" class="row g-2">
+                                    <!-- Utenti suggeriti qui -->
+                                </div>
+                            </div>
+
+                            <!-- Utenti invitati -->
+                            <div>
+                                <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
+                                <div id="invitedUsersList" class="row g-2">
+                                    <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                                        <i class="ph ph-user-plus f-s-24 mb-2"></i>
+                                        <p class="mb-0">{{ __('events.no_invited_users') }}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Risposte entro il -->
-                            <div class="row mt-4">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="datetime-local" name="invitation_deadline" id="invitation_deadline" class="form-control">
-                                        <label for="invitation_deadline">Risposte entro il</label>
-                                    </div>
-                                    <small class="text-muted">Data limite per le risposte agli inviti</small>
-                                </div>
-                            </div>
-
-                            <!-- Hidden input for invitations data -->
-                            <input type="hidden" name="invitations" id="invitationsData" value="[]">
+                            <!-- Hidden input per i dati degli inviti -->
+                            <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
                         </div>
 
                         <!-- Sezione Posizioni d'Ingaggio -->
@@ -946,6 +1061,173 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
+            // ========================================
+            // INIZIALIZZAZIONE EVENTI ONLINE
+            // ========================================
+            console.log('=== INIZIALIZZAZIONE EVENTI ONLINE ===');
+
+            const isOnlineCheckbox = document.getElementById('is_online');
+            const onlineEventSettings = document.getElementById('online-event-settings');
+
+            console.log('Online checkbox found:', isOnlineCheckbox);
+            console.log('Online settings found:', onlineEventSettings);
+
+            if (isOnlineCheckbox && onlineEventSettings) {
+                console.log('Setting up online event checkbox listener');
+                
+                // Controlla lo stato iniziale della checkbox
+                console.log('Initial checkbox state:', isOnlineCheckbox.checked);
+                if (isOnlineCheckbox.checked) {
+                    console.log('Checkbox is checked, hiding location fields...');
+                    onlineEventSettings.style.display = 'block';
+                    makeLocationFieldsOptional();
+                } else {
+                    console.log('Checkbox is not checked, showing location fields...');
+                    onlineEventSettings.style.display = 'none';
+                    makeLocationFieldsRequired();
+                }
+                
+                isOnlineCheckbox.addEventListener('change', function() {
+                    console.log('Online checkbox changed:', this.checked);
+                    if (this.checked) {
+                        console.log('Checkbox checked, hiding location fields...');
+                        onlineEventSettings.style.display = 'block';
+                        // Rendi i campi del luogo opzionali per eventi online
+                        makeLocationFieldsOptional();
+                    } else {
+                        console.log('Checkbox unchecked, showing location fields...');
+                        onlineEventSettings.style.display = 'none';
+                        // Rendi i campi del luogo obbligatori per eventi fisici
+                        makeLocationFieldsRequired();
+                    }
+                });
+            } else {
+                console.error('Online event elements not found!');
+                console.log('Available elements with "online" in ID:');
+                document.querySelectorAll('[id*="online"]').forEach(el => {
+                    console.log('-', el.id, el.tagName);
+                });
+            }
+
+            // Assicurati che la mappa sia visibile di default per eventi fisici
+            const mapContainer = document.getElementById('locationMap');
+            if (mapContainer && !isOnlineCheckbox?.checked) {
+                console.log('Making map visible for physical events');
+                mapContainer.style.display = 'block';
+                // Assicurati che anche il container della mappa sia visibile
+                const mapSection = mapContainer.closest('.col-12');
+                if (mapSection) {
+                    mapSection.style.display = 'block';
+                }
+            }
+
+            // Inizializza la mappa se siamo già al passo 2
+            if (currentStep === 2) {
+                console.log('Already on step 2, initializing map immediately');
+                setTimeout(initializeMap, 200);
+            }
+
+            // Controllo aggiuntivo per assicurarsi che il JavaScript venga eseguito
+            setTimeout(() => {
+                console.log('=== CONTROLLO AGGIUNTIVO DOPO 500ms ===');
+                const isOnlineCheckbox = document.getElementById('is_online');
+                if (isOnlineCheckbox && isOnlineCheckbox.checked) {
+                    console.log('Checkbox still checked after 500ms, forcing hide...');
+                    makeLocationFieldsOptional();
+                }
+            }, 500);
+
+            // Funzione per rendere i campi del luogo opzionali
+            function makeLocationFieldsOptional() {
+                console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA ===');
+                
+                // Lista degli ID degli elementi da nascondere
+                const elementsToHide = [
+                    'venue-name-container',
+                    'recent-venues-section',
+                    'venue-address-container',
+                    'city-container',
+                    'postcode-container',
+                    'country-container',
+                    'map-info-banner-container'
+                ];
+                
+                // Nascondi tutti gli elementi
+                elementsToHide.forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.style.display = 'none';
+                        console.log('Nascosto elemento:', elementId);
+                    } else {
+                        console.log('Elemento non trovato:', elementId);
+                    }
+                });
+                
+                // Nascondi la mappa
+                const mapContainer = document.getElementById('locationMap');
+                if (mapContainer) {
+                    mapContainer.style.display = 'none';
+                    console.log('Nascosta mappa');
+                }
+                
+                // Nascondi il container della mappa
+                const mapSection = mapContainer?.closest('.col-12');
+                if (mapSection) {
+                    mapSection.style.display = 'none';
+                }
+                
+                // Nascondi il banner informativo della mappa (se esiste)
+                const mapInfoBanner = document.querySelector('.alert-info');
+                if (mapInfoBanner && mapInfoBanner.textContent.includes('Posizionamento')) {
+                    mapInfoBanner.style.display = 'none';
+                    console.log('Nascosto banner informativo mappa');
+                }
+                
+                console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA ===');
+            }
+
+            // Funzione per rendere i campi del luogo obbligatori
+            function makeLocationFieldsRequired() {
+                console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA ===');
+                
+                // Lista degli ID degli elementi da mostrare
+                const elementsToShow = [
+                    'venue-name-container',
+                    'recent-venues-section',
+                    'venue-address-container',
+                    'city-container',
+                    'postcode-container',
+                    'country-container',
+                    'map-info-banner-container'
+                ];
+                
+                // Mostra tutti gli elementi
+                elementsToShow.forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.style.display = 'block';
+                        console.log('Mostrato elemento:', elementId);
+                    } else {
+                        console.log('Elemento non trovato:', elementId);
+                    }
+                });
+                
+                // Mostra la mappa
+                const mapContainer = document.getElementById('locationMap');
+                if (mapContainer) {
+                    mapContainer.style.display = 'block';
+                    console.log('Mostrata mappa');
+                }
+                
+                // Mostra il container della mappa
+                const mapSection = mapContainer?.closest('.col-12');
+                if (mapSection) {
+                    mapSection.style.display = 'block';
+                }
+                
+                console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA ===');
+            }
+
             console.log('Initialization completed successfully');
         } catch (error) {
             console.error('Errore durante l\'inizializzazione:', error);
@@ -970,10 +1252,24 @@ function initializeForm() {
 }
 
 function initializeMap() {
+    console.log('=== INITIALIZING MAP ===');
+    
     // Controlla se l'elemento mappa esiste e se la mappa non è già inizializzata
     const mapContainer = document.getElementById('locationMap');
-    if (!mapContainer || map !== null) return;
+    console.log('Map container found:', mapContainer);
+    console.log('Map already initialized:', map !== null);
+    
+    if (!mapContainer) {
+        console.error('Map container not found!');
+        return;
+    }
+    
+    if (map !== null) {
+        console.log('Map already initialized, skipping');
+        return;
+    }
 
+    console.log('Creating new map...');
     map = L.map('locationMap').setView([41.9028, 12.4964], 10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -987,9 +1283,12 @@ function initializeMap() {
     // Force map to resize after initialization
     setTimeout(() => {
         if (map) {
+            console.log('Invalidating map size...');
             map.invalidateSize();
         }
     }, 200);
+    
+    console.log('Map initialization completed');
 }
 
 function setupEventListeners() {
@@ -1354,13 +1653,13 @@ function validateCurrentStep() {
             isValid = false;
         }
 
-        // Description is optional, but if provided must be at least 20 characters
-        if (description && description.length < 20) {
-            console.log('Description too short:', description.length);
-            showError('description', 'La descrizione deve essere di almeno 20 caratteri');
-            highlightError('description');
-            isValid = false;
-        }
+        // Description is optional - no minimum length requirement
+        // if (description && description.length < 20) {
+        //     console.log('Description too short:', description.length);
+        //     showError('description', 'La descrizione deve essere di almeno 20 caratteri');
+        //     highlightError('description');
+        //     isValid = false;
+        // }
 
         if (!category) {
             console.log('Category is empty');

@@ -273,11 +273,11 @@ class EventController extends Controller
                 'start_datetime' => 'required|date_format:Y-m-d H:i|after:now',
                 'end_datetime' => 'required|date_format:Y-m-d H:i|after:start_datetime',
                 'registration_deadline' => 'nullable|date_format:Y-m-d H:i|before:start_datetime',
-                'venue_name' => 'required|string|max:255',
-                'venue_address' => 'required|string',
-                'city' => 'required|string|max:255',
+                'venue_name' => 'required_unless:is_online,1|string|max:255',
+                'venue_address' => 'required_unless:is_online,1|string',
+                'city' => 'required_unless:is_online,1|string|max:255',
                 'postcode' => 'nullable|string|max:10',
-                'country' => 'required|string|size:2',
+                'country' => 'required_unless:is_online,1|string|size:2',
                 'latitude' => 'nullable|numeric|between:-90,90',
                 'longitude' => 'nullable|numeric|between:-180,180',
                 'is_public' => 'required|in:0,1',
@@ -301,6 +301,10 @@ class EventController extends Controller
                 'recurrence_weekdays' => 'nullable|array',
                 'recurrence_weekdays.*' => 'integer|in:1,2,3,4,5,6,7',
                 'recurrence_monthday' => 'nullable|integer|min:1|max:31',
+                // Online event fields
+                'is_online' => 'nullable|boolean',
+                'timezone' => 'required_if:is_online,1|string|max:50',
+                'online_url' => 'nullable|url|max:500',
             ], [
                 'start_datetime.after' => 'La data di inizio deve essere nel futuro.',
                 'end_datetime.after' => 'La data di fine deve essere dopo la data di inizio.',
@@ -310,6 +314,12 @@ class EventController extends Controller
                 'recurrence_type.in' => 'Il tipo di ricorrenza selezionato non è valido.',
                 'recurrence_count.max' => 'Il numero di occorrenze non può superare 100.',
                 'invitation_deadline.after' => 'La scadenza inviti deve essere nel futuro.',
+                'venue_name.required_unless' => 'Il nome del venue è obbligatorio per eventi fisici.',
+                'venue_address.required_unless' => 'L\'indirizzo del venue è obbligatorio per eventi fisici.',
+                'city.required_unless' => 'La città è obbligatoria per eventi fisici.',
+                'country.required_unless' => 'Il paese è obbligatorio per eventi fisici.',
+                'timezone.required_if' => 'Il fuso orario è obbligatorio per eventi online.',
+                'online_url.url' => 'L\'URL dell\'evento online deve essere un link valido.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Event validation failed', [
@@ -340,6 +350,9 @@ class EventController extends Controller
         // Convert is_recurring to boolean
         $validated['is_recurring'] = isset($validated['is_recurring']) && ($validated['is_recurring'] === '1' || $validated['is_recurring'] === 1 || $validated['is_recurring'] === true);
 
+        // Convert is_online to boolean
+        $validated['is_online'] = isset($validated['is_online']) && ($validated['is_online'] === '1' || $validated['is_online'] === 1 || $validated['is_online'] === true);
+
         // Convert numeric recurrence fields
         if (isset($validated['recurrence_interval'])) {
             $validated['recurrence_interval'] = (int) $validated['recurrence_interval'];
@@ -349,6 +362,13 @@ class EventController extends Controller
         }
         if (isset($validated['recurrence_monthday'])) {
             $validated['recurrence_monthday'] = (int) $validated['recurrence_monthday'];
+        }
+
+        // Handle online event fields
+        if (!$validated['is_online']) {
+            // Clear online fields if not online
+            $validated['timezone'] = null;
+            $validated['online_url'] = null;
         }
 
         // Handle image upload
@@ -731,15 +751,15 @@ class EventController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'requirements' => 'nullable|string',
             'start_datetime' => 'required|date|after:now',
             'end_datetime' => 'required|date|after:start_datetime',
             'registration_deadline' => 'nullable|date|before:start_datetime',
-            'venue_name' => 'required|string|max:255',
-            'venue_address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'country' => 'required|string|size:2',
+            'venue_name' => 'required_unless:is_online,1|string|max:255',
+            'venue_address' => 'required_unless:is_online,1|string',
+            'city' => 'required_unless:is_online,1|string|max:255',
+            'country' => 'required_unless:is_online,1|string|size:2',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
             'is_public' => 'boolean',
@@ -750,6 +770,17 @@ class EventController extends Controller
             'tags' => 'nullable|string',
             'image_url' => 'nullable|url',
             'status' => ['required', Rule::in([Event::STATUS_DRAFT, Event::STATUS_PUBLISHED, Event::STATUS_CANCELLED])],
+            // Online event fields
+            'is_online' => 'nullable|boolean',
+            'timezone' => 'required_if:is_online,1|string|max:50',
+            'online_url' => 'nullable|url|max:500',
+        ], [
+            'venue_name.required_unless' => 'Il nome del venue è obbligatorio per eventi fisici.',
+            'venue_address.required_unless' => 'L\'indirizzo del venue è obbligatorio per eventi fisici.',
+            'city.required_unless' => 'La città è obbligatoria per eventi fisici.',
+            'country.required_unless' => 'Il paese è obbligatorio per eventi fisici.',
+            'timezone.required_if' => 'Il fuso orario è obbligatorio per eventi online.',
+            'online_url.url' => 'L\'URL dell\'evento online deve essere un link valido.',
         ]);
 
         // Process tags (if present)
@@ -757,6 +788,16 @@ class EventController extends Controller
             $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
         } else {
             $validated['tags'] = []; // Set empty array if no tags
+        }
+
+        // Convert is_online to boolean
+        $validated['is_online'] = isset($validated['is_online']) && ($validated['is_online'] === '1' || $validated['is_online'] === 1 || $validated['is_online'] === true);
+
+        // Handle online event fields
+        if (!$validated['is_online']) {
+            // Clear online fields if not online
+            $validated['timezone'] = null;
+            $validated['online_url'] = null;
         }
 
         // Log dell'attività prima dell'aggiornamento

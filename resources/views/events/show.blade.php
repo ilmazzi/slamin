@@ -57,7 +57,16 @@
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <i class="ph ph-map-pin me-2 fs-5"></i>
-                        <span class="fs-5">{{ $event->venue_name }}, {{ $event->city }}</span>
+                        <span class="fs-5">
+                            @if($event->is_online)
+                                <i class="ph ph-globe me-1"></i>{{ __('events.online_event') }}
+                                @if($event->online_url)
+                                    - <a href="{{ $event->online_url }}" target="_blank" class="text-white text-decoration-underline">{{ __('events.join_online') }}</a>
+                                @endif
+                            @else
+                                {{ $event->venue_name }}, {{ $event->city }}
+                            @endif
+                        </span>
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="ph ph-user me-2 fs-5"></i>
@@ -542,8 +551,48 @@
             </div>
             @endif
 
-            <!-- Location Map -->
-            @if($event->latitude && $event->longitude)
+            <!-- Location Map or Online Event Info -->
+            @if($event->is_online)
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="ph ph-globe me-2"></i>{{ __('events.online_event') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @if($event->online_url)
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-link me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">{{ __('events.online_url') }}</small>
+                                    <a href="{{ $event->online_url }}" target="_blank" class="text-decoration-none">
+                                        {{ __('events.join_online') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @if($event->timezone)
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ph ph-clock me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">{{ __('events.timezone') }}</small>
+                                    <span class="fw-semibold">{{ $event->timezone }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="ph ph-info me-2"></i>
+                        <strong>{{ __('events.online_event_notice') }}</strong>
+                    </div>
+                </div>
+            </div>
+            @elseif($event->latitude && $event->longitude)
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
@@ -880,7 +929,12 @@
                                 <h6 class="mb-1">{{ $event->title }}</h6>
                                 <p class="mb-0 small">
                                     <i class="ph ph-calendar me-1"></i>{{ $event->start_datetime->format('d F Y, H:i') }}<br>
-                                    <i class="ph ph-map-pin me-1"></i>{{ $event->venue_name }}, {{ $event->city }}
+                                    <i class="ph ph-map-pin me-1"></i>
+                                    @if($event->is_online)
+                                        <i class="ph ph-globe me-1"></i>{{ __('events.online_event') }}
+                                    @else
+                                        {{ $event->venue_name }}, {{ $event->city }}
+                                    @endif
                                 </p>
                             </div>
                         </div>

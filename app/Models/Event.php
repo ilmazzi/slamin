@@ -54,6 +54,9 @@ class Event extends Model
         'recurrence_weekdays',
         'recurrence_monthday',
         'parent_event_id',
+        'is_online',
+        'timezone',
+        'online_url',
     ];
 
     /**
@@ -74,6 +77,7 @@ class Event extends Model
         'moderated_at' => 'datetime',
         'is_recurring' => 'boolean',
         'recurrence_weekdays' => 'array',
+        'is_online' => 'boolean',
     ];
 
     /**
@@ -566,5 +570,76 @@ class Event extends Model
         }
 
         return $createdEvents;
+    }
+
+    /**
+     * Check if event is online
+     */
+    public function isOnlineEvent(): bool
+    {
+        return $this->is_online;
+    }
+
+    /**
+     * Get formatted timezone display name
+     */
+    public function getTimezoneDisplayName(): string
+    {
+        if (!$this->timezone) {
+            return 'UTC';
+        }
+
+        $timezone = new \DateTimeZone($this->timezone);
+        $offset = $timezone->getOffset(new \DateTime()) / 3600;
+        $sign = $offset >= 0 ? '+' : '';
+        
+        return $this->timezone . ' (UTC' . $sign . $offset . ')';
+    }
+
+    /**
+     * Get start time in user's timezone
+     */
+    public function getStartTimeInTimezone(string $userTimezone = null): string
+    {
+        if (!$this->start_datetime) {
+            return '';
+        }
+
+        $userTimezone = $userTimezone ?: config('app.timezone');
+        
+        return $this->start_datetime
+            ->setTimezone($userTimezone)
+            ->format('d/m/Y H:i');
+    }
+
+    /**
+     * Get end time in user's timezone
+     */
+    public function getEndTimeInTimezone(string $userTimezone = null): string
+    {
+        if (!$this->end_datetime) {
+            return '';
+        }
+
+        $userTimezone = $userTimezone ?: config('app.timezone');
+        
+        return $this->end_datetime
+            ->setTimezone($userTimezone)
+            ->format('d/m/Y H:i');
+    }
+
+    /**
+     * Get original timezone info for display
+     */
+    public function getOriginalTimezoneInfo(): string
+    {
+        if (!$this->is_online || !$this->timezone) {
+            return '';
+        }
+
+        $originalStart = $this->start_datetime->format('H:i');
+        $originalEnd = $this->end_datetime->format('H:i');
+        
+        return "($originalStart-$originalEnd {$this->timezone})";
     }
 }
