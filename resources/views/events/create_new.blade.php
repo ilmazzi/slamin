@@ -248,6 +248,7 @@
                                 </div>
                                 <div class="error-feedback" id="end_datetime-error"></div>
                             </div>
+                            </div>
 
                             <!-- Online Event Option -->
                             <div class="col-12 mb-3">
@@ -524,77 +525,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <!-- 1. Immagine Evento -->
-                            <div class="col-12 mb-3">
-                                <label class="form-label">{{ __('events.event_image') }} ({{ __('common.optional') }})</label>
-                                <input type="file" name="event_image" id="event_image" class="form-control" accept="image/*">
-                                <small class="text-muted">{{ __('events.image_format_help') }}</small>
-                                <div class="mt-2" id="imagePreview" style="display: none;">
-                                    <img id="previewImg" src="" class="img-thumbnail" style="max-height: 200px;">
-                                </div>
-                            </div>
-
-                            <!-- 2. Video Promozionale -->
-                            <div class="col-12 mb-3">
-                                <div class="form-floating">
-                                    <input type="url" name="promotional_video" id="promotional_video" class="form-control" placeholder="Link video promozionale">
-                                    <label for="promotional_video">{{ __('events.promotional_video') }} ({{ __('common.optional') }})</label>
-                                </div>
-                                <small class="text-muted">{{ __('events.promotional_video_help') }}</small>
-                                <div class="mt-2" id="videoPreview" style="display: none;">
-                                    <div class="ratio ratio-16x9">
-                                        <iframe id="videoEmbed" src="" frameborder="0" allowfullscreen></iframe>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3. Evento a Pagamento -->
-                            <div class="col-12 mb-3">
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" name="is_paid_event" id="is_paid_event" class="form-check-input" value="1">
-                                    <label for="is_paid_event" class="form-check-label">
-                                        <strong>{{ __('events.is_paid_event') }}</strong>
-                                    </label>
-                                </div>
-                                <div id="paymentFields" style="display: none;">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" name="ticket_price" id="ticket_price" class="form-control" min="0" step="0.01" placeholder="Prezzo biglietto">
-                                                <label for="ticket_price">{{ __('events.ticket_price') }} (€)</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="number" name="max_tickets" id="max_tickets" class="form-control" min="1" placeholder="Numero massimo biglietti">
-                                                <label for="max_tickets">{{ __('events.max_tickets') }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">{{ __('events.ticket_info_help') }}</small>
-                                </div>
-                            </div>
-
-                            <!-- 4. Gestione Festival -->
-                            <div class="col-12 mb-3">
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" name="is_festival_event" id="is_festival_event" class="form-check-input" value="1">
-                                    <label for="is_festival_event" class="form-check-label">
-                                        <strong>{{ __('events.is_festival_event') }}</strong>
-                                    </label>
-                                </div>
-                                <div id="festivalFields" style="display: none;">
-                                    <div class="form-floating mb-3">
-                                        <select name="festival_id" id="festival_id" class="form-select">
-                                            <option value="">{{ __('events.select_festival') }}</option>
-                                        </select>
-                                        <label for="festival_id">{{ __('events.select_festival') }}</label>
-                                    </div>
-                                    <small class="text-muted">{{ __('events.festival_help') }}</small>
-                                </div>
-                            </div>
-
-                            <!-- Campi esistenti mantenuti per compatibilità -->
+                            <!-- Requirements -->
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
                                     <textarea name="requirements" id="requirements" class="form-control" style="height: 100px" placeholder="Requisiti"></textarea>
@@ -603,12 +534,33 @@
                                 <small class="text-muted">{{ __('events.requirements_help') }}</small>
                             </div>
 
+                            <!-- Participants and Fee -->
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="number" name="max_participants" id="max_participants" class="form-control" min="1" placeholder="Numero massimo">
                                     <label for="max_participants">{{ __('events.max_participants_optional') }}</label>
                                 </div>
                                 <small class="text-muted">{{ __('events.no_limit_help') }}</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="number" name="entry_fee" id="entry_fee" class="form-control" min="0" step="0.01" value="0" placeholder="Costo">
+                                                                    <label for="entry_fee">{{ __('events.entry_fee') }} (€)</label>
+                            </div>
+                            <small class="text-muted">{{ __('events.entry_fee_help') }}</small>
+                            </div>
+
+
+
+                            <!-- Image Upload -->
+                            <div class="col-12 mb-3">
+                                <label class="form-label">{{ __('events.event_image') }} ({{ __('common.optional') }})</label>
+                                <input type="file" name="event_image" id="event_image" class="form-control" accept="image/*">
+                                <small class="text-muted">{{ __('events.image_format_help') }}</small>
+                                <div class="mt-2" id="imagePreview" style="display: none;">
+                                    <img id="previewImg" src="" class="img-thumbnail" style="max-height: 200px;">
+                                </div>
                             </div>
 
                             <!-- Event Status -->
@@ -1187,9 +1139,11 @@ function initializeForm() {
     // Check if elements exist before setting properties
     const startDateTime = document.getElementById('start_datetime');
     const endDateTime = document.getElementById('end_datetime');
+    const registrationDeadline = document.getElementById('registration_deadline');
 
     if (startDateTime) startDateTime.min = localDateTime;
     if (endDateTime) endDateTime.min = localDateTime;
+    if (registrationDeadline) registrationDeadline.min = localDateTime;
 }
 
 function initializeMap() {
@@ -1406,7 +1360,7 @@ function setupEventListeners() {
     }
 
     // Real-time preview updates
-    ['title', 'description', 'venue_name', 'city', 'ticket_price', 'start_datetime'].forEach(id => {
+    ['title', 'description', 'venue_name', 'city', 'entry_fee', 'start_datetime'].forEach(id => {
         const element = document.getElementById(id);
         if (element) {
             element.addEventListener('input', updatePreview);
@@ -1446,53 +1400,6 @@ function setupEventListeners() {
             }
         });
     });
-
-    // ========================================
-    // GESTIONE TERZO STEP - DETTAGLI EVENTO
-    // ========================================
-
-    // Gestione video promozionale
-    const promotionalVideo = document.getElementById('promotional_video');
-    if (promotionalVideo) {
-        promotionalVideo.addEventListener('input', function() {
-            const videoUrl = this.value.trim();
-            const videoPreview = document.getElementById('videoPreview');
-            const videoEmbed = document.getElementById('videoEmbed');
-            
-            if (videoUrl) {
-                const embedUrl = convertToEmbedUrl(videoUrl);
-                if (embedUrl) {
-                    videoEmbed.src = embedUrl;
-                    videoPreview.style.display = 'block';
-                } else {
-                    videoPreview.style.display = 'none';
-                }
-            } else {
-                videoPreview.style.display = 'none';
-            }
-        });
-    }
-
-    // Gestione evento a pagamento
-    const isPaidEvent = document.getElementById('is_paid_event');
-    const paymentFields = document.getElementById('paymentFields');
-    if (isPaidEvent && paymentFields) {
-        isPaidEvent.addEventListener('change', function() {
-            paymentFields.style.display = this.checked ? 'block' : 'none';
-        });
-    }
-
-    // Gestione festival
-    const isFestivalEvent = document.getElementById('is_festival_event');
-    const festivalFields = document.getElementById('festivalFields');
-    if (isFestivalEvent && festivalFields) {
-        isFestivalEvent.addEventListener('change', function() {
-            festivalFields.style.display = this.checked ? 'block' : 'none';
-            if (this.checked) {
-                loadFestivals();
-            }
-        });
-    }
 }
 
 function nextStep() {
@@ -2027,7 +1934,7 @@ function updatePreview() {
     const venueName = document.getElementById('venue_name').value || 'Nome Venue';
     const city = document.getElementById('city').value || 'Città';
     const startDateTime = document.getElementById('start_datetime').value;
-    const entryFee = document.getElementById('ticket_price').value || '0';
+    const entryFee = document.getElementById('entry_fee').value || '0';
     const isPublic = document.querySelector('input[name="is_public"]:checked').value === '1';
         const imageInput = document.getElementById('event_image');
 
@@ -2121,7 +2028,7 @@ function updatePreviewWithImage(imageSrc) {
     const venueName = document.getElementById('venue_name').value || 'Nome Venue';
     const city = document.getElementById('city').value || 'Città';
     const startDateTime = document.getElementById('start_datetime').value;
-    const entryFee = document.getElementById('ticket_price').value || '0';
+    const entryFee = document.getElementById('entry_fee').value || '0';
     const isPublic = document.querySelector('input[name="is_public"]:checked').value === '1';
 
     const formattedDate = startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT', {
@@ -2411,10 +2318,12 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     // Validate dates
     const startDateTime = document.getElementById('start_datetime').value;
     const endDateTime = document.getElementById('end_datetime').value;
+    const registrationDeadline = document.getElementById('registration_deadline').value;
 
     const now = new Date();
     const startDate = startDateTime ? new Date(startDateTime.replace(' ', 'T')) : null;
     const endDate = endDateTime ? new Date(endDateTime.replace(' ', 'T')) : null;
+    const regDeadline = registrationDeadline ? new Date(registrationDeadline.replace(' ', 'T')) : null;
 
     let hasErrors = false;
 
@@ -2455,6 +2364,17 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     } else {
         document.getElementById('end_datetime').classList.remove('is-invalid');
         document.getElementById('end_datetime').classList.add('is-valid');
+    }
+
+    // Validate registration deadline
+    if (regDeadline && startDate && regDeadline >= startDate) {
+        document.getElementById('registration_deadline-error').textContent = '{{ __('events.registration_deadline_before_start') }}';
+        document.getElementById('registration_deadline').classList.add('is-invalid');
+        document.getElementById('registration_deadline').classList.remove('is-valid');
+        hasErrors = true;
+    } else if (regDeadline) {
+        document.getElementById('registration_deadline').classList.remove('is-invalid');
+        document.getElementById('registration_deadline').classList.add('is-valid');
     }
 
     if (hasErrors) {
@@ -2592,8 +2512,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
+    // Registration deadline picker
+    flatpickr("#registration_deadline", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        allowInput: true,
+        placeholder: "Seleziona data e ora scadenza...",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Clear error when valid date is selected
+            document.getElementById('registration_deadline-error').textContent = '';
+            document.getElementById('registration_deadline').classList.remove('is-invalid');
+            document.getElementById('registration_deadline').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
 });
+
 // Funzioni per gestione inviti eventi privati
 let invitedUsers = [];
 let suggestedUsers = [];
@@ -3107,84 +3049,6 @@ function updateRecurrencePreview() {
     } else {
         previewDiv.innerHTML = `<span class="text-warning">${previewText}</span>`;
     }
-}
-
-// ========================================
-// FUNZIONI HELPER PER TERZO STEP
-// ========================================
-
-// Converte URL video in URL embed
-function convertToEmbedUrl(url) {
-    if (!url) return null;
-    
-    // YouTube
-    const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/;
-    const youtubeMatch = url.match(youtubeRegex);
-    if (youtubeMatch) {
-        return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
-    }
-    
-    // Vimeo
-    const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/;
-    const vimeoMatch = url.match(vimeoRegex);
-    if (vimeoMatch) {
-        return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
-    }
-    
-    // Dailymotion
-    const dailymotionRegex = /(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)/;
-    const dailymotionMatch = url.match(dailymotionRegex);
-    if (dailymotionMatch) {
-        return `https://www.dailymotion.com/embed/video/${dailymotionMatch[1]}`;
-    }
-    
-    // Altri servizi possono essere aggiunti qui
-    return null;
-}
-
-// Carica la lista dei festival
-function loadFestivals() {
-    const festivalSelect = document.getElementById('festival_id');
-    if (!festivalSelect) return;
-    
-    // Pulisci le opzioni esistenti
-    festivalSelect.innerHTML = '<option value="">{{ __("events.select_festival") }}</option>';
-    
-    // Simula caricamento (in produzione dovrebbe essere una chiamata AJAX)
-    fetch('/api/festivals', {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.festivals && data.festivals.length > 0) {
-            data.festivals.forEach(festival => {
-                const option = document.createElement('option');
-                option.value = festival.id;
-                option.textContent = festival.title;
-                festivalSelect.appendChild(option);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Errore nel caricamento festival:', error);
-        // Fallback con dati di esempio
-        const sampleFestivals = [
-            { id: 1, title: 'Festival di Poesia 2024' },
-            { id: 2, title: 'Slam Poetry Festival' },
-            { id: 3, title: 'Festival delle Arti Performative' }
-        ];
-        
-        sampleFestivals.forEach(festival => {
-            const option = document.createElement('option');
-            option.value = festival.id;
-            option.textContent = festival.title;
-            festivalSelect.appendChild(option);
-        });
-    });
 }
 
 // ===== GESTIONE POSIZIONI D'INGAGGIO =====

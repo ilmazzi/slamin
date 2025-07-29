@@ -1,0 +1,7 @@
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input type="text" name="registration_deadline" id="registration_deadline" class="form-control flatpickr-input" placeholder="Seleziona data e ora scadenza...">
+                                    <label for="registration_deadline">{{ __('events.registration_deadline') }} ({{ __('common.optional') }})</label>
+                                </div>
+                                <small class="text-muted">Lascia vuoto per nessuna scadenza</small>
+                                <div class="error-feedback" id="registration_deadline-error"></div>
