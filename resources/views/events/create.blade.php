@@ -146,6 +146,33 @@
                                 <div class="error-feedback" id="category-error"></div>
                             </div>
 
+                            <!-- Sezione Pubblico/Privato -->
+                            <div class="col-12 mb-3">
+                                <h6 class="text-primary mb-3">
+                                    <i class="ph ph-globe me-2"></i>{{ __('events.event_mode') }}
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
+                                            <label for="public" class="form-check-label">
+                                                <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
+                                                <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
+                                            <label for="private" class="form-check-label">
+                                                <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
+                                                <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Inviti per eventi privati - spostati al quarto step -->
                         </div>
                     </div>
