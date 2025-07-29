@@ -532,16 +532,16 @@ function loadEventsOnMapWithFilter(params) {
                         const colorMap = {
                             'bg-primary': '#007bff',      // Concert
                             'bg-secondary': '#6c757d',    // Open Mic
-                            'bg-success': '#28a745',      // Festival, Book Presentation
+                            'bg-success': '#28a745',      // Festival
                             'bg-danger': '#dc3545',       // Poetry Slam
                             'bg-warning': '#ffc107',      // Workshop
-                            'bg-info': '#17a2b8',         // Conference, Reading
+                            'bg-info': '#17a2b8',         // Conference
                             'bg-light': '#f8f9fa',        // Light
-                            'bg-dark': '#343a40',         // Dark
+                            'bg-dark': '#343a40',         // Book Presentation
                             'bg-purple': '#6f42c1',       // Poetry Art
                             'bg-pink': '#e83e8c',         // Residency
                             'bg-orange': '#fd7e14',       // Spoken Word
-                            'bg-cyan': '#0dcaf0'          // Cyan
+                            'bg-cyan': '#0dcaf0'          // Reading
                         };
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
                     }
