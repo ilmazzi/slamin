@@ -3,6 +3,27 @@
 @section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events.events_poetry_slam'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
+<style>
+/* Event popup styles */
+.event-popup {
+    min-width: 200px;
+    padding: 10px;
+}
+
+.event-popup h6 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.event-popup p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.event-popup .btn {
+    margin-top: 10px;
+}
+</style>
 @endsection
 
 @section('breadcrumb-title')
@@ -38,117 +59,26 @@
 @section('main-content')
 <div class="container-fluid">
 
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-calendar" style="font-size: 24px;"></i>
-                        </div>
-                    </div>
-                    <h4 class="mb-1">{{ $events->total() }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.total_events') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-globe" style="font-size: 24px;"></i>
-                        </div>
-                    </div>
-                    <h4 class="mb-1">{{ $events->where('is_public', true)->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.public_events_count') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-clock" style="font-size: 24px;"></i>
-                        </div>
-                    </div>
-                    <h4 class="mb-1">{{ $events->where('start_datetime', '>', now())->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.upcoming_events_count') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-map-pin" style="font-size: 24px;"></i>
-                        </div>
-                    </div>
-                    <h4 class="mb-1">{{ $events->pluck('city')->unique()->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.cities_count') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Navigation Links -->
+    <!-- Map Container (Always Visible) -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="ph ph-navigation-arrow me-2"></i>
-                        {{ __('events.quick_navigation') }}
-                    </h5>
+                <div class="card-body p-0">
+                    <div id="eventsMap" style="height: 400px; border-radius: 10px; overflow: hidden; position: relative;">
+                        <div class="map-controls position-absolute top-0 end-0 p-3" style="z-index: 1000;">
+                            <button class="btn btn-light btn-sm mb-2 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
+                                <i class="ph ph-crosshairs"></i>
+                            </button>
+                            <button class="btn btn-light btn-sm mb-2 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
+                                <i class="ph ph-arrow-clockwise"></i>
+                            </button>
+                            <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="Mostra tutti gli eventi">
+                                <i class="ph ph-globe"></i>
+                            </button>
                 </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('events.index') }}" class="card card-light-primary hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-list f-s-30 text-primary mb-2"></i>
-                                    <h6 class="mb-1">{{ __('events.all_events') }}</h6>
-                                    <small class="text-muted">{{ __('events.view_all_events') }}</small>
                                 </div>
-                            </a>
                         </div>
-                        @auth
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('events.index', ['filter' => 'my']) }}" class="card card-light-info hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-calendar f-s-30 text-info mb-2"></i>
-                                    <h6 class="mb-1">{{ __('sidebar.my_events') }}</h6>
-                                    <small class="text-muted">{{ __('events.view_my_events') }}</small>
                                 </div>
-                            </a>
-                        </div>
-                        @can('create', App\Models\Event::class)
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('events.create') }}" class="card card-light-success hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-plus-circle f-s-30 text-success mb-2"></i>
-                                    <h6 class="mb-1">{{ __('events.create_event') }}</h6>
-                                    <small class="text-muted">{{ __('events.create_new_event') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                        @endcan
-                        @endauth
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('events.index', ['filter' => 'upcoming']) }}" class="card card-light-warning hover-effect text-decoration-none">
-                                <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-clock f-s-30 text-warning mb-2"></i>
-                                    <h6 class="mb-1">{{ __('events.upcoming_events') }}</h6>
-                                    <small class="text-muted">{{ __('events.view_upcoming') }}</small>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -158,7 +88,8 @@
             <div class="card">
                 <div class="card-body">
                     <form method="GET" id="filterForm">
-                                                <div class="row g-3">
+                        <!-- First Row: Main Filters -->
+                        <div class="row g-3 mb-3">
                             <div class="col-lg-3 col-md-12">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light-primary border-end-0">
@@ -190,35 +121,18 @@
                                 <input type="number" name="radius" class="form-control"
                                        placeholder="{{ __('events.radius_km') }}" value="{{ request('radius', 50) }}" min="1" max="200">
                             </div>
-                            <div class="col-lg-2 col-md-4">
-                                <select name="type" class="form-select">
-                                    <option value="">{{ __('events.all_events') }}</option>
-                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events_only') }}</option>
-                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events_only') }}</option>
-                                </select>
-                            </div>
                             <div class="col-lg-3 col-md-12">
-                                <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                <div class="d-flex gap-2 justify-content-end">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" id="mapToggle">
-                                        <i class="ph ph-map-pin me-1"></i>{{ __('events.show_map') }}
-                                    </button>
-                                    @auth
-                                        @can('create', App\Models\Event::class)
-                                            <a href="{{ route('events.create') }}" class="btn btn-success">
-                                                <i class="ph ph-plus me-1"></i>{{ __('common.create') }}
-                                            </a>
-                                        @endcan
-                                    @endauth
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Quick Filter Tags -->
-                        <div class="row mt-3">
-                            <div class="col-12">
+                        <!-- Second Row: Quick Filters and Create Button -->
+                        <div class="row g-3">
+                            <div class="col-lg-9 col-md-12">
                                 <div class="d-flex flex-wrap gap-2">
                                     <span class="bg-light-primary rounded px-3 py-2" data-filter="today" style="cursor: pointer;">
                                         <i class="ph ph-calendar me-1"></i> {{ __('events.today') }}
@@ -245,188 +159,43 @@
                                     @endauth
                                 </div>
                             </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    @auth
+                                        @can('create', App\Models\Event::class)
+                                            <a href="{{ route('events.create') }}" class="btn btn-success">
+                                                <i class="ph ph-plus me-1"></i>{{ __('common.create') }}
+                                            </a>
+                                        @endcan
+                                    @endauth
+                                </div>
+                            </div>
                         </div>
                     </form>
-
-                    <!-- Filter functionality -->
-                    <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Quick filter functionality
-                        document.querySelectorAll('[data-filter]').forEach(filter => {
-                            filter.addEventListener('click', function() {
-                                const filterType = this.dataset.filter;
-                                applyQuickFilter(filterType);
-                            });
-                        });
-                    });
-
-                                        function applyQuickFilter(filterType) {
-                        const mapContainer = document.getElementById('mapContainer');
-                        const isMapVisible = mapContainer.style.display !== 'none';
-
-                        if (isMapVisible) {
-                            // Se la mappa è aperta, applica filtri alla mappa
-                            applyFilterToMap(filterType);
-                        } else {
-                            // Se la lista è aperta, applica filtri alla lista
-                            applyFilterToList(filterType);
-                        }
-                    }
-
-                    function applyFilterToList(filterType) {
-                        const form = document.getElementById('filterForm');
-                        const now = new Date();
-
-                        // Clear existing values
-                        form.querySelector('[name="search"]').value = '';
-
-                        switch(filterType) {
-                            case 'today':
-                                const today = now.toISOString().split('T')[0];
-                                addHiddenInput(form, 'date_from', today);
-                                addHiddenInput(form, 'date_to', today);
-                                break;
-
-                            case 'tomorrow':
-                                const tomorrow = new Date(now);
-                                tomorrow.setDate(tomorrow.getDate() + 1);
-                                const tomorrowStr = tomorrow.toISOString().split('T')[0];
-                                addHiddenInput(form, 'date_from', tomorrowStr);
-                                addHiddenInput(form, 'date_to', tomorrowStr);
-                                break;
-
-                            case 'weekend':
-                                const saturday = new Date(now);
-                                const sunday = new Date(now);
-                                const daysUntilSaturday = (6 - now.getDay()) % 7;
-                                saturday.setDate(now.getDate() + daysUntilSaturday);
-                                sunday.setDate(saturday.getDate() + 1);
-                                addHiddenInput(form, 'date_from', saturday.toISOString().split('T')[0]);
-                                addHiddenInput(form, 'date_to', sunday.toISOString().split('T')[0]);
-                                break;
-
-                            case 'free':
-                                addHiddenInput(form, 'free_only', '1');
-                                break;
-
-                            case 'nearby':
-                                if (navigator.geolocation) {
-                                    navigator.geolocation.getCurrentPosition(function(position) {
-                                        addHiddenInput(form, 'lat', position.coords.latitude);
-                                        addHiddenInput(form, 'lng', position.coords.longitude);
-                                        addHiddenInput(form, 'radius', '10');
-                                        form.submit();
-                                    });
-                                    return;
-                                }
-                                break;
-                            case 'my':
-                                addHiddenInput(form, 'filter', 'my');
-                                break;
-                            case 'private':
-                                addHiddenInput(form, 'filter', 'my_private');
-                                break;
-                        }
-
-                        form.submit();
-                    }
-
-                    function applyFilterToMap(filterType) {
-                        const center = map.getCenter();
-                        const params = {
-                            latitude: center.lat,
-                            longitude: center.lng,
-                            radius: 200
-                        };
-
-                        const now = new Date();
-
-                        switch(filterType) {
-                                                         case 'today':
-                                 params.date_from = now.toISOString().split('T')[0];
-                                 params.date_to = now.toISOString().split('T')[0];
-                                 console.log('Today filter applied:', params.date_from);
-                                 break;
-
-                                                         case 'tomorrow':
-                                 const tomorrow = new Date(now);
-                                 tomorrow.setDate(tomorrow.getDate() + 1);
-                                 params.date_from = tomorrow.toISOString().split('T')[0];
-                                 params.date_to = tomorrow.toISOString().split('T')[0];
-                                 console.log('Tomorrow filter applied:', params.date_from);
-                                 break;
-
-                                                         case 'weekend':
-                                 const saturday = new Date(now);
-                                 const sunday = new Date(now);
-                                 const daysUntilSaturday = (6 - now.getDay()) % 7;
-                                 saturday.setDate(now.getDate() + daysUntilSaturday);
-                                 sunday.setDate(saturday.getDate() + 1);
-                                 params.date_from = saturday.toISOString().split('T')[0];
-                                 params.date_to = sunday.toISOString().split('T')[0];
-                                 console.log('Weekend filter applied:', params.date_from, 'to', params.date_to);
-                                 break;
-
-                                                         case 'free':
-                                 params.free_only = '1';
-                                 console.log('Free filter applied');
-                                 break;
-
-                            case 'nearby':
-                                params.radius = '10';
-                                break;
-                        }
-
-                                                 console.log('Applying filter to map:', filterType, params);
-                         loadEventsOnMapWithFilter(params);
-                    }
-
-                    function addHiddenInput(form, name, value) {
-                        // Remove existing hidden input with same name
-                        const existing = form.querySelector(`input[name="${name}"]`);
-                        if (existing && existing.type === 'hidden') {
-                            existing.remove();
-                        }
-
-                        // Add new hidden input
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = name;
-                        input.value = value;
-                        form.appendChild(input);
-                    }
-                    </script>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Map Container (Hidden by default) -->
-    <div class="row mb-4" id="mapContainer" style="display: none;">
+    <!-- Events Grid with Pagination Controls -->
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div id="eventsMap" style="height: 500px; border-radius: 10px; overflow: hidden; position: relative;">
-                    <div class="map-controls position-absolute top-0 end-0 p-3" style="z-index: 1000;">
-                        <button class="btn btn-light btn-sm mb-2 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
-                            <i class="ph ph-crosshairs"></i>
-                        </button>
-                        <button class="btn btn-light btn-sm mb-2 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
-                            <i class="ph ph-arrow-clockwise"></i>
-                        </button>
-                        <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="Mostra tutti gli eventi">
-                            <i class="ph ph-globe"></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">{{ __('events.events_list') }}</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="form-label mb-0">{{ __('events.show') }}:</label>
+                    <select class="form-select form-select-sm" style="width: auto;" onchange="changePerPage(this.value)">
+                        <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="20" {{ request('per_page', 10) == 20 ? 'selected' : '' }}>20</option>
+                        <option value="50" {{ request('per_page', 10) == 50 ? 'selected' : '' }}>50</option>
+                    </select>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Events Grid -->
     <div class="row" id="eventsGrid">
-        @forelse($events as $event)
+        @forelse($events->take(request('per_page', 10)) as $event)
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 position-relative">
                     <!-- Event Status Badge -->
@@ -465,8 +234,13 @@
                             </div>
                         @endif
                         <div class="position-absolute bottom-0 start-0 text-white p-3 w-100" style="z-index: 2;">
+                            @if($event->is_online)
+                                <h6 class="mb-1 text-white">{{ __('events.online_event') }}</h6>
+                                <small class="text-white-50"><i class="ph ph-globe me-1"></i>{{ __('events.virtual_event') }}</small>
+                            @else
                             <h6 class="mb-1 text-white">{{ $event->venue_name }}</h6>
                             <small class="text-white-50"><i class="ph ph-map-pin me-1"></i>{{ $event->city }}</small>
+                            @endif
                         </div>
                     </div>
 
@@ -499,163 +273,36 @@
                                 <i class="ph ph-user me-2"></i>
                                 <span>{{ $event->organizer->name }}</span>
                             </div>
-                            @if($event->entry_fee > 0)
-                                <div class="d-flex align-items-center text-muted">
-                                    <i class="ph ph-currency-eur me-2"></i>
-                                    <span>€{{ number_format($event->entry_fee, 2) }}</span>
+                            @if($event->is_online)
+                                <div class="d-flex align-items-center text-muted mb-2">
+                                    <i class="ph ph-globe me-2"></i>
+                                    <span>{{ $event->timezone }}</span>
                                 </div>
                             @else
-                                <div class="d-flex align-items-center text-success">
-                                    <i class="ph ph-gift me-2"></i>
-                                    <span class="fw-semibold">{{ __('events.free') }}</span>
+                                <div class="d-flex align-items-center text-muted mb-2">
+                                    <i class="ph ph-map-pin me-2"></i>
+                                    <span>{{ $event->city }}, {{ $event->country }}</span>
                                 </div>
                             @endif
                         </div>
 
-                                                <!-- Participants Preview -->
-                        @php
-                            $acceptedInvitations = $event->invitations->where('status', 'accepted');
-                            $acceptedRequests = $event->requests->where('status', 'accepted');
-                            $totalConfirmed = $acceptedInvitations->count() + $acceptedRequests->count();
-                            $maxParticipants = $event->max_participants;
-                            $spotsLeft = $maxParticipants ? $maxParticipants - $totalConfirmed : null;
-                        @endphp
-
-                        <div class="mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <small class="text-muted fw-semibold" data-bs-toggle="tooltip" data-bs-placement="top"
-                                       title="{{ __('events.participants_preview') }}">
-                                    <i class="ph ph-users me-1"></i>{{ __('events.participants') }}
-                                </small>
-                                <div class="d-flex align-items-center gap-1">
-                                    @if($maxParticipants)
-                                        <span class="badge bg-primary">{{ $totalConfirmed }}/{{ $maxParticipants }}</span>
-                                        @if($spotsLeft > 0)
-                                            <span class="badge bg-success" style="font-size: 10px;">{{ __('events.participants_spots_left') }}: {{ $spotsLeft }}</span>
-                                        @elseif($spotsLeft === 0)
-                                            <span class="badge bg-warning" style="font-size: 10px;">{{ __('events.participants_full') }}</span>
-                                        @endif
-                                    @else
-                                        <span class="badge bg-success">{{ $totalConfirmed }}</span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            @if($totalConfirmed > 0)
-                                <!-- Show first 3 participants -->
-                                <div class="d-flex flex-wrap gap-1">
-                                    @foreach($acceptedInvitations->take(3) as $invitation)
-                                        <div class="d-flex align-items-center bg-light-success rounded px-2 py-1" style="font-size: 11px;">
-                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-1" style="width: 16px; height: 16px; font-size: 8px; font-weight: bold;">
-                                                {{ substr($invitation->invitedUser->getDisplayName(), 0, 1) }}
-                                            </div>
-                                            <span class="text-success fw-semibold">{{ ucfirst($invitation->role) }}</span>
-                                        </div>
-                                    @endforeach
-
-                                    @foreach($acceptedRequests->take(3 - $acceptedInvitations->count()) as $request)
-                                        <div class="d-flex align-items-center bg-light-success rounded px-2 py-1" style="font-size: 11px;">
-                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-1" style="width: 16px; height: 16px; font-size: 8px; font-weight: bold;">
-                                                {{ substr($request->user->getDisplayName(), 0, 1) }}
-                                            </div>
-                                            <span class="text-success fw-semibold">{{ ucfirst($request->requested_role) }}</span>
-                                        </div>
-                                    @endforeach
-
-                                    @if($totalConfirmed > 3)
-                                        <span class="badge bg-light text-muted" style="font-size: 10px;">+{{ $totalConfirmed - 3 }}</span>
-                                    @endif
-                                </div>
-
-                                <!-- Role summary -->
-                                @php
-                                    $roleStats = collect();
-                                    foreach($acceptedInvitations as $inv) {
-                                        $roleStats->put($inv->role, $roleStats->get($inv->role, 0) + 1);
-                                    }
-                                    foreach($acceptedRequests as $req) {
-                                        $roleStats->put($req->requested_role, $roleStats->get($req->requested_role, 0) + 1);
-                                    }
-                                @endphp
-                                @if($roleStats->count() > 0)
-                                    <div class="mt-2">
-                                        <small class="text-muted">{{ __('events.participants_roles_summary') }}:</small>
-                                        <div class="d-flex flex-wrap gap-1 mt-1">
-                                            @foreach($roleStats->take(3) as $role => $count)
-                                                <span class="badge bg-light-primary" style="font-size: 9px;">{{ ucfirst($role) }}: {{ $count }}</span>
-                                            @endforeach
-                                            @if($roleStats->count() > 3)
-                                                <span class="badge bg-light text-muted" style="font-size: 9px;">+{{ $roleStats->count() - 3 }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-                            @else
-                                <small class="text-muted">{{ __('events.no_participants') }}</small>
-                                @if($event->acceptsRequests())
-                                    <div class="mt-1">
-                                        <small class="text-success fw-semibold">
-                                            <i class="ph ph-hand-waving me-1"></i>{{ __('events.participants_accepting_applications') }}
-                                        </small>
-                                    </div>
-                                @endif
-                            @endif
-                        </div>
-
-                        <!-- Tags -->
-                        @if($event->tags)
-                            <div class="mb-3">
-                                @foreach(array_slice($event->tags, 0, 3) as $tag)
-                                    <span class="badge bg-light text-dark me-1">#{{ $tag }}</span>
-                                @endforeach
-                                @if(count($event->tags) > 3)
-                                    <span class="badge bg-light text-muted">+{{ count($event->tags) - 3 }}</span>
-                                @endif
-                            </div>
-                        @endif
-
-                        <!-- Action Buttons -->
                         <div class="mt-auto">
-                            <div class="row g-2">
-                                <div class="col-4">
-                                    <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm w-100">
-                                        <i class="ph ph-eye me-1"></i> Dettagli
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    @if($event->entry_fee > 0)
+                                        <span class="badge bg-warning me-2">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
+                                    @else
+                                        <span class="badge bg-success me-2">{{ __('events.free') }}</span>
+                                    @endif
+                                    @if($event->max_participants)
+                                        <small class="text-muted">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
+                                    @endif
+                                </div>
+                                <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
+                                    {{ __('common.view') }}
                                     </a>
                                 </div>
-                                <div class="col-2">
-                                    @auth
-                                        <button class="btn btn-outline-danger btn-sm w-100 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
-                                            <i class="ph-duotone ph-heart wishlist-icon"></i>
-                                        </button>
-                                    @endauth
                                 </div>
-                                <div class="col-3">
-                                    @auth
-                                        @if($event->organizer_id === auth()->id())
-                                            <a href="{{ route('events.manage', $event) }}" class="btn btn-light-secondary btn-sm w-100">
-                                                <i class="ph ph-gear"></i>
-                                            </a>
-                                        @elseif($event->acceptsRequests() && !$event->requests()->where('user_id', auth()->id())->exists())
-                                            <button class="btn btn-light-success btn-sm w-100" data-bs-toggle="modal" data-bs-target="#applyModal" data-event-id="{{ $event->id }}"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('events.participants_click_to_apply') }}">
-                                                <i class="ph ph-hand-waving me-1"></i>{{ __('events.apply') }}
-                                            </button>
-                                        @else
-                                            <button class="btn btn-light-secondary btn-sm w-100" disabled>
-                                                <i class="ph ph-check"></i>
-                                            </button>
-                                        @endif
-                                    @else
-                                        <a href="{{ route('login') }}" class="btn btn-light-primary btn-sm w-100">
-                                            <i class="ph ph-sign-in"></i>
-                                        </a>
-                                    @endauth
-                                </div>
-                                <div class="col-3">
-                                    <x-report-button :content="$event" type="event" size="sm" />
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -663,13 +310,13 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body text-center py-5">
-                        <i class="ph ph-calendar-x display-4 text-muted mb-3"></i>
-                        <h4 class="text-muted">{{ __('events.no_events_found') }}</h4>
-                        <p class="text-muted mb-4">{{ __('events.no_events_message') }}</p>
+                        <i class="ph ph-calendar-x f-s-48 text-muted mb-3"></i>
+                        <h5 class="text-muted">{{ __('events.no_events_found') }}</h5>
+                        <p class="text-muted">{{ __('events.try_adjusting_filters') }}</p>
                         @auth
                             @can('create', App\Models\Event::class)
                                 <a href="{{ route('events.create') }}" class="btn btn-primary">
-                                    <i class="ph ph-plus me-2"></i>{{ __('events.create_first_event') }}
+                                    <i class="ph ph-plus me-1"></i>{{ __('events.create_first_event') }}
                                 </a>
                             @endcan
                         @endauth
@@ -679,264 +326,283 @@
         @endforelse
     </div>
 
-    <!-- Pagination -->
-    @if($events->hasPages())
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                {{ $events->appends(request()->query())->links() }}
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="ph ph-calendar" style="font-size: 24px;"></i>
             </div>
         </div>
-    @endif
+                    <h4 class="mb-1">{{ $events->total() }}</h4>
+                    <p class="text-muted mb-0">{{ __('events.total_events') }}</p>
 </div>
-
-<!-- Apply Modal -->
-@auth
-<div class="modal fade" id="applyModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="ph ph-hand-waving me-2"></i>Richiesta Partecipazione
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="applyForm">
-                <div class="modal-body">
-                    <div id="eventDetails" class="mb-4"></div>
-
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('invitations.role') }} Richiesto *</label>
-                        <select name="requested_role" class="form-select" required>
-                            <option value="">Seleziona ruolo...</option>
-                            <option value="performer">Performer</option>
-                            <option value="judge">Judge</option>
-                            <option value="technician">Technician</option>
-                            <option value="host">Host</option>
-                        </select>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Messaggio di Presentazione *</label>
-                        <textarea name="message" class="form-control" rows="4"
-                                  placeholder="Presentati e spiega perché vuoi partecipare a questo evento..." required></textarea>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="ph ph-globe" style="font-size: 24px;"></i>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Esperienza (Opzionale)</label>
-                        <textarea name="experience" class="form-control" rows="3"
-                                  placeholder="Descrivi la tua esperienza nel poetry slam..."></textarea>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Link Portfolio (Opzionale)</label>
-                        <div id="portfolioLinks">
-                            <input type="url" name="portfolio_links[]" class="form-control mb-2"
-                                   placeholder="https://youtube.com/watch?v=...">
+                    <h4 class="mb-1">{{ $events->where('is_public', true)->count() }}</h4>
+                    <p class="text-muted mb-0">{{ __('events.public_events_count') }}</p>
                         </div>
-                        <button type="button" class="btn btn-light-secondary btn-sm" id="addPortfolioLink">
-                            <i class="ph ph-plus me-1"></i>Aggiungi Link
-                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-paper-plane me-2"></i>{{ __('videos.send') }} Richiesta
-                    </button>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="ph ph-clock" style="font-size: 24px;"></i>
                 </div>
-            </form>
+        </div>
+                    <h4 class="mb-1">{{ $events->where('start_datetime', '>', now())->count() }}</h4>
+                    <p class="text-muted mb-0">{{ __('events.upcoming_events_count') }}</p>
+    </div>
+</div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="card">
+                <div class="card-body text-center py-4">
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                        <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="ph ph-map-pin" style="font-size: 24px;"></i>
+                        </div>
+                    </div>
+                    <h4 class="mb-1">{{ $events->pluck('city')->unique()->count() }}</h4>
+                    <p class="text-muted mb-0">{{ __('events.cities_count') }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-@endauth
+
+<script>
+function changePerPage(value) {
+    const url = new URL(window.location);
+    url.searchParams.set('per_page', value);
+    window.location.href = url.toString();
+}
+</script>
 @endsection
 
-@section('script')
+@push('scripts')
 <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
 <script>
-// Traduzioni JavaScript
-const translations = {
-    show_map: '{{ __('events.show_map') }}',
-    show_list: '{{ __('events.show_list') }}',
-};
+// Variabili globali per la mappa
 let map = null;
 let markers = [];
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
-    // Map Toggle
-    document.getElementById('mapToggle').addEventListener('click', function() {
-        const mapContainer = document.getElementById('mapContainer');
-        const eventsGrid = document.getElementById('eventsGrid');
-
-        if (mapContainer.style.display === 'none') {
-            mapContainer.style.display = 'block';
-            eventsGrid.style.display = 'none';
-            this.innerHTML = `<i class="ph ph-list me-1"></i>${translations.show_list}`;
+    // Initialize map
             initMap();
-        } else {
-            mapContainer.style.display = 'none';
-            eventsGrid.style.display = 'flex';
-            this.innerHTML = `<i class="ph ph-map-pin me-1"></i>${translations.show_map}`;
-        }
-    });
 
-    // Filter Chips
-    document.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-            // Implement filter logic here
-            this.classList.toggle('active');
+    // Quick filter functionality
+    document.querySelectorAll('[data-filter]').forEach(filter => {
+        filter.addEventListener('click', function() {
+            const filterType = this.dataset.filter;
+            applyQuickFilter(filterType);
         });
     });
-
-    // Portfolio Links functionality
-    const addPortfolioLinkBtn = document.getElementById('addPortfolioLink');
-    if (addPortfolioLinkBtn) {
-        addPortfolioLinkBtn.addEventListener('click', function() {
-            const container = document.getElementById('portfolioLinks');
-            const input = document.createElement('input');
-            input.type = 'url';
-            input.name = 'portfolio_links[]';
-            input.className = 'form-control mb-2';
-            input.placeholder = 'https://youtube.com/watch?v=... o https://instagram.com/...';
-            container.appendChild(input);
-        });
-    }
 
     // Live Search
     let searchTimeout;
-    document.querySelector('input[name="search"]').addEventListener('input', function() {
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             document.getElementById('filterForm').submit();
         }, 500);
     });
+    }
 });
 
 function initMap() {
-    if (map) return;
-
-    // Inizializza mappa con controlli di zoom
-    map = L.map('eventsMap', {
-        zoomControl: true,
-        scrollWheelZoom: true,
-        doubleClickZoom: true,
-        boxZoom: true,
-        keyboard: true
-    }).setView([41.9028, 12.4964], 6); // Default: centro Italia
+    console.log('Initializing map...');
+    
+    // Inizializza la mappa
+    map = L.map('eventsMap').setView([41.9028, 12.4964], 10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 18
+        attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Prova a ottenere la posizione dell'utente
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+    // Carica gli eventi con i filtri correnti
+    loadEventsWithCurrentFilters();
+}
 
-                // Centra la mappa sulla posizione dell'utente
-                map.setView([userLat, userLng], 12);
-
-                // Aggiungi un marker per la posizione dell'utente
-                L.marker([userLat, userLng], {
-                    icon: L.divIcon({
-                        className: 'user-location-marker',
-                        html: '<div style="background: #007bff; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,123,255,0.5);"></div>',
-                        iconSize: [18, 18],
-                        iconAnchor: [9, 9]
-                    })
-                }).addTo(map).bindPopup('La tua posizione');
-
-                // Carica eventi vicino alla posizione dell'utente
-                loadEventsOnMap(userLat, userLng);
-            },
-            function(error) {
-                console.warn('Geolocation error:', error);
-                let message = '';
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        message = 'Geolocalizzazione negata. Puoi attivarla nelle impostazioni del browser.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        message = 'Posizione non disponibile.';
-                        break;
-                    case error.TIMEOUT:
-                        message = 'Timeout nella richiesta di geolocalizzazione.';
-                        break;
-                    default:
-                        message = 'Geolocalizzazione non disponibile (richiede HTTPS). Mostra eventi di default.';
-                        break;
-                }
-                showNotification(message, 'info');
-                // Fallback: usa coordinate Italia centrale
-                map.setView([41.9028, 12.4964], 6);
-                loadEventsOnMap(41.9028, 12.4964);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 300000 // 5 minuti
-            }
-        );
-    } else {
-        console.warn('Geolocation not supported');
-        showNotification('Il tuo browser non supporta la geolocalizzazione.', 'info');
-        // Fallback: usa coordinate Italia centrale
-        map.setView([41.9028, 12.4964], 6);
-        loadEventsOnMap(41.9028, 12.4964);
+function loadEventsWithCurrentFilters() {
+    const center = map.getCenter();
+    const params = {
+        latitude: center.lat,
+        longitude: center.lng
+    };
+    
+    // Ottieni i parametri correnti dall'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Applica i filtri correnti
+    if (urlParams.has('date_from')) {
+        params.date_from = urlParams.get('date_from');
     }
+    if (urlParams.has('date_to')) {
+        params.date_to = urlParams.get('date_to');
+    }
+    if (urlParams.has('free_only')) {
+        params.free_only = urlParams.get('free_only');
+    }
+    if (urlParams.has('filter')) {
+        params.filter = urlParams.get('filter');
+    }
+    if (urlParams.has('lat') && urlParams.has('lng')) {
+        params.latitude = parseFloat(urlParams.get('lat'));
+        params.longitude = parseFloat(urlParams.get('lng'));
+        // Centra la mappa sulla posizione del filtro
+        map.setView([params.latitude, params.longitude], 12);
+    }
+    // Aggiungi radius solo se è il filtro 'nearby' o se viene specificato esplicitamente
+    if (urlParams.has('filter') && urlParams.get('filter') === 'nearby') {
+        params.radius = urlParams.get('radius') || '10';
+    } else if (urlParams.has('radius') && urlParams.get('radius') > 0) {
+        params.radius = urlParams.get('radius');
+    }
+    
+    console.log('Loading events with current filters:', params);
+    loadEventsOnMapWithFilter(params);
 }
 
 function loadEventsOnMap(lat = 45.59614070, lng = 8.91219860) {
     loadEventsOnMapWithFilter({
         latitude: lat,
-        longitude: lng,
-        radius: 200
+        longitude: lng
     });
 }
 
 function loadEventsOnMapWithFilter(params) {
-    // Pulisci markers esistenti
+    console.log('loadEventsOnMapWithFilter called with params:', params);
+    
+    // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
 
-    fetch('/api/events/near?' + new URLSearchParams(params))
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    // Build URL with parameters
+    const url = new URL('/api/events/near', window.location.origin);
+    Object.keys(params).forEach(key => {
+        if (params[key] !== null && params[key] !== undefined) {
+            url.searchParams.append(key, params[key]);
         }
+    });
+    
+    console.log('Fetching from URL:', url.toString());
+    
+    fetch(url)
+        .then(response => {
+            console.log('Response status:', response.status);
         return response.json();
     })
     .then(events => {
-        events.forEach(event => {
-            if (event.latitude && event.longitude) {
-                const marker = L.marker([event.latitude, event.longitude])
-                    .addTo(map)
-                    .bindPopup(`
-                        <div class="p-2">
-                            <h6>${event.title}</h6>
-                            ${event.category ? `<span class="badge ${event.category_color_class} mb-2">${event.category_name}</span>` : ''}
-                            <p class="mb-1"><i class="ph ph-calendar me-1"></i>${event.start_datetime}</p>
-                            <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
-                            <small class="text-muted d-block">Organizzato da: ${event.organizer}</small>
-                            <a href="${event.url}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
-                        </div>
-                    `);
-                markers.push(marker);
+            console.log('Events received:', events);
+            console.log('Number of events:', events.length);
+            
+            if (events.length === 0) {
+                console.log('No events found with current filters');
+                showNotification('Nessun evento trovato con i filtri applicati.', 'info');
+                return;
             }
-        });
-
-        // Mostra notifica con numero di eventi trovati
-        const filterInfo = Object.keys(params).length > 3 ? ' filtrati' : '';
-        showNotification(`${events.length} eventi${filterInfo} trovati`, 'success');
+            
+            events.forEach((event, index) => {
+                console.log(`Adding marker ${index + 1}:`, event);
+                
+            if (event.latitude && event.longitude) {
+                    // Determina il colore del marker basato sulla categoria
+                    let markerColor = '#6c757d'; // Default secondary (grigio)
+                    if (event.category_color_class) {
+                        // Mappa le classi CSS ai colori esatti delle categorie
+                        const colorMap = {
+                            'bg-primary': '#007bff',      // Concert
+                            'bg-secondary': '#6c757d',    // Open Mic
+                            'bg-success': '#28a745',      // Festival
+                            'bg-danger': '#dc3545',       // Poetry Slam
+                            'bg-warning': '#ffc107',      // Workshop
+                            'bg-info': '#17a2b8',         // Conference
+                            'bg-light': '#f8f9fa',        // Light
+                            'bg-dark': '#343a40',         // Dark
+                            'bg-indigo': '#6610f2',       // Reading
+                            'bg-purple': '#6f42c1',       // Poetry Art
+                            'bg-pink': '#e83e8c',         // Residency
+                            'bg-orange': '#fd7e14',       // Spoken Word
+                            'bg-teal': '#20c997',         // Book Presentation
+                            'bg-cyan': '#0dcaf0'          // Cyan
+                        };
+                        markerColor = colorMap[event.category_color_class] || '#6c757d';
+                    }
+                    
+                    console.log(`Marker color for event ${event.id} (${event.category}): ${markerColor}`);
+                    
+                    // Crea icona personalizzata con colore ma stile standard
+                    const customIcon = L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="background-color: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    
+                    const marker = L.marker([event.latitude, event.longitude], {
+                        icon: customIcon
+                    }).addTo(map);
+                    
+                    console.log(`Marker added to map at [${event.latitude}, ${event.longitude}]`);
+                    
+                    // Create popup content
+                    let popupContent = `
+                        <div class="event-popup">
+                            <h6><strong>${event.title}</strong></h6>
+                            <p><strong>Data:</strong> ${event.start_datetime}</p>
+                    `;
+                    
+                    if (event.is_online) {
+                        popupContent += `<p><strong>Tipo:</strong> Evento Online - ${event.timezone || 'N/A'}</p>`;
+                    } else {
+                        popupContent += `<p><strong>Luogo:</strong> ${event.venue_name || 'N/A'}, ${event.city || 'N/A'}</p>`;
+                    }
+                    
+                    popupContent += `
+                            <p><strong>Organizzatore:</strong> ${event.organizer}</p>
+                            <a href="${event.url}" class="btn btn-sm btn-primary">Dettagli</a>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupContent);
+                markers.push(marker);
+                } else {
+                    console.log(`Event ${event.id} has no coordinates:`, event);
+                }
+            });
+            
+            console.log(`Total markers added: ${markers.length}`);
+            
+            // Fit map to show all markers
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
     })
     .catch(error => {
-        console.error('Error loading events on map:', error);
-        showNotification('{{ __('common.loading_error') }} degli eventi sulla mappa', 'error');
+            console.error('Error loading events:', error);
+            showNotification('Errore nel caricamento degli eventi.', 'error');
     });
 }
 
@@ -986,7 +652,10 @@ function showAllEvents() {
                             .bindPopup(`
                                 <div class="p-2">
                                     <h6>${event.title}</h6>
-                                    <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
+                                    ${event.is_online ? 
+                                        `<p class="mb-2"><i class="ph ph-globe me-1"></i>Evento Online</p>` :
+                                        `<p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>`
+                                    }
                                     <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
                                 </div>
                             `);
@@ -1007,131 +676,6 @@ function showAllEvents() {
         });
 }
 
-@auth
-// Handle apply modal events
-document.addEventListener('DOMContentLoaded', function() {
-    const applyModal = document.getElementById('applyModal');
-    if (applyModal) {
-        applyModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const eventId = button.getAttribute('data-event-id');
-
-            if (eventId) {
-                // Set the event ID in the form
-                const form = document.getElementById('applyForm');
-                form.setAttribute('action', `/events/${eventId}/apply`);
-                form.dataset.eventId = eventId;
-
-                // Update event details in modal
-                const eventCard = button.closest('.card');
-                const eventTitle = eventCard.querySelector('.card-title a').textContent;
-                const eventTime = eventCard.querySelector('.d-flex.align-items-center.text-muted').textContent;
-                const eventLocation = eventCard.querySelector('.text-white h6').textContent;
-                const eventCity = eventCard.querySelector('.text-white-50').textContent;
-
-                const eventDetails = document.getElementById('eventDetails');
-                if (eventDetails) {
-                    eventDetails.innerHTML = `
-                        <div class="alert alert-info mb-4">
-                            <div class="d-flex align-items-center">
-                                <i class="ph ph-info-circle me-3 fs-4"></i>
-                                <div>
-                                    <h6 class="mb-1">${eventTitle}</h6>
-                                    <p class="mb-0 small">
-                                        <i class="ph ph-calendar me-1"></i>${eventTime}<br>
-                                        <i class="ph ph-map-pin me-1"></i>${eventLocation}, ${eventCity}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-        });
-    }
-
-    // Handle form submission
-    const applyForm = document.getElementById('applyForm');
-    if (applyForm) {
-        applyForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const eventId = this.dataset.eventId;
-
-            // Validate form
-            const message = formData.get('message');
-            const role = formData.get('requested_role');
-
-            if (!role) {
-                showNotification('Seleziona un ruolo per continuare', 'error');
-                return;
-            }
-
-            if (!message || message.trim().length < 10) {
-                showNotification('Il messaggio deve contenere almeno 10 caratteri', 'error');
-                return;
-            }
-
-            // Disable submit button
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin me-2"></i>Invio in corso...';
-
-            // Submit form
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                // Hide modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
-                modal.hide();
-
-                // Show success message
-                showNotification('Richiesta inviata con successo!', 'success');
-
-                // Reset form
-                this.reset();
-
-                // Reload page after a short delay to show updated participant count
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            })
-            .catch(error => {
-                console.error('Error submitting application:', error);
-                showNotification('Errore nell\'invio della richiesta. Riprova.', 'error');
-            })
-            .finally(() => {
-                // Re-enable submit button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            });
-        });
-    }
-});
-@endauth
-
-// Initialize tooltips
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Bootstrap tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-});
-
 function showNotification(message, type) {
     // Simple notification system - will be enhanced with real-time notifications
     const alert = document.createElement('div');
@@ -1150,7 +694,182 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// {{ __('wishlist.wishlist') }} è gestita globalmente da WishlistManager
-// Non serve codice duplicato qui
+function applyQuickFilter(filterType) {
+    // Applica i filtri sia alla mappa che alla lista
+    applyFilterToMap(filterType);
+    applyFilterToList(filterType);
+}
+
+function updateEventsList(params) {
+    // Costruisci l'URL con i parametri di filtro
+    const url = new URL(window.location);
+    
+    // Rimuovi parametri esistenti
+    url.searchParams.delete('date_from');
+    url.searchParams.delete('date_to');
+    url.searchParams.delete('free_only');
+    url.searchParams.delete('filter');
+    url.searchParams.delete('lat');
+    url.searchParams.delete('lng');
+    url.searchParams.delete('radius');
+    
+    // Aggiungi i nuovi parametri
+    if (params.date_from) url.searchParams.set('date_from', params.date_from);
+    if (params.date_to) url.searchParams.set('date_to', params.date_to);
+    if (params.free_only) url.searchParams.set('free_only', params.free_only);
+    if (params.filter) url.searchParams.set('filter', params.filter);
+    if (params.lat) url.searchParams.set('lat', params.lat);
+    if (params.lng) url.searchParams.set('lng', params.lng);
+    if (params.radius) url.searchParams.set('radius', params.radius);
+    
+    // Aggiorna la pagina con i nuovi filtri
+    window.location.href = url.toString();
+}
+
+function applyFilterToList(filterType) {
+    const now = new Date();
+    const params = {};
+
+    switch(filterType) {
+        case 'today':
+            const today = now.toISOString().split('T')[0];
+            params.date_from = today;
+            params.date_to = today;
+            break;
+
+        case 'tomorrow':
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            params.date_from = tomorrowStr;
+            params.date_to = tomorrowStr;
+            break;
+
+        case 'weekend':
+            const saturday = new Date(now);
+            const sunday = new Date(now);
+            const daysUntilSaturday = (6 - now.getDay()) % 7;
+            saturday.setDate(now.getDate() + daysUntilSaturday);
+            sunday.setDate(saturday.getDate() + 1);
+            params.date_from = saturday.toISOString().split('T')[0];
+            params.date_to = sunday.toISOString().split('T')[0];
+            break;
+
+        case 'free':
+            params.free_only = '1';
+            break;
+
+        case 'nearby':
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    params.filter = 'nearby';
+                    params.lat = position.coords.latitude;
+                    params.lng = position.coords.longitude;
+                    params.radius = '10';
+                    updateEventsList(params);
+                });
+                return;
+            }
+            break;
+
+        case 'my':
+            params.filter = 'my';
+            break;
+
+        case 'private':
+            params.filter = 'my_private';
+            break;
+    }
+
+    // Aggiorna solo la mappa con i nuovi filtri
+    const center = map.getCenter();
+    const mapParams = {
+        latitude: center.lat,
+        longitude: center.lng,
+        ...params
+    };
+    
+    console.log('Applying filter to map only:', filterType, mapParams);
+    loadEventsOnMapWithFilter(mapParams);
+    
+    // Aggiorna anche la lista ricaricando la pagina
+    updateEventsList(params);
+}
+
+function applyFilterToMap(filterType) {
+    const center = map.getCenter();
+    const params = {
+        latitude: center.lat,
+        longitude: center.lng
+    };
+
+    const now = new Date();
+
+    switch(filterType) {
+        case 'today':
+            params.date_from = now.toISOString().split('T')[0];
+            params.date_to = now.toISOString().split('T')[0];
+            console.log('Today filter applied:', params.date_from);
+            break;
+
+        case 'tomorrow':
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            params.date_from = tomorrow.toISOString().split('T')[0];
+            params.date_to = tomorrow.toISOString().split('T')[0];
+            console.log('Tomorrow filter applied:', params.date_from);
+            break;
+
+        case 'weekend':
+            const saturday = new Date(now);
+            const sunday = new Date(now);
+            const daysUntilSaturday = (6 - now.getDay()) % 7;
+            saturday.setDate(now.getDate() + daysUntilSaturday);
+            sunday.setDate(saturday.getDate() + 1);
+            params.date_from = saturday.toISOString().split('T')[0];
+            params.date_to = sunday.toISOString().split('T')[0];
+            console.log('Weekend filter applied:', params.date_from, 'to', params.date_to);
+            break;
+
+        case 'free':
+            params.free_only = '1';
+            console.log('Free filter applied');
+            break;
+
+        case 'nearby':
+            params.filter = 'nearby';
+            params.radius = '10';
+            console.log('Nearby filter applied');
+            break;
+
+        case 'my':
+            params.filter = 'my';
+            console.log('My events filter applied');
+            break;
+
+        case 'private':
+            params.filter = 'my_private';
+            console.log('My private events filter applied');
+            break;
+    }
+
+    console.log('Applying filter to map:', filterType, params);
+    loadEventsOnMapWithFilter(params);
+}
+
+function addHiddenInput(form, name, value) {
+    // Remove existing hidden input with same name
+    const existing = form.querySelector(`input[name="${name}"]`);
+    if (existing && existing.type === 'hidden') {
+        existing.remove();
+    }
+
+    // Add new hidden input
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+}
 </script>
-@endsection
+@endpush

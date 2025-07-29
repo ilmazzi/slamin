@@ -227,7 +227,7 @@ class EventController extends Controller
             }
         }
 
-        $events = $query->paginate(12);
+        $events = $query->paginate($request->get('per_page', 10));
 
         return view('events.index', compact('events'));
     }
@@ -969,29 +969,109 @@ class EventController extends Controller
                 'date_from' => 'nullable|date',
                 'date_to' => 'nullable|date',
                 'free_only' => 'nullable|boolean',
+                'filter' => 'nullable|string|in:my,my_private,nearby',
+                'type' => 'nullable|string|in:public,private',
             ]);
 
             Log::info('Events near request params:', $request->all());
 
-                                    // Recupera eventi pubblici vicini alla posizione richiesta
-            $query = Event::where('is_public', true)
-                          ->whereNotNull('latitude')
-                          ->whereNotNull('longitude');
+            $user = Auth::user();
 
-            // Temporaneamente disabilito nearLocation per debug
-            // ->nearLocation(
-            //     $request->latitude,
-            //     $request->longitude,
-            //     $request->radius ?? 50
-            // );
+            // Base query
+            $query = Event::whereNotNull('latitude')
+                          ->whereNotNull('longitude')
+                          ->published();
 
-            // Applica filtri temporali se presenti
+            Log::info('After published() - Count: ' . $query->count());
+
+            // Apply upcoming filter only if not filtering for past events or invitations
+            if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
+                $query->upcoming();
+                Log::info('After upcoming() - Count: ' . $query->count());
+            }
+
+            // Filter by type (public/private)
+            if ($request->filled('type')) {
+                $query->where('is_public', $request->type === 'public');
+                Log::info('After type filter - Count: ' . $query->count());
+            }
+
+            // Gestione filtri per utente autenticato
+            if ($request->filled('filter') && $user) {
+                $userId = $user->id;
+
+                switch ($request->filter) {
+                    case 'my':
+                        // Eventi organizzati dall'utente o dove partecipa
+                        $query->where(function ($q) use ($userId) {
+                            $q->where('organizer_id', $userId)
+                              ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                                  $inviteQuery->where('invited_user_id', $userId)
+                                              ->where('status', 'accepted');
+                              })
+                              ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                                  $requestQuery->where('user_id', $userId)
+                                               ->where('status', 'accepted');
+                              });
+                        });
+                        Log::info('After my filter - Count: ' . $query->count());
+                        break;
+
+                    case 'my_private':
+                        // Solo eventi privati organizzati dall'utente o dove partecipa
+                        $query->where('is_public', false)
+                              ->where(function ($q) use ($userId) {
+                                  $q->where('organizer_id', $userId)
+                                    ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                                        $inviteQuery->where('invited_user_id', $userId)
+                                                    ->where('status', 'accepted');
+                                    })
+                                    ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                                        $requestQuery->where('user_id', $userId)
+                                                     ->where('status', 'accepted');
+                                    });
+                              });
+                        Log::info('After my_private filter - Count: ' . $query->count());
+                        break;
+                }
+            } else {
+                // Se non ci sono filtri specifici, mostra solo eventi pubblici o privati accessibili
+                if ($user) {
+                    $userId = $user->id;
+                    $query->where(function ($q) use ($userId) {
+                        // Eventi pubblici
+                        $q->where('is_public', true)
+                          // OR eventi privati organizzati dall'utente
+                          ->orWhere('organizer_id', $userId)
+                          // OR eventi privati dove l'utente ha un invito accettato
+                          ->orWhere(function ($subQ) use ($userId) {
+                              $subQ->where('is_public', false)
+                                   ->whereHas('invitations', function ($inviteQuery) use ($userId) {
+                                       $inviteQuery->where('invited_user_id', $userId)
+                                                   ->where('status', 'accepted');
+                                   });
+                          })
+                          // OR eventi privati dove l'utente ha una richiesta accettata
+                          ->orWhere(function ($subQ) use ($userId) {
+                              $subQ->where('is_public', false)
+                                   ->whereHas('requests', function ($requestQuery) use ($userId) {
+                                       $requestQuery->where('user_id', $userId)
+                                                    ->where('status', 'accepted');
+                                   });
+                          });
+                    });
+                }
+            }
+
+            // Applica filtri temporali
             if ($request->filled('date_from')) {
                 $query->whereDate('start_datetime', '>=', $request->date_from);
+                Log::info('After date_from filter - Count: ' . $query->count());
             }
 
             if ($request->filled('date_to')) {
                 $query->whereDate('start_datetime', '<=', $request->date_to);
+                Log::info('After date_to filter - Count: ' . $query->count());
             }
 
             // Filtro eventi gratuiti
@@ -1000,11 +1080,32 @@ class EventController extends Controller
                     $q->where('entry_fee', 0)
                       ->orWhereNull('entry_fee');
                 });
+                Log::info('After free_only filter - Count: ' . $query->count());
+            }
+
+            // Applica filtro di distanza SOLO se esplicitamente richiesto (filtro 'nearby')
+            // o se viene passato un raggio specifico
+            if ($request->filled('filter') && $request->filter === 'nearby') {
+                $radius = $request->radius ?? 10; // Default 10km per filtro "Vicino a me"
+                $query->nearLocation(
+                    $request->latitude,
+                    $request->longitude,
+                    $radius
+                );
+                Log::info('After nearLocation filter (nearby) - Count: ' . $query->count());
+            } elseif ($request->filled('radius') && $request->radius > 0) {
+                // Se viene specificato un raggio personalizzato
+                $query->nearLocation(
+                    $request->latitude,
+                    $request->longitude,
+                    $request->radius
+                );
+                Log::info('After nearLocation filter (custom radius) - Count: ' . $query->count());
             }
 
             $events = $query->with(['organizer'])->get();
 
-            Log::info('Found events count: ' . $events->count());
+            Log::info('Final events count: ' . $events->count());
             if ($events->count() === 0) {
                 Log::info('No events found with current filters');
             }
@@ -1023,6 +1124,9 @@ class EventController extends Controller
                     'category' => $event->category,
                     'category_name' => $event->category ? __('events.category_' . $event->category) : null,
                     'category_color_class' => $event->category_color_class,
+                    'is_online' => $event->is_online,
+                    'online_url' => $event->online_url,
+                    'timezone' => $event->timezone,
                 ];
             });
 
