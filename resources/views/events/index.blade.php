@@ -99,16 +99,9 @@
                                     <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
                             </div>
-                            <div class="col-lg-3 col-md-12">
-                                <div class="d-flex gap-2 justify-content-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
-                                    </button>
-                                </div>
-                            </div>
                         </div>
 
-                        <!-- Second Row: Quick Filters and Create Button -->
+                        <!-- Second Row: Quick Filters and Action Buttons -->
                         <div class="row g-3">
                             <div class="col-lg-9 col-md-12">
                                 <div class="d-flex flex-wrap gap-2">
@@ -139,6 +132,9 @@
                             </div>
                             <div class="col-lg-3 col-md-12">
                                 <div class="d-flex gap-2 justify-content-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
+                                    </button>
                                     @auth
                                         @can('create', App\Models\Event::class)
                                             <a href="{{ route('events.create') }}" class="btn btn-success">
