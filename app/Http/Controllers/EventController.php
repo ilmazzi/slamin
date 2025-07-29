@@ -266,7 +266,7 @@ class EventController extends Controller
         // Calcola le statistiche sui dati filtrati
         $filteredQuery = clone $query;
         $filteredEvents = $filteredQuery->get();
-        
+
         $statistics = [
             'total_events' => $filteredEvents->count(),
             'public_events' => $filteredEvents->where('is_public', true)->count(),
@@ -350,6 +350,9 @@ class EventController extends Controller
                 'is_online' => 'nullable|boolean',
                 'timezone' => 'required_if:is_online,1|string|max:50',
                 'online_url' => 'nullable|url|max:500',
+                // Festival fields
+                'festival_id' => 'nullable|exists:events,id',
+                'selected_festival_events' => 'nullable|string', // JSON string of selected events
             ], [
                 'start_datetime.after' => 'La data di inizio deve essere nel futuro.',
                 'end_datetime.after' => 'La data di fine deve essere dopo la data di inizio.',
@@ -476,7 +479,24 @@ class EventController extends Controller
         unset($validated['invitations']);
         unset($validated['invited_users']);
 
-        DB::transaction(function () use ($validated, $invitations, $invitedUsers, &$event) {
+        // Process festival data
+        $festivalEvents = [];
+        if (!empty($validated['selected_festival_events'])) {
+            try {
+                $festivalEvents = json_decode($validated['selected_festival_events'], true);
+                if (!is_array($festivalEvents)) {
+                    $festivalEvents = [];
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse selected festival events JSON: ' . $e->getMessage());
+                $festivalEvents = [];
+            }
+        }
+
+        // Remove selected_festival_events from validated data as it's not part of Event model
+        unset($validated['selected_festival_events']);
+
+        DB::transaction(function () use ($validated, $invitations, $invitedUsers, $festivalEvents, &$event) {
             // Process recurrence settings
             if (isset($validated['is_recurring']) && $validated['is_recurring'] && !empty($validated['recurrence_type'])) {
                 // Set default values for recurrence
@@ -506,6 +526,22 @@ class EventController extends Controller
 
             // Create the event
             $event = Event::create($validated);
+
+            // Process festival events if this is a festival
+            if ($event->category === Event::CATEGORY_FESTIVAL && !empty($festivalEvents)) {
+                $eventIds = array_column($festivalEvents, 'id');
+                $event->festival_events = $eventIds;
+                $event->save();
+
+                // Update festival_id for all events that are part of this festival
+                Event::whereIn('id', $eventIds)->update(['festival_id' => $event->id]);
+
+                Log::info('Festival events saved', [
+                    'festival_id' => $event->id,
+                    'event_count' => count($eventIds),
+                    'event_ids' => $eventIds
+                ]);
+            }
 
             // Create recurring events if needed
             if ($event->is_recurring) {
@@ -655,19 +691,19 @@ class EventController extends Controller
     public function getRecentVenues(): JsonResponse
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'User not authenticated'
             ], 401);
         }
-        
+
         $recentVenues = RecentVenue::where('user_id', $user->id)
             ->orderBy('last_used_at', 'desc')
             ->limit(4)
             ->get();
-        
+
         return response()->json([
             'success' => true,
             'venues' => $recentVenues
@@ -711,6 +747,67 @@ class EventController extends Controller
     }
 
     /**
+     * Search events for festival selection
+     */
+    public function searchEvents(Request $request): JsonResponse
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json(['events' => []]);
+        }
+
+        $events = Event::where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%")
+                  ->orWhere('venue_name', 'like', "%{$query}%")
+                  ->orWhere('city', 'like', "%{$query}%");
+            })
+            ->where('is_public', true) // Solo eventi pubblici
+            ->where('category', '!=', 'festival') // Escludi altri festival
+            ->where('start_datetime', '>', now()) // Solo eventi futuri
+            ->orderBy('start_datetime')
+            ->limit(10)
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->title,
+                    'date' => $event->start_datetime->format('d/m/Y'),
+                    'venue' => $event->venue_name ?: $event->city,
+                    'city' => $event->city,
+                    'category' => $event->category,
+                    'organizer' => $event->organizer->name ?? 'Organizzatore non specificato'
+                ];
+            });
+
+        return response()->json(['events' => $events]);
+    }
+
+    /**
+     * Get festivals for dropdown selection
+     */
+    public function getFestivals(Request $request): JsonResponse
+    {
+        $festivals = Event::where('category', 'festival')
+            ->where('is_public', true)
+            ->where('start_datetime', '>', now())
+            ->orderBy('start_datetime')
+            ->limit(20)
+            ->get()
+            ->map(function ($festival) {
+                return [
+                    'id' => $festival->id,
+                    'title' => $festival->title,
+                    'date' => $festival->start_datetime->format('d/m/Y'),
+                    'city' => $festival->city
+                ];
+            });
+
+        return response()->json(['festivals' => $festivals]);
+    }
+
+    /**
      * Display the specified event
      */
     public function show(Event $event): View|RedirectResponse
@@ -746,7 +843,7 @@ class EventController extends Controller
             }
         }
 
-        $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user']);
+        $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user', 'festival.organizer']);
 
         $canApply = false;
         $hasInvitation = false;
@@ -788,6 +885,11 @@ class EventController extends Controller
     {
         Gate::authorize('update', $event);
 
+        // Load festival relationships if this is a festival
+        if ($event->isFestival()) {
+            $event->load(['getFestivalEventModels']);
+        }
+
         $venueOwners = User::whereHas('roles', function ($query) {
             $query->where('name', 'venue_owner');
         })->get();
@@ -828,6 +930,8 @@ class EventController extends Controller
             'is_online' => 'nullable|boolean',
             'timezone' => 'required_if:is_online,1|string|max:50',
             'online_url' => 'nullable|url|max:500',
+            // Festival fields
+            'selected_festival_events' => 'nullable|string', // JSON string of selected events
         ], [
             'timezone.required_if' => 'Il fuso orario è obbligatorio per eventi online.',
             'online_url.url' => 'L\'URL dell\'evento online deve essere un link valido.',
@@ -846,23 +950,23 @@ class EventController extends Controller
         // Custom validation for physical events
         if (!$validated['is_online']) {
             $errors = [];
-            
+
             if (empty($validated['venue_name'])) {
                 $errors['venue_name'] = ['Il nome del venue è obbligatorio per eventi fisici.'];
             }
-            
+
             if (empty($validated['venue_address'])) {
                 $errors['venue_address'] = ['L\'indirizzo del venue è obbligatorio per eventi fisici.'];
             }
-            
+
             if (empty($validated['city'])) {
                 $errors['city'] = ['La città è obbligatoria per eventi fisici.'];
             }
-            
+
             if (empty($validated['country'])) {
                 $errors['country'] = ['Il paese è obbligatorio per eventi fisici.'];
             }
-            
+
             if (!empty($errors)) {
                 Log::error('Event validation failed - physical event requirements', [
                     'errors' => $errors,
@@ -890,6 +994,39 @@ class EventController extends Controller
             $validated['latitude'] = null;
             $validated['longitude'] = null;
             $validated['venue_owner_id'] = null;
+        }
+
+                // Process festival data if this is a festival
+        if ($event->category === Event::CATEGORY_FESTIVAL && !empty($request->selected_festival_events)) {
+            try {
+                $festivalEvents = json_decode($request->selected_festival_events, true);
+                if (is_array($festivalEvents)) {
+                    $eventIds = array_column($festivalEvents, 'id');
+                    $validated['festival_events'] = $eventIds;
+
+                                        // Get previous festival events to clean up old relationships
+                    $previousEventIds = $event->getFestivalEventIds();
+
+                    // Update festival_id for all events that are part of this festival
+                    Event::whereIn('id', $eventIds)->update(['festival_id' => $event->id]);
+
+                    // Clean up festival_id for events that are no longer part of this festival
+                    $removedEventIds = array_diff($previousEventIds, $eventIds);
+                    if (!empty($removedEventIds)) {
+                        Event::whereIn('id', $removedEventIds)->update(['festival_id' => null]);
+                    }
+
+                    Log::info('Festival events updated', [
+                        'festival_id' => $event->id,
+                        'event_count' => count($eventIds),
+                        'event_ids' => $eventIds,
+                        'removed_count' => count($removedEventIds),
+                        'removed_ids' => $removedEventIds
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse selected festival events JSON: ' . $e->getMessage());
+            }
         }
 
         // Log dell'attività prima dell'aggiornamento

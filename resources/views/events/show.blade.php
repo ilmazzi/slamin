@@ -419,6 +419,103 @@
                 </div>
             </div>
 
+            <!-- Festival Information -->
+            @if($event->isFestival() || $event->isPartOfFestival())
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="ph ph-trophy me-2"></i>{{ __('events.festival_info') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        @if($event->isFestival())
+                            <!-- Questo è un festival - mostra gli eventi collegati -->
+                            <div class="mb-3">
+                                <h6 class="mb-3 text-primary">
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.festival_events_list') }}
+                                </h6>
+                                @php
+                                    $festivalEvents = $event->getFestivalEventModels();
+                                @endphp
+                                @if($festivalEvents->count() > 0)
+                                    <div class="row">
+                                        @foreach($festivalEvents as $festivalEvent)
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card card-light-primary border-0">
+                                                    <div class="card-body p-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                                <i class="ph ph-calendar f-s-18"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <h6 class="mb-1 fw-bold">{{ $festivalEvent->title }}</h6>
+                                                                <div class="d-flex align-items-center gap-2 mb-1">
+                                                                    <span class="badge bg-primary">{{ $festivalEvent->start_datetime->format('d/m/Y') }}</span>
+                                                                    <span class="badge bg-light-secondary">{{ $festivalEvent->city }}</span>
+                                                                </div>
+                                                                <small class="text-muted">
+                                                                    <i class="ph ph-user me-1"></i>{{ $festivalEvent->organizer->getDisplayName() }}
+                                                                </small>
+                                                            </div>
+                                                            <div class="ms-auto">
+                                                                <a href="{{ route('events.show', $festivalEvent) }}" class="btn btn-sm btn-light-primary">
+                                                                    <i class="ph ph-eye me-1"></i>{{ __('events.view') }}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="text-center py-3">
+                                        <i class="ph ph-calendar-x display-4 text-muted mb-3"></i>
+                                        <p class="text-muted mb-0">{{ __('events.no_festival_events') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        @elseif($event->isPartOfFestival())
+                            <!-- Questo evento fa parte di un festival - mostra il festival -->
+                            <div class="mb-3">
+                                <h6 class="mb-3 text-primary">
+                                    <i class="ph ph-trophy me-2"></i>{{ __('events.part_of_festival') }}
+                                </h6>
+                                @php
+                                    $festival = $event->festival;
+                                @endphp
+                                @if($festival)
+                                    <div class="card card-light-primary border-0">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                    <i class="ph ph-trophy f-s-18"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1 fw-bold">{{ $festival->title }}</h6>
+                                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                                        <span class="badge bg-primary">{{ $festival->start_datetime->format('d/m/Y') }}</span>
+                                                        <span class="badge bg-light-secondary">{{ $festival->city }}</span>
+                                                    </div>
+                                                    <small class="text-muted">
+                                                        <i class="ph ph-user me-1"></i>{{ $festival->organizer->getDisplayName() }}
+                                                    </small>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <a href="{{ route('events.show', $festival) }}" class="btn btn-sm btn-light-primary">
+                                                        <i class="ph ph-eye me-1"></i>{{ __('events.view_festival') }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <!-- Posizioni d'Ingaggio -->
             @php
                 $gigPositions = $event->gig_positions;

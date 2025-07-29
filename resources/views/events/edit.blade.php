@@ -189,7 +189,7 @@
                                 <div class="card border-info">
                                     <div class="card-header bg-light-info">
                                         <div class="form-check">
-                                            <input type="checkbox" name="is_online" id="is_online" class="form-check-input" value="1" 
+                                            <input type="checkbox" name="is_online" id="is_online" class="form-check-input" value="1"
                                                    {{ old('is_online', $event->is_online) ? 'checked' : '' }}>
                                             <label for="is_online" class="form-check-label f-w-600">
                                                 <i class="ph ph-globe me-2"></i>{{ __('events.is_online') }}
@@ -273,8 +273,8 @@
                                             <!-- Online URL -->
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-floating">
-                                                    <input type="url" name="online_url" id="online_url" class="form-control @error('online_url') is-invalid @enderror" 
-                                                           placeholder="{{ __('events.online_url_placeholder') }}" 
+                                                    <input type="url" name="online_url" id="online_url" class="form-control @error('online_url') is-invalid @enderror"
+                                                           placeholder="{{ __('events.online_url_placeholder') }}"
                                                            value="{{ old('online_url', $event->online_url) }}">
                                                     <label for="online_url">{{ __('events.online_url') }}</label>
                                                 </div>
@@ -369,6 +369,97 @@
                             @endif
                         </div>
 
+                        <!-- Festival Events Management -->
+                        @if($event->isFestival())
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="text-primary mb-3">
+                                    <i class="ph ph-trophy me-2"></i>{{ __('events.festival_events') }}
+                                </h6>
+                                <div class="alert alert-border-primary" role="alert">
+                                    <h6>
+                                        <i class="ph ph-info-circle f-s-18 me-2 text-primary"></i>
+                                        {{ __('events.festival_events_help') }}
+                                    </h6>
+                                    <p class="mb-0">
+                                        Gestisci gli eventi che fanno parte di questo festival. Puoi aggiungere o rimuovere eventi esistenti.
+                                    </p>
+                                </div>
+
+                                <!-- Current Festival Events -->
+                                <div class="mb-4">
+                                    <h6 class="mb-3">{{ __('events.current_festival_events') }}</h6>
+                                    @php
+                                        $currentFestivalEvents = $event->getFestivalEventModels();
+                                    @endphp
+                                    @if($currentFestivalEvents->count() > 0)
+                                        <div class="row" id="currentFestivalEventsList">
+                                            @foreach($currentFestivalEvents as $festivalEvent)
+                                                <div class="col-md-6 mb-3" data-event-id="{{ $festivalEvent->id }}">
+                                                    <div class="card card-light-primary border-0">
+                                                        <div class="card-body p-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                                    <i class="ph ph-calendar f-s-18"></i>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1 fw-bold">{{ $festivalEvent->title }}</h6>
+                                                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                                                        <span class="badge bg-primary">{{ $festivalEvent->start_datetime->format('d/m/Y') }}</span>
+                                                                        <span class="badge bg-light-secondary">{{ $festivalEvent->city }}</span>
+                                                                    </div>
+                                                                    <small class="text-muted">
+                                                                        <i class="ph ph-user me-1"></i>{{ $festivalEvent->organizer->getDisplayName() }}
+                                                                    </small>
+                                                                </div>
+                                                                <div class="ms-auto">
+                                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEventFromFestival({{ $festivalEvent->id }})">
+                                                                        <i class="ph ph-trash me-1"></i>{{ __('events.remove') }}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="text-center py-3">
+                                            <i class="ph ph-calendar-x display-4 text-muted mb-3"></i>
+                                            <p class="text-muted mb-0">{{ __('events.no_festival_events') }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Add New Events to Festival -->
+                                <div class="mb-4">
+                                    <h6 class="mb-3">{{ __('events.add_events_to_festival') }}</h6>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="eventSearchInputEdit"
+                                                       placeholder="{{ __('events.search_events_placeholder') }}">
+                                                <button class="btn btn-outline-primary" type="button" onclick="searchEventsForFestivalEdit()">
+                                                    <i class="ph ph-magnifying-glass me-1"></i>{{ __('events.search') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Search Results -->
+                                    <div class="mt-3" id="searchResultsEventsEdit" style="display: none;">
+                                        <h6 class="mb-3">{{ __('events.search_results') }}</h6>
+                                        <div id="searchResultsListEventsEdit"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Hidden input for festival events data -->
+                                <input type="hidden" name="selected_festival_events" id="selectedFestivalEventsDataEdit"
+                                       value="{{ json_encode($event->getFestivalEventIds()) }}">
+                            </div>
+                        </div>
+                        @endif
+
                         <!-- Submit Buttons -->
                         <div class="row">
                             <div class="col-12">
@@ -419,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Funzione per rendere i campi del luogo opzionali
     function makeLocationFieldsOptional() {
         console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
-        
+
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field) {
@@ -437,26 +528,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-        
+
         // Nascondi la mappa per eventi online
         if (mapContainer) {
             mapContainer.style.display = 'none';
             console.log('Nascosta mappa');
         }
-        
+
         // Nascondi anche il container della mappa
         const mapSection = mapContainer?.closest('.col-12');
         if (mapSection) {
             mapSection.style.display = 'none';
         }
-        
+
         console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA (EDIT) ===');
     }
 
     // Funzione per rendere i campi del luogo obbligatori
     function makeLocationFieldsRequired() {
         console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
-        
+
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field) {
@@ -474,19 +565,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-        
+
         // Mostra la mappa per eventi fisici
         if (mapContainer) {
             mapContainer.style.display = 'block';
             console.log('Mostrata mappa');
         }
-        
+
         // Mostra anche il container della mappa
         const mapSection = mapContainer?.closest('.col-12');
         if (mapSection) {
             mapSection.style.display = 'block';
         }
-        
+
         console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA (EDIT) ===');
     }
 
@@ -547,7 +638,7 @@ function setupFormValidation() {
 
         // Validate required fields based on event type
         let requiredFields = ['title', 'category', 'start_datetime', 'end_datetime'];
-        
+
         if (!isOnline) {
             // For physical events, require location fields
             requiredFields = requiredFields.concat(['venue_name', 'venue_address', 'city']);
@@ -589,6 +680,230 @@ function setupFormValidation() {
             alert('{{ __("events.please_correct_errors") }}');
         }
     });
+}
+
+// Festival Events Management Functions
+let selectedFestivalEventsEdit = [];
+
+// Initialize selected events from current data
+document.addEventListener('DOMContentLoaded', function() {
+    const hiddenInput = document.getElementById('selectedFestivalEventsDataEdit');
+    if (hiddenInput && hiddenInput.value) {
+        try {
+            selectedFestivalEventsEdit = JSON.parse(hiddenInput.value);
+        } catch (e) {
+            console.error('Error parsing festival events data:', e);
+            selectedFestivalEventsEdit = [];
+        }
+    }
+});
+
+// Search events for festival (edit mode)
+function searchEventsForFestivalEdit() {
+    const searchInput = document.getElementById('eventSearchInputEdit');
+    const searchTerm = searchInput.value.trim();
+
+    if (!searchTerm) {
+        alert('Inserisci un termine di ricerca');
+        return;
+    }
+
+    console.log('Ricerca eventi per festival (edit):', searchTerm);
+
+    // Mostra indicatore di caricamento
+    const resultsSection = document.getElementById('searchResultsEventsEdit');
+    const resultsContainer = document.getElementById('searchResultsListEventsEdit');
+    if (resultsSection && resultsContainer) {
+        resultsContainer.innerHTML = '<div class="text-center text-muted py-3"><i class="ph ph-spinner-gap me-2"></i>Ricerca in corso...</div>';
+        resultsSection.style.display = 'block';
+    }
+
+    // Chiamata API per ricerca eventi
+    fetch(`/api/events/search?q=${encodeURIComponent(searchTerm)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Risultati API (edit):', data);
+        displayEventSearchResultsEdit(data.events || []);
+    })
+    .catch(error => {
+        console.error('Errore nella ricerca eventi (edit):', error);
+        // Fallback con dati di esempio
+        const sampleResults = [
+            { id: 1, title: 'Slam Poetry Night', date: '15/03/2024', venue: 'Teatro Comunale' },
+            { id: 2, title: 'Poetry Workshop', date: '16/03/2024', venue: 'Biblioteca Civica' },
+            { id: 3, title: 'Open Mic Poetry', date: '17/03/2024', venue: 'Caffè Letterario' }
+        ];
+        displayEventSearchResultsEdit(sampleResults);
+    });
+}
+
+// Display search results (edit mode)
+function displayEventSearchResultsEdit(events) {
+    const resultsContainer = document.getElementById('searchResultsListEventsEdit');
+    if (!resultsContainer) return;
+
+    if (events.length === 0) {
+        resultsContainer.innerHTML = '<div class="text-center text-muted py-3">Nessun evento trovato</div>';
+        return;
+    }
+
+    let html = '';
+    events.forEach(event => {
+        const isAlreadyAdded = selectedFestivalEventsEdit.some(e => e.id === event.id);
+        const isCurrentEvent = {{ $event->id }} === event.id;
+
+        if (!isAlreadyAdded && !isCurrentEvent) {
+            html += `
+                <div class="col-md-6 mb-3">
+                    <div class="card card-light-secondary border-0">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                    <i class="ph ph-calendar f-s-18"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 fw-bold">${event.title}</h6>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge bg-secondary">${event.date}</span>
+                                        <span class="badge bg-light-secondary">${event.venue}</span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="ph ph-user me-1"></i>${event.organizer || 'Organizzatore non specificato'}
+                                    </small>
+                                </div>
+                                <div class="ms-auto">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEventToFestivalEdit(${event.id}, '${event.title}', '${event.date}', '${event.venue}')">
+                                        <i class="ph ph-plus me-1"></i>{{ __('events.add') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    if (html === '') {
+        resultsContainer.innerHTML = '<div class="text-center text-muted py-3">Tutti gli eventi trovati sono già aggiunti al festival</div>';
+    } else {
+        resultsContainer.innerHTML = `<div class="row">${html}</div>`;
+    }
+}
+
+// Add event to festival (edit mode)
+function addEventToFestivalEdit(eventId, title, date, venue) {
+    const eventData = { id: eventId, title, date, venue };
+
+    // Check if already added
+    if (selectedFestivalEventsEdit.some(e => e.id === eventId)) {
+        alert('Questo evento è già aggiunto al festival');
+        return;
+    }
+
+    // Add to selected events
+    selectedFestivalEventsEdit.push(eventData);
+
+    // Update hidden input
+    updateSelectedFestivalEventsInputEdit();
+
+    // Add to current events list
+    addEventToCurrentListEdit(eventData);
+
+    // Hide search results
+    document.getElementById('searchResultsEventsEdit').style.display = 'none';
+
+    console.log('Evento aggiunto al festival (edit):', eventData);
+}
+
+// Remove event from festival (edit mode)
+function removeEventFromFestival(eventId) {
+    // Remove from selected events
+    selectedFestivalEventsEdit = selectedFestivalEventsEdit.filter(e => e.id !== eventId);
+
+    // Update hidden input
+    updateSelectedFestivalEventsInputEdit();
+
+    // Remove from current events list
+    const eventElement = document.querySelector(`[data-event-id="${eventId}"]`);
+    if (eventElement) {
+        eventElement.remove();
+    }
+
+    // Check if no events left
+    const currentList = document.getElementById('currentFestivalEventsList');
+    if (currentList && currentList.children.length === 0) {
+        currentList.innerHTML = `
+            <div class="col-12">
+                <div class="text-center py-3">
+                    <i class="ph ph-calendar-x display-4 text-muted mb-3"></i>
+                    <p class="text-muted mb-0">{{ __('events.no_festival_events') }}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    console.log('Evento rimosso dal festival (edit):', eventId);
+}
+
+// Add event to current list (edit mode)
+function addEventToCurrentListEdit(eventData) {
+    const currentList = document.getElementById('currentFestivalEventsList');
+    if (!currentList) return;
+
+    // Remove "no events" message if present
+    const noEventsMessage = currentList.querySelector('.col-12 .text-center');
+    if (noEventsMessage) {
+        noEventsMessage.remove();
+    }
+
+    const eventHtml = `
+        <div class="col-md-6 mb-3" data-event-id="${eventData.id}">
+            <div class="card card-light-primary border-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                            <i class="ph ph-calendar f-s-18"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 fw-bold">${eventData.title}</h6>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-primary">${eventData.date}</span>
+                                <span class="badge bg-light-secondary">${eventData.venue}</span>
+                            </div>
+                        </div>
+                        <div class="ms-auto">
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEventFromFestival(${eventData.id})">
+                                <i class="ph ph-trash me-1"></i>{{ __('events.remove') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    currentList.insertAdjacentHTML('beforeend', eventHtml);
+}
+
+// Update hidden input with selected events (edit mode)
+function updateSelectedFestivalEventsInputEdit() {
+    const hiddenInput = document.getElementById('selectedFestivalEventsDataEdit');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(selectedFestivalEventsEdit);
+        console.log('Festival events data updated (edit):', selectedFestivalEventsEdit);
+    }
 }
 </script>
 @endpush

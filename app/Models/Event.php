@@ -57,6 +57,8 @@ class Event extends Model
         'is_online',
         'timezone',
         'online_url',
+        'festival_id',
+        'festival_events',
     ];
 
     /**
@@ -78,6 +80,7 @@ class Event extends Model
         'is_recurring' => 'boolean',
         'recurrence_weekdays' => 'array',
         'is_online' => 'boolean',
+        'festival_events' => 'array',
     ];
 
     /**
@@ -592,7 +595,7 @@ class Event extends Model
         $timezone = new \DateTimeZone($this->timezone);
         $offset = $timezone->getOffset(new \DateTime()) / 3600;
         $sign = $offset >= 0 ? '+' : '';
-        
+
         return $this->timezone . ' (UTC' . $sign . $offset . ')';
     }
 
@@ -606,7 +609,7 @@ class Event extends Model
         }
 
         $userTimezone = $userTimezone ?: config('app.timezone');
-        
+
         return $this->start_datetime
             ->setTimezone($userTimezone)
             ->format('d/m/Y H:i');
@@ -622,7 +625,7 @@ class Event extends Model
         }
 
         $userTimezone = $userTimezone ?: config('app.timezone');
-        
+
         return $this->end_datetime
             ->setTimezone($userTimezone)
             ->format('d/m/Y H:i');
@@ -639,7 +642,63 @@ class Event extends Model
 
         $originalStart = $this->start_datetime->format('H:i');
         $originalEnd = $this->end_datetime->format('H:i');
-        
+
         return "($originalStart-$originalEnd {$this->timezone})";
+    }
+
+    /**
+     * Festival relationship - event belongs to a festival
+     */
+    public function festival(): BelongsTo
+    {
+        return $this->belongsTo(Event::class, 'festival_id');
+    }
+
+    /**
+     * Festival events relationship - festival has many events
+     */
+    public function festivalEvents(): HasMany
+    {
+        return $this->hasMany(Event::class, 'festival_id');
+    }
+
+    /**
+     * Get events that are part of this festival (from festival_events JSON)
+     */
+    public function getFestivalEventIds(): array
+    {
+        return $this->festival_events ?? [];
+    }
+
+    /**
+     * Get actual Event models for festival events
+     */
+    public function getFestivalEventModels()
+    {
+        $eventIds = $this->getFestivalEventIds();
+        if (empty($eventIds)) {
+            return collect();
+        }
+
+        return Event::whereIn('id', $eventIds)
+                   ->where('is_public', true)
+                   ->orderBy('start_datetime')
+                   ->get();
+    }
+
+    /**
+     * Check if this event is part of a festival
+     */
+    public function isPartOfFestival(): bool
+    {
+        return !is_null($this->festival_id);
+    }
+
+    /**
+     * Check if this event is a festival
+     */
+    public function isFestival(): bool
+    {
+        return $this->category === self::CATEGORY_FESTIVAL;
     }
 }

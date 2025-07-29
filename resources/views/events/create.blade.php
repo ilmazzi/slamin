@@ -130,7 +130,7 @@
                                     <textarea name="description" id="description" class="form-control" style="height: 120px" placeholder="Descrizione"></textarea>
                                     <label for="description">{{ __('events.description_event') }}</label>
                                 </div>
-                                <small class="text-muted">Descrivi il tuo evento, cosa aspettarsi, il formato, ecc. (opzionale)</small>
+                                <small class="text-muted">{{ __('events.description_event_help') }}</small>
                                 <div class="error-feedback" id="description-error"></div>
                             </div>
 
@@ -182,7 +182,7 @@
                 <div class="card d-none" id="step-2">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-calendar-clock me-2"></i>Data e Luogo
+                            <i class="ph ph-calendar-clock me-2"></i>{{ __('events.date_and_location') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -337,7 +337,7 @@
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
 
-                           
+
 
                             <div class="col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
@@ -366,67 +366,67 @@
                             <div class="col-md-6 mb-3" id="country-container">
                                 <div class="form-floating">
                                     <select name="country" id="country" class="form-select" required>
-                                        <option value="">Seleziona paese...</option>
-                                        <option value="IT" selected>Italia</option>
-                                        <option value="FR">Francia</option>
-                                        <option value="ES">Spagna</option>
-                                        <option value="DE">Germania</option>
-                                        <option value="CH">Svizzera</option>
-                                        <option value="AT">Austria</option>
-                                        <option value="BE">Belgio</option>
-                                        <option value="NL">Paesi Bassi</option>
-                                        <option value="PT">Portogallo</option>
-                                        <option value="GB">Regno Unito</option>
-                                        <option value="IE">Irlanda</option>
-                                        <option value="SE">Svezia</option>
-                                        <option value="NO">Norvegia</option>
-                                        <option value="DK">Danimarca</option>
-                                        <option value="FI">Finlandia</option>
-                                        <option value="PL">Polonia</option>
-                                        <option value="CZ">Repubblica Ceca</option>
-                                        <option value="SK">Slovacchia</option>
-                                        <option value="HU">Ungheria</option>
-                                        <option value="RO">Romania</option>
-                                        <option value="BG">Bulgaria</option>
-                                        <option value="HR">Croazia</option>
-                                        <option value="SI">Slovenia</option>
-                                        <option value="GR">Grecia</option>
-                                        <option value="CY">Cipro</option>
-                                        <option value="MT">Malta</option>
-                                        <option value="US">Stati Uniti</option>
-                                        <option value="CA">Canada</option>
-                                        <option value="MX">Messico</option>
-                                        <option value="BR">Brasile</option>
-                                        <option value="AR">Argentina</option>
-                                        <option value="CL">Cile</option>
-                                        <option value="AU">Australia</option>
-                                        <option value="NZ">{{ __('notifications.new') }} Zelanda</option>
-                                        <option value="JP">Giappone</option>
-                                        <option value="KR">Corea del Sud</option>
-                                        <option value="CN">Cina</option>
-                                        <option value="IN">India</option>
-                                        <option value="TH">Thailandia</option>
-                                        <option value="SG">Singapore</option>
-                                        <option value="MY">Malesia</option>
-                                        <option value="ID">Indonesia</option>
-                                        <option value="PH">Filippine</option>
-                                        <option value="VN">Vietnam</option>
-                                        <option value="RU">Russia</option>
-                                        <option value="UA">Ucraina</option>
-                                        <option value="BY">Bielorussia</option>
-                                        <option value="TR">Turchia</option>
-                                        <option value="IL">Israele</option>
-                                        <option value="AE">Emirati Arabi Uniti</option>
-                                        <option value="SA">Arabia Saudita</option>
-                                        <option value="EG">Egitto</option>
-                                        <option value="ZA">Sudafrica</option>
-                                        <option value="NG">Nigeria</option>
-                                        <option value="KE">Kenya</option>
-                                        <option value="MA">Marocco</option>
-                                        <option value="TN">Tunisia</option>
-                                        <option value="DZ">Algeria</option>
+                                        <option value="">{{ __('events.select_country') }}...</option>
+                                        <option value="IT" selected>{{ __('events.italy') }}</option>
+                                        <option value="FR">{{ __('events.france') }}</option>
+                                        <option value="ES">{{ __('events.spain') }}</option>
+                                        <option value="DE">{{ __('events.germany') }}</option>
+                                        <option value="CH">{{ __('events.switzerland') }}</option>
+                                        <option value="AT">{{ __('events.austria') }}</option>
+                                        <option value="BE">{{ __('events.belgium') }}</option>
+                                        <option value="NL">{{ __('events.netherlands') }}</option>
+                                        <option value="PT">{{ __('events.portugal') }}</option>
+                                        <option value="GB">{{ __('events.united_kingdom') }}</option>
+                                        <option value="IE">{{ __('events.ireland') }}</option>
+                                        <option value="SE">{{ __('events.sweden') }}</option>
+                                        <option value="NO">{{ __('events.norway') }}</option>
+                                        <option value="DK">{{ __('events.denmark') }}</option>
+                                        <option value="FI">{{ __('events.finland') }}</option>
+                                        <option value="PL">{{ __('events.poland') }}</option>
+                                        <option value="CZ">{{ __('events.czech_republic') }}</option>
+                                        <option value="SK">{{ __('events.slovakia') }}</option>
+                                        <option value="HU">{{ __('events.hungary') }}</option>
+                                        <option value="RO">{{ __('events.romania') }}</option>
+                                        <option value="BG">{{ __('events.bulgaria') }}</option>
+                                            <option value="HR">{{ __('events.croatia') }}</option>
+                                        <option value="SI">{{ __('events.slovenia') }}</option>
+                                        <option value="GR">{{ __('events.greece') }}</option>
+                                        <option value="CY">{{ __('events.cyprus') }}</option>
+                                        <option value="MT">{{ __('events.malta') }}</option>
+                                        <option value="US">{{ __('events.united_states') }}</option>
+                                        <option value="CA">{{ __('events.canada') }}</option>
+                                        <option value="MX">{{ __('events.mexico') }}</option>
+                                        <option value="BR">{{ __('events.brazil') }}</option>
+                                        <option value="AR">{{ __('events.argentina') }}</option>
+                                        <option value="CL">{{ __('events.chile') }}</option>
+                                        <option value="AU">{{ __('events.australia') }}</option>
+                                        <option value="NZ">{{ __('events.new_zealand') }}</option>
+                                        <option value="JP">{{ __('events.japan') }}</option>
+                                        <option value="KR">{{ __('events.south_korea') }}</option>
+                                        <option value="CN">{{ __('events.china') }}</option>
+                                        <option value="IN">{{ __('events.india') }}</option>
+                                        <option value="TH">{{ __('events.thailand') }}</option>
+                                        <option value="SG">{{ __('events.singapore') }}</option>
+                                        <option value="MY">{{ __('events.malaysia') }}</option>
+                                        <option value="ID">{{ __('events.indonesia') }}</option>
+                                        <option value="PH">{{ __('events.philippines') }}</option>
+                                        <option value="VN">{{ __('events.vietnam') }}</option>
+                                        <option value="RU">{{ __('events.russia') }}</option>
+                                                <option value="UA">{{ __('events.ukraine') }}</option>
+                                        <option value="BY">{{ __('events.belarus') }}</option>
+                                        <option value="TR">{{ __('events.turkey') }}</option>
+                                        <option value="IL">{{ __('events.israel') }}</option>
+                                        <option value="AE">{{ __('events.united_arab_emirates') }}</option>
+                                        <option value="SA">{{ __('events.saudi_arabia') }}</option>
+                                        <option value="EG">{{ __('events.egypt') }}</option>
+                                        <option value="ZA">{{ __('events.south_africa') }}</option>
+                                        <option value="NG">{{ __('events.nigeria') }}</option>
+                                        <option value="KE">{{ __('events.kenya') }}</option>
+                                        <option value="MA">{{ __('events.morocco') }}</option>
+                                        <option value="TN">{{ __('events.tunisia') }}</option>
+                                        <option value="DZ">{{ __('events.algeria') }}</option>
                                     </select>
-                                    <label for="country">Paese *</label>
+                                    <label for="country">{{ __('events.country') }} *</label>
                                 </div>
                             </div>
 
@@ -456,14 +456,14 @@
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
                                     <select name="venue_owner_id" id="venue_owner_id" class="form-select">
-                                        <option value="">Nessun proprietario specifico</option>
+                                        <option value="">{{ __('events.no_specific_owner') }}</option>
                                         @foreach($venueOwners as $owner)
                                             <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label for="venue_owner_id">Proprietario Venue (Opzionale)</label>
+                                    <label for="venue_owner_id">{{ __('events.venue_owner') }} ({{ __('common.optional') }})</label>
                                 </div>
-                                <small class="text-muted">Seleziona se conosci il proprietario del venue</small>
+                                <small class="text-muted">{{ __('events.venue_owner_help') }}</small>
                             </div>
                             @endif
                         </div>
@@ -492,7 +492,7 @@
                             <!-- 2. Video Promozionale -->
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
-                                    <input type="url" name="promotional_video" id="promotional_video" class="form-control" placeholder="Link video promozionale">
+                                    <input type="url" name="promotional_video" id="promotional_video" class="form-control" placeholder="{{ __('events.promotional_video_placeholder') }}">
                                     <label for="promotional_video">{{ __('events.promotional_video') }} ({{ __('common.optional') }})</label>
                                 </div>
                                 <small class="text-muted">{{ __('events.promotional_video_help') }}</small>
@@ -536,21 +536,74 @@
                             </div>
 
                             <!-- 4. Gestione Festival -->
-                            <div class="col-12 mb-3">
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" name="is_festival_event" id="is_festival_event" class="form-check-input" value="1">
-                                    <label for="is_festival_event" class="form-check-label">
-                                        <strong>{{ __('events.is_festival_event') }}</strong>
-                                    </label>
-                                </div>
-                                <div id="festivalFields" style="display: none;">
-                                    <div class="form-floating mb-3">
-                                        <select name="festival_id" id="festival_id" class="form-select">
-                                            <option value="">{{ __('events.select_festival') }}</option>
-                                        </select>
-                                        <label for="festival_id">{{ __('events.select_festival') }}</label>
+                            <div class="col-12 mb-3" id="festival-management-section">
+                                <!-- Sezione per associare a festival esistente (per categorie diverse da "Festival") -->
+                                <div id="create-festival-section" style="display: none;">
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" name="is_festival_event" id="is_festival_event" class="form-check-input" value="1">
+                                        <label for="is_festival_event" class="form-check-label">
+                                            <strong>{{ __('events.is_festival_event') }}</strong>
+                                        </label>
                                     </div>
-                                    <small class="text-muted">{{ __('events.festival_help') }}</small>
+                                    <div id="festivalFields" style="display: none;">
+                                        <div class="form-floating mb-3">
+                                            <select name="festival_id" id="festival_id" class="form-select">
+                                                <option value="">{{ __('events.select_festival') }}</option>
+                                            </select>
+                                            <label for="festival_id">{{ __('events.select_festival') }}</label>
+                                        </div>
+                                        <small class="text-muted">{{ __('events.festival_help') }}</small>
+                                    </div>
+                                </div>
+
+                                <!-- Sezione per selezionare eventi esistenti (quando categoria = "Festival") -->
+                                <div id="select-festival-events-section" style="display: none;">
+                                    <h6 class="text-success mb-3">
+                                        <i class="ph ph-trophy me-2"></i>{{ __('events.festival_events_selection') }}
+                                    </h6>
+                                    <div class="alert alert-border-success" role="alert">
+                                        <h6>
+                                            <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
+                                            {{ __('events.festival_events_selection_help') }}
+                                        </h6>
+                                    </div>
+
+                                    <!-- Barra di ricerca eventi -->
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ __('events.select_festival_events') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" id="eventSearchInput" class="form-control" placeholder="Cerca eventi esistenti..." onkeydown="handleEventSearchKeydown(event)">
+                                            <button type="button" class="btn btn-outline-success" onclick="searchEventsForFestival()">
+                                                <i class="ph ph-magnifying-glass"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Risultati ricerca eventi -->
+                                    <div id="searchResultsEvents" class="mb-3" style="display: none;">
+                                        <h6>{{ __('events.search_results') }}</h6>
+                                        <div id="searchResultsListEvents" class="list-group">
+                                            <!-- Risultati qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Eventi selezionati per il festival -->
+                                    <div>
+                                        <h6>{{ __('events.selected_events') }} <span id="selectedEventsCount" class="badge bg-success">0</span></h6>
+                                        <div class="alert alert-info mb-3" role="alert">
+                                            <i class="ph ph-info-circle me-2"></i>
+                                            <strong>Opzionale:</strong> Puoi cercare e aggiungere eventi esistenti che faranno parte di questo festival. Se non aggiungi eventi ora, potrai farlo successivamente dalla pagina di modifica del festival.
+                                        </div>
+                                        <div id="selectedEventsList" class="row g-2">
+                                            <div class="col-12 text-center text-muted py-3" id="noSelectedEvents">
+                                                <i class="ph ph-calendar-plus f-s-24 mb-2"></i>
+                                                <p class="mb-0">{{ __('events.no_events_selected') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden input per i dati degli eventi selezionati -->
+                                    <input type="hidden" name="selected_festival_events" id="selectedFestivalEventsData" value="[]">
                                 </div>
                             </div>
 
@@ -562,36 +615,11 @@
                 <div class="card d-none" id="step-4">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-users me-2"></i>Inviti e Ingaggi
+                            <i class="ph ph-users me-2"></i>{{ __('events.invites_and_gig') }}
                         </h5>
                     </div>
                     <div class="card-body">
-                        <!-- Sezione Pubblico/Privato -->
-                        <div class="mb-4">
-                            <h6 class="text-primary mb-3">
-                                <i class="ph ph-globe me-2"></i>{{ __('events.event_mode') }}
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check">
-                                        <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
-                                        <label for="public" class="form-check-label">
-                                            <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
-                                            <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check">
-                                        <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
-                                        <label for="private" class="form-check-label">
-                                            <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
-                                            <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Sezione Inviti per Eventi Privati -->
                         <div class="mb-4" id="private-invites-section" style="display: none;">
@@ -601,7 +629,7 @@
                             <div class="alert alert-border-primary" role="alert">
                                 <h6>
                                     <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
-                                    Inviti Specifici
+                                    {{ __('events.specific_invites') }}
                                 </h6>
                                 <p class="mb-0">
                                     {{ __('events.invite_users_help') }}
@@ -621,7 +649,7 @@
 
                             <!-- Risultati ricerca -->
                             <div id="searchResultsInvite" class="mb-3" style="display: none;">
-                                <h6>Risultati Ricerca</h6>
+                                <h6>{{ __('events.search_results') }}</h6>
                                 <div id="searchResultsListInvite" class="list-group">
                                     <!-- Risultati qui -->
                                 </div>
@@ -654,21 +682,21 @@
                         <!-- Sezione Inviti -->
                         <div class="mb-4">
                             <h6 class="text-primary mb-3">
-                                <i class="ph ph-envelope me-2"></i>Inviti Artisti
+                                <i class="ph ph-envelope me-2"></i>{{ __('events.artist_invites') }}
                             </h6>
                             <div class="alert alert-border-primary" role="alert">
                                 <h6>
                                     <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
-                                    Inviti Specifici
+                                    {{ __('events.specific_invites') }}
                                 </h6>
                                 <p class="mb-0">
-                                    Invita artisti specifici al tuo evento. Se accettano, il loro nome apparirà confermato (se la lineup è pubblica). Se rifiutano, riceverai una notifica per aprire posizioni d'ingaggio.
+                                    {{ __('events.artist_invites_help') }}
                                 </p>
                             </div>
 
                             <!-- Search Users -->
                             <div class="mb-4">
-                                <label class="form-label">Cerca Artisti da Invitare</label>
+                                <label class="form-label">{{ __('events.search_artists') }}</label>
                                 <div class="input-group">
                                     <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
                                     <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
@@ -679,7 +707,7 @@
 
                             <!-- Search Results -->
                             <div id="searchResultsInvite" class="mb-3" style="display: none;">
-                                <h6>Risultati Ricerca</h6>
+                                <h6>{{ __('events.search_results') }}</h6>
                                 <div id="searchResultsListInvite" class="list-group">
                                     <!-- Risultati qui -->
                                 </div>
@@ -712,15 +740,15 @@
                         <!-- Sezione Posizioni d'Ingaggio -->
                         <div class="mb-4">
                             <h6 class="text-success mb-3">
-                                <i class="ph ph-briefcase me-2"></i>Apri Posizioni d'Ingaggio
+                                <i class="ph ph-briefcase me-2"></i>{{ __('events.open_gig_positions') }}
                             </h6>
                             <div class="alert alert-border-success" role="alert">
                                 <h6>
                                     <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
-                                    Posizioni Aperte
+                                    {{ __('events.open_gig_positions') }}
                                 </h6>
                                 <p class="mb-0">
-                                    Crea posizioni d'ingaggio per trovare artisti e professionisti. Ogni tipologia creerà una posizione nell'area Gig.
+                                    {{ __('events.open_gig_positions_help') }}
                                 </p>
                             </div>
 
@@ -732,7 +760,7 @@
                             <!-- Pulsante per aggiungere nuova posizione -->
                             <div class="text-center mt-3">
                                 <button type="button" class="btn btn-success" onclick="addGigPosition()">
-                                    <i class="ph ph-plus me-2"></i>Aggiungi Posizione d'Ingaggio
+                                    <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
                                 </button>
                             </div>
 
@@ -769,7 +797,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">
-                                    <i class="ph ph-user-circle-plus me-2"></i>Invita Artista
+                                    <i class="ph ph-user-circle-plus me-2"></i>{{ __('events.invite_artist') }}
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
@@ -783,15 +811,15 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Seleziona {{ __('invitations.role') }} *</label>
+                                    <label class="form-label">{{ __('events.select_role') }} *</label>
                                     <div class="check-container">
                                         <label class="check-box d-flex align-items-center p-3 border rounded mb-2" style="cursor: pointer;">
                                             <input type="radio" name="invitationRole" value="performer" checked>
                                             <span class="radiomark check-primary ms-2"></span>
                                             <div class="ms-3">
                                                 <i class="ph ph-microphone me-2"></i>
-                                                <span class="fw-bold">Performer</span>
-                                                <small class="d-block text-muted">Artista che si esibisce sul palco</small>
+                                                <span class="fw-bold">{{ __('events.performer') }}</span>
+                                                <small class="d-block text-muted">{{ __('events.performer_help') }}</small>
                                             </div>
                                         </label>
 
@@ -800,8 +828,8 @@
                                             <span class="radiomark check-primary ms-2"></span>
                                             <div class="ms-3">
                                                 <i class="ph ph-scales me-2"></i>
-                                                <span class="fw-bold">Judge</span>
-                                                <small class="d-block text-muted">Giudice della competizione</small>
+                                                <span class="fw-bold">{{ __('events.judge') }}</span>
+                                                <small class="d-block text-muted">{{ __('events.judge_help') }}</small>
                                             </div>
                                         </label>
 
@@ -810,8 +838,8 @@
                                             <span class="radiomark check-primary ms-2"></span>
                                             <div class="ms-3">
                                                 <i class="ph ph-gear me-2"></i>
-                                                <span class="fw-bold">Technician</span>
-                                                <small class="d-block text-muted">Supporto tecnico audio/video</small>
+                                                <span class="fw-bold">{{ __('events.technician') }}</span>
+                                                <small class="d-block text-muted">{{ __('events.technician_help') }}</small>
                                             </div>
                                         </label>
 
@@ -820,16 +848,16 @@
                                             <span class="radiomark check-primary ms-2"></span>
                                             <div class="ms-3">
                                                 <i class="ph ph-user-focus me-2"></i>
-                                                <span class="fw-bold">Host</span>
-                                                <small class="d-block text-muted">Conduttore dell'evento</small>
+                                                        <span class="fw-bold">{{ __('events.host') }}</span>
+                                                <small class="d-block text-muted">{{ __('events.host_help') }}</small>
                                             </div>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Messaggio Personalizzato (Opzionale)</label>
-                                    <textarea id="invitationMessage" class="form-control" rows="3" placeholder="Aggiungi un messaggio personalizzato per l'invito..."></textarea>
+                                    <label class="form-label">{{ __('events.custom_message') }} ({{ __('common.optional') }})</label>
+                                    <textarea id="invitationMessage" class="form-control" rows="3" placeholder="{{ __('events.custom_message_placeholder') }}"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -846,7 +874,7 @@
                 <div class="card d-none" id="step-5">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-eye me-2"></i>{{ __('events.preview_event') }}
+                            <i class="ph ph-eye me-2"></i>{{ __('events.event_preview') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -856,7 +884,7 @@
 
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-light-primary btn-lg px-5" id="submitBtn">
-                                <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event_action') }}
+                                <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
                             </button>
                             <div class="mt-2" id="submitStatus" style="display: none;">
                                 <small class="text-muted">
@@ -902,7 +930,7 @@
                                 <i class="ph ph-lightbulb me-2"></i>{{ __('events.tip') }}
                             </h6>
                             <p class="mb-0 small text-info" id="stepTip">
-                                Scegli un titolo accattivante che descriva chiaramente il tuo evento.
+                                {{ __('events.step_tip') }}
                             </p>
                         </div>
 
@@ -934,11 +962,11 @@ let tags = [];
 let selectedInvitations = [];
 
 const stepTips = {
-    1: "Scegli un titolo accattivante che descriva chiaramente il tuo evento.",
-    2: "Imposta data, ora e luogo dell'evento. La mappa ti aiuterà a trovare la posizione esatta.",
-    3: "Aggiungi dettagli, tag e configura le impostazioni dell'evento.",
-    4: "Invita artisti specifici al tuo evento. Potrai sempre farlo anche dopo.",
-    5: "Rivedi tutti i dettagli prima di pubblicare l'evento."
+    1: "{{ __('events.step_tip_1') }}",
+    2: "{{ __('events.step_tip_2') }}",
+    3: "{{ __('events.step_tip_3') }}",
+    4: "{{ __('events.step_tip_4') }}",
+    5: "{{ __('events.step_tip_5') }}"
 };
 
 // Global error handler
@@ -1007,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isOnlineCheckbox && onlineEventSettings) {
                 console.log('Setting up online event checkbox listener');
-                
+
                 // Controlla lo stato iniziale della checkbox
                 console.log('Initial checkbox state:', isOnlineCheckbox.checked);
                 if (isOnlineCheckbox.checked) {
@@ -1019,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     onlineEventSettings.style.display = 'none';
                     makeLocationFieldsRequired();
                 }
-                
+
                 isOnlineCheckbox.addEventListener('change', function() {
                     console.log('Online checkbox changed:', this.checked);
                     if (this.checked) {
@@ -1060,6 +1088,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(initializeMap, 200);
             }
 
+            // ========================================
+            // INIZIALIZZAZIONE FESTIVAL
+            // ========================================
+            console.log('=== INIZIALIZZAZIONE FESTIVAL ===');
+            // Inizializza la sezione festival basandosi sulla categoria selezionata
+            const initialCategory = document.getElementById('category').value;
+            if (initialCategory) {
+                updateFestivalSectionDisplay(initialCategory);
+            }
+
             // Controllo aggiuntivo per assicurarsi che il JavaScript venga eseguito
             setTimeout(() => {
                 console.log('=== CONTROLLO AGGIUNTIVO DOPO 500ms ===');
@@ -1073,7 +1111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Funzione per rendere i campi del luogo opzionali
             function makeLocationFieldsOptional() {
                 console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA ===');
-                
+
                 // Lista degli ID degli elementi da nascondere
                 const elementsToHide = [
                     'venue-name-container',
@@ -1084,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'country-container',
                     'map-info-banner-container'
                 ];
-                
+
                 // Lista degli ID dei campi input da rendere opzionali
                 const fieldsToMakeOptional = [
                     'venue_name',
@@ -1093,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'postcode',
                     'country'
                 ];
-                
+
                 // Nascondi tutti gli elementi
                 elementsToHide.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1104,14 +1142,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Elemento non trovato:', elementId);
                     }
                 });
-                
+
                 // Rendi opzionali tutti i campi di localizzazione
                 fieldsToMakeOptional.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = false;
                         console.log('Campo reso opzionale:', fieldId);
-                        
+
                         // Rimuovi l'asterisco dal label
                         const label = field.parentElement.querySelector('label');
                         if (label) {
@@ -1119,27 +1157,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-                
+
                 // Nascondi la mappa
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'none';
                     console.log('Nascosta mappa');
                 }
-                
+
                 // Nascondi il container della mappa
                 const mapSection = mapContainer?.closest('.col-12');
                 if (mapSection) {
                     mapSection.style.display = 'none';
                 }
-                
+
                 console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA ===');
             }
 
             // Funzione per rendere i campi del luogo obbligatori
             function makeLocationFieldsRequired() {
                 console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA ===');
-                
+
                 // Lista degli ID degli elementi da mostrare
                 const elementsToShow = [
                     'venue-name-container',
@@ -1150,7 +1188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'country-container',
                     'map-info-banner-container'
                 ];
-                
+
                 // Lista degli ID dei campi input da rendere obbligatori
                 const fieldsToMakeRequired = [
                     'venue_name',
@@ -1159,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'postcode',
                     'country'
                 ];
-                
+
                 // Mostra tutti gli elementi
                 elementsToShow.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1170,14 +1208,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Elemento non trovato:', elementId);
                     }
                 });
-                
+
                 // Rendi obbligatori tutti i campi di localizzazione
                 fieldsToMakeRequired.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = true;
                         console.log('Campo reso obbligatorio:', fieldId);
-                        
+
                         // Aggiungi l'asterisco al label se non c'è già
                         const label = field.parentElement.querySelector('label');
                         if (label && !label.textContent.includes('*')) {
@@ -1185,20 +1223,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-                
+
                 // Mostra la mappa
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'block';
                     console.log('Mostrata mappa');
                 }
-                
+
                 // Mostra il container della mappa
                 const mapSection = mapContainer?.closest('.col-12');
                 if (mapSection) {
                     mapSection.style.display = 'block';
                 }
-                
+
                 console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA ===');
             }
 
@@ -1225,17 +1263,17 @@ function initializeForm() {
 
 function initializeMap() {
     console.log('=== INITIALIZING MAP ===');
-    
+
     // Controlla se l'elemento mappa esiste e se la mappa non è già inizializzata
     const mapContainer = document.getElementById('locationMap');
     console.log('Map container found:', mapContainer);
     console.log('Map already initialized:', map !== null);
-    
+
     if (!mapContainer) {
         console.error('Map container not found!');
         return;
     }
-    
+
     if (map !== null) {
         console.log('Map already initialized, skipping');
         return;
@@ -1259,7 +1297,7 @@ function initializeMap() {
             map.invalidateSize();
         }
     }, 200);
-    
+
     console.log('Map initialization completed');
 }
 
@@ -1489,7 +1527,7 @@ function setupEventListeners() {
             const videoUrl = this.value.trim();
             const videoPreview = document.getElementById('videoPreview');
             const videoEmbed = document.getElementById('videoEmbed');
-            
+
             if (videoUrl) {
                 const embedUrl = convertToEmbedUrl(videoUrl);
                 if (embedUrl) {
@@ -1513,15 +1551,28 @@ function setupEventListeners() {
         });
     }
 
-    // Gestione festival
+        // ========================================
+    // GESTIONE FESTIVAL - LOGICA BASATA SU CATEGORIA
+    // ========================================
+
+    // Gestione cambio categoria
+    const categorySelect = document.getElementById('category');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            console.log('Categoria selezionata:', selectedCategory);
+
+            // Aggiorna la visualizzazione della sezione festival nel quarto step
+            updateFestivalSectionDisplay(selectedCategory);
+        });
+    }
+
+    // Gestione creazione nuovo festival (quando non è selezionato un festival nel primo step)
     const isFestivalEvent = document.getElementById('is_festival_event');
     const festivalFields = document.getElementById('festivalFields');
     if (isFestivalEvent && festivalFields) {
         isFestivalEvent.addEventListener('change', function() {
             festivalFields.style.display = this.checked ? 'block' : 'none';
-            if (this.checked) {
-                loadFestivals();
-            }
         });
     }
 }
@@ -1678,13 +1729,20 @@ function validateCurrentStep() {
             highlightError('category');
             isValid = false;
         }
+
+        // Validazione per selezione categoria (opzionale nel primo step)
+        const selectedCategory = document.getElementById('category').value;
+        if (selectedCategory && selectedCategory !== '') {
+            console.log('Categoria selezionata nel primo step:', selectedCategory);
+            // La selezione della categoria è obbligatoria, ma non serve validazione aggiuntiva qui
+        }
     }
 
     if (step === 2) {
         const startDateTime = document.getElementById('start_datetime').value;
         const endDateTime = document.getElementById('end_datetime').value;
         const isOnline = document.getElementById('is_online')?.checked || false;
-        
+
         console.log('Step 2 validation - isOnline:', isOnline);
 
         if (!startDateTime) {
@@ -1779,31 +1837,50 @@ function validateCurrentStep() {
 
             if (step === 3) {
         console.log('Validating step 3...');
-        
+
         // Validazione per evento a pagamento
         const isPaidEvent = document.getElementById('is_paid_event');
         if (isPaidEvent && isPaidEvent.checked) {
             const ticketPrice = document.getElementById('ticket_price').value;
             const ticketCurrency = document.getElementById('ticket_currency').value;
-            
+
             if (!ticketPrice || ticketPrice <= 0) {
                 showError('ticket_price', 'Il prezzo del biglietto deve essere maggiore di 0');
                 highlightError('ticket_price');
                 isValid = false;
             }
-            
+
             if (!ticketCurrency) {
                 showError('ticket_currency', 'Seleziona una valuta');
                 highlightError('ticket_currency');
                 isValid = false;
             }
         }
-        
-        // Validazione per festival
+
+                // Validazione per festival (logica basata su categoria)
+        const selectedCategory = document.getElementById('category').value;
         const isFestivalEvent = document.getElementById('is_festival_event');
-        if (isFestivalEvent && isFestivalEvent.checked) {
+
+                if (selectedCategory === 'festival') {
+            // Categoria "Festival" selezionata: gli eventi sono opzionali
+            const selectedFestivalEvents = JSON.parse(document.getElementById('selectedFestivalEventsData').value || '[]');
+            console.log('Festival events selected:', selectedFestivalEvents);
+
+            // Rimuovi eventuali messaggi di errore precedenti
+            const errorDiv = document.querySelector('.festival-error-message');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+
+            // Rimuovi evidenziazione errore
+            const searchInput = document.getElementById('eventSearchInput');
+            if (searchInput) {
+                searchInput.classList.remove('is-invalid');
+                searchInput.style.borderColor = '';
+            }
+        } else if (isFestivalEvent && isFestivalEvent.checked) {
+            // Altre categorie con checkbox "appartiene ad un festival" attiva: valida selezione festival
             const festivalId = document.getElementById('festival_id').value;
-            
             if (!festivalId) {
                 showError('festival_id', 'Seleziona un festival');
                 highlightError('festival_id');
@@ -1816,7 +1893,7 @@ function validateCurrentStep() {
 
     if (step === 4) {
         console.log('Validating step 4...');
-        
+
         // Validazione per selezione pubblico/privato
         const isPublic = document.querySelector('input[name="is_public"]:checked');
         if (!isPublic) {
@@ -1825,7 +1902,7 @@ function validateCurrentStep() {
             highlightError('private');
             isValid = false;
         }
-        
+
         // Validazione per eventi privati - verifica che ci siano inviti
         if (isPublic && isPublic.value === '0') {
             const invitedUsers = JSON.parse(document.getElementById('invitedUsersData').value || '[]');
@@ -1873,7 +1950,7 @@ function setMapLocation(lat, lng, skipReverseGeocode = false) {
 
     marker = L.marker([lat, lng]).addTo(map);
     map.setView([lat, lng], 15);
-    
+
     // Esegui reverse geocoding solo se non è stato esplicitamente saltato
     if (!skipReverseGeocode) {
         reverseGeocode(lat, lng);
@@ -2080,16 +2157,64 @@ function previewImage() {
 function updatePreview() {
     if (currentStep !== 5) return;
 
-    const title = document.getElementById('title').value || 'Titolo {{ __('invitations.event') }}';
-    const description = document.getElementById('description').value || 'Descrizione evento...';
-    const venueName = document.getElementById('venue_name').value || 'Nome Venue';
-    const city = document.getElementById('city').value || 'Città';
-    const startDateTime = document.getElementById('start_datetime').value;
-    const entryFee = document.getElementById('ticket_price').value || '0';
-    const isPublic = document.querySelector('input[name="is_public"]:checked').value === '1';
-        const imageInput = document.getElementById('event_image');
+    // Get all form values with safe element access
+    const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
+    const description = document.getElementById('description')?.value || 'Descrizione evento...';
+    const requirements = document.getElementById('requirements')?.value || '';
+    const category = document.getElementById('category')?.value || '';
+    const categoryText = category && document.getElementById('category')?.options ?
+        document.getElementById('category').options[document.getElementById('category').selectedIndex]?.text || '' : '';
+
+    // Date and time
+    const startDateTime = document.getElementById('start_datetime')?.value || '';
+    const endDateTime = document.getElementById('end_datetime')?.value || '';
+    const registrationDeadline = document.getElementById('registration_deadline')?.value || '';
+    const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
+
+    // Location
+    const venueName = document.getElementById('venue_name')?.value || '';
+    const venueAddress = document.getElementById('venue_address')?.value || '';
+    const city = document.getElementById('city')?.value || '';
+    const postcode = document.getElementById('postcode')?.value || '';
+    const country = document.getElementById('country')?.value || '';
+    const isOnline = document.getElementById('is_online')?.checked || false;
+    const onlineUrl = document.getElementById('online_url')?.value || '';
+    const timezone = document.getElementById('timezone')?.value || '';
+
+    // Event settings
+    const entryFee = document.getElementById('ticket_price')?.value || '0';
+    const maxParticipants = document.getElementById('max_participants')?.value || '';
+    const isPublicRadio = document.querySelector('input[name="is_public"]:checked');
+    const isPublic = isPublicRadio ? isPublicRadio.value === '1' : true;
+    const allowRequests = document.getElementById('allow_requests')?.checked || false;
+    const statusRadio = document.querySelector('input[name="status"]:checked');
+    const status = statusRadio ? statusRadio.value : 'published';
+
+    // Festival data
+    const isFestival = category === 'festival';
+    const selectedFestivalEventsData = document.getElementById('selectedFestivalEventsData');
+    const festivalEvents = selectedFestivalEventsData ? JSON.parse(selectedFestivalEventsData.value || '[]') : [];
+    const isPartOfFestival = document.getElementById('is_festival_event')?.checked || false;
+    const festivalId = document.getElementById('festival_id')?.value || '';
+
+    // Recurrence
+    const isRecurring = document.getElementById('is_recurring')?.checked || false;
+    const recurrenceType = document.getElementById('recurrence_type')?.value || '';
+    const recurrenceInterval = document.getElementById('recurrence_interval')?.value || '';
+    const recurrenceCount = document.getElementById('recurrence_count')?.value || '';
+
+    // Gig positions
+    const gigPositionsData = document.getElementById('gigPositionsData');
+    const gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
+
+    // Invitations
+    const invitedUsersData = document.getElementById('invitedUsersData');
+    const invitedUsers = invitedUsersData ? JSON.parse(invitedUsersData.value || '[]') : [];
+    const invitationsData = document.getElementById('invitationsData');
+    const invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
 
     // Get image preview or use fallback
+    const imageInput = document.getElementById('event_image');
     let imageHtml = '';
     if (imageInput && imageInput.files[0]) {
         const reader = new FileReader();
@@ -2108,142 +2233,828 @@ function updatePreview() {
         `;
     }
 
-    const formattedDate = startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }) : 'Data da definire';
+    // Format dates
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleDateString('it-IT', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const formatTime = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleTimeString('it-IT', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const formatDateOnly = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleDateString('it-IT', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    // Calculate duration
+    let duration = '';
+    if (startDateTime && endDateTime) {
+        const start = new Date(startDateTime);
+        const end = new Date(endDateTime);
+        const diffHours = Math.round((end - start) / (1000 * 60 * 60));
+        duration = `${diffHours} ${diffHours === 1 ? 'ora' : 'ore'}`;
+    }
 
     const preview = `
-        <div class="position-relative overflow-hidden bg-primary" style="height: 250px;">
+        <!-- Hero Section -->
+        <div class="position-relative overflow-hidden bg-primary" style="height: 300px;">
             ${imageHtml}
+
+            <!-- Status Badges -->
+            <div class="position-absolute top-0 start-0 m-3" style="z-index: 3;">
+                <span class="badge bg-light-primary me-2">
+                    <i class="ph ph-tag me-1"></i>${categoryText || 'Categoria non specificata'}
+                </span>
+                ${isFestival ? '<span class="badge bg-warning"><i class="ph ph-trophy me-1"></i>Festival</span>' : ''}
+            </div>
+
             <span class="badge ${isPublic ? 'bg-light-success' : 'bg-light-warning'} position-absolute top-0 end-0 m-3" style="z-index: 3;">
                 <i class="ph ph-${isPublic ? 'globe' : 'lock'} me-1"></i>
                 ${isPublic ? 'Pubblico' : 'Privato'}
             </span>
+
             <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 3;">
-                <h3 class="fw-bold mb-2 text-white">${title}</h3>
+                <h2 class="fw-bold mb-3 text-white">${title}</h2>
                 <div class="d-flex align-items-center mb-2">
-                    <i class="ph ph-calendar-check me-2"></i>
-                    <span>${formattedDate}</span>
+                    <i class="ph ph-calendar-check me-2 fs-5"></i>
+                    <span class="fs-5">${formatDate(startDateTime)}</span>
                 </div>
-                <div class="d-flex align-items-center">
-                    <i class="ph ph-map-pin me-2"></i>
-                    <span>${venueName}, ${city}</span>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="ph ph-map-pin me-2 fs-5"></i>
+                    <span class="fs-5">
+                        ${isOnline ?
+                            '<i class="ph ph-globe me-1"></i>Evento Online' + (onlineUrl ? ` - ${onlineUrl}` : '') :
+                            `${venueName ? venueName + ', ' : ''}${city}${country ? ', ' + country : ''}`
+                        }
+                    </span>
                 </div>
+                ${isOnline && timezone ? `
+                    <div class="d-flex align-items-center">
+                        <i class="ph ph-clock me-2 fs-5"></i>
+                        <span class="fs-5">Fuso orario: ${timezone}</span>
+                    </div>
+                ` : ''}
             </div>
         </div>
+
+        <!-- Event Details -->
         <div class="p-4">
-            <div class="mb-4">
-                <h6 class="mb-2 text-primary"><i class="ph ph-file-text me-2"></i>Descrizione</h6>
-                <p class="mb-0 text-muted">${description}</p>
-            </div>
-
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <div class="border-start border-primary border-4 ps-3">
-                        <h6 class="mb-1 text-primary">Costo</h6>
-                        <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
-                    </div>
+            <!-- Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-file-text me-2"></i>Descrizione Evento</h6>
                 </div>
-                <div class="col-md-6">
-                    <div class="border-start border-primary border-4 ps-3">
-                        <h6 class="mb-1 text-primary">Tipo</h6>
-                        <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
-                    </div>
+                <div class="card-body">
+                    <p class="mb-0">${description}</p>
+                    ${requirements ? `
+                        <hr>
+                        <h6 class="text-primary">Requisiti:</h6>
+                        <p class="mb-0">${requirements}</p>
+                    ` : ''}
                 </div>
             </div>
 
+            <!-- Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-clock me-2"></i>Cronologia Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Inizio Evento</h6>
+                                <p class="mb-0">${formatDate(startDateTime)}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border-start border-danger border-4 ps-3">
+                                <h6 class="mb-1 text-danger">Fine Evento</h6>
+                                <p class="mb-0">${formatDate(endDateTime)}</p>
+                            </div>
+                        </div>
+                        ${duration ? `
+                            <div class="col-12">
+                                <div class="border-start border-info border-4 ps-3">
+                                    <h6 class="mb-1 text-info">Durata</h6>
+                                    <p class="mb-0">${duration}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${registrationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Iscrizioni</h6>
+                                    <p class="mb-0">${formatDateOnly(registrationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${invitationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Inviti</h6>
+                                    <p class="mb-0">${formatDateOnly(invitationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            ${!isOnline ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-map-pin me-2"></i>Dettagli Luogo</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            ${venueName ? `
+                                <div class="col-md-6">
+                                    <strong>Venue:</strong> ${venueName}
+                                </div>
+                            ` : ''}
+                            ${venueAddress ? `
+                                <div class="col-md-6">
+                                    <strong>Indirizzo:</strong> ${venueAddress}
+                                </div>
+                            ` : ''}
+                            ${city ? `
+                                <div class="col-md-4">
+                                    <strong>Città:</strong> ${city}
+                                </div>
+                            ` : ''}
+                            ${postcode ? `
+                                <div class="col-md-4">
+                                    <strong>CAP:</strong> ${postcode}
+                                </div>
+                            ` : ''}
+                            ${country ? `
+                                <div class="col-md-4">
+                                    <strong>Paese:</strong> ${country}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Event Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-gear me-2"></i>Impostazioni Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="border-start border-primary border-4 ps-3">
+                                <h6 class="mb-1 text-primary">Costo Ingresso</h6>
+                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-info border-4 ps-3">
+                                <h6 class="mb-1 text-info">Tipo Evento</h6>
+                                <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Stato</h6>
+                                <p class="mb-0">${status === 'published' ? 'Pubblicato' : 'Bozza'}</p>
+                            </div>
+                        </div>
+                        ${maxParticipants ? `
+                            <div class="col-md-4">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Max Partecipanti</h6>
+                                    <p class="mb-0">${maxParticipants}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="col-md-4">
+                            <div class="border-start border-secondary border-4 ps-3">
+                                <h6 class="mb-1 text-secondary">Richieste</h6>
+                                <p class="mb-0">${allowRequests ? 'Accettate' : 'Non accettate'}</p>
+                            </div>
+                        </div>
+                        ${isRecurring ? `
+                            <div class="col-md-4">
+                                <div class="border-start border-purple border-4 ps-3">
+                                    <h6 class="mb-1 text-purple">Ricorrenza</h6>
+                                    <p class="mb-0">${recurrenceType} - ${recurrenceCount} volte</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Festival Information -->
+            ${isFestival && festivalEvents.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Eventi del Festival</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">Questo festival include ${festivalEvents.length} evento${festivalEvents.length === 1 ? '' : 'i'}:</p>
+                        <div class="row g-2">
+                            ${festivalEvents.map(event => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-primary border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-calendar me-2 text-primary"></i>
+                                                <div>
+                                                    <strong>${event.title}</strong>
+                                                    <br><small class="text-muted">${event.date} - ${event.venue}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            ${isPartOfFestival && festivalId ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Parte di un Festival</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">Questo evento fa parte di un festival più grande.</p>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Gig Positions -->
+            ${gigPositions.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-briefcase me-2"></i>Posizioni d'Ingaggio Aperte</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${gigPositions.map(position => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-success border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user-circle me-2 text-success"></i>
+                                                <div>
+                                                    <strong>${position.type}</strong>
+                                                    <br><small class="text-muted">${position.quantity} posizione${position.quantity === 1 ? '' : 'i'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Invitations -->
+            ${invitations.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-user-plus me-2"></i>Inviti Specifici</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${invitations.map(invitation => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-info border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user me-2 text-info"></i>
+                                                <div>
+                                                    <strong>${invitation.user_name}</strong>
+                                                    <br><small class="text-muted">${invitation.role}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Private Event Invitations -->
+            ${!isPublic && invitedUsers.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-users me-2"></i>Utenti Invitati</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${invitedUsers.map(user => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-warning border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user me-2 text-warning"></i>
+                                                <div>
+                                                    <strong>${user.name}</strong>
+                                                    <br><small class="text-muted">${user.email}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Tags -->
             ${tags.length > 0 ? `
-                <div>
-                    <h6 class="mb-2 text-primary"><i class="ph ph-tag me-2"></i>Tags</h6>
-                    <div class="d-flex flex-wrap gap-1">
-                        ${tags.map(tag => `<span class="bg-light-primary rounded px-3 py-1 small">#${tag}</span>`).join('')}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-tag me-2"></i>Tags</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-1">
+                            ${tags.map(tag => `<span class="badge bg-light-primary rounded px-3 py-1">#${tag}</span>`).join('')}
+                        </div>
                     </div>
                 </div>
             ` : ''}
         </div>
     `;
 
-    document.getElementById('eventPreview').innerHTML = preview;
+    const eventPreviewElement = document.getElementById('eventPreview');
+    if (eventPreviewElement) {
+        eventPreviewElement.innerHTML = preview;
+    } else {
+        console.error('eventPreview element not found');
+    }
 }
 
 function updatePreviewWithImage(imageSrc) {
     if (currentStep !== 5) return;
 
-    const title = document.getElementById('title').value || 'Titolo {{ __('invitations.event') }}';
-    const description = document.getElementById('description').value || 'Descrizione evento...';
-    const venueName = document.getElementById('venue_name').value || 'Nome Venue';
-    const city = document.getElementById('city').value || 'Città';
-    const startDateTime = document.getElementById('start_datetime').value;
-    const entryFee = document.getElementById('ticket_price').value || '0';
-    const isPublic = document.querySelector('input[name="is_public"]:checked').value === '1';
+    // Get all form values with safe element access (same as updatePreview)
+    const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
+    const description = document.getElementById('description')?.value || 'Descrizione evento...';
+    const requirements = document.getElementById('requirements')?.value || '';
+    const category = document.getElementById('category')?.value || '';
+    const categoryText = category && document.getElementById('category')?.options ?
+        document.getElementById('category').options[document.getElementById('category').selectedIndex]?.text || '' : '';
 
-    const formattedDate = startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }) : 'Data da definire';
+    // Date and time
+    const startDateTime = document.getElementById('start_datetime')?.value || '';
+    const endDateTime = document.getElementById('end_datetime')?.value || '';
+    const registrationDeadline = document.getElementById('registration_deadline')?.value || '';
+    const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
+
+    // Location
+    const venueName = document.getElementById('venue_name')?.value || '';
+    const venueAddress = document.getElementById('venue_address')?.value || '';
+    const city = document.getElementById('city')?.value || '';
+    const postcode = document.getElementById('postcode')?.value || '';
+    const country = document.getElementById('country')?.value || '';
+    const isOnline = document.getElementById('is_online')?.checked || false;
+    const onlineUrl = document.getElementById('online_url')?.value || '';
+    const timezone = document.getElementById('timezone')?.value || '';
+
+    // Event settings
+    const entryFee = document.getElementById('ticket_price')?.value || '0';
+    const maxParticipants = document.getElementById('max_participants')?.value || '';
+    const isPublicRadio = document.querySelector('input[name="is_public"]:checked');
+    const isPublic = isPublicRadio ? isPublicRadio.value === '1' : true;
+    const allowRequests = document.getElementById('allow_requests')?.checked || false;
+    const statusRadio = document.querySelector('input[name="status"]:checked');
+    const status = statusRadio ? statusRadio.value : 'published';
+
+    // Festival data
+    const isFestival = category === 'festival';
+    const selectedFestivalEventsData = document.getElementById('selectedFestivalEventsData');
+    const festivalEvents = selectedFestivalEventsData ? JSON.parse(selectedFestivalEventsData.value || '[]') : [];
+    const isPartOfFestival = document.getElementById('is_festival_event')?.checked || false;
+    const festivalId = document.getElementById('festival_id')?.value || '';
+
+    // Recurrence
+    const isRecurring = document.getElementById('is_recurring')?.checked || false;
+    const recurrenceType = document.getElementById('recurrence_type')?.value || '';
+    const recurrenceInterval = document.getElementById('recurrence_interval')?.value || '';
+    const recurrenceCount = document.getElementById('recurrence_count')?.value || '';
+
+    // Gig positions
+    const gigPositionsData = document.getElementById('gigPositionsData');
+    const gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
+
+    // Invitations
+    const invitedUsersData = document.getElementById('invitedUsersData');
+    const invitedUsers = invitedUsersData ? JSON.parse(invitedUsersData.value || '[]') : [];
+    const invitationsData = document.getElementById('invitationsData');
+    const invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
+
+    // Format dates
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleDateString('it-IT', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const formatTime = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleTimeString('it-IT', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const formatDateOnly = (dateString) => {
+        if (!dateString) return 'Non specificato';
+        return new Date(dateString).toLocaleDateString('it-IT', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    // Calculate duration
+    let duration = '';
+    if (startDateTime && endDateTime) {
+        const start = new Date(startDateTime);
+        const end = new Date(endDateTime);
+        const diffHours = Math.round((end - start) / (1000 * 60 * 60));
+        duration = `${diffHours} ${diffHours === 1 ? 'ora' : 'ore'}`;
+    }
 
     const preview = `
-        <div class="position-relative overflow-hidden" style="height: 250px;">
+        <!-- Hero Section with Image -->
+        <div class="position-relative overflow-hidden" style="height: 300px;">
             <img src="${imageSrc}" alt="${title}" class="position-absolute w-100 h-100" style="object-fit: cover;">
             <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.7;"></div>
+
+            <!-- Status Badges -->
+            <div class="position-absolute top-0 start-0 m-3" style="z-index: 3;">
+                <span class="badge bg-light-primary me-2">
+                    <i class="ph ph-tag me-1"></i>${categoryText || 'Categoria non specificata'}
+                </span>
+                ${isFestival ? '<span class="badge bg-warning"><i class="ph ph-trophy me-1"></i>Festival</span>' : ''}
+            </div>
+
             <span class="badge ${isPublic ? 'bg-light-success' : 'bg-light-warning'} position-absolute top-0 end-0 m-3" style="z-index: 3;">
                 <i class="ph ph-${isPublic ? 'globe' : 'lock'} me-1"></i>
                 ${isPublic ? 'Pubblico' : 'Privato'}
             </span>
+
             <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 3;">
-                <h3 class="fw-bold mb-2 text-white">${title}</h3>
+                <h2 class="fw-bold mb-3 text-white">${title}</h2>
                 <div class="d-flex align-items-center mb-2">
-                    <i class="ph ph-calendar-check me-2"></i>
-                    <span>${formattedDate}</span>
+                    <i class="ph ph-calendar-check me-2 fs-5"></i>
+                    <span class="fs-5">${formatDate(startDateTime)}</span>
                 </div>
-                <div class="d-flex align-items-center">
-                    <i class="ph ph-map-pin me-2"></i>
-                    <span>${venueName}, ${city}</span>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="ph ph-map-pin me-2 fs-5"></i>
+                    <span class="fs-5">
+                        ${isOnline ?
+                            '<i class="ph ph-globe me-1"></i>Evento Online' + (onlineUrl ? ` - ${onlineUrl}` : '') :
+                            `${venueName ? venueName + ', ' : ''}${city}${country ? ', ' + country : ''}`
+                        }
+                    </span>
                 </div>
+                ${isOnline && timezone ? `
+                    <div class="d-flex align-items-center">
+                        <i class="ph ph-clock me-2 fs-5"></i>
+                        <span class="fs-5">Fuso orario: ${timezone}</span>
+                    </div>
+                ` : ''}
             </div>
         </div>
+
+        <!-- Event Details -->
         <div class="p-4">
-            <div class="mb-4">
-                <h6 class="mb-2 text-primary"><i class="ph ph-file-text me-2"></i>Descrizione</h6>
-                <p class="mb-0 text-muted">${description}</p>
-            </div>
-
-            <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                    <div class="border-start border-primary border-4 ps-3">
-                        <h6 class="mb-1 text-primary">Costo</h6>
-                        <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
-                    </div>
+            <!-- Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-file-text me-2"></i>Descrizione Evento</h6>
                 </div>
-                <div class="col-md-6">
-                    <div class="border-start border-primary border-4 ps-3">
-                        <h6 class="mb-1 text-primary">Tipo</h6>
-                        <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
-                    </div>
+                <div class="card-body">
+                    <p class="mb-0">${description}</p>
+                    ${requirements ? `
+                        <hr>
+                        <h6 class="text-primary">Requisiti:</h6>
+                        <p class="mb-0">${requirements}</p>
+                    ` : ''}
                 </div>
             </div>
 
+            <!-- Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-clock me-2"></i>Cronologia Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Inizio Evento</h6>
+                                <p class="mb-0">${formatDate(startDateTime)}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border-start border-danger border-4 ps-3">
+                                <h6 class="mb-1 text-danger">Fine Evento</h6>
+                                <p class="mb-0">${formatDate(endDateTime)}</p>
+                            </div>
+                        </div>
+                        ${duration ? `
+                            <div class="col-12">
+                                <div class="border-start border-info border-4 ps-3">
+                                    <h6 class="mb-1 text-info">Durata</h6>
+                                    <p class="mb-0">${duration}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${registrationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Iscrizioni</h6>
+                                    <p class="mb-0">${formatDateOnly(registrationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${invitationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Inviti</h6>
+                                    <p class="mb-0">${formatDateOnly(invitationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Details -->
+            ${!isOnline ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-map-pin me-2"></i>Dettagli Luogo</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            ${venueName ? `
+                                <div class="col-md-6">
+                                    <strong>Venue:</strong> ${venueName}
+                                </div>
+                            ` : ''}
+                            ${venueAddress ? `
+                                <div class="col-md-6">
+                                    <strong>Indirizzo:</strong> ${venueAddress}
+                                </div>
+                            ` : ''}
+                            ${city ? `
+                                <div class="col-md-4">
+                                    <strong>Città:</strong> ${city}
+                                </div>
+                            ` : ''}
+                            ${postcode ? `
+                                <div class="col-md-4">
+                                    <strong>CAP:</strong> ${postcode}
+                                </div>
+                            ` : ''}
+                            ${country ? `
+                                <div class="col-md-4">
+                                    <strong>Paese:</strong> ${country}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Event Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-gear me-2"></i>Impostazioni Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="border-start border-primary border-4 ps-3">
+                                <h6 class="mb-1 text-primary">Costo Ingresso</h6>
+                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-info border-4 ps-3">
+                                <h6 class="mb-1 text-info">Tipo Evento</h6>
+                                <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Stato</h6>
+                                <p class="mb-0">${status === 'published' ? 'Pubblicato' : 'Bozza'}</p>
+                            </div>
+                        </div>
+                        ${maxParticipants ? `
+                            <div class="col-md-4">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Max Partecipanti</h6>
+                                    <p class="mb-0">${maxParticipants}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="col-md-4">
+                            <div class="border-start border-secondary border-4 ps-3">
+                                <h6 class="mb-1 text-secondary">Richieste</h6>
+                                <p class="mb-0">${allowRequests ? 'Accettate' : 'Non accettate'}</p>
+                            </div>
+                        </div>
+                        ${isRecurring ? `
+                            <div class="col-md-4">
+                                <div class="border-start border-purple border-4 ps-3">
+                                    <h6 class="mb-1 text-purple">Ricorrenza</h6>
+                                    <p class="mb-0">${recurrenceType} - ${recurrenceCount} volte</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Festival Information -->
+            ${isFestival && festivalEvents.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Eventi del Festival</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">Questo festival include ${festivalEvents.length} evento${festivalEvents.length === 1 ? '' : 'i'}:</p>
+                        <div class="row g-2">
+                            ${festivalEvents.map(event => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-primary border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-calendar me-2 text-primary"></i>
+                                                <div>
+                                                    <strong>${event.title}</strong>
+                                                    <br><small class="text-muted">${event.date} - ${event.venue}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            ${isPartOfFestival && festivalId ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Parte di un Festival</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">Questo evento fa parte di un festival più grande.</p>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Gig Positions -->
+            ${gigPositions.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-briefcase me-2"></i>Posizioni d'Ingaggio Aperte</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${gigPositions.map(position => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-success border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user-circle me-2 text-success"></i>
+                                                <div>
+                                                    <strong>${position.type}</strong>
+                                                    <br><small class="text-muted">${position.quantity} posizione${position.quantity === 1 ? '' : 'i'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Invitations -->
+            ${invitations.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-user-plus me-2"></i>Inviti Specifici</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${invitations.map(invitation => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-info border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user me-2 text-info"></i>
+                                                <div>
+                                                    <strong>${invitation.user_name}</strong>
+                                                    <br><small class="text-muted">${invitation.role}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Private Event Invitations -->
+            ${!isPublic && invitedUsers.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-users me-2"></i>Utenti Invitati</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${invitedUsers.map(user => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-warning border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user me-2 text-warning"></i>
+                                                <div>
+                                                    <strong>${user.name}</strong>
+                                                    <br><small class="text-muted">${user.email}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Tags -->
             ${tags.length > 0 ? `
-                <div>
-                    <h6 class="mb-2 text-primary"><i class="ph ph-tag me-2"></i>Tags</h6>
-                    <div class="d-flex flex-wrap gap-1">
-                        ${tags.map(tag => `<span class="bg-light-primary rounded px-3 py-1 small">#${tag}</span>`).join('')}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-tag me-2"></i>Tags</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-1">
+                            ${tags.map(tag => `<span class="badge bg-light-primary rounded px-3 py-1">#${tag}</span>`).join('')}
+                        </div>
                     </div>
                 </div>
             ` : ''}
         </div>
     `;
 
-    document.getElementById('eventPreview').innerHTML = preview;
+    const eventPreviewElement = document.getElementById('eventPreview');
+    if (eventPreviewElement) {
+        eventPreviewElement.innerHTML = preview;
+    } else {
+        console.error('eventPreview element not found');
+    }
 }
 
 // Search users for invitations
@@ -3174,28 +3985,28 @@ function updateRecurrencePreview() {
 // Converte URL video in URL embed
 function convertToEmbedUrl(url) {
     if (!url) return null;
-    
+
     // YouTube
     const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/;
     const youtubeMatch = url.match(youtubeRegex);
     if (youtubeMatch) {
         return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
     }
-    
+
     // Vimeo
     const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/;
     const vimeoMatch = url.match(vimeoRegex);
     if (vimeoMatch) {
         return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
     }
-    
+
     // Dailymotion
     const dailymotionRegex = /(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)/;
     const dailymotionMatch = url.match(dailymotionRegex);
     if (dailymotionMatch) {
         return `https://www.dailymotion.com/embed/video/${dailymotionMatch[1]}`;
     }
-    
+
     // Altri servizi possono essere aggiunti qui
     return null;
 }
@@ -3204,11 +4015,11 @@ function convertToEmbedUrl(url) {
 function loadFestivals() {
     const festivalSelect = document.getElementById('festival_id');
     if (!festivalSelect) return;
-    
+
     // Pulisci le opzioni esistenti
     festivalSelect.innerHTML = '<option value="">{{ __("events.select_festival") }}</option>';
-    
-    // Simula caricamento (in produzione dovrebbe essere una chiamata AJAX)
+
+    // Chiamata API per caricare festival
     fetch('/api/festivals', {
         method: 'GET',
         headers: {
@@ -3216,8 +4027,14 @@ function loadFestivals() {
             'Accept': 'application/json',
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Festival caricati:', data);
         if (data.festivals && data.festivals.length > 0) {
             data.festivals.forEach(festival => {
                 const option = document.createElement('option');
@@ -3235,7 +4052,7 @@ function loadFestivals() {
             { id: 2, title: 'Slam Poetry Festival' },
             { id: 3, title: 'Festival delle Arti Performative' }
         ];
-        
+
         sampleFestivals.forEach(festival => {
             const option = document.createElement('option');
             option.value = festival.id;
@@ -3244,6 +4061,267 @@ function loadFestivals() {
         });
     });
 }
+
+// ========================================
+// FUNZIONI PER GESTIONE FESTIVAL - NUOVA LOGICA
+// ========================================
+
+// Aggiorna la visualizzazione della sezione festival nel quarto step
+function updateFestivalSectionDisplay(selectedCategory) {
+    const createFestivalSection = document.getElementById('create-festival-section');
+    const selectFestivalEventsSection = document.getElementById('select-festival-events-section');
+
+    if (selectedCategory === 'festival') {
+        // Categoria "Festival" selezionata: mostra selezione eventi esistenti
+        if (createFestivalSection) createFestivalSection.style.display = 'none';
+        if (selectFestivalEventsSection) {
+            selectFestivalEventsSection.style.display = 'block';
+            // Non serve caricare eventi specifici qui, verrà fatto quando l'utente cerca
+        }
+    } else {
+        // Altre categorie: mostra opzione per associare a festival esistente
+        if (createFestivalSection) createFestivalSection.style.display = 'block';
+        if (selectFestivalEventsSection) selectFestivalEventsSection.style.display = 'none';
+
+        // Carica la lista dei festival disponibili per la dropdown
+        loadFestivals();
+    }
+}
+
+// Carica gli eventi disponibili per il festival selezionato
+function loadFestivalEvents(festivalId) {
+    console.log('Caricamento eventi per festival:', festivalId);
+
+    // Simula caricamento eventi (in produzione dovrebbe essere una chiamata AJAX)
+    fetch(`/api/festivals/${festivalId}/events`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.events && data.events.length > 0) {
+            console.log('Eventi caricati:', data.events);
+            // Qui puoi popolare una lista di eventi suggeriti
+        }
+    })
+    .catch(error => {
+        console.error('Errore nel caricamento eventi festival:', error);
+        // Fallback con dati di esempio
+        const sampleEvents = [
+            { id: 1, title: 'Slam Poetry Night', date: '2024-03-15', venue: 'Teatro Comunale' },
+            { id: 2, title: 'Poetry Workshop', date: '2024-03-16', venue: 'Biblioteca Civica' },
+            { id: 3, title: 'Open Mic Night', date: '2024-03-17', venue: 'Caffè Letterario' }
+        ];
+        console.log('Eventi di esempio caricati:', sampleEvents);
+    });
+}
+
+// Gestisce la ricerca di eventi per il festival
+function handleEventSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        searchEventsForFestival();
+    }
+}
+
+// Cerca eventi per aggiungerli al festival
+function searchEventsForFestival() {
+    const searchInput = document.getElementById('eventSearchInput');
+    const searchTerm = searchInput.value.trim();
+
+    if (!searchTerm) {
+        alert('Inserisci un termine di ricerca');
+        return;
+    }
+
+    console.log('Ricerca eventi per festival:', searchTerm);
+
+    // Mostra indicatore di caricamento
+    const resultsSection = document.getElementById('searchResultsEvents');
+    const resultsContainer = document.getElementById('searchResultsListEvents');
+    if (resultsSection && resultsContainer) {
+        resultsContainer.innerHTML = '<div class="text-center text-muted py-3"><i class="ph ph-spinner-gap me-2"></i>Ricerca in corso...</div>';
+        resultsSection.style.display = 'block';
+    }
+
+    // Chiamata API per ricerca eventi
+    fetch(`/api/events/search?q=${encodeURIComponent(searchTerm)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Risultati API:', data);
+        displayEventSearchResults(data.events || []);
+    })
+    .catch(error => {
+        console.error('Errore nella ricerca eventi:', error);
+        // Fallback con dati di esempio
+        const sampleResults = [
+            { id: 1, title: 'Slam Poetry Night', date: '15/03/2024', venue: 'Teatro Comunale' },
+            { id: 2, title: 'Poetry Workshop', date: '16/03/2024', venue: 'Biblioteca Civica' },
+            { id: 3, title: 'Open Mic Poetry', date: '17/03/2024', venue: 'Caffè Letterario' }
+        ];
+        displayEventSearchResults(sampleResults);
+    });
+}
+
+// Mostra i risultati della ricerca eventi
+function displayEventSearchResults(events) {
+    const resultsContainer = document.getElementById('searchResultsListEvents');
+    const resultsSection = document.getElementById('searchResultsEvents');
+
+    if (!resultsContainer || !resultsSection) return;
+
+    if (events.length === 0) {
+        resultsContainer.innerHTML = '<div class="text-center text-muted py-3">Nessun evento trovato</div>';
+        resultsSection.style.display = 'block';
+        return;
+    }
+
+    resultsContainer.innerHTML = '';
+
+    events.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+        eventElement.innerHTML = `
+            <div>
+                <h6 class="mb-1">${event.title}</h6>
+                <small class="text-muted">${event.date} - ${event.venue}</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-success" onclick="addEventToFestival(${event.id}, '${event.title}', '${event.date}', '${event.venue}')">
+                <i class="ph ph-plus me-1"></i>Aggiungi
+            </button>
+        `;
+        resultsContainer.appendChild(eventElement);
+    });
+
+    resultsSection.style.display = 'block';
+}
+
+// Aggiunge un evento al festival
+function addEventToFestival(eventId, eventTitle, eventDate, eventVenue) {
+    const selectedEventsData = document.getElementById('selectedFestivalEventsData');
+    const selectedEventsList = document.getElementById('selectedEventsList');
+    const noSelectedEvents = document.getElementById('noSelectedEvents');
+    const selectedEventsCount = document.getElementById('selectedEventsCount');
+
+    if (!selectedEventsData || !selectedEventsList || !noSelectedEvents || !selectedEventsCount) return;
+
+    // Ottieni gli eventi già selezionati
+    let selectedEvents = JSON.parse(selectedEventsData.value || '[]');
+
+    // Controlla se l'evento è già stato aggiunto
+    if (selectedEvents.find(event => event.id === eventId)) {
+        alert('Questo evento è già stato aggiunto al festival');
+        return;
+    }
+
+    // Aggiungi il nuovo evento
+    selectedEvents.push({
+        id: eventId,
+        title: eventTitle,
+        date: eventDate,
+        venue: eventVenue
+    });
+
+    // Aggiorna i dati nascosti
+    selectedEventsData.value = JSON.stringify(selectedEvents);
+
+    // Aggiorna la visualizzazione
+    updateSelectedEventsDisplay(selectedEvents);
+
+    // Pulisci eventuali errori di validazione
+    clearFestivalValidationErrors();
+
+    // Nascondi i risultati della ricerca
+    document.getElementById('searchResultsEvents').style.display = 'none';
+    document.getElementById('eventSearchInput').value = '';
+
+    // Pulisci eventuali errori di validazione
+    clearFestivalValidationErrors();
+}
+
+// Aggiorna la visualizzazione degli eventi selezionati
+function updateSelectedEventsDisplay(selectedEvents) {
+    const selectedEventsList = document.getElementById('selectedEventsList');
+    const noSelectedEvents = document.getElementById('noSelectedEvents');
+    const selectedEventsCount = document.getElementById('selectedEventsCount');
+
+    if (!selectedEventsList || !noSelectedEvents || !selectedEventsCount) return;
+
+    if (selectedEvents.length === 0) {
+        selectedEventsList.innerHTML = `
+            <div class="col-12 text-center text-muted py-3" id="noSelectedEvents">
+                <i class="ph ph-calendar-plus f-s-24 mb-2"></i>
+                <p class="mb-0">{{ __('events.no_events_selected') }}</p>
+            </div>
+        `;
+        selectedEventsCount.textContent = '0';
+        return;
+    }
+
+    // Nascondi il messaggio "nessun evento"
+    noSelectedEvents.style.display = 'none';
+
+    // Aggiorna il contatore
+    selectedEventsCount.textContent = selectedEvents.length;
+
+    // Genera la lista degli eventi
+    selectedEventsList.innerHTML = '';
+
+    selectedEvents.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.className = 'col-md-6 col-lg-4';
+        eventElement.innerHTML = `
+            <div class="card border-success">
+                <div class="card-body p-3">
+                    <h6 class="card-title mb-2">${event.title}</h6>
+                    <p class="card-text small text-muted mb-2">
+                        <i class="ph ph-calendar me-1"></i>${event.date}<br>
+                        <i class="ph ph-map-pin me-1"></i>${event.venue}
+                    </p>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEventFromFestival(${event.id})">
+                        <i class="ph ph-minus me-1"></i>{{ __('events.remove_event_from_festival') }}
+                    </button>
+                </div>
+            </div>
+        `;
+        selectedEventsList.appendChild(eventElement);
+    });
+}
+
+// Rimuove un evento dal festival
+function removeEventFromFestival(eventId) {
+    const selectedEventsData = document.getElementById('selectedFestivalEventsData');
+
+    if (!selectedEventsData) return;
+
+    // Ottieni gli eventi selezionati
+    let selectedEvents = JSON.parse(selectedEventsData.value || '[]');
+
+    // Rimuovi l'evento
+    selectedEvents = selectedEvents.filter(event => event.id !== eventId);
+
+    // Aggiorna i dati nascosti
+    selectedEventsData.value = JSON.stringify(selectedEvents);
+
+    // Aggiorna la visualizzazione
+    updateSelectedEventsDisplay(selectedEvents);
+}
+
+
 
 // ===== GESTIONE POSIZIONI D'INGAGGIO =====
 
@@ -3443,13 +4521,13 @@ function loadRecentVenue(venueId) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             }
-            
+
             // Controlla se la risposta è JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 throw new Error('Expected JSON response but got: ' + contentType);
             }
-            
+
             return response.json();
         })
         .then(data => {
@@ -3461,12 +4539,12 @@ function loadRecentVenue(venueId) {
                     document.getElementById('venue_address').value = venue.venue_address;
                     document.getElementById('city').value = venue.city;
                     document.getElementById('postcode').value = venue.postcode;
-                    
+
                     // Se abbiamo le coordinate, posiziona sulla mappa
                     if (venue.latitude && venue.longitude) {
                         setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
                     }
-                    
+
                     // Mostra notifica di successo
                     showNotification('{{ __("events.venue_loaded_success") }}', 'success');
                 } else {
@@ -3478,7 +4556,7 @@ function loadRecentVenue(venueId) {
         })
         .catch(error => {
             console.error('Error loading recent venue:', error);
-            
+
             if (error.message === 'Authentication required') {
                 showNotification('Devi essere autenticato per caricare i luoghi recenti', 'warning');
             } else if (error.message === 'API endpoint not found') {
@@ -3496,28 +4574,28 @@ function loadRecentVenueFromDropdown(venueId) {
     if (!venueId) {
         return; // Nessuna selezione
     }
-    
+
     const selectElement = document.getElementById('recent_venue');
     const selectedOption = selectElement.querySelector(`option[value="${venueId}"]`);
-    
+
     if (selectedOption && selectedOption.dataset.venue) {
         try {
             const venue = JSON.parse(selectedOption.dataset.venue);
-            
+
             // Popola i campi con i dati del luogo recente
             document.getElementById('venue_name').value = venue.venue_name;
             document.getElementById('venue_address').value = venue.venue_address;
             document.getElementById('city').value = venue.city;
             document.getElementById('postcode').value = venue.postcode;
-            
+
             // Se abbiamo le coordinate, posiziona sulla mappa
             if (venue.latitude && venue.longitude) {
                 setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
             }
-            
+
             // Mostra notifica di successo
             showNotification('{{ __("events.venue_loaded_success") }}', 'success');
-            
+
         } catch (error) {
             console.error('Error parsing venue data:', error);
             showNotification('Errore nel caricamento dei dati del luogo', 'error');
@@ -3543,7 +4621,7 @@ function reverseGeocode(lat, lng) {
             if (data && data.address) {
                 // Aggiorna i campi con i dati dell'indirizzo
                 updateAddressFieldsFromReverseGeocode(data);
-                
+
                 // Mostra successo
                 if (statusEl) {
                     statusEl.innerHTML = '<i class="ph ph-check me-1"></i> {{ __("events.address_found") }}';
@@ -3578,12 +4656,12 @@ function reverseGeocode(lat, lng) {
 // Aggiorna i campi dell'indirizzo dal reverse geocoding
 function updateAddressFieldsFromReverseGeocode(data) {
     const address = data.address;
-    
+
     // Aggiorna il campo indirizzo
     const venueAddressInput = document.getElementById('venue_address');
     if (venueAddressInput && address) {
         const addressParts = [];
-        
+
         if (address.house_number) {
             addressParts.push(address.house_number);
         }
@@ -3593,43 +4671,43 @@ function updateAddressFieldsFromReverseGeocode(data) {
         if (address.suburb) {
             addressParts.push(address.suburb);
         }
-        
+
         if (addressParts.length > 0) {
             venueAddressInput.value = addressParts.join(', ');
         }
     }
-    
+
     // Aggiorna il campo città
     const cityInput = document.getElementById('city');
     if (cityInput && address) {
-        const city = address.city || 
-                    address.town || 
-                    address.village || 
-                    address.municipality || 
-                    address.county || 
-                    address.state || 
+        const city = address.city ||
+                    address.town ||
+                    address.village ||
+                    address.municipality ||
+                    address.county ||
+                    address.state ||
                     '';
-        
+
         if (city) {
             cityInput.value = city;
         }
     }
-    
+
     // Aggiorna il campo CAP
     const postcodeInput = document.getElementById('postcode');
     if (postcodeInput && address.postcode) {
         postcodeInput.value = address.postcode;
     }
-    
+
     // Aggiorna il campo nome venue se vuoto
     const venueNameInput = document.getElementById('venue_name');
     if (venueNameInput && !venueNameInput.value.trim() && address) {
-        const venueName = address.amenity || 
-                         address.shop || 
-                         address.office || 
-                         address.building || 
+        const venueName = address.amenity ||
+                         address.shop ||
+                         address.office ||
+                         address.building ||
                          '';
-        
+
         if (venueName) {
             venueNameInput.value = venueName;
         }
@@ -3646,15 +4724,31 @@ function showNotification(message, type = 'info') {
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Rimuovi automaticamente dopo 3 secondi
     setTimeout(() => {
         if (notification.parentNode) {
             notification.remove();
         }
     }, 3000);
+}
+
+// Funzione per pulire gli errori di validazione del festival
+function clearFestivalValidationErrors() {
+    // Rimuovi messaggio di errore se presente
+    const errorDiv = document.querySelector('.festival-error-message');
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
+    }
+
+    // Rimuovi evidenziazione errore
+    const searchInput = document.getElementById('eventSearchInput');
+    if (searchInput) {
+        searchInput.classList.remove('is-invalid');
+        searchInput.style.borderColor = '';
+    }
 }
 </script>
 
