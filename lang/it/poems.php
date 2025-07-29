@@ -136,6 +136,15 @@ return [
         'filter_by_language' => 'Filtra per lingua',
         'bookmarks' => 'Segnalibri',
         'liked' => 'Piaciute',
+        'sort_options' => [
+            'recent' => 'Più recenti',
+            'oldest' => 'Più vecchie',
+            'popular' => 'Più popolari',
+            'title' => 'Per titolo',
+            'author' => 'Per autore',
+            'likes' => 'Per mi piace',
+            'views' => 'Per visualizzazioni',
+        ],
     ],
     'status' => [
         'draft' => 'Bozza',
