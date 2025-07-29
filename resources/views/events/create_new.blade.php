@@ -383,7 +383,7 @@
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
 
-                           
+
 
                             <div class="col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
@@ -497,21 +497,7 @@
                                 </div>
                             </div>
 
-                            <!-- Venue Owner -->
-                            @if($venueOwners->count() > 0)
-                            <div class="col-12 mb-3">
-                                <div class="form-floating">
-                                    <select name="venue_owner_id" id="venue_owner_id" class="form-select">
-                                        <option value="">Nessun proprietario specifico</option>
-                                        @foreach($venueOwners as $owner)
-                                            <option value="{{ $owner->id }}">{{ $owner->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="venue_owner_id">Proprietario Venue (Opzionale)</label>
-                                </div>
-                                <small class="text-muted">Seleziona se conosci il proprietario del venue</small>
-                            </div>
-                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -928,7 +914,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isOnlineCheckbox && onlineEventSettings) {
                 console.log('Setting up online event checkbox listener');
-                
+
                 // Controlla lo stato iniziale della checkbox
                 console.log('Initial checkbox state:', isOnlineCheckbox.checked);
                 if (isOnlineCheckbox.checked) {
@@ -940,7 +926,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     onlineEventSettings.style.display = 'none';
                     makeLocationFieldsRequired();
                 }
-                
+
                 isOnlineCheckbox.addEventListener('change', function() {
                     console.log('Online checkbox changed:', this.checked);
                     if (this.checked) {
@@ -994,7 +980,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Funzione per rendere i campi del luogo opzionali
             function makeLocationFieldsOptional() {
                 console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA ===');
-                
+
                 // Lista degli ID degli elementi da nascondere
                 const elementsToHide = [
                     'venue-name-container',
@@ -1005,7 +991,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'country-container',
                     'map-info-banner-container'
                 ];
-                
+
                 // Lista degli ID dei campi input da rendere opzionali
                 const fieldsToMakeOptional = [
                     'venue_name',
@@ -1014,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'postcode',
                     'country'
                 ];
-                
+
                 // Nascondi tutti gli elementi
                 elementsToHide.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1025,14 +1011,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Elemento non trovato:', elementId);
                     }
                 });
-                
+
                 // Rendi opzionali tutti i campi di localizzazione
                 fieldsToMakeOptional.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = false;
                         console.log('Campo reso opzionale:', fieldId);
-                        
+
                         // Rimuovi l'asterisco dal label
                         const label = field.parentElement.querySelector('label');
                         if (label) {
@@ -1040,27 +1026,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-                
+
                 // Nascondi la mappa
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'none';
                     console.log('Nascosta mappa');
                 }
-                
+
                 // Nascondi il container della mappa
                 const mapSection = mapContainer?.closest('.col-12');
                 if (mapSection) {
                     mapSection.style.display = 'none';
                 }
-                
+
                 console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA ===');
             }
 
             // Funzione per rendere i campi del luogo obbligatori
             function makeLocationFieldsRequired() {
                 console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA ===');
-                
+
                 // Lista degli ID degli elementi da mostrare
                 const elementsToShow = [
                     'venue-name-container',
@@ -1071,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'country-container',
                     'map-info-banner-container'
                 ];
-                
+
                 // Lista degli ID dei campi input da rendere obbligatori
                 const fieldsToMakeRequired = [
                     'venue_name',
@@ -1080,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'postcode',
                     'country'
                 ];
-                
+
                 // Mostra tutti gli elementi
                 elementsToShow.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1091,14 +1077,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Elemento non trovato:', elementId);
                     }
                 });
-                
+
                 // Rendi obbligatori tutti i campi di localizzazione
                 fieldsToMakeRequired.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = true;
                         console.log('Campo reso obbligatorio:', fieldId);
-                        
+
                         // Aggiungi l'asterisco al label se non c'è già
                         const label = field.parentElement.querySelector('label');
                         if (label && !label.textContent.includes('*')) {
@@ -1106,20 +1092,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-                
+
                 // Mostra la mappa
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'block';
                     console.log('Mostrata mappa');
                 }
-                
+
                 // Mostra il container della mappa
                 const mapSection = mapContainer?.closest('.col-12');
                 if (mapSection) {
                     mapSection.style.display = 'block';
                 }
-                
+
                 console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA ===');
             }
 
@@ -1148,17 +1134,17 @@ function initializeForm() {
 
 function initializeMap() {
     console.log('=== INITIALIZING MAP ===');
-    
+
     // Controlla se l'elemento mappa esiste e se la mappa non è già inizializzata
     const mapContainer = document.getElementById('locationMap');
     console.log('Map container found:', mapContainer);
     console.log('Map already initialized:', map !== null);
-    
+
     if (!mapContainer) {
         console.error('Map container not found!');
         return;
     }
-    
+
     if (map !== null) {
         console.log('Map already initialized, skipping');
         return;
@@ -1182,7 +1168,7 @@ function initializeMap() {
             map.invalidateSize();
         }
     }, 200);
-    
+
     console.log('Map initialization completed');
 }
 
@@ -1560,7 +1546,7 @@ function validateCurrentStep() {
         const startDateTime = document.getElementById('start_datetime').value;
         const endDateTime = document.getElementById('end_datetime').value;
         const isOnline = document.getElementById('is_online')?.checked || false;
-        
+
         console.log('Step 2 validation - isOnline:', isOnline);
 
         if (!startDateTime) {
@@ -1722,7 +1708,7 @@ function setMapLocation(lat, lng, skipReverseGeocode = false) {
 
     marker = L.marker([lat, lng]).addTo(map);
     map.setView([lat, lng], 15);
-    
+
     // Esegui reverse geocoding solo se non è stato esplicitamente saltato
     if (!skipReverseGeocode) {
         reverseGeocode(lat, lng);
@@ -3249,13 +3235,13 @@ function loadRecentVenue(venueId) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             }
-            
+
             // Controlla se la risposta è JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 throw new Error('Expected JSON response but got: ' + contentType);
             }
-            
+
             return response.json();
         })
         .then(data => {
@@ -3267,12 +3253,12 @@ function loadRecentVenue(venueId) {
                     document.getElementById('venue_address').value = venue.venue_address;
                     document.getElementById('city').value = venue.city;
                     document.getElementById('postcode').value = venue.postcode;
-                    
+
                     // Se abbiamo le coordinate, posiziona sulla mappa
                     if (venue.latitude && venue.longitude) {
                         setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
                     }
-                    
+
                     // Mostra notifica di successo
                     showNotification('{{ __("events.venue_loaded_success") }}', 'success');
                 } else {
@@ -3284,7 +3270,7 @@ function loadRecentVenue(venueId) {
         })
         .catch(error => {
             console.error('Error loading recent venue:', error);
-            
+
             if (error.message === 'Authentication required') {
                 showNotification('Devi essere autenticato per caricare i luoghi recenti', 'warning');
             } else if (error.message === 'API endpoint not found') {
@@ -3302,28 +3288,28 @@ function loadRecentVenueFromDropdown(venueId) {
     if (!venueId) {
         return; // Nessuna selezione
     }
-    
+
     const selectElement = document.getElementById('recent_venue');
     const selectedOption = selectElement.querySelector(`option[value="${venueId}"]`);
-    
+
     if (selectedOption && selectedOption.dataset.venue) {
         try {
             const venue = JSON.parse(selectedOption.dataset.venue);
-            
+
             // Popola i campi con i dati del luogo recente
             document.getElementById('venue_name').value = venue.venue_name;
             document.getElementById('venue_address').value = venue.venue_address;
             document.getElementById('city').value = venue.city;
             document.getElementById('postcode').value = venue.postcode;
-            
+
             // Se abbiamo le coordinate, posiziona sulla mappa
             if (venue.latitude && venue.longitude) {
                 setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
             }
-            
+
             // Mostra notifica di successo
             showNotification('{{ __("events.venue_loaded_success") }}', 'success');
-            
+
         } catch (error) {
             console.error('Error parsing venue data:', error);
             showNotification('Errore nel caricamento dei dati del luogo', 'error');
@@ -3349,7 +3335,7 @@ function reverseGeocode(lat, lng) {
             if (data && data.address) {
                 // Aggiorna i campi con i dati dell'indirizzo
                 updateAddressFieldsFromReverseGeocode(data);
-                
+
                 // Mostra successo
                 if (statusEl) {
                     statusEl.innerHTML = '<i class="ph ph-check me-1"></i> {{ __("events.address_found") }}';
@@ -3384,12 +3370,12 @@ function reverseGeocode(lat, lng) {
 // Aggiorna i campi dell'indirizzo dal reverse geocoding
 function updateAddressFieldsFromReverseGeocode(data) {
     const address = data.address;
-    
+
     // Aggiorna il campo indirizzo
     const venueAddressInput = document.getElementById('venue_address');
     if (venueAddressInput && address) {
         const addressParts = [];
-        
+
         if (address.house_number) {
             addressParts.push(address.house_number);
         }
@@ -3399,43 +3385,43 @@ function updateAddressFieldsFromReverseGeocode(data) {
         if (address.suburb) {
             addressParts.push(address.suburb);
         }
-        
+
         if (addressParts.length > 0) {
             venueAddressInput.value = addressParts.join(', ');
         }
     }
-    
+
     // Aggiorna il campo città
     const cityInput = document.getElementById('city');
     if (cityInput && address) {
-        const city = address.city || 
-                    address.town || 
-                    address.village || 
-                    address.municipality || 
-                    address.county || 
-                    address.state || 
+        const city = address.city ||
+                    address.town ||
+                    address.village ||
+                    address.municipality ||
+                    address.county ||
+                    address.state ||
                     '';
-        
+
         if (city) {
             cityInput.value = city;
         }
     }
-    
+
     // Aggiorna il campo CAP
     const postcodeInput = document.getElementById('postcode');
     if (postcodeInput && address.postcode) {
         postcodeInput.value = address.postcode;
     }
-    
+
     // Aggiorna il campo nome venue se vuoto
     const venueNameInput = document.getElementById('venue_name');
     if (venueNameInput && !venueNameInput.value.trim() && address) {
-        const venueName = address.amenity || 
-                         address.shop || 
-                         address.office || 
-                         address.building || 
+        const venueName = address.amenity ||
+                         address.shop ||
+                         address.office ||
+                         address.building ||
                          '';
-        
+
         if (venueName) {
             venueNameInput.value = venueName;
         }
@@ -3452,9 +3438,9 @@ function showNotification(message, type = 'info') {
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Rimuovi automaticamente dopo 3 secondi
     setTimeout(() => {
         if (notification.parentNode) {
