@@ -286,7 +286,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AnalyticsController;
 
 // Public event routes (no auth required)
-Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
 
 // TEST: View semplice per verificare se il sistema view funziona
 Route::get('/test-simple-view', function () {
@@ -300,8 +300,17 @@ Route::get('/events/create', function () {
             $query->where('name', 'venue_owner');
         })->get();
 
+        // Ottieni i luoghi recenti dell'utente autenticato
+        $recentVenues = collect();
+        if (Auth::check()) {
+            $recentVenues = App\Models\RecentVenue::where('user_id', Auth::id())
+                ->orderBy('last_used_at', 'desc')
+                ->limit(4)
+                ->get();
+        }
+
         // TEST: Prova a renderizzare la view
-        return view('events.create', compact('venueOwners'));
+        return view('events.create', compact('venueOwners', 'recentVenues'));
 
     } catch (Exception $e) {
         // Se c'è un errore nella view, mostriamolo
@@ -314,6 +323,9 @@ Route::get('/events/create', function () {
         ], 500);
     }
 })->name('events.create');
+
+// Route per i luoghi recenti (pubblica)
+Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/api/events/near', [EventController::class, 'near'])->name('events.near');
@@ -345,6 +357,9 @@ Route::get('/api/events/test', function() {
     }
 });
 Route::get('/api/users/search', [EventController::class, 'searchUsers'])->name('users.search');
+
+// Route per i luoghi recenti (pubblica)
+// Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues');
 
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 

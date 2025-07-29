@@ -7,6 +7,7 @@ use App\Models\EventInvitation;
 use App\Models\EventRequest;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\RecentVenue;
 use App\Mail\EventInvitationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -240,7 +241,13 @@ class EventController extends Controller
             $query->where('name', 'venue_owner');
         })->get();
 
-        return view('events.create', compact('venueOwners'));
+        // Ottieni i luoghi recenti dell'utente (solo se autenticato)
+        $recentVenues = collect(); // Default vuoto
+        if (Auth::check()) {
+            $recentVenues = RecentVenue::getRecentVenues(4);
+        }
+
+        return view('events.create', compact('venueOwners', 'recentVenues'));
     }
 
     /**
@@ -553,9 +560,45 @@ class EventController extends Controller
             $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $invitedUsersCount]);
         }
 
+        // Salva il luogo come recente
+        RecentVenue::saveRecentVenue([
+            'venue_name' => $event->venue_name,
+            'venue_address' => $event->venue_address,
+            'city' => $event->city,
+            'postcode' => $event->postcode,
+            'country' => $event->country,
+            'latitude' => $event->latitude,
+            'longitude' => $event->longitude,
+        ]);
+
         return redirect()
             ->route('events.show', $event)
             ->with('success', $successMessage);
+    }
+
+    /**
+     * Get recent venues for the current user
+     */
+    public function getRecentVenues(): JsonResponse
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+        
+        $recentVenues = RecentVenue::where('user_id', $user->id)
+            ->orderBy('last_used_at', 'desc')
+            ->limit(4)
+            ->get();
+        
+        return response()->json([
+            'success' => true,
+            'venues' => $recentVenues
+        ]);
     }
 
     /**

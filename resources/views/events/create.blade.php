@@ -379,6 +379,40 @@
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
 
+                            <!-- Recent Venues Dropdown -->
+                            @if($recentVenues->count() > 0)
+                            <div class="col-12 mb-3">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-light-primary">
+                                        <h6 class="mb-0">
+                                            <i class="ph ph-clock-counter-clockwise me-2"></i>{{ __('events.recent_venues') }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <small class="text-muted mb-3 d-block">{{ __('events.recent_venues_help') }}</small>
+                                        <div class="row g-2">
+                                            @foreach($recentVenues as $venue)
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-outline-primary btn-sm w-100 text-start" 
+                                                        onclick="loadRecentVenue({{ $venue->id }})"
+                                                        title="{{ __('events.load_venue') }}">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="ph ph-map-pin me-2"></i>
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-bold">{{ $venue->venue_name }}</div>
+                                                            <small class="text-muted">{{ $venue->venue_address }}, {{ $venue->city }}</small>
+                                                        </div>
+                                                        <span class="badge bg-primary ms-2">{{ $venue->usage_count }}</span>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
@@ -1483,7 +1517,7 @@ function highlightError(fieldId) {
 
 
 
-function setMapLocation(lat, lng) {
+function setMapLocation(lat, lng, skipReverseGeocode = false) {
     document.getElementById('latitude').value = lat;
     document.getElementById('longitude').value = lng;
 
@@ -1493,6 +1527,11 @@ function setMapLocation(lat, lng) {
 
     marker = L.marker([lat, lng]).addTo(map);
     map.setView([lat, lng], 15);
+    
+    // Esegui reverse geocoding solo se non è stato esplicitamente saltato
+    if (!skipReverseGeocode) {
+        reverseGeocode(lat, lng);
+    }
 }
 
 function geocodeAddress(address) {
@@ -1511,7 +1550,7 @@ function geocodeAddress(address) {
         .then(data => {
             if (data && data.length > 0) {
                 const result = data[0];
-                setMapLocation(parseFloat(result.lat), parseFloat(result.lon));
+                setMapLocation(parseFloat(result.lat), parseFloat(result.lon), true); // Skip reverse geocoding
 
                 // NON aggiorniamo i campi - solo posizioniamo sulla mappa
                 // updateAddressFields(result);
@@ -3007,6 +3046,204 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('gigPositionsContainer').addEventListener('change', updateGigPositionsData);
     document.getElementById('gigPositionsContainer').addEventListener('input', updateGigPositionsData);
 });
+
+// ========================================
+// GESTIONE LUOGHI RECENTI E REVERSE GEOCODING
+// ========================================
+
+// Carica un luogo recente
+function loadRecentVenue(venueId) {
+    fetch(`/events/recent-venues`)
+        .then(response => {
+            // Controlla se la risposta è OK
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    // Utente non autenticato o non autorizzato
+                    throw new Error('Authentication required');
+                } else if (response.status === 404) {
+                    // Route non trovata
+                    throw new Error('API endpoint not found');
+                } else {
+                    // Altri errori HTTP
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            }
+            
+            // Controlla se la risposta è JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Expected JSON response but got: ' + contentType);
+            }
+            
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const venue = data.venues.find(v => v.id === venueId);
+                if (venue) {
+                    // Popola i campi con i dati del luogo recente
+                    document.getElementById('venue_name').value = venue.venue_name;
+                    document.getElementById('venue_address').value = venue.venue_address;
+                    document.getElementById('city').value = venue.city;
+                    document.getElementById('postcode').value = venue.postcode;
+                    
+                    // Se abbiamo le coordinate, posiziona sulla mappa
+                    if (venue.latitude && venue.longitude) {
+                        setMapLocation(venue.latitude, venue.longitude, true); // Skip reverse geocoding
+                    }
+                    
+                    // Mostra notifica di successo
+                    showNotification('{{ __("events.venue_loaded_success") }}', 'success');
+                } else {
+                    showNotification('Luogo non trovato', 'warning');
+                }
+            } else {
+                showNotification(data.message || 'Errore nel caricamento del luogo', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading recent venue:', error);
+            
+            if (error.message === 'Authentication required') {
+                showNotification('Devi essere autenticato per caricare i luoghi recenti', 'warning');
+            } else if (error.message === 'API endpoint not found') {
+                showNotification('Errore del server: endpoint non trovato', 'error');
+            } else if (error.message.includes('Expected JSON response')) {
+                showNotification('Errore del server: risposta non valida', 'error');
+            } else {
+                showNotification('{{ __("events.venue_load_error") }}', 'error');
+            }
+        });
+}
+
+// Funzione per il reverse geocoding quando si clicca sulla mappa
+function reverseGeocode(lat, lng) {
+    const statusEl = document.getElementById('geocoding-status');
+    if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> {{ __("events.searching_address") }}';
+        statusEl.className = 'small text-info mt-1';
+    }
+
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.address) {
+                // Aggiorna i campi con i dati dell'indirizzo
+                updateAddressFieldsFromReverseGeocode(data);
+                
+                // Mostra successo
+                if (statusEl) {
+                    statusEl.innerHTML = '<i class="ph ph-check me-1"></i> {{ __("events.address_found") }}';
+                    statusEl.className = 'small text-success mt-1';
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 3000);
+                }
+            } else {
+                // Indirizzo non trovato
+                if (statusEl) {
+                    statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> {{ __("events.address_not_found") }}';
+                    statusEl.className = 'small text-warning mt-1';
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 3000);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Reverse geocoding error:', error);
+            if (statusEl) {
+                statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> {{ __("events.reverse_geocoding_error") }}';
+                statusEl.className = 'small text-danger mt-1';
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
+            }
+        });
+}
+
+// Aggiorna i campi dell'indirizzo dal reverse geocoding
+function updateAddressFieldsFromReverseGeocode(data) {
+    const address = data.address;
+    
+    // Aggiorna il campo indirizzo
+    const venueAddressInput = document.getElementById('venue_address');
+    if (venueAddressInput && address) {
+        const addressParts = [];
+        
+        if (address.house_number) {
+            addressParts.push(address.house_number);
+        }
+        if (address.road) {
+            addressParts.push(address.road);
+        }
+        if (address.suburb) {
+            addressParts.push(address.suburb);
+        }
+        
+        if (addressParts.length > 0) {
+            venueAddressInput.value = addressParts.join(', ');
+        }
+    }
+    
+    // Aggiorna il campo città
+    const cityInput = document.getElementById('city');
+    if (cityInput && address) {
+        const city = address.city || 
+                    address.town || 
+                    address.village || 
+                    address.municipality || 
+                    address.county || 
+                    address.state || 
+                    '';
+        
+        if (city) {
+            cityInput.value = city;
+        }
+    }
+    
+    // Aggiorna il campo CAP
+    const postcodeInput = document.getElementById('postcode');
+    if (postcodeInput && address.postcode) {
+        postcodeInput.value = address.postcode;
+    }
+    
+    // Aggiorna il campo nome venue se vuoto
+    const venueNameInput = document.getElementById('venue_name');
+    if (venueNameInput && !venueNameInput.value.trim() && address) {
+        const venueName = address.amenity || 
+                         address.shop || 
+                         address.office || 
+                         address.building || 
+                         '';
+        
+        if (venueName) {
+            venueNameInput.value = venueName;
+        }
+    }
+}
+
+// Funzione per mostrare notifiche
+function showNotification(message, type = 'info') {
+    // Crea una notifica temporanea
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Rimuovi automaticamente dopo 3 secondi
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
 </script>
 
 <!-- Flatpickr JS -->

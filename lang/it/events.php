@@ -215,5 +215,14 @@ return [
     'view_all_events' => 'Vedi tutti gli eventi',
     'view_my_events' => 'Vedi i miei eventi',
     'view_upcoming' => 'Vedi prossimi eventi',
-
+    // Luoghi recenti
+    'recent_venues' => 'Luoghi Recenti',
+    'recent_venues_help' => 'Clicca su un luogo per caricarlo rapidamente',
+    'load_venue' => 'Carica luogo',
+    'venue_loaded_success' => 'Luogo caricato con successo!',
+    'venue_load_error' => 'Errore nel caricamento del luogo',
+    'address_found' => 'Indirizzo trovato!',
+    'address_not_found' => 'Indirizzo non trovato',
+    'searching_address' => 'Ricerca indirizzo...',
+    'reverse_geocoding_error' => 'Errore nella ricerca',
 ];
