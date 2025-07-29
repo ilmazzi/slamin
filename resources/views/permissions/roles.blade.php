@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Gestione {{ __('permissions.roles') }} - Slamin')
+@section('title', 'Gestione ' . __('permissions.roles') . ' - Slamin')
 
 @section('css')
 <style>

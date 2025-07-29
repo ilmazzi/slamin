@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'I Miei {{ __('common.video') }} - Slamin')
+@section('title', 'I Miei ' . __('common.video') . ' - Slamin')
 
 @section('css')
 <style>

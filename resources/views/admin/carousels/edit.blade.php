@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', '{{ __('permissions.modify') }} Slide Carosello')
+@section('title', __('permissions.modify') . ' Slide Carosello')
 
 @section('main-content')
 <div class="page-content">

@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'La Mia {{ __('wishlist.wishlist') }} - Slam in')
+@section('title', 'La Mia ' . __('wishlist.wishlist') . ' - Slam in')
 
 @section('main-content')
 <div class="page-content">

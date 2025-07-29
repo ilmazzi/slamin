@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', '{{ __('dashboard.dashboard') }} Moderazione')
+@section('title', __('dashboard.dashboard') . ' Moderazione')
 
 @section('main-content')
 <div class="container-fluid">

@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Analytics {{ __('dashboard.dashboard') }}')
+@section('title', 'Analytics ' . __('dashboard.dashboard'))
 @section('css')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>

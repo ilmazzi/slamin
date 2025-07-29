@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', '{{ __('permissions.modify') }} Profilo - Slamin')
+@section('title', __('permissions.modify') . ' Profilo - Slamin')
 
 @section('css')
 @endsection

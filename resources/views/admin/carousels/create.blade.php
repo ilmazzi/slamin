@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Crea {{ __('notifications.new') }} Slide Carosello')
+@section('title', 'Crea ' . __('notifications.new') . ' Slide Carosello')
 
 @section('main-content')
 <div class="page-content">

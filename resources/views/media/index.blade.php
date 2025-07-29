@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', '{{ __('common.media_section') }} - Slamin')
+@section('title', __('common.media_section') . ' - Slamin')
 
 @section('css')
 <!-- Slick CSS -->
@@ -86,10 +86,10 @@
                         @foreach($allMedia->take(8) as $media)
                         <div>
                             @if($media['type'] === 'video')
-                                <a href="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}" 
+                                <a href="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}"
                                    class="glightbox story" data-glightbox="type: video; zoomable: true;">
                                     <div class="position-relative">
-                                        <video src="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}" 
+                                        <video src="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}"
                                                poster="{{ $media['item']->thumbnail_path ? $media['item']->thumbnail_url : '' }}"
                                                class="rounded img-fluid">
                                         </video>
@@ -102,9 +102,9 @@
                                     </div>
                                 </a>
                             @else
-                                <a href="{{ asset($media['item']->image_path) }}" 
+                                <a href="{{ asset($media['item']->image_path) }}"
                                    class="glightbox story" data-glightbox="type: image; zoomable: true;">
-                                    <img src="{{ asset($media['item']->image_path) }}" 
+                                    <img src="{{ asset($media['item']->image_path) }}"
                                          alt="{{ $media['item']->alt_text }}" class="rounded img-fluid">
                                     <div class="h-50 w-50 d-flex-center b-r-50 overflow-hidden story-icon bg-primary">
                                         <img src="{{ $media['user']->profile_photo_url }}" alt="{{ $media['user']->getDisplayName() }}" class="img-fluid">
@@ -128,15 +128,15 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn {{ $type === 'all' ? 'btn-primary' : 'btn-outline-primary' }}" 
+                                <button type="button" class="btn {{ $type === 'all' ? 'btn-primary' : 'btn-outline-primary' }}"
                                         onclick="filterMedia('all')">
                                     <i class="ph ph-grid me-1"></i> Tutto
                                 </button>
-                                <button type="button" class="btn {{ $type === 'videos' ? 'btn-primary' : 'btn-outline-primary' }}" 
+                                <button type="button" class="btn {{ $type === 'videos' ? 'btn-primary' : 'btn-outline-primary' }}"
                                         onclick="filterMedia('videos')">
                                     <i class="ph ph-video-camera me-1"></i> {{ __('common.video') }}
                                 </button>
-                                <button type="button" class="btn {{ $type === 'photos' ? 'btn-primary' : 'btn-outline-primary' }}" 
+                                <button type="button" class="btn {{ $type === 'photos' ? 'btn-primary' : 'btn-outline-primary' }}"
                                         onclick="filterMedia('photos')">
                                     <i class="ph ph-image me-1"></i> {{ __('common.photo') }}
                                 </button>
@@ -173,19 +173,19 @@
                                     $firstVideo = $allVideos->first();
                                     $secondVideo = $allVideos->get(1);
                                 @endphp
-                                
+
                                 @if($firstVideo)
                                     <div class="left-main-img img-box">
-                                        <a href="{{ $firstVideo['item']->peertube_embed_url ?? asset('storage/' . $firstVideo['item']->file_path) }}" 
+                                        <a href="{{ $firstVideo['item']->peertube_embed_url ?? asset('storage/' . $firstVideo['item']->file_path) }}"
                                            class="glightbox" data-glightbox="type: video">
-                                            <img src="{{ $firstVideo['item']->thumbnail_path ? $firstVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
+                                            <img src="{{ $firstVideo['item']->thumbnail_path ? $firstVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}"
                                                  alt="{{ $firstVideo['item']->title }}">
                                             <div class="transparent-box">
                                                 <div class="caption">
                                                     <div class="d-flex align-items-center">
                                                         <a href="{{ route('user.show', $firstVideo['user']->id) }}" class="text-decoration-none me-2">
-                                                            <img src="{{ $firstVideo['user']->profile_photo_url }}" 
-                                                                 alt="{{ $firstVideo['user']->getDisplayName() }}" 
+                                                            <img src="{{ $firstVideo['user']->profile_photo_url }}"
+                                                                 alt="{{ $firstVideo['user']->getDisplayName() }}"
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
                                                         </a>
                                                         <i class="ph ph-play-circle"></i>
@@ -195,19 +195,19 @@
                                         </a>
                                     </div>
                                 @endif
-                                
+
                                 @if($secondVideo)
                                     <div class="right-main-img img-box">
-                                        <a href="{{ $secondVideo['item']->peertube_embed_url ?? asset('storage/' . $secondVideo['item']->file_path) }}" 
+                                        <a href="{{ $secondVideo['item']->peertube_embed_url ?? asset('storage/' . $secondVideo['item']->file_path) }}"
                                            class="glightbox" data-glightbox="type: video">
-                                            <img src="{{ $secondVideo['item']->thumbnail_path ? $secondVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
+                                            <img src="{{ $secondVideo['item']->thumbnail_path ? $secondVideo['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}"
                                                  alt="{{ $secondVideo['item']->title }}">
                                             <div class="transparent-box">
                                                 <div class="caption">
                                                     <div class="d-flex align-items-center">
                                                         <a href="{{ route('user.show', $secondVideo['user']->id) }}" class="text-decoration-none me-2">
-                                                            <img src="{{ $secondVideo['user']->profile_photo_url }}" 
-                                                                 alt="{{ $secondVideo['user']->getDisplayName() }}" 
+                                                            <img src="{{ $secondVideo['user']->profile_photo_url }}"
+                                                                 alt="{{ $secondVideo['user']->getDisplayName() }}"
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
                                                         </a>
                                                         <i class="ph ph-play-circle"></i>
@@ -242,19 +242,19 @@
                                     $remainingPhotos = $allPhotos->slice(1, 3);
                                     $extraPhotos = $allPhotos->slice(4);
                                 @endphp
-                                
+
                                 @if($firstPhoto)
                                     <div class="left-main-img img-box">
-                                        <a href="{{ asset($firstPhoto['item']->image_path) }}" 
+                                        <a href="{{ asset($firstPhoto['item']->image_path) }}"
                                            class="glightbox" data-glightbox="type: image; zoomable: true;">
-                                            <img src="{{ asset($firstPhoto['item']->image_path) }}" 
+                                            <img src="{{ asset($firstPhoto['item']->image_path) }}"
                                                  alt="{{ $firstPhoto['item']->alt_text }}">
                                             <div class="transparent-box2">
                                                 <div class="captions">
                                                     <div class="d-flex align-items-center">
                                                         <a href="{{ route('user.show', $firstPhoto['user']->id) }}" class="text-decoration-none me-2">
-                                                            <img src="{{ $firstPhoto['user']->profile_photo_url }}" 
-                                                                 alt="{{ $firstPhoto['user']->getDisplayName() }}" 
+                                                            <img src="{{ $firstPhoto['user']->profile_photo_url }}"
+                                                                 alt="{{ $firstPhoto['user']->getDisplayName() }}"
                                                                  class="rounded-circle" style="width: 30px; height: 30px;">
                                                         </a>
                                                         <span>{{ $firstPhoto['item']->title }}</span>
@@ -264,22 +264,22 @@
                                         </a>
                                     </div>
                                 @endif
-                                
+
                                 @if($remainingPhotos->count() > 0)
                                     <div>
                                         <div class="sub">
                                             @foreach($remainingPhotos as $photo)
                                                 <div class="img-box">
-                                                    <a href="{{ asset($photo['item']->image_path) }}" 
+                                                    <a href="{{ asset($photo['item']->image_path) }}"
                                                        class="glightbox" data-glightbox="type: image">
-                                                        <img src="{{ asset($photo['item']->image_path) }}" 
+                                                        <img src="{{ asset($photo['item']->image_path) }}"
                                                              alt="{{ $photo['item']->alt_text }}">
                                                         <div class="transparent-box2">
                                                             <div class="captions">
                                                                 <div class="d-flex align-items-center">
                                                                     <a href="{{ route('user.show', $photo['user']->id) }}" class="text-decoration-none me-2">
-                                                                        <img src="{{ $photo['user']->profile_photo_url }}" 
-                                                                             alt="{{ $photo['user']->getDisplayName() }}" 
+                                                                        <img src="{{ $photo['user']->profile_photo_url }}"
+                                                                             alt="{{ $photo['user']->getDisplayName() }}"
                                                                              class="rounded-circle" style="width: 25px; height: 25px;">
                                                                     </a>
                                                                     <span>{{ $photo['item']->title }}</span>
@@ -289,12 +289,12 @@
                                                     </a>
                                                 </div>
                                             @endforeach
-                                            
+
                                             @if($extraPhotos->count() > 0)
                                                 <div id="multi-link" class="img-box">
-                                                    <a href="{{ asset($extraPhotos->first()['item']->image_path) }}" 
+                                                    <a href="{{ asset($extraPhotos->first()['item']->image_path) }}"
                                                        class="glightbox" data-glightbox="type: image">
-                                                        <img src="{{ asset($extraPhotos->first()['item']->image_path) }}" 
+                                                        <img src="{{ asset($extraPhotos->first()['item']->image_path) }}"
                                                              alt="{{ $extraPhotos->first()['item']->alt_text }}">
                                                         <div class="transparent-box">
                                                             <div class="caption">
@@ -307,13 +307,13 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if($extraPhotos->count() > 1)
                                     <div id="more-img" class="extra-images-container hide-element">
                                         @foreach($extraPhotos->slice(1) as $photo)
-                                            <a href="{{ asset($photo['item']->image_path) }}" 
+                                            <a href="{{ asset($photo['item']->image_path) }}"
                                                class="glightbox" data-glightbox="type: image">
-                                                <img src="{{ asset($photo['item']->image_path) }}" 
+                                                <img src="{{ asset($photo['item']->image_path) }}"
                                                      alt="{{ $photo['item']->alt_text }}">
                                             </a>
                                         @endforeach
@@ -326,7 +326,7 @@
             </div>
         </div>
         @endif
-        
+
         <!-- Tutti i {{ __('common.media_section') }} - Lista Completa -->
         @if($type === 'all')
         <div class="row mt-4">
@@ -344,8 +344,8 @@
                                         <div class="card-header p-2">
                                             <div class="d-flex align-items-center">
                                                 <a href="{{ route('user.show', $media['user']->id) }}" class="text-decoration-none">
-                                                    <img src="{{ $media['user']->profile_photo_url }}" 
-                                                         alt="{{ $media['user']->getDisplayName() }}" 
+                                                    <img src="{{ $media['user']->profile_photo_url }}"
+                                                         alt="{{ $media['user']->getDisplayName() }}"
                                                          class="rounded-circle me-2" style="width: 32px; height: 32px;">
                                                 </a>
                                                 <div>
@@ -358,18 +358,18 @@
                                         </div>
                                         <div class="card-body p-2">
                                             @if($media['type'] === 'photo')
-                                                <a href="{{ asset($media['item']->image_path) }}" 
+                                                <a href="{{ asset($media['item']->image_path) }}"
                                                    class="glightbox" data-glightbox="type: image">
-                                                    <img src="{{ asset($media['item']->image_path) }}" 
-                                                         alt="{{ $media['item']->alt_text }}" 
+                                                    <img src="{{ asset($media['item']->image_path) }}"
+                                                         alt="{{ $media['item']->alt_text }}"
                                                          class="img-fluid rounded">
                                                 </a>
                                             @else
-                                                <a href="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}" 
+                                                <a href="{{ $media['item']->peertube_embed_url ?? asset('storage/' . $media['item']->file_path) }}"
                                                    class="glightbox" data-glightbox="type: video">
                                                     <div class="position-relative">
-                                                        <img src="{{ $media['item']->thumbnail_path ? $media['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}" 
-                                                             alt="{{ $media['item']->title }}" 
+                                                        <img src="{{ $media['item']->thumbnail_path ? $media['item']->thumbnail_url : asset('assets/images/placeholder.jpg') }}"
+                                                             alt="{{ $media['item']->title }}"
                                                              class="img-fluid rounded">
                                                         <div class="position-absolute top-50 start-50 translate-middle">
                                                             <i class="ph ph-play-circle text-white" style="font-size: 2rem;"></i>
@@ -377,7 +377,7 @@
                                                     </div>
                                                 </a>
                                             @endif
-                                            
+
                                             <div class="mt-2">
                                                 <h6 class="mb-1 small">{{ $media['item']->title }}</h6>
                                                 @if($media['item']->description)
@@ -448,7 +448,7 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <!-- Slick JS -->
 <script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
 <!-- GLightbox JS -->
@@ -530,7 +530,7 @@ function toggleLike(type, id) {
             const button = event.target.closest('button');
             const icon = button.querySelector('i');
             const statsElement = button.closest('.card').querySelector('.text-muted small:first-child');
-            
+
             if (data.liked) {
                 icon.style.color = '#e74c3c';
                 statsElement.innerHTML = `<i class="ph ph-heart me-1"></i>${data.likes_count}`;
@@ -551,7 +551,7 @@ function toggleLike(type, id) {
 function showComments(type, id) {
     currentMediaType = type;
     currentMediaId = id;
-    
+
     // Carica commenti via AJAX
     fetch(`/media/${type}/${id}/comments`)
         .then(response => response.json())
@@ -568,7 +568,7 @@ function showComments(type, id) {
                     </div>
                 `;
             });
-            
+
             document.getElementById('commentsContent').innerHTML = commentsHtml;
             $('#commentsModal').modal('show');
         })
@@ -582,7 +582,7 @@ function showComments(type, id) {
 function submitComment() {
     const content = document.querySelector('.comment-input').value;
     if (!content.trim()) return;
-    
+
     @auth
     fetch('{{ route("media.comment") }}', {
         method: 'POST',
@@ -610,10 +610,10 @@ function submitComment() {
             </div>
         `;
         commentsContent.insertAdjacentHTML('afterbegin', newComment);
-        
+
         // Pulisci input
         document.querySelector('.comment-input').value = '';
-        
+
         // Aggiorna contatore commenti
         const mediaItem = document.querySelector(`[data-type="${currentMediaType}"][data-id="${currentMediaId}"]`);
         const commentCount = mediaItem.querySelector('.text-muted small:last-child');
@@ -643,4 +643,4 @@ function openMediaModal(type, id) {
     }
 }
 </script>
-@endsection 
+@endpush

@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', '{{ __('notifications.notifications') }} - Slamin')
+@section('title', __('notifications.notifications') . ' - Slamin')
 
 @section('main-content')
 <div class="container-fluid">
