@@ -1152,6 +1152,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     'map-info-banner-container'
                 ];
                 
+                // Lista degli ID dei campi input da rendere opzionali
+                const fieldsToMakeOptional = [
+                    'venue_name',
+                    'venue_address',
+                    'city',
+                    'postcode',
+                    'country'
+                ];
+                
                 // Nascondi tutti gli elementi
                 elementsToHide.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1160,6 +1169,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Nascosto elemento:', elementId);
                     } else {
                         console.log('Elemento non trovato:', elementId);
+                    }
+                });
+                
+                // Rendi opzionali tutti i campi di localizzazione
+                fieldsToMakeOptional.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = false;
+                        console.log('Campo reso opzionale:', fieldId);
+                        
+                        // Rimuovi l'asterisco dal label
+                        const label = field.parentElement.querySelector('label');
+                        if (label) {
+                            label.textContent = label.textContent.replace(' *', '');
+                        }
                     }
                 });
                 
@@ -1174,13 +1198,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mapSection = mapContainer?.closest('.col-12');
                 if (mapSection) {
                     mapSection.style.display = 'none';
-                }
-                
-                // Nascondi il banner informativo della mappa (se esiste)
-                const mapInfoBanner = document.querySelector('.alert-info');
-                if (mapInfoBanner && mapInfoBanner.textContent.includes('Posizionamento')) {
-                    mapInfoBanner.style.display = 'none';
-                    console.log('Nascosto banner informativo mappa');
                 }
                 
                 console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA ===');
@@ -1201,6 +1218,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     'map-info-banner-container'
                 ];
                 
+                // Lista degli ID dei campi input da rendere obbligatori
+                const fieldsToMakeRequired = [
+                    'venue_name',
+                    'venue_address',
+                    'city',
+                    'postcode',
+                    'country'
+                ];
+                
                 // Mostra tutti gli elementi
                 elementsToShow.forEach(elementId => {
                     const element = document.getElementById(elementId);
@@ -1209,6 +1235,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Mostrato elemento:', elementId);
                     } else {
                         console.log('Elemento non trovato:', elementId);
+                    }
+                });
+                
+                // Rendi obbligatori tutti i campi di localizzazione
+                fieldsToMakeRequired.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = true;
+                        console.log('Campo reso obbligatorio:', fieldId);
+                        
+                        // Aggiungi l'asterisco al label se non c'è già
+                        const label = field.parentElement.querySelector('label');
+                        if (label && !label.textContent.includes('*')) {
+                            label.textContent += ' *';
+                        }
                     }
                 });
                 
@@ -1672,9 +1713,9 @@ function validateCurrentStep() {
     if (step === 2) {
         const startDateTime = document.getElementById('start_datetime').value;
         const endDateTime = document.getElementById('end_datetime').value;
-        const venueName = document.getElementById('venue_name').value.trim();
-        const venueAddress = document.getElementById('venue_address').value.trim();
-        const city = document.getElementById('city').value.trim();
+        const isOnline = document.getElementById('is_online')?.checked || false;
+        
+        console.log('Step 2 validation - isOnline:', isOnline);
 
         if (!startDateTime) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
@@ -1693,22 +1734,31 @@ function validateCurrentStep() {
             isValid = false;
         }
 
-        if (!venueName) {
-            showError('venue_name', 'Il nome del venue è obbligatorio');
-            highlightError('venue_name');
-            isValid = false;
-        }
+        // Validazione campi di localizzazione solo per eventi fisici
+        if (!isOnline) {
+            const venueName = document.getElementById('venue_name').value.trim();
+            const venueAddress = document.getElementById('venue_address').value.trim();
+            const city = document.getElementById('city').value.trim();
 
-        if (!venueAddress) {
-            showError('venue_address', 'L\'indirizzo è obbligatorio');
-            highlightError('venue_address');
-            isValid = false;
-        }
+            if (!venueName) {
+                showError('venue_name', 'Il nome del venue è obbligatorio');
+                highlightError('venue_name');
+                isValid = false;
+            }
 
-        if (!city) {
-            showError('city', 'La città è obbligatoria');
-            highlightError('city');
-            isValid = false;
+            if (!venueAddress) {
+                showError('venue_address', 'L\'indirizzo è obbligatorio');
+                highlightError('venue_address');
+                isValid = false;
+            }
+
+            if (!city) {
+                showError('city', 'La città è obbligatoria');
+                highlightError('city');
+                isValid = false;
+            }
+        } else {
+            console.log('Evento online - saltata validazione campi di localizzazione');
         }
 
         // Validate recurrence settings if enabled

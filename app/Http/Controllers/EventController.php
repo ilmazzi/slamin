@@ -273,11 +273,11 @@ class EventController extends Controller
                 'start_datetime' => 'required|date_format:Y-m-d H:i|after:now',
                 'end_datetime' => 'required|date_format:Y-m-d H:i|after:start_datetime',
                 'registration_deadline' => 'nullable|date_format:Y-m-d H:i|before:start_datetime',
-                'venue_name' => 'required_unless:is_online,1|string|max:255',
-                'venue_address' => 'required_unless:is_online,1|string',
-                'city' => 'required_unless:is_online,1|string|max:255',
+                'venue_name' => 'nullable|string|max:255',
+                'venue_address' => 'nullable|string',
+                'city' => 'nullable|string|max:255',
                 'postcode' => 'nullable|string|max:10',
-                'country' => 'required_unless:is_online,1|string|size:2',
+                'country' => 'nullable|string|size:2',
                 'latitude' => 'nullable|numeric|between:-90,90',
                 'longitude' => 'nullable|numeric|between:-180,180',
                 'is_public' => 'required|in:0,1',
@@ -314,10 +314,6 @@ class EventController extends Controller
                 'recurrence_type.in' => 'Il tipo di ricorrenza selezionato non è valido.',
                 'recurrence_count.max' => 'Il numero di occorrenze non può superare 100.',
                 'invitation_deadline.after' => 'La scadenza inviti deve essere nel futuro.',
-                'venue_name.required_unless' => 'Il nome del venue è obbligatorio per eventi fisici.',
-                'venue_address.required_unless' => 'L\'indirizzo del venue è obbligatorio per eventi fisici.',
-                'city.required_unless' => 'La città è obbligatoria per eventi fisici.',
-                'country.required_unless' => 'Il paese è obbligatorio per eventi fisici.',
                 'timezone.required_if' => 'Il fuso orario è obbligatorio per eventi online.',
                 'online_url.url' => 'L\'URL dell\'evento online deve essere un link valido.',
             ]);
@@ -369,6 +365,16 @@ class EventController extends Controller
             // Clear online fields if not online
             $validated['timezone'] = null;
             $validated['online_url'] = null;
+        } else {
+            // Clear physical location fields if online
+            $validated['venue_name'] = null;
+            $validated['venue_address'] = null;
+            $validated['city'] = null;
+            $validated['postcode'] = null;
+            $validated['country'] = null;
+            $validated['latitude'] = null;
+            $validated['longitude'] = null;
+            $validated['venue_owner_id'] = null;
         }
 
         // Handle image upload
@@ -580,16 +586,18 @@ class EventController extends Controller
             $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $invitedUsersCount]);
         }
 
-        // Salva il luogo come recente
-        RecentVenue::saveRecentVenue([
-            'venue_name' => $event->venue_name,
-            'venue_address' => $event->venue_address,
-            'city' => $event->city,
-            'postcode' => $event->postcode,
-            'country' => $event->country,
-            'latitude' => $event->latitude,
-            'longitude' => $event->longitude,
-        ]);
+        // Salva il luogo come recente solo per eventi fisici
+        if (!$event->is_online && $event->venue_name) {
+            RecentVenue::saveRecentVenue([
+                'venue_name' => $event->venue_name,
+                'venue_address' => $event->venue_address,
+                'city' => $event->city,
+                'postcode' => $event->postcode,
+                'country' => $event->country,
+                'latitude' => $event->latitude,
+                'longitude' => $event->longitude,
+            ]);
+        }
 
         return redirect()
             ->route('events.show', $event)
@@ -756,10 +764,11 @@ class EventController extends Controller
             'start_datetime' => 'required|date|after:now',
             'end_datetime' => 'required|date|after:start_datetime',
             'registration_deadline' => 'nullable|date|before:start_datetime',
-            'venue_name' => 'required_unless:is_online,1|string|max:255',
-            'venue_address' => 'required_unless:is_online,1|string',
-            'city' => 'required_unless:is_online,1|string|max:255',
-            'country' => 'required_unless:is_online,1|string|size:2',
+            'venue_name' => 'nullable|string|max:255',
+            'venue_address' => 'nullable|string',
+            'city' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:10',
+            'country' => 'nullable|string|size:2',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
             'is_public' => 'boolean',
@@ -775,10 +784,6 @@ class EventController extends Controller
             'timezone' => 'required_if:is_online,1|string|max:50',
             'online_url' => 'nullable|url|max:500',
         ], [
-            'venue_name.required_unless' => 'Il nome del venue è obbligatorio per eventi fisici.',
-            'venue_address.required_unless' => 'L\'indirizzo del venue è obbligatorio per eventi fisici.',
-            'city.required_unless' => 'La città è obbligatoria per eventi fisici.',
-            'country.required_unless' => 'Il paese è obbligatorio per eventi fisici.',
             'timezone.required_if' => 'Il fuso orario è obbligatorio per eventi online.',
             'online_url.url' => 'L\'URL dell\'evento online deve essere un link valido.',
         ]);
@@ -793,11 +798,53 @@ class EventController extends Controller
         // Convert is_online to boolean
         $validated['is_online'] = isset($validated['is_online']) && ($validated['is_online'] === '1' || $validated['is_online'] === 1 || $validated['is_online'] === true);
 
+        // Custom validation for physical events
+        if (!$validated['is_online']) {
+            $errors = [];
+            
+            if (empty($validated['venue_name'])) {
+                $errors['venue_name'] = ['Il nome del venue è obbligatorio per eventi fisici.'];
+            }
+            
+            if (empty($validated['venue_address'])) {
+                $errors['venue_address'] = ['L\'indirizzo del venue è obbligatorio per eventi fisici.'];
+            }
+            
+            if (empty($validated['city'])) {
+                $errors['city'] = ['La città è obbligatoria per eventi fisici.'];
+            }
+            
+            if (empty($validated['country'])) {
+                $errors['country'] = ['Il paese è obbligatorio per eventi fisici.'];
+            }
+            
+            if (!empty($errors)) {
+                Log::error('Event validation failed - physical event requirements', [
+                    'errors' => $errors,
+                    'request_data' => $request->all()
+                ]);
+                throw new \Illuminate\Validation\ValidationException(
+                    new \Illuminate\Validation\Validator(app('translator'), [], [], []),
+                    response()->json($errors, 422)
+                );
+            }
+        }
+
         // Handle online event fields
         if (!$validated['is_online']) {
             // Clear online fields if not online
             $validated['timezone'] = null;
             $validated['online_url'] = null;
+        } else {
+            // Clear physical location fields if online
+            $validated['venue_name'] = null;
+            $validated['venue_address'] = null;
+            $validated['city'] = null;
+            $validated['postcode'] = null;
+            $validated['country'] = null;
+            $validated['latitude'] = null;
+            $validated['longitude'] = null;
+            $validated['venue_owner_id'] = null;
         }
 
         // Log dell'attività prima dell'aggiornamento
