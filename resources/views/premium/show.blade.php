@@ -76,7 +76,7 @@
                         </div>
                         @endif
 
-                        <!-- Video Limit Highlight -->
+                        <!-- {{ __('common.video') }} Limit Highlight -->
                         <div class="alert alert-info mt-4">
                             <div class="d-flex align-items-center">
                                 <i class="ph-duotone ph-video-camera f-s-24 me-3"></i>

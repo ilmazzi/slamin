@@ -1,7 +1,7 @@
 @component('mail::message')
 
 @if($updateType === 'cancelled')
-# 🚫 Evento cancellato
+# 🚫 {{ __('invitations.event') }} cancellato
 
 Ciao **{{ $user->getDisplayName() }}**,
 
@@ -93,7 +93,7 @@ Ciao **{{ $user->getDisplayName() }}**!
 @if($event->entry_fee > 0)
 - **Costo:** €{{ number_format($event->entry_fee, 2) }}
 @else
-- **Gratuito** 🎉
+- **{{ __('common.free') }}** 🎉
 @endif
 @if($event->max_participants)
 - **Posti limitati:** {{ $event->max_participants }} partecipanti

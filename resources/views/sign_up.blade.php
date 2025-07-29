@@ -40,16 +40,16 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="UserName" placeholder="Email Username"
+                                        <input class="form-control" id="UserName" placeholder="{{ __('permissions.email') }} Username"
                                                type="text">
                                         <label for="UserName">Username</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="email" placeholder="Enter Your Email"
+                                        <input class="form-control" id="email" placeholder="Enter Your {{ __('permissions.email') }}"
                                                required type="email">
-                                        <label for="email">Email</label>
+                                        <label for="email">{{ __('permissions.email') }}</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

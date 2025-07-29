@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="UserName" placeholder="Email Username"
+                                        <input class="form-control" id="UserName" placeholder="{{ __('permissions.email') }} Username"
                                                type="text">
                                         <label for="UserName">Username</label>
                                     </div>
@@ -48,7 +48,7 @@
                                 <div class="col-12">
 
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="floatingInput" placeholder="Email Username"
+                                        <input class="form-control" id="floatingInput" placeholder="{{ __('permissions.email') }} Username"
                                                type="text">
                                         <label for="floatingInput">Password</label>
 

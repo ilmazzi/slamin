@@ -12,10 +12,10 @@
                 <ul class="d-flex align-items-center">
 
                     @auth
-                    <!-- Dashboard - Solo per utenti autenticati -->
+                    <!-- {{ __('dashboard.dashboard') }} - Solo per utenti autenticati -->
                     <li class="header-dashboard">
                         <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard">
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('dashboard.dashboard') }}">
                             <i class="ph ph-gauge"></i>
                         </a>
                     </li>
@@ -25,26 +25,26 @@
                         <div class="flex-shrink-0 dropdown">
                             <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
                                data-bs-toggle="dropdown"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scorciatoie">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.shortcuts') }}">
                                 <i class="ph ph-lightning"></i>
                             </a>
                             <ul class="dropdown-menu header-card border-0">
                                 <li class="dropdown-header">
                                     <h6 class="mb-0">
-                                        <i class="ph ph-lightning me-2"></i>Scorciatoie
+                                        <i class="ph ph-lightning me-2"></i>{{ __('common.shortcuts') }}
                                     </h6>
                                 </li>
                                 <li class="dropdown-divider"></li>
                                 <li class="dropdown-item">
                                     <a href="{{ route('peertube.upload-video') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-video-camera me-2 text-primary"></i>
-                                        <span>Carica Video</span>
+                                        <span>{{ __('common.upload_video') }}</span>
                                     </a>
                                 </li>
                                 <li class="dropdown-item">
                                     <a href="{{ route('events.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-calendar-plus me-2 text-success"></i>
-                                        <span>Crea Evento</span>
+                                        <span>Crea {{ __('invitations.event') }}</span>
                                     </a>
                                 </li>
                                 <li class="dropdown-item">
@@ -77,7 +77,7 @@
                                 <li class="dropdown-item">
                                     <a href="{{ route('admin.kanban.index') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-kanban me-2 text-info"></i>
-                                        <span>Kanban Board</span>
+                                        <span>{{ __('common.kanban_board') }}</span>
                                     </a>
                                 </li>
                                 @endif
@@ -94,7 +94,7 @@
                            href="#"
                            role="button"
                            id="notificationTrigger"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifiche">
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
                             <i class="ph ph-bell"></i>
                             <!-- Dynamic notification badge -->
                             <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
@@ -104,11 +104,11 @@
                              id="notificationcanvasRight" tabindex="-1">
                             <div class="offcanvas-header">
                                 <h5 class="offcanvas-title" id="notificationcanvasRightLabel">
-                                    <i class="ph ph-bell me-2"></i>Notifiche
+                                    <i class="ph ph-bell me-2"></i>{{ __('notifications.notifications') }}
                                     <span id="notificationCount" class="badge bg-primary ms-2">0</span>
                                 </h5>
                                 <div class="d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="Segna tutte come lette">
+                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="{{ __('notifications.mark_all_read') }}">
                                         <i class="ph ph-check-circle"></i>
                                     </button>
                                     <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
@@ -131,8 +131,8 @@
                                 <!-- Empty state -->
                                 <div id="notificationsEmpty" class="text-center p-4" style="display: none;">
                                     <i class="ph ph-bell-slash display-4 text-muted mb-3"></i>
-                                    <h6 class="text-muted">Nessuna notifica</h6>
-                                    <p class="text-muted small">Le tue notifiche appariranno qui</p>
+                                    <h6 class="text-muted">{{ __('notifications.no_notifications') }}</h6>
+                                    <p class="text-muted small">{{ __('notifications.notifications_placeholder') }}</p>
                                 </div>
 
                                 <!-- Footer actions -->
@@ -158,11 +158,11 @@
                     <!-- Theme Toggle - Per tutti gli utenti -->
                     <li class="header-dark">
                         <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tema Scuro">
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.dark_theme') }}">
                             <i class="ph ph-moon-stars"></i>
                         </div>
                         <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tema Chiaro">
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.light_theme') }}">
                             <i class="ph ph-sun-dim"></i>
                         </div>
                     </li>
@@ -172,7 +172,7 @@
                         <div class="flex-shrink-0 dropdown" id="lang_selector">
                             <a aria-expanded="false" class="d-block head-icon ps-0"
                                data-bs-toggle="dropdown"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Lingua">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.language_selector') }}">
                                 <div class="lang-flag lang-{{ app()->getLocale() }}">
                                     <span class="flag rounded-circle overflow-hidden">
                                         <i class="flag-icon flag-icon-{{

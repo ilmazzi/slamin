@@ -77,7 +77,7 @@
                                 <p class="mb-0">{{ $subscription->end_date->format('d/m/Y H:i') }}</p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-medium">Stato</label>
+                                <label class="form-label fw-medium">{{ __('invitations.status') }}</label>
                                 <p class="mb-0">
                                     <span class="badge bg-success">{{ __('premium.subscription_active') }}</span>
                                 </p>
@@ -97,7 +97,7 @@
                     <div class="card-header">
                         <h6 class="card-title mb-0">
                             <i class="ph-duotone ph-lightning f-s-16 me-2"></i>
-                            Azioni Rapide
+                            {{ __('invitations.actions') }} Rapide
                         </h6>
                     </div>
                     <div class="card-body">

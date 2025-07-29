@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Dashboard Moderazione')
+@section('title', '{{ __('dashboard.dashboard') }} Moderazione')
 
 @section('main-content')
 <div class="container-fluid">
@@ -11,7 +11,7 @@
                 <div>
                     <h4 class="mb-0 f-w-600">
                         <i class="ph-duotone ph-shield-check me-2"></i>
-                        Dashboard Moderazione
+                        {{ __('dashboard.dashboard') }} Moderazione
                     </h4>
                     <p class="text-muted mb-0">Gestisci la moderazione di tutti i contenuti</p>
                 </div>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Video</h6>
+                            <h6 class="mb-1">{{ __('common.video') }}</h6>
                             <div class="d-flex gap-2">
                                 <span class="badge bg-warning">{{ $stats['videos']['pending'] }} in attesa</span>
                                 <span class="badge bg-success">{{ $stats['videos']['approved'] }} approvati</span>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Foto</h6>
+                            <h6 class="mb-1">{{ __('common.photo') }}</h6>
                             <div class="d-flex gap-2">
                                 <span class="badge bg-warning">{{ $stats['photos']['pending'] }} in attesa</span>
                                 <span class="badge bg-success">{{ $stats['photos']['approved'] }} approvate</span>
@@ -122,7 +122,7 @@
 
     <!-- Contenuti in Attesa e Segnalazioni -->
     <div class="row">
-        <!-- Video in Attesa -->
+        <!-- {{ __('common.video') }} in Attesa -->
         @if($pendingContent['videos']->count() > 0)
         <div class="col-lg-6 mb-4">
             <div class="card hover-effect">
@@ -130,7 +130,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">
                             <i class="ph-duotone ph-video-camera me-2"></i>
-                            Video in Attesa
+                            {{ __('common.video') }} in Attesa
                         </h5>
                         <a href="{{ route('admin.moderation.pending', ['type' => 'videos']) }}" class="btn btn-sm btn-outline-primary">
                             Vedi tutti
@@ -263,7 +263,7 @@
 
 
 
-<!-- Kanban Board JS -->
+<!-- {{ __('common.kanban_board') }} JS -->
 <script src="{{ asset('assets/js/kanban_board.js') }}?v={{ time() }}"></script>
 
 

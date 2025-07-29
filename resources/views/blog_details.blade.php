@@ -244,7 +244,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <input type="email" class="form-control" placeholder="Enter Your Email">
+                                        <input type="email" class="form-control" placeholder="Enter Your {{ __('permissions.email') }}">
                                     </div>
                                 </div>
                                 <div class="col">
@@ -529,7 +529,7 @@
                             <div class="card-body">
                                 <form class="app-form">
                                     <div class="mb-3">
-                                        <label class="form-label f-w-500">Email</label>
+                                        <label class="form-label f-w-500">{{ __('permissions.email') }}</label>
                                         <div class="input-group">
                                             <input class="form-control form-control-sm" type="text" placeholder="@gmail.com">
                                             <button class="btn btn-primary" type="button"><i

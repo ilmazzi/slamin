@@ -128,7 +128,7 @@
         @forelse($poems as $poem)
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="card hover-effect">
-                    <!-- Thumbnail -->
+                    <!-- {{ __('common.thumbnail') }} -->
                     @if($poem->thumbnail_path)
                         <div class="card-img-top">
                             <img src="{{ $poem->thumbnail_url }}" class="img-fluid" alt="{{ $poem->title }}">
@@ -209,7 +209,7 @@
                             </small>
                         </div>
 
-                        <!-- Azioni -->
+                        <!-- {{ __('invitations.actions') }} -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group btn-group-sm">
                                 <a href="{{ route('poems.show', $poem) }}" class="btn btn-outline-primary">

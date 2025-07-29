@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-md-4 text-end">
                                 <a href="{{ route('poetry.test.dashboard') }}" class="btn btn-light btn-sm">
-                                    ← Back to Dashboard
+                                    ← Back to {{ __('dashboard.dashboard') }}
                                 </a>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                                             🗳️ Voting & Social
                                             @break
                                         @case('gigs')
-                                            💼 Gigs Management
+                                            💼 {{ __('common.gigs') }} Management
                                             @break
                                         @case('venues')
                                             🏛️ Venues Management

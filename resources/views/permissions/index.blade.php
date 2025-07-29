@@ -84,11 +84,11 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 f-w-600">Pannello Gestione Permessi</h4>
+                <h4 class="mb-0 f-w-600">{{ __('permissions.permissions_panel') }}</h4>
                 <div class="d-flex gap-2">
                     <a href="{{ route('permissions.roles') }}" class="btn btn-primary hover-effect">
                         <i class="ph ph-users me-2"></i>
-                        Gestione Ruoli
+                        Gestione {{ __('permissions.roles') }}
                     </a>
                     <a href="{{ route('permissions.permissions') }}" class="btn btn-success hover-effect">
                         <i class="ph ph-shield-check me-2"></i>
@@ -100,7 +100,7 @@
                     </a>
                     <button class="btn btn-info hover-effect" onclick="showCreateRoleModal()">
                         <i class="ph ph-plus me-2"></i>
-                        Nuovo Ruolo
+                        Nuovo {{ __('invitations.role') }}
                     </button>
                 </div>
             </div>
@@ -183,7 +183,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 f-w-600 text-dark">
                             <i class="ph ph-users me-2 text-primary"></i>
-                            Ruoli Recenti
+                            {{ __('permissions.roles') }} Recenti
                         </h5>
                         <a href="{{ route('permissions.roles') }}" class="btn btn-sm btn-primary hover-effect">
                             Vedi Tutti
@@ -195,10 +195,10 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="f-w-600">Ruolo</th>
-                                    <th class="f-w-600 text-center">N° Permessi</th>
-                                    <th class="f-w-600 text-center">N° Utenti</th>
-                                    <th class="f-w-600 text-center">Azioni</th>
+                                    <th class="f-w-600">{{ __('invitations.role') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('permissions.permissions_count') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('permissions.users_count') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,7 +218,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary hover-effect" onclick="editRole({{ $role->id }})" title="Modifica">
+                                            <button class="btn btn-outline-primary hover-effect" onclick="editRole({{ $role->id }})" title="{{ __('permissions.modify') }}">
                                                 <i class="ph ph-pencil f-s-14"></i>
                                             </button>
                                             @if($role->users->count() == 0)
@@ -256,10 +256,10 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="f-w-600">Permesso</th>
-                                    <th class="f-w-600 text-center">Gruppo</th>
-                                    <th class="f-w-600 text-center">Ruoli</th>
-                                    <th class="f-w-600 text-center">Azioni</th>
+                                    <th class="f-w-600">{{ __('permissions.permission') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('permissions.group') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('permissions.roles') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -279,7 +279,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary hover-effect" onclick="editPermission({{ $permission->id }})" title="Modifica">
+                                            <button class="btn btn-outline-primary hover-effect" onclick="editPermission({{ $permission->id }})" title="{{ __('permissions.modify') }}">
                                                 <i class="ph ph-pencil f-s-14"></i>
                                             </button>
                                             @if($permission->roles->count() == 0)
@@ -319,11 +319,11 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="f-w-600">Utente</th>
-                                    <th class="f-w-600">Email</th>
-                                    <th class="f-w-600 text-center">Ruoli</th>
-                                    <th class="f-w-600 text-center">Stato</th>
-                                    <th class="f-w-600 text-center">Azioni</th>
+                                    <th class="f-w-600">{{ __('permissions.user') }}</th>
+                                    <th class="f-w-600">{{ __('permissions.email') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('permissions.roles') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('invitations.status') }}</th>
+                                    <th class="f-w-600 text-center">{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -333,7 +333,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                                 <div class="bg-light-primary h-40 w-40 d-flex-center b-r-50 position-relative overflow-hidden me-3">
-                                                    <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="Avatar" class="img-fluid b-r-50">
+                                                    <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="{{ __('common.avatar') }}" class="img-fluid b-r-50">
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
@@ -364,10 +364,10 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary hover-effect" onclick="editUserRoles({{ $user->id }})" title="Gestisci Ruoli">
+                                            <button class="btn btn-outline-primary hover-effect" onclick="editUserRoles({{ $user->id }})" title="Gestisci {{ __('permissions.roles') }}">
                                                 <i class="ph ph-users f-s-14"></i>
                                             </button>
-                                            <button class="btn btn-outline-success hover-effect" onclick="editUserPermissions({{ $user->id }})" title="Gestisci Permessi">
+                                            <button class="btn btn-outline-success hover-effect" onclick="editUserPermissions({{ $user->id }})" title="{{ __('permissions.manage_permissions') }}">
                                                 <i class="ph ph-shield-check f-s-14"></i>
                                             </button>
                                         </div>
@@ -390,7 +390,7 @@
             <div class="modal-header card-light-primary">
                 <h5 class="modal-title f-w-600">
                     <i class="ph ph-plus me-2"></i>
-                    Crea Nuovo Ruolo
+                    Crea Nuovo {{ __('invitations.role') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -399,7 +399,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label f-w-600">Nome Ruolo *</label>
+                                <label class="form-label f-w-600">Nome {{ __('invitations.role') }} *</label>
                                 <input type="text" class="form-control" name="name" required>
                                 <small class="text-muted f-s-12">Nome tecnico (es: admin, moderator)</small>
                             </div>
@@ -422,7 +422,7 @@
                     <button type="button" class="btn btn-secondary hover-effect" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary hover-effect">
                         <i class="ph ph-plus me-2"></i>
-                        Crea Ruolo
+                        Crea {{ __('invitations.role') }}
                     </button>
                 </div>
             </form>

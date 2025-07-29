@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Wishlist')
+@section('title', '{{ __('wishlist.wishlist') }}')
 @section('css')
 
 @endsection
@@ -8,7 +8,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12 ">
-                <h4 class="main-title">Wishlist</h4>
+                <h4 class="main-title">{{ __('wishlist.wishlist') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -21,14 +21,14 @@
                         <a href="#" class="f-s-14 f-w-500">E-shop</a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Wishlist</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('wishlist.wishlist') }}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <!-- Breadcrumb end -->
 
-        <!-- Wishlist start -->
+        <!-- {{ __('wishlist.wishlist') }} start -->
 
         <div class="row wishlist-container">
             <div class="col-sm-6 col-lg-4 col-xl-3">
@@ -285,7 +285,7 @@
                 </div>
             </div>
         </div>
-        <!-- Wishlist end -->
+        <!-- {{ __('wishlist.wishlist') }} end -->
     </div>
 @endsection
 

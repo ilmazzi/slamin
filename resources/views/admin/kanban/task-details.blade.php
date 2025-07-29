@@ -47,13 +47,13 @@
 
         <!-- Comments Section -->
         <div class="task-comments">
-            <h6 class="mb-3">Commenti</h6>
+            <h6 class="mb-3">{{ __('common.comments_section') }}</h6>
 
             @if($task->comments->count() > 0)
                 @foreach($task->comments as $comment)
                 <div class="comment-item">
                     <div class="comment-header">
-                        <span class="comment-author">{{ $comment->user->name ?? 'Utente' }}</span>
+                        <span class="comment-author">{{ $comment->user->name ?? '{{ __('permissions.user') }}' }}</span>
                         <span class="comment-date">{{ $comment->created_at->format('d/m/Y H:i') }}</span>
                     </div>
                     <div class="comment-content">{{ $comment->content }}</div>
@@ -159,10 +159,10 @@
 
         <!-- Actions -->
         <div class="task-sidebar-section">
-            <h6>Azioni</h6>
+            <h6>{{ __('invitations.actions') }}</h6>
             <div class="d-grid gap-2">
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="editTask({{ $task->id }})">
-                    <i class="ph ph-pencil me-2"></i>Modifica
+                    <i class="ph ph-pencil me-2"></i>{{ __('permissions.modify') }}
                 </button>
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="deleteTask({{ $task->id }})">
                     <i class="ph ph-trash me-2"></i>Elimina

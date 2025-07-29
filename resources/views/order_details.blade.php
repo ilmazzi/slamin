@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-3">
-                                    <h6 class="f-w-600 text-dark"><i class="ti ti-mail f-s-18 text-secondary me-2"></i>Email</h6>
+                                    <h6 class="f-w-600 text-dark"><i class="ti ti-mail f-s-18 text-secondary me-2"></i>{{ __('permissions.email') }}</h6>
                                     <div class="text-end">
                                         <p>dam@1234.com</p>
                                     </div>

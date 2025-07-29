@@ -63,9 +63,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} Address</label>
                                         <input type="email" class="form-control"
-                                               placeholder="Enter Your Email" required>
+                                               placeholder="Enter Your {{ __('permissions.email') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -359,7 +359,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} Address</label>
                                         <input type="text" class="form-control"
                                                placeholder="@department.com" required>
                                     </div>
@@ -472,11 +472,11 @@
                                 </div>
                                 <div class="col-xl-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} Address</label>
                                         <div class="input-group mb-3">
                                             <span class="input-group-text b-r-left">@</span>
                                             <input type="text" class="form-control b-r-right"
-                                                   placeholder="Email Address">
+                                                   placeholder="{{ __('permissions.email') }} Address">
                                         </div>
                                     </div>
                                 </div>
@@ -594,9 +594,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email Address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} Address</label>
                                         <input type="email" class="form-control"
-                                               placeholder="Enter Your Email" required>
+                                               placeholder="Enter Your {{ __('permissions.email') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

@@ -96,7 +96,7 @@
                     </div>
                 </div>
 
-                <!-- Thumbnail -->
+                <!-- {{ __('common.thumbnail') }} -->
                 @if($poem->thumbnail_path)
                 <div class="card-img-top">
                     <img src="{{ $poem->thumbnail_url }}" class="img-fluid w-100" alt="{{ $poem->title }}">
@@ -147,7 +147,7 @@
                         </div>
                     </div>
 
-                    <!-- Azioni social -->
+                    <!-- {{ __('invitations.actions') }} social -->
                     @auth
                     <div class="d-flex justify-content-center gap-2 mb-4">
                         <button class="btn btn-outline-primary" onclick="toggleLike()" id="likeBtn">
@@ -192,7 +192,7 @@
                 </div>
             </div>
 
-            <!-- Commenti -->
+            <!-- {{ __('common.comments_section') }} -->
             <div class="card mt-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">

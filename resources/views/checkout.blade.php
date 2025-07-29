@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Email address</label>
+                                                <label class="form-label">{{ __('permissions.email') }} address</label>
                                                 <input type="email" class="form-control">
                                                 <div class="form-text">We'll never share your email with anyone else.</div>
                                             </div>
@@ -569,7 +569,7 @@
                                         <img src="{{asset('../assets/images/form/done.gif')}}" alt="">
                                     </div>
                                     <h5 class="text-success"> Your Order #7AD6728 Placed, Thank you!</h5>
-                                    <p>Confirmation will be sent to Your Email</p>
+                                    <p>Confirmation will be sent to Your {{ __('permissions.email') }}</p>
                                 </div>
                                 <div class="app-divider-v dashed"></div>
                                 <div>

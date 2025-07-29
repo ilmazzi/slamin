@@ -13,7 +13,7 @@
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-gauge f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-gauge f-s-16"></i> {{ __('dashboard.dashboard') }}
                             </span>
                         </a>
                     </li>
@@ -47,7 +47,7 @@
                 <div>
                     <a href="{{ route('admin.moderation.index') }}" class="btn btn-outline-secondary me-2">
                         <i class="ph-duotone ph-arrow-left me-2"></i>
-                        Dashboard
+                        {{ __('dashboard.dashboard') }}
                     </a>
                     <a href="{{ route('admin.moderation.pending') }}" class="btn btn-outline-primary">
                         <i class="ph-duotone ph-list-checks me-2"></i>
@@ -78,7 +78,7 @@
                                     <input class="form-check-input" type="checkbox" id="videos_auto_approve" name="videos_auto_approve" value="1" {{ ($formSettings['videos_auto_approve']['value'] ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="videos_auto_approve">
                                         <i class="ph-duotone ph-video-camera me-2"></i>
-                                        Video - Auto Approval
+                                        {{ __('common.video') }} - Auto Approval
                                     </label>
                                 </div>
                                 <small class="text-muted">I video verranno automaticamente approvati</small>
@@ -111,7 +111,7 @@
                                     <input class="form-check-input" type="checkbox" id="photos_auto_approve" name="photos_auto_approve" value="1" {{ ($formSettings['photos_auto_approve']['value'] ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="photos_auto_approve">
                                         <i class="ph-duotone ph-image me-2"></i>
-                                        Foto - Auto Approval
+                                        {{ __('common.photo') }} - Auto Approval
                                     </label>
                                 </div>
                                 <small class="text-muted">Le foto verranno automaticamente approvate</small>
@@ -133,7 +133,7 @@
                                     <input class="form-check-input" type="checkbox" id="comments_auto_approve" name="comments_auto_approve" value="1" {{ ($formSettings['comments_auto_approve']['value'] ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="comments_auto_approve">
                                         <i class="ph-duotone ph-chat-circle me-2"></i>
-                                        Commenti - Auto Approval
+                                        {{ __('common.comments_section') }} - Auto Approval
                                     </label>
                                 </div>
                                 <small class="text-muted">I commenti verranno automaticamente approvati</small>
@@ -144,14 +144,14 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Notifica Email per Contenuti in Attesa</label>
+                                <label class="form-label">Notifica {{ __('permissions.email') }} per Contenuti in Attesa</label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" value="1" {{ ($formSettings['email_notifications']['value'] ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="email_notifications">
                                         Abilita notifiche email
                                     </label>
                                 </div>
-                                <small class="text-muted">Invia email agli admin quando ci sono contenuti in attesa</small>
+                                <small class="text-muted">{{ __('videos.send') }} email agli admin quando ci sono contenuti in attesa</small>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -169,7 +169,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Auto-Archiviazione Contenuti Rifiutati</label>
+                                <label class="form-label">Auto-Archiviazione Contenuti {{ __('invitations.rejected_invitations') }}</label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="auto_archive_rejected" name="auto_archive_rejected" value="1" {{ ($formSettings['auto_archive_rejected']['value'] ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="auto_archive_rejected">
@@ -205,7 +205,7 @@
                         <h6>Auto-Approval Attivo</h6>
                         <div class="d-flex flex-column gap-2">
                             <div class="d-flex justify-content-between">
-                                <span>Video:</span>
+                                <span>{{ __('common.video') }}:</span>
                                 <span class="badge bg-{{ ($formSettings['videos_auto_approve']['value'] ?? false) ? 'success' : 'secondary' }}">
                                     {{ ($formSettings['videos_auto_approve']['value'] ?? false) ? 'Sì' : 'No' }}
                                 </span>
@@ -223,7 +223,7 @@
                                 </span>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <span>Foto:</span>
+                                <span>{{ __('common.photo') }}:</span>
                                 <span class="badge bg-{{ ($formSettings['photos_auto_approve']['value'] ?? false) ? 'success' : 'secondary' }}">
                                     {{ ($formSettings['photos_auto_approve']['value'] ?? false) ? 'Sì' : 'No' }}
                                 </span>
@@ -235,7 +235,7 @@
                                 </span>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <span>Commenti:</span>
+                                <span>{{ __('common.comments_section') }}:</span>
                                 <span class="badge bg-{{ ($formSettings['comments_auto_approve']['value'] ?? false) ? 'success' : 'secondary' }}">
                                     {{ ($formSettings['comments_auto_approve']['value'] ?? false) ? 'Sì' : 'No' }}
                                 </span>
@@ -246,9 +246,9 @@
                     <hr>
 
                     <div class="mb-3">
-                        <h6>Notifiche</h6>
+                        <h6>{{ __('notifications.notifications') }}</h6>
                         <div class="d-flex justify-content-between">
-                            <span>Email:</span>
+                            <span>{{ __('permissions.email') }}:</span>
                                                             <span class="badge bg-{{ ($formSettings['email_notifications']['value'] ?? false) ? 'success' : 'secondary' }}">
                                     {{ ($formSettings['email_notifications']['value'] ?? false) ? 'Attive' : 'Disattive' }}
                             </span>
@@ -271,7 +271,7 @@
                         <ul class="mb-0">
                             <li><strong>Auto-Approval:</strong> I contenuti vengono automaticamente approvati senza intervento manuale</li>
                             <li><strong>Moderazione Manuale:</strong> I contenuti richiedono l'approvazione di un admin/moderatore</li>
-                            <li><strong>Notifiche:</strong> Ricevi email quando ci sono contenuti in attesa di moderazione</li>
+                            <li><strong>{{ __('notifications.notifications') }}:</strong> Ricevi email quando ci sono contenuti in attesa di moderazione</li>
                         </ul>
                     </div>
                 </div>

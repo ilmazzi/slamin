@@ -132,7 +132,7 @@
         @forelse($drafts as $draft)
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="card hover-effect">
-                    <!-- Thumbnail -->
+                    <!-- {{ __('common.thumbnail') }} -->
                     @if($draft->thumbnail_path)
                         <div class="card-img-top">
                             <img src="{{ $draft->thumbnail_url }}" class="img-fluid" alt="{{ $draft->title }}">
@@ -211,7 +211,7 @@
                             </div>
                         @endif
 
-                        <!-- Azioni -->
+                        <!-- {{ __('invitations.actions') }} -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group btn-group-sm">
                                 <a href="{{ route('poems.edit', $draft) }}" class="btn btn-outline-warning">

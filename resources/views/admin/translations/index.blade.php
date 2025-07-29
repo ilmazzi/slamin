@@ -15,7 +15,7 @@
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>
@@ -189,7 +189,7 @@
                                 </div>
                                 <button type="button" class="btn btn-primary btn-sm"
                                         id="edit-btn-{{ $code }}" onclick="goToTranslation('{{ $code }}', '')">
-                                    <i class="ph ph-pencil me-1"></i>Modifica
+                                    <i class="ph ph-pencil me-1"></i>{{ __('permissions.modify') }}
                                 </button>
                             </div>
                         </div>
@@ -242,7 +242,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="ph ph-plus-circle me-2"></i>Aggiungi Nuova Lingua
+                    <i class="ph ph-plus-circle me-2"></i>Aggiungi {{ __('notifications.new') }} {{ __('common.language_selector') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -250,13 +250,13 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="language_code" class="form-label">Codice Lingua *</label>
+                        <label for="language_code" class="form-label">Codice {{ __('common.language_selector') }} *</label>
                         <input type="text" name="language_code" id="language_code" class="form-control"
                                placeholder="es. en, fr, de" maxlength="2" required>
                         <small class="text-muted">Codice ISO 639-1 (2 caratteri)</small>
                     </div>
                     <div class="mb-3">
-                        <label for="language_name" class="form-label">Nome Lingua *</label>
+                        <label for="language_name" class="form-label">Nome {{ __('common.language_selector') }} *</label>
                         <input type="text" name="language_name" id="language_name" class="form-control"
                                placeholder="es. English, Français, Deutsch" required>
                         <small class="text-muted">Nome completo della lingua</small>
@@ -270,7 +270,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-plus me-2"></i>Crea Lingua
+                        <i class="ph ph-plus me-2"></i>Crea {{ __('common.language_selector') }}
                     </button>
                 </div>
             </form>
@@ -294,7 +294,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                 <a href="#" id="syncLanguageBtn" class="btn btn-warning">
-                    <i class="ph ph-arrows-clockwise me-2"></i>Sincronizza Questa Lingua
+                    <i class="ph ph-arrows-clockwise me-2"></i>Sincronizza Questa {{ __('common.language_selector') }}
                 </a>
             </div>
         </div>
@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showMissingKeys(languageCode, missingKeys) {
-    let content = `<h6>Lingua: <strong>${languageCode.toUpperCase()}</strong></h6>`;
+    let content = `<h6>{{ __('common.language_selector') }}: <strong>${languageCode.toUpperCase()}</strong></h6>`;
     content += '<div class="mt-3">';
 
     for (const [file, keys] of Object.entries(missingKeys)) {
@@ -370,7 +370,7 @@ function deleteLanguage(languageCode, languageName) {
     }
 
     Swal.fire({
-        title: 'Elimina Lingua',
+        title: 'Elimina {{ __('common.language_selector') }}',
         text: `Sei sicuro di voler eliminare la lingua "${languageName}" (${languageCode.toUpperCase()})?`,
         icon: 'warning',
         showCancelButton: true,
@@ -463,7 +463,7 @@ function syncSingleLanguage(language) {
     }
 
     Swal.fire({
-        title: 'Sincronizza Lingua',
+        title: 'Sincronizza {{ __('common.language_selector') }}',
         text: `Sincronizzare la lingua ${language.toUpperCase()} con le chiavi italiane?`,
         icon: 'question',
         showCancelButton: true,
@@ -483,7 +483,7 @@ function syncSingleLanguage(language) {
                 }
             });
 
-            // Invia richiesta AJAX
+            // {{ __('videos.send') }} richiesta AJAX
             fetch('{{ route("admin.translations.sync") }}', {
                 method: 'POST',
                 headers: {
@@ -535,7 +535,7 @@ function showIncompleteKeys(language) {
     // Mostra i dettagli delle chiavi incomplete per l'italiano
     const missingKeys = @json($missingKeys);
     if (missingKeys[language] && Object.keys(missingKeys[language]).length > 0) {
-        let content = `<h6>Lingua: <strong>${language.toUpperCase()}</strong> (Riferimento)</h6>`;
+        let content = `<h6>{{ __('common.language_selector') }}: <strong>${language.toUpperCase()}</strong> (Riferimento)</h6>`;
         content += '<div class="mt-3">';
 
         for (const [file, keys] of Object.entries(missingKeys[language])) {
@@ -578,7 +578,7 @@ function showMissingKeys(language) {
     // Mostra i dettagli delle chiavi mancanti per la lingua specifica
     const missingKeys = @json($missingKeys);
     if (missingKeys[language] && Object.keys(missingKeys[language]).length > 0) {
-        let content = `<h6>Lingua: <strong>${language.toUpperCase()}</strong></h6>`;
+        let content = `<h6>{{ __('common.language_selector') }}: <strong>${language.toUpperCase()}</strong></h6>`;
         content += '<div class="mt-3">';
 
         for (const [file, keys] of Object.entries(missingKeys[language])) {
@@ -638,7 +638,7 @@ function syncLanguages() {
                 }
             });
 
-            // Invia richiesta AJAX
+            // {{ __('videos.send') }} richiesta AJAX
             fetch('{{ route("admin.translations.sync") }}', {
                 method: 'POST',
                 headers: {

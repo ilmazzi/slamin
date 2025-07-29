@@ -97,13 +97,13 @@
                                                             <a href=""> Chat </a>
                                                         </li>
                                                         <li>
-                                                            <a href=""> Email Page </a>
+                                                            <a href=""> {{ __('permissions.email') }} Page </a>
                                                             <ul class="second-part list-unstyled">
                                                                 <li>
-                                                                    <a href=""> Email </a>
+                                                                    <a href=""> {{ __('permissions.email') }} </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href=""> Read Email </a>
+                                                                    <a href=""> Read {{ __('permissions.email') }} </a>
                                                                 </li>
                                                             </ul>
                                                         </li>
@@ -140,7 +140,7 @@
                                                                     <a href=""> Checkout</a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="">Wishlist </a>
+                                                                    <a href="">{{ __('wishlist.wishlist') }} </a>
                                                                 </li>
                                                             </ul>
                                                         </li>
@@ -294,7 +294,7 @@
                                                             <a href=""> Animation</a>
                                                         </li>
                                                         <li>
-                                                            <a href=""> Video Embed</a>
+                                                            <a href=""> {{ __('common.video') }} Embed</a>
                                                         </li>
                                                         <li>
                                                             <a href="">Tour</a>
@@ -627,10 +627,10 @@
                                                     <a href="">Kanban board</a>
                                                 </li>
                                                 <li>
-                                                    <a href="">Email-Page</a>
+                                                    <a href="">{{ __('permissions.email') }}-Page</a>
                                                     <ul class="second-part list-unstyled">
                                                         <li>
-                                                            <a href="">Email</a>
+                                                            <a href="">{{ __('permissions.email') }}</a>
                                                             <div class="content-box">
                                                                 <p>Creating effective content for an e-commerce email page involves presenting
                                                                     critical email marketing metrics and performance indicators.</p>

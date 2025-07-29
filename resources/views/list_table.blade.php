@@ -60,7 +60,7 @@
                                                     </div>
 
                                                     <div class="email mb-3">
-                                                        <label class="form-label">Email :</label>
+                                                        <label class="form-label">{{ __('permissions.email') }} :</label>
                                                         <input class="form-control" type="email" id="email-field" placeholder="email" required>
                                                     </div>
 
@@ -112,7 +112,7 @@
                                         </th>
                                         <th class="d-none">ID</th>
                                         <th class="sort" data-sort="employee" scope="col">Employee</th>
-                                        <th class="sort" data-sort="email" scope="col">Email</th>
+                                        <th class="sort" data-sort="email" scope="col">{{ __('permissions.email') }}</th>
                                         <th class="sort" data-sort="contact" scope="col">contact</th>
                                         <th class="sort" data-sort="date" scope="col">Joining Date</th>
                                         <th class="sort" data-sort="status" scope="col">Status</th>

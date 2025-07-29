@@ -9,13 +9,13 @@
         <div class="col-12">
             <h4 class="main-title">
                 <i class="ph ph-pencil me-2"></i>
-                Modifica Traduzioni
+                {{ __('permissions.modify') }} Traduzioni
             </h4>
             <ul class="app-line-breadcrumbs mb-2">
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>

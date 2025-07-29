@@ -293,7 +293,7 @@
                                     <div class="card hover-effect">
                                         <div class="position-relative">
                                             @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
-                                                <!-- Thumbnail con overlay play -->
+                                                <!-- {{ __('common.thumbnail') }} con overlay play -->
                                                 <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
                                                     <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                                                     <!-- Overlay play button -->
@@ -309,7 +309,7 @@
                                                             @if($video->duration && $video->duration > 0)
                                                                 {{ $video->formatted_duration }}
                                                             @else
-                                                                <span title="Durata non disponibile">--:--</span>
+                                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
                                                             @endif
                                                         </small>
                                                     </div>
@@ -334,7 +334,7 @@
                                                             @if($video->duration && $video->duration > 0)
                                                                 {{ $video->formatted_duration }}
                                                             @else
-                                                                <span title="Durata non disponibile">--:--</span>
+                                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
                                                             @endif
                                                         </small>
                                                     </div>

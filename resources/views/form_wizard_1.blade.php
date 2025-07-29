@@ -79,7 +79,7 @@
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="mb-3">
-                                                            <label class="form-label f-w-500">Email Address</label>
+                                                            <label class="form-label f-w-500">{{ __('permissions.email') }} Address</label>
                                                             <div>
                                                                 <input type="email" class="form-control" placeholder="@gmail.com">
                                                             </div>
@@ -340,8 +340,8 @@
                                             <input type="text" class="form-control" placeholder="Phone Number" id="username1">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="username2" class="form-label f-w-500">Email Address</label>
-                                            <input type="text" class="form-control" placeholder="Enter Your Email" id="username2">
+                                            <label for="username2" class="form-label f-w-500">{{ __('permissions.email') }} Address</label>
+                                            <input type="text" class="form-control" placeholder="Enter Your {{ __('permissions.email') }}" id="username2">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="city" class="form-label f-w-500">Country</label>
@@ -496,7 +496,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="mb-3">
-                                                <label class="form-label f-w-500">Email Address</label>
+                                                <label class="form-label f-w-500">{{ __('permissions.email') }} Address</label>
                                                 <div>
                                                     <input type="email" class="form-control" placeholder="@gmail.com">
                                                 </div>

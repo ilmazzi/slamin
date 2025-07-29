@@ -13,7 +13,7 @@
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-gauge f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-gauge f-s-16"></i> {{ __('dashboard.dashboard') }}
                             </span>
                         </a>
                     </li>
@@ -48,7 +48,7 @@
                     <div class="d-flex gap-2">
                         <a href="{{ route('admin.moderation.index') }}" class="btn btn-outline-secondary">
                             <i class="ph-duotone ph-arrow-left me-2"></i>
-                            Dashboard
+                            {{ __('dashboard.dashboard') }}
                         </a>
                         <a href="{{ route('admin.moderation.settings') }}" class="btn btn-outline-primary">
                             <i class="ph-duotone ph-gear me-2"></i>
@@ -75,21 +75,21 @@
                                 <label class="form-label">Tipo di Contenuto</label>
                                 <select name="type" class="form-select">
                                     <option value="all" {{ $type == 'all' ? 'selected' : '' }}>Tutti i contenuti</option>
-                                    <option value="videos" {{ $type == 'videos' ? 'selected' : '' }}>Video</option>
+                                    <option value="videos" {{ $type == 'videos' ? 'selected' : '' }}>{{ __('common.video') }}</option>
                                     <option value="poems" {{ $type == 'poems' ? 'selected' : '' }}>Poesie</option>
                                     <option value="events" {{ $type == 'events' ? 'selected' : '' }}>Eventi</option>
-                                    <option value="photos" {{ $type == 'photos' ? 'selected' : '' }}>Foto</option>
+                                    <option value="photos" {{ $type == 'photos' ? 'selected' : '' }}>{{ __('common.photo') }}</option>
                                     <option value="carousels" {{ $type == 'carousels' ? 'selected' : '' }}>Caroselli</option>
-                                    <option value="video_comments" {{ $type == 'video_comments' ? 'selected' : '' }}>Commenti Video</option>
-                                    <option value="poem_comments" {{ $type == 'poem_comments' ? 'selected' : '' }}>Commenti Poesie</option>
+                                    <option value="video_comments" {{ $type == 'video_comments' ? 'selected' : '' }}>{{ __('common.comments_section') }} {{ __('common.video') }}</option>
+                                    <option value="poem_comments" {{ $type == 'poem_comments' ? 'selected' : '' }}>{{ __('common.comments_section') }} Poesie</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-6">
-                                <label class="form-label">Stato</label>
+                                <label class="form-label">{{ __('invitations.status') }}</label>
                                 <select name="status" class="form-select">
-                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>In Attesa</option>
+                                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>{{ __('invitations.pending_invitations') }}</option>
                                     <option value="approved" {{ $status == 'approved' ? 'selected' : '' }}>Approvati</option>
-                                    <option value="rejected" {{ $status == 'rejected' ? 'selected' : '' }}>Rifiutati</option>
+                                    <option value="rejected" {{ $status == 'rejected' ? 'selected' : '' }}>{{ __('invitations.rejected_invitations') }}</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 col-md-6">

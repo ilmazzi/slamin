@@ -86,7 +86,7 @@ window.addEventListener('load', function() {
         console.error('Slider not found!');
     }
 
-    // Wishlist è gestita globalmente da WishlistManager
+    // {{ __('wishlist.wishlist') }} è gestita globalmente da WishlistManager
     // Non serve codice duplicato qui
 });
 </script>
@@ -213,7 +213,7 @@ window.addEventListener('load', function() {
                                                 </p>
                                                 <div class="d-flex gap-1">
                                                     @auth
-                                                        <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                                                        <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
                                                             <i class="ph-duotone ph-heart wishlist-icon"></i>
                                                         </button>
                                                     @endauth
@@ -234,7 +234,7 @@ window.addEventListener('load', function() {
         </div>
         @endif
 
-        <!-- Most Popular Video Section -->
+        <!-- Most Popular {{ __('common.video') }} Section -->
         @if($mostPopularVideo)
         <div class="row mb-4">
             <div class="col-12">
@@ -244,7 +244,7 @@ window.addEventListener('load', function() {
                             <div class="p-3 p-md-4">
                                 <!-- Mobile First Layout -->
                                 <div class="row">
-                                    <!-- Video Thumbnail Column -->
+                                    <!-- {{ __('common.video') }} {{ __('common.thumbnail') }} Column -->
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
                                             <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
@@ -311,7 +311,7 @@ window.addEventListener('load', function() {
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm">
                                                         <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                        Guarda Video
+                                                        Guarda {{ __('common.video') }}
                                                     </a>
                                                     <x-report-button :content="$mostPopularVideo" type="video" size="sm" />
                                                 </div>
@@ -343,7 +343,7 @@ window.addEventListener('load', function() {
                                                             <i class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
                                                         </div>
                                                         <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->comment_count) }}</h6>
-                                                        <small class="text-muted f-s-10">Commenti</small>
+                                                        <small class="text-muted f-s-10">{{ __('common.comments_section') }}</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-6 col-md-3">
@@ -352,7 +352,7 @@ window.addEventListener('load', function() {
                                                             <i class="ph-duotone ph-hands-clapping f-s-16 f-s-md-18 text-danger"></i>
                                                         </div>
                                                         <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->snaps()->count()) }}</h6>
-                                                        <small class="text-muted f-s-10">Snap</small>
+                                                        <small class="text-muted f-s-10">{{ __('common.snap') }}</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -468,7 +468,7 @@ window.addEventListener('load', function() {
                                 <div class="details">
                                     <div>
                                         <h4 class="text-primary">{{ $user->videos_count }}</h4>
-                                        <p class="text-secondary">Video</p>
+                                        <p class="text-secondary">{{ __('common.video') }}</p>
                                     </div>
                                     <div>
                                         <h4 class="text-primary">{{ $user->followers_count ?? 0 }}</h4>

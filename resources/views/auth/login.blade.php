@@ -192,25 +192,25 @@
                         🎭 Slam In
                     </div>
                     <div class="welcome-text">
-                        Bentornato! Accedi alla tua community Slamin
+                        {{ __('login.welcome_text') }}
                     </div>
 
                     <div class="feature-list">
                         <div class="feature-item">
                             <i class="bi bi-calendar-event"></i>
-                            <span>Eventi e spettacoli</span>
+                            <span>{{ __('login.events_and_shows') }}</span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-people"></i>
-                            <span>Community di poeti</span>
+                            <span>{{ __('login.poets_community') }}</span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-mic"></i>
-                            <span>Condividi le tue performance</span>
+                            <span>{{ __('login.share_your_performances') }}</span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-trophy"></i>
-                            <span>Partecipa ai concorsi</span>
+                            <span>{{ __('login.participate_in_competitions') }}</span>
                         </div>
                     </div>
                 </div>
@@ -223,8 +223,8 @@
                         <div class="d-lg-none mb-3">
                             <img src="{{ asset('assets/images/logo.png') }}" alt="Slam In Logo" class="img-fluid" style="max-width: 180px;">
                         </div>
-                        <h2>🔐 <strong>Accedi al tuo account</strong></h2>
-                        <p class="text-muted">Entra in Slam In e scopri il mondo dello slam italiano</p>
+                        <h2>🔐 <strong>{{ __('login.login_to_your_account') }}</strong></h2>
+                        <p class="text-muted">{{ __('login.enter_slam_in_and_discover_the_italian_slam_world') }}</p>
                     </div>
 
                     @if($errors->any())
@@ -246,10 +246,10 @@
                     <form method="POST" action="{{ route('login.process') }}">
                         @csrf
 
-                        <!-- Email -->
+                        <!-- {{ __('login.email') }} -->
                         <div class="mb-3">
                             <label for="email" class="form-label">
-                                <strong>📧 Email</strong>
+                                <strong>📧 {{ __('login.email') }}</strong>
                             </label>
                             <input type="email"
                                    class="form-control @error('email') is-invalid @enderror"
@@ -257,7 +257,7 @@
                                    name="email"
                                    value="{{ old('email') }}"
                                    required
-                                   placeholder="inserisci@tuaemail.com">
+                                   placeholder="{{ __('login.email_placeholder') }}">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -266,14 +266,14 @@
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">
-                                <strong>🔑 Password</strong>
+                                <strong>🔑 {{ __('login.password') }}</strong>
                             </label>
                             <input type="password"
                                    class="form-control @error('password') is-invalid @enderror"
                                    id="password"
                                    name="password"
                                    required
-                                   placeholder="la tua password">
+                                   placeholder="{{ __('login.password_placeholder') }}">
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -283,23 +283,23 @@
                         <div class="mb-3 form-check">
                             <input class="form-check-input" type="checkbox" id="remember" name="remember">
                             <label class="form-check-label" for="remember">
-                                Ricordami
+                                {{ __('login.remember_me') }}
                             </label>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="d-grid mb-3">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                🎭 Entra in Slam In
+                                    🎭 {{ __('login.enter_slam_in') }}
                             </button>
                         </div>
 
                         <!-- Links -->
                         <div class="text-center">
                             <p class="mb-0">
-                                Non hai ancora un account?
+                                {{ __('login.no_account') }}
                                 <a href="{{ route('register') }}" class="back-link">
-                                    Registrati qui
+                                    {{ __('login.register_here') }}
                                 </a>
                             </p>
                         </div>

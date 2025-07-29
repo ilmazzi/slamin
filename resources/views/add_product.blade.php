@@ -197,7 +197,7 @@
                     <div class="card-body">
                         <div class="app-product-section">
                             <div class="main-title">
-                                <h6>Product Media</h6>
+                                <h6>Product {{ __('common.media_section') }}</h6>
                             </div>
 
                             <div>

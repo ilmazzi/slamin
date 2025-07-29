@@ -672,7 +672,7 @@
                                 <!-- <img src="{{asset('../assets/images/form/done.png')}}" alt=""> -->
                                             </div>
                                             <h5 class="text-success"> Your Order #7AD6728 Placed, Thank you!</h5>
-                                            <p>Confirmation will be sent to Your Email</p>
+                                            <p>Confirmation will be sent to Your {{ __('permissions.email') }}</p>
                                         </div>
                                         <div class="app-divider-v dashed"></div>
                                         <div>
@@ -879,8 +879,8 @@
                                             </div>
                                             <div class="col-md-6 col-xl-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Email Address</label>
-                                                    <input type="email" class="form-control" placeholder="Enter Your Email" required="">
+                                                    <label class="form-label">{{ __('permissions.email') }} Address</label>
+                                                    <input type="email" class="form-control" placeholder="Enter Your {{ __('permissions.email') }}" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-xl-4">
@@ -944,7 +944,7 @@
 
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Email</label>
+                                                    <label class="form-label">{{ __('permissions.email') }}</label>
                                                     <input type="email" class="form-control">
                                                 </div>
                                             </div>
@@ -1352,7 +1352,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="col-sm-2 col-form-label">Email</label>
+                                                        <label class="col-sm-2 col-form-label">{{ __('permissions.email') }}</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" readonly class="form-control-plaintext" value="email@gmail.com">
                                                         </div>
@@ -1433,7 +1433,7 @@
                                                         </address>
                                                         <p>Zip: 456730</p>
                                                         <p>Service : Application</p>
-                                                        <p>Email : ar12@gmail.com</p>
+                                                        <p>{{ __('permissions.email') }} : ar12@gmail.com</p>
                                                         <p>+91 6926578398</p>
                                                     </div>
                                                 </div>

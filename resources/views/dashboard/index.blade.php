@@ -199,7 +199,7 @@
 
         <!-- Contenuto sotto il calendario e statistiche -->
         <div class="row">
-            <!-- Titolo Azioni Rapide -->
+            <!-- Titolo {{ __('invitations.actions') }} Rapide -->
             <div class="col-12 mb-3">
                 <div class="text-center">
                     <h5 class="text-primary mb-2 f-w-600">
@@ -278,7 +278,7 @@
             @endforeach
         </div>
 
-        <!-- Wishlist Slider -->
+        <!-- {{ __('wishlist.wishlist') }} Slider -->
         @if(auth()->user()->wishlistedEvents()->count() > 0)
         <div class="row mt-4">
             <div class="col-12">
@@ -398,9 +398,9 @@
                                         <i class="ph ph-pen-nib f-s-20 text-white"></i>
                                     </div>
                                     <h6 class="text-success f-w-600 mb-1">{{ __('dashboard.poet_section') }}</h6>
-                                    <p class="text-muted f-s-12 mb-2">Sezione specifica per poeti in sviluppo...</p>
+                                    <p class="text-muted f-s-12 mb-2">{{ __('dashboard.poet_section_description') }}</p>
                                     <a href="#" class="btn btn-success btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
                                     </a>
                                 </div>
                             </div>
@@ -415,9 +415,9 @@
                                         <i class="ph ph-calendar-plus f-s-20 text-white"></i>
                                     </div>
                                     <h6 class="text-danger f-w-600 mb-1">{{ __('dashboard.organizer_section') }}</h6>
-                                    <p class="text-muted f-s-12 mb-2">Sezione organizzatori eventi in sviluppo...</p>
+                                    <p class="text-muted f-s-12 mb-2">{{ __('dashboard.organizer_section_description') }}</p>
                                     <a href="#" class="btn btn-danger btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
                                     </a>
                                 </div>
                             </div>
@@ -432,9 +432,9 @@
                                         <i class="ph ph-buildings f-s-20 text-white"></i>
                                     </div>
                                     <h6 class="text-info f-w-600 mb-1">{{ __('dashboard.venue_section') }}</h6>
-                                    <p class="text-muted f-s-12 mb-2">Sezione gestione venue in sviluppo...</p>
+                                    <p class="text-muted f-s-12 mb-2">{{ __('dashboard.venue_section_description') }}</p>
                                     <a href="#" class="btn btn-info btn-sm">
-                                        <i class="ph ph-arrow-right me-1"></i>Accedi
+                                        <i class="ph ph-arrow-right me-1"></i>{{ __('auth.login') }}
                                     </a>
                                 </div>
                             </div>
@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Wishlist toggle functionality
+    // {{ __('wishlist.wishlist') }} toggle functionality
     document.addEventListener('click', function(e) {
         if (e.target.closest('.wishlist-toggle')) {
             e.preventDefault();

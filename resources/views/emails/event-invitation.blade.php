@@ -61,7 +61,7 @@ Come **{{ $role }}**, sarai parte fondamentale di questo evento Poetry Slam!
 @if($event->entry_fee > 0)
 - **Costo partecipazione:** €{{ number_format($event->entry_fee, 2) }}
 @else
-- **Evento gratuito** 🎉
+- **{{ __('invitations.event') }} gratuito** 🎉
 @endif
 @if($event->max_participants)
 - **Posti limitati:** {{ $event->max_participants }} partecipanti

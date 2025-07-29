@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Modifica Profilo - Slamin')
+@section('title', '{{ __('permissions.modify') }} Profilo - Slamin')
 
 @section('css')
 @endsection
@@ -132,7 +132,7 @@
                             </div>
                         </div>
 
-                        <!-- Social Media -->
+                        <!-- Social {{ __('common.media_section') }} -->
                         <div class="app-divider-v">
                             <span class="text-primary f-w-600">{{ __('profile.social_media') }}</span>
                         </div>
@@ -385,9 +385,9 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
                 }
 
                 if (typeof Swal !== 'undefined') {
-                    Swal.fire('Successo!', 'Foto profilo aggiornata con successo', 'success');
+                    Swal.fire('Successo!', '{{ __('common.photo') }} profilo aggiornata con successo', 'success');
                 } else {
-                    alert('Foto profilo aggiornata con successo!');
+                    alert('{{ __('common.photo') }} profilo aggiornata con successo!');
                 }
             } else {
                 if (typeof Swal !== 'undefined') {

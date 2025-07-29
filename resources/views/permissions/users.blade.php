@@ -175,7 +175,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="bg-light-primary h-40 w-40 d-flex-center b-r-50 position-relative overflow-hidden me-3">
-                                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="Avatar" class="img-fluid b-r-50">
+                                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="{{ __('common.avatar') }}" class="img-fluid b-r-50">
                                             </div>
                                             <div>
                                                 <h6 class="mb-0 f-w-600">{{ $user->name }}</h6>
@@ -260,7 +260,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="bg-light-primary h-40 w-40 d-flex-center b-r-50 position-relative overflow-hidden me-3">
-                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="Avatar" class="img-fluid b-r-50">
+                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="{{ __('common.avatar') }}" class="img-fluid b-r-50">
                             </div>
                             <div>
                                 <h6 class="mb-0 f-w-600 text-primary">{{ $user->name }}</h6>
@@ -340,7 +340,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users me-2"></i>
-                    Gestione Ruoli Utente
+                    Gestione {{ __('permissions.roles') }} {{ __('permissions.user') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -349,11 +349,11 @@
                 <input type="hidden" name="user_id" id="userRolesUserId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Utente</label>
+                        <label class="form-label">{{ __('permissions.user') }}</label>
                         <input type="text" class="form-control" id="userRolesUserName" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Ruoli Disponibili</label>
+                        <label class="form-label">{{ __('permissions.roles') }} Disponibili</label>
                         <div class="row">
                             @foreach($roles as $role)
                             <div class="col-md-6 mb-3">
@@ -375,7 +375,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="ph ph-check me-2"></i>
-                        Salva Ruoli
+                        Salva {{ __('permissions.roles') }}
                     </button>
                 </div>
             </form>
@@ -390,7 +390,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-shield-check me-2"></i>
-                    Gestione Permessi Diretti Utente
+                    Gestione Permessi Diretti {{ __('permissions.user') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -399,7 +399,7 @@
                 <input type="hidden" name="user_id" id="userPermissionsUserId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Utente</label>
+                        <label class="form-label">{{ __('permissions.user') }}</label>
                         <input type="text" class="form-control" id="userPermissionsUserName" readonly>
                     </div>
                     <div class="mb-3">
@@ -453,7 +453,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-eye me-2"></i>
-                    Dettagli Utente
+                    Dettagli {{ __('permissions.user') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -471,7 +471,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users-plus me-2"></i>
-                    Assegnazione Massiva Ruoli
+                    Assegnazione Massiva {{ __('permissions.roles') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -486,7 +486,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Ruoli da Assegnare</label>
+                        <label class="form-label">{{ __('permissions.roles') }} da Assegnare</label>
                         <div class="row">
                             @foreach($roles as $role)
                             <div class="col-md-6 mb-2">
@@ -508,7 +508,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="ph ph-check me-2"></i>
-                        Assegna Ruoli
+                        Assegna {{ __('permissions.roles') }}
                     </button>
                 </div>
             </form>
@@ -560,17 +560,17 @@ function viewUserDetails(userId) {
                 let content = `
                     <div class="row">
                         <div class="col-md-6">
-                            <h6>Informazioni Utente</h6>
+                            <h6>Informazioni {{ __('permissions.user') }}</h6>
                             <table class="table table-sm">
                                 <tr><td><strong>Nome:</strong></td><td>${data.user.name}</td></tr>
-                                <tr><td><strong>Email:</strong></td><td>${data.user.email}</td></tr>
+                                <tr><td><strong>{{ __('permissions.email') }}:</strong></td><td>${data.user.email}</td></tr>
                                 <tr><td><strong>Nickname:</strong></td><td>${data.user.nickname || 'N/A'}</td></tr>
-                                <tr><td><strong>Stato:</strong></td><td>${data.user.status || 'N/A'}</td></tr>
+                                <tr><td><strong>{{ __('invitations.status') }}:</strong></td><td>${data.user.status || 'N/A'}</td></tr>
                                 <tr><td><strong>Registrato:</strong></td><td>${data.user.created_at}</td></tr>
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <h6>Ruoli Assegnati</h6>
+                            <h6>{{ __('permissions.roles') }} Assegnati</h6>
                             <div class="mb-3">
                                 ${data.user.roles.map(role => `<span class="badge bg-primary me-1">${role.display_name || role.name}</span>`).join('')}
                             </div>

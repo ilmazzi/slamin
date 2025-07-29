@@ -14,7 +14,7 @@
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                             </span>
                         </a>
                     </li>
@@ -43,7 +43,7 @@
                     <div class="btn-group">
                         <a href="{{ route('admin.carousels.edit', $carousel) }}" class="btn btn-primary hover-effect">
                             <i class="ph-duotone ph-pencil f-s-16 me-2"></i>
-                            Modifica
+                            {{ __('permissions.modify') }}
                         </a>
                         <a href="{{ route('admin.carousels.index') }}" class="btn btn-secondary hover-effect">
                             <i class="ph-duotone ph-arrow-left f-s-16 me-2"></i>
@@ -55,13 +55,13 @@
         </div>
 
         <div class="row">
-            <!-- Media Preview -->
+            <!-- {{ __('common.media_section') }} Preview -->
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
                             <i class="ph-duotone ph-image f-s-16 me-2"></i>
-                            Anteprima Media
+                            Anteprima {{ __('common.media_section') }}
                         </h6>
                     </div>
                     <div class="card-body">
@@ -73,7 +73,7 @@
                                 </video>
                                 <p class="text-muted mt-2">
                                     <i class="ph-duotone ph-video-camera f-s-14 me-1"></i>
-                                    Video attivo
+                                    {{ __('common.video') }} attivo
                                 </p>
                             </div>
                         @else
@@ -171,12 +171,12 @@
                     <div class="card-header">
                         <h6 class="card-title mb-0">
                             <i class="ph-duotone ph-gear f-s-16 me-2"></i>
-                            Stato e Impostazioni
+                            {{ __('invitations.status') }} e Impostazioni
                         </h6>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <strong>Stato:</strong>
+                            <strong>{{ __('invitations.status') }}:</strong>
                             @if($carousel->is_active)
                                 <span class="badge bg-success ms-2">
                                     <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Attivo
@@ -189,7 +189,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <strong>Stato Attuale:</strong>
+                            <strong>{{ __('invitations.status') }} Attuale:</strong>
                             @if($carousel->isCurrentlyActive())
                                 <span class="badge bg-success ms-2">
                                     <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Visibile

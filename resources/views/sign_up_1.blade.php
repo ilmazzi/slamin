@@ -31,8 +31,8 @@
                                         <input class="form-control" placeholder="Enter Your Username" type="text">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input class="form-control" placeholder="Enter Your Email" type="email">
+                                        <label class="form-label">{{ __('permissions.email') }}</label>
+                                        <input class="form-control" placeholder="Enter Your {{ __('permissions.email') }}" type="email">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>

@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="alert alert-danger">
                 <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                Video non trovato.
+                {{ __('common.video') }} non trovato.
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <!-- Video Player -->
+        <!-- {{ __('common.video') }} Player -->
         <div class="row">
             <div class="col-lg-8">
                 <div class="card hover-effect">
@@ -70,7 +70,7 @@
                                     </button>
                                 </div>
 
-                                <!-- Snap Markers sulla Progress Bar del Player -->
+                                <!-- {{ __('common.snap') }} Markers sulla Progress Bar del Player -->
                                 <div class="snap-markers-overlay position-absolute" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
 
 
@@ -140,7 +140,7 @@
                             <!-- Error message -->
                             <div class="alert alert-danger mt-3" id="videoError" style="display: none;">
                                 <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                                <span id="errorMessage">Errore nel caricamento del video</span>
+                                <span id="errorMessage">{{ __('videos.video_error') }}</span>
                             </div>
                         @elseif($video->file_path && Storage::exists($video->file_path))
                             <!-- Player locale (fallback) -->
@@ -149,11 +149,11 @@
                                 Il tuo browser non supporta la riproduzione video.
                             </video>
                         @else
-                            <!-- Video non disponibile -->
+                            <!-- {{ __('videos.video_unavailable') }} -->
                             <div class="d-flex align-items-center justify-content-center" style="height: 500px; background-color: #f8f9fa;">
                                 <div class="text-center">
                                     <i class="ph-duotone ph-video-camera-slash f-s-48 text-muted mb-3"></i>
-                                    <h5 class="text-muted">Video non disponibile</h5>
+                                    <h5 class="text-muted">{{ __('videos.video_unavailable') }}</h5>
                                     <p class="text-muted">Il video potrebbe essere in fase di elaborazione o non essere più disponibile.</p>
                                     @if($video->peertube_url)
                                         <a href="{{ $video->peertube_url }}" target="_blank" class="btn btn-primary">
@@ -166,7 +166,7 @@
                     </div>
                 </div>
 
-                <!-- Video Info -->
+                <!-- {{ __('common.video') }} Info -->
                 <div class="card hover-effect mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -208,7 +208,7 @@
                             <p class="card-text">{{ $video->description }}</p>
                         @endif
 
-                        <!-- Video Actions -->
+                        <!-- {{ __('common.video') }} Actions -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
                                 <!-- Like Button -->
@@ -223,10 +223,10 @@
                                     <span id="dislikeCount">{{ $video->dislike_count }}</span>
                                 </button>
 
-                                <!-- Snap Button -->
+                                <!-- {{ __('common.snap') }} Button -->
                                 <button type="button" class="btn btn-outline-dark hover-effect" onclick="showSnapModal()">
                                     <i class="ph-duotone ph-hands-clapping f-s-14 me-1"></i>
-                                    Snap
+                                    {{ __('common.snap') }}
                                 </button>
 
                                 <!-- Report Button -->
@@ -247,7 +247,7 @@
                     <div class="card-header">
                         <h6 class="card-title mb-0">
                             <i class="ph-duotone ph-chat-circle f-s-16 me-2"></i>
-                            Commenti (<span id="commentCount">{{ $video->comment_count }}</span>)
+                            {{ __('common.comments_section') }} (<span id="commentCount">{{ $video->comment_count }}</span>)
                         </h6>
                     </div>
                     <div class="card-body">
@@ -269,7 +269,7 @@
                             @else
                             <div class="alert alert-info">
                                 <i class="ph-duotone ph-info f-s-16 me-2"></i>
-                                <a href="{{ route('login') }}">Accedi</a> per lasciare un commento.
+                                <a href="{{ route('login') }}">{{ __('auth.login') }}</a> per lasciare un commento.
                             </div>
                             @endauth
                         </div>
@@ -320,7 +320,7 @@
             </div>
 
             <div class="col-lg-4">
-                <!-- Video Stats -->
+                <!-- {{ __('common.video') }} Stats -->
                 <div class="card hover-effect">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
@@ -339,18 +339,18 @@
                             <div class="col-4">
                                 <div class="border-end">
                                     <h5 class="mb-1" id="likeCountStats">{{ $video->like_count }}</h5>
-                                    <small class="text-muted">Mi piace</small>
+                                    <small class="text-muted">{{ __('videos.like') }}</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <h5 class="mb-1" id="commentCountStats">{{ $video->comment_count }}</h5>
-                                <small class="text-muted">Commenti</small>
+                                <small class="text-muted">{{ __('common.comments_section') }}</small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Video Details -->
+                <!-- {{ __('common.video') }} Details -->
                 <div class="card hover-effect mt-3">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
@@ -392,7 +392,7 @@
                     <div class="card-header">
                         <h6 class="card-title mb-0">
                             <i class="ph-duotone ph-hands-clapping f-s-16 me-2"></i>
-                            Snap Popolari
+                            {{ __('common.snap') }} Popolari
                         </h6>
                     </div>
                     <div class="card-body">
@@ -400,9 +400,9 @@
                             <div class="d-flex align-items-center mb-2">
                                 <div class="flex-shrink-0 position-relative">
                                                                     @if($video->thumbnail_path)
-                                    <img src="{{ $video->thumbnail_url }}" alt="Snap" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                    <img src="{{ $video->thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
                                     @elseif($video->peertube_thumbnail_url)
-                                        <img src="{{ $video->peertube_thumbnail_url }}" alt="Snap" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                        <img src="{{ $video->peertube_thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
                                     @else
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 30px;">
                                             <i class="ph-duotone ph-video-camera f-s-16 text-muted"></i>
@@ -431,23 +431,23 @@
     </div>
 </div>
 
-<!-- Snap Modal -->
+<!-- {{ __('common.snap') }} Modal -->
 <div class="modal fade" id="snapModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crea Snap</h5>
+                <h5 class="modal-title">Crea {{ __('common.snap') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="snapForm">
                     <div class="mb-3">
                         <label for="snapTitle" class="form-label">Titolo (opzionale)</label>
-                        <input type="text" class="form-control" id="snapTitle" placeholder="Titolo dello snap">
+                        <input type="text" class="form-control" id="snapTitle" placeholder="{{ __('common.snap_title') }}">
                     </div>
                     <div class="mb-3">
                         <label for="snapDescription" class="form-label">Descrizione (opzionale)</label>
-                        <textarea class="form-control" id="snapDescription" rows="3" placeholder="Descrizione dello snap"></textarea>
+                        <textarea class="form-control" id="snapDescription" rows="3" placeholder="{{ __('common.snap_description') }}"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Timestamp: <span id="currentTime">00:00</span></label>
@@ -457,7 +457,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                <button type="button" class="btn btn-primary" onclick="createSnap()">Crea Snap</button>
+                <button type="button" class="btn btn-primary" onclick="createSnap()">Crea {{ __('common.snap') }}</button>
             </div>
         </div>
     </div>
@@ -467,7 +467,7 @@
 
 @section('script')
 <style>
-/* Snap Markers sulla Progress Bar del Player */
+/* {{ __('common.snap') }} Markers sulla Progress Bar del Player */
 .snap-markers-overlay {
     z-index: 10;
 }
@@ -646,7 +646,7 @@ function showSnapModal() {
     // Ferma il video se è in riproduzione
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-        console.log('⏸️ Video fermato per creazione snap');
+        console.log('⏸️ {{ __('common.video') }} fermato per creazione snap');
     }
 
     // Aggiorna il tempo nel modal prima di mostrarlo
@@ -678,7 +678,7 @@ function createSnap() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log('✅ Snap creato con successo:', data.snap);
+            console.log('✅ {{ __('common.snap') }} creato con successo:', data.snap);
 
             document.getElementById('snapTitle').value = '';
             document.getElementById('snapTimestamp').value = '0';
@@ -766,7 +766,7 @@ setInterval(function() {
 // Debug: mostra lo stato del video ogni 30 secondi se in riproduzione
 setInterval(function() {
     if (isVideoPlaying) {
-        console.log('📊 Stato video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
+        console.log('📊 {{ __('invitations.status') }} video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
     }
 }, 30000);
 });
@@ -823,7 +823,7 @@ async function initializeVideoPlayer() {
 
         // Gestisci il caso in cui il video è ancora in elaborazione
         if (data.status === 'processing') {
-            console.log('⏳ Video ancora in elaborazione su PeerTube');
+            console.log('⏳ {{ __('common.video') }} ancora in elaborazione su PeerTube');
 
             // Nascondi loading e mostra messaggio di elaborazione
             if (loading) loading.style.display = 'none';
@@ -884,14 +884,14 @@ async function initializeVideoPlayer() {
             throw new Error(data.error || 'Nessun file video disponibile');
         }
     } catch (error) {
-        console.error('❌ Errore nel caricamento del video:', error);
+        console.error('❌ {{ __('videos.video_error') }}:', error);
 
         // Nascondi loading e mostra errore
         if (loading) loading.style.display = 'none';
         if (error) {
             error.style.display = 'block';
             document.getElementById('errorMessage').textContent =
-                'Errore nel caricamento del video: ' + error.message;
+                '{{ __('videos.video_error') }}: ' + error.message;
         }
     }
 }
@@ -899,7 +899,7 @@ async function initializeVideoPlayer() {
 function setupVideoEventListeners() {
     // Event listener per quando il video è caricato
     videoPlayer.addEventListener('loadedmetadata', function() {
-        console.log('🎬 Video caricato - Durata:', videoPlayer.duration);
+        console.log('🎬 {{ __('common.video') }} caricato - Durata:', videoPlayer.duration);
         videoDuration = videoPlayer.duration || videoDuration;
     });
 
@@ -915,24 +915,24 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video può essere riprodotto
     videoPlayer.addEventListener('canplay', function() {
-        console.log('▶️ Video pronto per la riproduzione');
+        console.log('▶️ {{ __('common.video') }} pronto per la riproduzione');
     });
 
     // Event listener per quando il video può essere riprodotto senza interruzioni
     videoPlayer.addEventListener('canplaythrough', function() {
-        console.log('🎯 Video può essere riprodotto completamente');
+        console.log('🎯 {{ __('common.video') }} può essere riprodotto completamente');
     });
 
     // Event listener per play
     videoPlayer.addEventListener('play', function() {
-        console.log('▶️ Video in riproduzione');
+        console.log('▶️ {{ __('common.video') }} in riproduzione');
         isVideoPlaying = true;
         incrementVideoViews();
     });
 
     // Event listener per pause
     videoPlayer.addEventListener('pause', function() {
-        console.log('⏸️ Video in pausa');
+        console.log('⏸️ {{ __('common.video') }} in pausa');
         isVideoPlaying = false;
     });
 
@@ -943,7 +943,7 @@ function setupVideoEventListeners() {
 
     // Event listener per fine video
     videoPlayer.addEventListener('ended', function() {
-        console.log('🏁 Video terminato');
+        console.log('🏁 {{ __('common.video') }} terminato');
         isVideoPlaying = false;
         updatePlayPauseButton();
     });
@@ -963,12 +963,12 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video non può essere riprodotto
     videoPlayer.addEventListener('stalled', function() {
-        console.log('⚠️ Video in stallo - potrebbe non essere accessibile');
+        console.log('⚠️ {{ __('common.video') }} in stallo - potrebbe non essere accessibile');
     });
 
     // Event listener per quando il video non ha dati
     videoPlayer.addEventListener('waiting', function() {
-        console.log('⏳ Video in attesa di dati');
+        console.log('⏳ {{ __('common.video') }} in attesa di dati');
     });
 
             // Event listener per l'icona snap
@@ -1001,7 +1001,7 @@ function createSnapAtCurrentTime() {
     // Ferma il video
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-        console.log('⏸️ Video fermato per creazione snap');
+        console.log('⏸️ {{ __('common.video') }} fermato per creazione snap');
     }
 
     // Mostra il modal con il tempo corrente

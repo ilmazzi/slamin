@@ -249,7 +249,7 @@
                                     <div class="error-content text-center">
                                         <!-- <h1>404!</h1> -->
                                         <h4 class=" mb-3">DO NOT ENTER</h4>
-                                        <button type="button" class="btn btn-light-primary">Back to Dashboard</button>
+                                        <button type="button" class="btn btn-light-primary">Back to {{ __('dashboard.dashboard') }}</button>
                                     </div>
                                 </div>
                             </div>

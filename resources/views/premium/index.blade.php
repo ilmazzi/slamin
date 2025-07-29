@@ -129,7 +129,7 @@
                                         </div>
 
                                         <div class="simple-price-content">
-                                            <!-- Video Limit -->
+                                            <!-- {{ __('common.video') }} Limit -->
                                             <div class="d-flex mb-3">
                                                 <span>
                                                     <i class="ph-bold ph-video-camera bg-success p-1 b-r-100 f-s-12 text-white"></i>

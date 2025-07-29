@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Modifica Slide Carosello')
+@section('title', '{{ __('permissions.modify') }} Slide Carosello')
 
 @section('main-content')
 <div class="page-content">
@@ -9,12 +9,12 @@
         <!-- Header -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">Modifica Slide Carosello</h4>
+                <h4 class="main-title">{{ __('permissions.modify') }} Slide Carosello</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                             </span>
                         </a>
                     </li>
@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Modifica Slide</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('permissions.modify') }} Slide</a>
                     </li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0">
                             <i class="ph-duotone ph-pencil-circle f-s-16 me-2"></i>
-                            Modifica Slide: {{ $carousel->title }}
+                            {{ __('permissions.modify') }} Slide: {{ $carousel->title }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -64,7 +64,7 @@
                                         <div class="form-text">Descrizione opzionale che apparirà sotto il titolo</div>
                                     </div>
 
-                                    <!-- Media Upload -->
+                                    <!-- {{ __('common.media_section') }} Upload -->
                                     <div class="mb-3">
                                         <label for="image" class="form-label">Immagine</label>
                                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
@@ -78,12 +78,12 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="video" class="form-label">Video (Opzionale)</label>
+                                        <label for="video" class="form-label">{{ __('common.video') }} (Opzionale)</label>
                                         <input type="file" class="form-control" id="video" name="video" accept="video/*">
                                         <div class="form-text">Lascia vuoto per mantenere il video attuale</div>
                                         @if($carousel->video_path)
                                             <div class="mt-2">
-                                                <small class="text-muted">Video attuale:</small>
+                                                <small class="text-muted">{{ __('common.video') }} attuale:</small>
                                                 <video class="ms-2" style="height: 50px;" controls>
                                                     <source src="{{ $carousel->videoUrl }}" type="video/mp4">
                                                 </video>
@@ -156,12 +156,12 @@
                                         <div class="card-header">
                                             <h6 class="card-title mb-0">
                                                 <i class="ph-duotone ph-info-circle f-s-16 me-2"></i>
-                                                Stato Attuale
+                                                {{ __('invitations.status') }} Attuale
                                             </h6>
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-2">
-                                                <strong>Stato:</strong>
+                                                <strong>{{ __('invitations.status') }}:</strong>
                                                 @if($carousel->isCurrentlyActive())
                                                     <span class="badge bg-success ms-2">Attivo</span>
                                                 @else

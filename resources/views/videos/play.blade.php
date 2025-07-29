@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <!-- Video Player -->
+        <!-- {{ __('common.video') }} Player -->
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <!-- Video Info -->
+                <!-- {{ __('common.video') }} Info -->
                 <div class="card mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -109,7 +109,7 @@
             </div>
 
             <div class="col-lg-4">
-                <!-- Video Stats -->
+                <!-- {{ __('common.video') }} Stats -->
                 <div class="card">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
@@ -128,18 +128,18 @@
                             <div class="col-4">
                                 <div class="border-end">
                                     <h5 class="mb-1">{{ $video->like_count }}</h5>
-                                    <small class="text-muted">Mi piace</small>
+                                    <small class="text-muted">{{ __('videos.like') }}</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <h5 class="mb-1">{{ $video->comment_count }}</h5>
-                                <small class="text-muted">Commenti</small>
+                                <small class="text-muted">{{ __('common.comments_section') }}</small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Video Details -->
+                <!-- {{ __('common.video') }} Details -->
                 <div class="card mt-3">
                     <div class="card-header">
                         <h6 class="card-title mb-0">

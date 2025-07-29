@@ -39,7 +39,7 @@
                         <option value="">Tutte le attività</option>
                         <option value="event_organized">Eventi organizzati</option>
                         <option value="event_participation">Partecipazioni</option>
-                        <option value="video_upload">Video caricati</option>
+                        <option value="video_upload">{{ __('common.video') }} caricati</option>
                     </select>
                     <button class="btn btn-outline-primary hover-effect" onclick="exportActivity()">
                         <i class="ph ph-download me-2"></i>Esporta
@@ -90,7 +90,7 @@
 
                                             @if(isset($activity['url']))
                                             <a href="{{ $activity['url'] }}" class="btn btn-sm btn-outline-{{ $activity['color'] }} hover-effect">
-                                                <i class="ph ph-arrow-right me-1"></i>Vedi Dettagli
+                                                <i class="ph ph-arrow-right me-1"></i>{{ __('common.view_details') }}
                                             </a>
                                             @endif
                                         </div>
@@ -112,7 +112,7 @@
                                 <i class="ph ph-calendar me-2"></i>Vedi Eventi
                             </a>
                             <a href="{{ route('peertube.upload-video') }}" class="btn btn-success hover-effect">
-                                <i class="ph ph-video-camera me-2"></i>Carica Video
+                                <i class="ph ph-video-camera me-2"></i>{{ __('common.upload_video') }}
                             </a>
                         </div>
                     </div>

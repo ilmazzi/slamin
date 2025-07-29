@@ -12,7 +12,7 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a></li>
                         <li class="breadcrumb-item active">Log di Attività</li>
                     </ol>
                 </div>
@@ -124,7 +124,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label">Utente</label>
+                                <label class="form-label">{{ __('permissions.user') }}</label>
                                 <select name="user_id" class="form-select">
                                     <option value="">Tutti gli utenti</option>
                                     @foreach($users as $user)
@@ -192,13 +192,13 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Data/Ora</th>
-                                    <th>Utente</th>
+                                    <th>{{ __('permissions.user') }}</th>
                                     <th>Azione</th>
                                     <th>Categoria</th>
                                     <th>Livello</th>
                                     <th>Descrizione</th>
                                     <th>IP</th>
-                                    <th>Azioni</th>
+                                    <th>{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -280,7 +280,7 @@
                 <div class="card-header">
                     <h4 class="card-title">
                         <i class="ph-duotone ph-chart-bar f-s-18 me-2"></i>
-                        Top Azioni
+                        Top {{ __('invitations.actions') }}
                     </h4>
                 </div>
                 <div class="card-body">
@@ -383,8 +383,8 @@ function showLogDetails(logId) {
                             <table class="table table-sm">
                                 <tr><td><strong>ID:</strong></td><td>${log.id}</td></tr>
                                 <tr><td><strong>Data:</strong></td><td>${new Date(log.created_at).toLocaleString('it-IT')}</td></tr>
-                                <tr><td><strong>Utente:</strong></td><td>${log.user ? log.user.name : 'Sistema'}</td></tr>
-                                <tr><td><strong>Email:</strong></td><td>${log.user ? log.user.email : '-'}</td></tr>
+                                <tr><td><strong>{{ __('permissions.user') }}:</strong></td><td>${log.user ? log.user.name : 'Sistema'}</td></tr>
+                                <tr><td><strong>{{ __('permissions.email') }}:</strong></td><td>${log.user ? log.user.email : '-'}</td></tr>
                                 <tr><td><strong>Azione:</strong></td><td>${log.action}</td></tr>
                                 <tr><td><strong>Categoria:</strong></td><td>${log.category}</td></tr>
                                 <tr><td><strong>Livello:</strong></td><td>${log.level}</td></tr>
@@ -422,8 +422,8 @@ function showLogDetails(logId) {
             }
         })
         .catch(error => {
-            console.error('Errore nel caricamento dettagli log:', error);
-            alert('Errore nel caricamento dei dettagli');
+            console.error('{{ __('common.loading_error') }} dettagli log:', error);
+            alert('{{ __('common.loading_error') }} dei dettagli');
         });
 }
 

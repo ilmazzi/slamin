@@ -55,7 +55,7 @@
                                                     <li>1 GB Hard disk Storage</li>
                                                     <li>1 fields </li>
                                                     <li>10 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-secondary w-100">Buy Plans</button>
                                             </div>
@@ -74,7 +74,7 @@
                                                     <li>1 GB Hard disk Storage</li>
                                                     <li>2 fields </li>
                                                     <li>15 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-secondary w-100">Buy Plans</button>
                                             </div>
@@ -103,7 +103,7 @@
                                                     <li>20 GB Hard disk Storage</li>
                                                     <li>50 fields </li>
                                                     <li>25 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-primary w-100">Buy Plans</button>
                                             </div>
@@ -122,7 +122,7 @@
                                                     <li>20 GB Hard disk Storage</li>
                                                     <li>50 fields </li>
                                                     <li>30 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-primary w-100">Buy Plans</button>
                                             </div>
@@ -148,7 +148,7 @@
                                                     <li>40 GB Hard disk Storage</li>
                                                     <li>Unlimited fields </li>
                                                     <li>40 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-secondary w-100">Buy Plans</button>
                                             </div>
@@ -170,7 +170,7 @@
                                                     <li>40 GB Hard disk Storage</li>
                                                     <li>Unlimited fields </li>
                                                     <li>40 User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-secondary w-100">Buy Plans</button>
                                             </div>
@@ -196,7 +196,7 @@
                                                     <li>40 GB Hard disk Storage</li>
                                                     <li>Unlimited fields </li>
                                                     <li>Unlimited User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-primary w-100">Buy Plans</button>
                                             </div>
@@ -215,7 +215,7 @@
                                                     <li>40 GB Hard disk Storage</li>
                                                     <li>Unlimited fields </li>
                                                     <li>Unlimited User</li>
-                                                    <li>Email Support</li>
+                                                    <li>{{ __('permissions.email') }} Support</li>
                                                 </ul>
                                                 <button type="button" class="btn btn-primary w-100">Buy Plans</button>
                                             </div>

@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <!-- Azioni -->
+        <!-- {{ __('invitations.actions') }} -->
         @auth
         <div class="row mb-4">
             <div class="col-12">

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Read Email')
+@section('title', 'Read {{ __('permissions.email') }}')
 @section('css')
     <!-- editor css -->
     <link rel="stylesheet" href="{{asset('assets/vendor/trumbowyg/trumbowyg.min.css')}}">
@@ -10,7 +10,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12 ">
-                <h4 class="main-title">Read Email</h4>
+                <h4 class="main-title">Read {{ __('permissions.email') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Read Email</a>
+                        <a href="#" class="f-s-14 f-w-500">Read {{ __('permissions.email') }}</a>
                     </li>
                 </ul>
             </div>
@@ -28,7 +28,7 @@
         <!-- Breadcrumb end -->
 
 
-        <!-- Read Email start -->
+        <!-- Read {{ __('permissions.email') }} start -->
         <div class="row">
             <div class="col-xl-3">
                 <div class="card d-none d-xl-block">
@@ -242,7 +242,7 @@
                 </div>
             </div>
         </div>
-        <!-- Read Email end -->
+        <!-- Read {{ __('permissions.email') }} end -->
     </div>
 @endsection
 

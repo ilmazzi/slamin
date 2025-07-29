@@ -192,7 +192,7 @@
                         🎭 Slam In
                     </div>
                     <div class="welcome-text">
-                        Bentornato! Accedi alla tua community di poetry slam
+                        Bentornato! {{ __('auth.login') }} alla tua community di poetry slam
                     </div>
 
                     <div class="feature-list">
@@ -223,7 +223,7 @@
                         <div class="d-lg-none mb-3">
                             <img src="{{ asset('assets/images/logo.png') }}" alt="Slam In Logo" class="img-fluid" style="max-width: 180px;">
                         </div>
-                        <h2>🔐 <strong>Accedi al tuo account</strong></h2>
+                        <h2>🔐 <strong>{{ __('auth.login') }} al tuo account</strong></h2>
                         <p class="text-muted">Entra in Slam In e scopri il mondo del poetry slam italiano</p>
                     </div>
 
@@ -246,10 +246,10 @@
                     <form method="POST" action="{{ route('login.process') }}">
                         @csrf
 
-                        <!-- Email -->
+                        <!-- {{ __('permissions.email') }} -->
                         <div class="mb-3">
                             <label for="email" class="form-label">
-                                <strong>📧 Email</strong>
+                                <strong>📧 {{ __('permissions.email') }}</strong>
                             </label>
                             <input type="email"
                                    class="form-control @error('email') is-invalid @enderror"

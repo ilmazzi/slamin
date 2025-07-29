@@ -176,33 +176,32 @@
                         <div class="col-3">
                             <div class="feature-icon">
                                 <h3>🎤</h3>
-                                <small>Poeti</small>
+                                <small>{{ __('register.poets') }}</small>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="feature-icon">
                                 <h3>🎪</h3>
-                                <small>Eventi</small>
+                                <small>{{ __('register.events') }}</small>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="feature-icon">
                                 <h3>🏛️</h3>
-                                <small>Venue</small>
+                                <small>{{ __('register.venues') }}</small>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="feature-icon">
                                 <h3>👥</h3>
-                                <small>Community</small>
+                                <small>{{ __('register.community') }}</small>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-4">
                         <p class="small opacity-75">
-                            La piattaforma italiana per<br>
-                            poeti, organizzatori, venue e appassionati di slam
+                            {{ __('register.platform_description') }}
                         </p>
                     </div>
                 </div>
@@ -213,9 +212,9 @@
                 <div class="form-container">
 
                     <div class="text-center mb-4">
-                        <h2>🚀 Registrati</h2>
-                        <p class="text-muted">Crea il tuo account e scegli i tuoi ruoli</p>
-                        <p class="small text-muted">✏️ Potrai completare il tuo profilo con bio e località dopo la registrazione</p>
+                        <h2>🚀 {{ __('register.register') }}</h2>
+                        <p class="text-muted">{{ __('register.create_account') }}</p>
+                        <p class="small text-muted">{{ __('register.complete_profile') }}</p>
                     </div>
 
                     @if($errors->any())
@@ -234,53 +233,53 @@
                         <!-- Dati Base - Layout migliorato -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Nome Completo *</label>
+                                <label class="form-label">{{ __('register.full_name') }} *</label>
                                 <input type="text" name="name" class="form-control"
                                        value="{{ old('name') }}" required
-                                       placeholder="Il tuo nome e cognome">
+                                       placeholder="{{ __('register.full_name_placeholder') }}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Nickname</label>
+                                <label class="form-label">{{ __('register.nickname') }}</label>
                                 <input type="text" name="nickname" class="form-control"
                                        value="{{ old('nickname') }}"
-                                       placeholder="Come vuoi essere chiamato">
-                                <small class="text-muted">Opzionale - Se non specificato, useremo il tuo nome</small>
+                                       placeholder="{{ __('register.nickname_placeholder') }}">
+                                <small class="text-muted">{{ __('register.optional') }}</small>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label class="form-label">Email *</label>
+                                <label class="form-label">{{ __('register.email') }} *</label>
                                 <input type="email" name="email" class="form-control"
                                        value="{{ old('email') }}" required
-                                       placeholder="la.tua.email@esempio.it">
+                                       placeholder="{{ __('register.email_placeholder') }}">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">
-                                    Password *
-                                    <small class="text-muted">(min. 8 caratteri)</small>
+                                            {{ __('register.password') }} *
+                                    <small class="text-muted">{{ __('register.password_min_characters') }}</small>
                                 </label>
                                 <input type="password" name="password" class="form-control"
                                        required placeholder="••••••••">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Conferma Password *</label>
+                                <label class="form-label">{{ __('register.confirm_password') }} *</label>
                                 <input type="password" name="password_confirmation" class="form-control"
                                        required placeholder="••••••••">
                             </div>
                         </div>
 
-                        <!-- Selezione Multi-Ruolo -->
+                        <!-- Selezione Multi-{{ __('invitations.role') }} -->
                         <div class="mb-4">
                             <label class="form-label">
-                                <strong>🎭 Scegli il tuo ruolo in Slam In</strong>
+                                <strong>🎭 {{ __('register.choose_role') }}</strong>
                             </label>
                             <p class="text-muted small mb-3">
-                                Puoi selezionare uno o più ruoli. Se non ne selezioni nessuno, verrai registrato come audience/fan.
-                                <br><strong>💡 Quattro ruoli principali:</strong> Poeta, Event Manager, Proprietario Venue, Audience
+                                {{ __('register.choose_role_description') }}
+                                <br><strong>💡 {{ __('register.four_main_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}
                             </p>
 
 
@@ -316,32 +315,30 @@
                         <!-- Pulsante Registrazione -->
                         <div class="d-grid mb-3">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                🚀 Join Slam In
+                                🚀 {{ __('register.join_slam_in') }}
                             </button>
                         </div>
                     </form>
 
                     <!-- Link Alternativi -->
                     <div class="text-center border-top pt-3 mt-4">
-                        <p class="text-muted mb-3">Hai già un account?</p>
+                        <p class="text-muted mb-3">{{ __('register.already_have_account') }}</p>
                         <div class="d-flex gap-3 justify-content-center flex-wrap">
                             <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm">
-                                <i class="bi bi-box-arrow-in-right"></i> Login
+                                <i class="bi bi-box-arrow-in-right"></i> {{ __('register.login') }}
                             </a>
-                            <a href="{{ route('login') }}" class="btn btn-outline-info btn-sm">
-                                🧪 Test Login
-                            </a>
+                           
                         </div>
                     </div>
 
                     <!-- Info Footer -->
                     <div class="mt-3">
                         <div class="alert alert-info">
-                            <h6>🌟 Perché unirti a Slam In?</h6>
+                            <h6>🌟 {{ __('register.why_join_slam_in') }}</h6>
                             <ul class="list-unstyled mb-0 small">
-                                <li>• <strong>Registrazione veloce:</strong> Solo i dati essenziali, profilo completabile dopo</li>
-                                <li>• <strong>Ruoli flessibili:</strong> Poeta, event manager, proprietario venue o audience</li>
-                                <li>• <strong>Ecosistema completo:</strong> Artisti, organizzatori, venue e pubblico insieme</li>
+                                <li>• <strong>{{ __('register.fast_registration') }}:</strong> {{ __('register.only_essential_data') }}</li>
+                                <li>• <strong>{{ __('register.roles') }} flessibili:</strong> {{ __('register.poet') }}, {{ __('events.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}</li>
+                                <li>• <strong>{{ __('register.complete_ecosystem') }}:</strong> {{ __('register.artists') }}, {{ __('events.organizers') }}, {{ __('register.venues') }} e {{ __('register.audience') }}</li>
                             </ul>
                         </div>
                     </div>

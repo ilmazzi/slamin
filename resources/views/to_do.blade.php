@@ -61,7 +61,7 @@
                             <div>
                                 <div class="task">
                           <span>
-                            ki-admin & Dashboard
+                            ki-admin & {{ __('dashboard.dashboard') }}
                           </span>
                                     <button class="btn btn-sm p-1 border-0 delete">
                                         <i class="ti ti-trash text-danger f-s-18"></i>

@@ -33,7 +33,7 @@
                             $roleDisplay = match($role) {
                                 'admin' => 'Amministratore',
                                 'moderatore' => 'Moderatore',
-                                'organizzatore' => 'Organizzatore',
+                                'organizzatore' => __('events.organizer'),
                                 'poeta' => 'Poeta',
                                 'giudice' => 'Giudice',
                                 'spettatore' => 'Spettatore',
@@ -54,19 +54,19 @@
                 <ul class="dropdown-menu">
                     <li class="dropdown-item">
                         <a class="f-w-500" href="{{ route('profile.show') }}">
-                            <i class="ph-duotone ph-user-circle pe-1 f-s-20"></i> Il Mio Profilo
+                            <i class="ph-duotone ph-user-circle pe-1 f-s-20"></i> {{ __('sidebar.my_profile') }}
                         </a>
                     </li>
                     <li class="dropdown-item">
                         <a class="f-w-500" href="{{ route('profile.edit') }}">
-                            <i class="ph-duotone ph-gear pe-1 f-s-20"></i> Impostazioni
+                            <i class="ph-duotone ph-gear pe-1 f-s-20"></i> {{ __('sidebar.settings') }}
                         </a>
                     </li>
                     <li class="dropdown-item">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <a class="f-w-500" href="#">
-                                    <i class="ph-duotone ph-detective pe-1 f-s-20"></i> Modalità Privata
+                                    <i class="ph-duotone ph-detective pe-1 f-s-20"></i> {{ __('sidebar.private_mode') }}
                                 </a>
                             </div>
                             <div class="flex-shrink-0">
@@ -78,7 +78,7 @@
                     </li>
                     <li class="dropdown-item">
                         <a class="mb-0 text-secondary f-w-500" href="{{ route('register') }}">
-                            <i class="ph-bold ph-plus pe-1 f-s-20"></i> Aggiungi Account
+                            <i class="ph-bold ph-plus pe-1 f-s-20"></i> {{ __('sidebar.add_account') }}
                         </a>
                     </li>
 
@@ -88,7 +88,7 @@
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link p-0 mb-0 text-danger f-w-500" style="text-decoration: none;">
-                                <i class="ph-duotone ph-sign-out pe-1 f-s-20"></i> {{ __('sidebar.logout') }}
+                                <i class="ph-duotone ph-sign-out pe-1 f-s-20"></i> {{ __('sidebar.logout_button') }}
                             </button>
                         </form>
                     </li>
@@ -108,7 +108,7 @@
                         <div class="simplebar-content" style="padding: 0px;">
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
                                 @auth
-                                <!-- Dashboard - Solo per utenti autenticati -->
+                                <!-- {{ __('dashboard.dashboard') }} - Solo per utenti autenticati -->
 
                                 <li class="no-sub {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('dashboard') }}">
@@ -138,28 +138,28 @@
                                 </li>
 
                                 @auth
-                                <!-- Gigs Section - DISABILITATO (non implementato) -->
+                                <!-- {{ __('common.gigs') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">Gigs</span>
+                                        <span class="text-muted">{{ __('common.gigs') }}</span>
                                     </a>
                                 </li>
                                 @endauth
 
-                                <!-- News Section - DISABILITATO (non implementato) -->
+                                <!-- {{ __('common.news') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">News</span>
+                                        <span class="text-muted">{{ __('common.news') }}</span>
                                     </a>
                                 </li>
 
-                                <!-- Media Section -->
+                                <!-- {{ __('common.media_section') }} Section -->
                                 <li class="no-sub {{ request()->routeIs('media.*') ? 'active' : '' }}">
                                     <a href="{{ route('media.index') }}">
                                         <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
-                                        Media
+                                        {{ __('common.media_section') }}
                                     </a>
                                 </li>
 
@@ -187,7 +187,7 @@
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#document"></use>
                                         </svg>
-                                        Il Mio Profilo
+                                        {{ __('sidebar.my_profile') }}
                                     </a>
                                 </li>
 
@@ -201,11 +201,11 @@
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#briefcase"></use>
                                         </svg>
-                                        Gestione Permessi
+                                        {{ __('sidebar.permissions_management') }}
                                     </a>
                                 </li>
 
-                                                                <!-- Moderation Dashboard - Solo per admin/moderator -->
+                                                                <!-- Moderation {{ __('dashboard.dashboard') }} - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.moderation.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.moderation.index') }}" title="{{ __('sidebar.moderation_tooltip') }}">
                                         <i class="ph-duotone ph-shield-check f-s-20 me-2"></i>
@@ -230,7 +230,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.settings.index') }}">
                                         <i class="ph-duotone ph-gear f-s-20 me-2"></i>
-                                        Impostazioni
+                                        {{ __('sidebar.settings') }}
                                     </a>
                                 </li>
 
@@ -242,11 +242,11 @@
                                     </a>
                                 </li>
 
-                                <!-- Kanban Board - Solo per admin/moderator -->
+                                <!-- {{ __('common.kanban_board') }} - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.kanban.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.kanban.index') }}">
                                         <i class="ph-duotone ph-kanban f-s-20 me-2"></i>
-                                        Kanban Board
+                                        {{ __('common.kanban_board') }}
                                     </a>
                                 </li>
 
@@ -254,7 +254,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.logs.index') }}">
                                         <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
-                                        System Logs
+                                        {{ __('sidebar.system_logs') }}
                                     </a>
                                 </li>
                                 @endif

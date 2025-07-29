@@ -151,7 +151,7 @@
                 </div>
             </div>
             <div class="faq-heading mb-3">
-                <h3><i class="ti ti-question-circle"></i> Admin Dashboard</h3>
+                <h3><i class="ti ti-question-circle"></i> Admin {{ __('dashboard.dashboard') }}</h3>
             </div>
             <div class="col-lg-8 offset-lg-2 mb-3">
                 <div class="accordion app-accordion accordion-secondary app-accordion-plus" id="nestingExample">
@@ -159,13 +159,13 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#nestingcollapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                What is Admin Dashboard ?
+                                What is Admin {{ __('dashboard.dashboard') }} ?
                             </button>
                         </h2>
                         <div id="nestingcollapseOne" class="accordion-collapse collapse show"
                              data-bs-parent="#nestingExample">
                             <div class="accordion-body">
-                                The Admin Dashboard displays tabs for multiple pages that provide a personalized view of BI
+                                The Admin {{ __('dashboard.dashboard') }} displays tabs for multiple pages that provide a personalized view of BI
                                 performance, data correctness, required cube maintenance and required administrative actions.
                                 These pages contain the results of detailed analyses, represented by links, images, graphs, pie
                                 charts and BI reports ...
@@ -176,7 +176,7 @@
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#nestingcollapseTwo" aria-expanded="false">
-                                What is responsive Admin Dashboard
+                                What is responsive Admin {{ __('dashboard.dashboard') }}
                             </button>
                         </h2>
                         <div id="nestingcollapseTwo" class="accordion-collapse collapse" data-bs-parent="#nestingExample">

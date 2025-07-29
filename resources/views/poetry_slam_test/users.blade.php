@@ -201,7 +201,7 @@
                         <h6>⚡ Quick Actions</h6>
                         <div class="btn-group">
                             <a href="{{ route('poetry.test.dashboard') }}" class="btn btn-primary">
-                                🏠 Dashboard
+                                🏠 {{ __('dashboard.dashboard') }}
                             </a>
                             <a href="{{ route('poetry.test.permissions') }}" class="btn btn-success">
                                 🔐 Test Permissions

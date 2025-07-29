@@ -46,7 +46,7 @@
                                     <th>Employee Name</th>
                                     <th>Position</th>
                                     <th>Status</th>
-                                    <th>Email</th>
+                                    <th>{{ __('permissions.email') }}</th>
                                     <th>id</th>
                                     <th>salary</th>
                                     <th>Date</th>
@@ -598,7 +598,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label  class="form-label">Email</label>
+                                            <label  class="form-label">{{ __('permissions.email') }}</label>
                                             <input type="text" class="form-control" placeholder="alison@gmail.com">
                                         </div>
                                     </div>

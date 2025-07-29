@@ -624,7 +624,7 @@
                                 </div>
                                 <div class="col-2">
                                     @auth
-                                        <button class="btn btn-outline-danger btn-sm w-100 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                                        <button class="btn btn-outline-danger btn-sm w-100 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
                                             <i class="ph-duotone ph-heart wishlist-icon"></i>
                                         </button>
                                     @endauth
@@ -705,7 +705,7 @@
                     <div id="eventDetails" class="mb-4"></div>
 
                     <div class="mb-3">
-                        <label class="form-label">Ruolo Richiesto *</label>
+                        <label class="form-label">{{ __('invitations.role') }} Richiesto *</label>
                         <select name="requested_role" class="form-select" required>
                             <option value="">Seleziona ruolo...</option>
                             <option value="performer">Performer</option>
@@ -741,7 +741,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-paper-plane me-2"></i>Invia Richiesta
+                        <i class="ph ph-paper-plane me-2"></i>{{ __('videos.send') }} Richiesta
                     </button>
                 </div>
             </form>
@@ -923,7 +923,7 @@ function loadEventsOnMapWithFilter(params) {
                             <p class="mb-1"><i class="ph ph-calendar me-1"></i>${event.start_datetime}</p>
                             <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
                             <small class="text-muted d-block">Organizzato da: ${event.organizer}</small>
-                            <a href="${event.url}" class="btn btn-primary btn-sm mt-2">Vedi Dettagli</a>
+                            <a href="${event.url}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
                         </div>
                     `);
                 markers.push(marker);
@@ -936,7 +936,7 @@ function loadEventsOnMapWithFilter(params) {
     })
     .catch(error => {
         console.error('Error loading events on map:', error);
-        showNotification('Errore nel caricamento degli eventi sulla mappa', 'error');
+        showNotification('{{ __('common.loading_error') }} degli eventi sulla mappa', 'error');
     });
 }
 
@@ -987,7 +987,7 @@ function showAllEvents() {
                                 <div class="p-2">
                                     <h6>${event.title}</h6>
                                     <p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>
-                                    <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">Vedi Dettagli</a>
+                                    <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
                                 </div>
                             `);
                     }
@@ -1003,7 +1003,7 @@ function showAllEvents() {
         })
         .catch(error => {
             console.error('Error loading all events:', error);
-            showNotification('Errore nel caricamento degli eventi', 'error');
+            showNotification('{{ __('common.loading_error') }} degli eventi', 'error');
         });
 }
 
@@ -1150,7 +1150,7 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// Wishlist è gestita globalmente da WishlistManager
+// {{ __('wishlist.wishlist') }} è gestita globalmente da WishlistManager
 // Non serve codice duplicato qui
 </script>
 @endsection

@@ -10,8 +10,8 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h5>{{ $invitation->event->title ?? 'N/A' }}</h5>
-                    <p>Stato: {{ $invitation->status }}</p>
-                    <p>Ruolo: {{ $invitation->role }}</p>
+                    <p>{{ __('invitations.status') }}: {{ $invitation->status }}</p>
+                    <p>{{ __('invitations.role') }}: {{ $invitation->role }}</p>
                 </div>
             </div>
         @endforeach

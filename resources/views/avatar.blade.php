@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Avatar')
+@section('title', '{{ __('common.avatar') }}')
 @section('css')
     <!--font-awesome-css-->
     <link rel="stylesheet" href="{{('assets/vendor/fontawesome/css/all.css')}}">
@@ -9,7 +9,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12 ">
-                <h4 class="main-title">Avatar</h4>
+                <h4 class="main-title">{{ __('common.avatar') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -19,14 +19,14 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Avatar</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('common.avatar') }}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <!-- Breadcrumb end -->
 
-        <!-- Avatar start -->
+        <!-- {{ __('common.avatar') }} start -->
         <div class="row">
             <!-- avatar 1 -->
             <div class="col-md-6">
@@ -772,7 +772,7 @@
             </div>
 
         </div>
-        <!-- Avatar end -->
+        <!-- {{ __('common.avatar') }} end -->
     </div>
 @endsection
 

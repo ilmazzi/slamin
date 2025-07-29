@@ -285,7 +285,7 @@
                             <div class="product-details-btn text-end mt-4">
                                 <a href="{{route('cart')}}" role="button" class="btn btn-primary">Add To Cart</a>
                                 <a href="{{route('checkout')}}" role="button" class="btn btn-success">Buy Now</a>
-                                <a href="{{route('wishlist')}}" role="button" class="btn btn-danger">Add to Wishlist</a>
+                                <a href="{{route('wishlist')}}" role="button" class="btn btn-danger">Add to {{ __('wishlist.wishlist') }}</a>
                             </div>
                         </div>
                     </div>

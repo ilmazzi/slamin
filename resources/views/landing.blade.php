@@ -201,7 +201,7 @@
                                         data-bs-target="#dashboard-tab-pane" data-bs-toggle="tab" id="dashboard-tab"
                                         role="tab"
                                         type="button">
-                                    <i class="ph ph-house pe-2 ps-1"></i> Dashboard
+                                    <i class="ph ph-house pe-2 ps-1"></i> {{ __('dashboard.dashboard') }}
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -282,7 +282,7 @@
                 <div class="col-xl-9">
 
                     <div class="tab-content mt-3 pe-sm-5 pe-0">
-                        <!-- Dashboard tab start -->
+                        <!-- {{ __('dashboard.dashboard') }} tab start -->
                         <div class="tab-pane fade show active" id="dashboard-tab-pane" role="tabpanel" tabindex="0">
                             <div class="row g-4">
                                 <div class="col-sm-6">
@@ -324,7 +324,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Dashboard tab end -->
+                        <!-- {{ __('dashboard.dashboard') }} tab end -->
 
                         <!--  Apps tab start -->
                         <div class="tab-pane fade" id="apps-tab-pane" role="tabpanel" tabindex="0">
@@ -404,7 +404,7 @@
                                             <img alt="demo-img" class="img-fluid b-r-8"
                                                  src="{{asset('../assets/images/landing/email.jpg')}}">
                                             <div class="demo-box">
-                                                <h6 class="m-0 f-w-500 f-s-18">Email</h6>
+                                                <h6 class="m-0 f-w-500 f-s-18">{{ __('permissions.email') }}</h6>
                                                 <a class="btn btn-primary icon-btn b-r-22" href="{{route('email')}}"
                                                    role="button"
                                                    target="_blank">
@@ -567,7 +567,7 @@
                                             <img alt="demo-img" class="img-fluid b-r-8"
                                                  src="{{asset('../assets/images/landing/avatar.jpg')}}">
                                             <div class="demo-box">
-                                                <h6 class="m-0 f-w-500 f-s-18">Avatar</h6>
+                                                <h6 class="m-0 f-w-500 f-s-18">{{ __('common.avatar') }}</h6>
                                                 <a class="btn btn-primary icon-btn b-r-22" href="{{route('avatar')}}"
                                                    role="button"
                                                    target="_blank">
@@ -705,7 +705,7 @@
                                             <img alt="demo-img" class="img-fluid b-r-8"
                                                  src="{{asset('../assets/images/landing/video-embaded.jpg')}}">
                                             <div class="demo-box">
-                                                <h6 class="m-0 f-w-500 f-s-18">Video embaded</h6>
+                                                <h6 class="m-0 f-w-500 f-s-18">{{ __('common.video') }} embaded</h6>
                                                 <a class="btn btn-primary icon-btn b-r-22" href="{{route('video_embed')}}"
                                                    role="button"
                                                    target="_blank">

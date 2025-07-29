@@ -1,23 +1,23 @@
 @extends('layout.master')
 
-@section('title', 'Notifiche - Slamin')
+@section('title', '{{ __('notifications.notifications') }} - Slamin')
 
 @section('main-content')
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row m-1">
         <div class="col-12">
-            <h4 class="main-title">Notifiche</h4>
+            <h4 class="main-title">{{ __('notifications.notifications') }}</h4>
             <ul class="app-line-breadcrumbs mb-3">
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Notifiche</a>
+                    <a href="#" class="f-s-14 f-w-500">{{ __('notifications.notifications') }}</a>
                 </li>
             </ul>
         </div>
@@ -53,12 +53,12 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h4 class="mb-0 f-w-600">Le Mie Notifiche</h4>
-                    <p class="text-muted mb-0">Gestisci tutte le tue notifiche</p>
+                    <h4 class="mb-0 f-w-600">Le Mie {{ __('notifications.notifications') }}</h4>
+                    <p class="text-muted mb-0">{{ __('notifications.manage_notifications') }}</p>
                 </div>
                 <div class="d-flex gap-2">
                     <button id="markAllReadBtn" class="btn btn-outline-primary hover-effect">
-                        <i class="ph-duotone ph-check-circle me-2"></i>Segna Tutte Come Lette
+                        <i class="ph-duotone ph-check-circle me-2"></i>Segna Tutte Come {{ __('notifications.read') }}
                     </button>
                     <button id="cleanupBtn" class="btn btn-outline-danger hover-effect">
                         <i class="ph-duotone ph-trash me-2"></i>Pulisci Vecchie
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Totale Notifiche</h6>
+                            <h6 class="mb-1">Totale {{ __('notifications.notifications') }}</h6>
                             <h4 class="mb-0 f-w-600">{{ $notifications->total() }}</h4>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Non Lette</h6>
+                            <h6 class="mb-1">{{ __('notifications.unread') }}</h6>
                             <h4 class="mb-0 f-w-600">{{ $unreadCount }}</h4>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Lette</h6>
+                            <h6 class="mb-1">{{ __('notifications.read') }}</h6>
                             <h4 class="mb-0 f-w-600">{{ $notifications->total() - $unreadCount }}</h4>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Ultimi 7 Giorni</h6>
+                            <h6 class="mb-1">{{ __('notifications.last_7_days') }}</h6>
                             <h4 class="mb-0 f-w-600">{{ $notifications->where('created_at', '>=', now()->subDays(7))->count() }}</h4>
                         </div>
                     </div>
@@ -145,7 +145,7 @@
         <div class="col-12">
             <div class="card hover-effect">
                 <div class="card-header">
-                    <h5 class="mb-0">Lista Notifiche</h5>
+                    <h5 class="mb-0">Lista {{ __('notifications.notifications') }}</h5>
                 </div>
                 <div class="card-body p-0">
                     @if($notifications->count() > 0)
@@ -163,7 +163,7 @@
                                             <h6 class="mb-1 f-w-600 {{ $notification->is_read ? 'text-muted' : '' }}">
                                                 {{ $notification->title }}
                                                 @if(!$notification->is_read)
-                                                    <span class="badge bg-danger ms-2">Nuova</span>
+                                                    <span class="badge bg-danger ms-2">{{ __('notifications.new') }}</span>
                                                 @endif
                                                 @if($notification->priority_badge)
                                                     <span class="badge {{ $notification->priority_badge }} ms-2">{{ ucfirst($notification->priority) }}</span>
@@ -222,7 +222,7 @@
                             <div class="icon-box bg-light mx-auto mb-3">
                                 <i class="ph-duotone ph-bell text-muted f-s-48"></i>
                             </div>
-                            <h5 class="text-muted">Nessuna notifica</h5>
+                            <h5 class="text-muted">{{ __('notifications.no_notifications') }}</h5>
                             <p class="text-muted">Non hai ancora ricevuto notifiche.</p>
                         </div>
                     @endif

@@ -329,7 +329,7 @@
 
                             <div class="app-form">
                                 <div class="mb-3">
-                                    <label class="form-label">Email address</label>
+                                    <label class="form-label">{{ __('permissions.email') }} address</label>
                                     <input type="email" class="form-control">
 
                                 </div>

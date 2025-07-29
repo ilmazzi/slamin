@@ -208,7 +208,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Email address</label>
+                                                    <label class="form-label">{{ __('permissions.email') }} address</label>
                                                     <input type="email" class="form-control"
                                                            placeholder="MariaCEck@teleworm.us">
                                                 </div>
@@ -1170,7 +1170,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="notification-email">
-                                                <h6>By Email</h6>
+                                                <h6>By {{ __('permissions.email') }}</h6>
                                                 <div class="select-item">
                                                     <input class="form-check-input form-check-primary w-25 h-25"
                                                            type="checkbox" id="checkbox-email"

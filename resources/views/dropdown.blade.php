@@ -153,7 +153,7 @@
                                 <div class="dropdown-menu dropdown-menu-md form-dropdown p-4">
                                     <form>
                                         <div class="mb-2">
-                                            <label class="form-label" for="exampleDropdownFormEmail">Email address</label>
+                                            <label class="form-label" for="exampleDropdownFormEmail">{{ __('permissions.email') }} address</label>
                                             <input type="email" class="form-control" id="exampleDropdownFormEmail"
                                                    placeholder="email@example.com">
                                         </div>
@@ -224,7 +224,7 @@
                        &lt;div class="dropdown-menu dropdown-menu-md form-dropdown p-4"&gt;
                        &lt;form&gt;
                        &lt;div class="mb-2"&gt;
-                       &lt;label class="form-label" for="exampleDropdownFormEmail"&gt;Email address&lt;/label&gt;
+                       &lt;label class="form-label" for="exampleDropdownFormEmail"&gt;{{ __('permissions.email') }} address&lt;/label&gt;
                        &lt;input type="email" class="form-control" id="exampleDropdownFormEmail"
                        placeholder="email@example.com"&gt;
                        &lt;/div&gt;

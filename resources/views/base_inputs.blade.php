@@ -185,8 +185,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" placeholder="Email Input">
+                                        <label class="form-label">{{ __('permissions.email') }}</label>
+                                        <input type="email" class="form-control" placeholder="{{ __('permissions.email') }} Input">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

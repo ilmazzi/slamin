@@ -145,8 +145,8 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Kanban Board</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a></li>
+                        <li class="breadcrumb-item active">{{ __('common.kanban_board') }}</li>
                     </ol>
                 </div>
                 <h4 class="page-title">
@@ -250,7 +250,7 @@
         </div>
     </div>
 
-    <!-- Kanban Board -->
+    <!-- {{ __('common.kanban_board') }} -->
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -559,7 +559,7 @@
                                 <select class="form-select" id="priority" name="priority" required>
                                     <option value="">Seleziona priorità</option>
                                     <option value="low">Bassa</option>
-                                    <option value="medium">Media</option>
+                                    <option value="medium">{{ __('common.media_section') }}</option>
                                     <option value="high">Alta</option>
                                     <option value="urgent">Urgente</option>
                                 </select>
@@ -663,7 +663,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editTaskModalLabel">
-                    <i class="ph ph-pencil me-2"></i>Modifica Task
+                    <i class="ph ph-pencil me-2"></i>{{ __('permissions.modify') }} Task
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -683,7 +683,7 @@
                                 <label for="edit_priority" class="form-label">Priorità *</label>
                                 <select class="form-select" id="edit_priority" name="priority" required>
                                     <option value="low">Bassa</option>
-                                    <option value="medium">Media</option>
+                                    <option value="medium">{{ __('common.media_section') }}</option>
                                     <option value="high">Alta</option>
                                     <option value="urgent">Urgente</option>
                                 </select>
@@ -782,7 +782,7 @@
 @endsection
 
 @push('scripts')
-<!-- Kanban Board JS -->
+<!-- {{ __('common.kanban_board') }} JS -->
 <script src="{{ asset('assets/vendor/kanban_board/hammer.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/kanban_board/muuri.min.js') }}"></script>
 <script src="{{ asset('assets/js/kanban_board.js') }}"></script>
@@ -808,12 +808,12 @@ function openTaskDetails(taskId) {
                 document.getElementById('taskDetailsContent').innerHTML = data.html;
                 document.getElementById('taskDetailsOverlay').style.display = 'flex';
             } else {
-                showNotification('Errore nel caricamento dei dettagli del task', 'error');
+                showNotification('{{ __('common.loading_error') }} dei dettagli del task', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showNotification('Errore nel caricamento dei dettagli del task', 'error');
+            showNotification('{{ __('common.loading_error') }} dei dettagli del task', 'error');
         });
 }
 
@@ -844,12 +844,12 @@ function editTask(taskId) {
                 // Show edit modal
                 new bootstrap.Modal(document.getElementById('editTaskModal')).show();
             } else {
-                showNotification('Errore nel caricamento del task', 'error');
+                showNotification('{{ __('common.loading_error') }} del task', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showNotification('Errore nel caricamento del task', 'error');
+            showNotification('{{ __('common.loading_error') }} del task', 'error');
         });
 }
 

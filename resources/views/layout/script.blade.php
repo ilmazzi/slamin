@@ -31,7 +31,7 @@
 <!-- Sidebar logo responsive -->
 <script src="{{asset('assets/js/sidebar-logo.js')}}"></script>
 
-<!-- Wishlist Management -->
+<!-- {{ __('wishlist.wishlist') }} Management -->
 <script src="{{asset('assets/js/wishlist.js')}}"></script>
 
 @stack('scripts')

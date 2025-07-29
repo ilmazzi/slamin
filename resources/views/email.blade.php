@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Email')
+@section('title', '{{ __('permissions.email') }}')
 @section('css')
 
 @endsection
@@ -8,7 +8,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12 ">
-                <h4 class="main-title">Email</h4>
+                <h4 class="main-title">{{ __('permissions.email') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -18,13 +18,13 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Email</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('permissions.email') }}</a>
                     </li>
                 </ul>
             </div>
         </div>
         <!-- Breadcrumb end -->
-        <!-- Email start -->
+        <!-- {{ __('permissions.email') }} start -->
         <div class="row position-relative">
             <div class="col-lg-3">
                 <div class="mailbox">
@@ -515,7 +515,7 @@
                                             </div>
                                             <div class="mg-s-45">
                                                 <h6 class="mb-0 f-w-600">Diana White</h6>
-                                                <a href="{{route('read_email')}}"><span class="f-s-13 text-secondary">Email messages are sent
+                                                <a href="{{route('read_email')}}"><span class="f-s-13 text-secondary">{{ __('permissions.email') }} messages are sent
                                     from software programs and web browsers, collectively as email....</span></a>
                                             </div>
                                         </div>
@@ -774,7 +774,7 @@
                 </div>
             </div>
         </div>
-        <!-- Email end -->
+        <!-- {{ __('permissions.email') }} end -->
     </div>
 
     <div class="modal fade" id="emailBox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

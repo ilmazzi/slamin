@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Ecommerce Dashboard')
+@section('title', 'Ecommerce {{ __('dashboard.dashboard') }}')
 @section('css')
 
     <!-- apexcharts css -->

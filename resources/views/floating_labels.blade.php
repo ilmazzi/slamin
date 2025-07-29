@@ -67,9 +67,9 @@
                                 <form class="app-form">
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="floatingInput"
-                                               placeholder="Email address"
+                                               placeholder="{{ __('permissions.email') }} address"
                                                type="email">
-                                        <label for="floatingInput">Email address</label>
+                                        <label for="floatingInput">{{ __('permissions.email') }} address</label>
                                     </div>
                                     <div class="form-floating">
                                         <input class="form-control" id="floatingPassword"
@@ -125,9 +125,9 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text b-r-left">@</span>
                                     <div class="form-floating">
-                                        <input class="form-control b-r-right" placeholder="Email Address"
+                                        <input class="form-control b-r-right" placeholder="{{ __('permissions.email') }} Address"
                                                type="text">
-                                        <label for="floatingInputGroup1">Email Address</label>
+                                        <label for="floatingInputGroup1">{{ __('permissions.email') }} Address</label>
                                     </div>
                                 </div>
                             </form>
@@ -232,7 +232,7 @@
                                         <input class="form-control" id="floatingInputGrid"
                                                placeholder="name@example.com"
                                                type="email" value="mdo@example.com">
-                                        <label for="floatingInputGrid">Email address</label>
+                                        <label for="floatingInputGrid">{{ __('permissions.email') }} address</label>
                                     </div>
                                 </div>
                                 <div class="col-md floating-select">

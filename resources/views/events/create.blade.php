@@ -257,7 +257,7 @@
                                 <div class="error-feedback" id="registration_deadline-error"></div>
                             </div>
 
-                            <!-- Evento Ricorrente -->
+                            <!-- {{ __('invitations.event') }} Ricorrente -->
                             <div class="col-12 mb-3">
                                 <div class="card border-primary">
                                     <div class="card-header bg-light-primary">
@@ -440,7 +440,7 @@
                                         <option value="AR">Argentina</option>
                                         <option value="CL">Cile</option>
                                         <option value="AU">Australia</option>
-                                        <option value="NZ">Nuova Zelanda</option>
+                                        <option value="NZ">{{ __('notifications.new') }} Zelanda</option>
                                         <option value="JP">Giappone</option>
                                         <option value="KR">Corea del Sud</option>
                                         <option value="CN">Cina</option>
@@ -701,7 +701,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Seleziona Ruolo *</label>
+                                    <label class="form-label">Seleziona {{ __('invitations.role') }} *</label>
                                     <div class="check-container">
                                         <label class="check-box d-flex align-items-center p-3 border rounded mb-2" style="cursor: pointer;">
                                             <input type="radio" name="invitationRole" value="performer" checked>
@@ -1695,7 +1695,7 @@ function previewImage() {
 function updatePreview() {
     if (currentStep !== 5) return;
 
-    const title = document.getElementById('title').value || 'Titolo Evento';
+    const title = document.getElementById('title').value || 'Titolo {{ __('invitations.event') }}';
     const description = document.getElementById('description').value || 'Descrizione evento...';
     const venueName = document.getElementById('venue_name').value || 'Nome Venue';
     const city = document.getElementById('city').value || 'Città';
@@ -1761,7 +1761,7 @@ function updatePreview() {
                 <div class="col-md-6">
                     <div class="border-start border-primary border-4 ps-3">
                         <h6 class="mb-1 text-primary">Costo</h6>
-                        <p class="mb-0">${entryFee == 0 ? 'Gratuito' : '€' + entryFee}</p>
+                        <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -1789,7 +1789,7 @@ function updatePreview() {
 function updatePreviewWithImage(imageSrc) {
     if (currentStep !== 5) return;
 
-    const title = document.getElementById('title').value || 'Titolo Evento';
+    const title = document.getElementById('title').value || 'Titolo {{ __('invitations.event') }}';
     const description = document.getElementById('description').value || 'Descrizione evento...';
     const venueName = document.getElementById('venue_name').value || 'Nome Venue';
     const city = document.getElementById('city').value || 'Città';
@@ -1836,7 +1836,7 @@ function updatePreviewWithImage(imageSrc) {
                 <div class="col-md-6">
                     <div class="border-start border-primary border-4 ps-3">
                         <h6 class="mb-1 text-primary">Costo</h6>
-                        <p class="mb-0">${entryFee == 0 ? 'Gratuito' : '€' + entryFee}</p>
+                        <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -1929,7 +1929,7 @@ function getRoleDisplayName(role) {
     const roleNames = {
         'poet': 'Poeta',
         'judge': 'Giudice',
-        'organizer': 'Organizzatore',
+        'organizer': '{{ __('events.organizer') }}',
         'technician': 'Tecnico',
         'audience': 'Pubblico'
     };
@@ -2335,7 +2335,7 @@ function loadSuggestedUsers() {
         displaySuggestedUsers();
     })
     .catch(error => {
-        console.error('Errore nel caricamento utenti suggeriti:', error);
+        console.error('{{ __('common.loading_error') }} utenti suggeriti:', error);
     });
 }
 
@@ -2877,9 +2877,9 @@ function addGigPosition() {
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][quantity]" min="1" value="1" required>
                     </div>
 
-                    <!-- Lingua richiesta -->
+                    <!-- {{ __('common.language_selector') }} richiesta -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Lingua richiesta (opzionale)</label>
+                        <label class="form-label">{{ __('common.language_selector') }} richiesta (opzionale)</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][language]">
                             <option value="">Nessuna preferenza</option>
                             <option value="italiano">Italiano</option>

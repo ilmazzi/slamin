@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Gestione Ruoli - Slamin')
+@section('title', 'Gestione {{ __('permissions.roles') }} - Slamin')
 
 @section('css')
 <style>
@@ -42,10 +42,10 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Gestione Ruoli del Sistema</h4>
+                <h4 class="mb-0">Gestione {{ __('permissions.roles') }} del Sistema</h4>
                 <button class="btn btn-primary" onclick="showCreateRoleModal()">
                     <i class="ph ph-plus me-2"></i>
-                    Nuovo Ruolo
+                    Nuovo {{ __('invitations.role') }}
                 </button>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-users me-2 text-primary"></i>
-                        Ruoli del Sistema
+                        {{ __('permissions.roles') }} del Sistema
                     </h5>
                 </div>
                 <div class="card-body">
@@ -71,7 +71,7 @@
                                     <th>Descrizione</th>
                                     <th>Permessi</th>
                                     <th>Utenti</th>
-                                    <th>Azioni</th>
+                                    <th>{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,7 +89,7 @@
                                     <td>
                                         <span class="badge bg-primary">{{ $role->permissions->count() }}</span>
                                         @if($role->permissions->count() > 0)
-                                        <button class="btn btn-sm btn-outline-info ms-2" onclick="showRolePermissions({{ $role->id }})" title="Visualizza Permessi">
+                                        <button class="btn btn-sm btn-outline-info ms-2" onclick="showRolePermissions({{ $role->id }})" title="{{ __('permissions.view_permissions') }}">
                                             <i class="ph ph-eye"></i>
                                         </button>
                                         @endif
@@ -104,10 +104,10 @@
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" onclick="editRole({{ $role->id }})" title="Modifica">
+                                            <button class="btn btn-outline-primary" onclick="editRole({{ $role->id }})" title="{{ __('permissions.modify') }}">
                                                 <i class="ph ph-pencil"></i>
                                             </button>
-                                            <button class="btn btn-outline-success" onclick="manageRolePermissions({{ $role->id }})" title="Gestisci Permessi">
+                                            <button class="btn btn-outline-success" onclick="manageRolePermissions({{ $role->id }})" title="{{ __('permissions.manage_permissions') }}">
                                                 <i class="ph ph-shield-check"></i>
                                             </button>
                                             @if($role->users->count() == 0)
@@ -135,7 +135,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="roleModalTitle">
                     <i class="ph ph-plus me-2"></i>
-                    Crea Nuovo Ruolo
+                    Crea Nuovo {{ __('invitations.role') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -145,7 +145,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Nome Ruolo *</label>
+                                <label class="form-label">Nome {{ __('invitations.role') }} *</label>
                                 <input type="text" class="form-control" name="name" id="roleName" required>
                                 <small class="text-muted">Nome tecnico (es: admin, moderator)</small>
                             </div>
@@ -195,7 +195,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary" id="roleSubmitBtn">
                         <i class="ph ph-plus me-2"></i>
-                        Crea Ruolo
+                        Crea {{ __('invitations.role') }}
                     </button>
                 </div>
             </form>
@@ -210,7 +210,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-shield-check me-2"></i>
-                    Permessi del Ruolo
+                    Permessi del {{ __('invitations.role') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -228,7 +228,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users me-2"></i>
-                    Utenti con questo Ruolo
+                    Utenti con questo {{ __('invitations.role') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -246,8 +246,8 @@
 let currentRoleId = null;
 
 function showCreateRoleModal() {
-    $('#roleModalTitle').html('<i class="ph ph-plus me-2"></i>Crea Nuovo Ruolo');
-    $('#roleSubmitBtn').html('<i class="ph ph-plus me-2"></i>Crea Ruolo');
+    $('#roleModalTitle').html('<i class="ph ph-plus me-2"></i>Crea Nuovo {{ __('invitations.role') }}');
+    $('#roleSubmitBtn').html('<i class="ph ph-plus me-2"></i>Crea {{ __('invitations.role') }}');
     $('#roleForm')[0].reset();
     $('#roleId').val('');
     $('#roleName').prop('readonly', false);
@@ -261,8 +261,8 @@ function editRole(roleId) {
         .then(response => response.json())
         .then(data => {
             if (data.role) {
-                $('#roleModalTitle').html('<i class="ph ph-pencil me-2"></i>Modifica Ruolo');
-                $('#roleSubmitBtn').html('<i class="ph ph-check me-2"></i>Aggiorna Ruolo');
+                $('#roleModalTitle').html('<i class="ph ph-pencil me-2"></i>{{ __('permissions.modify') }} {{ __('invitations.role') }}');
+                $('#roleSubmitBtn').html('<i class="ph ph-check me-2"></i>Aggiorna {{ __('invitations.role') }}');
                 $('#roleId').val(data.role.id);
                 $('#roleName').val(data.role.name).prop('readonly', true);
                 $('#roleDisplayName').val(data.role.display_name);
@@ -315,7 +315,7 @@ function showRolePermissions(roleId) {
         .then(data => {
             if (data.role) {
                 let content = '<div class="table-responsive"><table class="table">';
-                content += '<thead><tr><th>Permesso</th><th>Gruppo</th><th>Descrizione</th></tr></thead><tbody>';
+                content += '<thead><tr><th>{{ __('permissions.permission') }}</th><th>{{ __('permissions.group') }}</th><th>Descrizione</th></tr></thead><tbody>';
                 data.permissions.forEach(permission => {
                     content += `<tr>
                         <td><strong>${permission.display_name || permission.name}</strong></td>
@@ -339,7 +339,7 @@ function showRoleUsers(roleId) {
         .then(data => {
             if (data.role) {
                 let content = '<div class="table-responsive"><table class="table">';
-                content += '<thead><tr><th>Utente</th><th>Email</th><th>Stato</th></tr></thead><tbody>';
+                content += '<thead><tr><th>{{ __('permissions.user') }}</th><th>{{ __('permissions.email') }}</th><th>{{ __('invitations.status') }}</th></tr></thead><tbody>';
                 data.role.users.forEach(user => {
                     content += `<tr>
                         <td><strong>${user.name}</strong></td>

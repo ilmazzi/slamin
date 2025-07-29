@@ -67,11 +67,11 @@
                     <div class="d-flex align-items-start">
                         <i class="ph-duotone ph-info f-s-20 me-3 mt-1"></i>
                         <div>
-                            <h6 class="alert-heading mb-2">Informazioni sull'upload</h6>
+                            <h6 class="alert-heading mb-2">{{ __('videos.upload_info') }}</h6>
                             <p class="mb-2">Il tuo video verrà caricato su PeerTube e sarà disponibile a breve una volta completata la finalizzazione.</p>
                             <ul class="mb-0 small">
-                                <li>Formati supportati: MP4, AVI, MOV, MKV, WEBM, FLV</li>
-                                <li>Dimensione massima: 100MB</li>
+                                <li>{{ __('videos.supported_formats') }}</li>
+                                <li>{{ __('videos.max_size') }}</li>
                                 <li>Tempo di elaborazione: 2-5 minuti (dipende dalla dimensione)</li>
                             </ul>
                         </div>
@@ -94,7 +94,7 @@
                         <form action="{{ route('videos.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                             @csrf
 
-                            <!-- Video File Upload with Integrated Progress -->
+                            <!-- {{ __('common.video') }} File Upload with Integrated Progress -->
                             <div class="row mb-4">
                                 <div class="col-12">
                                     <label for="videoFile" class="form-label">{{ __('videos.video_file') }} *</label>
@@ -102,7 +102,7 @@
                                         <!-- Upload State -->
                                         <div id="uploadState">
                                             <i class="ph-duotone ph-cloud-arrow-up f-s-48 text-muted mb-3"></i>
-                                            <h6 class="mb-2">Trascina qui il tuo video o clicca per selezionare</h6>
+                                            <h6 class="mb-2">{{ __('videos.drag_drop_video') }}</h6>
                                             <p class="text-muted mb-3">{{ __('videos.supported_formats') }}: MP4, AVI, MOV, MKV, WEBM, FLV</p>
                                             <p class="text-muted f-s-12">{{ __('videos.max_size') }}: 100MB</p>
                                             <input type="file" name="video_file" id="videoFile" accept="video/*" class="d-none" required>
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
 
-                            <!-- Video Details - Mobile First Layout -->
+                            <!-- {{ __('common.video') }} Details - Mobile First Layout -->
                             <div class="row">
                                 <!-- Title -->
                                 <div class="col-12 mb-3">
@@ -193,7 +193,7 @@
                                     <div class="form-text">{{ __('videos.tags_help') }}</div>
                                 </div>
 
-                                <!-- Thumbnail -->
+                                <!-- {{ __('common.thumbnail') }} -->
                                 <div class="col-12 mb-3">
                                     <label for="thumbnail" class="form-label">{{ __('videos.thumbnail') }}</label>
                                     <div class="thumbnail-upload" id="thumbnailArea">
@@ -206,7 +206,7 @@
                                             <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="d-none">
                                         </div>
                                         <div class="thumbnail-preview d-none" id="thumbnailPreview">
-                                            <img src="" alt="Thumbnail" class="img-fluid rounded" id="thumbnailImg">
+                                            <img src="" alt="{{ __('common.thumbnail') }}" class="img-fluid rounded" id="thumbnailImg">
                                             <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-1" onclick="removeThumbnail()">
                                                 <i class="ph-duotone ph-x"></i>
                                             </button>
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const connectionLabels = {
             'slow-2g': 'Molto Lenta',
             '2g': 'Lenta',
-            '3g': 'Media',
+            '3g': '{{ __('common.media_section') }}',
             '4g': 'Veloce',
             '5g': 'Molto Veloce'
         };
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Complete the progress
             progressTitle.textContent = 'Completato!';
-            progressText.textContent = 'Video caricato con successo';
+            progressText.textContent = '{{ __('common.video') }} caricato con successo';
             progressBar.style.width = '100%';
             progressPercent.textContent = '100%';
             progressBar.classList.remove('progress-bar-animated');
@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Thumbnail handling
+    // {{ __('common.thumbnail') }} handling
     const thumbnail = document.getElementById('thumbnail');
     const thumbnailPreview = document.getElementById('thumbnailPreview');
     const thumbnailImg = document.getElementById('thumbnailImg');

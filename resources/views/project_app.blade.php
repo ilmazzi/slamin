@@ -228,7 +228,7 @@
                                             </div>
                                             <a href="{{route('project_details')}}" target="_blank" class="flex-grow-1 ps-2">
                                                 <h6 class="m-0 text-dark f-w-600"> Designing</h6>
-                                                <div class="text-muted f-s-14 f-w-500">Dashboard</div>
+                                                <div class="text-muted f-s-14 f-w-500">{{ __('dashboard.dashboard') }}</div>
                                             </a>
                                             <div class="dropdown">
                                                 <button class="bg-none border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -662,7 +662,7 @@
                                             </div>
                                             <a href="{{route('project_details')}}" target="_blank" class="flex-grow-1 ps-2">
                                                 <h6 class="m-0 text-dark f-w-600"> Designing</h6>
-                                                <div class="text-muted f-s-14 f-w-500">Dashboard</div>
+                                                <div class="text-muted f-s-14 f-w-500">{{ __('dashboard.dashboard') }}</div>
                                             </a>
                                             <div class="dropdown">
                                                 <button class="bg-none border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">

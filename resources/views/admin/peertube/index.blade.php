@@ -113,7 +113,7 @@
                             <i class="ph ph-calendar text-primary f-s-24"></i>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">Ultimi 7 Giorni</h6>
+                            <h6 class="mb-1">{{ __('notifications.last_7_days') }}</h6>
                             <h4 class="mb-0">{{ \App\Models\User::whereNotNull('peertube_user_id')->where('peertube_created_at', '>=', now()->subDays(7))->count() }}</h4>
                         </div>
                     </div>

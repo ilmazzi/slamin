@@ -12,7 +12,7 @@
                     <h4 class="mb-0">📋 Log Details #{{ $log->id }}</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.logs.index') }}">System Logs</a></li>
                             <li class="breadcrumb-item active">Log #{{ $log->id }}</li>
                         </ol>

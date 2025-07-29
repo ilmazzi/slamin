@@ -127,7 +127,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="mb-3">
-                                                <label class="form-label wizard-form-text-label">Email*</label>
+                                                <label class="form-label wizard-form-text-label">{{ __('permissions.email') }}*</label>
                                                 <input type="email" class="form-control wizard-required" placeholder="CheriDMorrow@teleworm.us" id="email2">
                                                 <div class="wizard-form-error">
                                                     ! please enter valid data
@@ -355,8 +355,8 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="mb-3">
-                                                        <label for="emailId1" class="form-label wizard-form-text-label">Email*</label>
-                                                        <input type="email" class="form-control wizard-required" id="emailId1" placeholder="Enter Your Email" required="">
+                                                        <label for="emailId1" class="form-label wizard-form-text-label">{{ __('permissions.email') }}*</label>
+                                                        <input type="email" class="form-control wizard-required" id="emailId1" placeholder="Enter Your {{ __('permissions.email') }}" required="">
                                                         <div class="wizard-form-error">
                                                             ! please enter valid data
                                                         </div>
@@ -516,7 +516,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="mb-3">
-                                                        <label for="emailId2" class="form-label wizard-form-text-label">Email*</label>
+                                                        <label for="emailId2" class="form-label wizard-form-text-label">{{ __('permissions.email') }}*</label>
                                                         <input type="email" class="form-control wizard-required" id="emailId2" placeholder="StevenSHarmon@rhyta.com" required>
                                                         <div class="wizard-form-error">
                                                             ! please enter valid data

@@ -15,7 +15,7 @@
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>
@@ -175,14 +175,14 @@
             </div>
         </div>
 
-        <!-- Thumbnail Management Section -->
+        <!-- {{ __('common.thumbnail') }} Management Section -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card hover-effect">
                     <div class="card-header">
                         <h5 class="mb-0 f-w-600 text-dark">
                             <i class="ph ph-image me-2"></i>
-                            Gestione Thumbnail Video
+                            Gestione {{ __('common.thumbnail') }} {{ __('common.video') }}
                         </h5>
                     </div>
                     <div class="card-body pa-30">
@@ -196,7 +196,7 @@
                                                 <i class="ph ph-video-camera f-s-24"></i>
                                             </div>
                                             <div class="eshop-card-content">
-                                                <h6 class="mb-1">Totale Video</h6>
+                                                <h6 class="mb-1">Totale {{ __('common.video') }}</h6>
                                                 <h4 class="mb-0" id="totalVideos">-</h4>
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@
                                                 <i class="ph ph-check-circle f-s-24"></i>
                                             </div>
                                             <div class="eshop-card-content">
-                                                <h6 class="mb-1">Con Thumbnail</h6>
+                                                <h6 class="mb-1">Con {{ __('common.thumbnail') }}</h6>
                                                 <h4 class="mb-0" id="withThumbnail">-</h4>
                                             </div>
                                         </div>
@@ -226,7 +226,7 @@
                                                 <i class="ph ph-warning f-s-24"></i>
                                             </div>
                                             <div class="eshop-card-content">
-                                                <h6 class="mb-1">Senza Thumbnail</h6>
+                                                <h6 class="mb-1">Senza {{ __('common.thumbnail') }}</h6>
                                                 <h4 class="mb-0" id="withoutThumbnail">-</h4>
                                             </div>
                                         </div>
@@ -254,11 +254,11 @@
                         <div class="d-flex gap-3 mb-4">
                             <button type="button" class="btn btn-success hover-effect" onclick="generateMissingThumbnails()">
                                 <i class="ph ph-plus-circle me-2"></i>
-                                Genera Thumbnail Mancanti
+                                Genera {{ __('common.thumbnail') }} Mancanti
                             </button>
                             <button type="button" class="btn btn-warning hover-effect" onclick="regenerateAllThumbnails()">
                                 <i class="ph ph-arrow-clockwise me-2"></i>
-                                Rigenera Tutte le Thumbnail
+                                Rigenera Tutte le {{ __('common.thumbnail') }}
                             </button>
                             <button type="button" class="btn btn-info hover-effect" onclick="refreshThumbnailStats()">
                                 <i class="ph ph-arrows-clockwise me-2"></i>
@@ -467,7 +467,7 @@ function refreshThumbnailStats() {
         }
     })
     .catch(error => {
-        console.error('Errore nel caricamento statistiche:', error);
+        console.error('{{ __('common.loading_error') }} statistiche:', error);
     });
 }
 
@@ -524,7 +524,7 @@ function executeThumbnailAction(action) {
     document.getElementById('thumbnailProgressBar').textContent = '0%';
 
     // Disabilita bottoni
-    const buttons = document.querySelectorAll('button[onclick*="Thumbnail"]');
+    const buttons = document.querySelectorAll('button[onclick*="{{ __('common.thumbnail') }}"]');
     buttons.forEach(btn => btn.disabled = true);
 
     fetch('{{ route("admin.settings.thumbnails") }}', {
@@ -600,7 +600,7 @@ function showThumbnailResults(data) {
 
         if (data.data.results.length > 0) {
             html += '<div class="table-responsive"><table class="table table-sm">';
-            html += '<thead><tr><th>Video ID</th><th>Titolo</th><th>Stato</th><th>Dettagli</th></tr></thead><tbody>';
+            html += '<thead><tr><th>{{ __('common.video') }} ID</th><th>Titolo</th><th>{{ __('invitations.status') }}</th><th>Dettagli</th></tr></thead><tbody>';
 
             data.data.results.forEach(result => {
                 const statusClass = result.status === 'success' ? 'success' :

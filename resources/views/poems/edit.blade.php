@@ -84,7 +84,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Lingua e Tags -->
+                            <!-- {{ __('common.language_selector') }} e Tags -->
                             <div class="col-md-6 mb-3">
                                 <label for="language" class="form-label">{{ __('poems.fields.language') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('language') is-invalid @enderror" id="language" name="language" required>
@@ -135,7 +135,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Thumbnail -->
+                            <!-- {{ __('common.thumbnail') }} -->
                             <div class="col-12 mb-3">
                                 <label for="thumbnail" class="form-label">{{ __('poems.fields.thumbnail') }}</label>
 

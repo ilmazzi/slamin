@@ -12,7 +12,7 @@
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>
@@ -59,17 +59,17 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-calendar me-2"></i>
-                        Informazioni Evento
+                        Informazioni {{ __('invitations.event') }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-1">Titolo Evento</h6>
-                            <p class="mb-0 f-w-600">{{ $invitation->event->title ?? 'Evento non trovato' }}</p>
+                            <h6 class="text-muted mb-1">Titolo {{ __('invitations.event') }}</h6>
+                            <p class="mb-0 f-w-600">{{ $invitation->event->title ?? '{{ __('invitations.event') }} non trovato' }}</p>
                         </div>
                                                 <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-1">Organizzatore</h6>
+                            <h6 class="text-muted mb-1">{{ __('events.organizer') }}</h6>
                             <div class="d-flex align-items-center">
                                 @if($invitation->event && $invitation->event->organizer)
                                     @if($invitation->event->organizer->profile_photo)
@@ -85,7 +85,7 @@
                                     @endif
                                     <span class="f-w-600">{{ $invitation->event->organizer->name }}</span>
                                 @else
-                                    <span class="f-w-600 text-muted">Organizzatore non disponibile</span>
+                                    <span class="f-w-600 text-muted">{{ __('events.organizer') }} non disponibile</span>
                                 @endif
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-12 mb-3">
                             <h6 class="text-muted mb-1">Descrizione</h6>
-                            <p class="mb-0">{{ $invitation->event ? ($invitation->event->description ?? 'Nessuna descrizione disponibile') : 'Evento non trovato' }}</p>
+                            <p class="mb-0">{{ $invitation->event ? ($invitation->event->description ?? 'Nessuna descrizione disponibile') : '{{ __('invitations.event') }} non trovato' }}</p>
                         </div>
                     </div>
                 </div>
@@ -116,15 +116,15 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-envelope me-2"></i>
-                        Stato Invito
+                        {{ __('invitations.status') }} Invito
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-1">Stato</h6>
+                            <h6 class="text-muted mb-1">{{ __('invitations.status') }}</h6>
                             @if($invitation->status === 'pending')
-                                <span class="badge bg-warning">In Attesa</span>
+                                <span class="badge bg-warning">{{ __('invitations.pending_invitations') }}</span>
                             @elseif($invitation->status === 'accepted')
                                 <span class="badge bg-success">Accettato</span>
                             @elseif($invitation->status === 'declined')
@@ -141,7 +141,7 @@
                             <p class="mb-0 f-w-600 {{ $invitation->expires_at->isPast() ? 'text-danger' : '' }}">
                                 {{ $invitation->expires_at->format('d/m/Y H:i') }}
                                 @if($invitation->expires_at->isPast())
-                                    <span class="badge bg-danger ms-2">Scaduto</span>
+                                    <span class="badge bg-danger ms-2">{{ __('invitations.expired') }}</span>
                                 @endif
                             </p>
                         </div>
@@ -163,7 +163,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-gear me-2"></i>
-                        Azioni
+                        {{ __('invitations.actions') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -198,7 +198,7 @@
                                 <div class="icon-box bg-warning mx-auto mb-3">
                                     <i class="ph-duotone ph-clock text-white"></i>
                                 </div>
-                                <h6 class="text-warning">Invito Scaduto</h6>
+                                <h6 class="text-warning">Invito {{ __('invitations.expired') }}</h6>
                                 <p class="text-muted">Questo invito è scaduto e non può più essere accettato.</p>
                             @endif
                         </div>
@@ -211,7 +211,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-arrow-right me-2"></i>
-                        Azioni Rapide
+                        {{ __('invitations.actions') }} Rapide
                     </h5>
                 </div>
                 <div class="card-body">
@@ -220,12 +220,12 @@
                             <a href="{{ route('events.show', $invitation->event) }}"
                                class="btn btn-outline-primary hover-effect">
                                 <i class="ph-duotone ph-eye me-2"></i>
-                                Visualizza Evento
+                                Visualizza {{ __('invitations.event') }}
                             </a>
                         @else
                             <button class="btn btn-outline-secondary hover-effect" disabled>
                                 <i class="ph-duotone ph-eye me-2"></i>
-                                Evento non disponibile
+                                {{ __('invitations.event') }} non disponibile
                             </button>
                         @endif
                         <a href="{{ route('invitations.index') }}"

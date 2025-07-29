@@ -122,7 +122,7 @@
                                 <i class="ph ph-currency-eur me-2 text-muted"></i>
                                 <div>
                                     <small class="text-muted d-block">{{ __('events.entry_fee') }}</small>
-                                    <span class="badge bg-success">Gratuito</span>
+                                    <span class="badge bg-success">{{ __('common.free') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -184,12 +184,12 @@
                     @endif
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">Inizio Evento</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.start_event') }}</h6>
                         <p class="text-muted mb-0">{{ $event->start_datetime->format('d F Y, H:i') }}</p>
                     </div>
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">Fine Evento</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.end_event') }}</h6>
                         <p class="text-muted mb-0">{{ $event->end_datetime->format('d F Y, H:i') }}</p>
                         <small class="text-muted">{{ __('events.duration') }}: {{ $event->duration }} {{ __('events.duration_hours') }}</small>
                     </div>
@@ -458,7 +458,7 @@
                                             </span>
                                         @else
                                             <span class="badge bg-secondary ms-2">
-                                                Scaduto
+                                                {{ __('invitations.expired') }}
                                             </span>
                                         @endif
                                     </div>
@@ -489,7 +489,7 @@
                                         <div class="col-md-6 mb-2">
                                             <small class="text-muted">
                                                 <i class="ph ph-translate me-1"></i>
-                                                Lingua: {{ __('events.language_' . $position['language']) }}
+                                                {{ __('common.language_selector') }}: {{ __('events.language_' . $position['language']) }}
                                             </small>
                                         </div>
                                         @endif
@@ -528,7 +528,7 @@
                                         <div class="mt-3">
                                             <button class="btn btn-sm btn-outline-success" onclick="contactOrganizer('{{ $event->organizer->email }}', '{{ __('events.gig_type_' . $position['type']) }}')">
                                                 <i class="ph ph-envelope me-1"></i>
-                                                Contatta Organizzatore
+                                                Contatta {{ __('events.organizer') }}
                                             </button>
                                         </div>
                                         @endif
@@ -603,7 +603,7 @@
                             <div class="mt-3">
                                 <button class="btn btn-sm btn-success w-100" onclick="contactOrganizer('{{ $event->organizer->email }}', 'Posizioni d\'Ingaggio')">
                                     <i class="ph ph-envelope me-1"></i>
-                                    Contatta Organizzatore
+                                    Contatta {{ __('events.organizer') }}
                                 </button>
                             </div>
                             @endif
@@ -641,7 +641,7 @@
                                 </span>
                             @else
                                 <span class="badge bg-secondary">
-                                    Scaduto
+                                    {{ __('invitations.expired') }}
                                 </span>
                             @endif
                         </div>
@@ -711,7 +711,7 @@
                                 <button class="btn btn-light-success w-100 mb-2" data-bs-toggle="modal" data-bs-target="#applyModal">
                                     <i class="ph ph-hand-waving me-2"></i>Richiedi Partecipazione
                                 </button>
-                                <small class="text-muted">Questo evento accetta richieste di partecipazione</small>
+                                <small class="text-muted">{{ __('events.accepts_requests') }}</small>
 
                             @else
                                 <!-- Cannot apply -->
@@ -720,15 +720,15 @@
                                 </div>
                             @endif
 
-                            <!-- Wishlist Button -->
-                            <button class="btn btn-outline-danger w-100 mb-2 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/Rimuovi dalla wishlist">
+                            <!-- {{ __('wishlist.wishlist') }} Button -->
+                            <button class="btn btn-outline-danger w-100 mb-2 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
                                 <i class="ph-duotone ph-heart wishlist-icon"></i>
-                                <span class="wishlist-text">Aggiungi alla Wishlist</span>
+                                <span class="wishlist-text">Aggiungi alla {{ __('wishlist.wishlist') }}</span>
                             </button>
 
                             <!-- Always show share button -->
                             <button class="btn btn-light-primary w-100 mt-2" onclick="shareEvent()">
-                                <i class="ph ph-share me-2"></i>Condividi Evento
+                                <i class="ph ph-share me-2"></i>Condividi {{ __('invitations.event') }}
                             </button>
 
                             <!-- Report Button -->
@@ -737,10 +737,10 @@
                         @else
                             <!-- Not logged in -->
                             <div class="alert alert-info mb-3">
-                                <i class="ph ph-sign-in me-2"></i>Accedi per partecipare a questo evento
+                                <i class="ph ph-sign-in me-2"></i>{{ __('auth.login') }} per partecipare a questo evento
                             </div>
                             <a href="{{ route('login') }}" class="btn btn-light-primary w-100">
-                                <i class="ph ph-sign-in me-2"></i>Accedi
+                                <i class="ph ph-sign-in me-2"></i>{{ __('auth.login') }}
                             </a>
                         @endauth
                     </div>
@@ -780,7 +780,7 @@
 
                     @if($event->max_participants)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">Partecipanti</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.participants') }}</h6>
                         <p class="mb-0">
                             {{ $event->invitations->where('status', 'accepted')->count() + $event->requests->where('status', 'accepted')->count() }} / {{ $event->max_participants }}
                         </p>
@@ -817,7 +817,7 @@
                         </div>
                         <div>
                             <h6 class="mb-0 text-white">{{ $event->organizer->getDisplayName() }}</h6>
-                            <small class="text-white-50">Organizzatore</small>
+                            <small class="text-white-50">{{ __('events.organizer') }}</small>
                         </div>
                     </div>
                     @if($event->organizer->bio)
@@ -827,7 +827,7 @@
                     @auth
                         @if($event->organizer_id !== auth()->id())
                             <button class="btn btn-light btn-sm w-100">
-                                <i class="ph ph-chat-circle me-2"></i>Contatta Organizzatore
+                                <i class="ph ph-chat-circle me-2"></i>Contatta {{ __('events.organizer') }}
                             </button>
                         @endif
                     @endauth
@@ -996,7 +996,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-danger">
-                    <i class="ph ph-warning me-2"></i>Elimina Evento
+                    <i class="ph ph-warning me-2"></i>Elimina {{ __('invitations.event') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -1162,12 +1162,12 @@ function showNotification(message, type) {
     }, 5000);
 }
 
-// Wishlist è gestita globalmente da WishlistManager
+// {{ __('wishlist.wishlist') }} è gestita globalmente da WishlistManager
 // Non serve codice duplicato qui
 
 // Funzione per contattare l'organizzatore per posizioni d'ingaggio
 function contactOrganizer(email, positionType) {
-    const subject = encodeURIComponent(`Interesse per posizione: ${positionType} - Evento: {{ $event->title }}`);
+    const subject = encodeURIComponent(`Interesse per posizione: ${positionType} - {{ __('invitations.event') }}: {{ $event->title }}`);
     const body = encodeURIComponent(`Ciao!
 
 Sono interessato alla posizione di ${positionType} per il tuo evento "{{ $event->title }}" che si terrà il {{ $event->start_datetime->format('d/m/Y H:i') }}.

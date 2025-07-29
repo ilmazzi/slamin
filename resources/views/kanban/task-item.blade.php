@@ -26,7 +26,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" onclick="loadTaskForEdit({{ $task->id }})">
-                            <i class="ph-bold ph-pencil me-2"></i>Modifica
+                            <i class="ph-bold ph-pencil me-2"></i>{{ __('permissions.modify') }}
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="#" onclick="deleteTask({{ $task->id }})">

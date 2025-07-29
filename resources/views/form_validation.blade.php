@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label">{{ __('permissions.email') }}</label>
                                 <input type="email" class="form-control" id="email">
                                 <div class="mt-1">
                                     <span id="emailError" class="text-danger"></span>

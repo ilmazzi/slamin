@@ -1087,7 +1087,7 @@
                                 <span class="float-end f-s-13 text-secondary">IT Section</span>
                             </div>
                             <div>
-                                <span class="fw-medium"><i class="ti ti-mail"></i> Email</span>
+                                <span class="fw-medium"><i class="ti ti-mail"></i> {{ __('permissions.email') }}</span>
                                 <span class="float-end f-s-13 text-secondary">Ninfa@gmail.com</span>
                             </div>
                             <div>

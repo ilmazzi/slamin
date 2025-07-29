@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'I Miei Video - Slamin')
+@section('title', 'I Miei {{ __('common.video') }} - Slamin')
 
 @section('css')
 <style>
@@ -174,9 +174,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 f-w-600">Gestione Video</h4>
+                <h4 class="mb-0 f-w-600">Gestione {{ __('common.video') }}</h4>
                 <a href="{{ route('videos.upload') }}" class="btn btn-primary hover-effect">
-                    <i class="ph ph-plus me-2"></i>Carica Nuovo Video
+                    <i class="ph ph-plus me-2"></i>Carica Nuovo {{ __('common.video') }}
                 </a>
             </div>
         </div>
@@ -190,7 +190,7 @@
             <div class="card hover-effect">
                 <div class="position-relative">
                     @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
-                        <!-- Thumbnail con overlay play -->
+                        <!-- {{ __('common.thumbnail') }} con overlay play -->
                         <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
                             <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                             <!-- Overlay play button -->
@@ -206,7 +206,7 @@
                                     @if($video->duration && $video->duration > 0)
                                         {{ $video->formatted_duration }}
                                     @else
-                                        <span title="Durata non disponibile">--:--</span>
+                                        <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
                                     @endif
                                 </small>
                             </div>
@@ -227,7 +227,7 @@
                                     @if($video->duration && $video->duration > 0)
                                         {{ $video->formatted_duration }}
                                     @else
-                                        <span title="Durata non disponibile">--:--</span>
+                                        <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
                                     @endif
                                 </small>
                             </div>
@@ -262,7 +262,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <small class="text-muted f-s-12">{{ $video->created_at->format('d/m/Y') }}</small>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary hover-effect btn-sm" onclick="editVideo({{ $video->id }})" title="Modifica">
+                            <button class="btn btn-primary hover-effect btn-sm" onclick="editVideo({{ $video->id }})" title="{{ __('permissions.modify') }}">
                                 <i class="ph ph-pencil f-s-14"></i>
                             </button>
                             <button class="btn btn-danger hover-effect btn-sm" onclick="deleteVideo({{ $video->id }})" title="Elimina">
@@ -275,7 +275,7 @@
                     @if(!($video->file_path || $video->peertube_uuid))
                         <div class="alert alert-warning mb-0">
                             <i class="ph ph-warning me-2"></i>
-                            <small>Video non disponibile</small>
+                            <small>{{ __('videos.video_unavailable') }}</small>
                         </div>
                     @endif
                 </div>
@@ -310,14 +310,14 @@
     @endif
 </div>
 
-<!-- Upload Video Modal -->
+<!-- Upload {{ __('common.video') }} Modal -->
 <div class="modal fade" id="uploadVideoModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header card-light-primary">
                 <h5 class="modal-title f-w-600">
                     <i class="ph ph-video-camera me-2"></i>
-                    Carica Nuovo Video
+                    Carica Nuovo {{ __('common.video') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -326,7 +326,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="mb-3">
-                                <label class="form-label f-w-600">Titolo del Video *</label>
+                                <label class="form-label f-w-600">Titolo del {{ __('common.video') }} *</label>
                                 <input type="text" class="form-control" name="title" required>
                                 <small class="text-muted f-s-12">Un titolo accattivante per il tuo video</small>
                             </div>
@@ -350,14 +350,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label f-w-600">URL del Video *</label>
+                        <label class="form-label f-w-600">URL del {{ __('common.video') }} *</label>
                         <input type="url" class="form-control" name="video_url" required
                                placeholder="https://youtube.com/watch?v=... o https://vimeo.com/...">
                         <small class="text-muted f-s-12">Supporta YouTube e Vimeo</small>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label f-w-600">Thumbnail (Opzionale)</label>
+                        <label class="form-label f-w-600">{{ __('common.thumbnail') }} (Opzionale)</label>
                         <input type="file" class="form-control" name="thumbnail" accept="image/*">
                         <small class="text-muted f-s-12">Se non carichi un'immagine, verrà usata quella di YouTube</small>
                     </div>
@@ -365,7 +365,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary hover-effect" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary hover-effect">
-                        <i class="ph ph-upload me-2"></i>Carica Video
+                        <i class="ph ph-upload me-2"></i>{{ __('common.upload_video') }}
                     </button>
                 </div>
             </form>
@@ -373,14 +373,14 @@
     </div>
 </div>
 
-<!-- View Video Modal -->
+<!-- View {{ __('common.video') }} Modal -->
 <div class="modal fade" id="viewVideoModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header card-light-info">
                 <h5 class="modal-title f-w-600" id="videoModalTitle">
                     <i class="ph ph-play me-2"></i>
-                    Visualizza Video
+                    Visualizza {{ __('common.video') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -465,7 +465,7 @@ function deleteVideo(videoId) {
     });
 }
 
-// Upload Video Form Handler
+// Upload {{ __('common.video') }} Form Handler
 $('#uploadVideoForm').on('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);

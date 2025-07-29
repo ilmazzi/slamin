@@ -30,7 +30,7 @@
                                             account and enjoy the experience.</p>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label" for="emailId">Email address</label>
+                                        <label class="form-label" for="emailId">{{ __('permissions.email') }} address</label>
                                         <input class="form-control" type="email" id="emailId">
                                         <div class="form-text text">We'll never share your email with anyone else.</div>
                                     </div>

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-9 col-12">
-                <p class="footer-text f-w-600 mb-0">Copyright © 2025 ki-admin. All rights reserved 💖 V1.0.0</p>
+                <p class="footer-text f-w-600 mb-0">{{ __('common.copyright') }}</p>
             </div>
             <div class="col-md-3">
                 <div class="footer-text text-end">
@@ -204,7 +204,7 @@ class NotificationManager {
         container.innerHTML = `
             <div class="text-center p-4">
                 <i class="ph ph-warning-circle display-4 text-warning mb-3"></i>
-                <h6 class="text-muted">Errore nel caricamento</h6>
+                <h6 class="text-muted">{{ __('common.loading_error') }}</h6>
                 <button class="btn btn-outline-primary btn-sm" onclick="notificationManager.loadNotifications()">
                     <i class="ph ph-arrow-clockwise me-1"></i>Riprova
                 </button>
@@ -377,7 +377,7 @@ async function clearOldNotifications() {
                 }
             });
             notificationManager.loadNotifications();
-            notificationManager.showToast('Notifiche vecchie eliminate', 'success');
+            notificationManager.showToast('{{ __('notifications.notifications') }} vecchie eliminate', 'success');
         } catch (error) {
             notificationManager.showToast('Errore nell\'operazione', 'error');
         }

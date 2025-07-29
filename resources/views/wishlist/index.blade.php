@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'La Mia Wishlist - Slam in')
+@section('title', 'La Mia {{ __('wishlist.wishlist') }} - Slam in')
 
 @section('main-content')
 <div class="page-content">
@@ -11,21 +11,21 @@
                 <div class="page-title-box d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-heart f-s-20 me-2 text-danger"></i>
-                        La Mia Wishlist
+                        La Mia {{ __('wishlist.wishlist') }}
                     </h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">Dashboard</a>
+                                <a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item active">Wishlist</li>
+                            <li class="breadcrumb-item active">{{ __('wishlist.wishlist') }}</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Wishlist Content -->
+        <!-- {{ __('wishlist.wishlist') }} Content -->
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -33,7 +33,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
                                 <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                Eventi nella Wishlist
+                                Eventi nella {{ __('wishlist.wishlist') }}
                             </h5>
                             <span class="badge bg-primary f-s-12">
                                 {{ $wishlistedEvents->total() }} eventi
@@ -64,7 +64,7 @@
                                         <div class="card-body d-flex flex-column">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <h5 class="card-title f-w-600 mb-0">{{ $event->title }}</h5>
-                                                <button class="btn btn-sm btn-outline-danger remove-wishlist" data-event-id="{{ $event->id }}" title="Rimuovi dalla wishlist">
+                                                <button class="btn btn-sm btn-outline-danger remove-wishlist" data-event-id="{{ $event->id }}" title="{{ __('wishlist.remove_from_wishlist') }}">
                                                     <i class="ph-duotone ph-heart-fill"></i>
                                                 </button>
                                             </div>
@@ -117,7 +117,7 @@
                                 <div class="mb-4">
                                     <i class="ph-duotone ph-heart f-s-64 text-muted"></i>
                                 </div>
-                                <h5 class="text-muted mb-3">La tua wishlist è vuota</h5>
+                                <h5 class="text-muted mb-3">{{ __('wishlist.wishlist_empty') }}</h5>
                                 <p class="text-muted mb-4">
                                     Non hai ancora aggiunto nessun evento alla tua wishlist.<br>
                                     Esplora gli eventi disponibili e aggiungi quelli che ti interessano!
@@ -139,7 +139,7 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Rimuovi dalla wishlist
+    // {{ __('wishlist.remove_from_wishlist') }}
     $('.remove-wishlist').on('click', function() {
         const eventId = $(this).data('event-id');
         const card = $(this).closest('.col-lg-6');

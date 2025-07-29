@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Analytics Dashboard')
+@section('title', 'Analytics {{ __('dashboard.dashboard') }}')
 @section('css')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -230,11 +230,11 @@
 @endsection
 
 @section('breadcrumb-title')
-<h3>Analytics Dashboard</h3>
+<h3>Analytics {{ __('dashboard.dashboard') }}</h3>
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item">Dashboard</li>
+<li class="breadcrumb-item">{{ __('dashboard.dashboard') }}</li>
 <li class="breadcrumb-item active">Analytics</li>
 @endsection
 
@@ -246,7 +246,7 @@
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h2 class="mb-2">
-                    <i class="ph ph-chart-line me-3"></i>Analytics Dashboard
+                    <i class="ph ph-chart-line me-3"></i>Analytics {{ __('dashboard.dashboard') }}
                     <span class="real-time-indicator">
                         <span class="real-time-dot"></span>
                         Live
@@ -300,7 +300,7 @@
         <div class="col-md-3 mb-3">
             <div class="metric-card text-center">
                 <div class="metric-number">{{ $analytics['overview']['total_participants'] }}</div>
-                <div class="metric-label">Partecipanti Totali</div>
+                <div class="metric-label">{{ __('events.participants') }} Totali</div>
                 <div class="metric-change positive">
                     <i class="ph ph-users me-1"></i>
                     {{ $analytics['overview']['avg_participants_per_event'] }} media per evento
@@ -320,7 +320,7 @@
         <div class="col-md-3 mb-3">
             <div class="metric-card text-center">
                 <div class="metric-number">{{ $analytics['overview']['repeat_participants'] }}</div>
-                <div class="metric-label">Partecipanti Ricorrenti</div>
+                <div class="metric-label">{{ __('events.participants') }} Ricorrenti</div>
                 <div class="metric-change positive">
                     <i class="ph ph-repeat me-1"></i>
                     Alto engagement

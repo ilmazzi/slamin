@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Video Embed')
+@section('title', '{{ __('common.video') }} Embed')
 @section('css')
 
 @endsection
@@ -8,7 +8,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12 ">
-                <h4 class="main-title">Video Embed</h4>
+                <h4 class="main-title">{{ __('common.video') }} Embed</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -18,18 +18,18 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Video Embed</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('common.video') }} Embed</a>
                     </li>
                 </ul>
             </div>
         </div>
         <!-- Breadcrumb end -->
         <div class="row">
-            <!-- Ratio Video 1x1 start -->
+            <!-- Ratio {{ __('common.video') }} 1x1 start -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Ratio Video 1x1 </h5>
+                        <h5>Ratio {{ __('common.video') }} 1x1 </h5>
                     </div>
                     <div class="card-body">
                         <div class="ratio ratio-1x1">
@@ -45,7 +45,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h5>Ratio Video 4x3 </h5>
+                        <h5>Ratio {{ __('common.video') }} 4x3 </h5>
                     </div>
                     <div class="card-body">
                         <div class="ratio  ratio-4x3">
@@ -59,12 +59,12 @@
                     </div>
                 </div>
             </div>
-            <!-- Ratio Video 1x1 end -->
-            <!-- Ratio Video 16x9 start -->
+            <!-- Ratio {{ __('common.video') }} 1x1 end -->
+            <!-- Ratio {{ __('common.video') }} 16x9 start -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Ratio Video 16x9 </h5>
+                        <h5>Ratio {{ __('common.video') }} 16x9 </h5>
                     </div>
                     <div class="card-body">
                         <div class="ratio ratio-16x9">
@@ -94,7 +94,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h5> Ratio Video 21x9 </h5>
+                        <h5> Ratio {{ __('common.video') }} 21x9 </h5>
                     </div>
                     <div class="card-body">
                         <div class="ratio ratio-21x9">
@@ -108,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Ratio Video 16x9 end -->
+            <!-- Ratio {{ __('common.video') }} 16x9 end -->
         </div>
     </div>
 @endsection

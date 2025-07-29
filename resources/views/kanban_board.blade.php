@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Kanban Board')
+@section('title', '{{ __('common.kanban_board') }}')
 @section('css')
 <!-- Force cache refresh -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -14,7 +14,7 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="main-title">Kanban Board</h4>
+                        <h4 class="main-title">{{ __('common.kanban_board') }}</h4>
                         <ul class="app-line-breadcrumbs mb-3">
                             <li class="">
                                 <a href="#" class="f-s-14 f-w-500">
@@ -24,7 +24,7 @@
                                 </a>
                             </li>
                             <li class="active">
-                                <a href="#" class="f-s-14 f-w-500">Kanban Board</a>
+                                <a href="#" class="f-s-14 f-w-500">{{ __('common.kanban_board') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <!-- Kanban Board start -->
+        <!-- {{ __('common.kanban_board') }} start -->
         <div class="row">
             <div class="col-12">
                 <div class="kanban-board-container app-scroll">
@@ -120,7 +120,7 @@
                 </div>
             </div>
         </div>
-        <!-- Kanban Board end -->
+        <!-- {{ __('common.kanban_board') }} end -->
     </div>
 
     <!-- Add Task Modal -->
@@ -147,7 +147,7 @@
                                     <label for="priority" class="form-label">Priorità *</label>
                                     <select class="form-select" id="priority" name="priority" required>
                                         <option value="low">Bassa</option>
-                                        <option value="medium" selected>Media</option>
+                                        <option value="medium" selected>{{ __('common.media_section') }}</option>
                                         <option value="high">Alta</option>
                                         <option value="urgent">Urgente</option>
                                     </select>
@@ -244,7 +244,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editTaskModalLabel">
-                        <i class="ph-bold ph-pencil me-2"></i>Modifica Task
+                        <i class="ph-bold ph-pencil me-2"></i>{{ __('permissions.modify') }} Task
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -264,7 +264,7 @@
                                     <label for="edit_priority" class="form-label">Priorità *</label>
                                     <select class="form-select" id="edit_priority" name="priority" required>
                                         <option value="low">Bassa</option>
-                                        <option value="medium">Media</option>
+                                        <option value="medium">{{ __('common.media_section') }}</option>
                                         <option value="high">Alta</option>
                                         <option value="urgent">Urgente</option>
                                     </select>
@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const editModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
                 editModal.show();
             } else {
-                alert('Errore nel caricamento del task');
+                alert('{{ __('common.loading_error') }} del task');
             }
         })
         .catch(error => {

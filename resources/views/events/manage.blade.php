@@ -19,7 +19,7 @@
 @section('main-content')
 <div class="container-fluid">
 
-    <!-- Dashboard Header -->
+    <!-- {{ __('dashboard.dashboard') }} Header -->
     <div class="row m-1 mb-4">
         <div class="col-12">
             <div class="card bg-primary text-white position-relative overflow-hidden" style="min-height: 200px;">
@@ -141,7 +141,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-image me-2"></i>Immagine Evento</h6>
+                    <h6 class="mb-0"><i class="ph ph-image me-2"></i>Immagine {{ __('invitations.event') }}</h6>
                 </div>
                 <div class="card-body text-center">
                     <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
@@ -156,7 +156,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-lightning me-2"></i>Azioni Rapide</h6>
+                    <h6 class="mb-0"><i class="ph ph-lightning me-2"></i>{{ __('invitations.actions') }} Rapide</h6>
                 </div>
                 <div class="card-body">
         <div class="row g-3">
@@ -432,7 +432,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="mb-0">
-                        <i class="ph ph-clock me-2"></i>Timeline Evento
+                        <i class="ph ph-clock me-2"></i>Timeline {{ __('invitations.event') }}
                     </h6>
                 </div>
                 <div class="card-body p-3">
@@ -463,7 +463,7 @@
                             </div>
                             <div class="timeline-content bg-light-primary b-1-primary">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-primary">Inizio Evento</h6>
+                                    <h6 class="mb-1 text-primary">{{ __('events.start_event') }}</h6>
                                     <span class="badge bg-primary">{{ $event->start_datetime->diffForHumans() }}</span>
                                 </div>
                         <p class="text-muted mb-0">{{ $event->start_datetime->format('d/m/Y H:i') }}</p>
@@ -478,7 +478,7 @@
                             </div>
                             <div class="timeline-content bg-light-success b-1-success">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-success">Fine Evento</h6>
+                                    <h6 class="mb-1 text-success">{{ __('events.end_event') }}</h6>
                                     <span class="badge bg-success">{{ $event->duration }}h</span>
                                 </div>
                         <p class="text-muted mb-0">{{ $event->end_datetime->format('d/m/Y H:i') }}</p>
@@ -500,7 +500,7 @@
                         <div class="col-6">
                             <div class="border rounded p-3">
                                 <div class="h4 text-primary mb-1">{{ $event->invitations->count() }}</div>
-                                <small class="text-muted">Inviti Totali</small>
+                                <small class="text-muted">{{ __('invitations.total_invitations') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
@@ -514,7 +514,7 @@
                                 <div class="h4 text-warning mb-1">
                                     {{ $event->acceptedInvitations->count() }}
                                 </div>
-                                <small class="text-muted">Inviti Accettati</small>
+                                <small class="text-muted">Inviti {{ __('invitations.accepted_invitations') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
@@ -616,7 +616,7 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Ruolo *</label>
+                                <label class="form-label">{{ __('invitations.role') }} *</label>
                                 <select name="role" class="form-select" required>
                                     <option value="performer">Performer</option>
                                     <option value="judge">Judge</option>
@@ -645,7 +645,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-paper-plane me-2"></i>Invia Inviti
+                        <i class="ph ph-paper-plane me-2"></i>{{ __('videos.send') }} Inviti
                     </button>
                 </div>
             </form>

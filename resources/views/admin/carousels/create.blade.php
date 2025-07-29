@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Crea Nuova Slide Carosello')
+@section('title', 'Crea {{ __('notifications.new') }} Slide Carosello')
 
 @section('main-content')
 <div class="page-content">
@@ -9,12 +9,12 @@
         <!-- Header -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">Crea Nuova Slide Carosello</h4>
+                <h4 class="main-title">Crea {{ __('notifications.new') }} Slide Carosello</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                             </span>
                         </a>
                     </li>
@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Nuova Slide</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('notifications.new') }} Slide</a>
                     </li>
                 </ul>
             </div>
@@ -83,7 +83,7 @@
                                                 <div class="form-text">Descrizione opzionale che apparirà sotto il titolo</div>
                                             </div>
 
-                                            <!-- Media Upload -->
+                                            <!-- {{ __('common.media_section') }} Upload -->
                                             <div class="mb-3">
                                                 <label for="image" class="form-label">Immagine *</label>
                                                 <input type="file" class="form-control" id="image" name="image"
@@ -92,10 +92,10 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="video" class="form-label">Video (opzionale)</label>
+                                                <label for="video" class="form-label">{{ __('common.video') }} (opzionale)</label>
                                                 <input type="file" class="form-control" id="video" name="video"
                                                        accept="video/*">
-                                                <div class="form-text">Video opzionale (MP4, AVI, MOV, MKV, WEBM, FLV - max 10MB)</div>
+                                                <div class="form-text">{{ __('common.video') }} opzionale (MP4, AVI, MOV, MKV, WEBM, FLV - max 10MB)</div>
                                             </div>
 
                                             <!-- Link Settings -->
@@ -596,7 +596,7 @@ window.testManualSearch = function() {
     const mockData = [
         {
             id: 1,
-            title: 'Test Video 1',
+            title: 'Test {{ __('common.video') }} 1',
             description: 'Descrizione di test',
             image_url: 'http://localhost/assets/images/placeholder/placeholder-1.jpg',
             url: '#',
@@ -605,7 +605,7 @@ window.testManualSearch = function() {
         },
         {
             id: 2,
-            title: 'Test Video 2',
+            title: 'Test {{ __('common.video') }} 2',
             description: 'Altra descrizione di test',
             image_url: 'http://localhost/assets/images/placeholder/placeholder-1.jpg',
             url: '#',
@@ -886,16 +886,16 @@ function openContentSelectionModal(item) {
     const modalSelectedInfo = document.getElementById('modalSelectedInfo');
     switch (contentType) {
         case 'video':
-            modalSelectedInfo.textContent = `Video • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni`;
+            modalSelectedInfo.textContent = `{{ __('common.video') }} • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni`;
             break;
         case 'event':
-            modalSelectedInfo.textContent = `Evento • ${item.dataset.organizer || 'N/A'} • ${item.dataset.date || 'N/A'} • ${item.dataset.location || 'N/A'}`;
+            modalSelectedInfo.textContent = `{{ __('invitations.event') }} • ${item.dataset.organizer || 'N/A'} • ${item.dataset.date || 'N/A'} • ${item.dataset.location || 'N/A'}`;
             break;
         case 'user':
-            modalSelectedInfo.textContent = `Utente • ${item.dataset.videos_count || '0'} video • ${item.dataset.location || 'N/A'}`;
+            modalSelectedInfo.textContent = `{{ __('permissions.user') }} • ${item.dataset.videos_count || '0'} video • ${item.dataset.location || 'N/A'}`;
             break;
         case 'snap':
-            modalSelectedInfo.textContent = `Snap • ${item.dataset.user || 'N/A'} • ${item.dataset.likes || '0'} like • ${item.dataset.timestamp || 'N/A'}`;
+            modalSelectedInfo.textContent = `{{ __('common.snap') }} • ${item.dataset.user || 'N/A'} • ${item.dataset.likes || '0'} like • ${item.dataset.timestamp || 'N/A'}`;
             break;
         default:
             modalSelectedInfo.textContent = '';
@@ -947,7 +947,7 @@ function submitModalForm() {
     submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-2"></i>Creazione...';
     submitBtn.disabled = true;
 
-    // Invia la richiesta
+    // {{ __('videos.send') }} la richiesta
     fetch('{{ route("admin.carousels.store") }}', {
         method: 'POST',
         body: formData,

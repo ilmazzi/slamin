@@ -59,7 +59,7 @@
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-danger">
                                 <i class="ph-duotone ph-flag me-2"></i>
-                                Invia Segnalazione
+                                {{ __('videos.send') }} Segnalazione
                             </button>
                             <a href="{{ url()->previous() }}" class="btn btn-secondary">
                                 <i class="ph-duotone ph-x me-2"></i>

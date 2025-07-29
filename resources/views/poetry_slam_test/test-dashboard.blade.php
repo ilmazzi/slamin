@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'Slamin - Test Dashboard')
+@section('title', 'Slamin - Test {{ __('dashboard.dashboard') }}')
 @section('css')
     <!-- apexcharts css -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/apexcharts/apexcharts.css') }}">
@@ -10,7 +10,7 @@
         <!-- Breadcrumb start -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">🎭 Slamin Test Dashboard</h4>
+                <h4 class="main-title">🎭 Slamin Test {{ __('dashboard.dashboard') }}</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
                         <a href="#" class="f-s-14 f-w-500">
@@ -18,7 +18,7 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Dashboard</a>
+                        <a href="#" class="f-s-14 f-w-500">{{ __('dashboard.dashboard') }}</a>
                     </li>
                 </ul>
             </div>

@@ -39,7 +39,7 @@
 
                          <!-- <h3 class="text-secondary mb-4">Subscribe Now to Get Updates</h3> -->
                          <div class="app-form mb-3 mt-4">
-                             <input type="email" class="form-control form-control-lg m-auto text-center coming-soon-input" placeholder="Enter an Email" id="username">
+                             <input type="email" class="form-control form-control-lg m-auto text-center coming-soon-input" placeholder="Enter an {{ __('permissions.email') }}" id="username">
 
                          </div>
                          <a class="btn btn-primary btn-xl" href="{{ route('coming_soon') }}">Subscribe Now</a>

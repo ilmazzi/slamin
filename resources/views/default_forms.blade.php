@@ -46,9 +46,9 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
 
-                                        <input type="email" class="form-control" placeholder="Your Email">
+                                        <input type="email" class="form-control" placeholder="Your {{ __('permissions.email') }}">
 
                                     </div>
                                 </div>
@@ -123,10 +123,10 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
                                         <div class="icon-form">
                                             <i class="ti ti-mail"></i>
-                                            <input type="email" class="form-control pa-s-34" placeholder="Your Email">
+                                            <input type="email" class="form-control pa-s-34" placeholder="Your {{ __('permissions.email') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -208,11 +208,11 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <label class="form-label">Email address</label>
+                                    <label class="form-label">{{ __('permissions.email') }} address</label>
                                 </div>
                                 <div class="col-md-9">
 
-                                    <input type="email" class="form-control" placeholder="Your Email">
+                                    <input type="email" class="form-control" placeholder="Your {{ __('permissions.email') }}">
 
                                 </div>
                             </div>
@@ -295,12 +295,12 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <label class="form-label">Email address</label>
+                                    <label class="form-label">{{ __('permissions.email') }} address</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="icon-form">
                                         <i class="ti ti-mail"></i>
-                                        <input type="email" class="form-control pa-s-34" placeholder="Your Email">
+                                        <input type="email" class="form-control pa-s-34" placeholder="Your {{ __('permissions.email') }}">
                                     </div>
                                 </div>
                             </div>
@@ -383,8 +383,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
-                                        <input type="email" class="form-control" placeholder="Your Email">
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
+                                        <input type="email" class="form-control" placeholder="Your {{ __('permissions.email') }}">
 
                                     </div>
                                 </div>
@@ -449,10 +449,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
                                         <div class="icon-form">
                                             <i class="ti ti-mail"></i>
-                                            <input type="text" class="form-control  pa-s-34" placeholder="Your Email">
+                                            <input type="text" class="form-control  pa-s-34" placeholder="Your {{ __('permissions.email') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -522,9 +522,9 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
 
-                                        <input type="text" class="form-control" placeholder="Your Email">
+                                        <input type="text" class="form-control" placeholder="Your {{ __('permissions.email') }}">
 
                                     </div>
                                 </div>
@@ -595,10 +595,10 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Email address</label>
+                                        <label class="form-label">{{ __('permissions.email') }} address</label>
                                         <div class="icon-form">
                                             <i class="ti ti-mail"></i>
-                                            <input type="text" class="form-control pa-s-34" placeholder="Your Email">
+                                            <input type="text" class="form-control pa-s-34" placeholder="Your {{ __('permissions.email') }}">
                                         </div>
                                     </div>
                                 </div>

@@ -239,7 +239,7 @@
                                     <th>Parent Name </th>
                                     <th>API Key</th>
                                     <th>Date</th>
-                                    <th>Email</th>
+                                    <th>{{ __('permissions.email') }}</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>

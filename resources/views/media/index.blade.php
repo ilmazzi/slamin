@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'Media - Slamin')
+@section('title', '{{ __('common.media_section') }} - Slamin')
 
 @section('css')
 <!-- Slick CSS -->
@@ -17,18 +17,18 @@
         <div class="col-12">
             <h4 class="main-title">
                 <i class="ph ph-video-camera me-2"></i>
-                Media
+                {{ __('common.media_section') }}
             </h4>
             <ul class="app-line-breadcrumbs mb-3">
                 <li class="">
                     <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
+                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
                         </span>
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Media</a>
+                    <a href="#" class="f-s-14 f-w-500">{{ __('common.media_section') }}</a>
                 </li>
             </ul>
         </div>
@@ -40,7 +40,7 @@
             <div class="card card-light-primary hover-effect">
                 <div class="card-body text-center">
                     <div class="f-s-48 f-w-700 text-primary">{{ $stats['total_videos'] }}</div>
-                    <div class="f-s-14 text-muted">Video</div>
+                    <div class="f-s-14 text-muted">{{ __('common.video') }}</div>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
             <div class="card card-light-success hover-effect">
                 <div class="card-body text-center">
                     <div class="f-s-48 f-w-700 text-success">{{ $stats['total_photos'] }}</div>
-                    <div class="f-s-14 text-muted">Foto</div>
+                    <div class="f-s-14 text-muted">{{ __('common.photo') }}</div>
                 </div>
             </div>
         </div>
@@ -64,13 +64,13 @@
             <div class="card card-light-info hover-effect">
                 <div class="card-body text-center">
                     <div class="f-s-48 f-w-700 text-info">{{ $stats['total_comments'] }}</div>
-                    <div class="f-s-14 text-muted">Commenti</div>
+                    <div class="f-s-14 text-muted">{{ __('common.comments_section') }}</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Featured Media Slider -->
+    <!-- Featured {{ __('common.media_section') }} Slider -->
     @if(isset($allMedia) && $allMedia->count() > 0)
     <div class="row mb-4">
         <div class="col-12">
@@ -78,7 +78,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-star me-2"></i>
-                        Media in Evidenza
+                        {{ __('common.media_section') }} in Evidenza
                     </h5>
                 </div>
                 <div class="card-body">
@@ -134,19 +134,19 @@
                                 </button>
                                 <button type="button" class="btn {{ $type === 'videos' ? 'btn-primary' : 'btn-outline-primary' }}" 
                                         onclick="filterMedia('videos')">
-                                    <i class="ph ph-video-camera me-1"></i> Video
+                                    <i class="ph ph-video-camera me-1"></i> {{ __('common.video') }}
                                 </button>
                                 <button type="button" class="btn {{ $type === 'photos' ? 'btn-primary' : 'btn-outline-primary' }}" 
                                         onclick="filterMedia('photos')">
-                                    <i class="ph ph-image me-1"></i> Foto
+                                    <i class="ph ph-image me-1"></i> {{ __('common.photo') }}
                                 </button>
                             </div>
                         </div>
                         <div class="col-md-6 text-md-end">
                             <select class="form-select d-inline-block w-auto" onchange="sortMedia(this.value)">
-                                <option value="latest" {{ $sort === 'latest' ? 'selected' : '' }}>Più recenti</option>
-                                <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>Più popolari</option>
-                                <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>Più vecchi</option>
+                                <option value="latest" {{ $sort === 'latest' ? 'selected' : '' }}>{{ __('common.most_recent') }}</option>
+                                <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>{{ __('common.most_popular') }}</option>
+                                <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>{{ __('common.oldest') }}</option>
                             </select>
                         </div>
                     </div>
@@ -155,15 +155,15 @@
         </div>
     </div>
 
-    <!-- Media Content -->
+    <!-- {{ __('common.media_section') }} Content -->
     <div class="row">
-        <!-- Video Gallery -->
+        <!-- {{ __('common.video') }} Gallery -->
         @if($type === 'videos' || $type === 'all')
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Gallery Video ({{ $allMedia->where('type', 'video')->count() }} video totali)</h5>
+                        <h5>Gallery {{ __('common.video') }} ({{ $allMedia->where('type', 'video')->count() }} video totali)</h5>
                     </div>
                     <div class="card-body">
                         <div class="col-12">
@@ -231,7 +231,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Gallery Foto ({{ $allMedia->where('type', 'photo')->count() }} foto totali)</h5>
+                        <h5>Gallery {{ __('common.photo') }} ({{ $allMedia->where('type', 'photo')->count() }} foto totali)</h5>
                     </div>
                     <div class="card-body">
                         <div class="col-12">
@@ -327,14 +327,14 @@
         </div>
         @endif
         
-        <!-- Tutti i Media - Lista Completa -->
+        <!-- Tutti i {{ __('common.media_section') }} - Lista Completa -->
         @if($type === 'all')
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Tutti i Media ({{ $allMedia->count() }} totali)</h5>
-                        <p class="text-muted mb-0">Clicca su un media per visualizzarlo in fullscreen</p>
+                        <h5>Tutti i {{ __('common.media_section') }} ({{ $allMedia->count() }} totali)</h5>
+                        <p class="text-muted mb-0">{{ __('common.click_media_fullscreen') }}</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -418,26 +418,26 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Commenti</h5>
+                <h5 class="modal-title">{{ __('common.comments_section') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div id="commentsContent"></div>
                 <div class="mt-3">
                     <textarea class="form-control comment-input" placeholder="Scrivi un commento..." rows="3"></textarea>
-                    <button class="btn btn-primary mt-2" onclick="submitComment()">Invia</button>
+                    <button class="btn btn-primary mt-2" onclick="submitComment()">{{ __('videos.send') }}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Media Modal -->
+<!-- {{ __('common.media_section') }} Modal -->
 <div class="modal fade" id="mediaModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Media</h5>
+                <h5 class="modal-title">{{ __('common.media_section') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -574,7 +574,7 @@ function showComments(type, id) {
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('commentsContent').innerHTML = '<p>Errore nel caricamento dei commenti</p>';
+            document.getElementById('commentsContent').innerHTML = '<p>{{ __('common.loading_error') }} dei commenti</p>';
             $('#commentsModal').modal('show');
         });
 }
@@ -637,7 +637,7 @@ function openMediaModal(type, id) {
         const mediaItem = document.querySelector(`[data-type="${type}"][data-id="${id}"]`);
         const img = mediaItem.querySelector('img');
         document.getElementById('mediaModalContent').innerHTML = `
-            <img src="${img.src}" class="img-fluid" alt="Media">
+            <img src="${img.src}" class="img-fluid" alt="{{ __('common.media_section') }}">
         `;
         $('#mediaModal').modal('show');
     }

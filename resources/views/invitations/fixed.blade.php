@@ -10,7 +10,7 @@
                     <h4 class="mb-0">🎭 I Miei Inviti</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a></li>
                             <li class="breadcrumb-item active">Inviti</li>
                         </ol>
                     </div>
@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">Inviti Totali</span>
+                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">{{ __('invitations.total_invitations') }}</span>
                                 <h4 class="fs-4 fw-semibold mb-3">{{ $invitations->total() }}</h4>
                             </div>
                             <div class="flex-shrink-0 text-end">
@@ -40,7 +40,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">In Attesa</span>
+                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">{{ __('invitations.pending_invitations') }}</span>
                                 <h4 class="fs-4 fw-semibold mb-3 text-warning">{{ $invitations->where('status', 'pending')->count() }}</h4>
                             </div>
                             <div class="flex-shrink-0 text-end">
@@ -55,7 +55,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">Accettati</span>
+                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">{{ __('invitations.accepted_invitations') }}</span>
                                 <h4 class="fs-4 fw-semibold mb-3 text-success">{{ $invitations->where('status', 'accepted')->count() }}</h4>
                             </div>
                             <div class="flex-shrink-0 text-end">
@@ -70,7 +70,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">Rifiutati</span>
+                                <span class="text-muted text-uppercase fw-medium text-truncate d-block">{{ __('invitations.rejected_invitations') }}</span>
                                 <h4 class="fs-4 fw-semibold mb-3 text-danger">{{ $invitations->where('status', 'declined')->count() }}</h4>
                             </div>
                             <div class="flex-shrink-0 text-end">
@@ -124,12 +124,12 @@
                                 <table class="table table-hover">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Evento</th>
-                                            <th>Ruolo</th>
-                                            <th>Organizzatore</th>
-                                            <th>Data Evento</th>
-                                            <th>Stato</th>
-                                            <th>Azioni</th>
+                                            <th>{{ __('invitations.event') }}</th>
+                                            <th>{{ __('invitations.role') }}</th>
+                                            <th>{{ __('events.organizer') }}</th>
+                                            <th>Data {{ __('invitations.event') }}</th>
+                                            <th>{{ __('invitations.status') }}</th>
+                                            <th>{{ __('invitations.actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -173,10 +173,10 @@
                                                     @switch($invitation->status)
                                                         @case('pending')
                                                             <span class="badge bg-warning">
-                                                                <i class="ph ph-clock me-1"></i>In Attesa
+                                                                <i class="ph ph-clock me-1"></i>{{ __('invitations.pending_invitations') }}
                                                             </span>
                                                             @if($invitation->expires_at && $invitation->expires_at->isPast())
-                                                                <br><small class="text-danger">Scaduto</small>
+                                                                <br><small class="text-danger">{{ __('invitations.expired') }}</small>
                                                             @elseif($invitation->expires_at)
                                                                 <br><small class="text-muted">Scade: {{ $invitation->expires_at->format('d/m/Y H:i') }}</small>
                                                             @endif
@@ -210,7 +210,7 @@
                                                     @else
                                                         <a href="{{ route('events.show', $invitation->event) }}"
                                                            class="btn btn-outline-primary btn-sm">
-                                                            <i class="ph ph-eye"></i> Vedi Evento
+                                                            <i class="ph ph-eye"></i> Vedi {{ __('invitations.event') }}
                                                         </a>
                                                     @endif
                                                 </td>
@@ -229,7 +229,7 @@
                                 <div class="mb-3">
                                     <i class="ph ph-envelope-simple text-muted" style="font-size: 4rem;"></i>
                                 </div>
-                                <h5 class="text-muted">Nessun invito ricevuto</h5>
+                                <h5 class="text-muted">{{ __('invitations.no_invitations') }}</h5>
                                 <p class="text-muted">Non hai ancora ricevuto inviti per eventi poetry slam.</p>
                                 <a href="{{ route('events.index') }}" class="btn btn-primary">
                                     <i class="ph ph-calendar-plus"></i> Cerca Eventi

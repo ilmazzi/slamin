@@ -85,7 +85,7 @@
                                         <div class="mt-3">
                                             <div class="text-center">
                                                 <a href="{{ route('poetry.test.dashboard') }}" class="btn btn-success me-2">
-                                                    🏠 Dashboard
+                                                    🏠 {{ __('dashboard.dashboard') }}
                                                 </a>
                                                 <a href="{{ route('poetry.test.signup') }}" class="btn btn-primary me-2">
                                                     🚀 Registrati

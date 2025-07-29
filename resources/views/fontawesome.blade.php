@@ -2756,7 +2756,7 @@
 
                             <li class="icon-box" onclick="text_font(this)">
                                 <i class="fa-solid fa-video-camera fa-fw"></i>
-                                <strong class="mb-3">Video camera</strong>
+                                <strong class="mb-3">{{ __('common.video') }} camera</strong>
                             </li>
 
                             <li class="icon-box" onclick="text_font(this)">

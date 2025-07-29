@@ -45,7 +45,7 @@
                 <h4 class="mb-0">Permessi del Sistema</h4>
                 <button class="btn btn-primary" onclick="showCreatePermissionModal()">
                     <i class="ph ph-plus me-2"></i>
-                    Nuovo Permesso
+                    Nuovo {{ __('permissions.permission') }}
                 </button>
             </div>
         </div>
@@ -68,10 +68,10 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Nome Visualizzato</th>
-                                    <th>Gruppo</th>
+                                    <th>{{ __('permissions.group') }}</th>
                                     <th>Descrizione</th>
-                                    <th>Ruoli</th>
-                                    <th>Azioni</th>
+                                    <th>{{ __('permissions.roles') }}</th>
+                                    <th>{{ __('invitations.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,14 +92,14 @@
                                     <td>
                                         <span class="badge bg-primary">{{ $permission->roles->count() }}</span>
                                         @if($permission->roles->count() > 0)
-                                        <button class="btn btn-sm btn-outline-info ms-2" onclick="showPermissionRoles({{ $permission->id }})" title="Visualizza Ruoli">
+                                        <button class="btn btn-sm btn-outline-info ms-2" onclick="showPermissionRoles({{ $permission->id }})" title="Visualizza {{ __('permissions.roles') }}">
                                             <i class="ph ph-eye"></i>
                                         </button>
                                         @endif
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" onclick="editPermission({{ $permission->id }})" title="Modifica">
+                                            <button class="btn btn-outline-primary" onclick="editPermission({{ $permission->id }})" title="{{ __('permissions.modify') }}">
                                                 <i class="ph ph-pencil"></i>
                                             </button>
                                             @if($permission->roles->count() == 0)
@@ -127,7 +127,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="permissionModalTitle">
                     <i class="ph ph-plus me-2"></i>
-                    Crea Nuovo Permesso
+                    Crea Nuovo {{ __('permissions.permission') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -135,7 +135,7 @@
                 <input type="hidden" name="permission_id" id="permissionId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Nome Permesso *</label>
+                        <label class="form-label">Nome {{ __('permissions.permission') }} *</label>
                         <input type="text" class="form-control" name="name" id="permissionName" required>
                         <small class="text-muted">Nome tecnico (es: events.create, users.manage)</small>
                     </div>
@@ -145,7 +145,7 @@
                         <small class="text-muted">Nome per l'interfaccia (es: Crea Eventi)</small>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Gruppo</label>
+                        <label class="form-label">{{ __('permissions.group') }}</label>
                         <select class="form-select" name="group" id="permissionGroup">
                             <option value="">Nessun gruppo</option>
                             <option value="events">Eventi</option>
@@ -155,7 +155,7 @@
                             <option value="system">Sistema</option>
                             <option value="invitations">Inviti</option>
                             <option value="requests">Richieste</option>
-                            <option value="notifications">Notifiche</option>
+                            <option value="notifications">{{ __('notifications.notifications') }}</option>
                         </select>
                         <small class="text-muted">Raggruppa i permessi per categoria</small>
                     </div>
@@ -169,7 +169,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary" id="permissionSubmitBtn">
                         <i class="ph ph-plus me-2"></i>
-                        Crea Permesso
+                        Crea {{ __('permissions.permission') }}
                     </button>
                 </div>
             </form>
@@ -184,7 +184,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users me-2"></i>
-                    Ruoli con questo Permesso
+                    {{ __('permissions.roles') }} con questo {{ __('permissions.permission') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -202,8 +202,8 @@
 let currentPermissionId = null;
 
 function showCreatePermissionModal() {
-    $('#permissionModalTitle').html('<i class="ph ph-plus me-2"></i>Crea Nuovo Permesso');
-    $('#permissionSubmitBtn').html('<i class="ph ph-plus me-2"></i>Crea Permesso');
+    $('#permissionModalTitle').html('<i class="ph ph-plus me-2"></i>Crea Nuovo {{ __('permissions.permission') }}');
+    $('#permissionSubmitBtn').html('<i class="ph ph-plus me-2"></i>Crea {{ __('permissions.permission') }}');
     $('#permissionForm')[0].reset();
     $('#permissionId').val('');
     $('#permissionName').prop('readonly', false);
@@ -216,8 +216,8 @@ function editPermission(permissionId) {
         .then(response => response.json())
         .then(data => {
             if (data.permission) {
-                $('#permissionModalTitle').html('<i class="ph ph-pencil me-2"></i>Modifica Permesso');
-                $('#permissionSubmitBtn').html('<i class="ph ph-check me-2"></i>Aggiorna Permesso');
+                $('#permissionModalTitle').html('<i class="ph ph-pencil me-2"></i>{{ __('permissions.modify') }} {{ __('permissions.permission') }}');
+                $('#permissionSubmitBtn').html('<i class="ph ph-check me-2"></i>Aggiorna {{ __('permissions.permission') }}');
                 $('#permissionId').val(data.permission.id);
                 $('#permissionName').val(data.permission.name).prop('readonly', true);
                 $('#permissionDisplayName').val(data.permission.display_name);
@@ -267,7 +267,7 @@ function showPermissionRoles(permissionId) {
         .then(data => {
             if (data.permission) {
                 let content = '<div class="table-responsive"><table class="table">';
-                content += '<thead><tr><th>Ruolo</th><th>Nome Visualizzato</th><th>Descrizione</th></tr></thead><tbody>';
+                content += '<thead><tr><th>{{ __('invitations.role') }}</th><th>Nome Visualizzato</th><th>Descrizione</th></tr></thead><tbody>';
                 data.permission.roles.forEach(role => {
                     content += `<tr>
                         <td><code>${role.name}</code></td>

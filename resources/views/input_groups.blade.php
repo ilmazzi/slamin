@@ -85,8 +85,8 @@
                                     <div class="input-group flex-nowrap mb-3">
                                                     <span class="input-group-text b-r-left text-bg-danger"
                                                           id="addon-wrapping1">@</span>
-                                        <input aria-describedby="addon-wrapping" aria-label="Email"
-                                               class="form-control b-r-right" placeholder="Email"
+                                        <input aria-describedby="addon-wrapping" aria-label="{{ __('permissions.email') }}"
+                                               class="form-control b-r-right" placeholder="{{ __('permissions.email') }}"
                                                type="text">
                                     </div>
                                 </div>
@@ -95,8 +95,8 @@
                                     <div class="input-group flex-nowrap mb-3">
                                                     <span class="input-group-text b-r-left text-bg-secondary"
                                                           id="addon-wrapping2">+</span>
-                                        <input aria-describedby="addon-wrapping" aria-label="Email"
-                                               class="form-control b-r-right" placeholder="Email"
+                                        <input aria-describedby="addon-wrapping" aria-label="{{ __('permissions.email') }}"
+                                               class="form-control b-r-right" placeholder="{{ __('permissions.email') }}"
                                                type="text">
                                     </div>
                                 </div>
@@ -105,8 +105,8 @@
                                     <div class="input-group flex-nowrap mb-3">
                                                     <span class="input-group-text b-r-left text-bg-primary"
                                                           id="addon-wrapping">#</span>
-                                        <input aria-describedby="addon-wrapping" aria-label="Email"
-                                               class="form-control b-r-right" placeholder="Email"
+                                        <input aria-describedby="addon-wrapping" aria-label="{{ __('permissions.email') }}"
+                                               class="form-control b-r-right" placeholder="{{ __('permissions.email') }}"
                                                type="text">
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@
                                             <div class="input-group ">
                                 <span class="input-group-text b-r-left bg-light-primary b-1-primary"><i
                                         class="fa-solid fa-pencil"></i></span>
-                                                <input class="form-control" placeholder="Email" type="text">
+                                                <input class="form-control" placeholder="{{ __('permissions.email') }}" type="text">
                                             </div>
                                         </div>
                                         <div class="mb-3">
