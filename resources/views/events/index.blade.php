@@ -552,6 +552,25 @@ function loadEventsOnMapWithFilter(params) {
                     
                     console.log(`Marker color for event ${event.id} (${event.category}): ${markerColor}`);
                     
+                    // Gestione marker sovrapposti - sposta leggermente i marker alla stessa posizione
+                    let lat = parseFloat(event.latitude);
+                    let lng = parseFloat(event.longitude);
+                    
+                    // Controlla se ci sono altri marker alla stessa posizione
+                    const existingMarkersAtPosition = markers.filter(marker => {
+                        const markerLat = marker.getLatLng().lat;
+                        const markerLng = marker.getLatLng().lng;
+                        return Math.abs(markerLat - lat) < 0.0001 && Math.abs(markerLng - lng) < 0.0001;
+                    });
+                    
+                    if (existingMarkersAtPosition.length > 0) {
+                        // Sposta il marker di una piccola quantità per renderlo visibile
+                        const offset = 0.0002; // Circa 20 metri
+                        lat += (existingMarkersAtPosition.length * offset);
+                        lng += (existingMarkersAtPosition.length * offset);
+                        console.log(`Marker ${event.id} offset to [${lat}, ${lng}] due to overlap`);
+                    }
+                    
                     // Crea icona personalizzata con colore ma stile standard
                     const customIcon = L.divIcon({
                         className: 'custom-marker',
@@ -560,11 +579,11 @@ function loadEventsOnMapWithFilter(params) {
                         iconAnchor: [10, 10]
                     });
                     
-                    const marker = L.marker([event.latitude, event.longitude], {
+                    const marker = L.marker([lat, lng], {
                         icon: customIcon
                     }).addTo(map);
                     
-                    console.log(`Marker added to map at [${event.latitude}, ${event.longitude}]`);
+                    console.log(`Marker added to map at [${lat}, ${lng}]`);
                     
                     // Create popup content
                     let popupContent = `

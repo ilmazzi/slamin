@@ -16,7 +16,7 @@
                         <li class="breadcrumb-item active">Log di Attività</li>
                     </ol>
                 </div>
-                <h4 class="page-title">
+                <h4 clupdateass="page-title">
                     <i class="ph-duotone ph-list-checks me-2"></i>
                     Log di Attività
                 </h4>
