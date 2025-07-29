@@ -135,24 +135,6 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">{{ __('events.event_mode') }} *</label>
-                                <div class="form-check">
-                                    <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
-                                    <label for="public" class="form-check-label">
-                                        <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
-                                        <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
-                                    <label for="private" class="form-check-label">
-                                        <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
-                                        <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
                                 <label class="form-label">{{ __('events.event_category') }} *</label>
                                 <select name="category" id="category" class="form-select" required>
                                     <option value="">{{ __('events.category_placeholder') }}</option>
@@ -164,61 +146,7 @@
                                 <div class="error-feedback" id="category-error"></div>
                             </div>
 
-                            <!-- Inviti per eventi privati -->
-                            <div class="col-12 mb-3" id="private-invites-section" style="display: none;">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h6 class="mb-0">
-                                            <i class="ph ph-users me-2"></i>{{ __('events.invite_users') }}
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-3">{{ __('events.invite_users_help') }}</p>
-
-                                        <!-- Barra di ricerca -->
-                                        <div class="mb-3">
-                                            <label class="form-label">{{ __('events.search_users') }}</label>
-                                            <div class="input-group">
-                                                <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
-                                                <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
-                                                    <i class="ph ph-magnifying-glass"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Risultati ricerca -->
-                                        <div id="searchResultsInvite" class="mb-3" style="display: none;">
-                                            <h6>Risultati Ricerca</h6>
-                                            <div id="searchResultsListInvite" class="list-group">
-                                                <!-- Risultati qui -->
-                                            </div>
-                                        </div>
-
-                                        <!-- Utenti suggeriti -->
-                                        <div class="mb-3">
-                                            <h6>{{ __('events.suggested_users') }}</h6>
-                                            <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
-                                            <div id="suggestedUsersList" class="row g-2">
-                                                <!-- Utenti suggeriti qui -->
-                                            </div>
-                                        </div>
-
-                                        <!-- Utenti invitati -->
-                                        <div>
-                                            <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
-                                            <div id="invitedUsersList" class="row g-2">
-                                                <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
-                                                    <i class="ph ph-user-plus f-s-24 mb-2"></i>
-                                                    <p class="mb-0">{{ __('events.no_invited_users') }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Hidden input per i dati degli inviti -->
-                                        <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Inviti per eventi privati - spostati al quarto step -->
                         </div>
                     </div>
                 </div>
@@ -561,13 +489,18 @@
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="number" name="ticket_price" id="ticket_price" class="form-control" min="0" step="0.01" placeholder="Prezzo biglietto">
-                                                <label for="ticket_price">{{ __('events.ticket_price') }} (€)</label>
+                                                <label for="ticket_price">{{ __('events.ticket_price') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="number" name="max_tickets" id="max_tickets" class="form-control" min="1" placeholder="Numero massimo biglietti">
-                                                <label for="max_tickets">{{ __('events.max_tickets') }}</label>
+                                                <select name="ticket_currency" id="ticket_currency" class="form-select">
+                                                    <option value="EUR">EUR (€)</option>
+                                                    <option value="USD">USD ($)</option>
+                                                    <option value="GBP">GBP (£)</option>
+                                                    <option value="CHF">CHF (CHF)</option>
+                                                </select>
+                                                <label for="ticket_currency">{{ __('events.ticket_currency') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -594,41 +527,6 @@
                                 </div>
                             </div>
 
-                            <!-- Campi esistenti mantenuti per compatibilità -->
-                            <div class="col-12 mb-3">
-                                <div class="form-floating">
-                                    <textarea name="requirements" id="requirements" class="form-control" style="height: 100px" placeholder="Requisiti"></textarea>
-                                    <label for="requirements">{{ __('events.requirements_participants') }}</label>
-                                </div>
-                                <small class="text-muted">{{ __('events.requirements_help') }}</small>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="form-floating">
-                                    <input type="number" name="max_participants" id="max_participants" class="form-control" min="1" placeholder="Numero massimo">
-                                    <label for="max_participants">{{ __('events.max_participants_optional') }}</label>
-                                </div>
-                                <small class="text-muted">{{ __('events.no_limit_help') }}</small>
-                            </div>
-
-                            <!-- Event Status -->
-                            <div class="col-12 mb-3">
-                                <label class="form-label">{{ __('events.event_status') }}</label>
-                                <div class="form-check">
-                                    <input type="radio" name="status" id="published" value="published" class="form-check-input" checked>
-                                    <label for="published" class="form-check-label">
-                                        <i class="ph ph-globe me-2"></i>{{ __('events.publish_immediately') }}
-                                        <small class="d-block text-muted">{{ __('events.publish_immediately_help') }}</small>
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" name="status" id="draft" value="draft" class="form-check-input">
-                                    <label for="draft" class="form-check-label">
-                                        <i class="ph ph-note-pencil me-2"></i>{{ __('events.save_as_draft') }}
-                                        <small class="d-block text-muted">{{ __('events.save_as_draft_help') }}</small>
-                                    </label>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -641,6 +539,91 @@
                         </h5>
                     </div>
                     <div class="card-body">
+                        <!-- Sezione Pubblico/Privato -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="ph ph-globe me-2"></i>{{ __('events.event_mode') }}
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
+                                        <label for="public" class="form-check-label">
+                                            <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
+                                            <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
+                                        <label for="private" class="form-check-label">
+                                            <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
+                                            <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sezione Inviti per Eventi Privati -->
+                        <div class="mb-4" id="private-invites-section" style="display: none;">
+                            <h6 class="text-primary mb-3">
+                                <i class="ph ph-envelope me-2"></i>{{ __('events.invite_users') }}
+                            </h6>
+                            <div class="alert alert-border-primary" role="alert">
+                                <h6>
+                                    <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
+                                    Inviti Specifici
+                                </h6>
+                                <p class="mb-0">
+                                    {{ __('events.invite_users_help') }}
+                                </p>
+                            </div>
+
+                            <!-- Barra di ricerca -->
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('events.search_users') }}</label>
+                                <div class="input-group">
+                                    <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
+                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
+                                        <i class="ph ph-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Risultati ricerca -->
+                            <div id="searchResultsInvite" class="mb-3" style="display: none;">
+                                <h6>Risultati Ricerca</h6>
+                                <div id="searchResultsListInvite" class="list-group">
+                                    <!-- Risultati qui -->
+                                </div>
+                            </div>
+
+                            <!-- Utenti suggeriti -->
+                            <div class="mb-3">
+                                <h6>{{ __('events.suggested_users') }}</h6>
+                                <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
+                                <div id="suggestedUsersList" class="row g-2">
+                                    <!-- Utenti suggeriti qui -->
+                                </div>
+                            </div>
+
+                            <!-- Utenti invitati -->
+                            <div>
+                                <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
+                                <div id="invitedUsersList" class="row g-2">
+                                    <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                                        <i class="ph ph-user-plus f-s-24 mb-2"></i>
+                                        <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hidden input per i dati degli inviti -->
+                            <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
+                        </div>
+
                         <!-- Sezione Inviti -->
                         <div class="mb-4">
                             <h6 class="text-primary mb-3">
@@ -728,6 +711,27 @@
 
                             <!-- Hidden input for gig positions data -->
                             <input type="hidden" name="gig_positions" id="gigPositionsData" value="[]">
+                        </div>
+
+                        <!-- Event Status -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="ph ph-globe me-2"></i>{{ __('events.event_status') }}
+                            </h6>
+                            <div class="form-check">
+                                <input type="radio" name="status" id="published" value="published" class="form-check-input" checked>
+                                <label for="published" class="form-check-label">
+                                    <i class="ph ph-globe me-2"></i>{{ __('events.publish_immediately') }}
+                                    <small class="d-block text-muted">{{ __('events.publish_immediately_help') }}</small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="status" id="draft" value="draft" class="form-check-input">
+                                <label for="draft" class="form-check-label">
+                                    <i class="ph ph-note-pencil me-2"></i>{{ __('events.save_as_draft') }}
+                                    <small class="d-block text-muted">{{ __('events.save_as_draft_help') }}</small>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1748,37 +1752,64 @@ function validateCurrentStep() {
 
             if (step === 3) {
         console.log('Validating step 3...');
-        const maxParticipants = document.getElementById('max_participants').value;
-
-        console.log('Max participants value:', maxParticipants);
-
-        // Il campo è opzionale, ma se viene compilato deve essere maggiore di 0
-        if (maxParticipants && maxParticipants <= 0) {
-            console.log('Max participants is invalid, showing error');
-            showError('max_participants', 'Il numero massimo di partecipanti deve essere maggiore di 0');
-            highlightError('max_participants');
-            isValid = false;
+        
+        // Validazione per evento a pagamento
+        const isPaidEvent = document.getElementById('is_paid_event');
+        if (isPaidEvent && isPaidEvent.checked) {
+            const ticketPrice = document.getElementById('ticket_price').value;
+            const ticketCurrency = document.getElementById('ticket_currency').value;
+            
+            if (!ticketPrice || ticketPrice <= 0) {
+                showError('ticket_price', 'Il prezzo del biglietto deve essere maggiore di 0');
+                highlightError('ticket_price');
+                isValid = false;
+            }
+            
+            if (!ticketCurrency) {
+                showError('ticket_currency', 'Seleziona una valuta');
+                highlightError('ticket_currency');
+                isValid = false;
+            }
+        }
+        
+        // Validazione per festival
+        const isFestivalEvent = document.getElementById('is_festival_event');
+        if (isFestivalEvent && isFestivalEvent.checked) {
+            const festivalId = document.getElementById('festival_id').value;
+            
+            if (!festivalId) {
+                showError('festival_id', 'Seleziona un festival');
+                highlightError('festival_id');
+                isValid = false;
+            }
         }
 
         console.log('Step 3 validation result:', isValid);
     }
 
     if (step === 4) {
-        const imageElement = document.getElementById('image');
-        const acceptsRequestsElement = document.getElementById('accepts_requests');
-
-        // Verifica che gli elementi esistano prima di accedere alle loro proprietà
-        if (imageElement && acceptsRequestsElement) {
-            const image = imageElement.files[0];
-            const acceptsRequests = acceptsRequestsElement.checked;
-
-            if (!image && !acceptsRequests) {
-                showError('image', 'Devi caricare un\'immagine o abilitare le richieste di partecipazione');
-                highlightError('image');
-                highlightError('accepts_requests');
+        console.log('Validating step 4...');
+        
+        // Validazione per selezione pubblico/privato
+        const isPublic = document.querySelector('input[name="is_public"]:checked');
+        if (!isPublic) {
+            showError('is_public', 'Seleziona se l\'evento è pubblico o privato');
+            highlightError('public');
+            highlightError('private');
+            isValid = false;
+        }
+        
+        // Validazione per eventi privati - verifica che ci siano inviti
+        if (isPublic && isPublic.value === '0') {
+            const invitedUsers = JSON.parse(document.getElementById('invitedUsersData').value || '[]');
+            if (invitedUsers.length === 0) {
+                showError('invitedUsersData', 'Per eventi privati devi invitare almeno un utente');
+                highlightError('invitedUsersData');
                 isValid = false;
             }
         }
+
+        console.log('Step 4 validation result:', isValid);
     }
 
     console.log('Validation result:', isValid);
