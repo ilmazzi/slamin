@@ -1172,7 +1172,7 @@
 @endauth
 @endsection
 
-@section('script')
+@push('scripts')
 @if($event->latitude && $event->longitude)
 <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
 <script>
@@ -1337,4 +1337,4 @@ Cordiali saluti,
     window.open(mailtoLink);
 }
 </script>
-@endsection
+@endpush
