@@ -640,17 +640,17 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('events.search_users') }}</label>
                                 <div class="input-group">
-                                    <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
-                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
+                                    <input type="text" id="privateUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handlePrivateUserSearchKeydown(event)">
+                                    <button type="button" class="btn btn-outline-primary" onclick="searchPrivateUsersForInvite()">
                                         <i class="ph ph-magnifying-glass"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Risultati ricerca -->
-                            <div id="searchResultsInvite" class="mb-3" style="display: none;">
+                            <div id="privateSearchResultsInvite" class="mb-3" style="display: none;">
                                 <h6>{{ __('events.search_results') }}</h6>
-                                <div id="searchResultsListInvite" class="list-group">
+                                <div id="privateSearchResultsListInvite" class="list-group">
                                     <!-- Risultati qui -->
                                 </div>
                             </div>
@@ -659,16 +659,16 @@
                             <div class="mb-3">
                                 <h6>{{ __('events.suggested_users') }}</h6>
                                 <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
-                                <div id="suggestedUsersList" class="row g-2">
+                                <div id="privateSuggestedUsersList" class="row g-2">
                                     <!-- Utenti suggeriti qui -->
                                 </div>
                             </div>
 
                             <!-- Utenti invitati -->
                             <div>
-                                <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
-                                <div id="invitedUsersList" class="row g-2">
-                                    <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                                <h6>{{ __('events.invited_users') }} <span id="privateInviteCount" class="badge bg-primary">0</span></h6>
+                                <div id="privateInvitedUsersList" class="row g-2">
+                                    <div class="col-12 text-center text-muted py-3" id="noPrivateInvitedUsers">
                                         <i class="ph ph-user-plus f-s-24 mb-2"></i>
                                         <p class="mb-0">{{ __('events.no_invited_users') }}</p>
                                     </div>
@@ -676,7 +676,7 @@
                             </div>
 
                             <!-- Hidden input per i dati degli inviti -->
-                            <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
+                            <input type="hidden" name="private_invited_users" id="privateInvitedUsersData" value="[]">
                         </div>
 
                         <!-- Sezione Inviti -->
@@ -698,17 +698,17 @@
                             <div class="mb-4">
                                 <label class="form-label">{{ __('events.search_artists') }}</label>
                                 <div class="input-group">
-                                    <input type="text" id="userSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleUserSearchKeydown(event)">
-                                    <button type="button" class="btn btn-outline-primary" onclick="searchUsersForInvite()">
+                                    <input type="text" id="artistUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleArtistUserSearchKeydown(event)">
+                                    <button type="button" class="btn btn-outline-primary" onclick="searchArtistUsersForInvite()">
                                         <i class="ph ph-magnifying-glass"></i>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Search Results -->
-                            <div id="searchResultsInvite" class="mb-3" style="display: none;">
+                            <div id="artistSearchResultsInvite" class="mb-3" style="display: none;">
                                 <h6>{{ __('events.search_results') }}</h6>
-                                <div id="searchResultsListInvite" class="list-group">
+                                <div id="artistSearchResultsListInvite" class="list-group">
                                     <!-- Risultati qui -->
                                 </div>
                             </div>
@@ -717,16 +717,16 @@
                             <div class="mb-3">
                                 <h6>{{ __('events.suggested_users') }}</h6>
                                 <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
-                                <div id="suggestedUsersList" class="row g-2">
+                                <div id="artistSuggestedUsersList" class="row g-2">
                                     <!-- Utenti suggeriti qui -->
                                 </div>
                             </div>
 
                             <!-- Utenti invitati -->
                             <div>
-                                <h6>{{ __('events.invited_users') }} <span id="inviteCount" class="badge bg-primary">0</span></h6>
-                                <div id="invitedUsersList" class="row g-2">
-                                    <div class="col-12 text-center text-muted py-3" id="noInvitedUsers">
+                                <h6>{{ __('events.invited_users') }} <span id="artistInviteCount" class="badge bg-primary">0</span></h6>
+                                <div id="artistInvitedUsersList" class="row g-2">
+                                    <div class="col-12 text-center text-muted py-3" id="noArtistInvitedUsers">
                                         <i class="ph ph-user-plus f-s-24 mb-2"></i>
                                         <p class="mb-0">{{ __('events.no_invited_users') }}</p>
                                     </div>
@@ -734,7 +734,7 @@
                             </div>
 
                             <!-- Hidden input per i dati degli inviti -->
-                            <input type="hidden" name="invited_users" id="invitedUsersData" value="[]">
+                            <input type="hidden" name="artist_invited_users" id="artistInvitedUsersData" value="[]">
                         </div>
 
                         <!-- Sezione Posizioni d'Ingaggio -->
@@ -1482,10 +1482,16 @@ function setupEventListeners() {
         }
     });
 
-    // User search functionality
-    const userSearchInput = document.getElementById('userSearchInput');
-    if (userSearchInput) {
-        userSearchInput.addEventListener('keydown', handleUserSearchKeydown);
+    // User search functionality for private events
+    const privateUserSearchInput = document.getElementById('privateUserSearchInput');
+    if (privateUserSearchInput) {
+        privateUserSearchInput.addEventListener('keydown', handlePrivateUserSearchKeydown);
+    }
+
+    // User search functionality for artist invites
+    const artistUserSearchInput = document.getElementById('artistUserSearchInput');
+    if (artistUserSearchInput) {
+        artistUserSearchInput.addEventListener('keydown', handleArtistUserSearchKeydown);
     }
 
     // Image upload preview
@@ -1905,10 +1911,10 @@ function validateCurrentStep() {
 
         // Validazione per eventi privati - verifica che ci siano inviti
         if (isPublic && isPublic.value === '0') {
-            const invitedUsers = JSON.parse(document.getElementById('invitedUsersData').value || '[]');
-            if (invitedUsers.length === 0) {
-                showError('invitedUsersData', 'Per eventi privati devi invitare almeno un utente');
-                highlightError('invitedUsersData');
+            const privateInvitedUsers = JSON.parse(document.getElementById('privateInvitedUsersData').value || '[]');
+            if (privateInvitedUsers.length === 0) {
+                showError('privateInvitedUsersData', 'Per eventi privati devi invitare almeno un utente');
+                highlightError('privateInvitedUsersData');
                 isValid = false;
             }
         }
@@ -2208,8 +2214,10 @@ function updatePreview() {
     const gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
 
     // Invitations
-    const invitedUsersData = document.getElementById('invitedUsersData');
-    const invitedUsers = invitedUsersData ? JSON.parse(invitedUsersData.value || '[]') : [];
+    const privateInvitedUsersData = document.getElementById('privateInvitedUsersData');
+    const privateInvitedUsers = privateInvitedUsersData ? JSON.parse(privateInvitedUsersData.value || '[]') : [];
+    const artistInvitedUsersData = document.getElementById('artistInvitedUsersData');
+    const artistInvitedUsers = artistInvitedUsersData ? JSON.parse(artistInvitedUsersData.value || '[]') : [];
     const invitationsData = document.getElementById('invitationsData');
     const invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
 
@@ -2564,14 +2572,14 @@ function updatePreview() {
             ` : ''}
 
             <!-- Private Event Invitations -->
-            ${!isPublic && invitedUsers.length > 0 ? `
+            ${!isPublic && privateInvitedUsers.length > 0 ? `
                 <div class="card mb-4">
                     <div class="card-header">
                         <h6 class="mb-0"><i class="ph ph-users me-2"></i>Utenti Invitati</h6>
                     </div>
                     <div class="card-body">
                         <div class="row g-2">
-                            ${invitedUsers.map(user => `
+                            ${privateInvitedUsers.map(user => `
                                 <div class="col-md-6">
                                     <div class="card card-light-warning border-0">
                                         <div class="card-body p-2">
@@ -2669,8 +2677,10 @@ function updatePreviewWithImage(imageSrc) {
     const gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
 
     // Invitations
-    const invitedUsersData = document.getElementById('invitedUsersData');
-    const invitedUsers = invitedUsersData ? JSON.parse(invitedUsersData.value || '[]') : [];
+    const privateInvitedUsersData = document.getElementById('privateInvitedUsersData');
+    const privateInvitedUsers = privateInvitedUsersData ? JSON.parse(privateInvitedUsersData.value || '[]') : [];
+    const artistInvitedUsersData = document.getElementById('artistInvitedUsersData');
+    const artistInvitedUsers = artistInvitedUsersData ? JSON.parse(artistInvitedUsersData.value || '[]') : [];
     const invitationsData = document.getElementById('invitationsData');
     const invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
 
@@ -3006,14 +3016,14 @@ function updatePreviewWithImage(imageSrc) {
             ` : ''}
 
             <!-- Private Event Invitations -->
-            ${!isPublic && invitedUsers.length > 0 ? `
+            ${!isPublic && privateInvitedUsers.length > 0 ? `
                 <div class="card mb-4">
                     <div class="card-header">
                         <h6 class="mb-0"><i class="ph ph-users me-2"></i>Utenti Invitati</h6>
                     </div>
                     <div class="card-body">
                         <div class="row g-2">
-                            ${invitedUsers.map(user => `
+                            ${privateInvitedUsers.map(user => `
                                 <div class="col-md-6">
                                     <div class="card card-light-warning border-0">
                                         <div class="card-body p-2">
@@ -3477,7 +3487,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 // Funzioni per gestione inviti eventi privati
-let invitedUsers = [];
+let privateInvitedUsers = [];
+let artistInvitedUsers = [];
 let suggestedUsers = [];
 
 // Carica utenti suggeriti
@@ -3492,16 +3503,17 @@ function loadSuggestedUsers() {
     .then(response => response.json())
     .then(data => {
         suggestedUsers = data.users || [];
-        displaySuggestedUsers();
+        displayPrivateSuggestedUsers();
+        displayArtistSuggestedUsers();
     })
     .catch(error => {
         console.error('{{ __('common.loading_error') }} utenti suggeriti:', error);
     });
 }
 
-// Mostra utenti suggeriti
-function displaySuggestedUsers() {
-    const container = document.getElementById('suggestedUsersList');
+// Mostra utenti suggeriti per eventi privati
+function displayPrivateSuggestedUsers() {
+    const container = document.getElementById('privateSuggestedUsersList');
     if (!container) return;
 
     if (suggestedUsers.length === 0) {
@@ -3528,7 +3540,7 @@ function displaySuggestedUsers() {
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')"
+                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -3539,9 +3551,49 @@ function displaySuggestedUsers() {
     `).join('');
 }
 
-// Cerca utenti per invito
-function searchUsersForInvite() {
-    const searchTerm = document.getElementById('userSearchInput').value.trim();
+// Mostra utenti suggeriti per artisti
+function displayArtistSuggestedUsers() {
+    const container = document.getElementById('artistSuggestedUsersList');
+    if (!container) return;
+
+    if (suggestedUsers.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center text-muted py-2">
+                <i class="ph ph-users f-s-16 mb-1"></i>
+                <p class="mb-0 small">{{ __('events.no_suggested_users') }}</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = suggestedUsers.map(user => `
+        <div class="col-md-6 col-lg-4 mb-2">
+            <div class="card hover-effect">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
+                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
+                                 alt="${user.name}" class="img-fluid">
+                        </a>
+                        <div class="flex-grow-1 ps-2">
+                            <div class="fw-medium txt-ellipsis-1">${user.name}</div>
+                            <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
+                        </div>
+                        <button type="button" class="btn btn-light-primary icon-btn b-r-4"
+                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}')"
+                                title="{{ __('events.invite_user') }}">
+                            <i class="ph ph-plus f-s-12"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Cerca utenti per invito privato
+function searchPrivateUsersForInvite() {
+    const searchTerm = document.getElementById('privateUserSearchInput').value.trim();
     if (!searchTerm) return;
 
     fetch(`/api/users/search?q=${encodeURIComponent(searchTerm)}`, {
@@ -3553,17 +3605,38 @@ function searchUsersForInvite() {
     })
     .then(response => response.json())
     .then(data => {
-        displaySearchResults(data.users || []);
+        displayPrivateSearchResults(data.users || []);
     })
     .catch(error => {
-        console.error('Errore nella ricerca utenti:', error);
+        console.error('Errore nella ricerca utenti privati:', error);
     });
 }
 
-// Mostra risultati ricerca
-function displaySearchResults(users) {
-    const container = document.getElementById('searchResultsListInvite');
-    const resultsDiv = document.getElementById('searchResultsInvite');
+// Cerca utenti per invito artisti
+function searchArtistUsersForInvite() {
+    const searchTerm = document.getElementById('artistUserSearchInput').value.trim();
+    if (!searchTerm) return;
+
+    fetch(`/api/users/search?q=${encodeURIComponent(searchTerm)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayArtistSearchResults(data.users || []);
+    })
+    .catch(error => {
+        console.error('Errore nella ricerca artisti:', error);
+    });
+}
+
+// Mostra risultati ricerca per inviti privati
+function displayPrivateSearchResults(users) {
+    const container = document.getElementById('privateSearchResultsListInvite');
+    const resultsDiv = document.getElementById('privateSearchResultsInvite');
 
     if (!container || !resultsDiv) return;
 
@@ -3588,7 +3661,7 @@ function displaySearchResults(users) {
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="inviteUser(${user.id}, '${user.name}', '${user.email}')">
+                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -3600,12 +3673,52 @@ function displaySearchResults(users) {
     resultsDiv.style.display = 'block';
 }
 
-// Invita utente
-function inviteUser(userId, userName, userEmail) {
-    console.log('Inviting user:', userId, userName, userEmail);
+// Mostra risultati ricerca per inviti artisti
+function displayArtistSearchResults(users) {
+    const container = document.getElementById('artistSearchResultsListInvite');
+    const resultsDiv = document.getElementById('artistSearchResultsInvite');
+
+    if (!container || !resultsDiv) return;
+
+    if (users.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted py-3">
+                <i class="ph ph-magnifying-glass f-s-24 mb-2"></i>
+                <p class="mb-0">Nessun artista trovato</p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = users.map(user => `
+            <div class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3 text-decoration-none">
+                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
+                             alt="${user.name}" class="img-fluid">
+                    </a>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
+                        <small class="text-muted f-s-12">${user.email}</small>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button type="button" class="btn btn-primary btn-sm hover-effect"
+                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}')">
+                            <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    resultsDiv.style.display = 'block';
+}
+
+// Invita utente per eventi privati
+function invitePrivateUser(userId, userName, userEmail) {
+    console.log('Inviting private user:', userId, userName, userEmail);
 
     // Controlla se l'utente è già stato invitato
-    if (invitedUsers.some(user => user.id === userId)) {
+    if (privateInvitedUsers.some(user => user.id === userId)) {
         console.log('User already invited');
         return;
     }
@@ -3616,11 +3729,11 @@ function inviteUser(userId, userName, userEmail) {
         email: userEmail
     };
 
-    invitedUsers.push(user);
-    console.log('Current invited users:', invitedUsers);
+    privateInvitedUsers.push(user);
+    console.log('Current private invited users:', privateInvitedUsers);
 
-    updateInvitedUsersDisplay();
-    updateInvitedUsersData();
+    updatePrivateInvitedUsersDisplay();
+    updatePrivateInvitedUsersData();
 
     // Mostra feedback visivo
     const button = event.target.closest('button');
@@ -3640,43 +3753,147 @@ function inviteUser(userId, userName, userEmail) {
     }
 }
 
-// Rimuovi invito
-function removeInvite(userId) {
-    console.log('Removing invite for user:', userId);
+// Invita artista
+function inviteArtistUser(userId, userName, userEmail) {
+    console.log('Inviting artist user:', userId, userName, userEmail);
 
-    invitedUsers = invitedUsers.filter(user => user.id !== userId);
-    console.log('Remaining invited users:', invitedUsers);
+    // Controlla se l'utente è già stato invitato
+    if (artistInvitedUsers.some(user => user.id === userId)) {
+        console.log('Artist already invited');
+        return;
+    }
 
-    updateInvitedUsersDisplay();
-    updateInvitedUsersData();
+    const user = {
+        id: userId,
+        name: userName,
+        email: userEmail
+    };
+
+    artistInvitedUsers.push(user);
+    console.log('Current artist invited users:', artistInvitedUsers);
+
+    updateArtistInvitedUsersDisplay();
+    updateArtistInvitedUsersData();
+
+    // Mostra feedback visivo
+    const button = event.target.closest('button');
+    if (button) {
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="ph ph-check f-s-12"></i>';
+        button.classList.remove('btn-light-primary');
+        button.classList.add('btn-light-success');
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.classList.remove('btn-light-success');
+            button.classList.add('btn-light-primary');
+            button.disabled = false;
+        }, 2000);
+    }
 }
 
-// Aggiorna visualizzazione utenti invitati
-function updateInvitedUsersDisplay() {
-    console.log('Updating invited users display, count:', invitedUsers.length);
+// Rimuovi invito privato
+function removePrivateInvite(userId) {
+    console.log('Removing private invite for user:', userId);
 
-    const container = document.getElementById('invitationsList');
-    const countElement = document.getElementById('invitationCount');
+    privateInvitedUsers = privateInvitedUsers.filter(user => user.id !== userId);
+    console.log('Remaining private invited users:', privateInvitedUsers);
+
+    updatePrivateInvitedUsersDisplay();
+    updatePrivateInvitedUsersData();
+}
+
+// Rimuovi invito artista
+function removeArtistInvite(userId) {
+    console.log('Removing artist invite for user:', userId);
+
+    artistInvitedUsers = artistInvitedUsers.filter(user => user.id !== userId);
+    console.log('Remaining artist invited users:', artistInvitedUsers);
+
+    updateArtistInvitedUsersDisplay();
+    updateArtistInvitedUsersData();
+}
+
+// Aggiorna visualizzazione utenti invitati per eventi privati
+function updatePrivateInvitedUsersDisplay() {
+    console.log('Updating private invited users display, count:', privateInvitedUsers.length);
+
+    const container = document.getElementById('privateInvitedUsersList');
+    const countElement = document.getElementById('privateInviteCount');
 
     if (!container) {
-        console.error('Container invitationsList not found');
+        console.error('Container privateInvitedUsersList not found');
         return;
     }
 
     if (!countElement) {
-        console.error('Element invitationCount not found');
+        console.error('Element privateInviteCount not found');
         return;
     }
 
-    if (invitedUsers.length === 0) {
+    if (privateInvitedUsers.length === 0) {
         container.innerHTML = `
-            <div class="col-12 text-center text-muted py-4" id="noInvitations">
+            <div class="col-12 text-center text-muted py-4" id="noPrivateInvitations">
+                <i class="ph ph-user-plus display-4 mb-2"></i>
+                <p>Nessun utente invitato ancora.<br>Cerca e aggiungi utenti da invitare.</p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = privateInvitedUsers.map(user => `
+            <div class="col-md-6 col-lg-4 mb-2">
+                <div class="card hover-effect">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center">
+                            <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
+                                <img src="/assets/images/avatar/default.png"
+                                     alt="${user.name}" class="img-fluid">
+                            </a>
+                            <div class="flex-grow-1 ps-2">
+                                <div class="fw-medium txt-ellipsis-1">${user.name}</div>
+                                <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
+                            </div>
+                            <button type="button" class="btn btn-light-danger icon-btn b-r-4"
+                                    onclick="removePrivateInvite(${user.id})" title="Rimuovi invito">
+                                <i class="ph ph-x f-s-12"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    countElement.textContent = privateInvitedUsers.length;
+    console.log('Private display updated, count element shows:', countElement.textContent);
+}
+
+// Aggiorna visualizzazione artisti invitati
+function updateArtistInvitedUsersDisplay() {
+    console.log('Updating artist invited users display, count:', artistInvitedUsers.length);
+
+    const container = document.getElementById('artistInvitedUsersList');
+    const countElement = document.getElementById('artistInviteCount');
+
+    if (!container) {
+        console.error('Container artistInvitedUsersList not found');
+        return;
+    }
+
+    if (!countElement) {
+        console.error('Element artistInviteCount not found');
+        return;
+    }
+
+    if (artistInvitedUsers.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center text-muted py-4" id="noArtistInvitations">
                 <i class="ph ph-user-plus display-4 mb-2"></i>
                 <p>Nessun artista selezionato ancora.<br>Cerca e aggiungi artisti da invitare.</p>
             </div>
         `;
     } else {
-        container.innerHTML = invitedUsers.map(user => `
+        container.innerHTML = artistInvitedUsers.map(user => `
             <div class="col-md-6 col-lg-4 mb-2">
                 <div class="card hover-effect">
                     <div class="card-body p-3">
@@ -3691,7 +3908,7 @@ function updateInvitedUsersDisplay() {
                                 <div class="text-muted f-s-10 txt-ellipsis-1">${user.role || 'performer'}</div>
                             </div>
                             <button type="button" class="btn btn-light-danger icon-btn b-r-4"
-                                    onclick="removeInvite(${user.id})" title="Rimuovi invito">
+                                    onclick="removeArtistInvite(${user.id})" title="Rimuovi invito">
                                 <i class="ph ph-x f-s-12"></i>
                             </button>
                         </div>
@@ -3701,23 +3918,39 @@ function updateInvitedUsersDisplay() {
         `).join('');
     }
 
-    countElement.textContent = invitedUsers.length;
-    console.log('Display updated, count element shows:', countElement.textContent);
+    countElement.textContent = artistInvitedUsers.length;
+    console.log('Artist display updated, count element shows:', countElement.textContent);
 }
 
-// Aggiorna dati nascosti
-function updateInvitedUsersData() {
-    const hiddenInput = document.getElementById('invitationsData');
+// Aggiorna dati nascosti per inviti privati
+function updatePrivateInvitedUsersData() {
+    const hiddenInput = document.getElementById('privateInvitedUsersData');
     if (hiddenInput) {
-        hiddenInput.value = JSON.stringify(invitedUsers);
+        hiddenInput.value = JSON.stringify(privateInvitedUsers);
     }
 }
 
-// Gestisce il tasto Invio nella ricerca utenti
-function handleUserSearchKeydown(event) {
+// Aggiorna dati nascosti per inviti artisti
+function updateArtistInvitedUsersData() {
+    const hiddenInput = document.getElementById('artistInvitedUsersData');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(artistInvitedUsers);
+    }
+}
+
+// Gestisce il tasto Invio nella ricerca utenti privati
+function handlePrivateUserSearchKeydown(event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Previene il submit del form
-        searchUsers(); // Esegue la ricerca invece
+        searchPrivateUsersForInvite(); // Esegue la ricerca invece
+    }
+}
+
+// Gestisce il tasto Invio nella ricerca artisti
+function handleArtistUserSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Previene il submit del form
+        searchArtistUsersForInvite(); // Esegue la ricerca invece
     }
 }
 

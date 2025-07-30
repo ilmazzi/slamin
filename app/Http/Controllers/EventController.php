@@ -335,6 +335,8 @@ class EventController extends Controller
                 'event_image' => 'nullable',
                 'invitations' => 'nullable|string', // JSON string of invitations
                 'invited_users' => 'nullable|string', // JSON string of invited users for private events
+                'private_invited_users' => 'nullable|string', // JSON string of private invited users
+                'artist_invited_users' => 'nullable|string', // JSON string of artist invited users
                 // Nuovi campi per inviti e ingaggi
                 'invitation_deadline' => 'nullable|date_format:Y-m-d H:i|after:now',
                 'gig_positions' => 'nullable|string', // JSON string of gig positions
@@ -462,22 +464,37 @@ class EventController extends Controller
         }
 
         // Process invited users for private events
-        $invitedUsers = [];
-        if (!$validated['is_public'] && !empty($validated['invited_users'])) {
+        $privateInvitedUsers = [];
+        if (!$validated['is_public'] && !empty($validated['private_invited_users'])) {
             try {
-                $invitedUsers = json_decode($validated['invited_users'], true);
-                if (!is_array($invitedUsers)) {
-                    $invitedUsers = [];
+                $privateInvitedUsers = json_decode($validated['private_invited_users'], true);
+                if (!is_array($privateInvitedUsers)) {
+                    $privateInvitedUsers = [];
                 }
             } catch (\Exception $e) {
-                Log::warning('Failed to parse invited users JSON: ' . $e->getMessage());
-                $invitedUsers = [];
+                Log::warning('Failed to parse private invited users JSON: ' . $e->getMessage());
+                $privateInvitedUsers = [];
+            }
+        }
+
+        // Process invited users for artist invites
+        $artistInvitedUsers = [];
+        if (!empty($validated['artist_invited_users'])) {
+            try {
+                $artistInvitedUsers = json_decode($validated['artist_invited_users'], true);
+                if (!is_array($artistInvitedUsers)) {
+                    $artistInvitedUsers = [];
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse artist invited users JSON: ' . $e->getMessage());
+                $artistInvitedUsers = [];
             }
         }
 
         // Remove invitations and invited_users from validated data as they're not part of Event model
         unset($validated['invitations']);
-        unset($validated['invited_users']);
+        unset($validated['private_invited_users']);
+        unset($validated['artist_invited_users']);
 
         // Process festival data
         $festivalEvents = [];
@@ -496,7 +513,7 @@ class EventController extends Controller
         // Remove selected_festival_events from validated data as it's not part of Event model
         unset($validated['selected_festival_events']);
 
-        DB::transaction(function () use ($validated, $invitations, $invitedUsers, $festivalEvents, &$event) {
+        DB::transaction(function () use ($validated, $invitations, $privateInvitedUsers, $artistInvitedUsers, $festivalEvents, &$event) {
             // Process recurrence settings
             if (isset($validated['is_recurring']) && $validated['is_recurring'] && !empty($validated['recurrence_type'])) {
                 // Set default values for recurrence
@@ -595,7 +612,7 @@ class EventController extends Controller
             }
 
             // Create invitations for private event users
-            foreach ($invitedUsers as $invitedUser) {
+            foreach ($privateInvitedUsers as $invitedUser) {
                 if (isset($invitedUser['id'])) {
                     // Verify user exists
                     $user = User::find($invitedUser['id']);
@@ -633,10 +650,59 @@ class EventController extends Controller
                     }
                 }
             }
+
+            // Create invitations for artist users
+            Log::info('Processing artist invitations', [
+                'count' => count($artistInvitedUsers),
+                'users' => $artistInvitedUsers
+            ]);
+            
+            foreach ($artistInvitedUsers as $invitedUser) {
+                Log::info('Processing artist user', ['user' => $invitedUser]);
+                
+                if (isset($invitedUser['id'])) {
+                    // Verify user exists
+                    $user = User::find($invitedUser['id']);
+                    if ($user) {
+                        // Create invitation for artist role
+                        $eventInvitation = EventInvitation::create([
+                            'event_id' => $event->id,
+                            'invited_user_id' => $invitedUser['id'],
+                            'inviter_id' => Auth::id(),
+                            'role' => $invitedUser['role'] ?? 'performer', // Use specified role or default to performer
+                            'message' => "Sei invitato come artista al nostro evento!",
+                            'status' => EventInvitation::STATUS_PENDING,
+                            'expires_at' => Carbon::parse($event->start_datetime)->subDays(1), // Expires 1 day before event
+                        ]);
+
+                        // Create notification
+                        Notification::createEventInvitation($eventInvitation);
+
+                        // Send email invitation
+                        try {
+                            Mail::to($user->email)->send(new EventInvitationMail($eventInvitation));
+                            Log::info('Artist invitation email sent', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitedUser['id'],
+                                'email' => $user->email,
+                                'role' => $invitedUser['role'] ?? 'performer'
+                            ]);
+                        } catch (\Exception $e) {
+                            Log::error('Failed to send artist invitation email', [
+                                'event_id' => $event->id,
+                                'invited_user_id' => $invitedUser['id'],
+                                'email' => $user->email,
+                                'error' => $e->getMessage()
+                            ]);
+                        }
+                    }
+                }
+            }
         });
 
         $invitationCount = count($invitations);
-        $invitedUsersCount = count($invitedUsers);
+        $privateInvitedUsersCount = count($privateInvitedUsers);
+        $artistInvitedUsersCount = count($artistInvitedUsers);
 
         // Log dell'attività
         LoggingService::logEvent('create', [
@@ -648,7 +714,8 @@ class EventController extends Controller
             'recurrence_type' => $event->recurrence_type,
             'recurrence_count' => $event->recurrence_count,
             'invitations_count' => $invitationCount,
-            'private_invitations_count' => $invitedUsersCount,
+            'private_invitations_count' => $privateInvitedUsersCount,
+            'artist_invitations_count' => $artistInvitedUsersCount,
             'has_image' => !empty($event->image_url),
             'venue_name' => $event->venue_name,
             'city' => $event->city,
@@ -663,8 +730,12 @@ class EventController extends Controller
             $successMessage .= ' ' . __('events.invitations_sent_success', ['count' => $invitationCount]);
         }
 
-        if ($invitedUsersCount > 0) {
-            $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $invitedUsersCount]);
+        if ($privateInvitedUsersCount > 0) {
+            $successMessage .= ' ' . __('events.private_invitations_sent_success', ['count' => $privateInvitedUsersCount]);
+        }
+
+        if ($artistInvitedUsersCount > 0) {
+            $successMessage .= ' ' . __('events.artist_invitations_sent_success', ['count' => $artistInvitedUsersCount]);
         }
 
         // Salva il luogo come recente solo per eventi fisici
@@ -718,7 +789,7 @@ class EventController extends Controller
         $query = $request->get('q', '');
 
         if (strlen($query) < 2) {
-            return response()->json([]);
+            return response()->json(['users' => []]);
         }
 
         $users = User::where(function ($q) use ($query) {
@@ -739,11 +810,11 @@ class EventController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'roles' => $user->roles->pluck('name')->toArray(),
-                    'avatar' => $user->avatar ?? null,
+                    'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) : null,
                 ];
             });
 
-        return response()->json($users);
+        return response()->json(['users' => $users]);
     }
 
     /**
