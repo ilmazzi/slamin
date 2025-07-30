@@ -145,7 +145,7 @@ class EventInvitationController extends Controller
 
         if ($invitation->accept($validated['response_message'] ?? null)) {
             return redirect()
-                ->route('invitations.show', $invitation)
+                ->route('dashboard')
                 ->with('success', 'Invito accettato con successo!');
         }
 
@@ -173,7 +173,7 @@ class EventInvitationController extends Controller
 
         if ($invitation->decline($validated['response_message'] ?? null)) {
             return redirect()
-                ->route('invitations.show', $invitation)
+                ->route('dashboard')
                 ->with('success', 'Invito rifiutato.');
         }
 

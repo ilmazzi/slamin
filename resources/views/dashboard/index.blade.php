@@ -362,14 +362,14 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-1">
-                                        <form action="{{ route('event-invitations.accept', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('event-invitations.accept', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline invitation-form" data-invitation-id="{{ $invitation->id }}">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-success btn-sm" title="{{ __('invitations.accept') }}">
                                                 <i class="ph ph-check f-s-12"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('event-invitations.decline', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('event-invitations.decline', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline invitation-form" data-invitation-id="{{ $invitation->id }}">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-danger btn-sm" title="{{ __('invitations.decline') }}">
@@ -455,6 +455,29 @@
 <script src="{{ asset('assets/vendor/fullcalendar/global.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Gestione inviti
+    const invitationForms = document.querySelectorAll('.invitation-form');
+    invitationForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const invitationId = this.getAttribute('data-invitation-id');
+            const invitationRow = this.closest('.d-flex.align-items-center');
+            
+            // Nascondi immediatamente la riga dell'invito
+            if (invitationRow) {
+                invitationRow.style.opacity = '0.5';
+                invitationRow.style.pointerEvents = 'none';
+            }
+            
+            // Disabilita i pulsanti per evitare doppi click
+            const buttons = this.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.innerHTML = '<i class="ph ph-spinner ph-spin f-s-12"></i>';
+            });
+        });
+    });
+
+    // Calendar
     const calendarEl = document.getElementById('dashboardCalendar');
 
     if (calendarEl) {
