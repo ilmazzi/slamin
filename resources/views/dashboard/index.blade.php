@@ -362,14 +362,14 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-1">
-                                        <form action="{{ route('event-invitations.accept', ['event' => $invitation->event, 'invitation' => $invitation]) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('event-invitations.accept', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-success btn-sm" title="{{ __('invitations.accept') }}">
                                                 <i class="ph ph-check f-s-12"></i>
                                             </button>
                                         </form>
-                                        <form action="{{ route('event-invitations.decline', ['event' => $invitation->event, 'invitation' => $invitation]) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('event-invitations.decline', ['event' => $invitation->event, 'invitation' => $invitation->id]) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-danger btn-sm" title="{{ __('invitations.decline') }}">

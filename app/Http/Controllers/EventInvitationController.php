@@ -127,8 +127,13 @@ class EventInvitationController extends Controller
     /**
      * Accept an invitation
      */
-    public function accept(Request $request, EventInvitation $invitation): RedirectResponse
+    public function accept(Request $request, Event $event, $invitationId): RedirectResponse
     {
+        // Find the invitation manually
+        $invitation = EventInvitation::where('id', $invitationId)
+                                   ->where('event_id', $event->id)
+                                   ->firstOrFail();
+
         // Check if user can accept this invitation
         if ($invitation->invited_user_id !== Auth::id()) {
             abort(403, 'Non autorizzato a gestire questo invito.');
@@ -150,8 +155,13 @@ class EventInvitationController extends Controller
     /**
      * Decline an invitation
      */
-    public function decline(Request $request, EventInvitation $invitation): RedirectResponse
+    public function decline(Request $request, Event $event, $invitationId): RedirectResponse
     {
+        // Find the invitation manually
+        $invitation = EventInvitation::where('id', $invitationId)
+                                   ->where('event_id', $event->id)
+                                   ->firstOrFail();
+
         // Check if user can decline this invitation
         if ($invitation->invited_user_id !== Auth::id()) {
             abort(403, 'Non autorizzato a gestire questo invito.');
