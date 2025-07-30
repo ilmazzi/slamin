@@ -37,5 +37,6 @@ return [
     'logout_button' => '',
     'permissions_management' => '',
     'system_logs' => '',
+    'chat' => 'Chat',
 
 ];

@@ -21,7 +21,7 @@ class GroupJoinRequestController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         $requests = $user->groupJoinRequests()
                         ->with('group')
                         ->orderBy('created_at', 'desc')
@@ -41,7 +41,9 @@ class GroupJoinRequestController extends Controller
             abort(403, 'Non hai i permessi per visualizzare le richieste del gruppo.');
         }
 
-        $requests = $group->getPendingJoinRequests()
+        $requests = $group->joinRequests()
+                         ->with(['user', 'processedBy'])
+                         ->orderBy('created_at', 'desc')
                          ->paginate(10);
 
         return view('groups.join_requests.pending', compact('group', 'requests'));
@@ -70,12 +72,15 @@ class GroupJoinRequestController extends Controller
         }
 
         // Crea la richiesta
-        GroupJoinRequest::create([
+        $joinRequest = GroupJoinRequest::create([
             'group_id' => $group->id,
             'user_id' => $user->id,
             'status' => 'pending',
             'message' => $request->input('message', ''),
         ]);
+
+        // Crea la notifica per admin e moderatori
+        \App\Models\Notification::createGroupJoinRequest($joinRequest);
 
         return back()->with('success', 'Richiesta di partecipazione inviata con successo.');
     }
@@ -131,6 +136,9 @@ class GroupJoinRequestController extends Controller
             'joined_at' => now(),
         ]);
 
+        // Crea la notifica di risposta
+        \App\Models\Notification::createGroupJoinRequestResponse($request, 'accepted');
+
         return back()->with('success', "Richiesta di {$request->user->name} accettata con successo.");
     }
 
@@ -153,6 +161,9 @@ class GroupJoinRequestController extends Controller
 
         // Rifiuta la richiesta
         $request->decline($user);
+
+        // Crea la notifica di risposta
+        \App\Models\Notification::createGroupJoinRequestResponse($request, 'declined');
 
         return back()->with('success', "Richiesta di {$request->user->name} rifiutata.");
     }

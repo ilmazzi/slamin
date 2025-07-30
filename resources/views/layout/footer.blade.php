@@ -122,16 +122,16 @@ class NotificationManager {
 
     renderNotification(notification) {
         const isUnread = !notification.is_read;
-        const timeAgo = this.timeAgo(new Date(notification.created_at));
-        
+        const timeAgo = notification.created_at || 'Ora';
+
         // Controlla se è una notifica di invito a evento
-        const isEventInvitation = notification.type === 'event_invitation' || 
+        const isEventInvitation = notification.type === 'event_invitation' ||
                                  (notification.title && notification.title.includes('Invito'));
-        
+
         // Estrai event_id e invitation_id dai dati della notifica se disponibili
         let eventId = null;
         let invitationId = null;
-        
+
         if (notification.data) {
             try {
                 const data = typeof notification.data === 'string' ? JSON.parse(notification.data) : notification.data;
@@ -142,68 +142,73 @@ class NotificationManager {
             }
         }
 
-        return `
-            <div class="notification-message head-box ${isUnread ? 'unread' : ''}" data-notification-id="${notification.id}">
-                <div class="d-flex align-items-start position-relative">
-                    <div class="flex-shrink-0 me-3">
-                        <div class="notification-icon ${notification.color}">
-                            <i class="${notification.icon}"></i>
+                return `
+            <div class="d-flex align-items-start p-3 border-bottom ${isUnread ? 'bg-light-primary' : ''}" data-notification-id="${notification.id}">
+                <div class="flex-shrink-0 me-3">
+                    ${notification.sender_avatar ? `
+                        <img src="${notification.sender_avatar}" alt="Avatar" class="h-40 w-40 rounded-circle object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="bg-light-${notification.color.replace('text-', '')} h-40 w-40 d-flex-center rounded-circle" style="display: none;">
+                            <i class="${notification.icon} f-s-16 text-${notification.color.replace('text-', '')}"></i>
                         </div>
-                    </div>
-                    <div class="message-content-box flex-grow-1 pe-2">
-                        <h6 class="mb-1 f-s-14 ${isUnread ? 'fw-bold' : ''}">${notification.title}</h6>
-                        <p class="mb-1 f-s-13 text-muted">${notification.message}</p>
-                        
-                        ${isEventInvitation && eventId && invitationId ? `
-                            <div class="mt-2 d-flex gap-1">
-                                <form action="/events/${eventId}/invitations/${invitationId}/accept" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
-                                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                    <input type="hidden" name="_method" value="PATCH">
-                                    <button type="submit" class="btn btn-success btn-sm" title="Accetta">
-                                        <i class="ph ph-check f-s-12"></i>
-                                    </button>
-                                </form>
-                                <form action="/events/${eventId}/invitations/${invitationId}/decline" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
-                                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                                    <input type="hidden" name="_method" value="PATCH">
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
-                                        <i class="ph ph-x f-s-12"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        ` : ''}
-                        
-                        ${!isEventInvitation && notification.action_url ? `
-                            <div class="mt-2">
-                                <a href="${notification.action_url}" class="btn btn-primary btn-sm">
-                                    ${notification.action_text || 'Visualizza'}
-                                </a>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="text-end position-absolute top-0 end-0">
-                        <div class="dropdown">
-                            <button class="btn btn-link btn-sm p-1" data-bs-toggle="dropdown">
-                                <i class="ph ph-dots-three-vertical f-s-14"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                ${isUnread ? `
-                                    <li><a class="dropdown-item" href="#" onclick="markNotificationRead(${notification.id})">
-                                        <i class="ph ph-check me-2"></i>Segna come letta
-                                    </a></li>
-                                ` : `
-                                    <li><a class="dropdown-item" href="#" onclick="markNotificationUnread(${notification.id})">
-                                        <i class="ph ph-arrow-counter-clockwise me-2"></i>Segna come non letta
-                                    </a></li>
-                                `}
-                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteNotification(${notification.id})">
-                                    <i class="ph ph-trash me-2"></i>Elimina
+                    ` : `
+                        <div class="bg-light-${notification.color.replace('text-', '')} h-40 w-40 d-flex-center rounded-circle">
+                            <i class="${notification.icon} f-s-16 text-${notification.color.replace('text-', '')}"></i>
+                        </div>
+                    `}
+                </div>
+                <div class="flex-grow-1 pe-2">
+                    <h6 class="mb-1 f-s-14 ${isUnread ? 'fw-bold' : ''}">${notification.title}</h6>
+                    <p class="mb-1 f-s-13 text-muted">${notification.message}</p>
+
+                    ${isEventInvitation && eventId && invitationId ? `
+                        <div class="mt-2 d-flex gap-1">
+                            <form action="/events/${eventId}/invitations/${invitationId}/accept" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
+                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-success btn-sm" title="Accetta">
+                                    <i class="ph ph-check f-s-12"></i>
+                                </button>
+                            </form>
+                            <form action="/events/${eventId}/invitations/${invitationId}/decline" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
+                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
+                                    <i class="ph ph-x f-s-12"></i>
+                                </button>
+                            </form>
+                        </div>
+                    ` : ''}
+
+                    ${!isEventInvitation && notification.action_url ? `
+                        <div class="mt-2">
+                            <a href="${notification.action_url}" class="btn btn-primary btn-sm">
+                                ${notification.action_text || 'Visualizza'}
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="dropdown">
+                        <button class="btn btn-link btn-sm p-1" data-bs-toggle="dropdown">
+                            <i class="ph ph-dots-three-vertical f-s-14"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            ${isUnread ? `
+                                <li><a class="dropdown-item" href="#" onclick="markNotificationRead(${notification.id})">
+                                    <i class="ph ph-check me-2"></i>Segna come letta
                                 </a></li>
-                            </ul>
-                        </div>
-                        <div class="mt-1">
-                            <span class="badge ${notification.priority_badge}">${timeAgo}</span>
-                        </div>
+                            ` : `
+                                <li><a class="dropdown-item" href="#" onclick="markNotificationUnread(${notification.id})">
+                                    <i class="ph ph-arrow-counter-clockwise me-2"></i>Segna come non letta
+                                </a></li>
+                            `}
+                            <li><a class="dropdown-item text-danger" href="#" onclick="deleteNotification(${notification.id})">
+                                <i class="ph ph-trash me-2"></i>Elimina
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="mt-1">
+                        <span class="badge bg-light-${notification.color.replace('text-', '')} text-primary f-s-10">${timeAgo}</span>
                     </div>
                 </div>
             </div>
@@ -253,7 +258,7 @@ class NotificationManager {
 
     attachEventListeners() {
         // Handle notification clicks
-        document.querySelectorAll('.notification-message').forEach(item => {
+        document.querySelectorAll('[data-notification-id]').forEach(item => {
             item.addEventListener('click', (e) => {
                 if (e.target.closest('.dropdown')) return;
 
@@ -272,14 +277,14 @@ class NotificationManager {
         document.querySelectorAll('.invitation-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 const invitationId = this.getAttribute('data-invitation-id');
-                const notificationRow = this.closest('.notification-message');
-                
+                const notificationRow = this.closest('[data-notification-id]');
+
                 // Nascondi immediatamente la notifica
                 if (notificationRow) {
                     notificationRow.style.opacity = '0.5';
                     notificationRow.style.pointerEvents = 'none';
                 }
-                
+
                 // Disabilita i pulsanti per evitare doppi click
                 const buttons = this.querySelectorAll('button');
                 buttons.forEach(button => {
@@ -456,53 +461,7 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
-// CSS for notification styling
-const notificationStyles = `
-<style>
-.notification-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-}
-
-.notification-message.unread {
-    background: rgba(102, 126, 234, 0.05);
-    border-left: 3px solid #667eea;
-}
-
-.notification-message {
-    border-bottom: 1px solid #f0f0f0;
-    padding: 15px;
-    transition: all 0.3s ease;
-}
-
-.notification-message:hover {
-    background: #f8f9fa;
-}
-
-.badge-notification {
-    font-size: 0.7rem;
-    padding: 0.35em 0.5em;
-}
-
-@keyframes notificationPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.notification-new {
-    animation: notificationPulse 2s infinite;
-}
-</style>
-`;
-
-// Inject CSS
-document.head.insertAdjacentHTML('beforeend', notificationStyles);
+// No custom CSS - using template classes only
 </script>
 @endauth
 

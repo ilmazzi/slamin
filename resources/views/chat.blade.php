@@ -1,29 +1,24 @@
 @extends('layout.master')
-@section('title', 'Chat')
-@section('css')
 
-@endsection
 @section('main-content')
+<div class="page-content">
     <div class="container-fluid">
-        <!-- Breadcrumb start -->
-        <div class="row m-1">
-            <div class="col-12 ">
-                <h4 class="main-title">Chat</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-stack f-s-16"></i> Apps
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Chat</a>
-                    </li>
-                </ul>
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0">{{ __('chat.title') }}</h4>
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('sidebar.dashboard') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('chat.title') }}</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Breadcrumb end -->
+        <!-- end page title -->
+
         <!-- Chat start -->
         <div class="row position-relative chat-container-box">
             <div class="col-lg-4 col-xxl-3  box-col-5">
@@ -31,30 +26,23 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                        <span class="chatdp h-45 w-45 d-flex-center b-r-50 position-relative bg-danger">
-                          <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
+                                <span class="chatdp h-45 w-45 d-flex-center b-r-50 position-relative bg-danger">
+                                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('assets/images/avatar/09.png') }}" alt="" class="img-fluid b-r-50">
+                                    <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                </span>
                                 <div class="flex-grow-1 ps-2">
-                                    <div class="fs-6"> Ninfa Monaldo</div>
-                                    <div class="text-muted f-s-12">Web Developer</div>
+                                    <div class="fs-6">{{ auth()->user()->name }}</div>
+                                    <div class="text-muted f-s-12">{{ auth()->user()->role ?? 'User' }}</div>
                                 </div>
                                 <div>
                                     <div class="btn-group dropdown-icon-none">
-                                        <a role="button"  data-bs-placement="top"  data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                        <a role="button" data-bs-placement="top" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                             <i class="ti ti-settings fs-5"></i>
                                         </a>
                                         <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                            <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                        class="f-s-13">Chat Settings</span></a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                        class="f-s-13">Contact Settings</span></a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                                        class="f-s-13">Settings</span></a>
-                                            </li>
+                                            <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span class="f-s-13">Chat Settings</span></a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span class="f-s-13">Contact Settings</span></a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span class="f-s-13">Settings</span></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -66,364 +54,139 @@
                         <div class="card-body">
                             <div class="chat-tab-wrapper">
                                 <ul class="tabs chat-tabs">
-                                    <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>Chat</li>
-                                    <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i>Updates</li>
-                                    <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i>Contact</li>
+                                    <li class="tab-link active" data-tab="1"><i class="ph-fill ph-chat-circle-text f-s-18 me-2"></i>Chat</li>
+                                    <li class="tab-link" data-tab="2"><i class="ph-fill ph-wechat-logo f-s-18 me-2"></i>Updates</li>
+                                    <li class="tab-link" data-tab="3"><i class="ph-fill ph-phone-call f-s-18 me-2"></i>Contact</li>
                                 </ul>
                             </div>
                             <div class="content-wrapper">
-
                                 <!-- tab 1 -->
-
                                 <div id="tab-1" class="tabs-content active">
                                     <div class="tab-wrapper">
                                         <div class="mt-3">
-                                            <ul class="nav nav-tabs app-tabs-primary tab-light-primary chat-status-tab border-0 justify-content-between mb-0 pb-0" id="Basic"
-                                                role="tablist">
+                                            <ul class="nav nav-tabs app-tabs-primary tab-light-primary chat-status-tab border-0 justify-content-between mb-0 pb-0" id="Basic" role="tablist">
                                                 <li class="nav-item" role="presentation">
-                                                    <button class="nav-link active" id="private-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#private-tab-pane" type="button" role="tab"
-                                                            aria-controls="private-tab-pane" aria-selected="false"
-                                                            tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>Private</button>
+                                                    <button class="nav-link active" id="private-tab" data-bs-toggle="tab" data-bs-target="#private-tab-pane" type="button" role="tab" aria-controls="private-tab-pane" aria-selected="false" tabindex="-1">
+                                                        <i class="ph-fill ph-lock-key-open me-2"></i>Private
+                                                    </button>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="groups-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#groups-tab-pane" type="button" role="tab"
-                                                            aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i>Group </button>
+                                                    <button class="nav-link" id="groups-tab" data-bs-toggle="tab" data-bs-target="#groups-tab-pane" type="button" role="tab" aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1">
+                                                        <i class="ph-fill ph-users-three me-2"></i>Group
+                                                    </button>
                                                 </li>
                                             </ul>
                                             <div class="tab-content" id="BasicContent">
                                                 <!-- Private Chat -->
-                                                <div class="tab-pane fade show active" id="private-tab-pane" role="tabpanel"
-                                                     aria-labelledby="private-tab" tabindex="0">
-                                                    <div class="chat-contact">
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-primary">
-                                          <img src="{{asset('../assets/images/avatar/1.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
+                                                <div class="tab-pane fade show active" id="private-tab-pane" role="tabpanel" aria-labelledby="private-tab" tabindex="0">
+                                                    <div class="chat-contact" id="privateChatsList">
+                                                        @forelse($chats->where('type', 'private') as $chat)
+                                                            @php
+                                                                $otherUser = $chat->participants->where('user_id', '!=', auth()->id())->first()->user ?? null;
+                                                                $unreadCount = $chat->getUnreadCount(auth()->user());
+                                                            @endphp
+                                                            <div class="chat-contactbox" data-chat-id="{{ $chat->id }}" onclick="loadChat({{ $chat->id }})">
+                                                                <div class="position-absolute">
+                                                                    <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-primary">
+                                                                        @if($otherUser && $otherUser->avatar)
+                                                                            <img src="{{ asset('storage/' . $otherUser->avatar) }}" alt="" class="img-fluid b-r-50">
+                                                                        @else
+                                                                            <img src="{{ asset('assets/images/avatar/1.png') }}" alt="" class="img-fluid b-r-50">
+                                                                        @endif
+                                                                        <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="flex-grow-1 text-start mg-s-50">
+                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $otherUser ? $otherUser->name : __('chat.unknown_user') }}</p>
+                                                                    <p class="text-secondary mb-0 f-s-12 mb-0 chat-message">
+                                                                        <i class="ti ti-checks"></i>
+                                                                        @if($chat->lastMessage)
+                                                                            {{ Str::limit($chat->lastMessage->message, 30) }}
+                                                                        @else
+                                                                            {{ __('chat.no_messages') }}
+                                                                        @endif
+                                                                        @if($unreadCount > 0)
+                                                                            <span class="badge bg-danger ms-1">{{ $unreadCount }}</span>
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="f-s-12 chat-time">
+                                                                        @if($chat->lastMessage)
+                                                                            {{ $chat->lastMessage->created_at->diffForHumans() }}
+                                                                        @else
+                                                                            {{ __('chat.no_messages') }}
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Bette Hagenes</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Hi! Bette How are you?
-                                                                </p>
+                                                        @empty
+                                                            <div class="text-center py-3">
+                                                                <p class="text-muted">{{ __('chat.no_private_chats') }}</p>
                                                             </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2:30AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-dark">
-                                          <img src="{{asset('../assets/images/avatar/2.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-secondary border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Mark Walsh</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Hi! Work is done
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2:30AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-success">
-                                          <img src="{{asset('../assets/images/avatar/3.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Jerry Ladies</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> I'm waiting
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2:30AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-danger">
-                                          <img src="{{asset('../assets/images/avatar/4.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Jessica</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Awesome! 🤩 I like it
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2:30AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-warning">
-                                          <img src="{{asset('../assets/images/avatar/5.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Sue Flay</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> oh, Really !!
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">1:00PM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-dark">
-                                          <img src="{{asset('../assets/images/avatar/6.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Isla White</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Bye! see you soon
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">12:33PM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-secondary">
-                                          <img src="{{asset('../assets/images/avatar/07.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Anita Break</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Bye!
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">1:52AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-primary">
-                                          <img src="{{asset('../assets/images/avatar/08.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Lou Pole</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Heyy !
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2 days</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-info">
-                                          <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Noah Davis</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Have a great day
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">8:00 PM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-success">
-                                          <img src="{{asset('../assets/images/avatar/10.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Pete Sakes</p>
-                                                                <p class="text-secondary mb-0 f-s-12 mb-0 chat-message"><i class="ti ti-checks"></i> Bye! see you soon
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">12:30 PM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                        <span class="h-45 w-45 d-flex-center b-r-50 position-relative bg-danger">
-                                          <img src="{{asset('../assets/images/avatar/11.png')}}" alt="" class="img-fluid b-r-50">
-                                          <span
-                                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                        </span>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-50">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Fleta Walsh</p>
-                                                                <p class="text-muted mb-0 text-success f-s-12 chat-message">Typing....</p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">Now</p>
-                                                            </div>
-                                                        </div>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                                 <!-- Group Chat -->
-                                                <div class="tab-pane fade" id="groups-tab-pane" role="tabpanel"
-                                                     aria-labelledby="groups-tab" tabindex="0">
-                                                    <div class="chat-contact chat-group-list">
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="text-bg-warning h-45 w-45 d-flex-center b-r-50">
-                                                                        A
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        2+
-                                                                    </li>
-                                                                </ul>
+                                                <div class="tab-pane fade" id="groups-tab-pane" role="tabpanel" aria-labelledby="groups-tab" tabindex="0">
+                                                    <div class="chat-contact chat-group-list" id="groupChatsList">
+                                                        @forelse($chats->where('type', 'group') as $chat)
+                                                            @php
+                                                                $unreadCount = $chat->getUnreadCount(auth()->user());
+                                                            @endphp
+                                                            <div class="chat-contactbox" data-chat-id="{{ $chat->id }}" onclick="loadChat({{ $chat->id }})">
+                                                                <div class="position-absolute">
+                                                                    <ul class="avatar-group">
+                                                                        <li class="text-bg-warning h-45 w-45 d-flex-center b-r-50">
+                                                                            {{ substr($chat->name, 0, 1) }}
+                                                                        </li>
+                                                                        <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50" data-bs-toggle="tooltip" data-bs-title="2 More">
+                                                                            {{ $chat->participants->count() }}+
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="flex-grow-1 text-start mg-s-75">
+                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $chat->name }}</p>
+                                                                    <p class="text-secondary f-s-12 chat-message">
+                                                                        @if($chat->lastMessage)
+                                                                            {{ Str::limit($chat->lastMessage->message, 30) }}
+                                                                        @else
+                                                                            {{ __('chat.no_messages') }}
+                                                                        @endif
+                                                                        @if($unreadCount > 0)
+                                                                            <span class="badge bg-danger ms-1">{{ $unreadCount }}</span>
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="f-s-12 chat-time">
+                                                                        @if($chat->lastMessage)
+                                                                            {{ $chat->lastMessage->created_at->diffForHumans() }}
+                                                                        @else
+                                                                            {{ __('chat.no_messages') }}
+                                                                        @endif
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Office Group</p>
-                                                                <p class="text-secondary f-s-12 chat-message">Hi! Bette How are you?</p>
+                                                        @empty
+                                                            <div class="text-center py-3">
+                                                                <p class="text-muted">{{ __('chat.no_group_chats') }}</p>
                                                             </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2:30AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="h-45 w-45 d-flex-center overflow-hidden b-r-50 bg-primary">
-                                                                        <img src="{{asset('../assets/images/avatar/16.png')}} " alt="" class="img-fluid">
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        4+
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Markting Group</p>
-                                                                <p class="text-secondary f-s-12 chat-message">Hi! Work is done</p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">7:24AM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="h-45 w-45 d-flex-center overflow-hidden b-r-50 bg-info">
-                                                                        <img src="{{asset('../assets/images/avatar/15.png')}} " alt="" class="img-fluid">
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        10+
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Developer Group</p>
-                                                                <p class="text-secondary f-s-12 chat-message"> I'm waiting </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2min</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="text-bg-danger h-45 w-45 d-flex-center overflow-hidden b-r-50">
-                                                                        AD
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        2+
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Designer Group</p>
-                                                                <p class="text-secondary f-s-12 chat-message">Awesome! 🤩 I like it </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">2day</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="h-45 w-45 d-flex-center overflow-hidden b-r-50 bg-dark">
-                                                                        <img src="{{asset('../assets/images/avatar/14.png')}} " alt="" class="img-fluid">
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        15+
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">Friend's Group</p>
-                                                                <p class="text-secondary f-s-12 chat-message">Bye! see you soon </p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">12:30PM</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="chat-contactbox">
-                                                            <div class="position-absolute">
-                                                                <ul class="avatar-group">
-                                                                    <li class="text-bg-danger h-45 w-45 d-flex-center overflow-hidden b-r-50">
-                                                                        <img src="{{asset('../assets/images/avatar/10.png')}}" alt="" class="img-fluid">
-                                                                    </li>
-                                                                    <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50"
-                                                                        data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                        25+
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="flex-grow-1 text-start mg-s-75">
-                                                                <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">client Group</p>
-                                                                <p class="text-muted text-success f-s-12 chat-message">Typing...</p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="f-s-12 chat-time">Now</p>
-                                                            </div>
-                                                        </div>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                                 <div class="float-end">
-                                                    <div class="btn-group dropup  dropdown-icon-none">
-                                                        <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
-                                                                data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                                    <div class="btn-group dropup dropdown-icon-none">
+                                                        <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                                             <i class="ti ti-plus"></i>
                                                         </button>
                                                         <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                                            <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                                        class="f-s-13">New Chat</span></a>
-                                                            </li>
-                                                            <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                                        class="f-s-13">New Contact</span></a>
-                                                            </li>
+                                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createPrivateChatModal">
+                                                                <i class="ti ti-brand-hipchat"></i> <span class="f-s-13">{{ __('chat.create_private') }}</span>
+                                                            </a></li>
+                                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createGroupChatModal">
+                                                                <i class="ti ti-phone-call"></i> <span class="f-s-13">{{ __('chat.create_group') }}</span>
+                                                            </a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -433,309 +196,69 @@
                                 </div>
 
                                 <!-- tab 2 -->
-
                                 <div id="tab-2" class="tabs-content">
                                     <div class="chat-contact tabcontent">
                                         <div class="updates-box">
                                             <div class="b-2-success b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                                  <img src="{{asset('../assets/images/avatar/16.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
+                                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
+                                                    <img src="{{ asset('assets/images/avatar/16.png') }}" alt="" class="img-fluid b-r-50">
+                                                </span>
                                             </div>
                                             <div class="flex-grow-1 text-start ps-2">
                                                 <span>Bette Hagenes</span>
                                                 <p class="f-s-12 text-secondary mb-0">2:30AM</p>
                                             </div>
                                         </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
-                                  <img src="{{asset('../assets/images/avatar/6.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Jessica</span>
-                                                <p class="f-s-12 text-secondary mb-0">2min</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-dark">
-                                  <img src="{{asset('../assets/images/avatar/5.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Jerry Ladies</span>
-                                                <p class="f-s-12 text-secondary mb-0">7:00AM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-success b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                                  <img src="{{asset('../assets/images/avatar/4.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Emery McKenzie</span>
-                                                <p class="f-s-12 text-secondary mb-0">5:26PM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-success b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                                  <img src="{{asset('../assets/images/avatar/3.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Mark Walsh</span>
-                                                <p class="f-s-12 text-secondary mb-0">1:26PM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-dark">
-                                  <img src="{{asset('../assets/images/avatar/2.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Noah Davis</span>
-                                                <p class="f-s-12 text-secondary mb-0">6:22PM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                                  <img src="{{asset('../assets/images/avatar/1.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                <span>
-                                  Isla White</span>
-                                                <p class="f-s-12 text-secondary mb-0">6:10PM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-secondary">
-                                  <img src="{{asset('../assets/images/avatar/10.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Fleta Walsh</span>
-                                                <p class="f-s-12 text-secondary mb-0">5:26PM</p>
-                                            </div>
-                                        </div>
-                                        <div class="updates-box">
-                                            <div class="b-2-secondary b-r-50 p-1">
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-secondary">
-                                  <img src="{{asset('../assets/images/avatar/11.png')}}" alt="" class="img-fluid b-r-50">
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 text-start ps-2">
-                                                <span>Pete Sakes</span>
-                                                <p class="f-s-12 text-secondary mb-0">3:26PM</p>
-                                            </div>
-                                        </div>
+                                        <!-- Altri aggiornamenti... -->
                                     </div>
-
                                     <div class="float-end">
                                         <div class="btn-group dropdown-icon-none">
-                                            <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
-                                                    data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                            <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                                 <i class="ti ti-plus"></i>
                                             </button>
                                             <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                                <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                            class="f-s-13">New Chat</span></a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                            class="f-s-13">New Contact</span></a>
-                                                </li>
+                                                <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span class="f-s-13">New Chat</span></a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span class="f-s-13">New Contact</span></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- tab 3 -->
-
                                 <div id="tab-3" class="tabs-content">
                                     <div class="chat-contact tabcontent chat-contact-list">
-                                        <div class=" d-flex align-items-center py-3">
+                                        <div class="d-flex align-items-center py-3">
                                             <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
-                                  <img src="{{asset('../assets/images/avatar/13.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
+                                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
+                                                    <img src="{{ asset('assets/images/avatar/13.png') }}" alt="" class="img-fluid b-r-50">
+                                                    <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                                </span>
                                             </div>
                                             <div class="flex-grow-1 ps-2">
                                                 <p class="contact-name text-dark mb-0 f-w-500">Bette Hagenes</p>
                                                 <p class="mb-0 text-secondary f-s-13">+978356479</p>
                                             </div>
                                             <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
+                                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
+                                                    <i class="ti ti-phone-call"></i>
+                                                </span>
                                             </div>
                                             <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
+                                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
+                                                    <i class="ti ti-video"></i>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-danger">
-                                  <img src="{{asset('../assets/images/avatar/12.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Fleta Walsh</p>
-                                                <p class="mb-0 text-secondary f-s-13">+988456479</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                                  <img src="{{asset('../assets/images/avatar/11.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Lenora Bogisich</p>
-                                                <p class="mb-0 text-secondary f-s-13">+4583546479</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-success">
-                                  <img src="{{asset('../assets/images/avatar/10.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-secondary border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Emery McKenzie</p>
-                                                <p class="mb-0 text-secondary f-s-13">+378356479</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-danger">
-                                  <img src="{{asset('../assets/images/avatar/08.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Elmer</p>
-                                                <p class="mb-0 text-secondary f-s-13">+678356270</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-success">
-                                  <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Mark Walsh</p>
-                                                <p class="mb-0 text-secondary f-s-13">+780356479</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center py-3">
-                                            <div>
-                                <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                                  <img src="{{asset('../assets/images/avatar/07.png')}}" alt="" class="img-fluid b-r-50">
-                                  <span
-                                      class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 ps-2">
-                                                <p class="contact-name text-dark mb-0 f-w-500">Sue Flay</p>
-                                                <p class="mb-0 text-secondary f-s-13">+780356479</p>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                                  <i class="ti ti-phone-call"></i>
-                                </span>
-                                            </div>
-                                            <div>
-                                <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                                  <i class="ti ti-video"></i>
-                                </span>
-                                            </div>
-                                        </div>
-
+                                        <!-- Altri contatti... -->
                                     </div>
                                     <div class="float-end">
                                         <div class="btn-group dropdown-icon-none">
-                                            <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
-                                                    data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                            <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                                 <i class="ti ti-plus"></i>
                                             </button>
                                             <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                                <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                            class="f-s-13">New Chat</span></a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                            class="f-s-13">New Contact</span></a>
-                                                </li>
+                                                <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span class="f-s-13">New Chat</span></a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span class="f-s-13">New Contact</span></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -748,23 +271,19 @@
             <div class="col-lg-8 col-xxl-9 box-col-7">
                 <div class="card chat-container-content-box">
                     <div class="card-header">
-                        <div class="chat-header d-flex align-items-center">
+                        <div class="chat-header d-flex align-items-center" id="chatHeader">
                             <div class="d-lg-none">
                                 <a class="me-3 toggle-btn" role="button"><i class="ti ti-align-justified"></i></a>
                             </div>
-                            <a href="{{route('profile.show')}}">
-                        <span class="profileimg h-45 w-45 d-flex-center b-r-50 position-relative bg-light">
-                          <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                            </a>
+                            <span class="profileimg h-45 w-45 d-flex-center b-r-50 position-relative bg-light">
+                                <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('assets/images/avatar/14.png') }}" alt="" class="img-fluid b-r-50">
+                                <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                            </span>
                             <div class="flex-grow-1 ps-2 pe-2">
-                                <div class="fs-6"> Jerry Ladies</div>
-                                <div class="text-muted f-s-12 text-success">Online</div>
+                                <div class="fs-6" id="chatHeaderName">{{ __('chat.select_chat') }}</div>
+                                <div class="text-muted f-s-12 text-success" id="chatHeaderStatus">{{ __('chat.select_chat_description') }}</div>
                             </div>
-                            <button type="button" class="btn btn-success h-45 w-45 icon-btn b-r-22 me-sm-2"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" class="btn btn-success h-45 w-45 icon-btn b-r-22 me-sm-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="ti ti-phone-call f-s-20"></i>
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
@@ -772,17 +291,16 @@
                                     <div class="modal-body p-0">
                                         <div class="call">
                                             <div class="call-div">
-                                                <img src="{{asset('../assets/images/profile-app/32.jpg')}}" class="w-100" alt="">
+                                                <img src="{{ asset('assets/images/profile-app/32.jpg') }}" class="w-100" alt="">
                                                 <div class="call-caption">
-                                                    <h2 class="text-white">Jerry Ladies</h2>
+                                                    <h2 class="text-white" id="callUserName">User</h2>
                                                     <div class="d-flex justify-content-center">
-                                    <span
-                                        class="bg-success h-40 w-40 d-flex-center b-r-50 animate__animated animate__1 animate__shakeY animate__infinite call-btn pointer-events-auto" data-bs-dismiss="modal">
-                                      <i class="ti ti-phone-call "></i>
-                                    </span>
+                                                        <span class="bg-success h-40 w-40 d-flex-center b-r-50 animate__animated animate__1 animate__shakeY animate__infinite call-btn pointer-events-auto" data-bs-dismiss="modal">
+                                                            <i class="ti ti-phone-call"></i>
+                                                        </span>
                                                         <span class="bg-danger h-40 w-40 d-flex-center b-r-50 ms-4 call-btn pointer-events-auto" data-bs-dismiss="modal">
-                                      <i class="ti ti-phone"></i>
-                                    </span>
+                                                            <i class="ti ti-phone"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -790,8 +308,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary h-45 w-45 icon-btn b-r-22 me-sm-2"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                            <button type="button" class="btn btn-primary h-45 w-45 icon-btn b-r-22 me-sm-2" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                                 <i class="ti ti-video f-s-20"></i>
                             </button>
                             <div class="modal fade" id="exampleModal1" tabindex="-1" aria-hidden="true">
@@ -799,157 +316,46 @@
                                     <div class="modal-body p-0">
                                         <div class="call">
                                             <div class="call-div pointer-events-auto">
-                                                <img src="{{asset('../assets/images/profile-app/25.jpg')}}" class="w-100" alt="">
-
+                                                <img src="{{ asset('assets/images/profile-app/25.jpg') }}" class="w-100" alt="">
                                                 <div class="call-caption">
                                                     <div class="d-flex justify-content-center align-items-center">
-
-                                    <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
-                                      <i class="ti ti-microphone text-dark"></i>
-                                    </span>
-                                                        <span data-bs-dismiss="modal"
-                                                              class="bg-danger h-45 w-45 d-flex-center b-r-50 ms-4 animate__pulse animate__animated animate__infinite animate__faster call-btn pointer-events-auto">
-                                      <i class="ti ti-phone"></i>
-                                    </span>
                                                         <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
-                                      <i class="ti ti-phone-pause text-dark"></i>
-                                    </span>
+                                                            <i class="ti ti-microphone text-dark"></i>
+                                                        </span>
+                                                        <span data-bs-dismiss="modal" class="bg-danger h-45 w-45 d-flex-center b-r-50 ms-4 animate__pulse animate__animated animate__infinite animate__faster call-btn pointer-events-auto">
+                                                            <i class="ti ti-phone"></i>
+                                                        </span>
+                                                        <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
+                                                            <i class="ti ti-phone-pause text-dark"></i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="video-div">
-                                                <img src="{{asset('../assets/images/profile-app/31.jpg')}}" class="w-100 rounded" alt="">
+                                                <img src="{{ asset('assets/images/profile-app/31.jpg') }}" class="w-100 rounded" alt="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <button class="btn btn-secondary h-45 w-45 icon-btn b-r-22 me-sm-2"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                <button class="btn btn-secondary h-45 w-45 icon-btn b-r-22 me-sm-2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                     <i class="ti ti-settings f-s-20"></i>
                                 </button>
                                 <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                class="f-s-13">Chat Settings</span></a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                class="f-s-13">Contact Settings</span></a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                                class="f-s-13">Settings</span></a>
-                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span class="f-s-13">Chat Settings</span></a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span class="f-s-13">Contact Settings</span></a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span class="f-s-13">Settings</span></a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="card-body chat-body">
-                        <div class="chat-container ">
-                            <div class="text-center">
-                                <span class="badge text-light-secondary">Today</span>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chatdp h-45 w-45 b-r-50 position-absolute start-0 bg-light">
-                                    <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                                </div>
-                                <div class="chat-box">
-                                    <div>
-                                        <p class="chat-text">Hi! Ninfa Monaldo can we go over the project details for the upcoming presentation?</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:00PM</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chat-box-right">
-                                    <div>
-                                        <p class="chat-text">Sure, Jerry.</p>
-                                        <p class="chat-text">I was just reviewing our notes.</p>
-                                        <p class="chat-text">What do you want to start with?</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:02PM</p>
-                                    </div>
-                                </div>
-                                <div class="chatdp h-45 w-45 b-r-50 position-absolute end-0 top-0 bg-danger">
-                                    <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chatdp h-45 w-45 b-r-50 position-absolute start-0 bg-light">
-                                    <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                                </div>
-                                <div class="chat-box">
-                                    <div>
-                                        <p class="chat-text">  Let’s begin with the project timeline.</p>
-                                        <p class="chat-text">  Are we on track to meet the deadlines?</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:03PM</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chat-box-right">
-                                    <div>
-                                        <p class="chat-text">Yes, mostly.</p>
-                                        <p class="chat-text">We completed the initial research phase and the design draft. We're currently in the development phase, which should be done by the end of the week.</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:02PM</p>
-                                    </div>
-                                </div>
-                                <div class="chatdp h-45 w-45 b-r-50 position-absolute end-0 top-0 bg-danger">
-                                    <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                        <span class="chatdp h-45 w-45 position-absolute start-0 b-r-50 bg-light">
-                          <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                        </span>
-                                <div class="chat-box">
-                                    <div>
-                                        <p class="chat-text"> Great to hear! </p>
-                                        <p class="chat-text"> How about the testing phase? When do we plan to start that?</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:06PM</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chat-box-right">
-                                    <div>
-                                        <p class="chat-text">We have it scheduled to start next Monday. That gives us a full week to iron out any issues before the final presentation.</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:08M</p>
-                                    </div>
-                                </div>
-                                <span class="chatdp h-45 w-45 b-r-50 position-absolute top-0 end-0 bg-danger">
-                          <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                        </span>
-                            </div>
-                            <div class="position-relative">
-                        <span class="chatdp h-45 w-45 b-r-50 position-absolute start-0 bg-light">
-                          <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                        </span>
-                                <div class="chat-box">
-                                    <div>
-                                        <p class="chat-text"> Perfect. Have we assigned specific tasks for the testing phase?</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:10PM</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="position-relative">
-                                <div class="chat-box-right">
-                                    <div>
-                                        <p class="chat-text">Yes, I've assigned the initial testing to the QA team. I've also scheduled a meeting with them to go over the testing protocols.</p>
-                                        <p class="text-muted"><i class="ti ti-checks text-primary"></i> 2:08M</p>
-                                    </div>
-                                </div>
-                                <span class="chatdp h-45 w-45 b-r-50 position-absolute top-0 end-0 bg-danger">
-                          <img src="{{asset('../assets/images/avatar/09.png')}}" alt="" class="img-fluid b-r-50">
-                        </span>
-                            </div>
-                            <div class="position-relative">
-                        <span class="chatdp h-45 w-45 b-r-50 position-absolute start-0 bg-light">
-                          <img src="{{asset('../assets/images/avatar/14.png')}}" alt="" class="img-fluid b-r-50">
-                        </span>
-                                <div class="chat-box">
-                                    <div>
-                                        <p class="chat-text">Typing....</p>
-                                    </div>
-                                </div>
+                        <div class="chat-container" id="chatMessages">
+                            <div class="text-center py-5">
+                                <i class="ph-duotone ph-chat-circle-text f-s-50 text-muted mb-3"></i>
+                                <h5 class="text-muted">{{ __('chat.select_chat_to_start') }}</h5>
+                                <p class="text-muted">{{ __('chat.select_chat_description') }}</p>
                             </div>
                         </div>
                     </div>
@@ -957,50 +363,42 @@
                         <div class="chat-footer d-flex">
                             <div class="app-form flex-grow-1">
                                 <div class="input-group">
-                          <span class="input-group-text bg-secondary ms-2 me-2 b-r-10 ">
-                            <a class="emoji-btn d-flex-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Emoji" role="button">
-                              <i class="ti ti-mood-smile f-s-18"></i>
-                            </a>
-                          </span>
-                                    <input type="text" class="form-control b-r-6" placeholder="Type a message"
-                                           aria-label="Recipient's username">
-                                    <button class="btn btn-sm btn-primary ms-2 me-2 b-r-4" type="button"><i class="ti ti-send"></i> <span>Send</span> </button>
+                                    <span class="input-group-text bg-secondary ms-2 me-2 b-r-10">
+                                        <a class="emoji-btn d-flex-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Emoji" role="button">
+                                            <i class="ti ti-mood-smile f-s-18"></i>
+                                        </a>
+                                    </span>
+                                    <input type="text" class="form-control b-r-6" id="messageInput" placeholder="{{ __('chat.type_message') }}" aria-label="Recipient's username">
+                                    <button class="btn btn-sm btn-primary ms-2 me-2 b-r-4" type="button" onclick="sendMessage()">
+                                        <i class="ti ti-send"></i> <span>{{ __('chat.send_message') }}</span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="d-none d-sm-block">
-                                <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button"
-                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Microphone">
+                                <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Microphone">
                                     <i class="ti ti-microphone f-s-18"></i>
                                 </a>
                             </div>
                             <div class="d-none d-sm-block">
-                                <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button"
-                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Camera">
+                                <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Camera">
                                     <i class="ti ti-camera-plus f-s-18"></i>
                                 </a>
                             </div>
                             <div class="d-none d-sm-block">
-                                <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button"
-                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Paperclip">
+                                <label for="fileInput" class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Paperclip">
                                     <i class="ti ti-paperclip f-s-18"></i>
-                                </a>
+                                </label>
+                                <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
                             </div>
                             <div>
                                 <div class="btn-group dropdown-icon-none d-sm-none">
-                                    <a class="h-35 w-35 d-flex-center ms-1" role="button" data-bs-toggle="dropdown"
-                                       data-bs-auto-close="true" aria-expanded="false">
+                                    <a class="h-35 w-35 d-flex-center ms-1" role="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
                                     </a>
                                     <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                        <li><a class="dropdown-item" href="#"><i class="ti ti-microphone"></i> <span
-                                                    class="f-s-13">Microphone</span></a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#"> <i class="ti ti-camera-plus"></i> <span
-                                                    class="f-s-13">camera</span></a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#"><i class="ti ti-paperclip"></i> <span
-                                                    class="f-s-13">paperclip</span></a>
-                                        </li>
+                                        <li><a class="dropdown-item" href="#"><i class="ti ti-microphone"></i> <span class="f-s-13">Microphone</span></a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="ti ti-camera-plus"></i> <span class="f-s-13">camera</span></a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="ti ti-paperclip"></i> <span class="f-s-13">paperclip</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -1011,9 +409,408 @@
         </div>
         <!-- Chat end -->
     </div>
+</div>
+
+<!-- Modal per creare chat privata -->
+<div class="modal fade" id="createPrivateChatModal" tabindex="-1" aria-labelledby="createPrivateChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPrivateChatModalLabel">{{ __('chat.create_private_chat') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="searchUser" class="form-label">{{ __('chat.search_user') }}</label>
+                    <input type="text" class="form-control" id="searchUser" placeholder="{{ __('chat.type_to_search') }}">
+                </div>
+                <div id="searchResults" class="list-group"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
+                <button type="button" class="btn btn-primary" id="createPrivateChatBtn" disabled>{{ __('chat.create') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal per creare chat di gruppo -->
+<div class="modal fade" id="createGroupChatModal" tabindex="-1" aria-labelledby="createGroupChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGroupChatModalLabel">{{ __('chat.create_group_chat') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="groupName" class="form-label">{{ __('chat.group_name') }}</label>
+                    <input type="text" class="form-control" id="groupName" placeholder="{{ __('chat.enter_group_name') }}">
+                </div>
+                <div class="mb-3">
+                    <label for="searchGroupUsers" class="form-label">{{ __('chat.add_participants') }}</label>
+                    <input type="text" class="form-control" id="searchGroupUsers" placeholder="{{ __('chat.type_to_search') }}">
+                </div>
+                <div id="groupSearchResults" class="list-group mb-3"></div>
+                <div id="selectedUsers" class="mb-3">
+                    <label class="form-label">{{ __('chat.selected_participants') }}</label>
+                    <div id="selectedUsersList" class="d-flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
+                <button type="button" class="btn btn-primary" id="createGroupChatBtn" disabled>{{ __('chat.create') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
+<script>
+let currentChatId = null;
+let selectedUsers = [];
+let pollingInterval;
 
-<script src="{{asset('assets/js/chat.js')}}"></script>
-@endsection
+// Inizializzazione
+$(document).ready(function() {
+    // Gestione tab
+    $('.tab-link').on('click', function() {
+        $('.tab-link').removeClass('active');
+        $(this).addClass('active');
+
+        const tabId = $(this).data('tab');
+        $('.tabs-content').removeClass('active');
+        $(`#tab-${tabId}`).addClass('active');
+    });
+
+    // Ricerca utenti per chat privata
+    $('#searchUser').on('input', function() {
+        const query = $(this).val();
+        if (query.length >= 2) {
+            searchUsers(query, 'searchResults');
+        } else {
+            $('#searchResults').empty();
+        }
+    });
+
+    // Ricerca utenti per chat di gruppo
+    $('#searchGroupUsers').on('input', function() {
+        const query = $(this).val();
+        if (query.length >= 2) {
+            searchUsers(query, 'groupSearchResults');
+        } else {
+            $('#groupSearchResults').empty();
+        }
+    });
+
+    // Creazione chat privata
+    $('#createPrivateChatBtn').on('click', function() {
+        const selectedUserId = $(this).data('user-id');
+        if (selectedUserId) {
+            createPrivateChat(selectedUserId);
+        }
+    });
+
+    // Creazione chat di gruppo
+    $('#createGroupChatBtn').on('click', function() {
+        const groupName = $('#groupName').val();
+        if (groupName && selectedUsers.length > 0) {
+            createGroupChat(groupName, selectedUsers);
+        }
+    });
+
+    // Gestione invio messaggio
+    $('#messageInput').on('keypress', function(e) {
+        if (e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Gestione upload file
+    $('#fileInput').on('change', function() {
+        const fileName = this.files[0]?.name;
+        if (fileName) {
+            // Mostra nome file selezionato
+            console.log('File selezionato:', fileName);
+        }
+    });
+
+    // Inizia polling
+    startPolling();
+});
+
+// Carica una chat
+function loadChat(chatId) {
+    currentChatId = chatId;
+
+    // Aggiorna UI
+    $('.chat-contactbox').removeClass('active');
+    $(`[data-chat-id="${chatId}"]`).addClass('active');
+
+    // Carica messaggi
+    loadMessages(chatId);
+
+    // Aggiorna header
+    updateChatHeader(chatId);
+}
+
+// Carica messaggi
+function loadMessages(chatId) {
+    $.get(`{{ route('chat.messages', ':chatId') }}`.replace(':chatId', chatId))
+        .done(function(response) {
+            if (response.success) {
+                displayMessages(response.messages);
+            }
+        })
+        .fail(function() {
+            console.error('Errore nel caricamento dei messaggi');
+        });
+}
+
+// Mostra messaggi
+function displayMessages(messages) {
+    const container = $('#chatMessages');
+    container.empty();
+
+    if (messages.length === 0) {
+        container.html(`
+            <div class="text-center py-5">
+                <i class="ph-duotone ph-chat-circle-text f-s-50 text-muted mb-3"></i>
+                <h5 class="text-muted">{{ __('chat.no_messages') }}</h5>
+            </div>
+        `);
+        return;
+    }
+
+    // Aggiungi badge "Today"
+    container.append('<div class="text-center"><span class="badge text-light-secondary">Today</span></div>');
+
+    messages.forEach(function(message) {
+        const messageHtml = createMessageHtml(message);
+        container.append(messageHtml);
+    });
+
+    // Scroll to bottom
+    container.scrollTop(container[0].scrollHeight);
+}
+
+// Crea HTML per un messaggio
+function createMessageHtml(message) {
+    const isOwn = message.user_id == {{ auth()->id() }};
+    const messageClass = isOwn ? 'chat-box-right' : 'chat-box';
+    const avatarClass = isOwn ? 'end-0 top-0 bg-danger' : 'start-0 bg-light';
+    const avatarImg = isOwn ?
+        '{{ asset("assets/images/avatar/09.png") }}' :
+        (message.user.avatar ? `{{ asset('storage/') }}/${message.user.avatar}` : '{{ asset("assets/images/avatar/14.png") }}');
+
+    let content = '';
+
+    if (message.file_path) {
+        if (message.is_image) {
+            content = `<img src="${message.file_url}" alt="image" class="img-fluid rounded" style="max-width: 200px;">`;
+        } else {
+            content = `
+                <div class="d-flex align-items-center">
+                    <i class="ti ti-file-text me-2"></i>
+                    <a href="${message.file_url}" target="_blank" class="text-decoration-none">
+                        ${message.file_name}
+                    </a>
+                </div>`;
+        }
+    } else {
+        content = `<p class="chat-text">${message.message}</p>`;
+    }
+
+    return `
+        <div class="position-relative">
+            ${!isOwn ? `<div class="chatdp h-45 w-45 b-r-50 position-absolute ${avatarClass}">
+                <img src="${avatarImg}" alt="" class="img-fluid b-r-50">
+            </div>` : ''}
+            <div class="${messageClass}">
+                <div>
+                    ${content}
+                    <p class="text-muted"><i class="ti ti-checks text-primary"></i> ${message.created_at}</p>
+                </div>
+            </div>
+            ${isOwn ? `<div class="chatdp h-45 w-45 b-r-50 position-absolute ${avatarClass}">
+                <img src="${avatarImg}" alt="" class="img-fluid b-r-50">
+            </div>` : ''}
+        </div>`;
+}
+
+// Invia messaggio
+function sendMessage() {
+    const message = $('#messageInput').val().trim();
+    const fileInput = $('#fileInput')[0];
+
+    if (!message && !fileInput.files.length) return;
+
+    const formData = new FormData();
+    formData.append('message', message);
+    if (fileInput.files.length) {
+        formData.append('file', fileInput.files[0]);
+    }
+
+    $.ajax({
+        url: `{{ route('chat.messages.store', ':chatId') }}`.replace(':chatId', currentChatId),
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    .done(function(response) {
+        if (response.success) {
+            $('#messageInput').val('');
+            $('#fileInput').val('');
+            loadMessages(currentChatId);
+        }
+    })
+    .fail(function() {
+        console.error('Errore nell\'invio del messaggio');
+    });
+}
+
+// Ricerca utenti
+function searchUsers(query, targetId) {
+    $.get(`{{ route('chat.users.search') }}?q=${encodeURIComponent(query)}`)
+        .done(function(response) {
+            if (response.success) {
+                displaySearchResults(response.users, targetId);
+            }
+        })
+        .fail(function() {
+            console.error('Errore nella ricerca utenti');
+        });
+}
+
+// Mostra risultati ricerca
+function displaySearchResults(users, targetId) {
+    const container = $(`#${targetId}`);
+    container.empty();
+
+    users.forEach(function(user) {
+        const item = `
+            <div class="list-group-item list-group-item-action d-flex align-items-center" data-user-id="${user.id}">
+                <img src="${user.avatar_url || '{{ asset("assets/images/avatar/1.png") }}'}"
+                     alt="user-img" class="rounded-circle avatar-sm me-3">
+                <div>
+                    <h6 class="mb-0">${user.name}</h6>
+                    <small class="text-muted">${user.email}</small>
+                </div>
+            </div>`;
+        container.append(item);
+    });
+
+    // Gestione click sui risultati
+    container.find('.list-group-item').on('click', function() {
+        const userId = $(this).data('user-id');
+        const userName = $(this).find('h6').text();
+
+        if (targetId === 'searchResults') {
+            // Chat privata
+            $('#createPrivateChatBtn').data('user-id', userId).prop('disabled', false);
+            $('#searchResults .list-group-item').removeClass('active');
+            $(this).addClass('active');
+        } else {
+            // Chat di gruppo
+            if (!selectedUsers.find(u => u.id == userId)) {
+                selectedUsers.push({id: userId, name: userName});
+                updateSelectedUsersList();
+            }
+        }
+    });
+}
+
+// Aggiorna lista utenti selezionati
+function updateSelectedUsersList() {
+    const container = $('#selectedUsersList');
+    container.empty();
+
+    selectedUsers.forEach(function(user) {
+        const badge = `
+            <span class="badge bg-primary d-flex align-items-center">
+                ${user.name}
+                <button type="button" class="btn-close btn-close-white ms-2"
+                        onclick="removeSelectedUser(${user.id})"></button>
+            </span>`;
+        container.append(badge);
+    });
+
+    $('#createGroupChatBtn').prop('disabled', selectedUsers.length === 0);
+}
+
+// Rimuovi utente selezionato
+function removeSelectedUser(userId) {
+    selectedUsers = selectedUsers.filter(u => u.id != userId);
+    updateSelectedUsersList();
+}
+
+// Crea chat privata
+function createPrivateChat(userId) {
+    $.post('{{ route("chat.create.private") }}', {
+        user_id: userId,
+        _token: $('meta[name="csrf-token"]').attr('content')
+    })
+    .done(function(response) {
+        if (response.success) {
+            $('#createPrivateChatModal').modal('hide');
+            location.reload();
+        }
+    })
+    .fail(function() {
+        console.error('Errore nella creazione della chat');
+    });
+}
+
+// Crea chat di gruppo
+function createGroupChat(name, userIds) {
+    $.post('{{ route("chat.create.group") }}', {
+        name: name,
+        user_ids: userIds.map(u => u.id),
+        _token: $('meta[name="csrf-token"]').attr('content')
+    })
+    .done(function(response) {
+        if (response.success) {
+            $('#createGroupChatModal').modal('hide');
+            location.reload();
+        }
+    })
+    .fail(function() {
+        console.error('Errore nella creazione della chat');
+    });
+}
+
+// Aggiorna header chat
+function updateChatHeader(chatId) {
+    // Trova la chat selezionata
+    const chatItem = $(`[data-chat-id="${chatId}"]`);
+    const chatName = chatItem.find('.f-w-500').text();
+
+    // Aggiorna header
+    $('#chatHeaderName').text(chatName);
+    $('#chatHeaderStatus').text('{{ __("chat.online") }}');
+    $('#callUserName').text(chatName);
+}
+
+// Inizia polling
+function startPolling() {
+    pollingInterval = setInterval(function() {
+        if (currentChatId) {
+            loadMessages(currentChatId);
+        }
+    }, 5000); // Poll ogni 5 secondi
+}
+
+// Cleanup al cambio pagina
+$(window).on('beforeunload', function() {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+});
+</script>
+@endpush

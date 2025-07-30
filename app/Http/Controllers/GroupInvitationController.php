@@ -21,7 +21,7 @@ class GroupInvitationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         $invitations = $user->groupInvitations()
                            ->with(['group', 'invitedBy'])
                            ->orderBy('created_at', 'desc')
@@ -36,7 +36,7 @@ class GroupInvitationController extends Controller
     public function sent()
     {
         $user = Auth::user();
-        
+
         $invitations = $user->sentGroupInvitations()
                            ->with(['group', 'user'])
                            ->orderBy('created_at', 'desc')
@@ -71,11 +71,11 @@ class GroupInvitationController extends Controller
         }
 
         $request->validate([
-            'email' => 'required|email|exists:users,email',
+            'user_id' => 'required|exists:users,id',
             'message' => 'nullable|string|max:500',
         ]);
 
-        $invitedUser = \App\Models\User::where('email', $request->email)->first();
+        $invitedUser = \App\Models\User::findOrFail($request->user_id);
 
         // Verifica che l'utente non sia già membro del gruppo
         if ($invitedUser->isMemberOf($group)) {
@@ -93,7 +93,7 @@ class GroupInvitationController extends Controller
         }
 
         // Crea l'invito
-        GroupInvitation::create([
+        $invitation = GroupInvitation::create([
             'group_id' => $group->id,
             'user_id' => $invitedUser->id,
             'invited_by' => $user->id,
@@ -101,6 +101,9 @@ class GroupInvitationController extends Controller
             'message' => $request->message,
             'expires_at' => now()->addDays(7), // Invito valido per 7 giorni
         ]);
+
+        // Crea la notifica
+        \App\Models\Notification::createGroupInvitation($invitation);
 
         return back()->with('success', 'Invito inviato con successo.');
     }
@@ -117,6 +120,7 @@ class GroupInvitationController extends Controller
         }
 
         $invitations = $group->getPendingInvitations()
+                           ->with(['user', 'invitedBy'])
                            ->paginate(10);
 
         return view('groups.invitations.pending', compact('group', 'invitations'));
@@ -131,23 +135,35 @@ class GroupInvitationController extends Controller
 
         // Verifica che l'invito sia per l'utente corrente
         if ($invitation->user_id !== $user->id) {
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Non puoi accettare inviti di altri utenti.'], 403);
+            }
             abort(403, 'Non puoi accettare inviti di altri utenti.');
         }
 
         // Verifica che l'invito sia pendente
         if (!$invitation->isPending()) {
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Questo invito non è più valido.'], 400);
+            }
             return back()->with('error', 'Questo invito non è più valido.');
         }
 
         // Verifica che l'invito non sia scaduto
         if ($invitation->isExpired()) {
             $invitation->markAsExpired();
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Questo invito è scaduto.'], 400);
+            }
             return back()->with('error', 'Questo invito è scaduto.');
         }
 
         // Verifica che l'utente non sia già membro del gruppo
         if ($user->isMemberOf($invitation->group)) {
             $invitation->update(['status' => 'accepted']);
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Sei già membro di questo gruppo.'], 400);
+            }
             return back()->with('error', 'Sei già membro di questo gruppo.');
         }
 
@@ -163,6 +179,17 @@ class GroupInvitationController extends Controller
             'joined_at' => now(),
         ]);
 
+        // Crea la notifica di risposta
+        \App\Models\Notification::createGroupInvitationResponse($invitation, 'accepted');
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Hai accettato l\'invito al gruppo!',
+                'redirect_url' => route('groups.show', $invitation->group)
+            ]);
+        }
+
         return redirect()->route('groups.show', $invitation->group)
                         ->with('success', 'Hai accettato l\'invito al gruppo!');
     }
@@ -176,16 +203,32 @@ class GroupInvitationController extends Controller
 
         // Verifica che l'invito sia per l'utente corrente
         if ($invitation->user_id !== $user->id) {
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Non puoi rifiutare inviti di altri utenti.'], 403);
+            }
             abort(403, 'Non puoi rifiutare inviti di altri utenti.');
         }
 
         // Verifica che l'invito sia pendente
         if (!$invitation->isPending()) {
+            if (request()->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Questo invito non è più valido.'], 400);
+            }
             return back()->with('error', 'Questo invito non è più valido.');
         }
 
         // Rifiuta l'invito
         $invitation->decline();
+
+        // Crea la notifica di risposta
+        \App\Models\Notification::createGroupInvitationResponse($invitation, 'declined');
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Hai rifiutato l\'invito al gruppo.'
+            ]);
+        }
 
         return back()->with('success', 'Hai rifiutato l\'invito al gruppo.');
     }

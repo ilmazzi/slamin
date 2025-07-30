@@ -24,6 +24,31 @@
         </div>
     </div>
 
+    <!-- Messaggi Flash -->
+    @if(session('success'))
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="ph-duotone ph-check-circle me-2"></i>
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="ph-duotone ph-x-circle me-2"></i>
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Filtri e ricerca -->
     <div class="row mb-3">
         <div class="col-12">
@@ -36,9 +61,9 @@
                                 <span class="input-group-text">
                                     <i class="ph-duotone ph-magnifying-glass"></i>
                                 </span>
-                                <input type="text" 
-                                       name="search" 
-                                       class="form-control" 
+                                <input type="text"
+                                       name="search"
+                                       class="form-control"
                                        placeholder="{{ __('groups.search_placeholder') }}"
                                        value="{{ request('search') }}">
                             </div>
@@ -92,12 +117,12 @@
                     <div class="d-flex align-items-start mb-3">
                         <div class="flex-shrink-0">
                             @if($group->image)
-                                <img src="{{ asset('storage/' . $group->image) }}" 
-                                     alt="{{ $group->name }}" 
-                                     class="rounded-circle" 
+                                <img src="{{ asset('storage/' . $group->image) }}"
+                                     alt="{{ $group->name }}"
+                                     class="rounded-circle"
                                      style="width: 60px; height: 60px; object-fit: cover;">
                             @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
+                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
                                      style="width: 60px; height: 60px;">
                                     <i class="ph-duotone ph-users text-primary f-s-24"></i>
                                 </div>
@@ -159,6 +184,7 @@
                             @if($group->visibility == 'public')
                                 <form action="{{ route('groups.join', $group) }}" method="POST" class="d-inline">
                                     @csrf
+                                    <input type="hidden" name="message" value="">
                                     <button type="submit" class="btn btn-success btn-sm">
                                         <i class="ph-duotone ph-plus me-1"></i>
                                         {{ __('groups.join') }}
@@ -224,4 +250,4 @@
     </div>
     @endif
 </div>
-@endsection 
+@endsection

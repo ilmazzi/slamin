@@ -60,7 +60,11 @@ class GroupMemberController extends Controller
             return back()->with('error', 'L\'utente è già admin del gruppo.');
         }
 
+        $oldRole = $groupMember->role;
         $groupMember->update(['role' => 'admin']);
+
+        // Crea la notifica per l'utente promosso
+        \App\Models\Notification::createGroupRoleChanged($group, $member, $oldRole, 'admin', $user);
 
         return back()->with('success', "{$member->name} è stato promosso ad admin del gruppo.");
     }
@@ -91,7 +95,11 @@ class GroupMemberController extends Controller
             return back()->with('error', 'Non puoi degradare l\'ultimo admin del gruppo.');
         }
 
+        $oldRole = $groupMember->role;
         $groupMember->update(['role' => 'moderator']);
+
+        // Crea la notifica per l'utente degradato
+        \App\Models\Notification::createGroupRoleChanged($group, $member, $oldRole, 'moderator', $user);
 
         return back()->with('success', "{$member->name} è stato degradato a moderatore.");
     }
@@ -117,7 +125,11 @@ class GroupMemberController extends Controller
             return back()->with('error', 'L\'utente è già admin o moderatore del gruppo.');
         }
 
+        $oldRole = $groupMember->role;
         $groupMember->update(['role' => 'moderator']);
+
+        // Crea la notifica per l'utente promosso
+        \App\Models\Notification::createGroupRoleChanged($group, $member, $oldRole, 'moderator', $user);
 
         return back()->with('success', "{$member->name} è stato promosso a moderatore del gruppo.");
     }
@@ -143,7 +155,11 @@ class GroupMemberController extends Controller
             return back()->with('error', 'L\'utente non è moderatore del gruppo.');
         }
 
+        $oldRole = $groupMember->role;
         $groupMember->update(['role' => 'member']);
+
+        // Crea la notifica per l'utente degradato
+        \App\Models\Notification::createGroupRoleChanged($group, $member, $oldRole, 'member', $user);
 
         return back()->with('success', "{$member->name} è stato degradato a membro.");
     }
@@ -200,13 +216,23 @@ class GroupMemberController extends Controller
 
         $users = User::where(function($query) use ($search) {
             $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('nickname', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%");
         })
         ->whereNotIn('id', $group->members()->pluck('user_id'))
         ->whereNotIn('id', $group->invitations()->where('status', 'pending')->pluck('user_id'))
         ->limit(10)
-        ->get();
+        ->get()
+        ->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'avatar_url' => \App\Helpers\AvatarHelper::getUserAvatarUrl($user),
+                'has_avatar' => !empty($user->avatar),
+            ];
+        });
 
         return response()->json($users);
     }

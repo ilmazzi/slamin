@@ -19,4 +19,7 @@ return [
     'moderation' => 'Moderazione',
     'moderation_tooltip' => 'Gestisci contenuti e segnalazioni',
     'system_logs' => 'Log di Sistema',
+
+    // Chat
+    'chat' => 'Chat',
 ];

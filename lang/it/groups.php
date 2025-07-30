@@ -86,6 +86,10 @@ return [
     'group_description_placeholder' => 'Descrivi il tuo gruppo...',
     'invitation_message_placeholder' => 'Messaggio di invito (opzionale)',
     'join_request_message_placeholder' => 'Messaggio di richiesta (opzionale)',
+    'invite_members' => 'Invita Membri',
+    'search_users_placeholder' => 'Cerca per nome, nickname o email...',
+    'search_results' => 'Risultati Ricerca',
+    'invited_users' => 'Utenti Invitati',
 
     // Statistiche
     'stats' => 'Statistiche',
@@ -135,6 +139,7 @@ return [
     // Conferme
     'confirm_delete' => 'Sei sicuro di voler eliminare questo gruppo?',
     'confirm_leave' => 'Sei sicuro di voler lasciare questo gruppo?',
+    'confirm_leave_title' => 'Conferma Uscita',
     'confirm_remove_member' => 'Sei sicuro di voler rimuovere questo membro?',
     'confirm_decline_invitation' => 'Sei sicuro di voler rifiutare questo invito?',
     'confirm_cancel_request' => 'Sei sicuro di voler annullare questa richiesta?',
@@ -144,6 +149,27 @@ return [
     'status_accepted' => 'Accettato',
     'status_declined' => 'Rifiutato',
     'status_expired' => 'Scaduto',
+
+    // Azioni inviti
+    'accept_invitation' => 'Accetta Invito',
+    'decline_invitation' => 'Rifiuta Invito',
+    'confirm_accept_invitation' => 'Sei sicuro di voler accettare l\'invito al gruppo ":group"?',
+    'confirm_decline_invitation' => 'Sei sicuro di voler rifiutare l\'invito al gruppo ":group"?',
+
+    // Statistiche inviti
+    'invitations_pending' => 'In Attesa',
+    'invitations_accepted' => 'Accettati',
+    'invitations_declined' => 'Rifiutati',
+    'invitations_expired' => 'Scaduti',
+
+    // Messaggi di validazione
+    'select_user_from_search' => 'Seleziona un utente dalla ricerca',
+
+    // Anteprima immagine
+    'image_preview' => 'Anteprima Immagine',
+    'new_image_preview' => 'Anteprima Nuova Immagine',
+    'image_removed' => 'Immagine rimossa',
+    'image_removed_message' => 'L\'immagine è stata rimossa dalla selezione',
 
     // Informazioni aggiuntive
     'group_info' => 'Informazioni Gruppo',
@@ -179,4 +205,4 @@ return [
     'delete_confirmation_invitations' => 'Tutte le invitazioni e richieste pendenti verranno eliminate',
     'invite_first_member' => 'Invita il primo membro per iniziare a costruire la tua community.',
     'you' => 'Tu',
-]; 
+];

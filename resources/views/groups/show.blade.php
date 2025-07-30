@@ -12,12 +12,12 @@
                     <div class="d-flex align-items-start">
                         <div class="flex-shrink-0">
                             @if($group->image)
-                                <img src="{{ asset('storage/' . $group->image) }}" 
-                                     alt="{{ $group->name }}" 
-                                     class="rounded-circle" 
+                                <img src="{{ asset('storage/' . $group->image) }}"
+                                     alt="{{ $group->name }}"
+                                     class="rounded-circle"
                                      style="width: 100px; height: 100px; object-fit: cover;">
                             @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
+                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
                                      style="width: 100px; height: 100px;">
                                     <i class="ph-duotone ph-users text-primary f-s-48"></i>
                                 </div>
@@ -67,10 +67,10 @@
                                                 @endif
                                                 @if(!$group->hasAdmin(auth()->user()))
                                                 <li>
-                                                    <form action="{{ route('groups.leave', $group) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('groups.leave', $group) }}" method="POST" class="d-inline" id="leaveGroupForm">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item text-danger" 
-                                                                onclick="return confirm('{{ __('groups.confirm_leave') }}')">
+                                                        <button type="button" class="dropdown-item text-danger"
+                                                                onclick="confirmLeaveGroup()">
                                                             <i class="ph-duotone ph-sign-out me-2"></i>
                                                             {{ __('groups.leave') }}
                                                         </button>
@@ -82,6 +82,7 @@
                                                     <li>
                                                         <form action="{{ route('groups.join', $group) }}" method="POST" class="d-inline">
                                                             @csrf
+                                                            <input type="hidden" name="message" value="">
                                                             <button type="submit" class="dropdown-item">
                                                                 <i class="ph-duotone ph-plus me-2"></i>
                                                                 {{ __('groups.join') }}
@@ -173,7 +174,7 @@
                     @forelse($group->events()->latest()->take(5)->get() as $event)
                     <div class="d-flex align-items-center mb-3 p-3 border rounded">
                         <div class="flex-shrink-0">
-                            <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
+                            <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
                                  style="width: 50px; height: 50px;">
                                 <i class="ph-duotone ph-calendar text-primary"></i>
                             </div>
@@ -226,12 +227,12 @@
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-shrink-0">
                             @if($member->user->profile_photo)
-                                <img src="{{ $member->user->profile_photo_url }}" 
-                                     alt="{{ $member->user->getDisplayName() }}" 
-                                     class="rounded-circle" 
+                                <img src="{{ $member->user->profile_photo_url }}"
+                                     alt="{{ $member->user->getDisplayName() }}"
+                                     class="rounded-circle"
                                      style="width: 40px; height: 40px; object-fit: cover;">
                             @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
+                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
                                      style="width: 40px; height: 40px;">
                                     <span class="text-primary fw-bold">
                                         {{ substr($member->user->getDisplayName(), 0, 2) }}
@@ -276,12 +277,12 @@
                         <strong>{{ __('groups.created_by') }}:</strong>
                         <div class="d-flex align-items-center mt-1">
                             @if($group->creator->profile_photo)
-                                <img src="{{ $group->creator->profile_photo_url }}" 
-                                     alt="{{ $group->creator->getDisplayName() }}" 
-                                     class="rounded-circle me-2" 
+                                <img src="{{ $group->creator->profile_photo_url }}"
+                                     alt="{{ $group->creator->getDisplayName() }}"
+                                     class="rounded-circle me-2"
                                      style="width: 30px; height: 30px; object-fit: cover;">
                             @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center me-2"
                                      style="width: 30px; height: 30px;">
                                     <span class="text-primary fw-bold" style="font-size: 12px;">
                                         {{ substr($group->creator->getDisplayName(), 0, 2) }}
@@ -370,4 +371,25 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+function confirmLeaveGroup() {
+    Swal.fire({
+        title: '{{ __("groups.confirm_leave_title") }}',
+        text: '{{ __("groups.confirm_leave") }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '{{ __("groups.leave") }}',
+        cancelButtonText: '{{ __("common.cancel") }}'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('leaveGroupForm').submit();
+        }
+    });
+}
+</script>
+@endpush

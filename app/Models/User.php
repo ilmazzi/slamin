@@ -13,6 +13,7 @@ use App\Models\VideoSnap;
 use App\Models\VideoLike;
 use App\Models\Video;
 use App\Models\SystemSetting;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -669,5 +670,102 @@ class User extends Authenticatable
     public function getAdminGroupsCountAttribute(): int
     {
         return $this->adminGroups()->count();
+    }
+
+    // ========================================
+    // RELAZIONI PER IL SISTEMA DI CHAT
+    // ========================================
+
+    /**
+     * Chat di cui l'utente è partecipante
+     */
+    public function chatParticipations()
+    {
+        return $this->hasMany(ChatParticipant::class);
+    }
+
+    /**
+     * Chat create dall'utente
+     */
+    public function createdChats()
+    {
+        return $this->hasMany(Chat::class, 'created_by');
+    }
+
+    /**
+     * Messaggi inviati dall'utente
+     */
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
+
+    /**
+     * Chat attive dell'utente (non silenziate)
+     */
+    public function activeChats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_participants')
+                    ->where('chat_participants.is_active', true)
+                    ->where('chat_participants.is_muted', false)
+                    ->withPivot('role', 'last_read_at', 'joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Chat con messaggi non letti
+     */
+    public function unreadChats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_participants')
+                    ->where('chat_participants.is_active', true)
+                    ->where(function ($query) {
+                        $query->whereNull('chat_participants.last_read_at')
+                              ->orWhere('chat_participants.last_read_at', '<', DB::raw('chats.last_message_at'));
+                    })
+                    ->withPivot('role', 'last_read_at', 'joined_at')
+                    ->withTimestamps();
+    }
+
+    // ========================================
+    // METODI HELPER PER IL SISTEMA DI CHAT
+    // ========================================
+
+    /**
+     * Ottieni il numero totale di messaggi non letti
+     */
+    public function getUnreadChatMessagesCountAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->chatParticipations()->with('chat.messages')->get() as $participation) {
+            $total += $participation->getUnreadCount();
+        }
+        return $total;
+    }
+
+    /**
+     * Verifica se l'utente può creare chat
+     */
+    public function canCreateChats(): bool
+    {
+        return $this->isActive();
+    }
+
+    /**
+     * Verifica se l'utente può moderare una chat specifica
+     */
+    public function canModerateChat(Chat $chat): bool
+    {
+        $participation = $this->chatParticipations()->where('chat_id', $chat->id)->first();
+        return $participation ? $participation->canModerate() : false;
+    }
+
+    /**
+     * Verifica se l'utente può gestire i partecipanti di una chat
+     */
+    public function canManageChatParticipants(Chat $chat): bool
+    {
+        $participation = $this->chatParticipations()->where('chat_id', $chat->id)->first();
+        return $participation ? $participation->canManageParticipants() : false;
     }
 }

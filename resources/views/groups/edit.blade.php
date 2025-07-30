@@ -24,10 +24,10 @@
                                 <i class="ph-duotone ph-tag me-1"></i>
                                 {{ __('groups.name') }} <span class="text-danger">*</span>
                             </label>
-                            <input type="text" 
-                                   class="form-control @error('name') is-invalid @enderror" 
-                                   id="name" 
-                                   name="name" 
+                            <input type="text"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   id="name"
+                                   name="name"
                                    value="{{ old('name', $group->name) }}"
                                    placeholder="{{ __('groups.group_name_placeholder') }}"
                                    required>
@@ -42,9 +42,9 @@
                                 <i class="ph-duotone ph-text-aa me-1"></i>
                                 {{ __('groups.description') }}
                             </label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" 
-                                      id="description" 
-                                      name="description" 
+                            <textarea class="form-control @error('description') is-invalid @enderror"
+                                      id="description"
+                                      name="description"
                                       rows="4"
                                       placeholder="{{ __('groups.group_description_placeholder') }}">{{ old('description', $group->description) }}</textarea>
                             @error('description')
@@ -58,18 +58,18 @@
                                 <i class="ph-duotone ph-image me-1"></i>
                                 {{ __('groups.image') }}
                             </label>
-                            
+
                             <!-- Immagine attuale -->
                             @if($group->image)
                             <div class="mb-3">
                                 <label class="form-label">{{ __('common.current_image') }}:</label>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ asset('storage/' . $group->image) }}" 
-                                         alt="{{ $group->name }}" 
-                                         class="rounded me-3" 
+                                    <img src="{{ asset('storage/' . $group->image) }}"
+                                         alt="{{ $group->name }}"
+                                         class="rounded me-3"
                                          style="width: 80px; height: 80px; object-fit: cover;">
                                     <div>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                        <button type="button" class="btn btn-outline-danger btn-sm"
                                                 onclick="document.getElementById('remove_image').value = '1'; this.parentElement.parentElement.style.display = 'none';">
                                             <i class="ph-duotone ph-trash me-1"></i>
                                             {{ __('common.remove_image') }}
@@ -80,17 +80,36 @@
                             </div>
                             @endif
 
-                            <input type="file" 
-                                   class="form-control @error('image') is-invalid @enderror" 
-                                   id="image" 
+                            <input type="file"
+                                   class="form-control @error('image') is-invalid @enderror"
+                                   id="image"
                                    name="image"
-                                   accept="image/*">
+                                   accept="image/*"
+                                   onchange="previewImage(this)">
                             <div class="form-text">
                                 {{ __('common.image_help_text') }}
                             </div>
                             @error('image')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+
+                            <!-- Anteprima immagine -->
+                            <div id="imagePreview" class="mt-3" style="display: none;">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">
+                                            <i class="ph-duotone ph-eye me-1"></i>
+                                            {{ __('groups.new_image_preview') }}
+                                        </h6>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeImage()">
+                                            <i class="ph-duotone ph-x"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <img id="previewImg" src="" alt="Anteprima" class="img-fluid rounded" style="max-height: 200px; max-width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Visibilità -->
@@ -99,9 +118,9 @@
                                 <i class="ph-duotone ph-eye me-1"></i>
                                 {{ __('groups.visibility') }} <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select @error('visibility') is-invalid @enderror" 
-                                    id="visibility" 
-                                    name="visibility" 
+                            <select class="form-select @error('visibility') is-invalid @enderror"
+                                    id="visibility"
+                                    name="visibility"
                                     required>
                                 <option value="">{{ __('common.select_option') }}</option>
                                 <option value="public" {{ old('visibility', $group->visibility) == 'public' ? 'selected' : '' }}>
@@ -112,11 +131,11 @@
                                 </option>
                             </select>
                             <div class="form-text">
-                                <strong>{{ __('groups.visibility_public') }}:</strong> 
+                                <strong>{{ __('groups.visibility_public') }}:</strong>
                                 {{ __('groups.tips.public_visibility') }}
                             </div>
                             <div class="form-text">
-                                <strong>{{ __('groups.visibility_private') }}:</strong> 
+                                <strong>{{ __('groups.visibility_private') }}:</strong>
                                 {{ __('groups.tips.private_visibility') }}
                             </div>
                             @error('visibility')
@@ -156,9 +175,9 @@
                                 {{ __('groups.delete_warning') }}
                             </p>
                         </div>
-                        <button type="button" 
-                                class="btn btn-outline-danger" 
-                                data-bs-toggle="modal" 
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bs-toggle="modal"
                                 data-bs-target="#deleteGroupModal">
                             <i class="ph-duotone ph-trash me-2"></i>
                             {{ __('groups.delete') }}
@@ -208,4 +227,63 @@
     </div>
 </div>
 @endif
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+// Funzioni per l'anteprima dell'immagine
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const file = input.files[0];
+
+    if (file) {
+        // Verifica che sia un'immagine
+        if (!file.type.startsWith('image/')) {
+            Swal.fire('Errore', 'Seleziona un file immagine valido', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Verifica la dimensione del file (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            Swal.fire('Errore', 'L\'immagine deve essere inferiore a 2MB', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Crea l'URL per l'anteprima
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function removeImage() {
+    const input = document.getElementById('image');
+    const preview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+
+    // Pulisci l'input file
+    input.value = '';
+
+    // Nascondi l'anteprima
+    preview.style.display = 'none';
+    previewImg.src = '';
+
+    // Mostra conferma
+            Swal.fire({
+            icon: 'success',
+            title: '{{ __("groups.image_removed") }}',
+            text: '{{ __("groups.image_removed_message") }}',
+            timer: 1500,
+            showConfirmButton: false
+        });
+}
+</script>
+@endpush

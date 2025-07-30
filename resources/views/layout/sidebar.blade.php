@@ -199,6 +199,24 @@
                                 </li>
                                 @endif
 
+                                @auth
+                                <!-- Chat Section - Solo per utenti autenticati -->
+                                <li class="no-sub {{ request()->routeIs('chat.*') ? 'active' : '' }}">
+                                    <a href="{{ route('chat.index') }}">
+                                        <i class="ph-duotone ph-chat-circle-text f-s-20 me-2"></i>
+                                        {{ __('sidebar.chat') }}
+                                        @php
+                                            $unreadCount = auth()->user()->getUnreadChatMessagesCountAttribute();
+                                        @endphp
+                                        @if($unreadCount > 0)
+                                            <span class="badge bg-danger badge-notification ms-2">
+                                                {{ $unreadCount }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endauth
+
                                 <!-- Profile Section - Solo per utenti autenticati -->
                                 <li class="no-sub {{ request()->routeIs('profile.*') ? 'active' : '' }}">
                                     <a href="{{ route('profile.show') }}">

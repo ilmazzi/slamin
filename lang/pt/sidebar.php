@@ -15,5 +15,6 @@ return [
     'moderation' => '',
     'moderation_tooltip' => '',
     'system_logs' => '',
+    'chat' => 'Chat',
 
 ];

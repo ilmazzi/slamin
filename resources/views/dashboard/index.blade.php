@@ -191,6 +191,25 @@
                                     </div>
                                 </a>
                             </div>
+
+                            <!-- Statistica 5 - Inviti ai Gruppi in Attesa -->
+                            <div class="col-6">
+                                <a href="{{ route('group-invitations.index') }}" class="text-decoration-none">
+                                    <div class="card hover-effect equal-card b-t-4-primary">
+                                        <div class="card-body eshop-cards text-center pa-15">
+                                            <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                                                <i class="ph ph-users f-s-18 text-primary"></i>
+                                            </div>
+                                            <span class="ripple-effect"></span>
+                                            <div class="overflow-hidden">
+                                                <h4 class="text-primary mb-1 f-w-600">{{ $stats['pending_group_invitations'] }}</h4>
+                                                <p class="f-w-500 text-dark f-s-12 mb-1">Inviti ai Gruppi</p>
+                                                <span class="badge bg-light-primary f-s-10">Gruppi</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -390,6 +409,60 @@
             </div>
             @endif
 
+            <!-- Inviti ai Gruppi in Sospeso -->
+            @if(auth()->user()->groupInvitations()->where('status', 'pending')->count() > 0)
+            <div class="col-lg-4">
+                <div class="card hover-effect equal-card">
+                    <div class="ribbon-top top-left ribbon-primary">
+                        <i class="ph ph-users f-s-12"></i>
+                    </div>
+                    <div class="card-header">
+                        <h6 class="card-title mb-0 f-w-600">
+                            <i class="ph ph-users me-2 text-primary"></i>Inviti ai Gruppi
+                        </h6>
+                    </div>
+                    <div class="card-body pa-20">
+                        @foreach(auth()->user()->groupInvitations()->where('status', 'pending')->with(['group', 'invitedBy'])->take(3)->get() as $invitation)
+                            <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-light-primary h-35 w-35 d-flex-center rounded-circle">
+                                        <i class="ph ph-users text-primary f-s-14"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="mb-1 fw-500 f-s-14">{{ $invitation->group->name }}</p>
+                                    <small class="text-muted f-s-12">
+                                        <i class="ph ph-user me-1"></i>{{ $invitation->invitedBy->name ?? 'Utente non trovato' }}
+                                    </small>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="d-flex gap-1">
+                                        <form action="{{ route('group-invitations.accept', $invitation) }}" method="POST" class="d-inline group-invitation-form" data-invitation-id="{{ $invitation->id }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success btn-sm" title="Accetta">
+                                                <i class="ph ph-check f-s-12"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('group-invitations.decline', $invitation) }}" method="POST" class="d-inline group-invitation-form" data-invitation-id="{{ $invitation->id }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
+                                                <i class="ph ph-x f-s-12"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        <div class="text-center mt-3">
+                            <a href="{{ route('group-invitations.index') }}" class="btn btn-light-primary btn-sm">
+                                <i class="ph ph-eye me-1"></i>Vedi Tutti gli Inviti
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Role-Specific Sections -->
             <div class="col-lg-8">
                 <div class="row g-3">
@@ -461,13 +534,13 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             const invitationId = this.getAttribute('data-invitation-id');
             const invitationRow = this.closest('.d-flex.align-items-center');
-            
+
             // Nascondi immediatamente la riga dell'invito
             if (invitationRow) {
                 invitationRow.style.opacity = '0.5';
                 invitationRow.style.pointerEvents = 'none';
             }
-            
+
             // Disabilita i pulsanti per evitare doppi click
             const buttons = this.querySelectorAll('button');
             buttons.forEach(button => {
@@ -646,6 +719,113 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+    });
+
+    // Gestione form inviti ai gruppi
+    const groupInvitationForms = document.querySelectorAll('.group-invitation-form');
+    groupInvitationForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const invitationId = this.getAttribute('data-invitation-id');
+            const invitationRow = this.closest('.d-flex.align-items-center');
+
+            // Disable form and show loading state
+            if (invitationRow) {
+                invitationRow.style.opacity = '0.5';
+                invitationRow.style.pointerEvents = 'none';
+            }
+
+            // Submit form
+            fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: new URLSearchParams(new FormData(this))
+            })
+            .then(response => response.json())
+                        .then(data => {
+                if (data.success) {
+                    // Show success notification
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Successo',
+                            text: data.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            // If there's a redirect URL (for accept), redirect
+                            if (data.redirect_url) {
+                                window.location.href = data.redirect_url;
+                            } else {
+                                // Remove invitation row for decline
+                                if (invitationRow) {
+                                    invitationRow.style.transition = 'opacity 0.3s ease';
+                                    invitationRow.style.opacity = '0';
+                                    setTimeout(() => {
+                                        invitationRow.remove();
+
+                                        // Check if no more invitations
+                                        const remainingInvitations = document.querySelectorAll('.group-invitation-form').length;
+                                        if (remainingInvitations === 0) {
+                                            // Hide the entire group invitations section
+                                            const groupInvitationsSection = document.querySelector('.col-lg-4:has(.ribbon-primary)');
+                                            if (groupInvitationsSection) {
+                                                groupInvitationsSection.remove();
+                                            }
+                                        }
+                                    }, 300);
+                                }
+                            }
+                        });
+                    } else {
+                        // Fallback if Swal is not available
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            location.reload();
+                        }
+                    }
+                } else {
+                    // Re-enable form
+                    if (invitationRow) {
+                        invitationRow.style.opacity = '1';
+                        invitationRow.style.pointerEvents = 'auto';
+                    }
+
+                    // Show error notification
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Errore',
+                            text: data.message || 'Si è verificato un errore. Riprova.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error handling group invitation:', error);
+
+                // Re-enable form
+                if (invitationRow) {
+                    invitationRow.style.opacity = '1';
+                    invitationRow.style.pointerEvents = 'auto';
+                }
+
+                // Show error notification
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore',
+                        text: 'Si è verificato un errore. Riprova.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
     });
 });
 </script>

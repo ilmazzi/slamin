@@ -63,6 +63,19 @@ class Notification extends Model
     const TYPE_EVENT_REMINDER = 'event_reminder';
 
     /**
+     * Type constants for groups
+     */
+    const TYPE_GROUP_INVITATION = 'group_invitation';
+    const TYPE_GROUP_INVITATION_ACCEPTED = 'group_invitation_accepted';
+    const TYPE_GROUP_INVITATION_DECLINED = 'group_invitation_declined';
+    const TYPE_GROUP_JOIN_REQUEST = 'group_join_request';
+    const TYPE_GROUP_JOIN_REQUEST_ACCEPTED = 'group_join_request_accepted';
+    const TYPE_GROUP_JOIN_REQUEST_DECLINED = 'group_join_request_declined';
+    const TYPE_GROUP_MEMBER_JOINED = 'group_member_joined';
+    const TYPE_GROUP_MEMBER_LEFT = 'group_member_left';
+    const TYPE_GROUP_ROLE_CHANGED = 'group_role_changed';
+
+    /**
      * Get the user this notification belongs to
      */
     public function user(): BelongsTo
@@ -156,6 +169,15 @@ class Notification extends Model
             self::TYPE_EVENT_UPDATE => 'ph ph-calendar-check',
             self::TYPE_EVENT_CANCELLED => 'ph ph-calendar-x',
             self::TYPE_EVENT_REMINDER => 'ph ph-clock',
+            self::TYPE_GROUP_INVITATION => 'ph ph-users',
+            self::TYPE_GROUP_INVITATION_ACCEPTED => 'ph ph-user-plus',
+            self::TYPE_GROUP_INVITATION_DECLINED => 'ph ph-user-minus',
+            self::TYPE_GROUP_JOIN_REQUEST => 'ph ph-hand-waving',
+            self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED => 'ph ph-user-plus',
+            self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'ph ph-user-minus',
+            self::TYPE_GROUP_MEMBER_JOINED => 'ph ph-user-plus',
+            self::TYPE_GROUP_MEMBER_LEFT => 'ph ph-user-minus',
+            self::TYPE_GROUP_ROLE_CHANGED => 'ph ph-user-gear',
             default => 'ph ph-bell',
         };
     }
@@ -174,6 +196,13 @@ class Notification extends Model
             self::TYPE_EVENT_UPDATE => 'text-primary',
             self::TYPE_EVENT_CANCELLED => 'text-danger',
             self::TYPE_EVENT_REMINDER => 'text-warning',
+            self::TYPE_GROUP_INVITATION => 'text-primary',
+            self::TYPE_GROUP_INVITATION_ACCEPTED, self::TYPE_GROUP_MEMBER_JOINED => 'text-success',
+            self::TYPE_GROUP_INVITATION_DECLINED, self::TYPE_GROUP_MEMBER_LEFT => 'text-danger',
+            self::TYPE_GROUP_JOIN_REQUEST => 'text-info',
+            self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED => 'text-success',
+            self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'text-danger',
+            self::TYPE_GROUP_ROLE_CHANGED => 'text-warning',
             default => 'text-primary',
         };
     }
@@ -482,6 +511,211 @@ class Notification extends Model
     }
 
     /**
+     * Create group invitation notification
+     */
+    public static function createGroupInvitation(GroupInvitation $invitation): void
+    {
+        $notification = self::create([
+            'user_id' => $invitation->user_id,
+            'type' => self::TYPE_GROUP_INVITATION,
+            'title' => 'Nuovo Invito Gruppo',
+            'message' => "Sei stato invitato a unirti al gruppo \"{$invitation->group->name}\"",
+            'data' => [
+                'group_id' => $invitation->group_id,
+                'invitation_id' => $invitation->id,
+                'invited_by' => $invitation->invited_by,
+                'message' => $invitation->message,
+            ],
+            'action_url' => route('group-invitations.index'),
+            'action_text' => 'Gestisci Invito',
+            'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group invitation response notification
+     */
+    public static function createGroupInvitationResponse(GroupInvitation $invitation, string $response): void
+    {
+        // Delete existing invitation notifications for the invited user
+        self::where('type', self::TYPE_GROUP_INVITATION)
+            ->where('user_id', $invitation->user_id)
+            ->whereJsonContains('data->invitation_id', $invitation->id)
+            ->delete();
+
+        $responseText = $response === 'accepted' ? 'accettato' : 'rifiutato';
+        $type = $response === 'accepted' ? self::TYPE_GROUP_INVITATION_ACCEPTED : self::TYPE_GROUP_INVITATION_DECLINED;
+        $title = $response === 'accepted' ? 'Invito Gruppo Accettato' : 'Invito Gruppo Rifiutato';
+
+        $notification = self::create([
+            'user_id' => $invitation->invited_by, // Notify the person who sent the invitation
+            'type' => $type,
+            'title' => $title,
+            'message' => "{$invitation->user->name} ha {$responseText} l'invito per unirsi al gruppo \"{$invitation->group->name}\"",
+            'data' => [
+                'group_id' => $invitation->group_id,
+                'invitation_id' => $invitation->id,
+                'user_id' => $invitation->user_id,
+                'response' => $response,
+            ],
+            'action_url' => route('groups.show', $invitation->group),
+            'action_text' => 'Vedi Gruppo',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group member joined notification
+     */
+    public static function createGroupMemberJoined(Group $group, User $newMember, User $notifyUser): void
+    {
+        $notification = self::create([
+            'user_id' => $notifyUser->id,
+            'type' => self::TYPE_GROUP_MEMBER_JOINED,
+            'title' => 'Nuovo Membro Gruppo',
+            'message' => "{$newMember->name} si è unito al gruppo \"{$group->name}\"",
+            'data' => [
+                'group_id' => $group->id,
+                'new_member_id' => $newMember->id,
+            ],
+            'action_url' => route('groups.show', $group),
+            'action_text' => 'Vedi Gruppo',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group member left notification
+     */
+    public static function createGroupMemberLeft(Group $group, User $leftMember, User $notifyUser): void
+    {
+        $notification = self::create([
+            'user_id' => $notifyUser->id,
+            'type' => self::TYPE_GROUP_MEMBER_LEFT,
+            'title' => 'Membro Lasciato Gruppo',
+            'message' => "{$leftMember->name} ha lasciato il gruppo \"{$group->name}\"",
+            'data' => [
+                'group_id' => $group->id,
+                'left_member_id' => $leftMember->id,
+            ],
+            'action_url' => route('groups.show', $group),
+            'action_text' => 'Vedi Gruppo',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group role changed notification
+     */
+    public static function createGroupRoleChanged(Group $group, User $member, string $oldRole, string $newRole, User $changedBy): void
+    {
+        $roleNames = [
+            'member' => 'membro',
+            'moderator' => 'moderatore',
+            'admin' => 'amministratore'
+        ];
+
+        $oldRoleName = $roleNames[$oldRole] ?? $oldRole;
+        $newRoleName = $roleNames[$newRole] ?? $newRole;
+
+        $title = 'Ruolo Cambiato nel Gruppo';
+        $message = "Il tuo ruolo nel gruppo \"{$group->name}\" è stato cambiato da {$oldRoleName} a {$newRoleName} da {$changedBy->name}";
+
+        $notification = self::create([
+            'user_id' => $member->id, // Notify the member whose role was changed
+            'type' => self::TYPE_GROUP_ROLE_CHANGED,
+            'title' => $title,
+            'message' => $message,
+            'data' => [
+                'group_id' => $group->id,
+                'old_role' => $oldRole,
+                'new_role' => $newRole,
+                'changed_by_id' => $changedBy->id,
+            ],
+            'action_url' => route('groups.show', $group),
+            'action_text' => 'Vedi Gruppo',
+            'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group join request notification
+     */
+        public static function createGroupJoinRequest(GroupJoinRequest $request): void
+    {
+        // Notifica tutti gli admin e moderatori del gruppo
+        $group = $request->group;
+        $adminsAndModerators = $group->members()
+                                   ->whereIn('role', ['admin', 'moderator'])
+                                   ->get();
+
+        foreach ($adminsAndModerators as $member) {
+            $notification = self::create([
+                'user_id' => $member->user_id,
+                'type' => self::TYPE_GROUP_JOIN_REQUEST,
+                'title' => 'Nuova Richiesta di Partecipazione',
+                'message' => "{$request->user->name} ha richiesto di unirsi al gruppo \"{$group->name}\"",
+                'data' => [
+                    'group_id' => $group->id,
+                    'request_id' => $request->id,
+                    'user_id' => $request->user_id,
+                    'message' => $request->message,
+                ],
+                'action_url' => route('groups.requests.pending', $group),
+                'action_text' => 'Gestisci Richiesta',
+                'priority' => self::PRIORITY_HIGH,
+            ]);
+
+            // Broadcast real-time notification
+            self::broadcastNotification($notification);
+        }
+    }
+
+    /**
+     * Create group join request response notification
+     */
+    public static function createGroupJoinRequestResponse(GroupJoinRequest $request, string $response): void
+    {
+        $responseText = $response === 'accepted' ? 'accettata' : 'rifiutata';
+        $type = $response === 'accepted' ? self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED : self::TYPE_GROUP_JOIN_REQUEST_DECLINED;
+        $title = $response === 'accepted' ? 'Richiesta Accettata' : 'Richiesta Rifiutata';
+
+        $notification = self::create([
+            'user_id' => $request->user_id, // Notify the user who made the request
+            'type' => $type,
+            'title' => $title,
+            'message' => "La tua richiesta di partecipazione al gruppo \"{$request->group->name}\" è stata {$responseText}",
+            'data' => [
+                'group_id' => $request->group_id,
+                'request_id' => $request->id,
+                'response' => $response,
+                'processed_by_id' => $request->processed_by,
+            ],
+            'action_url' => route('groups.show', $request->group),
+            'action_text' => 'Vedi Gruppo',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
      * Get available notification types
      */
     public static function getAvailableTypes(): array
@@ -497,6 +731,15 @@ class Notification extends Model
             self::TYPE_EVENT_UPDATE => 'Aggiornamento Evento',
             self::TYPE_EVENT_CANCELLED => 'Evento Cancellato',
             self::TYPE_EVENT_REMINDER => 'Promemoria Evento',
+            self::TYPE_GROUP_INVITATION => 'Invito Gruppo',
+            self::TYPE_GROUP_INVITATION_ACCEPTED => 'Invito Gruppo Accettato',
+            self::TYPE_GROUP_INVITATION_DECLINED => 'Invito Gruppo Rifiutato',
+            self::TYPE_GROUP_JOIN_REQUEST => 'Richiesta Partecipazione Gruppo',
+            self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED => 'Richiesta Partecipazione Accettata',
+            self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'Richiesta Partecipazione Rifiutata',
+            self::TYPE_GROUP_MEMBER_JOINED => 'Nuovo Membro Gruppo',
+            self::TYPE_GROUP_MEMBER_LEFT => 'Membro Lasciato Gruppo',
+            self::TYPE_GROUP_ROLE_CHANGED => 'Ruolo Cambiato',
         ];
     }
 }

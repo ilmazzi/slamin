@@ -61,19 +61,23 @@ class NotificationController extends Controller
                                    ->limit(10)
                                    ->get()
                                    ->map(function ($notification) {
+                                       // Get sender avatar based on notification type and data
+                                       $senderAvatar = $this->getSenderAvatar($notification);
+
                                        return [
                                            'id' => $notification->id,
-                                           'title' => $notification->title,
-                                           'message' => $notification->message,
-                                           'type' => $notification->type,
-                                           'icon' => $notification->icon,
-                                           'color' => $notification->color,
-                                           'priority_badge' => $notification->priority_badge,
-                                           'action_url' => $notification->action_url,
-                                           'action_text' => $notification->action_text,
-                                           'data' => $notification->data,
-                                           'created_at' => $notification->created_at->diffForHumans(),
-                                           'is_read' => $notification->is_read,
+                                           'title' => $notification->title ?? '',
+                                           'message' => $notification->message ?? '',
+                                           'type' => $notification->type ?? '',
+                                           'icon' => $notification->icon ?? 'ph-bell',
+                                           'color' => $notification->color ?? 'primary',
+                                           'priority_badge' => $notification->priority_badge ?? '',
+                                           'action_url' => $notification->action_url ?? '',
+                                           'action_text' => $notification->action_text ?? '',
+                                           'data' => $notification->data ?? [],
+                                           'created_at' => $notification->created_at ? $notification->created_at->diffForHumans() : 'Ora',
+                                           'is_read' => $notification->is_read ?? false,
+                                           'sender_avatar' => $senderAvatar,
                                        ];
                                    });
 
@@ -84,6 +88,95 @@ class NotificationController extends Controller
             'unread_count' => $unreadCount,
             'has_more' => $unreadCount > 10,
         ]);
+    }
+
+        /**
+     * Get sender avatar for notification
+     */
+    private function getSenderAvatar(Notification $notification): ?string
+    {
+        $data = $notification->data ?? [];
+
+        // Group role changed notification
+        if ($notification->type === 'group_role_changed' && isset($data['changed_by_id'])) {
+            $user = \App\Models\User::find($data['changed_by_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Group invitation notification
+        if ($notification->type === 'group_invitation' && isset($data['invited_by'])) {
+            $user = \App\Models\User::find($data['invited_by']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Group invitation response notification
+        if (in_array($notification->type, ['group_invitation_accepted', 'group_invitation_declined']) && isset($data['user_id'])) {
+            $user = \App\Models\User::find($data['user_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Event invitation notification - avatar dell'organizzatore dell'evento
+        if ($notification->type === 'event_invitation' && isset($data['invitation_id'])) {
+            $invitation = \App\Models\EventInvitation::find($data['invitation_id']);
+            if ($invitation && $invitation->event) {
+                return \App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->event->user);
+            }
+        }
+
+        // Event invitation response notification - avatar di chi ha risposto
+        if (in_array($notification->type, ['invitation_accepted', 'invitation_declined']) && isset($data['invited_user_id'])) {
+            $user = \App\Models\User::find($data['invited_user_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Event update notification - avatar dell'organizzatore dell'evento
+        if ($notification->type === 'event_update' && isset($data['event_id'])) {
+            $event = \App\Models\Event::find($data['event_id']);
+            if ($event) {
+                return \App\Helpers\AvatarHelper::getUserAvatarUrl($event->user);
+            }
+        }
+
+        // Event cancelled notification - avatar dell'organizzatore dell'evento
+        if ($notification->type === 'event_cancelled' && isset($data['event_id'])) {
+            $event = \App\Models\Event::find($data['event_id']);
+            if ($event) {
+                return \App\Helpers\AvatarHelper::getUserAvatarUrl($event->user);
+            }
+        }
+
+        // Event reminder notification - avatar dell'organizzatore dell'evento
+        if ($notification->type === 'event_reminder' && isset($data['event_id'])) {
+            $event = \App\Models\Event::find($data['event_id']);
+            if ($event) {
+                return \App\Helpers\AvatarHelper::getUserAvatarUrl($event->user);
+            }
+        }
+
+                // Group join request notification - avatar di chi ha fatto la richiesta
+        if ($notification->type === 'group_join_request' && isset($data['user_id'])) {
+            $user = \App\Models\User::find($data['user_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Group join request response notification - avatar di chi ha processato la richiesta
+        if (in_array($notification->type, ['group_join_request_accepted', 'group_join_request_declined']) && isset($data['processed_by_id'])) {
+            $user = \App\Models\User::find($data['processed_by_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        // Group member joined/left notification
+        if (in_array($notification->type, ['group_member_joined', 'group_member_left']) && isset($data['new_member_id'])) {
+            $user = \App\Models\User::find($data['new_member_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        if (in_array($notification->type, ['group_member_joined', 'group_member_left']) && isset($data['left_member_id'])) {
+            $user = \App\Models\User::find($data['left_member_id']);
+            return $user ? \App\Helpers\AvatarHelper::getUserAvatarUrl($user) : null;
+        }
+
+        return null;
     }
 
     /**

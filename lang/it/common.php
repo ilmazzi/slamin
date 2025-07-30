@@ -21,7 +21,12 @@ return [
     'back_to_dashboard' => 'Back To Dashboard',
     'reset' => 'Reset',
     'loading_error' => 'Errore di caricamento',
-    
+    'attention' => 'Attenzione',
+    'select_option' => 'Seleziona un\'opzione',
+    'image_help_text' => 'Formati supportati: JPG, PNG, GIF. Dimensione massima: 2MB.',
+    'current_image' => 'Immagine Attuale',
+    'remove_image' => 'Rimuovi Immagine',
+
     // Sezioni della sidebar
     'gigs' => 'Gig',
     'news' => 'Notizie',

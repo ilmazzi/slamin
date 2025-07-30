@@ -63,6 +63,7 @@ class DashboardController extends Controller
             'future_events' => 0,
             'organized_events' => 0,
             'pending_invitations' => 0,
+            'pending_group_invitations' => 0,
             'total_events' => 0,
             'pending_requests' => 0,
             'unread_notifications' => 0,
@@ -110,6 +111,15 @@ class DashboardController extends Controller
                             ->where('status', EventInvitation::STATUS_PENDING)
                             ->count();
         $stats['pending_invitations'] = $pendingReceived + $pendingSent;
+
+        // Pending group invitations (received + sent)
+        $pendingGroupReceived = $user->groupInvitations()
+                                    ->where('status', 'pending')
+                                    ->count();
+        $pendingGroupSent = $user->sentGroupInvitations()
+                                 ->where('status', 'pending')
+                                 ->count();
+        $stats['pending_group_invitations'] = $pendingGroupReceived + $pendingGroupSent;
 
         $stats['total_events'] = $stats['past_events'] + $stats['future_events'];
 
@@ -222,7 +232,7 @@ class DashboardController extends Controller
         $actions = [];
 
         // Ordine richiesto: Scrivi poesia, Crea evento, Carica video, Scrivi articolo
-        
+
         // 1. Scrivi Poesia - per poeti e admin
         if ($user->can('poems.create')) {
             $actions[] = [

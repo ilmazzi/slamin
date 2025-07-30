@@ -114,7 +114,7 @@
                                 </div>
 
                                 <!-- Notifications will be loaded here -->
-                                <div id="notificationsList" class="head-container" style="display: none;">
+                                <div id="notificationsList" style="display: none;">
                                     <!-- Dynamic notifications loaded via JavaScript -->
                                 </div>
 

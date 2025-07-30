@@ -118,8 +118,38 @@ class GroupController extends Controller
             'joined_at' => now(),
         ]);
 
+        // Gestisci gli inviti se presenti
+        if ($request->has('invited_users') && !empty($request->invited_users)) {
+            $invitedUsers = json_decode($request->invited_users, true);
+
+            if (is_array($invitedUsers)) {
+                foreach ($invitedUsers as $invitedUser) {
+                    if (isset($invitedUser['id']) && $invitedUser['id'] != Auth::id()) {
+                        // Crea l'invito
+                        \App\Models\GroupInvitation::create([
+                            'group_id' => $group->id,
+                            'user_id' => $invitedUser['id'],
+                            'invited_by' => Auth::id(),
+                            'message' => "Sei stato invitato a unirti al gruppo \"{$group->name}\"",
+                            'expires_at' => now()->addDays(7),
+                        ]);
+
+                        // Crea la notifica
+                        \App\Models\Notification::createGroupInvitation(
+                            \App\Models\GroupInvitation::where('group_id', $group->id)
+                                                      ->where('user_id', $invitedUser['id'])
+                                                      ->latest()
+                                                      ->first()
+                        );
+                    }
+                }
+            }
+        }
+
         return redirect()->route('groups.show', $group)
-                        ->with('success', 'Gruppo creato con successo!');
+                        ->with('success', 'Gruppo creato con successo!' .
+                              (isset($invitedUsers) && count($invitedUsers) > 0 ?
+                               ' Inviti inviati a ' . count($invitedUsers) . ' utenti.' : ''));
     }
 
     /**
@@ -197,7 +227,7 @@ class GroupController extends Controller
             if ($group->image) {
                 Storage::disk('public')->delete($group->image);
             }
-            
+
             $imagePath = $request->file('image')->store('groups', 'public');
             $group->image = $imagePath;
         }
@@ -257,18 +287,13 @@ class GroupController extends Controller
     /**
      * Richiedi di entrare in un gruppo
      */
-    public function join(Group $group, Request $request)
+        public function join(Group $group, Request $request)
     {
         $user = Auth::user();
 
         // Verifica se l'utente è già membro
         if ($user->isMemberOf($group)) {
             return back()->with('error', 'Sei già membro di questo gruppo.');
-        }
-
-        // Verifica se l'utente ha già una richiesta pendente
-        if ($group->hasPendingJoinRequest($user)) {
-            return back()->with('error', 'Hai già una richiesta pendente per questo gruppo.');
         }
 
         // Verifica se l'utente ha già un invito pendente
@@ -285,12 +310,35 @@ class GroupController extends Controller
             abort(403, 'Non hai i permessi per richiedere di entrare in gruppi pubblici.');
         }
 
-        // Crea la richiesta di partecipazione
-        $group->joinRequests()->create([
-            'user_id' => $user->id,
-            'message' => $request->message,
-            'status' => 'pending',
-        ]);
+        // Cerca una richiesta esistente per questo utente e gruppo
+        $existingRequest = $group->joinRequests()->where('user_id', $user->id)->first();
+
+        if ($existingRequest) {
+            // Se esiste già una richiesta pendente, mostra errore
+            if ($existingRequest->status === 'pending') {
+                return back()->with('error', 'Hai già una richiesta pendente per questo gruppo.');
+            }
+
+            // Se la richiesta precedente è stata accettata o rifiutata, aggiornala
+            $existingRequest->update([
+                'message' => $request->input('message', ''),
+                'status' => 'pending',
+                'processed_by' => null,
+                'processed_at' => null,
+            ]);
+
+            $joinRequest = $existingRequest;
+        } else {
+            // Crea una nuova richiesta di partecipazione
+            $joinRequest = $group->joinRequests()->create([
+                'user_id' => $user->id,
+                'message' => $request->input('message', ''),
+                'status' => 'pending',
+            ]);
+        }
+
+        // Crea la notifica per admin e moderatori
+        \App\Models\Notification::createGroupJoinRequest($joinRequest);
 
         return back()->with('success', 'Richiesta di partecipazione inviata con successo!');
     }
