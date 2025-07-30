@@ -135,15 +135,42 @@ class LoggingMiddleware
                 $content = $response->getContent();
                 if ($content) {
                     $decoded = json_decode($content, true);
-                    if ($decoded && isset($decoded['message'])) {
-                        $errorDetails['error_message'] = $decoded['message'];
+                    if ($decoded) {
+                        // Handle JSON responses
+                        if (isset($decoded['message'])) {
+                            $errorDetails['error_message'] = $decoded['message'];
+                            $errorDetails['error_body'] = $decoded['message'];
+                        } elseif (isset($decoded['error'])) {
+                            $errorDetails['error_message'] = $decoded['error'];
+                            $errorDetails['error_body'] = $decoded['error'];
+                        } elseif (isset($decoded['errors'])) {
+                            $errorDetails['error_message'] = is_array($decoded['errors']) ? implode('; ', $decoded['errors']) : $decoded['errors'];
+                            $errorDetails['error_body'] = $errorDetails['error_message'];
+                        }
                     } elseif (is_string($content)) {
                         // Extract error message from HTML content
                         if (preg_match('/<title[^>]*>(.*?)<\/title>/i', $content, $matches)) {
                             $errorDetails['error_title'] = $matches[1];
                         }
                         if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $content, $matches)) {
-                            $errorDetails['error_body'] = strip_tags($matches[1]);
+                            $bodyContent = $this->cleanErrorContent($matches[1]);
+                            
+                            // Try to extract only the error message, not the entire body
+                            if (preg_match('/error.*?:\s*(.*?)(?:\n|$)/i', $bodyContent, $errorMatches)) {
+                                $errorDetails['error_body'] = trim($errorMatches[1]);
+                            } elseif (preg_match('/exception.*?:\s*(.*?)(?:\n|$)/i', $bodyContent, $exceptionMatches)) {
+                                $errorDetails['error_body'] = trim($exceptionMatches[1]);
+                            } elseif (preg_match('/<h1[^>]*>(.*?)<\/h1>/i', $content, $h1Matches)) {
+                                $errorDetails['error_body'] = strip_tags($h1Matches[1]);
+                            } elseif (preg_match('/<h2[^>]*>(.*?)<\/h2>/i', $content, $h2Matches)) {
+                                $errorDetails['error_body'] = strip_tags($h2Matches[1]);
+                            } else {
+                                // If no specific error found, take only the first 200 characters
+                                $errorDetails['error_body'] = substr($bodyContent, 0, 200);
+                                if (strlen($bodyContent) > 200) {
+                                    $errorDetails['error_body'] .= '...';
+                                }
+                            }
                         }
                     }
                 }
@@ -156,6 +183,72 @@ class LoggingMiddleware
                         $errorDetails['exception_file'] = $exception->getFile();
                         $errorDetails['exception_line'] = $exception->getLine();
                         $errorDetails['exception_trace'] = $exception->getTraceAsString();
+                        
+                        // If we have exception details, use them as the primary error message
+                        if (!isset($errorDetails['error_body']) || empty($errorDetails['error_body']) || $errorDetails['error_body'] === '500') {
+                            $errorDetails['error_body'] = $exception->getMessage();
+                        }
+                    }
+                }
+                
+                // If we still don't have a meaningful error message, try to get it from Laravel's error handler
+                if (!isset($errorDetails['error_body']) || empty($errorDetails['error_body']) || $errorDetails['error_body'] === '500') {
+                    // Try to get error from session flash data
+                    if ($request->session()->has('errors')) {
+                        $errors = $request->session()->get('errors');
+                        if ($errors && method_exists($errors, 'all')) {
+                            $errorMessages = $errors->all();
+                            if (!empty($errorMessages)) {
+                                $errorDetails['error_body'] = implode('; ', $errorMessages);
+                            }
+                        }
+                    }
+                    
+                    // Try to get error from session
+                    if ($request->session()->has('error')) {
+                        $errorDetails['error_body'] = $request->session()->get('error');
+                    }
+                    
+                    // Try to get validation errors from request
+                    if ($request->has('errors')) {
+                        $requestErrors = $request->get('errors');
+                        if (is_array($requestErrors)) {
+                            $errorDetails['error_body'] = implode('; ', $requestErrors);
+                        }
+                    }
+                    
+                    // Check for database-related errors in the exception
+                    if (isset($errorDetails['exception_message'])) {
+                        $exceptionMsg = $errorDetails['exception_message'];
+                        if (str_contains($exceptionMsg, 'SQLSTATE') || 
+                            str_contains($exceptionMsg, 'database') || 
+                            str_contains($exceptionMsg, 'table') ||
+                            str_contains($exceptionMsg, 'column')) {
+                            $errorDetails['error_body'] = "Database error: " . $exceptionMsg;
+                        }
+                    }
+                    
+                    // Try to get error from Laravel's log file (last few lines)
+                    if (!isset($errorDetails['error_body']) || empty($errorDetails['error_body']) || $errorDetails['error_body'] === '500') {
+                        $logFile = storage_path('logs/laravel.log');
+                        if (file_exists($logFile)) {
+                            $logLines = file($logFile);
+                            $lastLines = array_slice($logLines, -10); // Last 10 lines
+                            foreach (array_reverse($lastLines) as $line) {
+                                if (str_contains($line, 'ERROR') || str_contains($line, 'Exception')) {
+                                    // Extract error message from log line
+                                    if (preg_match('/\[.*?\] (.*?): (.*?)(?:\n|$)/', $line, $matches)) {
+                                        $errorDetails['error_body'] = trim($matches[2]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // If still no meaningful error, provide a generic but helpful message
+                    if (!isset($errorDetails['error_body']) || empty($errorDetails['error_body']) || $errorDetails['error_body'] === '500') {
+                        $errorDetails['error_body'] = "Server error occurred while processing {$request->method()} request to {$request->path()}";
                     }
                 }
 
@@ -288,5 +381,33 @@ class LoggingMiddleware
         };
 
         return "{$methodText} request to {$pathText} - {$statusText} ({$statusCode}) - {$responseTime}ms";
+    }
+
+    /**
+     * Clean error content by removing JavaScript, CSS, and excessive HTML
+     */
+    private function cleanErrorContent(string $content): string
+    {
+        // Remove script tags and their content
+        $content = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $content);
+        
+        // Remove style tags and their content
+        $content = preg_replace('/<style[^>]*>.*?<\/style>/is', '', $content);
+        
+        // Remove other potentially large HTML elements
+        $content = preg_replace('/<nav[^>]*>.*?<\/nav>/is', '', $content);
+        $content = preg_replace('/<footer[^>]*>.*?<\/footer>/is', '', $content);
+        $content = preg_replace('/<header[^>]*>.*?<\/header>/is', '', $content);
+        
+        // Remove excessive whitespace and newlines
+        $content = preg_replace('/\s+/', ' ', $content);
+        
+        // Strip HTML tags
+        $content = strip_tags($content);
+        
+        // Trim and clean up
+        $content = trim($content);
+        
+        return $content;
     }
 }

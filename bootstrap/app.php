@@ -13,7 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\ExceptionLoggingMiddleware::class,
             \App\Http\Middleware\LoggingMiddleware::class,
+            \App\Http\Middleware\CustomErrorPages::class,
         ]);
 
         // Register custom middleware aliases
@@ -24,5 +26,17 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Log all exceptions for better debugging
+        $exceptions->reportable(function (\Throwable $e) {
+            // Log to our custom logging service
+            \App\Services\LoggingService::logError('unhandled_exception', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+                'request_url' => request()->fullUrl(),
+                'request_method' => request()->method(),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()?->id,
+            ]);
+        });
     })->create();

@@ -79,7 +79,17 @@
                                 $code == 'en' ? 'gbr' :
                                 ($code == 'de' ? 'deu' :
                                 ($code == 'es' ? 'esp' :
-                                ($code == 'fr' ? 'fra' : 'ita')))
+                                ($code == 'fr' ? 'fra' :
+                                ($code == 'pt' ? 'prt' :
+                                ($code == 'pt-br' ? 'bra' :
+                                ($code == 'nl' ? 'nld' :
+                                ($code == 'pl' ? 'pol' :
+                                ($code == 'ru' ? 'rus' :
+                                ($code == 'ja' ? 'jpn' :
+                                ($code == 'zh' ? 'chn' :
+                                ($code == 'ar' ? 'sau' :
+                                ($code == 'hi' ? 'ind' :
+                                ($code == 'ko' ? 'kor' : 'ita')))))))))))))
                             }} me-2" style="font-size: 24px;"></i>
                         </div>
                     </div>

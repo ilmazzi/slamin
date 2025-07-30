@@ -624,17 +624,8 @@
                         <!-- Sezione Inviti per Eventi Privati -->
                         <div class="mb-4" id="private-invites-section" style="display: none;">
                             <h6 class="text-primary mb-3">
-                                <i class="ph ph-envelope me-2"></i>{{ __('events.invite_users') }}
+                                <i class="ph ph-envelope me-2"></i>{{ __('events.private_invites') }}
                             </h6>
-                            <div class="alert alert-border-primary" role="alert">
-                                <h6>
-                                    <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
-                                    {{ __('events.specific_invites') }}
-                                </h6>
-                                <p class="mb-0">
-                                    {{ __('events.invite_users_help') }}
-                                </p>
-                            </div>
 
                             <!-- Barra di ricerca -->
                             <div class="mb-3">
@@ -682,21 +673,12 @@
                         <!-- Sezione Inviti -->
                         <div class="mb-4">
                             <h6 class="text-primary mb-3">
-                                <i class="ph ph-envelope me-2"></i>{{ __('events.artist_invites') }}
+                                <i class="ph ph-envelope me-2"></i>{{ __('events.invites') }}
                             </h6>
-                            <div class="alert alert-border-primary" role="alert">
-                                <h6>
-                                    <i class="ph ph-info-circle f-s-18 me-2 text-info"></i>
-                                    {{ __('events.specific_invites') }}
-                                </h6>
-                                <p class="mb-0">
-                                    {{ __('events.artist_invites_help') }}
-                                </p>
-                            </div>
-
+                            
                             <!-- Search Users -->
                             <div class="mb-4">
-                                <label class="form-label">{{ __('events.search_artists') }}</label>
+                                <label class="form-label">{{ __('events.search_users') }}</label>
                                 <div class="input-group">
                                     <input type="text" id="artistUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleArtistUserSearchKeydown(event)">
                                     <button type="button" class="btn btn-outline-primary" onclick="searchArtistUsersForInvite()">
@@ -737,20 +719,11 @@
                             <input type="hidden" name="artist_invited_users" id="artistInvitedUsersData" value="[]">
                         </div>
 
-                        <!-- Sezione Posizioni d'Ingaggio -->
+                        <!-- Sezione Ingaggi -->
                         <div class="mb-4">
                             <h6 class="text-success mb-3">
-                                <i class="ph ph-briefcase me-2"></i>{{ __('events.open_gig_positions') }}
+                                <i class="ph ph-briefcase me-2"></i>{{ __('events.gigs') }}
                             </h6>
-                            <div class="alert alert-border-success" role="alert">
-                                <h6>
-                                    <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
-                                    {{ __('events.open_gig_positions') }}
-                                </h6>
-                                <p class="mb-0">
-                                    {{ __('events.open_gig_positions_help') }}
-                                </p>
-                            </div>
 
                             <!-- Container per le posizioni d'ingaggio -->
                             <div id="gigPositionsContainer">
@@ -2612,6 +2585,34 @@ function updatePreview() {
                     </div>
                 </div>
             ` : ''}
+
+            <!-- Artist Invitations -->
+            ${artistInvitedUsers.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-user-circle-plus me-2"></i>Artisti Invitati</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${artistInvitedUsers.map(user => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-primary border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user-circle me-2 text-primary"></i>
+                                                <div>
+                                                    <strong>${user.name}</strong>
+                                                    <br><small class="text-muted">${user.role || 'Artista'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `;
 
@@ -3056,6 +3057,34 @@ function updatePreviewWithImage(imageSrc) {
                     </div>
                 </div>
             ` : ''}
+
+            <!-- Artist Invitations -->
+            ${artistInvitedUsers.length > 0 ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-user-circle-plus me-2"></i>Artisti Invitati</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            ${artistInvitedUsers.map(user => `
+                                <div class="col-md-6">
+                                    <div class="card card-light-primary border-0">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph ph-user-circle me-2 text-primary"></i>
+                                                <div>
+                                                    <strong>${user.name}</strong>
+                                                    <br><small class="text-muted">${user.role || 'Artista'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `;
 
@@ -3094,7 +3123,13 @@ function updatePreviewWithImage(imageSrc) {
     }
 
     // Simulated search - in production this would be an AJAX call
-    fetch(`/api/users/search?q=${encodeURIComponent(query)}`)
+    fetch(`/api/users/search?q=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        }
+    })
         .then(response => response.json())
         .then(data => {
             displaySearchResults(data);

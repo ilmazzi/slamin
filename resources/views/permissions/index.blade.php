@@ -432,7 +432,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 function showCreateRoleModal() {
     $('#createRoleModal').modal('show');
@@ -555,4 +555,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endsection
+@endpush

@@ -322,7 +322,7 @@ Route::get('/events/create', function () {
             'venue_owners_count' => isset($venueOwners) ? $venueOwners->count() : 'non_definito'
         ], 500);
     }
-})->name('events.create');
+})->name('events.create')->middleware('auth');
 
 // Route per i luoghi recenti (pubblica)
 Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');
@@ -359,12 +359,28 @@ Route::get('/api/events/test', function() {
         ]);
     }
 });
-Route::get('/api/users/search', [EventController::class, 'searchUsers'])->name('users.search');
+
 
 // Route per i luoghi recenti (pubblica)
 // Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues');
 
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::post('/events', [EventController::class, 'store'])->name('events.store')->middleware('auth');
+
+// API route per ricerca utenti (pubblica)
+Route::get('/api/users/search', [EventController::class, 'searchUsers'])->name('api.users.search');
+
+// Test routes per le pagine di errore
+Route::get('/test/error/403', function () {
+    abort(403, 'Test 403');
+})->name('test.403');
+
+Route::get('/test/error/404', function () {
+    abort(404, 'Test 404');
+})->name('test.404');
+
+Route::get('/test/error/500', function () {
+    abort(500, 'Test 500');
+})->name('test.500');
 
 // TEST: Route identica ma con URL diverso
 Route::get('/create-event-test', [EventController::class, 'create'])->name('create-event-test');
@@ -618,21 +634,7 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
             Route::post('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'updateSettings'])->name('settings.update');
         });
 
-        // API routes for user search
-        Route::get('/api/users/search', function (Illuminate\Http\Request $request) {
-            $query = $request->get('q');
 
-            if (!$query || strlen($query) < 2) {
-                return response()->json(['users' => []]);
-            }
-
-            $users = App\Models\User::where('name', 'like', "%{$query}%")
-                        ->orWhere('email', 'like', "%{$query}%")
-                        ->limit(10)
-                        ->get(['id', 'name', 'email']);
-
-            return response()->json(['users' => $users]);
-        })->name('api.users.search');
     });
 
     // Profile Routes (accessibili a tutti gli utenti autenticati)

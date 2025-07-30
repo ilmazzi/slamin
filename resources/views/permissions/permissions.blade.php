@@ -197,7 +197,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 let currentPermissionId = null;
 
@@ -332,4 +332,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endsection
+@endpush

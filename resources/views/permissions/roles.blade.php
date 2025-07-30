@@ -241,7 +241,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 let currentRoleId = null;
 
@@ -408,4 +408,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endsection
+@endpush

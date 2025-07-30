@@ -1,0 +1,36 @@
+<?php
+
+return [
+
+    'premium' => '',
+    'packages' => '',
+    'free_package' => '',
+    'price_monthly' => '',
+    'days' => '',
+    'video_limit' => '',
+    'features' => '',
+    'select_plan' => '',
+    'purchase' => '',
+    'checkout' => '',
+    'payment_method' => '',
+    'terms_accepted' => '',
+    'payment_successful' => '',
+    'manage_subscription' => '',
+    'current_plan' => '',
+    'subscription_status' => '',
+    'subscription_active' => '',
+    'days_remaining' => '',
+    'upgrade_required' => '',
+    'upgrade_message' => '',
+    'compare_packages' => '',
+    'best_value' => '',
+    'most_popular' => '',
+    'faq' => '',
+    'frequently_asked_questions' => '',
+    'how_many_videos' => '',
+    'how_many_videos_answer' => '',
+    'can_i_upgrade' => '',
+    'can_i_upgrade_answer' => '',
+    'payment_methods_answer' => '',
+
+];

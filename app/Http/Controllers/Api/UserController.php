@@ -25,10 +25,14 @@ class UserController extends Controller
             $users = User::where(function($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                   ->orWhere('email', 'like', "%{$query}%");
-            })
-            ->where('id', '!=', Auth::id()) // Escludi l'utente corrente
-            ->limit(10)
-            ->get(['id', 'name', 'email', 'profile_photo']);
+            });
+            
+            // Escludi l'utente corrente solo se è autenticato
+            if (Auth::check()) {
+                $users = $users->where('id', '!=', Auth::id());
+            }
+            
+            $users = $users->limit(10)->get(['id', 'name', 'email', 'profile_photo']);
 
             // Aggiungi l'URL dell'avatar per ogni utente
             $usersWithAvatars = $users->map(function($user) {
@@ -55,13 +59,17 @@ class UserController extends Controller
      */
     public function suggested()
     {
-        $currentUser = Auth::user();
-        
         // Per ora restituiamo utenti attivi recenti
         // In futuro potremmo implementare un sistema di followers/following
-        $suggestedUsers = User::where('id', '!=', $currentUser->id)
-            ->where('created_at', '>=', now()->subMonths(3)) // Utenti attivi negli ultimi 3 mesi
-            ->orderBy('created_at', 'desc')
+        $suggestedUsers = User::where('created_at', '>=', now()->subMonths(3)); // Utenti attivi negli ultimi 3 mesi
+        
+        // Escludi l'utente corrente solo se è autenticato
+        if (Auth::check()) {
+            $currentUser = Auth::user();
+            $suggestedUsers = $suggestedUsers->where('id', '!=', $currentUser->id);
+        }
+        
+        $suggestedUsers = $suggestedUsers->orderBy('created_at', 'desc')
             ->limit(6)
             ->get(['id', 'name', 'email', 'profile_photo']);
 

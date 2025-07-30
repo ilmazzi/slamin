@@ -173,5 +173,6 @@ return [
     'news' => '',
     'media_section' => '',
     'kanban_board' => '',
+    'loading_error' => '',
 
 ];

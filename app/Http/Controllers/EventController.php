@@ -282,6 +282,11 @@ class EventController extends Controller
      */
     public function create(): View
     {
+        // Controlla se l'utente può creare eventi usando Spatie
+        if (!Auth::check() || !Auth::user()->can('create events')) {
+            abort(403, 'Non hai i permessi per creare eventi');
+        }
+
         $venueOwners = User::whereHas('roles', function ($query) {
             $query->where('name', 'venue_owner');
         })->get();
@@ -300,7 +305,10 @@ class EventController extends Controller
      */
         public function store(Request $request): RedirectResponse
     {
-        Gate::authorize('create', Event::class);
+        // Controlla se l'utente può creare eventi usando Spatie
+        if (!Auth::check() || !Auth::user()->can('create events')) {
+            abort(403, 'Non hai i permessi per creare eventi');
+        }
 
         // Log the request data for debugging
         Log::info('Event creation request', [
@@ -792,11 +800,14 @@ class EventController extends Controller
             ->whereHas('roles', function ($q) {
                 // Only users with relevant roles for poetry slam events
                 $q->whereIn('name', ['poet', 'judge', 'technician', 'organizer']);
-            })
-            ->where('status', 'active')
-            ->where('id', '!=', Auth::id()) // Exclude current user
-            ->limit(10)
-            ->get()
+            });
+            
+        // Exclude current user only if authenticated
+        if (Auth::check()) {
+            $users = $users->where('id', '!=', Auth::id());
+        }
+        
+        $users = $users->limit(10)->get()
             ->map(function ($user) {
                 return [
                     'id' => $user->id,
@@ -947,7 +958,11 @@ class EventController extends Controller
      */
     public function edit(Event $event): View
     {
-        Gate::authorize('update', $event);
+        // Controlla se l'utente può modificare questo evento usando Spatie
+        if (!Auth::check() || !Auth::user()->can('edit events') || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+            abort(403, 'Non hai i permessi per modificare questo evento');
+        }
 
         // Load festival relationships if this is a festival
         if ($event->isFestival()) {
@@ -966,7 +981,11 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event): RedirectResponse
     {
-        Gate::authorize('update', $event);
+        // Controlla se l'utente può modificare questo evento usando Spatie
+        if (!Auth::check() || !Auth::user()->can('edit events') || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+            abort(403, 'Non hai i permessi per modificare questo evento');
+        }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -1129,7 +1148,15 @@ class EventController extends Controller
      */
     public function destroy(Event $event): RedirectResponse
     {
-        Gate::authorize('delete', $event);
+        // Controlla se l'utente può eliminare questo evento usando Spatie
+        if (!Auth::check() || !Auth::user()->can('delete events') || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+            abort(403, 'Non hai i permessi per eliminare questo evento');
+        }
+
+        // Check if event is part of a festival
+        $isPartOfFestival = $event->festival_id !== null;
+        $festivalTitle = $isPartOfFestival ? $event->festival->title : null;
 
         // Log dell'attività prima dell'eliminazione
         LoggingService::logEvent('delete', [
@@ -1145,16 +1172,60 @@ class EventController extends Controller
             'participants_count' => $event->invitations()->where('status', 'accepted')->count(),
             'pending_invitations_count' => $event->invitations()->where('status', 'pending')->count(),
             'requests_count' => $event->requests()->count(),
+            'is_part_of_festival' => $isPartOfFestival,
+            'festival_title' => $festivalTitle,
+            'deleted_by_user_id' => Auth::id(),
+            'deleted_by_user_email' => Auth::user()->email,
         ], 'Event', $event->id);
 
-        // Notify all participants about cancellation
-        $this->notifyEventCancellation($event);
+        // Notify all participants about event deletion
+        $this->notifyEventDeletion($event);
 
-        $event->delete();
+        // Delete event and all related data using transaction
+        DB::transaction(function () use ($event) {
+            // Delete all invitations (cascade will handle this, but we log it)
+            $invitationsCount = $event->invitations()->count();
+            $event->invitations()->delete();
+
+            // Delete all requests (cascade will handle this, but we log it)
+            $requestsCount = $event->requests()->count();
+            $event->requests()->delete();
+
+            // Delete all wishlist entries
+            $wishlistCount = $event->wishlistedBy()->count();
+            $event->wishlistedBy()->detach();
+
+            // Delete child events if this is a parent event
+            $childEventsCount = $event->childEvents()->count();
+            $event->childEvents()->delete();
+
+            // Delete recurrence series if this is part of one
+            $recurrenceSeriesCount = $event->recurrenceSeries()->count();
+            $event->recurrenceSeries()->delete();
+
+            // Log the deletion of related data
+            Log::info('Event deletion - related data removed', [
+                'event_id' => $event->id,
+                'event_title' => $event->title,
+                'invitations_deleted' => $invitationsCount,
+                'requests_deleted' => $requestsCount,
+                'wishlist_entries_deleted' => $wishlistCount,
+                'child_events_deleted' => $childEventsCount,
+                'recurrence_series_deleted' => $recurrenceSeriesCount,
+            ]);
+
+            // Finally delete the event itself
+            $event->delete();
+        });
+
+        $successMessage = 'Evento eliminato con successo!';
+        if ($isPartOfFestival) {
+            $successMessage .= " L'evento è stato rimosso dal festival '{$festivalTitle}'.";
+        }
 
         return redirect()
             ->route('events.index')
-            ->with('success', 'Evento eliminato con successo!');
+            ->with('success', $successMessage);
     }
 
     /**
@@ -1162,7 +1233,11 @@ class EventController extends Controller
      */
     public function manage(Event $event): View
     {
-        Gate::authorize('update', $event);
+        // Controlla se l'utente può gestire questo evento usando Spatie
+        if (!Auth::check() || !Auth::user()->can('manage events') || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+            abort(403, 'Non hai i permessi per gestire questo evento');
+        }
 
         $event->load([
             'pendingInvitations.invitedUser',
@@ -1713,6 +1788,149 @@ class EventController extends Controller
                 'message' => 'L\'evento "' . $event->title . '" è stato cancellato',
                 'data' => ['event_id' => $event->id],
                 'priority' => Notification::PRIORITY_HIGH,
+            ]);
+        }
+    }
+
+    /**
+     * Notify participants about event deletion
+     */
+    private function notifyEventDeletion(Event $event): void
+    {
+        try {
+            $participantIds = collect();
+
+            // Get all invitations (pending and accepted)
+            $participantIds = $participantIds->merge(
+                $event->invitations()
+                      ->whereIn('status', ['pending', 'accepted'])
+                      ->pluck('invited_user_id')
+            );
+
+            // Get all requests (pending and accepted)
+            $participantIds = $participantIds->merge(
+                $event->requests()
+                      ->whereIn('status', ['pending', 'accepted'])
+                      ->pluck('user_id')
+            );
+
+            // Get all users who have this event in their wishlist (with error handling)
+            $wishlistUserIds = collect();
+            try {
+                $wishlistUserIds = $event->wishlistedBy()->pluck('users.id');
+            } catch (\Exception $e) {
+                Log::warning('Failed to get wishlist users for event deletion', [
+                    'event_id' => $event->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+
+            // Merge all affected users
+            $allAffectedUsers = $participantIds->merge($wishlistUserIds)->unique();
+
+            // Create notifications for all affected users
+            foreach ($allAffectedUsers as $userId) {
+                try {
+                    $user = User::find($userId);
+                    if (!$user) continue;
+
+                    // Determine notification type based on user's relationship with the event
+                    $hasInvitation = $event->invitations()->where('invited_user_id', $userId)->exists();
+                    $hasRequest = $event->requests()->where('user_id', $userId)->exists();
+                    $hasWishlist = false;
+                    
+                    try {
+                        $hasWishlist = $event->wishlistedBy()->where('users.id', $userId)->exists();
+                    } catch (\Exception $e) {
+                        Log::warning('Failed to check wishlist for user', [
+                            'user_id' => $userId,
+                            'event_id' => $event->id,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+
+                    $notificationType = 'event_deleted';
+                    $title = 'Evento Eliminato';
+                    $message = 'L\'evento "' . $event->title . '" è stato eliminato';
+
+                    if ($hasInvitation) {
+                        $invitation = $event->invitations()->where('invited_user_id', $userId)->first();
+                        if ($invitation && $invitation->status === 'accepted') {
+                            $notificationType = 'event_deleted_participant';
+                            $title = 'Evento Eliminato - Sei Stato Disiscritto';
+                            $message = 'L\'evento "' . $event->title . '" a cui eri iscritto è stato eliminato';
+                        } else {
+                            $notificationType = 'event_deleted_invitation';
+                            $title = 'Evento Eliminato - Invito Annullato';
+                            $message = 'L\'evento "' . $event->title . '" per cui avevi ricevuto un invito è stato eliminato';
+                        }
+                    } elseif ($hasRequest) {
+                        $request = $event->requests()->where('user_id', $userId)->first();
+                        if ($request && $request->status === 'accepted') {
+                            $notificationType = 'event_deleted_participant';
+                            $title = 'Evento Eliminato - Sei Stato Disiscritto';
+                            $message = 'L\'evento "' . $event->title . '" a cui eri iscritto è stato eliminato';
+                        } else {
+                            $notificationType = 'event_deleted_request';
+                            $title = 'Evento Eliminato - Richiesta Annullata';
+                            $message = 'L\'evento "' . $event->title . '" per cui avevi fatto richiesta è stato eliminato';
+                        }
+                    } elseif ($hasWishlist) {
+                        $notificationType = 'event_deleted_wishlist';
+                        $title = 'Evento Eliminato - Rimosso dai Preferiti';
+                        $message = 'L\'evento "' . $event->title . '" che avevi nei tuoi preferiti è stato eliminato';
+                    }
+
+                    Notification::create([
+                        'user_id' => $userId,
+                        'type' => $notificationType,
+                        'title' => $title,
+                        'message' => $message,
+                        'data' => [
+                            'event_id' => $event->id,
+                            'event_title' => $event->title,
+                            'deleted_by_user_id' => Auth::id(),
+                            'deleted_by_user_email' => Auth::user()->email,
+                        ],
+                        'priority' => Notification::PRIORITY_HIGH,
+                    ]);
+
+                    // Log the notification
+                    Log::info('Event deletion notification sent', [
+                        'user_id' => $userId,
+                        'user_email' => $user->email,
+                        'event_id' => $event->id,
+                        'event_title' => $event->title,
+                        'notification_type' => $notificationType,
+                        'user_relationship' => [
+                            'has_invitation' => $hasInvitation,
+                            'has_request' => $hasRequest,
+                            'has_wishlist' => $hasWishlist,
+                        ],
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to send notification to user', [
+                        'user_id' => $userId,
+                        'event_id' => $event->id,
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+
+            // Log summary
+            Log::info('Event deletion notifications summary', [
+                'event_id' => $event->id,
+                'event_title' => $event->title,
+                'total_notifications_sent' => $allAffectedUsers->count(),
+                'participants_notified' => $participantIds->count(),
+                'wishlist_users_notified' => $wishlistUserIds->count(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to send event deletion notifications', [
+                'event_id' => $event->id,
+                'event_title' => $event->title,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
         }
     }

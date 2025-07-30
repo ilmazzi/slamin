@@ -136,7 +136,7 @@
                                         <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
                                     </button>
                                     @auth
-                                        @can('create', App\Models\Event::class)
+                                        @can('create events')
                                             <a href="{{ route('events.create') }}" class="btn btn-success">
                                                 <i class="ph ph-plus me-1"></i>{{ __('common.create') }}
                                             </a>
@@ -269,9 +269,20 @@
                                         <small class="text-muted">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
                                     @endif
                                 </div>
-                                <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
-                                    {{ __('common.view') }}
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
+                                        {{ __('common.view') }}
                                     </a>
+                                    @can('delete events')
+                                        @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
+                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
+                                                    title="Elimina evento">
+                                                <i class="ph ph-trash"></i>
+                                            </button>
+                                        @endif
+                                    @endcan
+                                </div>
                             </div>
                                             </div>
                                         </div>
@@ -285,7 +296,7 @@
                         <h5 class="text-muted">{{ __('events.no_events_found') }}</h5>
                         <p class="text-muted">{{ __('events.try_adjusting_filters') }}</p>
                         @auth
-                            @can('create', App\Models\Event::class)
+                            @can('create events')
                                 <a href="{{ route('events.create') }}" class="btn btn-primary">
                                     <i class="ph ph-plus me-1"></i>{{ __('events.create_first_event') }}
                                 </a>
@@ -373,11 +384,60 @@
     </div>
 </div>
 
+<!-- Delete Event Modal -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteEventModalLabel">
+                    <i class="ph ph-warning me-2"></i>Elimina Evento
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Sei sicuro di voler eliminare l'evento "<strong id="deleteEventTitle"></strong>"?</p>
+                <div class="alert alert-warning">
+                    <i class="ph ph-warning me-2"></i>
+                    <strong>Attenzione:</strong> Questa azione non può essere annullata e:
+                    <ul class="mb-0 mt-2">
+                        <li>Tutti i partecipanti riceveranno una notifica di cancellazione</li>
+                        <li>Tutti gli inviti e le richieste verranno eliminati</li>
+                        <li>L'evento verrà rimosso dai preferiti di tutti gli utenti</li>
+                        <li>Se l'evento fa parte di un festival, verrà rimosso dal festival</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <form id="deleteEventForm" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="ph ph-trash me-2"></i>Elimina Definitivamente
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 function changePerPage(value) {
     const url = new URL(window.location);
     url.searchParams.set('per_page', value);
     window.location.href = url.toString();
+}
+
+function confirmDeleteEvent(eventId, eventTitle) {
+    // Set the event title in the modal
+    document.getElementById('deleteEventTitle').textContent = eventTitle;
+    
+    // Set the form action
+    document.getElementById('deleteEventForm').action = `/events/${eventId}`;
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('deleteEventModal'));
+    modal.show();
 }
 </script>
 @endsection

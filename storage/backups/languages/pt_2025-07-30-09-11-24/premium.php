@@ -1,0 +1,36 @@
+<?php
+
+return [
+
+    'premium' => 'Premium',
+    'packages' => 'Pacchetti',
+    'free_package' => 'Gratuito',
+    'price_monthly' => 'al mese',
+    'days' => 'giorni',
+    'video_limit' => 'Limite Video',
+    'features' => 'Caratteristiche',
+    'select_plan' => 'Seleziona Piano',
+    'purchase' => 'Acquista',
+    'checkout' => 'Checkout',
+    'payment_method' => 'Metodo di Pagamento',
+    'terms_accepted' => 'Accetto i termini e condizioni',
+    'payment_successful' => 'Pagamento Completato',
+    'manage_subscription' => 'Gestisci Abbonamento',
+    'current_plan' => 'Piano Attuale',
+    'subscription_status' => 'Stato Abbonamento',
+    'subscription_active' => 'Attivo',
+    'days_remaining' => 'Giorni Rimanenti',
+    'upgrade_required' => 'Aggiornamento Richiesto',
+    'upgrade_message' => 'Hai raggiunto il limite di video gratuiti. Aggiorna il tuo piano per caricare più video.',
+    'compare_packages' => 'Confronta Pacchetti',
+    'best_value' => 'Miglior Valore',
+    'most_popular' => 'Più Popolare',
+    'faq' => 'FAQ',
+    'frequently_asked_questions' => 'Domande Frequenti',
+    'how_many_videos' => 'Quanti video posso caricare?',
+    'how_many_videos_answer' => 'Il numero di video dipende dal tuo piano. Il piano gratuito permette 3 video, mentre i piani premium permettono da 10 a 100 video.',
+    'can_i_upgrade' => 'Posso aggiornare il mio piano?',
+    'can_i_upgrade_answer' => 'Sì, puoi aggiornare il tuo piano in qualsiasi momento. Il nuovo piano sarà attivo immediatamente.',
+    'payment_methods_answer' => 'Accettiamo tutte le principali carte di credito e debito tramite Stripe.',
+
+];

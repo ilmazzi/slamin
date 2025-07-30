@@ -188,7 +188,7 @@ class TranslationController extends Controller
     public function createLanguage(Request $request)
     {
         $request->validate([
-            'language_code' => 'required|string|size:2|unique:languages,code',
+            'language_code' => 'required|string|size:2',
             'language_name' => 'required|string|max:50',
         ]);
 
@@ -204,14 +204,27 @@ class TranslationController extends Controller
             // Crea la directory
             File::makeDirectory($languagePath, 0755, true);
 
-            // Copia i file di traduzione dall'italiano
+            // Copia solo le chiavi dall'italiano (senza traduzioni)
             $italianPath = lang_path('it');
             if (File::exists($italianPath)) {
                 $files = File::files($italianPath);
                 foreach ($files as $file) {
                     $fileName = $file->getFilename();
                     $newPath = $languagePath . '/' . $fileName;
-                    File::copy($file->getPathname(), $newPath);
+                    
+                    // Carica le traduzioni italiane
+                    $italianTranslations = include $file->getPathname();
+                    if (is_array($italianTranslations)) {
+                        // Crea un array con solo le chiavi (valori vuoti)
+                        $emptyTranslations = [];
+                        foreach ($italianTranslations as $key => $value) {
+                            $emptyTranslations[$key] = '';
+                        }
+                        
+                        // Genera il contenuto PHP con le chiavi vuote
+                        $phpContent = $this->generatePhpContent($emptyTranslations, pathinfo($fileName, PATHINFO_FILENAME));
+                        File::put($newPath, $phpContent);
+                    }
                 }
             }
 
@@ -391,6 +404,16 @@ class TranslationController extends Controller
             'es' => 'Español',
             'fr' => 'Français',
             'de' => 'Deutsch',
+            'pt' => 'Português',
+            'pt-br' => 'Português (Brasil)',
+            'nl' => 'Nederlands',
+            'pl' => 'Polski',
+            'ru' => 'Русский',
+            'ja' => '日本語',
+            'zh' => '中文',
+            'ar' => 'العربية',
+            'hi' => 'हिन्दी',
+            'ko' => '한국어',
         ];
 
         return $names[$code] ?? ucfirst($code);

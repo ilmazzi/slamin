@@ -798,17 +798,23 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         @auth
-                            @if($event->organizer_id === auth()->id())
-                                <!-- Organizer Actions -->
-                                <a href="{{ route('events.manage', $event) }}" class="btn btn-light-primary w-100 mb-2">
-                                    <i class="ph ph-gear me-2"></i>{{ __('events.manage_event_action') }}
-                                </a>
-                                <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
-                                    <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
-                                </a>
-                                <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                    <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}
-                                </button>
+                            @if($event->organizer_id === auth()->id() || auth()->user()->hasAnyRole(['admin', 'moderator']))
+                                <!-- Organizer/Admin Actions -->
+                                @if($event->organizer_id === auth()->id())
+                                    <a href="{{ route('events.manage', $event) }}" class="btn btn-light-primary w-100 mb-2">
+                                        <i class="ph ph-gear me-2"></i>{{ __('events.manage_event_action') }}
+                                    </a>
+                                    <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
+                                        <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
+                                    </a>
+                                @endif
+                                @can('delete events')
+                                    @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
+                                        <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}
+                                        </button>
+                                    @endif
+                                @endcan
 
                             @elseif($hasInvitation)
                                 <!-- User has invitation -->
@@ -1141,7 +1147,7 @@
 
 <!-- Delete Modal -->
 @auth
-@if($event->organizer_id === auth()->id())
+@if($event->organizer_id === auth()->id() || auth()->user()->hasAnyRole(['admin', 'moderator']))
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
