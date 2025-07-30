@@ -440,21 +440,7 @@
                                 </div>
                             </div>
 
-                            <!-- Venue Owner -->
-                            @if($venueOwners->count() > 0)
-                            <div class="col-12 mb-3">
-                                <div class="form-floating">
-                                    <select name="venue_owner_id" id="venue_owner_id" class="form-select">
-                                        <option value="">{{ __('events.no_specific_owner') }}</option>
-                                        @foreach($venueOwners as $owner)
-                                            <option value="{{ $owner->id }}">{{ $owner->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <label for="venue_owner_id">{{ __('events.venue_owner') }} ({{ __('common.optional') }})</label>
-                                </div>
-                                <small class="text-muted">{{ __('events.venue_owner_help') }}</small>
-                            </div>
-                            @endif
+                           
                         </div>
                     </div>
                 </div>
