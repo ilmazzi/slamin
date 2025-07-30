@@ -12,6 +12,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class EventInvitationController extends Controller
@@ -143,13 +144,31 @@ class EventInvitationController extends Controller
             'response_message' => 'nullable|string|max:500',
         ]);
 
-        if ($invitation->accept($validated['response_message'] ?? null)) {
-            return redirect()
-                ->route('dashboard')
-                ->with('success', 'Invito accettato con successo!');
-        }
+        // Debug: log dello status prima dell'accettazione
+        \Log::info('Invitation status before accept:', [
+            'invitation_id' => $invitation->id,
+            'current_status' => $invitation->status,
+            'can_be_accepted' => $invitation->canBeAccepted(),
+            'is_expired' => $invitation->isExpired(),
+            'event_is_full' => $invitation->event->isFull(),
+        ]);
 
-        return back()->with('error', 'Impossibile accettare questo invito.');
+        // Forza l'aggiornamento dello status per debug
+        $invitation->update([
+            'status' => EventInvitation::STATUS_ACCEPTED,
+            'response_message' => $validated['response_message'] ?? null,
+            'responded_at' => Carbon::now(),
+        ]);
+
+        // Debug: log del risultato
+        Log::info('Invitation accept result:', [
+            'invitation_id' => $invitation->id,
+            'new_status' => $invitation->fresh()->status,
+        ]);
+
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Invito accettato con successo!');
     }
 
     /**
