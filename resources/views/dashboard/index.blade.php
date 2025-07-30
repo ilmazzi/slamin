@@ -381,7 +381,7 @@
                             </div>
                         @endforeach
                         <div class="text-center mt-3">
-                            <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="btn btn-light-success btn-sm">
+                            <a href="{{ route('notifications.index') }}" class="btn btn-light-success btn-sm">
                                 <i class="ph ph-eye me-1"></i>{{ __('dashboard.view_all_invitations') }}
                             </a>
                         </div>

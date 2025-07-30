@@ -123,6 +123,24 @@ class NotificationManager {
     renderNotification(notification) {
         const isUnread = !notification.is_read;
         const timeAgo = this.timeAgo(new Date(notification.created_at));
+        
+        // Controlla se è una notifica di invito a evento
+        const isEventInvitation = notification.type === 'event_invitation' || 
+                                 (notification.title && notification.title.includes('Invito'));
+        
+        // Estrai event_id e invitation_id dai dati della notifica se disponibili
+        let eventId = null;
+        let invitationId = null;
+        
+        if (notification.data) {
+            try {
+                const data = typeof notification.data === 'string' ? JSON.parse(notification.data) : notification.data;
+                eventId = data.event_id;
+                invitationId = data.invitation_id;
+            } catch (e) {
+                console.log('Could not parse notification data');
+            }
+        }
 
         return `
             <div class="notification-message head-box ${isUnread ? 'unread' : ''}" data-notification-id="${notification.id}">
@@ -135,7 +153,27 @@ class NotificationManager {
                     <div class="message-content-box flex-grow-1 pe-2">
                         <h6 class="mb-1 f-s-14 ${isUnread ? 'fw-bold' : ''}">${notification.title}</h6>
                         <p class="mb-1 f-s-13 text-muted">${notification.message}</p>
-                        ${notification.action_text && notification.action_url ? `
+                        
+                        ${isEventInvitation && eventId && invitationId ? `
+                            <div class="mt-2 d-flex gap-1">
+                                <form action="/events/${eventId}/invitations/${invitationId}/accept" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
+                                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                    <input type="hidden" name="_method" value="PATCH">
+                                    <button type="submit" class="btn btn-success btn-sm" title="Accetta">
+                                        <i class="ph ph-check f-s-12"></i>
+                                    </button>
+                                </form>
+                                <form action="/events/${eventId}/invitations/${invitationId}/decline" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
+                                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
+                                    <input type="hidden" name="_method" value="PATCH">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
+                                        <i class="ph ph-x f-s-12"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        ` : ''}
+                        
+                        ${!isEventInvitation && notification.action_text && notification.action_url ? `
                             <div class="mt-2">
                                 <a href="${notification.action_url}" class="btn btn-primary btn-sm">
                                     ${notification.action_text}
@@ -227,6 +265,27 @@ class NotificationManager {
                     this.markAsRead(notificationId);
                     window.location.href = notification.action_url;
                 }
+            });
+        });
+
+        // Handle invitation forms in notifications
+        document.querySelectorAll('.invitation-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const invitationId = this.getAttribute('data-invitation-id');
+                const notificationRow = this.closest('.notification-message');
+                
+                // Nascondi immediatamente la notifica
+                if (notificationRow) {
+                    notificationRow.style.opacity = '0.5';
+                    notificationRow.style.pointerEvents = 'none';
+                }
+                
+                // Disabilita i pulsanti per evitare doppi click
+                const buttons = this.querySelectorAll('button');
+                buttons.forEach(button => {
+                    button.disabled = true;
+                    button.innerHTML = '<i class="ph ph-spinner ph-spin f-s-12"></i>';
+                });
             });
         });
     }
