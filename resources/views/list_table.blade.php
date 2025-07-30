@@ -621,7 +621,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- List js -->

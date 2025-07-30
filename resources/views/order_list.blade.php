@@ -382,7 +382,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- js-->
 <script src="{{asset('assets/js/orders_list.js')}}"></script>

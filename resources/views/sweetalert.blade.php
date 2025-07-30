@@ -247,7 +247,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- Toatify js-->

@@ -496,7 +496,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- toatify js-->
 <script src="{{asset('assets/vendor/notifications/toastify-js.js')}}"></script>

@@ -315,7 +315,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- slick-file -->

@@ -279,7 +279,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- nouislider js -->

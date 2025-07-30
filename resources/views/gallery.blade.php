@@ -211,7 +211,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- Glight js -->
 <script src="{{asset('assets/vendor/glightbox/glightbox.min.js')}}"></script>

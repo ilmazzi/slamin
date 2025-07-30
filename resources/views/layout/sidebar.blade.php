@@ -109,15 +109,16 @@
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
                                 @auth
                                 <!-- {{ __('dashboard.dashboard') }} - Solo per utenti autenticati -->
+                                <!-- Dashboard nascosto come richiesto -->
 
-                                <li class="no-sub {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <!-- <li class="no-sub {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('dashboard') }}">
                                         <svg stroke="currentColor" stroke-width="1.5">
                                             <use xlink:href="../assets/svg/_sprite.svg#home"></use>
                                         </svg>
                                         {{ __('dashboard.dashboard') }}
                                     </a>
-                                </li>
+                                </li> -->
                                 @endauth
 
                                 <!-- Eventi Section -->

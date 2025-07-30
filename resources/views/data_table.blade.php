@@ -1606,7 +1606,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- data table js -->

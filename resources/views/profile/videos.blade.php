@@ -403,7 +403,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 function showUploadModal() {
     $('#uploadVideoModal').modal('show');

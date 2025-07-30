@@ -277,7 +277,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 function previewImage(input) {
     if (input.files && input.files[0]) {

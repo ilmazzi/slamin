@@ -287,7 +287,7 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 // Carica statistiche thumbnail all'avvio
 document.addEventListener('DOMContentLoaded', function() {

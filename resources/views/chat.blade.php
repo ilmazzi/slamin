@@ -1013,7 +1013,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <script src="{{asset('assets/js/chat.js')}}"></script>
 @endsection

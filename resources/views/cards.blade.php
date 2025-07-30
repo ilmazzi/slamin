@@ -747,7 +747,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
     <!--customizer-->
     <div id="customizer"></div>
 

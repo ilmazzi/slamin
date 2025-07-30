@@ -176,7 +176,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- flatpickr js-->

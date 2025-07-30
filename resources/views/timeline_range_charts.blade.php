@@ -97,7 +97,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- apexcharts-->
 <script src="{{asset('assets/vendor/apexcharts/apexcharts.min.js')}}"></script>

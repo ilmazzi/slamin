@@ -178,7 +178,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 // Activity Filter
 document.getElementById('activityFilter').addEventListener('change', function() {

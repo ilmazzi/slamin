@@ -547,7 +547,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- masonry js-->

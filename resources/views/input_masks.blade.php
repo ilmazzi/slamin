@@ -202,7 +202,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!--cleave js  -->

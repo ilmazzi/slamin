@@ -362,7 +362,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!-- Block ui js  -->
     <script src="{{asset('assets/vendor/block-ui/jquery.min.js')}}"></script>

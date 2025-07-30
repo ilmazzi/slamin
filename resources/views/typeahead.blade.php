@@ -161,7 +161,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- typeahead js -->

@@ -104,7 +104,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!-- Trumbowyg js -->
     <script src="{{asset('assets/vendor/trumbowyg/trumbowyg.min.js')}}"></script>

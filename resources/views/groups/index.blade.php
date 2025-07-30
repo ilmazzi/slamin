@@ -151,7 +151,7 @@
 
                         @if($group->hasMember(auth()->user()))
                             @if($group->hasAdmin(auth()->user()) || auth()->user()->hasRole('admin'))
-                            <a href="{{ route('groups.edit', $group) }}" class="btn btn-warning btn-sm">
+                            <a href="{{ route('groups.edit', $group) }}" class="btn btn-light-primary btn-sm">
                                 <i class="ph-duotone ph-pencil"></i>
                             </a>
                             @endif
@@ -178,7 +178,7 @@
                 </div>
 
                 <!-- Footer con info aggiuntive -->
-                <div class="card-footer bg-light">
+                <div class="card-footer bg-light-info">
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">
                             <i class="ph-duotone ph-user me-1"></i>

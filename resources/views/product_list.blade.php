@@ -389,7 +389,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!--datatable -->
     <script src="{{asset('assets/vendor/datatable/jquery.dataTables.min.js')}}"></script>

@@ -406,7 +406,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- select2 -->

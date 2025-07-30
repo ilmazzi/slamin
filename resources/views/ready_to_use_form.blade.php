@@ -678,7 +678,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- filepond -->

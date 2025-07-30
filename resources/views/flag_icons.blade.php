@@ -600,7 +600,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- toastify js -->

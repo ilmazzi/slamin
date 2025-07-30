@@ -813,7 +813,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- nouislider js -->
 <script src="{{asset('assets/vendor/nouislider/nouislider.min.js')}}"></script>

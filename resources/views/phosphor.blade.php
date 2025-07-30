@@ -7553,7 +7553,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- toatify js-->

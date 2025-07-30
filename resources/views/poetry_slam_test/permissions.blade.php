@@ -226,7 +226,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips

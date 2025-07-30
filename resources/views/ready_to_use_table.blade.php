@@ -2744,7 +2744,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- latest jquery-->

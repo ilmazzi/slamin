@@ -239,6 +239,6 @@
     <!-- Invoice end -->
 @endsection
 
-@section('script')
+@push('scripts')
 
 @endsection

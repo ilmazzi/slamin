@@ -159,7 +159,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- prism js-->

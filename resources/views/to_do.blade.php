@@ -432,7 +432,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- List js -->
 <script src="{{asset('assets/vendor/listJs/list-jquery.min.js')}}"></script>

@@ -1320,7 +1320,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- slick-file -->
 <script src="{{asset('assets/vendor/slick/slick.min.js')}}"></script>

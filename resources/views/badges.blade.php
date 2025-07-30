@@ -551,7 +551,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 @endsection

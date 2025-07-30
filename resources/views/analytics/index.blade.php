@@ -536,7 +536,7 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 let charts = {};
 let realtimeInterval;

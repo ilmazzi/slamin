@@ -236,7 +236,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

@@ -281,7 +281,7 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 function togglePassword() {
     const passwordInput = document.getElementById('peertube_admin_password');

@@ -157,7 +157,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- Tooltip js  -->

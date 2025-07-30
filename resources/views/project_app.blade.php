@@ -1050,7 +1050,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- js -->
 <script src="{{asset('assets/js/project_app.js')}}"></script>

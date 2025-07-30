@@ -617,7 +617,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- alert js-->

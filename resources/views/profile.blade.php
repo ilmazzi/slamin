@@ -1119,7 +1119,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- Glight js -->

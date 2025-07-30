@@ -167,7 +167,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- apexcharts-->

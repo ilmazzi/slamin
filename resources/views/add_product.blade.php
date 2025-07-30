@@ -339,7 +339,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!-- select2 -->
     <script src="{{asset('assets/vendor/select/select2.min.js')}}"></script>

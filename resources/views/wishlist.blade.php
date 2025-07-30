@@ -289,7 +289,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- wishlist js-->
 <script src="{{asset('assets/js/wishlist.js')}}"></script>

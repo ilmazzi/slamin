@@ -783,7 +783,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- draggable js  -->

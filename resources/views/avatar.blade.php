@@ -776,7 +776,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!-- avatar js -->
     <script src="{{asset('assets/js/avatar.js')}}"></script>

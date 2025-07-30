@@ -244,7 +244,7 @@
 </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
     function confirmAcceptInvitation(invitationId, eventTitle) {
         Swal.fire({

@@ -175,7 +175,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- Simple bar js-->

@@ -1285,7 +1285,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 {{--    <!-- table-js  -->--}}

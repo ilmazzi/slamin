@@ -64,7 +64,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
     <!-- tree-view js  -->
     <script src="{{asset('assets/vendor/jstree/jquery.min.js')}}"></script>

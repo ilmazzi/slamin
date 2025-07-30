@@ -465,7 +465,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <style>
 /* {{ __('common.snap') }} Markers sulla Progress Bar del Player */
 .snap-markers-overlay {

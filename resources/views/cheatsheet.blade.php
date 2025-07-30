@@ -8978,7 +8978,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- masonry js-->
 <script src="{{asset('assets/vendor/masonry/masonry.pkgd.min.js')}}"></script>

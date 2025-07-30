@@ -757,7 +757,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 <!-- checkout js -->
 <script src="{{asset('assets/js/checkout.js')}}"></script>

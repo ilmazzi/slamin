@@ -372,7 +372,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 <!-- kanban_board hammer js-->
 <script src="{{ asset('assets/vendor/kanban_board/hammer.min.js') }}?v={{ time() }}"></script>
 

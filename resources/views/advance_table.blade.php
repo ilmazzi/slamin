@@ -648,7 +648,7 @@
 @endsection
 
 
-@section('script')
+@push('scripts')
 
 
     <!-- datatable js-->

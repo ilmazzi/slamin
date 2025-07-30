@@ -122,7 +122,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
 <!-- google maps api -->

@@ -825,7 +825,7 @@
 
 
 
-@section('script')
+@push('scripts')
 
 <!-- js -->
 <script src="{{asset('assets/js/email.js')}}"></script>

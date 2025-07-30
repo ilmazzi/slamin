@@ -258,7 +258,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
     <script>
         // Auto-dismiss alerts after 5 seconds
         setTimeout(function() {

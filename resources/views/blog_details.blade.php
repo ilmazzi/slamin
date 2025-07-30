@@ -550,7 +550,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('scripts')
 
 
     <!-- Glightbox js -->
