@@ -697,7 +697,7 @@
                     </h5>
                 </div>
                 <div class="card-body p-0">
-                    <div id="eventMap" style="height: 200px; border-radius: 10px; overflow: hidden;"></div>
+                    <div id="eventMap" style="height: 350px; border-radius: 10px; overflow: hidden;"></div>
                 </div>
                 <div class="card-footer">
                     <p class="mb-0">

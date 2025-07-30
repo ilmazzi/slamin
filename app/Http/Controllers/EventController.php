@@ -652,14 +652,7 @@ class EventController extends Controller
             }
 
             // Create invitations for artist users
-            Log::info('Processing artist invitations', [
-                'count' => count($artistInvitedUsers),
-                'users' => $artistInvitedUsers
-            ]);
-            
             foreach ($artistInvitedUsers as $invitedUser) {
-                Log::info('Processing artist user', ['user' => $invitedUser]);
-                
                 if (isset($invitedUser['id'])) {
                     // Verify user exists
                     $user = User::find($invitedUser['id']);
