@@ -175,46 +175,19 @@
                                href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.language_selector') }}">
                                 <div class="lang-flag lang-{{ app()->getLocale() }}">
                                     <span class="flag rounded-circle overflow-hidden">
-                                        <i class="flag-icon flag-icon-{{
-                                            app()->getLocale() == 'en' ? 'gbr' :
-                                            (app()->getLocale() == 'de' ? 'deu' :
-                                            (app()->getLocale() == 'es' ? 'esp' :
-                                            (app()->getLocale() == 'fr' ? 'fra' : 'ita')))
-                                        }}"></i>
+                                        <i class="flag-icon flag-icon-{{ \App\Providers\LanguageServiceProvider::getFlagCode(app()->getLocale()) }}"></i>
                                     </span>
                                 </div>
                             </a>
                             <ul class="dropdown-menu language-dropdown header-card border-0">
-                                <li class="lang lang-it {{ app()->getLocale() == 'it' ? 'selected' : '' }} dropdown-item p-2" data-bs-placement="top" data-bs-toggle="tooltip" title="IT">
-                                    <a href="{{ url()->current() }}?lang=it" class="d-flex align-items-center text-decoration-none">
-                                        <i class="flag-icon flag-icon-ita flag-icon-squared rounded-circle f-s-20"></i>
-                                        <span class="ps-2">Italiano</span>
+                                @foreach($availableLanguages as $code => $name)
+                                <li class="lang lang-{{ $code }} {{ app()->getLocale() == $code ? 'selected' : '' }} dropdown-item p-2" data-bs-placement="top" data-bs-toggle="tooltip" title="{{ strtoupper($code) }}">
+                                    <a href="{{ url()->current() }}?lang={{ $code }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="flag-icon flag-icon-{{ \App\Providers\LanguageServiceProvider::getFlagCode($code) }} flag-icon-squared rounded-circle f-s-20"></i>
+                                        <span class="ps-2">{{ $name }}</span>
                                     </a>
                                 </li>
-                                <li class="lang lang-en {{ app()->getLocale() == 'en' ? 'selected' : '' }} dropdown-item p-2" title="EN">
-                                    <a href="{{ url()->current() }}?lang=en" class="d-flex align-items-center text-decoration-none">
-                                        <i class="flag-icon flag-icon-gbr flag-icon-squared rounded-circle f-s-20"></i>
-                                        <span class="ps-2">English</span>
-                                    </a>
-                                </li>
-                                <li class="lang lang-fr {{ app()->getLocale() == 'fr' ? 'selected' : '' }} dropdown-item p-2" title="FR">
-                                    <a href="{{ url()->current() }}?lang=fr" class="d-flex align-items-center text-decoration-none">
-                                        <i class="flag-icon flag-icon-fra flag-icon-squared rounded-circle f-s-20"></i>
-                                        <span class="ps-2">Français</span>
-                                    </a>
-                                </li>
-                                <li class="lang lang-es {{ app()->getLocale() == 'es' ? 'selected' : '' }} dropdown-item p-2" title="ES">
-                                    <a href="{{ url()->current() }}?lang=es" class="d-flex align-items-center text-decoration-none">
-                                        <i class="flag-icon flag-icon-esp flag-icon-squared rounded-circle f-s-20"></i>
-                                        <span class="ps-2">Español</span>
-                                    </a>
-                                </li>
-                                <li class="lang lang-de {{ app()->getLocale() == 'de' ? 'selected' : '' }} dropdown-item p-2" title="DE">
-                                    <a href="{{ url()->current() }}?lang=de" class="d-flex align-items-center text-decoration-none">
-                                        <i class="flag-icon flag-icon-deu flag-icon-squared rounded-circle f-s-20"></i>
-                                        <span class="ps-2">Deutsch</span>
-                                    </a>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </li>

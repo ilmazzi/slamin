@@ -814,7 +814,7 @@ class EventController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'roles' => $user->roles->pluck('name')->toArray(),
-                    'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) : null,
+                    'avatar_url' => \App\Helpers\AvatarHelper::getUserAvatarUrl($user),
                 ];
             });
 

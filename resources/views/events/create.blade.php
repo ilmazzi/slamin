@@ -5,18 +5,7 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 <!-- Flatpickr CSS -->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/datepikar/flatpickr.min.css')}}">
-<style>
-.hidden-for-online-event {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
-    left: -9999px !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-}
-</style>
+
 @endsection
 
 @section('main-content')
@@ -619,146 +608,190 @@
                         </h5>
                     </div>
                     <div class="card-body">
-
-
+                        
                         <!-- Sezione Inviti per Eventi Privati -->
                         <div class="mb-4" id="private-invites-section" style="display: none;">
-                            <h6 class="text-primary mb-3">
-                                <i class="ph ph-envelope me-2"></i>{{ __('events.private_invites') }}
-                            </h6>
-
-                            <!-- Barra di ricerca -->
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('events.search_users') }}</label>
-                                <div class="input-group">
-                                    <input type="text" id="privateUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handlePrivateUserSearchKeydown(event)">
-                                    <button type="button" class="btn btn-outline-primary" onclick="searchPrivateUsersForInvite()">
-                                        <i class="ph ph-magnifying-glass"></i>
-                                    </button>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-bottom">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="ph ph-envelope me-2"></i>{{ __('events.private_invites') }}
+                                    </h6>
                                 </div>
-                            </div>
-
-                            <!-- Risultati ricerca -->
-                            <div id="privateSearchResultsInvite" class="mb-3" style="display: none;">
-                                <h6>{{ __('events.search_results') }}</h6>
-                                <div id="privateSearchResultsListInvite" class="list-group">
-                                    <!-- Risultati qui -->
-                                </div>
-                            </div>
-
-                            <!-- Utenti suggeriti -->
-                            <div class="mb-3">
-                                <h6>{{ __('events.suggested_users') }}</h6>
-                                <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
-                                <div id="privateSuggestedUsersList" class="row g-2">
-                                    <!-- Utenti suggeriti qui -->
-                                </div>
-                            </div>
-
-                            <!-- Utenti invitati -->
-                            <div>
-                                <h6>{{ __('events.invited_users') }} <span id="privateInviteCount" class="badge bg-primary">0</span></h6>
-                                <div id="privateInvitedUsersList" class="row g-2">
-                                    <div class="col-12 text-center text-muted py-3" id="noPrivateInvitedUsers">
-                                        <i class="ph ph-user-plus f-s-24 mb-2"></i>
-                                        <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                <div class="card-body">
+                                    <!-- Barra di ricerca -->
+                                    <div class="mb-3">
+                                       
+                                        <div class="input-group">
+                                            <input type="text" id="privateUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handlePrivateUserSearchKeydown(event)">
+                                           
+                                            <button type="button" class="btn btn-outline-primary" onclick="searchPrivateUsersForInvite()">
+                                                <i class="ph ph-magnifying-glass"></i>
+                                            </button>
+                                            
+                                        </div>
+                                        <small class="text-muted">{{ __('events.search_users_help') }}</small>
                                     </div>
+
+                                    <!-- Risultati ricerca -->
+                                    <div id="privateSearchResultsInvite" class="mb-3" style="display: none;">
+                                        <h6 class="text-muted fw-bold">{{ __('events.search_results') }}</h6>
+                                        <div id="privateSearchResultsListInvite" class="list-group">
+                                            <!-- Risultati qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Utenti suggeriti -->
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold">{{ __('events.suggested_users') }}</h6>
+                                        <p class="text-muted small mb-2">{{ __('events.suggested_users_help') }}</p>
+                                        <div id="privateSuggestedUsersList" class="row g-2">
+                                            <!-- Utenti suggeriti qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Utenti invitati -->
+                                    <div>
+                                        <h6 class="text-muted fw-bold d-flex align-items-center">
+                                            {{ __('events.invited_users') }}
+                                            <span id="privateInviteCount" class="badge bg-light text-primary border ms-2">0</span>
+                                        </h6>
+                                        <div id="privateInvitedUsersList" class="row g-2">
+                                            <div class="col-12 text-center text-muted py-4" id="noPrivateInvitedUsers">
+                                                <i class="ph ph-user-plus f-s-32 mb-3 text-primary opacity-50"></i>
+                                                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden input per i dati degli inviti -->
+                                    <input type="hidden" name="private_invited_users" id="privateInvitedUsersData" value="[]">
                                 </div>
                             </div>
-
-                            <!-- Hidden input per i dati degli inviti -->
-                            <input type="hidden" name="private_invited_users" id="privateInvitedUsersData" value="[]">
                         </div>
 
-                        <!-- Sezione Inviti -->
+                        <!-- Sezione Inviti Artisti -->
                         <div class="mb-4">
-                            <h6 class="text-primary mb-3">
-                                <i class="ph ph-envelope me-2"></i>{{ __('events.invites') }}
-                            </h6>
-                            
-                            <!-- Search Users -->
-                            <div class="mb-4">
-                                <label class="form-label">{{ __('events.search_users') }}</label>
-                                <div class="input-group">
-                                    <input type="text" id="artistUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleArtistUserSearchKeydown(event)">
-                                    <button type="button" class="btn btn-outline-primary" onclick="searchArtistUsersForInvite()">
-                                        <i class="ph ph-magnifying-glass"></i>
-                                    </button>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-bottom">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="ph ph-envelope me-2"></i>{{ __('events.invites') }}
+                                    </h6>
                                 </div>
-                            </div>
-
-                            <!-- Search Results -->
-                            <div id="artistSearchResultsInvite" class="mb-3" style="display: none;">
-                                <h6>{{ __('events.search_results') }}</h6>
-                                <div id="artistSearchResultsListInvite" class="list-group">
-                                    <!-- Risultati qui -->
-                                </div>
-                            </div>
-
-                            <!-- Utenti suggeriti -->
-                            <div class="mb-3">
-                                <h6>{{ __('events.suggested_users') }}</h6>
-                                <p class="text-muted small">{{ __('events.suggested_users_help') }}</p>
-                                <div id="artistSuggestedUsersList" class="row g-2">
-                                    <!-- Utenti suggeriti qui -->
-                                </div>
-                            </div>
-
-                            <!-- Utenti invitati -->
-                            <div>
-                                <h6>{{ __('events.invited_users') }} <span id="artistInviteCount" class="badge bg-primary">0</span></h6>
-                                <div id="artistInvitedUsersList" class="row g-2">
-                                    <div class="col-12 text-center text-muted py-3" id="noArtistInvitedUsers">
-                                        <i class="ph ph-user-plus f-s-24 mb-2"></i>
-                                        <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                <div class="card-body">
+                                    <!-- Search Users -->
+                                    <div class="mb-4  mt-4">
+                                       
+                                        <div class="input-group">
+                                            <input type="text" id="artistUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleArtistUserSearchKeydown(event)">
+                                            
+                                            <button type="button" class="btn btn-outline-primary" onclick="searchArtistUsersForInvite()">
+                                                <i class="ph ph-magnifying-glass"></i>
+                                            </button>
+                                            
+                                        </div>
+                                        <small class="text-muted">{{ __('events.search_users_help') }}</small>
                                     </div>
+
+                                    <!-- Search Results -->
+                                    <div id="artistSearchResultsInvite" class="mb-3" style="display: none;">
+                                        <h6 class="text-muted fw-bold">{{ __('events.search_results') }}</h6>
+                                        <div id="artistSearchResultsListInvite" class="list-group">
+                                            <!-- Risultati qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Utenti suggeriti -->
+                                    <div class="mb-3">
+                                        <h6 class="text-muted fw-bold">{{ __('events.suggested_users') }}</h6>
+                                        <p class="text-muted small mb-2">{{ __('events.suggested_users_help') }}</p>
+                                        <div id="artistSuggestedUsersList" class="row g-2">
+                                            <!-- Utenti suggeriti qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Utenti invitati -->
+                                    <div>
+                                        <h6 class="text-muted fw-bold d-flex align-items-center">
+                                            {{ __('events.invited_users') }}
+                                            <span id="artistInviteCount" class="badge text-primary border ms-2">0</span>
+                                        </h6>
+                                        <div id="artistInvitedUsersList" class="row g-2">
+                                            <div class="col-12 text-center text-muted py-4" id="noArtistInvitedUsers">
+                                                <i class="ph ph-user-plus f-s-32 mb-3 text-primary opacity-50"></i>
+                                                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden input per i dati degli inviti -->
+                                    <input type="hidden" name="artist_invited_users" id="artistInvitedUsersData" value="[]">
                                 </div>
                             </div>
-
-                            <!-- Hidden input per i dati degli inviti -->
-                            <input type="hidden" name="artist_invited_users" id="artistInvitedUsersData" value="[]">
                         </div>
 
                         <!-- Sezione Ingaggi -->
                         <div class="mb-4">
-                            <h6 class="text-success mb-3">
-                                <i class="ph ph-briefcase me-2"></i>{{ __('events.gigs') }}
-                            </h6>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-bottom">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="ph ph-briefcase me-2"></i>{{ __('events.gigs') }}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Container per le posizioni d'ingaggio -->
+                                    <div id="gigPositionsContainer">
+                                        <!-- Le posizioni verranno aggiunte qui dinamicamente -->
+                                    </div>
 
-                            <!-- Container per le posizioni d'ingaggio -->
-                            <div id="gigPositionsContainer">
-                                <!-- Le posizioni verranno aggiunte qui dinamicamente -->
+                                    <!-- Pulsante per aggiungere nuova posizione -->
+                                    <div class="text-center mt-3">
+                                        <button type="button" class="btn btn-light-success btn-lg" onclick="addGigPosition()">
+                                            <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
+                                        </button>
+                                    </div>
+
+                                    <!-- Hidden input for gig positions data -->
+                                    <input type="hidden" name="gig_positions" id="gigPositionsData" value="[]">
+                                </div>
                             </div>
-
-                            <!-- Pulsante per aggiungere nuova posizione -->
-                            <div class="text-center mt-3">
-                                <button type="button" class="btn btn-success" onclick="addGigPosition()">
-                                    <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
-                                </button>
-                            </div>
-
-                            <!-- Hidden input for gig positions data -->
-                            <input type="hidden" name="gig_positions" id="gigPositionsData" value="[]">
                         </div>
 
                         <!-- Event Status -->
                         <div class="mb-4">
-                            <h6 class="text-primary mb-3">
-                                <i class="ph ph-globe me-2"></i>{{ __('events.event_status') }}
-                            </h6>
-                            <div class="form-check">
-                                <input type="radio" name="status" id="published" value="published" class="form-check-input" checked>
-                                <label for="published" class="form-check-label">
-                                    <i class="ph ph-globe me-2"></i>{{ __('events.publish_immediately') }}
-                                    <small class="d-block text-muted">{{ __('events.publish_immediately_help') }}</small>
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" name="status" id="draft" value="draft" class="form-check-input">
-                                <label for="draft" class="form-check-label">
-                                    <i class="ph ph-note-pencil me-2"></i>{{ __('events.save_as_draft') }}
-                                    <small class="d-block text-muted">{{ __('events.save_as_draft_help') }}</small>
-                                </label>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-bottom">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="ph ph-globe me-2"></i>{{ __('events.event_status') }}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-4">
+                                            <div class="form-check p-3 border rounded h-100">
+                                                <input type="radio" name="status" id="published" value="published" class="form-check-input" checked>
+                                                <label for="published" class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-globe me-2 text-success"></i>
+                                                        <span class="fw-bold">{{ __('events.publish_immediately') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.publish_immediately_help') }}</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-4">
+                                            <div class="form-check p-3 border rounded h-100">
+                                                <input type="radio" name="status" id="draft" value="draft" class="form-check-input">
+                                                <label for="draft" class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-note-pencil me-2 text-warning"></i>
+                                                        <span class="fw-bold">{{ __('events.save_as_draft') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.save_as_draft_help') }}</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -766,76 +799,93 @@
 
                 <!-- Role Selection Modal -->
                 <div class="modal fade" id="roleSelectionModal" tabindex="-1">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">
+                            <div class="modal-header bg-white border-bottom">
+                                <h5 class="modal-title mb-0 text-primary">
                                     <i class="ph ph-user-circle-plus me-2"></i>{{ __('events.invite_artist') }}
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="text-center mb-3">
-                                    <div class="participant-avatar mx-auto mb-3" style="width: 60px; height: 60px; background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);">
-                                        <span id="selectedUserInitials"></span>
+                                <!-- User Info Card -->
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-body text-center">
+                                        <div class="avatar avatar-lg mx-auto mb-3 bg-primary text-white d-flex align-items-center justify-content-center f-s-24 fw-bold">
+                                            <span id="selectedUserInitials"></span>
+                                        </div>
+                                        <h5 id="selectedUserName" class="mb-1"></h5>
+                                        <small class="text-muted" id="selectedUserEmail"></small>
                                     </div>
-                                    <h6 id="selectedUserName"></h6>
-                                    <small class="text-muted" id="selectedUserEmail"></small>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('events.select_role') }} *</label>
-                                    <div class="check-container">
-                                        <label class="check-box d-flex align-items-center p-3 border rounded mb-2" style="cursor: pointer;">
-                                            <input type="radio" name="invitationRole" value="performer" checked>
-                                            <span class="radiomark check-primary ms-2"></span>
-                                            <div class="ms-3">
-                                                <i class="ph ph-microphone me-2"></i>
-                                                <span class="fw-bold">{{ __('events.performer') }}</span>
-                                                <small class="d-block text-muted">{{ __('events.performer_help') }}</small>
+                                <!-- Role Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">{{ __('events.select_role') }} *</label>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100 hover-effect">
+                                                <input type="radio" name="invitationRole" value="performer" checked class="form-check-input">
+                                                <label class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-microphone me-2 text-primary f-s-20"></i>
+                                                        <span class="fw-bold">{{ __('events.performer') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.performer_help') }}</small>
+                                                </label>
                                             </div>
-                                        </label>
-
-                                        <label class="check-box d-flex align-items-center p-3 border rounded mb-2" style="cursor: pointer;">
-                                            <input type="radio" name="invitationRole" value="judge">
-                                            <span class="radiomark check-primary ms-2"></span>
-                                            <div class="ms-3">
-                                                <i class="ph ph-scales me-2"></i>
-                                                <span class="fw-bold">{{ __('events.judge') }}</span>
-                                                <small class="d-block text-muted">{{ __('events.judge_help') }}</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100 hover-effect">
+                                                <input type="radio" name="invitationRole" value="judge" class="form-check-input">
+                                                <label class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-scales me-2 text-warning f-s-20"></i>
+                                                        <span class="fw-bold">{{ __('events.judge') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.judge_help') }}</small>
+                                                </label>
                                             </div>
-                                        </label>
-
-                                        <label class="check-box d-flex align-items-center p-3 border rounded mb-2" style="cursor: pointer;">
-                                            <input type="radio" name="invitationRole" value="technician">
-                                            <span class="radiomark check-primary ms-2"></span>
-                                            <div class="ms-3">
-                                                <i class="ph ph-gear me-2"></i>
-                                                <span class="fw-bold">{{ __('events.technician') }}</span>
-                                                <small class="d-block text-muted">{{ __('events.technician_help') }}</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100 hover-effect">
+                                                <input type="radio" name="invitationRole" value="technician" class="form-check-input">
+                                                <label class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-gear me-2 text-info f-s-20"></i>
+                                                        <span class="fw-bold">{{ __('events.technician') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.technician_help') }}</small>
+                                                </label>
                                             </div>
-                                        </label>
-
-                                        <label class="check-box d-flex align-items-center p-3 border rounded" style="cursor: pointer;">
-                                            <input type="radio" name="invitationRole" value="host">
-                                            <span class="radiomark check-primary ms-2"></span>
-                                            <div class="ms-3">
-                                                <i class="ph ph-user-focus me-2"></i>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100 hover-effect">
+                                                <input type="radio" name="invitationRole" value="host" class="form-check-input">
+                                                <label class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-user-focus me-2 text-success f-s-20"></i>
                                                         <span class="fw-bold">{{ __('events.host') }}</span>
-                                                <small class="d-block text-muted">{{ __('events.host_help') }}</small>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.host_help') }}</small>
+                                                </label>
                                             </div>
-                                        </label>
+                                        </div>
                                     </div>
                                 </div>
 
+                                <!-- Custom Message -->
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('events.custom_message') }} ({{ __('common.optional') }})</label>
-                                    <textarea id="invitationMessage" class="form-control" rows="3" placeholder="{{ __('events.custom_message_placeholder') }}"></textarea>
+                                    <label class="form-label fw-bold">{{ __('events.custom_message') }} <span class="text-muted">({{ __('common.optional') }})</span></label>
+                                    <textarea id="invitationMessage" class="form-control" rows="4" placeholder="{{ __('events.custom_message_placeholder') }}"></textarea>
+                                    <small class="text-muted">{{ __('events.custom_message_help') }}</small>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
-                                <button type="button" class="btn btn-primary" onclick="confirmInvitation()">
+                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <i class="ph ph-x me-2"></i>{{ __('common.cancel') }}
+                                </button>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="confirmInvitation()">
                                     <i class="ph ph-paper-plane me-2"></i>{{ __('events.send_invitation') }}
                                 </button>
                             </div>
@@ -3215,7 +3265,7 @@ function addInvitation(userId, userName, userEmail, userRoles) {
     // Populate modal with user data
     document.getElementById('selectedUserName').textContent = userName;
     document.getElementById('selectedUserEmail').textContent = userEmail;
-    document.getElementById('selectedUserInitials').textContent = userName.substring(0, 2).toUpperCase();
+    document.getElementById('selectedUserInitials').textContent = userName.split(' ').map(n => n[0]).join('').toUpperCase();
 
     // Reset form
     document.querySelector('input[name="invitationRole"][value="performer"]').checked = true;
@@ -3526,6 +3576,18 @@ let privateInvitedUsers = [];
 let artistInvitedUsers = [];
 let suggestedUsers = [];
 
+// Funzione helper per gestire l'avatar in modo coerente
+function getUserAvatarHtml(user) {
+    const avatarUrl = user.avatar_url || '/assets/images/avatar/default.png';
+    return `<img src="${avatarUrl}" alt="${user.name}" class="img-fluid">`;
+}
+
+// Funzione helper per l'avatar con wrapper (per liste e risultati)
+function getUserAvatarWithWrapper(user) {
+    const avatarUrl = user.avatar_url || '/assets/images/avatar/default.png';
+    return `<img src="${avatarUrl}" alt="${user.name}" class="img-fluid">`;
+}
+
 // Carica utenti suggeriti
 function loadSuggestedUsers() {
     fetch('/api/users/suggested', {
@@ -3566,16 +3628,15 @@ function displayPrivateSuggestedUsers() {
             <div class="card hover-effect">
                 <div class="card-body p-3">
                     <div class="d-flex align-items-center">
-                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
-                                 alt="${user.name}" class="img-fluid">
+                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden flex-shrink-0 me-3 text-decoration-none">
+                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" alt="${user.name}" class="img-fluid">
                         </a>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}')"
+                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -3606,16 +3667,15 @@ function displayArtistSuggestedUsers() {
             <div class="card hover-effect">
                 <div class="card-body p-3">
                     <div class="d-flex align-items-center">
-                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
-                                 alt="${user.name}" class="img-fluid">
+                        <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden flex-shrink-0 me-3 text-decoration-none">
+                            <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" alt="${user.name}" class="img-fluid">
                         </a>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}')"
+                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -3687,8 +3747,7 @@ function displayPrivateSearchResults(users) {
             <div class="list-group-item">
                 <div class="d-flex align-items-center">
                     <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3 text-decoration-none">
-                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
-                             alt="${user.name}" class="img-fluid">
+                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" alt="${user.name}" class="img-fluid">
                     </a>
                     <div class="flex-grow-1">
                         <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
@@ -3696,7 +3755,7 @@ function displayPrivateSearchResults(users) {
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}')">
+                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -3727,8 +3786,7 @@ function displayArtistSearchResults(users) {
             <div class="list-group-item">
                 <div class="d-flex align-items-center">
                     <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3 text-decoration-none">
-                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}"
-                             alt="${user.name}" class="img-fluid">
+                        <img src="${user.avatar_url || '/assets/images/avatar/default.png'}" alt="${user.name}" class="img-fluid">
                     </a>
                     <div class="flex-grow-1">
                         <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
@@ -3736,7 +3794,7 @@ function displayArtistSearchResults(users) {
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}')">
+                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -3749,8 +3807,8 @@ function displayArtistSearchResults(users) {
 }
 
 // Invita utente per eventi privati
-function invitePrivateUser(userId, userName, userEmail) {
-    console.log('Inviting private user:', userId, userName, userEmail);
+function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
+    console.log('Inviting private user:', userId, userName, userEmail, userAvatarUrl);
 
     // Controlla se l'utente è già stato invitato
     if (privateInvitedUsers.some(user => user.id === userId)) {
@@ -3761,7 +3819,8 @@ function invitePrivateUser(userId, userName, userEmail) {
     const user = {
         id: userId,
         name: userName,
-        email: userEmail
+        email: userEmail,
+        avatar_url: userAvatarUrl
     };
 
     privateInvitedUsers.push(user);
@@ -3789,8 +3848,8 @@ function invitePrivateUser(userId, userName, userEmail) {
 }
 
 // Invita artista
-function inviteArtistUser(userId, userName, userEmail) {
-    console.log('Inviting artist user:', userId, userName, userEmail);
+function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
+    console.log('Inviting artist user:', userId, userName, userEmail, userAvatarUrl);
 
     // Controlla se l'utente è già stato invitato
     if (artistInvitedUsers.some(user => user.id === userId)) {
@@ -3801,7 +3860,8 @@ function inviteArtistUser(userId, userName, userEmail) {
     const user = {
         id: userId,
         name: userName,
-        email: userEmail
+        email: userEmail,
+        avatar_url: userAvatarUrl
     };
 
     artistInvitedUsers.push(user);
@@ -3880,10 +3940,9 @@ function updatePrivateInvitedUsersDisplay() {
                 <div class="card hover-effect">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center">
-                            <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                                <img src="/assets/images/avatar/default.png"
-                                     alt="${user.name}" class="img-fluid">
-                            </a>
+                            <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden flex-shrink-0 me-3">
+                                ${getUserAvatarHtml(user)}
+                            </div>
                             <div class="flex-grow-1 ps-2">
                                 <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                                 <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
@@ -3933,10 +3992,9 @@ function updateArtistInvitedUsersDisplay() {
                 <div class="card hover-effect">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center">
-                            <a href="/user/${user.id}" target="_blank" class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-dark flex-shrink-0 me-3 text-decoration-none">
-                                <img src="/assets/images/avatar/default.png"
-                                     alt="${user.name}" class="img-fluid">
-                            </a>
+                            <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden flex-shrink-0 me-3">
+                                ${getUserAvatarHtml(user)}
+                            </div>
                             <div class="flex-grow-1 ps-2">
                                 <div class="fw-medium txt-ellipsis-1">${user.name}</div>
                                 <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
@@ -4089,8 +4147,8 @@ function confirmInvitation() {
     console.log('Current invited users:', invitedUsers);
 
     // Aggiorna la visualizzazione
-    updateInvitedUsersDisplay();
-    updateInvitedUsersData();
+    updateArtistInvitedUsersDisplay();
+    updateArtistInvitedUsersData();
 
     // Chiudi il modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('roleSelectionModal'));
