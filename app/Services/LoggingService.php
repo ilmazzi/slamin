@@ -397,6 +397,10 @@ class LoggingService
             'permission_denied' => 'Permission denied',
             'not_found' => 'Resource not found',
             'server_error' => 'Server error occurred',
+            'http_error' => 'HTTP error occurred',
+            'unhandled_exception' => 'Unhandled exception occurred',
+            'global_exception' => 'Global exception handler caught error',
+            'fatal_error' => 'Fatal error occurred',
         ];
 
         return self::log(

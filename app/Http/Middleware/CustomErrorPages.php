@@ -21,6 +21,18 @@ class CustomErrorPages
         if ($response->getStatusCode() >= 400) {
             $statusCode = $response->getStatusCode();
             
+            // Log dell'errore HTTP con dettagli
+            \App\Services\LoggingService::logError('http_error', [
+                'status_code' => $statusCode,
+                'request_url' => $request->fullUrl(),
+                'request_method' => $request->method(),
+                'request_data' => $request->except(['password', 'password_confirmation', 'token', '_token']),
+                'user_id' => \Illuminate\Support\Facades\Auth::user()?->id,
+                'user_agent' => $request->userAgent(),
+                'ip' => $request->ip(),
+                'response_content' => $response->getContent(),
+            ]);
+            
             // Verifica se esiste una vista personalizzata per questo codice di errore
             $errorView = "errors.error_{$statusCode}";
             
