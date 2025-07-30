@@ -221,48 +221,47 @@ class DashboardController extends Controller
     {
         $actions = [];
 
-        // Azioni base per tutti
-        $actions[] = [
-            'key' => 'create_post',
-            'icon' => 'ph ph-plus',
-            'color' => 'primary'
-        ];
-
-        // Azioni specifiche per ruolo
-        if ($user->hasRole('poet')) {
+        // Ordine richiesto: Scrivi poesia, Crea evento, Carica video, Scrivi articolo
+        
+        // 1. Scrivi Poesia - per poeti e admin
+        if ($user->can('poems.create')) {
             $actions[] = [
                 'key' => 'write_poem',
                 'icon' => 'ph ph-pen-nib',
-                'color' => 'info'
-            ];
-            $actions[] = [
-                'key' => 'upload_performance',
-                'icon' => 'ph ph-upload',
-                'color' => 'warning'
+                'color' => 'info',
+                'url' => route('poems.create')
             ];
         }
 
-        if ($user->hasRole('organizer')) {
+        // 2. Crea Evento - per organizer e admin
+        if ($user->can('events.create.public') || $user->can('events.create.private')) {
             $actions[] = [
                 'key' => 'organize_event',
                 'icon' => 'ph ph-calendar-plus',
-                'color' => 'success'
+                'color' => 'success',
+                'url' => route('events.create')
             ];
         }
 
-        if ($user->hasRole('venue_owner')) {
+        // 3. Carica Video - per poeti e admin
+        if ($user->can('videos.upload')) {
             $actions[] = [
-                'key' => 'manage_venue',
-                'icon' => 'ph ph-buildings',
-                'color' => 'danger'
+                'key' => 'upload_performance',
+                'icon' => 'ph ph-upload',
+                'color' => 'warning',
+                'url' => route('videos.upload')
             ];
         }
 
-        $actions[] = [
-            'key' => 'find_events',
-            'icon' => 'ph ph-magnifying-glass',
-            'color' => 'secondary'
-        ];
+        // 4. Scrivi Articolo - per organizer, venue_owner e admin
+        if ($user->can('articles.create')) {
+            $actions[] = [
+                'key' => 'write_article',
+                'icon' => 'ph ph-newspaper',
+                'color' => 'primary',
+                'url' => '#' // TODO: Creare route per articles.create
+            ];
+        }
 
         return $actions;
     }

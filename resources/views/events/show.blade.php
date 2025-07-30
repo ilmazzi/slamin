@@ -808,7 +808,7 @@
                                         <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
                                     </a>
                                 @endif
-                                @can('delete events')
+                                @can('events.manage.own')
                                     @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
                                         <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                             <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}

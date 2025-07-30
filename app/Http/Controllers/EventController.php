@@ -283,7 +283,7 @@ class EventController extends Controller
     public function create(): View
     {
         // Controlla se l'utente può creare eventi usando Spatie
-        if (!Auth::check() || !Auth::user()->can('create events')) {
+        if (!Auth::check() || (!Auth::user()->can('events.create.public') && !Auth::user()->can('events.create.private'))) {
             abort(403, 'Non hai i permessi per creare eventi');
         }
 
@@ -306,7 +306,7 @@ class EventController extends Controller
         public function store(Request $request): RedirectResponse
     {
         // Controlla se l'utente può creare eventi usando Spatie
-        if (!Auth::check() || !Auth::user()->can('create events')) {
+        if (!Auth::check() || (!Auth::user()->can('events.create.public') && !Auth::user()->can('events.create.private'))) {
             abort(403, 'Non hai i permessi per creare eventi');
         }
 
@@ -959,7 +959,7 @@ class EventController extends Controller
     public function edit(Event $event): View
     {
         // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('edit events') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per modificare questo evento');
         }
@@ -982,7 +982,7 @@ class EventController extends Controller
     public function update(Request $request, Event $event): RedirectResponse
     {
         // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('edit events') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per modificare questo evento');
         }
@@ -1149,7 +1149,7 @@ class EventController extends Controller
     public function destroy(Event $event): RedirectResponse
     {
         // Controlla se l'utente può eliminare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('delete events') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per eliminare questo evento');
         }
@@ -1234,7 +1234,7 @@ class EventController extends Controller
     public function manage(Event $event): View
     {
         // Controlla se l'utente può gestire questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('manage events') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per gestire questo evento');
         }

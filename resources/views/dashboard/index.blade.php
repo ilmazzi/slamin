@@ -209,63 +209,10 @@
                 </div>
             </div>
 
-            <!-- Quick Actions compatte -->
-            @php
-                $actionCards = [
-                    [
-                        'key' => 'organize_event',
-                        'color' => 'success',
-                        'icon' => 'ph ph-calendar-plus',
-                        'link' => route('events.create')
-                    ],
-                    [
-                        'key' => 'find_events',
-                        'color' => 'warning',
-                        'icon' => 'ph ph-search',
-                        'link' => route('events.index')
-                    ],
-                    [
-                        'key' => 'view_wishlist',
-                        'color' => 'danger',
-                        'icon' => 'ph ph-heart',
-                        'link' => route('wishlist.index')
-                    ],
-                    [
-                        'key' => 'view_poems',
-                        'color' => 'info',
-                        'icon' => 'ph ph-book-open',
-                        'link' => route('poems.index')
-                    ],
-                    [
-                        'key' => 'create_post',
-                        'color' => 'primary',
-                        'icon' => 'ph ph-plus-circle',
-                        'link' => '#'
-                    ],
-                    [
-                        'key' => 'write_poem',
-                        'color' => 'secondary',
-                        'icon' => 'ph ph-pen-nib',
-                        'link' => route('poems.create')
-                    ],
-                    [
-                        'key' => 'upload_performance',
-                        'color' => 'info',
-                        'icon' => 'ph ph-upload',
-                        'link' => '#'
-                    ],
-                    [
-                        'key' => 'manage_venue',
-                        'color' => 'dark',
-                        'icon' => 'ph ph-buildings',
-                        'link' => '#'
-                    ]
-                ];
-            @endphp
-
-            @foreach($actionCards as $action)
+            <!-- Quick Actions dinamiche dal controller -->
+            @foreach($quickActions as $action)
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="{{ $action['link'] }}" class="card hover-effect h-100 text-decoration-none">
+                    <a href="{{ $action['url'] }}" class="card hover-effect h-100 text-decoration-none">
                         <div class="card-body text-center pa-15">
                             <div class="bg-light-{{ $action['color'] }} h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                 <i class="{{ $action['icon'] }} text-{{ $action['color'] }} f-s-18"></i>

@@ -624,7 +624,7 @@
 
 @endsection
 
-@section('script')
+@push('scripts')
 <script>
 // Tab functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -734,4 +734,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endsection
+@endpush

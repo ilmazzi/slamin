@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // Run Poetry Slam roles and permissions setup
         $this->call([
             PoetrySlamSeeder::class,
+            GroupsPermissionsSeeder::class, // Aggiunto per i gruppi
             TestUsersSeeder::class,
             SystemSettingsSeeder::class,
             PhotoSeeder::class,

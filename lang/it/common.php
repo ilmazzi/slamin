@@ -16,6 +16,7 @@ return [
     'ok' => 'OK',
     'dashboard' => 'Dashboard',
     'view' => 'Visualizza',
+    'view_all' => 'Visualizza Tutti',
     'all' => 'Tutti',
     'back_to_dashboard' => 'Back To Dashboard',
     'reset' => 'Reset',

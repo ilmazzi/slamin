@@ -181,6 +181,21 @@
                                 </li>
 
                                 @auth
+                                <!-- Gruppi Section - Solo per poeti e organizzatori -->
+                                @if(auth()->user()->can('groups.create'))
+                                <li class="no-sub {{ request()->routeIs('groups.*') ? 'active' : '' }}">
+                                    <a href="{{ route('groups.index') }}">
+                                        <i class="ph-duotone ph-users f-s-20 me-2"></i>
+                                        {{ __('groups.title') }}
+                                        @if(auth()->user()->getGroupsCountAttribute() > 0)
+                                            <span class="badge bg-info badge-notification ms-2">
+                                                {{ auth()->user()->getGroupsCountAttribute() }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endif
+
                                 <!-- Profile Section - Solo per utenti autenticati -->
                                 <li class="no-sub {{ request()->routeIs('profile.*') ? 'active' : '' }}">
                                     <a href="{{ route('profile.show') }}">

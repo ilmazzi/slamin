@@ -136,7 +136,7 @@
                                         <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
                                     </button>
                                     @auth
-                                        @can('create events')
+                                        @can('events.create.public')
                                             <a href="{{ route('events.create') }}" class="btn btn-success">
                                                 <i class="ph ph-plus me-1"></i>{{ __('common.create') }}
                                             </a>
@@ -273,7 +273,7 @@
                                     <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
                                         {{ __('common.view') }}
                                     </a>
-                                    @can('delete events')
+                                    @can('events.manage.own')
                                         @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
                                             <button type="button" class="btn btn-outline-danger btn-sm" 
                                                     onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
@@ -296,7 +296,7 @@
                         <h5 class="text-muted">{{ __('events.no_events_found') }}</h5>
                         <p class="text-muted">{{ __('events.try_adjusting_filters') }}</p>
                         @auth
-                            @can('create events')
+                            @can('events.create.public')
                                 <a href="{{ route('events.create') }}" class="btn btn-primary">
                                     <i class="ph ph-plus me-1"></i>{{ __('events.create_first_event') }}
                                 </a>

@@ -42,6 +42,8 @@ class Event extends Model
         'moderated_at',
         'organizer_id',
         'venue_owner_id',
+        'group_id',
+        'group_permissions',
         'allow_requests',
         'tags',
         'category',
@@ -700,5 +702,92 @@ class Event extends Model
     public function isFestival(): bool
     {
         return $this->category === self::CATEGORY_FESTIVAL;
+    }
+
+    // ========================================
+    // RELAZIONI CON I GRUPPI
+    // ========================================
+
+    /**
+     * Relazione con il gruppo dell'evento
+     */
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    /**
+     * Verifica se l'evento appartiene a un gruppo
+     */
+    public function belongsToGroup(): bool
+    {
+        return !is_null($this->group_id);
+    }
+
+    /**
+     * Verifica se un utente può modificare l'evento in base ai permessi del gruppo
+     */
+    public function canBeModifiedBy(User $user): bool
+    {
+        // Se l'evento non appartiene a un gruppo, solo l'organizzatore può modificarlo
+        if (!$this->belongsToGroup()) {
+            return $user->id === $this->organizer_id;
+        }
+
+        // Se l'utente è admin del sito, può sempre modificare
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        // Se l'utente è l'organizzatore dell'evento
+        if ($user->id === $this->organizer_id) {
+            return true;
+        }
+
+        // Verifica i permessi del gruppo
+        switch ($this->group_permissions) {
+            case 'creator_only':
+                // Solo il creatore può modificare
+                return $user->id === $this->organizer_id;
+            
+            case 'group_admins':
+                // Gli admin del gruppo possono modificare
+                return $user->isAdminOf($this->group);
+            
+            case 'group_members':
+                // Tutti i membri del gruppo possono modificare
+                return $user->isMemberOf($this->group);
+            
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Verifica se un utente può visualizzare l'evento
+     */
+    public function canBeViewedBy(User $user): bool
+    {
+        // Se l'evento è pubblico, tutti possono vederlo
+        if ($this->is_public) {
+            return true;
+        }
+
+        // Se l'utente è admin del sito, può sempre vedere
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        // Se l'utente è l'organizzatore, può vedere
+        if ($user->id === $this->organizer_id) {
+            return true;
+        }
+
+        // Se l'evento appartiene a un gruppo, i membri del gruppo possono vedere
+        if ($this->belongsToGroup()) {
+            return $user->isMemberOf($this->group);
+        }
+
+        return false;
     }
 }

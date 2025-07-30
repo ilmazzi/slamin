@@ -852,3 +852,72 @@ Route::prefix('poems')->name('poems.')->group(function () {
     });
 });
 
+// ========================================
+// ROUTES PER I GRUPPI
+// ========================================
+
+Route::prefix('groups')->name('groups.')->middleware('auth')->group(function () {
+    // Routes principali dei gruppi
+    Route::get('/', [App\Http\Controllers\GroupController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\GroupController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\GroupController::class, 'store'])->name('store');
+
+    Route::get('/{group}', [App\Http\Controllers\GroupController::class, 'show'])->name('show');
+    Route::get('/{group}/edit', [App\Http\Controllers\GroupController::class, 'edit'])->name('edit');
+    Route::put('/{group}', [App\Http\Controllers\GroupController::class, 'update'])->name('update');
+    Route::delete('/{group}', [App\Http\Controllers\GroupController::class, 'destroy'])->name('destroy');
+    Route::get('/{group}/dashboard', [App\Http\Controllers\GroupController::class, 'dashboard'])->name('dashboard');
+    
+    // Partecipazione ai gruppi
+    Route::post('/{group}/join', [App\Http\Controllers\GroupController::class, 'join'])->name('join');
+    Route::post('/{group}/leave', [App\Http\Controllers\GroupController::class, 'leave'])->name('leave');
+
+    // Gestione membri
+    Route::prefix('{group}/members')->name('members.')->group(function () {
+        Route::get('/', [App\Http\Controllers\GroupMemberController::class, 'index'])->name('index');
+        Route::post('/{member}/promote', [App\Http\Controllers\GroupMemberController::class, 'promote'])->name('promote');
+        Route::post('/{member}/demote', [App\Http\Controllers\GroupMemberController::class, 'demote'])->name('demote');
+        Route::post('/{member}/promote-moderator', [App\Http\Controllers\GroupMemberController::class, 'promoteToModerator'])->name('promote-moderator');
+        Route::post('/{member}/demote-member', [App\Http\Controllers\GroupMemberController::class, 'demoteToMember'])->name('demote-member');
+        Route::delete('/{member}', [App\Http\Controllers\GroupMemberController::class, 'remove'])->name('remove');
+        Route::get('/search', [App\Http\Controllers\GroupMemberController::class, 'searchUsers'])->name('search');
+        Route::post('/invite', [App\Http\Controllers\GroupMemberController::class, 'invite'])->name('invite');
+    });
+
+    // Gestione inviti
+    Route::prefix('{group}/invitations')->name('invitations.')->group(function () {
+        Route::get('/pending', [App\Http\Controllers\GroupInvitationController::class, 'pending'])->name('pending');
+        Route::get('/create', [App\Http\Controllers\GroupInvitationController::class, 'create'])->name('create');
+        Route::post('/store', [App\Http\Controllers\GroupInvitationController::class, 'store'])->name('store');
+    });
+});
+
+// Routes per inviti (globali)
+Route::prefix('group-invitations')->name('group-invitations.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\GroupInvitationController::class, 'index'])->name('index');
+    Route::get('/sent', [App\Http\Controllers\GroupInvitationController::class, 'sent'])->name('sent');
+    Route::get('/{invitation}', [App\Http\Controllers\GroupInvitationController::class, 'show'])->name('show');
+    Route::post('/{invitation}/accept', [App\Http\Controllers\GroupInvitationController::class, 'accept'])->name('accept');
+    Route::post('/{invitation}/decline', [App\Http\Controllers\GroupInvitationController::class, 'decline'])->name('decline');
+    Route::delete('/{invitation}', [App\Http\Controllers\GroupInvitationController::class, 'cancel'])->name('cancel');
+    Route::post('/{invitation}/resend', [App\Http\Controllers\GroupInvitationController::class, 'resend'])->name('resend');
+});
+
+// Routes per richieste di partecipazione
+Route::prefix('group-requests')->name('group-requests.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\GroupJoinRequestController::class, 'index'])->name('index');
+    Route::get('/{request}', [App\Http\Controllers\GroupJoinRequestController::class, 'show'])->name('show');
+    Route::post('/{request}/accept', [App\Http\Controllers\GroupJoinRequestController::class, 'accept'])->name('accept');
+    Route::post('/{request}/decline', [App\Http\Controllers\GroupJoinRequestController::class, 'decline'])->name('decline');
+    Route::delete('/{request}', [App\Http\Controllers\GroupJoinRequestController::class, 'cancel'])->name('cancel');
+});
+
+// Routes per richieste pendenti di un gruppo
+Route::prefix('groups/{group}/requests')->name('groups.requests.')->middleware('auth')->group(function () {
+    Route::get('/pending', [App\Http\Controllers\GroupJoinRequestController::class, 'pending'])->name('pending');
+    Route::get('/stats', [App\Http\Controllers\GroupJoinRequestController::class, 'stats'])->name('stats');
+    Route::post('/store', [App\Http\Controllers\GroupJoinRequestController::class, 'store'])->name('store');
+});
+
+
+

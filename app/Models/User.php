@@ -278,7 +278,7 @@ class User extends Authenticatable
      */
     public function canCreateEvents(): bool
     {
-        return $this->hasPermissionTo('create events');
+        return $this->hasPermissionTo('events.create.public') || $this->hasPermissionTo('events.create.private');
     }
 
     /**
@@ -286,7 +286,7 @@ class User extends Authenticatable
      */
     public function canInviteUsers(): bool
     {
-        return $this->hasPermissionTo('send invitations');
+        return $this->hasPermissionTo('events.invite');
     }
 
     /**
@@ -294,7 +294,7 @@ class User extends Authenticatable
      */
     public function canParticipateInEvents(): bool
     {
-        return $this->hasPermissionTo('view events');
+        return $this->hasPermissionTo('events.view.public') || $this->hasPermissionTo('events.view.private');
     }
 
     /**
@@ -516,5 +516,150 @@ class User extends Authenticatable
     public function canHavePeerTubeAccount(): bool
     {
         return $this->hasAnyRole(['poet', 'organizer']);
+    }
+
+    // ========================================
+    // RELAZIONI CON I GRUPPI
+    // ========================================
+
+    /**
+     * Gruppi creati dall'utente
+     */
+    public function createdGroups()
+    {
+        return $this->hasMany(Group::class, 'created_by');
+    }
+
+    /**
+     * Gruppi di cui l'utente è membro
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members')
+                    ->withPivot('role', 'joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Membership nei gruppi
+     */
+    public function groupMemberships()
+    {
+        return $this->hasMany(GroupMember::class);
+    }
+
+    /**
+     * Gruppi di cui l'utente è admin
+     */
+    public function adminGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members')
+                    ->wherePivot('role', 'admin')
+                    ->withPivot('joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Gruppi di cui l'utente è moderatore (inclusi admin)
+     */
+    public function moderatorGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members')
+                    ->whereIn('group_members.role', ['admin', 'moderator'])
+                    ->withPivot('role', 'joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Inviti ricevuti per i gruppi
+     */
+    public function groupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class);
+    }
+
+    /**
+     * Inviti inviati per i gruppi
+     */
+    public function sentGroupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class, 'invited_by');
+    }
+
+    /**
+     * Richieste di partecipazione ai gruppi
+     */
+    public function groupJoinRequests()
+    {
+        return $this->hasMany(GroupJoinRequest::class);
+    }
+
+    /**
+     * Richieste di partecipazione processate dall'utente
+     */
+    public function processedGroupJoinRequests()
+    {
+        return $this->hasMany(GroupJoinRequest::class, 'processed_by');
+    }
+
+    // ========================================
+    // METODI HELPER PER I GRUPPI
+    // ========================================
+
+    /**
+     * Verifica se l'utente può creare gruppi
+     */
+    public function canCreateGroups(): bool
+    {
+        return $this->hasAnyRole(['poet', 'organizer', 'admin']);
+    }
+
+    /**
+     * Verifica se l'utente è membro di un gruppo specifico
+     */
+    public function isMemberOf(Group $group): bool
+    {
+        return $this->groups()->where('groups.id', $group->id)->exists();
+    }
+
+    /**
+     * Verifica se l'utente è admin di un gruppo specifico
+     */
+    public function isAdminOf(Group $group): bool
+    {
+        return $this->adminGroups()->where('groups.id', $group->id)->exists();
+    }
+
+    /**
+     * Verifica se l'utente è moderatore di un gruppo specifico
+     */
+    public function isModeratorOf(Group $group): bool
+    {
+        return $this->moderatorGroups()->where('groups.id', $group->id)->exists();
+    }
+
+    /**
+     * Ottieni il ruolo dell'utente in un gruppo specifico
+     */
+    public function getRoleInGroup(Group $group): ?string
+    {
+        $membership = $this->groupMemberships()->where('group_id', $group->id)->first();
+        return $membership ? $membership->role : null;
+    }
+
+    /**
+     * Conta i gruppi di cui l'utente è membro
+     */
+    public function getGroupsCountAttribute(): int
+    {
+        return $this->groups()->count();
+    }
+
+    /**
+     * Conta i gruppi di cui l'utente è admin
+     */
+    public function getAdminGroupsCountAttribute(): int
+    {
+        return $this->adminGroups()->count();
     }
 }

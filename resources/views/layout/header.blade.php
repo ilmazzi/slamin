@@ -35,52 +35,42 @@
                                     </h6>
                                 </li>
                                 <li class="dropdown-divider"></li>
+                                <!-- 1. Scrivi Poesia - per poeti e admin -->
+                                @can('poems.create')
                                 <li class="dropdown-item">
-                                    <a href="{{ route('peertube.upload-video') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-video-camera me-2 text-primary"></i>
-                                        <span>{{ __('common.upload_video') }}</span>
+                                    <a href="{{ route('poems.create') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-pen-nib me-2 text-info"></i>
+                                        <span>{{ __('dashboard.write_poem') }}</span>
                                     </a>
                                 </li>
+                                @endcan
+                                <!-- 2. Crea Evento - per organizer e admin -->
+                                @can('events.create.public')
                                 <li class="dropdown-item">
                                     <a href="{{ route('events.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <i class="ph ph-calendar-plus me-2 text-success"></i>
-                                        <span>Crea {{ __('invitations.event') }}</span>
+                                        <span>{{ __('dashboard.organize_event') }}</span>
                                     </a>
                                 </li>
+                                @endcan
+                                <!-- 3. Carica Video - per poeti e admin -->
+                                @can('videos.upload')
                                 <li class="dropdown-item">
-                                    <a href="{{ route('profile.edit') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-user-circle me-2 text-info"></i>
-                                        <span>Profilo</span>
+                                    <a href="{{ route('videos.upload') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-upload me-2 text-warning"></i>
+                                        <span>{{ __('dashboard.upload_performance') }}</span>
                                     </a>
                                 </li>
-                                @if(auth()->user()->hasRole(['admin', 'moderator']))
-                                <li class="dropdown-divider"></li>
+                                @endcan
+                                <!-- 4. Scrivi Articolo - per organizer, venue_owner e admin -->
+                                @can('articles.create')
                                 <li class="dropdown-item">
-                                    <a href="{{ route('admin.moderation.index') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-shield-check me-2 text-warning"></i>
-                                        <span>{{ __('sidebar.moderation') }}</span>
-                                        @php
-                                            $pendingCount = \App\Models\Video::pending()->count() +
-                                                          \App\Models\Poem::pending()->count() +
-                                                          \App\Models\Event::pending()->count() +
-                                                          \App\Models\Photo::pending()->count() +
-                                                          \App\Models\Carousel::pending()->count() +
-                                                          \App\Models\Report::active()->count();
-                                        @endphp
-                                        @if($pendingCount > 0)
-                                            <span class="badge bg-warning ms-auto">{{ $pendingCount }}</span>
-                                        @endif
+                                    <a href="#" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-newspaper me-2 text-primary"></i>
+                                        <span>{{ __('dashboard.write_article') }}</span>
                                     </a>
                                 </li>
-                                @endif
-                                @if(auth()->user()->hasRole('admin'))
-                                <li class="dropdown-item">
-                                    <a href="{{ route('admin.kanban.index') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-kanban me-2 text-info"></i>
-                                        <span>{{ __('common.kanban_board') }}</span>
-                                    </a>
-                                </li>
-                                @endif
+                                @endcan
                             </ul>
                         </div>
                     </li>
