@@ -160,6 +160,20 @@ class EventInvitationController extends Controller
             'responded_at' => Carbon::now(),
         ]);
 
+        // Crea notifica per l'organizzatore
+        Notification::create([
+            'user_id' => $invitation->event->organizer_id,
+            'type' => 'invitation_accepted',
+            'title' => 'Invito Accettato',
+            'message' => $invitation->invitedUser->name . ' ha accettato l\'invito per ' . $invitation->event->title,
+            'data' => json_encode([
+                'event_id' => $invitation->event_id,
+                'invitation_id' => $invitation->id,
+                'user_id' => $invitation->invited_user_id,
+            ]),
+            'action_url' => '/events/' . $invitation->event_id,
+        ]);
+
         // Debug: log del risultato
         Log::info('Invitation accept result:', [
             'invitation_id' => $invitation->id,
@@ -190,13 +204,30 @@ class EventInvitationController extends Controller
             'response_message' => 'nullable|string|max:500',
         ]);
 
-        if ($invitation->decline($validated['response_message'] ?? null)) {
-            return redirect()
-                ->route('dashboard')
-                ->with('success', 'Invito rifiutato.');
-        }
+        // Forza l'aggiornamento dello status per il rifiuto
+        $invitation->update([
+            'status' => EventInvitation::STATUS_DECLINED,
+            'response_message' => $validated['response_message'] ?? null,
+            'responded_at' => Carbon::now(),
+        ]);
 
-        return back()->with('error', 'Impossibile rifiutare questo invito.');
+        // Crea notifica per l'organizzatore
+        Notification::create([
+            'user_id' => $invitation->event->organizer_id,
+            'type' => 'invitation_declined',
+            'title' => 'Invito Rifiutato',
+            'message' => $invitation->invitedUser->name . ' ha rifiutato l\'invito per ' . $invitation->event->title,
+            'data' => json_encode([
+                'event_id' => $invitation->event_id,
+                'invitation_id' => $invitation->id,
+                'user_id' => $invitation->invited_user_id,
+            ]),
+            'action_url' => '/events/' . $invitation->event_id,
+        ]);
+
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Invito rifiutato.');
     }
 
     /**
