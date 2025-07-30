@@ -172,6 +172,7 @@ class EventInvitationController extends Controller
                 'user_id' => $invitation->invited_user_id,
             ]),
             'action_url' => '/events/' . $invitation->event_id,
+            'action_text' => $invitation->event->start_datetime ? $invitation->event->start_datetime->format('d/m/Y H:i') : 'Visualizza Evento',
         ]);
 
         // Debug: log del risultato
@@ -223,6 +224,7 @@ class EventInvitationController extends Controller
                 'user_id' => $invitation->invited_user_id,
             ]),
             'action_url' => '/events/' . $invitation->event_id,
+            'action_text' => $invitation->event->start_datetime ? $invitation->event->start_datetime->format('d/m/Y H:i') : 'Visualizza Evento',
         ]);
 
         return redirect()

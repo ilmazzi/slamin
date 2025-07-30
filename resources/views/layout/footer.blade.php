@@ -144,7 +144,7 @@ class NotificationManager {
 
         return `
             <div class="notification-message head-box ${isUnread ? 'unread' : ''}" data-notification-id="${notification.id}">
-                <div class="d-flex align-items-start">
+                <div class="d-flex align-items-start position-relative">
                     <div class="flex-shrink-0 me-3">
                         <div class="notification-icon ${notification.color}">
                             <i class="${notification.icon}"></i>
@@ -181,12 +181,12 @@ class NotificationManager {
                             </div>
                         ` : ''}
                     </div>
-                    <div class="text-end">
+                    <div class="text-end position-absolute top-0 end-0">
                         <div class="dropdown">
-                            <button class="btn btn-link btn-sm" data-bs-toggle="dropdown">
-                                <i class="ph ph-dots-three-vertical"></i>
+                            <button class="btn btn-link btn-sm p-1" data-bs-toggle="dropdown">
+                                <i class="ph ph-dots-three-vertical f-s-14"></i>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-end">
                                 ${isUnread ? `
                                     <li><a class="dropdown-item" href="#" onclick="markNotificationRead(${notification.id})">
                                         <i class="ph ph-check me-2"></i>Segna come letta

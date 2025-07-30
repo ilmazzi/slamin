@@ -1,6 +1,28 @@
 <?php
 
 return [
-
-
+    'notifications' => 'Notifiche',
+    'manage_notifications' => 'Gestisci le tue notifiche',
+    'unread' => 'Non lette',
+    'read' => 'Lette',
+    'new' => 'Nuova',
+    'last_7_days' => 'Ultimi 7 giorni',
+    'mark_all_read' => 'Segna tutte come lette',
+    'no_notifications' => 'Nessuna notifica',
+    'notifications_placeholder' => 'Non hai ancora ricevuto notifiche',
+    'loading_error' => 'Errore nel caricamento delle notifiche',
+    'mark_as_read' => 'Segna come letta',
+    'mark_as_unread' => 'Segna come non letta',
+    'delete_notification' => 'Elimina notifica',
+    'view_all' => 'Vedi tutte',
+    'clear_old' => 'Pulisci vecchie',
+    'cleanup_confirm' => 'Sei sicuro di voler eliminare le notifiche più vecchie di 30 giorni?',
+    'cleanup_success' => 'Notifiche pulite con successo',
+    'mark_all_success' => 'Tutte le notifiche sono state segnate come lette',
+    'delete_success' => 'Notifica eliminata con successo',
+    'mark_read_success' => 'Notifica segnata come letta',
+    'mark_unread_success' => 'Notifica segnata come non letta',
+    'operation_error' => 'Errore durante l\'operazione',
+    'delete_error' => 'Errore durante l\'eliminazione',
+    'cleanup_error' => 'Errore durante la pulizia',
 ];
