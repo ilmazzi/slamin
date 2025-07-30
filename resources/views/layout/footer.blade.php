@@ -173,10 +173,10 @@ class NotificationManager {
                             </div>
                         ` : ''}
                         
-                        ${!isEventInvitation && notification.action_text && notification.action_url ? `
+                        ${!isEventInvitation && notification.action_url ? `
                             <div class="mt-2">
                                 <a href="${notification.action_url}" class="btn btn-primary btn-sm">
-                                    ${notification.action_text}
+                                    ${notification.action_text || 'Visualizza'}
                                 </a>
                             </div>
                         ` : ''}

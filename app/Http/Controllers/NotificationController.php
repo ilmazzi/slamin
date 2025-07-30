@@ -71,6 +71,7 @@ class NotificationController extends Controller
                                            'priority_badge' => $notification->priority_badge,
                                            'action_url' => $notification->action_url,
                                            'action_text' => $notification->action_text,
+                                           'data' => $notification->data,
                                            'created_at' => $notification->created_at->diffForHumans(),
                                            'is_read' => $notification->is_read,
                                        ];
