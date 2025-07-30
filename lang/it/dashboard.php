@@ -55,6 +55,7 @@ return [
     // Wishlist
     'my_wishlist' => 'La Mia Wishlist',
     'view_all' => 'Vedi Tutto',
+    'view_all_invitations' => 'Visualizza Tutti gli Inviti',
     
     // Sezioni per ruolo
     'poet_section' => 'Sezione Poeta',

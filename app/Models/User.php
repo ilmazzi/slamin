@@ -188,6 +188,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Event invitations received by this user (alias for receivedInvitations)
+     */
+    public function eventInvitations()
+    {
+        return $this->receivedInvitations();
+    }
+
+    /**
      * Invitations sent by this user
      */
     public function sentInvitations()

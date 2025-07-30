@@ -334,6 +334,62 @@
                 </div>
             </div>
 
+            <!-- Inviti in Sospeso -->
+            @if(auth()->user()->eventInvitations()->where('status', 'pending')->count() > 0)
+            <div class="col-lg-4">
+                <div class="card hover-effect equal-card">
+                    <div class="ribbon-top top-left ribbon-success">
+                        <i class="ph ph-envelope f-s-12"></i>
+                    </div>
+                    <div class="card-header">
+                        <h6 class="card-title mb-0 f-w-600">
+                            <i class="ph ph-envelope me-2 text-success"></i>{{ __('dashboard.pending_invitations') }}
+                        </h6>
+                    </div>
+                    <div class="card-body pa-20">
+                        @foreach(auth()->user()->eventInvitations()->where('status', 'pending')->with('event')->take(3)->get() as $invitation)
+                            <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-light-success h-35 w-35 d-flex-center rounded-circle">
+                                        <i class="ph ph-calendar text-success f-s-14"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="mb-1 fw-500 f-s-14">{{ $invitation->event->title }}</p>
+                                    <small class="text-muted f-s-12">
+                                        <i class="ph ph-calendar me-1"></i>{{ $invitation->event->start_datetime->format('d/m/Y H:i') }}
+                                    </small>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="d-flex gap-1">
+                                        <form action="{{ route('event-invitations.accept', ['event' => $invitation->event, 'invitation' => $invitation]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-success btn-sm" title="{{ __('invitations.accept') }}">
+                                                <i class="ph ph-check f-s-12"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('event-invitations.decline', ['event' => $invitation->event, 'invitation' => $invitation]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="{{ __('invitations.decline') }}">
+                                                <i class="ph ph-x f-s-12"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        <div class="text-center mt-3">
+                            <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="btn btn-light-success btn-sm">
+                                <i class="ph ph-eye me-1"></i>{{ __('dashboard.view_all_invitations') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Role-Specific Sections -->
             <div class="col-lg-8">
                 <div class="row g-3">
