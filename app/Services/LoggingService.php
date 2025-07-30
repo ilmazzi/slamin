@@ -413,4 +413,165 @@ class LoggingService
             $relatedId
         );
     }
-} 
+
+    /**
+     * Log security events (authentication, authorization, etc.)
+     */
+    public static function logSecurity(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog
+    {
+        $descriptions = [
+            'login_attempt' => 'Login attempt',
+            'login_success' => 'Successful login',
+            'login_failed' => 'Failed login attempt',
+            'logout' => 'User logout',
+            'password_reset' => 'Password reset requested',
+            'password_changed' => 'Password changed',
+            'account_locked' => 'Account locked',
+            'suspicious_activity' => 'Suspicious activity detected',
+            'permission_violation' => 'Permission violation',
+            'csrf_violation' => 'CSRF token violation',
+            'rate_limit_exceeded' => 'Rate limit exceeded',
+            'brute_force_attempt' => 'Brute force attempt detected',
+        ];
+
+        // Log to security channel
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : $action;
+        Log::channel('security')->warning("Security Event: [{$action}] {$description}", [
+            'action' => $action,
+            'user_id' => Auth::user()?->id,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'details' => $details,
+        ]);
+
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : "Security: {$action}";
+        return self::log(
+            "security.{$action}",
+            ActivityLog::CATEGORY_SYSTEM,
+            $description,
+            $details,
+            ActivityLog::LEVEL_WARNING,
+            $relatedModel,
+            $relatedId
+        );
+    }
+
+    /**
+     * Log API events
+     */
+    public static function logApi(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog
+    {
+        $descriptions = [
+            'api_request' => 'API request made',
+            'api_response' => 'API response received',
+            'api_error' => 'API error occurred',
+            'external_service_call' => 'External service called',
+            'external_service_error' => 'External service error',
+            'rate_limit_hit' => 'API rate limit hit',
+            'authentication_failed' => 'API authentication failed',
+        ];
+
+        // Log to API channel
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : $action;
+        Log::channel('api')->info("API Event: [{$action}] {$description}", [
+            'action' => $action,
+            'user_id' => Auth::user()?->id,
+            'ip' => request()->ip(),
+            'details' => $details,
+        ]);
+
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : "API: {$action}";
+        return self::log(
+            "api.{$action}",
+            ActivityLog::CATEGORY_SYSTEM,
+            $description,
+            $details,
+            ActivityLog::LEVEL_INFO,
+            $relatedModel,
+            $relatedId
+        );
+    }
+
+    /**
+     * Log user activity for production monitoring
+     */
+    public static function logUserActivity(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog
+    {
+        $descriptions = [
+            'page_view' => 'Page viewed',
+            'feature_used' => 'Feature used',
+            'data_exported' => 'Data exported',
+            'bulk_action' => 'Bulk action performed',
+            'search_performed' => 'Search performed',
+            'filter_applied' => 'Filter applied',
+            'download_requested' => 'Download requested',
+        ];
+
+        // Log to user activity channel
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : $action;
+        Log::channel('user_activity')->info("User Activity: [{$action}] {$description}", [
+            'action' => $action,
+            'user_id' => Auth::user()?->id,
+            'ip' => request()->ip(),
+            'url' => request()->fullUrl(),
+            'details' => $details,
+        ]);
+
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : "User Activity: {$action}";
+        return self::log(
+            "user_activity.{$action}",
+            ActivityLog::CATEGORY_SYSTEM,
+            $description,
+            $details,
+            ActivityLog::LEVEL_INFO,
+            $relatedModel,
+            $relatedId
+        );
+    }
+
+    /**
+     * Log critical errors that need immediate attention
+     */
+    public static function logCritical(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog
+    {
+        $descriptions = [
+            'database_connection_failed' => 'Database connection failed',
+            'file_system_error' => 'File system error',
+            'memory_exhaustion' => 'Memory exhaustion',
+            'disk_space_full' => 'Disk space full',
+            'service_unavailable' => 'Service unavailable',
+            'payment_processing_error' => 'Payment processing error',
+            'email_delivery_failed' => 'Email delivery failed',
+        ];
+
+        // Log to errors channel and potentially Slack
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : $action;
+        Log::channel('errors')->critical("CRITICAL: [{$action}] {$description}", [
+            'action' => $action,
+            'user_id' => Auth::user()?->id,
+            'ip' => request()->ip(),
+            'details' => $details,
+        ]);
+
+        // Also log to Slack if configured
+        if (config('logging.channels.slack.url')) {
+            $description = $descriptions[$action] ?? $action;
+            Log::channel('slack')->critical("🚨 CRITICAL ERROR: [{$action}] {$description}", [
+                'action' => $action,
+                'user_id' => Auth::user()?->id,
+                'details' => $details,
+            ]);
+        }
+
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : "CRITICAL: {$action}";
+        return self::log(
+            "critical.{$action}",
+            ActivityLog::CATEGORY_SYSTEM,
+            $description,
+            $details,
+            ActivityLog::LEVEL_CRITICAL,
+            $relatedModel,
+            $relatedId
+        );
+    }
+}

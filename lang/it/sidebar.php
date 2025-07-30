@@ -8,15 +8,15 @@ return [
     'private_mode' => 'Modalità Privata',
     'add_account' => 'Aggiungi Account',
     'logout_button' => 'Logout',
-    
+
     // Menu guest
     'guest_menu_title' => 'Slamin',
     'login' => 'Accedi',
-    
+
     // Amministrazione
     'administration' => 'Amministrazione',
     'permissions_management' => 'Gestione Permessi',
     'moderation' => 'Moderazione',
     'moderation_tooltip' => 'Gestisci contenuti e segnalazioni',
-    'system_logs' => 'System Logs',
+    'system_logs' => 'Log di Sistema',
 ];

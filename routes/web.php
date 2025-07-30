@@ -568,14 +568,28 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
         Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
 
-        // System Logs
+                // System Logs
         Route::prefix('logs')->name('logs.')->group(function () {
-            Route::get('/', [App\Http\Controllers\Admin\LogController::class, 'index'])->name('index');
-            Route::get('/get-logs', [App\Http\Controllers\Admin\LogController::class, 'getLogs'])->name('get-logs');
-            Route::get('/{log}', [App\Http\Controllers\Admin\LogController::class, 'show'])->name('show');
-            Route::post('/export', [App\Http\Controllers\Admin\LogController::class, 'export'])->name('export');
-            Route::post('/clear-old', [App\Http\Controllers\Admin\LogController::class, 'clearOldLogs'])->name('clear-old');
-            Route::get('/stats', [App\Http\Controllers\Admin\LogController::class, 'getStats'])->name('stats');
+            // Test route
+            Route::get('/test', [App\Http\Controllers\Admin\TestLogsController::class, 'index'])->name('test');
+
+            // Dashboard principale
+            Route::get('/', [App\Http\Controllers\Admin\LogsController::class, 'index'])->name('index');
+
+            // Log di attività (database)
+            Route::get('/activity', [App\Http\Controllers\Admin\LogsController::class, 'activity'])->name('activity');
+
+            // Log di errore (file)
+            Route::get('/errors', [App\Http\Controllers\Admin\LogsController::class, 'errors'])->name('errors');
+
+            // Dettagli log specifico
+            Route::get('/{id}', [App\Http\Controllers\Admin\LogsController::class, 'show'])->name('show');
+
+            // Download log
+            Route::get('/download', [App\Http\Controllers\Admin\LogsController::class, 'download'])->name('download');
+
+            // Pulizia log
+            Route::post('/clear', [App\Http\Controllers\Admin\LogsController::class, 'clear'])->name('clear');
         });
         Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
         Route::post('/settings/thumbnails', [App\Http\Controllers\Admin\SystemSettingsController::class, 'manageThumbnails'])->name('settings.thumbnails');
@@ -867,7 +881,7 @@ Route::prefix('groups')->name('groups.')->middleware('auth')->group(function () 
     Route::put('/{group}', [App\Http\Controllers\GroupController::class, 'update'])->name('update');
     Route::delete('/{group}', [App\Http\Controllers\GroupController::class, 'destroy'])->name('destroy');
     Route::get('/{group}/dashboard', [App\Http\Controllers\GroupController::class, 'dashboard'])->name('dashboard');
-    
+
     // Partecipazione ai gruppi
     Route::post('/{group}/join', [App\Http\Controllers\GroupController::class, 'join'])->name('join');
     Route::post('/{group}/leave', [App\Http\Controllers\GroupController::class, 'leave'])->name('leave');
