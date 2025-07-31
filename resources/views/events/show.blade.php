@@ -245,7 +245,7 @@
                                 <!-- Invited Participants -->
                                 @foreach($acceptedInvitations as $invitation)
                                     <div class="col-md-6 mb-3">
-                                        <div class="card card-light-success border-0">
+                                        <div class="card border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
@@ -258,7 +258,7 @@
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-success">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-success">{{ ucfirst($invitation->role) }}</span>
                                                             <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->compensation)
@@ -320,7 +320,7 @@
                                         <div class="card card-light-warning border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                    <div class="rounded-circle bg-light-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
                                                         @if($invitation->invitedUser->profile_photo)
                                                             <img src="{{ $invitation->invitedUser->profile_photo_url }}" alt="{{ $invitation->invitedUser->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                                         @else
@@ -330,7 +330,7 @@
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-warning">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-warning">{{ ucfirst($invitation->role) }}</span>
                                                             <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->expires_at)
@@ -361,7 +361,7 @@
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-warning">{{ ucfirst($request->requested_role) }}</span>
+                                                            <span class="badge bg-light-warning">{{ ucfirst($request->requested_role) }}</span>
                                                             <span class="badge bg-light-warning">{{ __('events.participant_applied') }}</span>
                                                         </div>
                                                         @if($request->message)

@@ -77,7 +77,9 @@ class EventInvitationController extends Controller
         $event = Event::findOrFail($validated['event_id']);
 
         // Check if user can invite to this event
-        Gate::authorize('update', $event);
+        if (!$event->canBeModifiedBy(Auth::user())) {
+            abort(403, 'Non hai i permessi per invitare utenti a questo evento.');
+        }
 
         $invitations = [];
         $errors = [];
@@ -238,7 +240,9 @@ class EventInvitationController extends Controller
     public function cancel(EventInvitation $invitation): RedirectResponse
     {
         // Check if user can cancel this invitation
-        Gate::authorize('update', $invitation->event);
+        if (!$invitation->event->canBeModifiedBy(Auth::user())) {
+            abort(403, 'Non hai i permessi per cancellare inviti per questo evento.');
+        }
 
         if ($invitation->status !== EventInvitation::STATUS_PENDING) {
             return back()->with('error', 'Impossibile cancellare un invito già gestito.');
@@ -267,7 +271,9 @@ class EventInvitationController extends Controller
      */
     public function statistics(Event $event): JsonResponse
     {
-        Gate::authorize('update', $event);
+        if (!$event->canBeModifiedBy(Auth::user())) {
+            abort(403, 'Non hai i permessi per visualizzare le statistiche di questo evento.');
+        }
 
         $stats = [
             'total' => $event->invitations()->count(),
@@ -309,7 +315,9 @@ class EventInvitationController extends Controller
      */
     public function resend(EventInvitation $invitation): JsonResponse
     {
-        Gate::authorize('update', $invitation->event);
+        if (!$invitation->event->canBeModifiedBy(Auth::user())) {
+            abort(403, 'Non hai i permessi per reinviare inviti per questo evento.');
+        }
 
         if ($invitation->status !== EventInvitation::STATUS_PENDING) {
             return response()->json([
@@ -339,7 +347,9 @@ class EventInvitationController extends Controller
      */
     public function bulkAction(Request $request, Event $event): JsonResponse
     {
-        Gate::authorize('update', $event);
+        if (!$event->canBeModifiedBy(Auth::user())) {
+            abort(403, 'Non hai i permessi per eseguire azioni di massa su questo evento.');
+        }
 
         $validated = $request->validate([
             'action' => 'required|in:cancel,resend,extend',

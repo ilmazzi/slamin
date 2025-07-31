@@ -125,14 +125,13 @@ class NotificationManager {
         const timeAgo = notification.created_at || 'Ora';
 
         // Controlla se è una notifica di invito a evento
-        const isEventInvitation = notification.type === 'event_invitation' ||
-                                 (notification.title && notification.title.includes('Invito'));
+        const isEventInvitation = notification.type === 'event_invitation';
 
         // Estrai event_id e invitation_id dai dati della notifica se disponibili
         let eventId = null;
         let invitationId = null;
 
-        if (notification.data) {
+        if (notification.data && isEventInvitation) {
             try {
                 const data = typeof notification.data === 'string' ? JSON.parse(notification.data) : notification.data;
                 eventId = data.event_id;

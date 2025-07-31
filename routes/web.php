@@ -163,7 +163,7 @@ Route::get('/tasks/{task}/details', [App\Http\Controllers\TaskController::class,
 Route::patch('/tasks/{task}/status', [App\Http\Controllers\TaskController::class, 'updateStatus'])->name('tasks.update-status');
 Route::put('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])->name('tasks.destroy');
-Route::post('/tasks/{task}/delete-image', [App\Http\Controllers\TaskController::class, 'deleteImage'])->name('tasks.delete-image');
+// Route moved to tasks group below
 
 Route::view('landing', 'landing')->name('landing');
 Route::view('leaflet_map', 'leaflet_map')->name('leaflet_map');
@@ -423,13 +423,7 @@ Route::get('/invitations/{invitation}', [InvitationController::class, 'show'])->
 Route::get('/invitations/{invitation}/accept', [InvitationController::class, 'accept'])->name('invitations.accept');
 Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'decline'])->name('invitations.decline');
 
-// Request routes
-Route::get('/requests', [EventRequestController::class, 'index'])->name('requests.index');
-Route::post('/requests/{eventRequest}/accept', [EventRequestController::class, 'accept'])->name('requests.accept');
-Route::post('/requests/{eventRequest}/decline', [EventRequestController::class, 'decline'])->name('requests.decline');
-Route::post('/requests/{eventRequest}/accept-ajax', [EventRequestController::class, 'acceptAjax'])->name('requests.accept.ajax');
-Route::post('/requests/{eventRequest}/decline-ajax', [EventRequestController::class, 'declineAjax'])->name('requests.decline.ajax');
-Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, 'cancel'])->name('requests.cancel');
+// Request routes (moved to group below)
 
     // Event invitations (organizer management)
     Route::prefix('events/{event}/invitations')->name('event-invitations.')->group(function () {
@@ -456,6 +450,8 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         Route::patch('/{eventRequest}/accept', [EventRequestController::class, 'accept'])->name('accept');
         Route::patch('/{eventRequest}/decline', [EventRequestController::class, 'decline'])->name('decline');
         Route::delete('/{eventRequest}', [EventRequestController::class, 'cancel'])->name('cancel');
+        Route::post('/{eventRequest}/accept-ajax', [EventRequestController::class, 'acceptAjax'])->name('accept.ajax');
+        Route::post('/{eventRequest}/decline-ajax', [EventRequestController::class, 'declineAjax'])->name('decline.ajax');
 
         // API routes for requests
         Route::prefix('api')->name('api.')->group(function () {

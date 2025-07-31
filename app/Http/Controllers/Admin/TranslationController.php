@@ -833,7 +833,16 @@ class TranslationController extends Controller
                 if (!File::exists($italianFile)) continue;
 
                 $italianTranslations = include $italianFile;
-                $targetTranslations = File::exists($targetFile) ? include $targetFile : [];
+                if (!is_array($italianTranslations)) {
+                    continue; // Salta questo file se non è un array valido
+                }
+                $targetTranslations = [];
+                if (File::exists($targetFile)) {
+                    $loadedTranslations = include $targetFile;
+                    if (is_array($loadedTranslations)) {
+                        $targetTranslations = $loadedTranslations;
+                    }
+                }
 
                 $missingInFile = [];
 
