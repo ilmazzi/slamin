@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\HasModeration;
 use App\Traits\Reportable;
+use App\Traits\HasLikes;
+use App\Traits\HasViews;
+use App\Traits\HasComments;
 use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
 {
-    use HasFactory, HasModeration, Reportable;
+    use HasFactory, HasModeration, Reportable, HasLikes, HasViews, HasComments;
 
     protected $fillable = [
         'user_id',

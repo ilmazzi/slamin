@@ -9,6 +9,11 @@ class AvatarHelper
      */
     public static function getUserAvatarUrl($user)
     {
+        // Check if user is null or invalid
+        if (!$user || !is_object($user)) {
+            return asset('assets/images/avatar/default-avatar.webp');
+        }
+
         // Check if user has a profile photo URL (Laravel Jetstream/Fortify)
         if ($user->profile_photo_url && $user->profile_photo_url !== asset('assets/images/avatar/default-avatar.webp')) {
             return $user->profile_photo_url;
@@ -28,7 +33,7 @@ class AvatarHelper
     public static function getUserAvatarHtml($user, $size = 'h-40 w-40', $classes = '')
     {
         $avatarUrl = self::getUserAvatarUrl($user);
-        $userName = $user->name ?? 'User';
+        $userName = $user && is_object($user) ? ($user->name ?? 'User') : 'User';
 
         return "<img src=\"{$avatarUrl}\" alt=\"{$userName}\" class=\"img-fluid {$classes}\">";
     }
@@ -38,7 +43,12 @@ class AvatarHelper
      */
     public static function getUserAvatarJsHtml($user)
     {
+        if (!$user || !is_object($user)) {
+            return "<img src=\"/assets/images/avatar/default.png\" alt=\"User\" class=\"img-fluid\">";
+        }
+        
         $avatarUrl = $user->avatar_url ?? '/assets/images/avatar/default.png';
-        return "<img src=\"{$avatarUrl}\" alt=\"{$user->name}\" class=\"img-fluid\">";
+        $userName = $user->name ?? 'User';
+        return "<img src=\"{$avatarUrl}\" alt=\"{$userName}\" class=\"img-fluid\">";
     }
 }

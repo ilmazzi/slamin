@@ -258,27 +258,42 @@
                         </div>
 
                         <div class="mt-auto">
+                            <!-- Event Info -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                @if($event->entry_fee > 0)
+                                    <span class="badge bg-warning">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
+                                @else
+                                    <span class="badge bg-success">{{ __('events.free') }}</span>
+                                @endif
+                                @if($event->max_participants)
+                                    <small class="text-muted">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
+                                @endif
+                            </div>
+                            
+                            <!-- Social Actions & Action Buttons -->
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    @if($event->entry_fee > 0)
-                                        <span class="badge bg-warning me-2">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
-                                    @else
-                                        <span class="badge bg-success me-2">{{ __('events.free') }}</span>
-                                    @endif
-                                    @if($event->max_participants)
-                                        <small class="text-muted">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
-                                    @endif
-                                </div>
+                                <!-- Social Actions -->
+                                @if(Auth::check())
+                                    <div class="d-flex align-items-center gap-3">
+                                        <x-social-like-button :content="$event" type="event" />
+                                        <x-social-view-display :content="$event" type="event" />
+                                        <x-report-button :content="$event" type="event" />
+                                    </div>
+                                @else
+                                    <div></div>
+                                @endif
+                                
+                                <!-- Action Buttons -->
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
-                                        {{ __('common.view') }}
+                                    <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm">
+                                        <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
                                     </a>
                                     @can('events.manage.own')
                                         @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
-                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            <button type="button" class="btn btn-light btn-sm" 
                                                     onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
                                                     title="Elimina evento">
-                                                <i class="ph ph-trash"></i>
+                                                <i class="ti ti-trash"></i>
                                             </button>
                                         @endif
                                     @endcan

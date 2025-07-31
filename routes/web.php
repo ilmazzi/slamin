@@ -485,12 +485,40 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
         });
     });
 
+
+
+    // Social API Routes (unified system) - PUBBLICHE - FUORI DA TUTTI I MIDDLEWARE
+    Route::prefix('api/social')->name('api.social.')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])->group(function () {
+        // View routes (pubbliche - non richiedono autenticazione)
+        Route::post('/views/increment', [App\Http\Controllers\ViewController::class, 'increment'])->name('views.increment');
+        Route::get('/views/content', [App\Http\Controllers\ViewController::class, 'getViewedContent'])->name('views.content');
+        Route::get('/views/stats', [App\Http\Controllers\ViewController::class, 'getViewStats'])->name('views.stats');
+
+        // Like routes (richiedono autenticazione)
+        Route::middleware('auth')->group(function () {
+            Route::post('/likes/toggle', [App\Http\Controllers\LikeController::class, 'toggle'])->name('likes.toggle');
+            Route::get('/likes/content', [App\Http\Controllers\LikeController::class, 'getLikedContent'])->name('likes.content');
+            Route::get('/likes/stats', [App\Http\Controllers\LikeController::class, 'getLikeStats'])->name('likes.stats');
+        });
+
+        // Comment routes (richiedono autenticazione)
+        Route::middleware('auth')->group(function () {
+            Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+            Route::put('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'update'])->name('comments.update');
+            Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
+            Route::post('/comments/{comment}/approve', [App\Http\Controllers\CommentController::class, 'approve'])->name('comments.approve');
+            Route::post('/comments/{comment}/reject', [App\Http\Controllers\CommentController::class, 'reject'])->name('comments.reject');
+            Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('comments.list');
+            Route::get('/comments/{comment}/replies', [App\Http\Controllers\CommentController::class, 'getReplies'])->name('comments.replies');
+        });
+    });
+
     // Development/testing routes (only in local environment)
     if (app()->environment('local')) {
         Route::post('/notifications/test', [NotificationController::class, 'test'])->name('notifications.test');
     }
 
-    // API routes for user search and suggestions
+    // API routes for user search and suggestions (excluding social routes)
     Route::prefix('api')->name('api.')->middleware('auth')->group(function () {
         Route::get('/users/search', [App\Http\Controllers\Api\UserController::class, 'search'])->name('users.search');
         Route::get('/users/suggested', [App\Http\Controllers\Api\UserController::class, 'suggested'])->name('users.suggested');
@@ -730,6 +758,17 @@ Route::post('/requests/{eventRequest}/cancel', [EventRequestController::class, '
 
     // Public Profile Routes (accessibili a tutti)
     Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
+});
+
+
+
+// Admin Social Settings Routes
+Route::prefix('admin/social-settings')->name('admin.social-settings.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\SocialSettingsController::class, 'index'])->name('index');
+    Route::post('/update', [App\Http\Controllers\Admin\SocialSettingsController::class, 'update'])->name('update');
+    Route::post('/toggle', [App\Http\Controllers\Admin\SocialSettingsController::class, 'toggleFeature'])->name('toggle');
+    Route::get('/api/settings', [App\Http\Controllers\Admin\SocialSettingsController::class, 'getSettings'])->name('api.settings');
+    Route::post('/reset', [App\Http\Controllers\Admin\SocialSettingsController::class, 'reset'])->name('reset');
 });
 
 // Test Routes (solo in ambiente locale)

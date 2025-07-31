@@ -768,4 +768,88 @@ class User extends Authenticatable
         $participation = $this->chatParticipations()->where('chat_id', $chat->id)->first();
         return $participation ? $participation->canManageParticipants() : false;
     }
+
+    /**
+     * Relazione con i like unificati
+     */
+    public function likes()
+    {
+        return $this->hasMany(\App\Models\Like::class);
+    }
+
+    /**
+     * Relazione con le visualizzazioni unificate
+     */
+    public function views()
+    {
+        return $this->hasMany(\App\Models\View::class);
+    }
+
+    /**
+     * Relazione con i commenti unificati
+     */
+    public function comments()
+    {
+        return $this->hasMany(\App\Models\Comment::class);
+    }
+
+    /**
+     * Contenuti likati dall'utente (relazione polimorfa)
+     */
+    public function likedContent()
+    {
+        return $this->belongsToMany(\App\Models\Video::class, 'unified_likes', 'user_id', 'likeable_id')
+            ->where('likeable_type', \App\Models\Video::class)
+            ->withTimestamps()
+            ->union(
+                $this->belongsToMany(\App\Models\Photo::class, 'unified_likes', 'user_id', 'likeable_id')
+                    ->where('likeable_type', \App\Models\Photo::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Poem::class, 'unified_likes', 'user_id', 'likeable_id')
+                    ->where('likeable_type', \App\Models\Poem::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Carousel::class, 'unified_likes', 'user_id', 'likeable_id')
+                    ->where('likeable_type', \App\Models\Carousel::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Event::class, 'unified_likes', 'user_id', 'likeable_id')
+                    ->where('likeable_type', \App\Models\Event::class)
+                    ->withTimestamps()
+            );
+    }
+
+    /**
+     * Contenuti visualizzati dall'utente (relazione polimorfa)
+     */
+    public function viewedContent()
+    {
+        return $this->belongsToMany(\App\Models\Video::class, 'unified_views', 'user_id', 'viewable_id')
+            ->where('viewable_type', \App\Models\Video::class)
+            ->withTimestamps()
+            ->union(
+                $this->belongsToMany(\App\Models\Photo::class, 'unified_views', 'user_id', 'viewable_id')
+                    ->where('viewable_type', \App\Models\Photo::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Poem::class, 'unified_views', 'user_id', 'viewable_id')
+                    ->where('viewable_type', \App\Models\Poem::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Carousel::class, 'unified_views', 'user_id', 'viewable_id')
+                    ->where('viewable_type', \App\Models\Carousel::class)
+                    ->withTimestamps()
+            )
+            ->union(
+                $this->belongsToMany(\App\Models\Event::class, 'unified_views', 'user_id', 'viewable_id')
+                    ->where('viewable_type', \App\Models\Event::class)
+                    ->withTimestamps()
+            );
+    }
 }

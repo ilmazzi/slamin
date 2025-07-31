@@ -76,6 +76,14 @@ class Notification extends Model
     const TYPE_GROUP_ROLE_CHANGED = 'group_role_changed';
 
     /**
+     * Type constants for social interactions
+     */
+    const TYPE_CONTENT_LIKED = 'content_liked';
+    const TYPE_CONTENT_COMMENTED = 'content_commented';
+    const TYPE_COMMENT_LIKED = 'comment_liked';
+    const TYPE_VIDEO_SNAPPED = 'video_snapped';
+
+    /**
      * Get the user this notification belongs to
      */
     public function user(): BelongsTo

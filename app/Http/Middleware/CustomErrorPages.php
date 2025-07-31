@@ -15,6 +15,11 @@ class CustomErrorPages
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Escludi le route API dal middleware
+        if ($request->is('api/*') || $request->is('api/social/*') || $request->is('api/test')) {
+            return $next($request);
+        }
+
         $response = $next($request);
 
         // Se la risposta è un errore HTTP, personalizziamo la vista

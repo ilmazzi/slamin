@@ -11,10 +11,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Reportable;
 use App\Traits\HasModeration;
+use App\Traits\HasLikes;
+use App\Traits\HasViews;
+use App\Traits\HasComments;
 
 class Poem extends Model
 {
-    use HasFactory, Reportable, HasModeration;
+    use HasFactory, Reportable, HasModeration, HasLikes, HasViews, HasComments;
 
     protected $fillable = [
         'title',
@@ -92,19 +95,11 @@ class Poem extends Model
         return $this->hasMany(Poem::class, 'translated_from');
     }
 
-    public function likes(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'poem_likes')->withTimestamps();
-    }
-
+    // Relazioni like e commenti gestite dai trait HasLikes e HasComments
+    
     public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'poem_bookmarks')->withTimestamps();
-    }
-
-    public function comments(): HasMany
-    {
-        return $this->hasMany(PoemComment::class);
     }
 
     // Scopes

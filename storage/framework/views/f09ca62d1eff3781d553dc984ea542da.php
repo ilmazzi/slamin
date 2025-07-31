@@ -276,28 +276,100 @@
                         </div>
 
                         <div class="mt-auto">
+                            <!-- Event Info -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <?php if($event->entry_fee > 0): ?>
+                                    <span class="badge bg-warning"><?php echo e(__('events.entry_fee')); ?>: €<?php echo e($event->entry_fee); ?></span>
+                                <?php else: ?>
+                                    <span class="badge bg-success"><?php echo e(__('events.free')); ?></span>
+                                <?php endif; ?>
+                                <?php if($event->max_participants): ?>
+                                    <small class="text-muted"><?php echo e(__('events.max_participants')); ?>: <?php echo e($event->max_participants); ?></small>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <!-- Social Actions & Action Buttons -->
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <?php if($event->entry_fee > 0): ?>
-                                        <span class="badge bg-warning me-2"><?php echo e(__('events.entry_fee')); ?>: €<?php echo e($event->entry_fee); ?></span>
-                                    <?php else: ?>
-                                        <span class="badge bg-success me-2"><?php echo e(__('events.free')); ?></span>
-                                    <?php endif; ?>
-                                    <?php if($event->max_participants): ?>
-                                        <small class="text-muted"><?php echo e(__('events.max_participants')); ?>: <?php echo e($event->max_participants); ?></small>
-                                    <?php endif; ?>
-                                </div>
+                                <!-- Social Actions -->
+                                <?php if(Auth::check()): ?>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-like-button','data' => ['content' => $event,'type' => 'event']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-like-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($event),'type' => 'event']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $attributes = $__attributesOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__attributesOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $component = $__componentOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__componentOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+                                        <?php if (isset($component)) { $__componentOriginalf1bddb52d2d13581ea13eec9962d253b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf1bddb52d2d13581ea13eec9962d253b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-display','data' => ['content' => $event,'type' => 'event']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-display'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($event),'type' => 'event']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf1bddb52d2d13581ea13eec9962d253b)): ?>
+<?php $attributes = $__attributesOriginalf1bddb52d2d13581ea13eec9962d253b; ?>
+<?php unset($__attributesOriginalf1bddb52d2d13581ea13eec9962d253b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf1bddb52d2d13581ea13eec9962d253b)): ?>
+<?php $component = $__componentOriginalf1bddb52d2d13581ea13eec9962d253b; ?>
+<?php unset($__componentOriginalf1bddb52d2d13581ea13eec9962d253b); ?>
+<?php endif; ?>
+                                        <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $event,'type' => 'event']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($event),'type' => 'event']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div></div>
+                                <?php endif; ?>
+                                
+                                <!-- Action Buttons -->
                                 <div class="d-flex gap-2">
-                                    <a href="<?php echo e(route('events.show', $event)); ?>" class="btn btn-outline-primary btn-sm">
-                                        <?php echo e(__('common.view')); ?>
+                                    <a href="<?php echo e(route('events.show', $event)); ?>" class="btn btn-primary btn-sm">
+                                        <i class="ti ti-eye me-1"></i><?php echo e(__('common.view')); ?>
 
                                     </a>
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('events.manage.own')): ?>
                                         <?php if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id()): ?>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                            <button type="button" class="btn btn-light btn-sm" 
                                                     onclick="confirmDeleteEvent(<?php echo e($event->id); ?>, '<?php echo e(addslashes($event->title)); ?>')"
                                                     title="Elimina evento">
-                                                <i class="ph ph-trash"></i>
+                                                <i class="ti ti-trash"></i>
                                             </button>
                                         <?php endif; ?>
                                     <?php endif; ?>

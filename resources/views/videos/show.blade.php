@@ -208,22 +208,16 @@
                             <p class="card-text">{{ $video->description }}</p>
                         @endif
 
-                        <!-- {{ __('common.video') }} Actions -->
+                        <!-- Video Actions -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
-                                <!-- Like Button -->
-                                <button type="button" class="btn btn-outline-primary hover-effect" onclick="toggleLike('like')" id="likeBtn">
-                                    <i class="ph-duotone ph-thumbs-up f-s-14 me-1"></i>
-                                    <span id="likeCount">{{ $video->like_count }}</span>
-                                </button>
+                                <!-- Like Button (Sistema Unificato) -->
+                                <x-social-like-button :content="$video" type="video" />
 
-                                <!-- Dislike Button -->
-                                <button type="button" class="btn btn-outline-secondary hover-effect" onclick="toggleLike('dislike')" id="dislikeBtn">
-                                    <i class="ph-duotone ph-thumbs-down f-s-14 me-1"></i>
-                                    <span id="dislikeCount">{{ $video->dislike_count }}</span>
-                                </button>
+                                <!-- View Counter (Sistema Unificato) -->
+                                <x-social-view-counter :content="$video" type="video" />
 
-                                <!-- {{ __('common.snap') }} Button -->
+                                <!-- Snap Button (Mantenuto esistente) -->
                                 <button type="button" class="btn btn-outline-dark hover-effect" onclick="showSnapModal()">
                                     <i class="ph-duotone ph-hands-clapping f-s-14 me-1"></i>
                                     {{ __('common.snap') }}
@@ -231,7 +225,6 @@
 
                                 <!-- Report Button -->
                                 <x-report-button :content="$video" type="video" />
-                            </div>
                             </div>
 
                             <small class="text-muted">
@@ -242,81 +235,8 @@
                     </div>
                 </div>
 
-                <!-- Comments Section -->
-                <div class="card hover-effect mt-3">
-                    <div class="card-header">
-                        <h6 class="card-title mb-0">
-                            <i class="ph-duotone ph-chat-circle f-s-16 me-2"></i>
-                            {{ __('common.comments_section') }} (<span id="commentCount">{{ $video->comment_count }}</span>)
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Add Comment Form -->
-                        <div class="mb-4">
-                            @auth
-                            <form id="commentForm">
-                                <div class="mb-3">
-                                    <textarea class="form-control" id="commentContent" rows="3" placeholder="Scrivi un commento..." maxlength="1000"></textarea>
-                                    <div class="form-text">
-                                        <span id="charCount">0</span>/1000 caratteri
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary hover-effect">
-                                    <i class="ph-duotone ph-paper-plane f-s-14 me-1"></i>
-                                    Pubblica Commento
-                                </button>
-                            </form>
-                            @else
-                            <div class="alert alert-info">
-                                <i class="ph-duotone ph-info f-s-16 me-2"></i>
-                                <a href="{{ route('login') }}">{{ __('auth.login') }}</a> per lasciare un commento.
-                            </div>
-                            @endauth
-                        </div>
-
-                        <!-- Comments List -->
-                        <div id="commentsList">
-                            @foreach($comments as $comment)
-                                <div class="Comment-box mb-3" id="comment-{{ $comment->id }}">
-                                    <div class="d-flex align-items-center">
-                                        <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden bg-primary">
-                                            @if($comment->user->profile_photo)
-                                                <img src="{{ $comment->user->profile_photo_url }}" alt="" class="img-fluid">
-                                            @else
-                                                <span class="text-white fw-bold">{{ substr($comment->user->name, 0, 2) }}</span>
-                                            @endif
-                                        </div>
-                                        <div class="flex-grow-1 ps-2 pe-2">
-                                            <div class="f-w-600">{{ $comment->user->name }}</div>
-                                            <div class="text-muted f-s-12">{{ $comment->created_at->diffForHumans() }}</div>
-                                        </div>
-                                        @if(auth()->id() === $comment->user_id || auth()->user()->isModerator())
-                                            <div class="dropdown">
-                                                <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteComment({{ $comment->id }})">
-                                                        <i class="ti ti-trash f-s-14 me-1"></i> Elimina
-                                                    </a></li>
-                                                </ul>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="mt-2">
-                                        <p class="mb-0">{{ $comment->content }}</p>
-                                        @if($comment->timestamp)
-                                            <small class="text-muted">
-                                                <i class="ph-duotone ph-clock f-s-12 me-1"></i>
-                                                {{ $comment->formatted_timestamp }}
-                                            </small>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
+                <!-- Comments Section (Sistema Unificato) -->
+                <x-social-comments-section :content="$video" type="video" />
             </div>
 
             <div class="col-lg-4">

@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Reportable;
 use App\Traits\HasModeration;
+use App\Traits\HasLikes;
+use App\Traits\HasViews;
+use App\Traits\HasComments;
 
 class Video extends Model
 {
-    use HasFactory, Reportable, HasModeration;
+    use HasFactory, Reportable, HasModeration, HasLikes, HasViews, HasComments;
 
     protected $fillable = [
         'title',
@@ -73,21 +76,7 @@ class Video extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relazione con i commenti
-     */
-    public function comments()
-    {
-        return $this->hasMany(VideoComment::class);
-    }
-
-    /**
-     * Relazione con i commenti approvati
-     */
-    public function approvedComments()
-    {
-        return $this->hasMany(VideoComment::class)->approved();
-    }
+    // Relazioni commenti gestite dal trait HasComments
 
     /**
      * Relazione con gli snap
@@ -105,29 +94,7 @@ class Video extends Model
         return $this->hasMany(VideoSnap::class)->approved();
     }
 
-    /**
-     * Relazione con i like
-     */
-    public function likes()
-    {
-        return $this->hasMany(VideoLike::class);
-    }
-
-    /**
-     * Relazione con i like positivi
-     */
-    public function positiveLikes()
-    {
-        return $this->hasMany(VideoLike::class)->likes();
-    }
-
-    /**
-     * Relazione con i dislike
-     */
-    public function negativeLikes()
-    {
-        return $this->hasMany(VideoLike::class)->dislikes();
-    }
+    // Relazioni like gestite dal trait HasLikes
 
     /**
      * Ottiene l'URL del thumbnail

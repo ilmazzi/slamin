@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\HasModeration;
 use App\Traits\Reportable;
+use App\Traits\HasLikes;
+use App\Traits\HasViews;
+use App\Traits\HasComments;
 
 class Carousel extends Model
 {
-    use HasFactory, HasModeration, Reportable;
+    use HasFactory, HasModeration, Reportable, HasLikes, HasViews, HasComments;
 
     protected $fillable = [
         'title',
@@ -34,6 +37,8 @@ class Carousel extends Model
         'content_description',
         'content_image_url',
         'content_url',
+        'like_count',
+        'comment_count',
     ];
 
     protected $casts = [
@@ -41,6 +46,8 @@ class Carousel extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'moderated_at' => 'datetime',
+        'like_count' => 'integer',
+        'comment_count' => 'integer',
     ];
 
     // Costanti per i tipi di contenuto

@@ -36,24 +36,28 @@ unset($__defined_vars); ?>
 <div class="report-button-container">
     <?php if($isReported): ?>
         <!-- Pulsante per rimuovere la segnalazione -->
-        <button type="button"
-                class="btn btn-<?php echo e($size); ?> btn-outline-warning report-remove-btn"
-                data-type="<?php echo e($type); ?>"
-                data-id="<?php echo e($content->id); ?>"
-                title="Rimuovi segnalazione">
-            <i class="ph-duotone ph-flag-simple"></i>
-            <span class="ms-1">Segnalato</span>
-        </button>
+        <div class="report-remove-btn"
+             data-type="<?php echo e($type); ?>"
+             data-id="<?php echo e($content->id); ?>"
+             title="Rimuovi segnalazione"
+             style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+             onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+             onmouseout="this.style.backgroundColor='transparent'">
+            <i class="ti ti-flag f-s-24 text-warning"></i>
+            <span class="text-secondary f-s-12">Segnalato</span>
+        </div>
     <?php else: ?>
         <!-- Pulsante per segnalare -->
-        <button type="button"
-                class="btn btn-<?php echo e($size); ?> btn-outline-secondary report-btn"
-                data-type="<?php echo e($type); ?>"
-                data-id="<?php echo e($content->id); ?>"
-                title="Segnala contenuto">
-            <i class="ph-duotone ph-flag"></i>
-            <span class="ms-1">Segnala</span>
-        </button>
+        <div class="report-btn"
+             data-type="<?php echo e($type); ?>"
+             data-id="<?php echo e($content->id); ?>"
+             title="Segnala contenuto"
+             style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+             onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+             onmouseout="this.style.backgroundColor='transparent'">
+            <i class="ti ti-flag f-s-24 text-muted"></i>
+            <span class="text-secondary f-s-12">Segnala</span>
+        </div>
     <?php endif; ?>
 
     <?php if($reportCount > 0): ?>

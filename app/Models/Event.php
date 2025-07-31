@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\HasModeration;
 use App\Traits\Reportable;
+use App\Traits\HasLikes;
+use App\Traits\HasViews;
+use App\Traits\HasComments;
 use Carbon\Carbon;
 
 class Event extends Model
 {
-    use HasFactory, HasModeration, Reportable;
+    use HasFactory, HasModeration, Reportable, HasLikes, HasViews, HasComments;
 
     /**
      * The attributes that are mass assignable.
@@ -61,6 +64,8 @@ class Event extends Model
         'online_url',
         'festival_id',
         'festival_events',
+        'like_count',
+        'comment_count',
     ];
 
     /**
@@ -83,6 +88,8 @@ class Event extends Model
         'recurrence_weekdays' => 'array',
         'is_online' => 'boolean',
         'festival_events' => 'array',
+        'like_count' => 'integer',
+        'comment_count' => 'integer',
     ];
 
     /**

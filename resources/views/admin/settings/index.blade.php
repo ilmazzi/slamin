@@ -627,4 +627,4 @@ function showThumbnailResults(data) {
     }
 }
 </script>
-@endsection
+@endpush
