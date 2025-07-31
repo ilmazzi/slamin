@@ -223,6 +223,9 @@
                                         {{ $event->title }}
                                     </a>
                                 </h5>
+                                @if($event->subtitle)
+                                    <h6 class="text-muted mb-2">{{ $event->subtitle }}</h6>
+                                @endif
                                 <p class="text-muted mb-2">
                                     {{ Str::limit($event->description, 80) }}
                                 </p>

@@ -66,6 +66,30 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <!-- Toggle per Sottotitolo -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" class="form-check-input" id="subtitle-toggle" {{ old('subtitle', $event->subtitle) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="subtitle-toggle">
+                                                <i class="ph ph-plus-circle me-2"></i>Aggiungi sottotitolo
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">Opzionale</small>
+                                    </div>
+                                </div>
+
+                                <!-- Campo Sottotitolo -->
+                                <div class="mb-3" id="subtitle-field" style="display: {{ old('subtitle', $event->subtitle) ? 'block' : 'none' }};">
+                                    <label for="subtitle" class="form-label">Sottotitolo evento</label>
+                                    <input type="text" class="form-control @error('subtitle') is-invalid @enderror"
+                                           id="subtitle" name="subtitle" value="{{ old('subtitle', $event->subtitle) }}" placeholder="Inserisci un sottotitolo per l'evento...">
+                                    <small class="text-muted">Un sottotitolo può aiutare a descrivere meglio il tuo evento</small>
+                                    @error('subtitle')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="col-md-4">
@@ -613,6 +637,25 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isLinkedToGroup && groupFields) {
         isLinkedToGroup.addEventListener('change', function() {
             groupFields.style.display = this.checked ? 'block' : 'none';
+
+    // ========================================
+    // GESTIONE TOGGLE SOTTOTITOLO
+    // ========================================
+    const subtitleToggle = document.getElementById('subtitle-toggle');
+    const subtitleField = document.getElementById('subtitle-field');
+    const subtitleInput = document.getElementById('subtitle');
+
+    if (subtitleToggle && subtitleField) {
+        subtitleToggle.addEventListener('change', function() {
+            if (this.checked) {
+                subtitleField.style.display = 'block';
+                subtitleInput.focus();
+            } else {
+                subtitleField.style.display = 'none';
+                subtitleInput.value = ''; // Pulisce il campo quando si disattiva
+            }
+        });
+    }
         });
     }
 

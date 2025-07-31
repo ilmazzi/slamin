@@ -50,7 +50,10 @@
                 @endif
 
                 <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 2;">
-                    <h1 class="display-4 fw-bold mb-3 text-white">{{ $event->title }}</h1>
+                    <h1 class="display-4 fw-bold mb-2 text-white">{{ $event->title }}</h1>
+                    @if($event->subtitle)
+                        <h4 class="text-white-50 mb-3">{{ $event->subtitle }}</h4>
+                    @endif
                     <div class="d-flex align-items-center mb-2">
                         <i class="ph ph-calendar-check me-2 fs-5"></i>
                         <span class="fs-5">{{ $event->start_datetime->format('d F Y, H:i') }}</span>

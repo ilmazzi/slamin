@@ -110,10 +110,33 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
-                                                                    <input type="text" name="title" id="title" class="form-control" placeholder="{{ __('events.title_placeholder') }}" required>
-                                <label for="title">{{ __('events.title_event') }} *</label>
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="{{ __('events.title_placeholder') }}" required>
+                                    <label for="title">{{ __('events.title_event') }} *</label>
                                 </div>
                                 <div class="error-feedback" id="title-error"></div>
+                            </div>
+
+                            <!-- Toggle per Sottotitolo -->
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" class="form-check-input" id="subtitle-toggle">
+                                        <label class="form-check-label" for="subtitle-toggle">
+                                            <i class="ph ph-plus-circle me-2"></i>Aggiungi sottotitolo
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Opzionale</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Sottotitolo (nascosto di default) -->
+                            <div class="col-12 mb-3" id="subtitle-field" style="display: none;">
+                                <div class="form-floating">
+                                    <input type="text" name="subtitle" id="subtitle" class="form-control" placeholder="Inserisci un sottotitolo per l'evento...">
+                                    <label for="subtitle">Sottotitolo evento</label>
+                                </div>
+                                <small class="text-muted">Un sottotitolo può aiutare a descrivere meglio il tuo evento</small>
+                                <div class="error-feedback" id="subtitle-error"></div>
                             </div>
 
                             <div class="col-12 mb-3">
@@ -1119,6 +1142,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 mapContainer.style.display = 'block';
                 // Assicurati che anche il container della mappa sia visibile
                 const mapSection = mapContainer.closest('.col-12');
+
+            // ========================================
+            // INIZIALIZZAZIONE TOGGLE SOTTOTITOLO
+            // ========================================
+            console.log('=== INIZIALIZZAZIONE TOGGLE SOTTOTITOLO ===');
+
+            const subtitleToggle = document.getElementById('subtitle-toggle');
+            const subtitleField = document.getElementById('subtitle-field');
+            const subtitleInput = document.getElementById('subtitle');
+
+            console.log('Subtitle toggle found:', subtitleToggle);
+            console.log('Subtitle field found:', subtitleField);
+
+            if (subtitleToggle && subtitleField) {
+                console.log('Setting up subtitle toggle listener');
+                
+                subtitleToggle.addEventListener('change', function() {
+                    console.log('Subtitle toggle changed:', this.checked);
+                    if (this.checked) {
+                        subtitleField.style.display = 'block';
+                        subtitleInput.focus();
+                    } else {
+                        subtitleField.style.display = 'none';
+                        subtitleInput.value = ''; // Pulisce il campo quando si disattiva
+                    }
+                });
+            } else {
+                console.error('Subtitle toggle elements not found!');
+            }
                 if (mapSection) {
                     mapSection.style.display = 'block';
                 }
