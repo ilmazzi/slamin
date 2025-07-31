@@ -32,4 +32,6 @@ return [
     'news' => 'Notizie',
     'media_section' => 'Media',
     'kanban_board' => 'Kanban Board',
+    'popular' => 'Popolari',
+    'new' => 'Nuovi',
 ];

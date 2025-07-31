@@ -369,4 +369,4 @@ function testConnection() {
         });
 }
 </script>
-@endsection
+@endpush
