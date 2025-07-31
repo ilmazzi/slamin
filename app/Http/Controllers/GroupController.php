@@ -110,14 +110,6 @@ class GroupController extends Controller
 
         $group->save();
 
-        // Aggiungi il creatore come admin del gruppo
-        GroupMember::create([
-            'group_id' => $group->id,
-            'user_id' => Auth::id(),
-            'role' => 'admin',
-            'joined_at' => now(),
-        ]);
-
         // Gestisci gli inviti se presenti
         if ($request->has('invited_users') && !empty($request->invited_users)) {
             $invitedUsers = json_decode($request->invited_users, true);

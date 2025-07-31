@@ -1032,4 +1032,4 @@ function updateSnapModalTime() {
 }
 </script>
 @endif
-@endsection
+@endpush

@@ -2,6 +2,33 @@
 
 @section('title', $group->name)
 
+@section('css')
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+
+<style>
+/* Stili per lo slider degli eventi del gruppo */
+.events-slider {
+    position: relative;
+    margin: 0 -10px;
+}
+
+.events-slider .autoplay-item {
+    padding: 0 10px;
+}
+
+.events-slider .card {
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.events-slider .card:hover {
+    transform: translateY(-5px);
+}
+</style>
+@endsection
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Header del gruppo -->
@@ -10,20 +37,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-start">
-                        <div class="flex-shrink-0">
-                            @if($group->image)
-                                <img src="{{ asset('storage/' . $group->image) }}"
-                                     alt="{{ $group->name }}"
-                                     class="rounded-circle"
-                                     style="width: 100px; height: 100px; object-fit: cover;">
-                            @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
-                                     style="width: 100px; height: 100px;">
-                                    <i class="ph-duotone ph-users text-primary f-s-48"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="flex-grow-1 ms-4">
+                        <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h2 class="mb-2">{{ $group->name }}</h2>
@@ -112,52 +126,21 @@
         </div>
     </div>
 
-    <!-- Statistiche e informazioni -->
+    <!-- Immagine del gruppo in grande -->
     <div class="row mb-4">
-        <div class="col-12 col-md-3">
-            <div class="card card-light-primary">
-                <div class="card-body text-center">
-                    <i class="ph-duotone ph-users text-primary f-s-32 mb-2"></i>
-                    <h4 class="text-primary mb-1">{{ $group->getMembersCount() }}</h4>
-                    <p class="text-muted mb-0">{{ __('groups.total_members') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="card card-light-success">
-                <div class="card-body text-center">
-                    <i class="ph-duotone ph-crown text-success f-s-32 mb-2"></i>
-                    <h4 class="text-success mb-1">{{ $group->getAdmins()->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('groups.admins_count') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="card card-light-info">
-                <div class="card-body text-center">
-                    <i class="ph-duotone ph-shield-check text-info f-s-32 mb-2"></i>
-                    <h4 class="text-info mb-1">{{ $group->getModerators()->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('groups.moderators_count') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="card card-light-warning">
-                <div class="card-body text-center">
-                    <i class="ph-duotone ph-calendar text-warning f-s-32 mb-2"></i>
-                    <h4 class="text-warning mb-1">{{ $group->events()->count() }}</h4>
-                    <p class="text-muted mb-0">{{ __('groups.group_events') }}</p>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    {!! group_banner_with_dimensions($group, '100%', '300px', 'w-100') !!}
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contenuto principale -->
-    <div class="row">
-        <!-- Informazioni del gruppo -->
-        <div class="col-12 col-lg-8">
-            <!-- Eventi del gruppo -->
-            <div class="card mb-4">
+    <!-- Eventi del gruppo -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-calendar me-2 text-primary"></i>
@@ -171,45 +154,120 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    @forelse($group->events()->latest()->take(5)->get() as $event)
-                    <div class="d-flex align-items-center mb-3 p-3 border rounded">
-                        <div class="flex-shrink-0">
-                            <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
-                                 style="width: 50px; height: 50px;">
-                                <i class="ph-duotone ph-calendar text-primary"></i>
+                    @php $groupEvents = $group->events()->latest()->take(10)->get(); @endphp
+                    @if($groupEvents->count() > 0)
+                        <div class="events-slider app-arrow" id="group-events-slider">
+                            @foreach($groupEvents as $event)
+                            <div class="autoplay-item">
+                                <div class="card overflow-hidden hover-effect">
+                                    @if($event->image_url)
+                                        <img src="{{ $event->image_url }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                                    @else
+                                        @php
+                                            $fallbackImages = [
+                                                'assets/images/background/default-event-1.webp',
+                                                'assets/images/background/default-event-2.webp',
+                                                'assets/images/background/default-event-3.webp',
+                                                'assets/images/background/default-event-4.webp'
+                                            ];
+                                            $randomImage = $fallbackImages[array_rand($fallbackImages)];
+                                        @endphp
+                                        <img src="{{ asset($randomImage) }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
+                                    @endif
+                                    <div class="card-body">
+                                        <h5 class="card-title f-w-600">{{ $event->title }}</h5>
+                                        <p class="card-text text-muted f-s-14">
+                                            <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
+                                            {{ $event->venue_name ?: $event->city ?: 'Luogo da definire' }}
+                                        </p>
+                                        @if($event->description)
+                                            <p class="card-text">{{ Str::limit($event->description, 80) }}</p>
+                                        @endif
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="card-text">
+                                                <small class="text-body-secondary">
+                                                    <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
+                                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                </small>
+                                            </p>
+                                            <div class="d-flex gap-1">
+                                                @auth
+                                                    <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
+                                                        <i class="ph-duotone ph-heart wishlist-icon"></i>
+                                                    </button>
+                                                @endauth
+                                                <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
+                                                    <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
+                                                </a>
+                                                <x-report-button :content="$event" type="event" size="sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            @endforeach
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">{{ $event->title }}</h6>
-                            <p class="text-muted mb-1">
-                                <i class="ph-duotone ph-calendar me-1"></i>
-                                {{ $event->start_datetime->format('d/m/Y H:i') }}
-                            </p>
-                            <small class="text-muted">
-                                <i class="ph-duotone ph-map-pin me-1"></i>
-                                {{ $event->location }}
-                            </small>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <a href="{{ route('events.show', $event) }}" class="btn btn-outline-primary btn-sm">
-                                {{ __('common.view') }}
+                    @else
+                        <div class="text-center py-4">
+                            <i class="ph-duotone ph-calendar text-muted f-s-48 mb-3"></i>
+                            <p class="text-muted">{{ __('groups.no_group_events') }}</p>
+                            @if($group->hasMember(auth()->user()))
+                            <a href="{{ route('events.create', ['group_id' => $group->id]) }}" class="btn btn-primary">
+                                <i class="ph-duotone ph-plus me-2"></i>
+                                {{ __('groups.create_group_event') }}
                             </a>
+                            @endif
                         </div>
-                    </div>
-                    @empty
-                    <div class="text-center py-4">
-                        <i class="ph-duotone ph-calendar text-muted f-s-48 mb-3"></i>
-                        <p class="text-muted">{{ __('groups.no_group_events') }}</p>
-                        @if($group->hasMember(auth()->user()))
-                        <a href="{{ route('events.create', ['group_id' => $group->id]) }}" class="btn btn-primary">
-                            <i class="ph-duotone ph-plus me-2"></i>
-                            {{ __('groups.create_group_event') }}
-                        </a>
-                        @endif
-                    </div>
-                    @endforelse
+                    @endif
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Statistiche ridotte -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-3">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="ph-duotone ph-users text-primary f-s-24 mb-1"></i>
+                                <h6 class="text-primary mb-0">{{ $group->getMembersCount() }}</h6>
+                                <small class="text-muted">{{ __('groups.total_members') }}</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="ph-duotone ph-crown text-success f-s-24 mb-1"></i>
+                                <h6 class="text-success mb-0">{{ $group->getAdmins()->count() }}</h6>
+                                <small class="text-muted">{{ __('groups.admins_count') }}</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="ph-duotone ph-shield-check text-info f-s-24 mb-1"></i>
+                                <h6 class="text-info mb-0">{{ $group->getModerators()->count() }}</h6>
+                                <small class="text-muted">{{ __('groups.moderators_count') }}</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex flex-column align-items-center">
+                                <i class="ph-duotone ph-calendar text-warning f-s-24 mb-1"></i>
+                                <h6 class="text-warning mb-0">{{ $group->events()->count() }}</h6>
+                                <small class="text-muted">{{ __('groups.group_events') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenuto principale -->
+    <div class="row">
+        <!-- Informazioni del gruppo -->
+        <div class="col-12 col-lg-8">
 
             <!-- Membri recenti -->
             <div class="card">
@@ -374,6 +432,10 @@
 @endsection
 
 @push('scripts')
+<!-- Slick JS -->
+<script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
+<script src="{{ asset('assets/js/slick.js') }}"></script>
+
 <script>
 function confirmLeaveGroup() {
     Swal.fire({
@@ -391,5 +453,42 @@ function confirmLeaveGroup() {
         }
     });
 }
+
+// Inizializza lo slider degli eventi del gruppo
+$(document).ready(function() {
+    // Verifica se Slick è disponibile
+    if (typeof $.fn.slick === 'undefined') {
+        console.error('Slick non è caricato!');
+        return;
+    }
+    
+    const $groupSlider = $('#group-events-slider');
+    if ($groupSlider.length > 0) {
+        $groupSlider.slick({
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: true,
+            dots: false,
+            infinite: true,
+            speed: 500,
+            responsive: [
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+    }
+});
 </script>
 @endpush

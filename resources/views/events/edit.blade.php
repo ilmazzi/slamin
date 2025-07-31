@@ -331,6 +331,32 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" name="is_linked_to_group" id="is_linked_to_group" class="form-check-input" value="1" {{ old('is_linked_to_group', $event->group_id ? '1' : '0') ? 'checked' : '' }}>
+                                        <label for="is_linked_to_group" class="form-check-label">
+                                            <strong>{{ __('events.is_linked_to_group') }}</strong>
+                                        </label>
+                                    </div>
+                                    <div id="groupFields" style="display: {{ old('is_linked_to_group', $event->group_id ? '1' : '0') ? 'block' : 'none' }};">
+                                        <select class="form-select @error('group_id') is-invalid @enderror"
+                                                id="group_id" name="group_id">
+                                            <option value="">{{ __('events.select_group') }}</option>
+                                            @foreach($groups as $group)
+                                                <option value="{{ $group->id }}" {{ old('group_id', $event->group_id) == $group->id ? 'selected' : '' }}>
+                                                    {{ $group->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-muted">{{ __('events.group_help') }}</small>
+                                        @error('group_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Step 4: Image -->
@@ -579,6 +605,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA (EDIT) ===');
+    }
+
+    // Gestione evento legato a gruppo
+    const isLinkedToGroup = document.getElementById('is_linked_to_group');
+    const groupFields = document.getElementById('groupFields');
+    if (isLinkedToGroup && groupFields) {
+        isLinkedToGroup.addEventListener('change', function() {
+            groupFields.style.display = this.checked ? 'block' : 'none';
+        });
     }
 
     // Inizializza lo stato dei campi in base al valore corrente

@@ -1,14 +1,12 @@
-@extends('layout.master')
-
-@section('title', __('events.create_event'))
-@section('css')
-<link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
+<?php $__env->startSection('title', __('events.create_event')); ?>
+<?php $__env->startSection('css'); ?>
+<link rel="stylesheet" href="<?php echo e(asset('assets/vendor/leafletmaps/leaflet.css')); ?>">
 <!-- Flatpickr CSS -->
-<link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/datepikar/flatpickr.min.css')}}">
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/datepikar/flatpickr.min.css')); ?>">
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
 
     <!-- Page Header -->
@@ -16,9 +14,9 @@
         <div class="card-body">
             <div class="text-center mb-4">
                 <h2 class="mb-2">
-                    <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }} Slam in
+                    <i class="ph ph-calendar-plus me-2"></i><?php echo e(__('events.create_event')); ?> Slam in
                 </h2>
-                <p class="text-muted mb-0">{{ __('events.create_event_help') }}</p>
+                <p class="text-muted mb-0"><?php echo e(__('events.create_event_help')); ?></p>
             </div>
 
                         <!-- Wizard Steps - Mobile First -->
@@ -28,27 +26,27 @@
                                 <div class="d-none d-lg-flex align-items-center justify-content-center">
                                     <div class="text-center" data-step="1">
                                         <i class="ph ph-info fs-1 text-primary mb-2"></i>
-                                        <div class="small fw-bold text-primary">{{ __('events.step_1') }}</div>
+                                        <div class="small fw-bold text-primary"><?php echo e(__('events.step_1')); ?></div>
                                     </div>
                                     <i class="ph ph-arrow-right text-muted mx-3"></i>
                                     <div class="text-center" data-step="2">
                                         <i class="ph ph-calendar-check fs-1 text-muted mb-2"></i>
-                                        <div class="small fw-bold text-muted">{{ __('events.step_2') }}</div>
+                                        <div class="small fw-bold text-muted"><?php echo e(__('events.step_2')); ?></div>
                                     </div>
                                     <i class="ph ph-arrow-right text-muted mx-3"></i>
                                     <div class="text-center" data-step="3">
                                         <i class="ph ph-gear fs-1 text-muted mb-2"></i>
-                                        <div class="small fw-bold text-muted">{{ __('events.step_3') }}</div>
+                                        <div class="small fw-bold text-muted"><?php echo e(__('events.step_3')); ?></div>
                                     </div>
                                     <i class="ph ph-arrow-right text-muted mx-3"></i>
                                     <div class="text-center" data-step="4">
                                         <i class="ph ph-users fs-1 text-muted mb-2"></i>
-                                        <div class="small fw-bold text-muted">{{ __('events.step_4') }}</div>
+                                        <div class="small fw-bold text-muted"><?php echo e(__('events.step_4')); ?></div>
                                     </div>
                                     <i class="ph ph-arrow-right text-muted mx-3"></i>
                                     <div class="text-center" data-step="5">
                                         <i class="ph ph-eye fs-1 text-muted mb-2"></i>
-                                        <div class="small fw-bold text-muted">{{ __('events.step_5') }}</div>
+                                        <div class="small fw-bold text-muted"><?php echo e(__('events.step_5')); ?></div>
                                     </div>
                                 </div>
 
@@ -59,27 +57,27 @@
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <div class="text-center flex-fill" data-step="1">
                                                     <i class="ph ph-info f-s-24 text-primary mb-1"></i>
-                                                    <div class="f-s-10 fw-bold text-primary">{{ __('events.step_1_short') }}</div>
+                                                    <div class="f-s-10 fw-bold text-primary"><?php echo e(__('events.step_1_short')); ?></div>
                                                 </div>
                                                 <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
                                                 <div class="text-center flex-fill" data-step="2">
                                                     <i class="ph ph-calendar-check f-s-24 text-muted mb-1"></i>
-                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_2_short') }}</div>
+                                                    <div class="f-s-10 fw-bold text-muted"><?php echo e(__('events.step_2_short')); ?></div>
                                                 </div>
                                                 <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
                                                 <div class="text-center flex-fill" data-step="3">
                                                     <i class="ph ph-gear f-s-24 text-muted mb-1"></i>
-                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_3_short') }}</div>
+                                                    <div class="f-s-10 fw-bold text-muted"><?php echo e(__('events.step_3_short')); ?></div>
                                                 </div>
                                                 <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
                                                 <div class="text-center flex-fill" data-step="4">
                                                     <i class="ph ph-users f-s-24 text-muted mb-1"></i>
-                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_4_short') }}</div>
+                                                    <div class="f-s-10 fw-bold text-muted"><?php echo e(__('events.step_4_short')); ?></div>
                                                 </div>
                                                 <i class="ph ph-arrow-right text-muted f-s-12 mx-1"></i>
                                                 <div class="text-center flex-fill" data-step="5">
                                                     <i class="ph ph-eye f-s-24 text-muted mb-1"></i>
-                                                    <div class="f-s-10 fw-bold text-muted">{{ __('events.step_5_short') }}</div>
+                                                    <div class="f-s-10 fw-bold text-muted"><?php echo e(__('events.step_5_short')); ?></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -90,8 +88,8 @@
         </div>
     </div>
 
-    <form id="eventForm" action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+    <form id="eventForm" action="<?php echo e(route('events.store')); ?>" method="POST" enctype="multipart/form-data">
+        <?php echo csrf_field(); ?>
 
 
 
@@ -103,15 +101,16 @@
                 <div class="card" id="step-1">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-info me-2"></i>{{ __('events.step_basic_info') }}
+                            <i class="ph ph-info me-2"></i><?php echo e(__('events.step_basic_info')); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
-                                                                    <input type="text" name="title" id="title" class="form-control" placeholder="{{ __('events.title_placeholder') }}" required>
-                                <label for="title">{{ __('events.title_event') }} *</label>
+                                                                    <input type="text" name="title" id="title" class="form-control" placeholder="<?php echo e(__('events.title_placeholder')); ?>" required>
+                                <label for="title"><?php echo e(__('events.title_event')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="title-error"></div>
                             </div>
@@ -119,36 +118,38 @@
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
                                     <textarea name="description" id="description" class="form-control" style="height: 120px" placeholder="Descrizione"></textarea>
-                                    <label for="description">{{ __('events.description_event') }}</label>
+                                    <label for="description"><?php echo e(__('events.description_event')); ?></label>
                                 </div>
-                                <small class="text-muted">{{ __('events.description_event_help') }}</small>
+                                <small class="text-muted"><?php echo e(__('events.description_event_help')); ?></small>
                                 <div class="error-feedback" id="description-error"></div>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">{{ __('events.event_category') }} *</label>
+                                <label class="form-label"><?php echo e(__('events.event_category')); ?> *</label>
                                 <select name="category" id="category" class="form-select" required>
-                                    <option value="">{{ __('events.category_placeholder') }}</option>
-                                    @foreach(App\Models\Event::getCategories() as $key => $name)
-                                        <option value="{{ $key }}">{{ $name }}</option>
-                                    @endforeach
+                                    <option value=""><?php echo e(__('events.category_placeholder')); ?></option>
+                                    <?php $__currentLoopData = App\Models\Event::getCategories(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($key); ?>"><?php echo e($name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
-                                <small class="text-muted">{{ __('events.category_help') }}</small>
+                                <small class="text-muted"><?php echo e(__('events.category_help')); ?></small>
                                 <div class="error-feedback" id="category-error"></div>
                             </div>
 
                             <!-- Sezione Pubblico/Privato -->
                             <div class="col-12 mb-3">
                                 <h6 class="text-primary mb-3">
-                                    <i class="ph ph-globe me-2"></i>{{ __('events.event_mode') }}
+                                    <i class="ph ph-globe me-2"></i><?php echo e(__('events.event_mode')); ?>
+
                                 </h6>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <div class="form-check">
                                             <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
                                             <label for="public" class="form-check-label">
-                                                <i class="ph ph-globe me-2"></i>{{ __('events.mode_public') }}
-                                                <small class="d-block text-muted">{{ __('events.public_event_description') }}</small>
+                                                <i class="ph ph-globe me-2"></i><?php echo e(__('events.mode_public')); ?>
+
+                                                <small class="d-block text-muted"><?php echo e(__('events.public_event_description')); ?></small>
                                             </label>
                                         </div>
                                     </div>
@@ -156,8 +157,9 @@
                                         <div class="form-check">
                                             <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
                                             <label for="private" class="form-check-label">
-                                                <i class="ph ph-lock me-2"></i>{{ __('events.mode_private') }}
-                                                <small class="d-block text-muted">{{ __('events.private_event_description') }}</small>
+                                                <i class="ph ph-lock me-2"></i><?php echo e(__('events.mode_private')); ?>
+
+                                                <small class="d-block text-muted"><?php echo e(__('events.private_event_description')); ?></small>
                                             </label>
                                         </div>
                                     </div>
@@ -173,7 +175,8 @@
                 <div class="card d-none" id="step-2">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-calendar-clock me-2"></i>{{ __('events.date_and_location') }}
+                            <i class="ph ph-calendar-clock me-2"></i><?php echo e(__('events.date_and_location')); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
@@ -182,7 +185,7 @@
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="text" name="start_datetime" id="start_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora inizio..." required readonly>
-                                    <label for="start_datetime">{{ __('events.start_date') }} {{ __('events.start_time') }} *</label>
+                                    <label for="start_datetime"><?php echo e(__('events.start_date')); ?> <?php echo e(__('events.start_time')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="start_datetime-error"></div>
                             </div>
@@ -190,7 +193,7 @@
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="text" name="end_datetime" id="end_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora fine..." required readonly>
-                                    <label for="end_datetime">{{ __('events.end_date') }} {{ __('events.end_time') }} *</label>
+                                    <label for="end_datetime"><?php echo e(__('events.end_date')); ?> <?php echo e(__('events.end_time')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="end_datetime-error"></div>
                             </div>
@@ -202,7 +205,8 @@
                                         <div class="form-check">
                                             <input type="checkbox" name="is_online" id="is_online" class="form-check-input" value="1">
                                             <label for="is_online" class="form-check-label f-w-600">
-                                                <i class="ph ph-globe me-2"></i>{{ __('events.online_event') }}
+                                                <i class="ph ph-globe me-2"></i><?php echo e(__('events.online_event')); ?>
+
                                             </label>
                                         </div>
                                     </div>
@@ -212,7 +216,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-floating">
                                                     <select name="timezone" id="timezone" class="form-select">
-                                                        <option value="">{{ __('events.select_timezone') }}</option>
+                                                        <option value=""><?php echo e(__('events.select_timezone')); ?></option>
                                                         <option value="Europe/Rome" selected>Europe/Rome (UTC+1/+2)</option>
                                                         <option value="Europe/London">Europe/London (UTC+0/+1)</option>
                                                         <option value="Europe/Paris">Europe/Paris (UTC+1/+2)</option>
@@ -277,53 +281,54 @@
                                                         <option value="Africa/Tunis">Africa/Tunis (UTC+1/+2)</option>
                                                         <option value="Africa/Algiers">Africa/Algiers (UTC+1)</option>
                                                     </select>
-                                                    <label for="timezone">{{ __('events.timezone') }} *</label>
+                                                    <label for="timezone"><?php echo e(__('events.timezone')); ?> *</label>
                                                 </div>
-                                                <small class="text-muted">{{ __('events.timezone_help') }}</small>
+                                                <small class="text-muted"><?php echo e(__('events.timezone_help')); ?></small>
                                             </div>
 
                                             <!-- Online URL -->
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-floating">
-                                                    <input type="url" name="online_url" id="online_url" class="form-control" placeholder="{{ __('events.online_url_placeholder') }}">
-                                                    <label for="online_url">{{ __('events.online_url') }}</label>
+                                                    <input type="url" name="online_url" id="online_url" class="form-control" placeholder="<?php echo e(__('events.online_url_placeholder')); ?>">
+                                                    <label for="online_url"><?php echo e(__('events.online_url')); ?></label>
                                                 </div>
-                                                <small class="text-muted">{{ __('events.online_url_help') }}</small>
+                                                <small class="text-muted"><?php echo e(__('events.online_url_help')); ?></small>
                                             </div>
                                         </div>
 
                                         <!-- Online Event Notice -->
                                         <div class="alert alert-info">
                                             <i class="ph ph-info me-2"></i>
-                                            <strong>{{ __('events.online_event_notice') }}</strong>
+                                            <strong><?php echo e(__('events.online_event_notice')); ?></strong>
                                         </div>
                                     </div>
                                 </div>
                             </div>
  <!-- Recent Venues Dropdown -->
- @if($recentVenues->count() > 0)
+ <?php if($recentVenues->count() > 0): ?>
  <div class="col-12 mb-3" id="recent-venues-section">
      <div class="form-floating">
          <select name="recent_venue" id="recent_venue" class="form-select" onchange="loadRecentVenueFromDropdown(this.value)">
-             <option value="">{{ __('events.select_recent_venue') }}</option>
-             @foreach($recentVenues as $venue)
-                 <option value="{{ $venue->id }}" data-venue="{{ json_encode($venue) }}">
-                     {{ $venue->venue_name }} - {{ $venue->venue_address }}, {{ $venue->city }} ({{ $venue->usage_count }} volte)
+             <option value=""><?php echo e(__('events.select_recent_venue')); ?></option>
+             <?php $__currentLoopData = $recentVenues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $venue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                 <option value="<?php echo e($venue->id); ?>" data-venue="<?php echo e(json_encode($venue)); ?>">
+                     <?php echo e($venue->venue_name); ?> - <?php echo e($venue->venue_address); ?>, <?php echo e($venue->city); ?> (<?php echo e($venue->usage_count); ?> volte)
                  </option>
-             @endforeach
+             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
          </select>
          <label for="recent_venue">
-             <i class="ph ph-clock-counter-clockwise me-2"></i>{{ __('events.recent_venues') }}
+             <i class="ph ph-clock-counter-clockwise me-2"></i><?php echo e(__('events.recent_venues')); ?>
+
          </label>
      </div>
-     <small class="text-muted">{{ __('events.recent_venues_help') }}</small>
+     <small class="text-muted"><?php echo e(__('events.recent_venues_help')); ?></small>
  </div>
- @endif
+ <?php endif; ?>
                             <!-- Location -->
                             <div class="col-12 mb-3" id="venue-name-container">
                                 <div class="form-floating">
-                                                                    <input type="text" name="venue_name" id="venue_name" class="form-control" placeholder="{{ __('events.venue_name_placeholder') }}" required>
-                                <label for="venue_name">{{ __('events.venue_name') }} *</label>
+                                                                    <input type="text" name="venue_name" id="venue_name" class="form-control" placeholder="<?php echo e(__('events.venue_name_placeholder')); ?>" required>
+                                <label for="venue_name"><?php echo e(__('events.venue_name')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="venue_name-error"></div>
                             </div>
@@ -332,24 +337,24 @@
 
                             <div class="col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
-                                    <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
-                                    <label for="venue_address">{{ __('events.venue_address') }} *</label>
+                                    <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="<?php echo e(__('events.venue_address_placeholder')); ?>" required>
+                                    <label for="venue_address"><?php echo e(__('events.venue_address')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="venue_address-error"></div>
                             </div>
 
                             <div class="col-md-3 mb-3" id="city-container">
                                 <div class="form-floating">
-                                    <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('events.city_placeholder') }}" required>
-                                    <label for="city">{{ __('events.city') }} *</label>
+                                    <input type="text" name="city" id="city" class="form-control" placeholder="<?php echo e(__('events.city_placeholder')); ?>" required>
+                                    <label for="city"><?php echo e(__('events.city')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="city-error"></div>
                             </div>
 
                             <div class="col-md-3 mb-3" id="postcode-container">
                                 <div class="form-floating">
-                                    <input type="text" name="postcode" id="postcode" class="form-control" placeholder="{{ __('events.postcode_placeholder') }}" required>
-                                    <label for="postcode">{{ __('events.postcode') }} *</label>
+                                    <input type="text" name="postcode" id="postcode" class="form-control" placeholder="<?php echo e(__('events.postcode_placeholder')); ?>" required>
+                                    <label for="postcode"><?php echo e(__('events.postcode')); ?> *</label>
                                 </div>
                                 <div class="error-feedback" id="postcode-error"></div>
                             </div>
@@ -357,74 +362,75 @@
                             <div class="col-md-6 mb-3" id="country-container">
                                 <div class="form-floating">
                                     <select name="country" id="country" class="form-select" required>
-                                        <option value="">{{ __('events.select_country') }}...</option>
-                                        <option value="IT" selected>{{ __('events.italy') }}</option>
-                                        <option value="FR">{{ __('events.france') }}</option>
-                                        <option value="ES">{{ __('events.spain') }}</option>
-                                        <option value="DE">{{ __('events.germany') }}</option>
-                                        <option value="CH">{{ __('events.switzerland') }}</option>
-                                        <option value="AT">{{ __('events.austria') }}</option>
-                                        <option value="BE">{{ __('events.belgium') }}</option>
-                                        <option value="NL">{{ __('events.netherlands') }}</option>
-                                        <option value="PT">{{ __('events.portugal') }}</option>
-                                        <option value="GB">{{ __('events.united_kingdom') }}</option>
-                                        <option value="IE">{{ __('events.ireland') }}</option>
-                                        <option value="SE">{{ __('events.sweden') }}</option>
-                                        <option value="NO">{{ __('events.norway') }}</option>
-                                        <option value="DK">{{ __('events.denmark') }}</option>
-                                        <option value="FI">{{ __('events.finland') }}</option>
-                                        <option value="PL">{{ __('events.poland') }}</option>
-                                        <option value="CZ">{{ __('events.czech_republic') }}</option>
-                                        <option value="SK">{{ __('events.slovakia') }}</option>
-                                        <option value="HU">{{ __('events.hungary') }}</option>
-                                        <option value="RO">{{ __('events.romania') }}</option>
-                                        <option value="BG">{{ __('events.bulgaria') }}</option>
-                                            <option value="HR">{{ __('events.croatia') }}</option>
-                                        <option value="SI">{{ __('events.slovenia') }}</option>
-                                        <option value="GR">{{ __('events.greece') }}</option>
-                                        <option value="CY">{{ __('events.cyprus') }}</option>
-                                        <option value="MT">{{ __('events.malta') }}</option>
-                                        <option value="US">{{ __('events.united_states') }}</option>
-                                        <option value="CA">{{ __('events.canada') }}</option>
-                                        <option value="MX">{{ __('events.mexico') }}</option>
-                                        <option value="BR">{{ __('events.brazil') }}</option>
-                                        <option value="AR">{{ __('events.argentina') }}</option>
-                                        <option value="CL">{{ __('events.chile') }}</option>
-                                        <option value="AU">{{ __('events.australia') }}</option>
-                                        <option value="NZ">{{ __('events.new_zealand') }}</option>
-                                        <option value="JP">{{ __('events.japan') }}</option>
-                                        <option value="KR">{{ __('events.south_korea') }}</option>
-                                        <option value="CN">{{ __('events.china') }}</option>
-                                        <option value="IN">{{ __('events.india') }}</option>
-                                        <option value="TH">{{ __('events.thailand') }}</option>
-                                        <option value="SG">{{ __('events.singapore') }}</option>
-                                        <option value="MY">{{ __('events.malaysia') }}</option>
-                                        <option value="ID">{{ __('events.indonesia') }}</option>
-                                        <option value="PH">{{ __('events.philippines') }}</option>
-                                        <option value="VN">{{ __('events.vietnam') }}</option>
-                                        <option value="RU">{{ __('events.russia') }}</option>
-                                                <option value="UA">{{ __('events.ukraine') }}</option>
-                                        <option value="BY">{{ __('events.belarus') }}</option>
-                                        <option value="TR">{{ __('events.turkey') }}</option>
-                                        <option value="IL">{{ __('events.israel') }}</option>
-                                        <option value="AE">{{ __('events.united_arab_emirates') }}</option>
-                                        <option value="SA">{{ __('events.saudi_arabia') }}</option>
-                                        <option value="EG">{{ __('events.egypt') }}</option>
-                                        <option value="ZA">{{ __('events.south_africa') }}</option>
-                                        <option value="NG">{{ __('events.nigeria') }}</option>
-                                        <option value="KE">{{ __('events.kenya') }}</option>
-                                        <option value="MA">{{ __('events.morocco') }}</option>
-                                        <option value="TN">{{ __('events.tunisia') }}</option>
-                                        <option value="DZ">{{ __('events.algeria') }}</option>
+                                        <option value=""><?php echo e(__('events.select_country')); ?>...</option>
+                                        <option value="IT" selected><?php echo e(__('events.italy')); ?></option>
+                                        <option value="FR"><?php echo e(__('events.france')); ?></option>
+                                        <option value="ES"><?php echo e(__('events.spain')); ?></option>
+                                        <option value="DE"><?php echo e(__('events.germany')); ?></option>
+                                        <option value="CH"><?php echo e(__('events.switzerland')); ?></option>
+                                        <option value="AT"><?php echo e(__('events.austria')); ?></option>
+                                        <option value="BE"><?php echo e(__('events.belgium')); ?></option>
+                                        <option value="NL"><?php echo e(__('events.netherlands')); ?></option>
+                                        <option value="PT"><?php echo e(__('events.portugal')); ?></option>
+                                        <option value="GB"><?php echo e(__('events.united_kingdom')); ?></option>
+                                        <option value="IE"><?php echo e(__('events.ireland')); ?></option>
+                                        <option value="SE"><?php echo e(__('events.sweden')); ?></option>
+                                        <option value="NO"><?php echo e(__('events.norway')); ?></option>
+                                        <option value="DK"><?php echo e(__('events.denmark')); ?></option>
+                                        <option value="FI"><?php echo e(__('events.finland')); ?></option>
+                                        <option value="PL"><?php echo e(__('events.poland')); ?></option>
+                                        <option value="CZ"><?php echo e(__('events.czech_republic')); ?></option>
+                                        <option value="SK"><?php echo e(__('events.slovakia')); ?></option>
+                                        <option value="HU"><?php echo e(__('events.hungary')); ?></option>
+                                        <option value="RO"><?php echo e(__('events.romania')); ?></option>
+                                        <option value="BG"><?php echo e(__('events.bulgaria')); ?></option>
+                                            <option value="HR"><?php echo e(__('events.croatia')); ?></option>
+                                        <option value="SI"><?php echo e(__('events.slovenia')); ?></option>
+                                        <option value="GR"><?php echo e(__('events.greece')); ?></option>
+                                        <option value="CY"><?php echo e(__('events.cyprus')); ?></option>
+                                        <option value="MT"><?php echo e(__('events.malta')); ?></option>
+                                        <option value="US"><?php echo e(__('events.united_states')); ?></option>
+                                        <option value="CA"><?php echo e(__('events.canada')); ?></option>
+                                        <option value="MX"><?php echo e(__('events.mexico')); ?></option>
+                                        <option value="BR"><?php echo e(__('events.brazil')); ?></option>
+                                        <option value="AR"><?php echo e(__('events.argentina')); ?></option>
+                                        <option value="CL"><?php echo e(__('events.chile')); ?></option>
+                                        <option value="AU"><?php echo e(__('events.australia')); ?></option>
+                                        <option value="NZ"><?php echo e(__('events.new_zealand')); ?></option>
+                                        <option value="JP"><?php echo e(__('events.japan')); ?></option>
+                                        <option value="KR"><?php echo e(__('events.south_korea')); ?></option>
+                                        <option value="CN"><?php echo e(__('events.china')); ?></option>
+                                        <option value="IN"><?php echo e(__('events.india')); ?></option>
+                                        <option value="TH"><?php echo e(__('events.thailand')); ?></option>
+                                        <option value="SG"><?php echo e(__('events.singapore')); ?></option>
+                                        <option value="MY"><?php echo e(__('events.malaysia')); ?></option>
+                                        <option value="ID"><?php echo e(__('events.indonesia')); ?></option>
+                                        <option value="PH"><?php echo e(__('events.philippines')); ?></option>
+                                        <option value="VN"><?php echo e(__('events.vietnam')); ?></option>
+                                        <option value="RU"><?php echo e(__('events.russia')); ?></option>
+                                                <option value="UA"><?php echo e(__('events.ukraine')); ?></option>
+                                        <option value="BY"><?php echo e(__('events.belarus')); ?></option>
+                                        <option value="TR"><?php echo e(__('events.turkey')); ?></option>
+                                        <option value="IL"><?php echo e(__('events.israel')); ?></option>
+                                        <option value="AE"><?php echo e(__('events.united_arab_emirates')); ?></option>
+                                        <option value="SA"><?php echo e(__('events.saudi_arabia')); ?></option>
+                                        <option value="EG"><?php echo e(__('events.egypt')); ?></option>
+                                        <option value="ZA"><?php echo e(__('events.south_africa')); ?></option>
+                                        <option value="NG"><?php echo e(__('events.nigeria')); ?></option>
+                                        <option value="KE"><?php echo e(__('events.kenya')); ?></option>
+                                        <option value="MA"><?php echo e(__('events.morocco')); ?></option>
+                                        <option value="TN"><?php echo e(__('events.tunisia')); ?></option>
+                                        <option value="DZ"><?php echo e(__('events.algeria')); ?></option>
                                     </select>
-                                    <label for="country">{{ __('events.country') }} *</label>
+                                    <label for="country"><?php echo e(__('events.country')); ?> *</label>
                                 </div>
                             </div>
 
                             <div class="col-12 mb-3" id="map-info-banner-container">
                                 <div class="alert alert-info" id="map-info-banner">
                                     <i class="ph ph-info me-2"></i>
-                                    <strong>{{ __('events.auto_positioning_title') }}:</strong> {{ __('events.auto_positioning_description') }}
+                                    <strong><?php echo e(__('events.auto_positioning_title')); ?>:</strong> <?php echo e(__('events.auto_positioning_description')); ?>
+
                                 </div>
                             </div>
 
@@ -434,11 +440,12 @@
 
                             <!-- Map -->
                             <div class="col-12 mb-3">
-                                <label class="form-label">{{ __('events.map_location') }}</label>
+                                <label class="form-label"><?php echo e(__('events.map_location')); ?></label>
                                 <div id="locationMap" class="border rounded" style="height: 300px;"></div>
-                                <small class="text-muted">{{ __('events.map_auto_positioning_help') }}</small>
+                                <small class="text-muted"><?php echo e(__('events.map_auto_positioning_help')); ?></small>
                                 <div id="geocoding-status" class="small text-info mt-1" style="display: none;">
-                                    <i class="ph ph-spinner-gap me-1"></i> {{ __('events.auto_positioning_status') }}
+                                    <i class="ph ph-spinner-gap me-1"></i> <?php echo e(__('events.auto_positioning_status')); ?>
+
                                 </div>
                             </div>
 
@@ -451,16 +458,17 @@
                 <div class="card d-none" id="step-3">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-gear me-2"></i>{{ __('events.step_event_details') }}
+                            <i class="ph ph-gear me-2"></i><?php echo e(__('events.step_event_details')); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <!-- 1. Immagine Evento -->
                             <div class="col-12 mb-3">
-                                <label class="form-label">{{ __('events.event_image') }} ({{ __('common.optional') }})</label>
+                                <label class="form-label"><?php echo e(__('events.event_image')); ?> (<?php echo e(__('common.optional')); ?>)</label>
                                 <input type="file" name="event_image" id="event_image" class="form-control" accept="image/*">
-                                <small class="text-muted">{{ __('events.image_format_help') }}</small>
+                                <small class="text-muted"><?php echo e(__('events.image_format_help')); ?></small>
                                 <div class="mt-2" id="imagePreview" style="display: none;">
                                     <img id="previewImg" src="" class="img-thumbnail" style="max-height: 200px;">
                                 </div>
@@ -469,10 +477,10 @@
                             <!-- 2. Video Promozionale -->
                             <div class="col-12 mb-3">
                                 <div class="form-floating">
-                                    <input type="url" name="promotional_video" id="promotional_video" class="form-control" placeholder="{{ __('events.promotional_video_placeholder') }}">
-                                    <label for="promotional_video">{{ __('events.promotional_video') }} ({{ __('common.optional') }})</label>
+                                    <input type="url" name="promotional_video" id="promotional_video" class="form-control" placeholder="<?php echo e(__('events.promotional_video_placeholder')); ?>">
+                                    <label for="promotional_video"><?php echo e(__('events.promotional_video')); ?> (<?php echo e(__('common.optional')); ?>)</label>
                                 </div>
-                                <small class="text-muted">{{ __('events.promotional_video_help') }}</small>
+                                <small class="text-muted"><?php echo e(__('events.promotional_video_help')); ?></small>
                                 <div class="mt-2" id="videoPreview" style="display: none;">
                                     <div class="ratio ratio-16x9">
                                         <iframe id="videoEmbed" src="" frameborder="0" allowfullscreen></iframe>
@@ -485,7 +493,7 @@
                                 <div class="form-check mb-3">
                                     <input type="checkbox" name="is_paid_event" id="is_paid_event" class="form-check-input" value="1">
                                     <label for="is_paid_event" class="form-check-label">
-                                        <strong>{{ __('events.is_paid_event') }}</strong>
+                                        <strong><?php echo e(__('events.is_paid_event')); ?></strong>
                                     </label>
                                 </div>
                                 <div id="paymentFields" style="display: none;">
@@ -493,7 +501,7 @@
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="number" name="ticket_price" id="ticket_price" class="form-control" min="0" step="0.01" placeholder="Prezzo biglietto">
-                                                <label for="ticket_price">{{ __('events.ticket_price') }}</label>
+                                                <label for="ticket_price"><?php echo e(__('events.ticket_price')); ?></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -504,42 +512,42 @@
                                                     <option value="GBP">GBP (£)</option>
                                                     <option value="CHF">CHF (CHF)</option>
                                                 </select>
-                                                <label for="ticket_currency">{{ __('events.ticket_currency') }}</label>
+                                                <label for="ticket_currency"><?php echo e(__('events.ticket_currency')); ?></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <small class="text-muted">{{ __('events.ticket_info_help') }}</small>
+                                    <small class="text-muted"><?php echo e(__('events.ticket_info_help')); ?></small>
                                 </div>
                             </div>
 
                             <!-- 4. Evento Legato a Gruppo -->
                             <div class="col-12 mb-3">
-                                <!-- DEBUG VISIBILE: Groups count: {{ isset($groups) ? $groups->count() : 'NOT SET' }} -->
-                                <!-- DEBUG VISIBILE: Groups data: {{ isset($groups) ? json_encode($groups->pluck('name', 'id')->toArray()) : 'NOT SET' }} -->
+                                <!-- DEBUG VISIBILE: Groups count: <?php echo e(isset($groups) ? $groups->count() : 'NOT SET'); ?> -->
+                                <!-- DEBUG VISIBILE: Groups data: <?php echo e(isset($groups) ? json_encode($groups->pluck('name', 'id')->toArray()) : 'NOT SET'); ?> -->
                                 <div class="form-check mb-3">
                                     <input type="checkbox" name="is_linked_to_group" id="is_linked_to_group" class="form-check-input" value="1">
                                     <label for="is_linked_to_group" class="form-check-label">
-                                        <strong>{{ __('events.is_linked_to_group') }}</strong>
+                                        <strong><?php echo e(__('events.is_linked_to_group')); ?></strong>
                                     </label>
                                 </div>
                                 <div id="groupFields" style="display: none;">
-                                    <!-- DEBUG: Groups count: {{ isset($groups) ? $groups->count() : 'NOT SET' }} -->
-                                    <!-- DEBUG: Groups data: {{ isset($groups) ? json_encode($groups->pluck('name', 'id')->toArray()) : 'NOT SET' }} -->
-                                    <!-- DEBUG: Groups type: {{ isset($groups) ? get_class($groups) : 'NOT SET' }} -->
+                                    <!-- DEBUG: Groups count: <?php echo e(isset($groups) ? $groups->count() : 'NOT SET'); ?> -->
+                                    <!-- DEBUG: Groups data: <?php echo e(isset($groups) ? json_encode($groups->pluck('name', 'id')->toArray()) : 'NOT SET'); ?> -->
+                                    <!-- DEBUG: Groups type: <?php echo e(isset($groups) ? get_class($groups) : 'NOT SET'); ?> -->
                                     <div class="form-floating mb-3">
                                         <select name="group_id" id="group_id" class="form-select">
-                                            <option value="">{{ __('events.select_group') }}</option>
-                                                                                    @if(isset($groups) && $groups->count() > 0)
-                                            @foreach($groups as $group)
-                                                <option value="{{ $group->id }}">{{ $group->name }}</option>
-                                            @endforeach
-                                        @else
+                                            <option value=""><?php echo e(__('events.select_group')); ?></option>
+                                                                                    <?php if(isset($groups) && $groups->count() > 0): ?>
+                                            <?php $__currentLoopData = $groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($group->id); ?>"><?php echo e($group->name); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
                                             <option value="" disabled>Nessun gruppo disponibile</option>
-                                        @endif
+                                        <?php endif; ?>
                                         </select>
-                                        <label for="group_id">{{ __('events.select_group') }}</label>
+                                        <label for="group_id"><?php echo e(__('events.select_group')); ?></label>
                                     </div>
-                                    <small class="text-muted">{{ __('events.group_help') }}</small>
+                                    <small class="text-muted"><?php echo e(__('events.group_help')); ?></small>
                                 </div>
                             </div>
 
@@ -550,35 +558,37 @@
                                     <div class="form-check mb-3">
                                         <input type="checkbox" name="is_festival_event" id="is_festival_event" class="form-check-input" value="1">
                                         <label for="is_festival_event" class="form-check-label">
-                                            <strong>{{ __('events.is_festival_event') }}</strong>
+                                            <strong><?php echo e(__('events.is_festival_event')); ?></strong>
                                         </label>
                                     </div>
                                     <div id="festivalFields" style="display: none;">
                                         <div class="form-floating mb-3">
                                             <select name="festival_id" id="festival_id" class="form-select">
-                                                <option value="">{{ __('events.select_festival') }}</option>
+                                                <option value=""><?php echo e(__('events.select_festival')); ?></option>
                                             </select>
-                                            <label for="festival_id">{{ __('events.select_festival') }}</label>
+                                            <label for="festival_id"><?php echo e(__('events.select_festival')); ?></label>
                                         </div>
-                                        <small class="text-muted">{{ __('events.festival_help') }}</small>
+                                        <small class="text-muted"><?php echo e(__('events.festival_help')); ?></small>
                                     </div>
                                 </div>
 
                                 <!-- Sezione per selezionare eventi esistenti (quando categoria = "Festival") -->
                                 <div id="select-festival-events-section" style="display: none;">
                                     <h6 class="text-success mb-3">
-                                        <i class="ph ph-trophy me-2"></i>{{ __('events.festival_events_selection') }}
+                                        <i class="ph ph-trophy me-2"></i><?php echo e(__('events.festival_events_selection')); ?>
+
                                     </h6>
                                     <div class="alert alert-border-success" role="alert">
                                         <h6>
                                             <i class="ph ph-info-circle f-s-18 me-2 text-success"></i>
-                                            {{ __('events.festival_events_selection_help') }}
+                                            <?php echo e(__('events.festival_events_selection_help')); ?>
+
                                         </h6>
                                     </div>
 
                                     <!-- Barra di ricerca eventi -->
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('events.select_festival_events') }}</label>
+                                        <label class="form-label"><?php echo e(__('events.select_festival_events')); ?></label>
                                         <div class="input-group">
                                             <input type="text" id="eventSearchInput" class="form-control" placeholder="Cerca eventi esistenti..." onkeydown="handleEventSearchKeydown(event)">
                                             <button type="button" class="btn btn-outline-success" onclick="searchEventsForFestival()">
@@ -589,7 +599,7 @@
 
                                     <!-- Risultati ricerca eventi -->
                                     <div id="searchResultsEvents" class="mb-3" style="display: none;">
-                                        <h6>{{ __('events.search_results') }}</h6>
+                                        <h6><?php echo e(__('events.search_results')); ?></h6>
                                         <div id="searchResultsListEvents" class="list-group">
                                             <!-- Risultati qui -->
                                         </div>
@@ -597,7 +607,7 @@
 
                                     <!-- Eventi selezionati per il festival -->
                                     <div>
-                                        <h6>{{ __('events.selected_events') }} <span id="selectedEventsCount" class="badge bg-success">0</span></h6>
+                                        <h6><?php echo e(__('events.selected_events')); ?> <span id="selectedEventsCount" class="badge bg-success">0</span></h6>
                                         <div class="alert alert-info mb-3" role="alert">
                                             <i class="ph ph-info-circle me-2"></i>
                                             <strong>Opzionale:</strong> Puoi cercare e aggiungere eventi esistenti che faranno parte di questo festival. Se non aggiungi eventi ora, potrai farlo successivamente dalla pagina di modifica del festival.
@@ -605,7 +615,7 @@
                                         <div id="selectedEventsList" class="row g-2">
                                             <div class="col-12 text-center text-muted py-3" id="noSelectedEvents">
                                                 <i class="ph ph-calendar-plus f-s-24 mb-2"></i>
-                                                <p class="mb-0">{{ __('events.no_events_selected') }}</p>
+                                                <p class="mb-0"><?php echo e(__('events.no_events_selected')); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -623,7 +633,8 @@
                 <div class="card d-none" id="step-4">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-users me-2"></i>{{ __('events.invites_and_gig') }}
+                            <i class="ph ph-users me-2"></i><?php echo e(__('events.invites_and_gig')); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
@@ -633,7 +644,8 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-white border-bottom">
                                     <h6 class="mb-0 text-primary">
-                                        <i class="ph ph-envelope me-2"></i>{{ __('events.private_invites') }}
+                                        <i class="ph ph-envelope me-2"></i><?php echo e(__('events.private_invites')); ?>
+
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -641,19 +653,19 @@
                                     <div class="mb-3">
                                        
                                         <div class="input-group">
-                                            <input type="text" id="privateUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handlePrivateUserSearchKeydown(event)">
+                                            <input type="text" id="privateUserSearchInput" class="form-control" placeholder="<?php echo e(__('events.search_users')); ?>" onkeydown="handlePrivateUserSearchKeydown(event)">
                                            
                                             <button type="button" class="btn btn-outline-primary" onclick="searchPrivateUsersForInvite()">
                                                 <i class="ph ph-magnifying-glass"></i>
                                             </button>
                                             
                                         </div>
-                                        <small class="text-muted">{{ __('events.search_users_help') }}</small>
+                                        <small class="text-muted"><?php echo e(__('events.search_users_help')); ?></small>
                                     </div>
 
                                     <!-- Risultati ricerca -->
                                     <div id="privateSearchResultsInvite" class="mb-3" style="display: none;">
-                                        <h6 class="text-muted fw-bold">{{ __('events.search_results') }}</h6>
+                                        <h6 class="text-muted fw-bold"><?php echo e(__('events.search_results')); ?></h6>
                                         <div id="privateSearchResultsListInvite" class="list-group">
                                             <!-- Risultati qui -->
                                         </div>
@@ -661,8 +673,8 @@
 
                                     <!-- Utenti suggeriti -->
                                     <div class="mb-3">
-                                        <h6 class="text-muted fw-bold">{{ __('events.suggested_users') }}</h6>
-                                        <p class="text-muted small mb-2">{{ __('events.suggested_users_help') }}</p>
+                                        <h6 class="text-muted fw-bold"><?php echo e(__('events.suggested_users')); ?></h6>
+                                        <p class="text-muted small mb-2"><?php echo e(__('events.suggested_users_help')); ?></p>
                                         <div id="privateSuggestedUsersList" class="row g-2">
                                             <!-- Utenti suggeriti qui -->
                                         </div>
@@ -671,13 +683,14 @@
                                     <!-- Utenti invitati -->
                                     <div>
                                         <h6 class="text-muted fw-bold d-flex align-items-center">
-                                            {{ __('events.invited_users') }}
+                                            <?php echo e(__('events.invited_users')); ?>
+
                                             <span id="privateInviteCount" class="badge bg-light text-primary border ms-2">0</span>
                                         </h6>
                                         <div id="privateInvitedUsersList" class="row g-2">
                                             <div class="col-12 text-center text-muted py-4" id="noPrivateInvitedUsers">
                                                 <i class="ph ph-user-plus f-s-32 mb-3 text-primary opacity-50"></i>
-                                                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                                <p class="mb-0"><?php echo e(__('events.no_invited_users')); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -693,7 +706,8 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-white border-bottom">
                                     <h6 class="mb-0 text-primary">
-                                        <i class="ph ph-envelope me-2"></i>{{ __('events.invites') }}
+                                        <i class="ph ph-envelope me-2"></i><?php echo e(__('events.invites')); ?>
+
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -701,19 +715,19 @@
                                     <div class="mb-4  mt-4">
                                        
                                         <div class="input-group">
-                                            <input type="text" id="artistUserSearchInput" class="form-control" placeholder="{{ __('events.search_users') }}" onkeydown="handleArtistUserSearchKeydown(event)">
+                                            <input type="text" id="artistUserSearchInput" class="form-control" placeholder="<?php echo e(__('events.search_users')); ?>" onkeydown="handleArtistUserSearchKeydown(event)">
                                             
                                             <button type="button" class="btn btn-outline-primary" onclick="searchArtistUsersForInvite()">
                                                 <i class="ph ph-magnifying-glass"></i>
                                             </button>
                                             
                                         </div>
-                                        <small class="text-muted">{{ __('events.search_users_help') }}</small>
+                                        <small class="text-muted"><?php echo e(__('events.search_users_help')); ?></small>
                                     </div>
 
                                     <!-- Search Results -->
                                     <div id="artistSearchResultsInvite" class="mb-3" style="display: none;">
-                                        <h6 class="text-muted fw-bold">{{ __('events.search_results') }}</h6>
+                                        <h6 class="text-muted fw-bold"><?php echo e(__('events.search_results')); ?></h6>
                                         <div id="artistSearchResultsListInvite" class="list-group">
                                             <!-- Risultati qui -->
                                         </div>
@@ -721,8 +735,8 @@
 
                                     <!-- Utenti suggeriti -->
                                     <div class="mb-3">
-                                        <h6 class="text-muted fw-bold">{{ __('events.suggested_users') }}</h6>
-                                        <p class="text-muted small mb-2">{{ __('events.suggested_users_help') }}</p>
+                                        <h6 class="text-muted fw-bold"><?php echo e(__('events.suggested_users')); ?></h6>
+                                        <p class="text-muted small mb-2"><?php echo e(__('events.suggested_users_help')); ?></p>
                                         <div id="artistSuggestedUsersList" class="row g-2">
                                             <!-- Utenti suggeriti qui -->
                                         </div>
@@ -731,13 +745,14 @@
                                     <!-- Utenti invitati -->
                                     <div>
                                         <h6 class="text-muted fw-bold d-flex align-items-center">
-                                            {{ __('events.invited_users') }}
+                                            <?php echo e(__('events.invited_users')); ?>
+
                                             <span id="artistInviteCount" class="badge text-primary border ms-2">0</span>
                                         </h6>
                                         <div id="artistInvitedUsersList" class="row g-2">
                                             <div class="col-12 text-center text-muted py-4" id="noArtistInvitedUsers">
                                                 <i class="ph ph-user-plus f-s-32 mb-3 text-primary opacity-50"></i>
-                                                <p class="mb-0">{{ __('events.no_invited_users') }}</p>
+                                                <p class="mb-0"><?php echo e(__('events.no_invited_users')); ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -753,7 +768,8 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-white border-bottom">
                                     <h6 class="mb-0 text-primary">
-                                        <i class="ph ph-briefcase me-2"></i>{{ __('events.gigs') }}
+                                        <i class="ph ph-briefcase me-2"></i><?php echo e(__('events.gigs')); ?>
+
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -765,7 +781,8 @@
                                     <!-- Pulsante per aggiungere nuova posizione -->
                                     <div class="text-center mt-3">
                                         <button type="button" class="btn btn-light-success btn-lg" onclick="addGigPosition()">
-                                            <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
+                                            <i class="ph ph-plus me-2"></i><?php echo e(__('events.add_gig_position')); ?>
+
                                         </button>
                                     </div>
 
@@ -780,7 +797,8 @@
                             <div class="card border-0 shadow-sm">
                                 <div class="card-header bg-white border-bottom">
                                     <h6 class="mb-0 text-primary">
-                                        <i class="ph ph-globe me-2"></i>{{ __('events.event_status') }}
+                                        <i class="ph ph-globe me-2"></i><?php echo e(__('events.event_status')); ?>
+
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -791,9 +809,9 @@
                                                 <label for="published" class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-globe me-2 text-success"></i>
-                                                        <span class="fw-bold">{{ __('events.publish_immediately') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.publish_immediately')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.publish_immediately_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.publish_immediately_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -803,9 +821,9 @@
                                                 <label for="draft" class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-note-pencil me-2 text-warning"></i>
-                                                        <span class="fw-bold">{{ __('events.save_as_draft') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.save_as_draft')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.save_as_draft_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.save_as_draft_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -822,7 +840,8 @@
                         <div class="modal-content">
                             <div class="modal-header bg-white border-bottom">
                                 <h5 class="modal-title mb-0 text-primary">
-                                    <i class="ph ph-user-circle-plus me-2"></i>{{ __('events.invite_artist') }}
+                                    <i class="ph ph-user-circle-plus me-2"></i><?php echo e(__('events.invite_artist')); ?>
+
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
@@ -840,7 +859,7 @@
 
                                 <!-- Role Selection -->
                                 <div class="mb-4">
-                                    <label class="form-label fw-bold">{{ __('events.select_role') }} *</label>
+                                    <label class="form-label fw-bold"><?php echo e(__('events.select_role')); ?> *</label>
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-check p-3 border rounded h-100 hover-effect">
@@ -848,9 +867,9 @@
                                                 <label class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-microphone me-2 text-primary f-s-20"></i>
-                                                        <span class="fw-bold">{{ __('events.performer') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.performer')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.performer_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.performer_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -860,9 +879,9 @@
                                                 <label class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-scales me-2 text-warning f-s-20"></i>
-                                                        <span class="fw-bold">{{ __('events.judge') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.judge')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.judge_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.judge_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -872,9 +891,9 @@
                                                 <label class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-gear me-2 text-info f-s-20"></i>
-                                                        <span class="fw-bold">{{ __('events.technician') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.technician')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.technician_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.technician_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -884,9 +903,9 @@
                                                 <label class="form-check-label h-100 d-flex flex-column justify-content-center">
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-user-focus me-2 text-success f-s-20"></i>
-                                                        <span class="fw-bold">{{ __('events.host') }}</span>
+                                                        <span class="fw-bold"><?php echo e(__('events.host')); ?></span>
                                                     </div>
-                                                    <small class="text-muted">{{ __('events.host_help') }}</small>
+                                                    <small class="text-muted"><?php echo e(__('events.host_help')); ?></small>
                                                 </label>
                                             </div>
                                         </div>
@@ -895,17 +914,19 @@
 
                                 <!-- Custom Message -->
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">{{ __('events.custom_message') }} <span class="text-muted">({{ __('common.optional') }})</span></label>
-                                    <textarea id="invitationMessage" class="form-control" rows="4" placeholder="{{ __('events.custom_message_placeholder') }}"></textarea>
-                                    <small class="text-muted">{{ __('events.custom_message_help') }}</small>
+                                    <label class="form-label fw-bold"><?php echo e(__('events.custom_message')); ?> <span class="text-muted">(<?php echo e(__('common.optional')); ?>)</span></label>
+                                    <textarea id="invitationMessage" class="form-control" rows="4" placeholder="<?php echo e(__('events.custom_message_placeholder')); ?>"></textarea>
+                                    <small class="text-muted"><?php echo e(__('events.custom_message_help')); ?></small>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                    <i class="ph ph-x me-2"></i>{{ __('common.cancel') }}
+                                    <i class="ph ph-x me-2"></i><?php echo e(__('common.cancel')); ?>
+
                                 </button>
                                 <button type="button" class="btn btn-primary btn-lg" onclick="confirmInvitation()">
-                                    <i class="ph ph-paper-plane me-2"></i>{{ __('events.send_invitation') }}
+                                    <i class="ph ph-paper-plane me-2"></i><?php echo e(__('events.send_invitation')); ?>
+
                                 </button>
                             </div>
                         </div>
@@ -916,7 +937,8 @@
                 <div class="card d-none" id="step-5">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-eye me-2"></i>{{ __('events.event_preview') }}
+                            <i class="ph ph-eye me-2"></i><?php echo e(__('events.event_preview')); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
@@ -926,11 +948,13 @@
 
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-light-primary btn-lg px-5" id="submitBtn">
-                                <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
+                                <i class="ph ph-check-circle me-2"></i><?php echo e(__('events.create_event')); ?>
+
                             </button>
                             <div class="mt-2" id="submitStatus" style="display: none;">
                                 <small class="text-muted">
-                                    <i class="ph ph-spinner-gap me-1"></i>{{ __('events.creation_in_progress') }}
+                                    <i class="ph ph-spinner-gap me-1"></i><?php echo e(__('events.creation_in_progress')); ?>
+
                                 </small>
                             </div>
                         </div>
@@ -943,36 +967,40 @@
                 <div class="card position-sticky" style="top: 20px;">
                     <div class="card-header">
                         <h6 class="mb-0">
-                            <i class="ph ph-navigation-arrow me-2"></i>{{ __('events.navigation') }}
+                            <i class="ph ph-navigation-arrow me-2"></i><?php echo e(__('events.navigation')); ?>
+
                         </h6>
                     </div>
                     <div class="card-body">
                         <!-- Step Navigation -->
                         <div class="d-flex justify-content-between mb-4">
                             <button type="button" class="btn btn-light-secondary" id="prevStep" disabled>
-                                <i class="ph ph-arrow-left me-1"></i>{{ __('events.previous_step') }}
+                                <i class="ph ph-arrow-left me-1"></i><?php echo e(__('events.previous_step')); ?>
+
                             </button>
                             <button type="button" class="btn btn-light-primary" id="nextStep">
-                                {{ __('events.next_step') }}<i class="ph ph-arrow-right ms-1"></i>
+                                <?php echo e(__('events.next_step')); ?><i class="ph ph-arrow-right ms-1"></i>
                             </button>
                         </div>
 
                         <!-- Progress -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('events.progress') }}</label>
+                            <label class="form-label"><?php echo e(__('events.progress')); ?></label>
                             <div class="progress">
                                 <div class="progress-bar bg-primary" id="progressBar" style="width: 25%"></div>
                             </div>
-                            <small class="text-muted">{{ __('events.step_progress') }} <span id="currentStep">1</span> {{ __('events.of') }} 5</small>
+                            <small class="text-muted"><?php echo e(__('events.step_progress')); ?> <span id="currentStep">1</span> <?php echo e(__('events.of')); ?> 5</small>
                         </div>
 
                         <!-- Quick Tips -->
                         <div class="alert alert-light-info" role="alert">
                             <h6 class="text-info">
-                                <i class="ph ph-lightbulb me-2"></i>{{ __('events.tip') }}
+                                <i class="ph ph-lightbulb me-2"></i><?php echo e(__('events.tip')); ?>
+
                             </h6>
                             <p class="mb-0 small text-info" id="stepTip">
-                                {{ __('events.step_tip') }}
+                                <?php echo e(__('events.step_tip')); ?>
+
                             </p>
                         </div>
 
@@ -980,7 +1008,7 @@
                         <div class="text-center">
                             <small class="text-muted">
                                 <i class="ph ph-floppy-disk me-1"></i>
-                                <span id="autosaveStatus">{{ __('events.autosave_status') }}</span>
+                                <span id="autosaveStatus"><?php echo e(__('events.autosave_status')); ?></span>
                             </small>
                         </div>
                     </div>
@@ -989,10 +1017,10 @@
         </div>
     </form>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
-<script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
+<?php $__env->startPush('scripts'); ?>
+<script src="<?php echo e(asset('assets/vendor/leafletmaps/leaflet.js')); ?>"></script>
 <script>
 // Test di base per verificare se il JavaScript si carica
 console.log('=== JAVASCRIPT LOADED ===');
@@ -1004,11 +1032,11 @@ let tags = [];
 let selectedInvitations = [];
 
 const stepTips = {
-    1: "{{ __('events.step_tip_1') }}",
-    2: "{{ __('events.step_tip_2') }}",
-    3: "{{ __('events.step_tip_3') }}",
-    4: "{{ __('events.step_tip_4') }}",
-    5: "{{ __('events.step_tip_5') }}"
+    1: "<?php echo e(__('events.step_tip_1')); ?>",
+    2: "<?php echo e(__('events.step_tip_2')); ?>",
+    3: "<?php echo e(__('events.step_tip_3')); ?>",
+    4: "<?php echo e(__('events.step_tip_4')); ?>",
+    5: "<?php echo e(__('events.step_tip_5')); ?>"
 };
 
 // Global error handler
@@ -2246,7 +2274,7 @@ function updatePreview() {
     if (currentStep !== 5) return;
 
     // Get all form values with safe element access
-    const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
+    const title = document.getElementById('title')?.value || 'Titolo <?php echo e(__('invitations.event')); ?>';
     const description = document.getElementById('description')?.value || 'Descrizione evento...';
     const requirements = document.getElementById('requirements')?.value || '';
     const category = document.getElementById('category')?.value || '';
@@ -2523,7 +2551,7 @@ function updatePreview() {
                         <div class="col-md-4">
                             <div class="border-start border-primary border-4 ps-3">
                                 <h6 class="mb-1 text-primary">Costo Ingresso</h6>
-                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
+                                <p class="mb-0">${entryFee == 0 ? '<?php echo e(__('common.free')); ?>' : '€' + entryFee}</p>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -2762,7 +2790,7 @@ function updatePreviewWithImage(imageSrc) {
     if (currentStep !== 5) return;
 
     // Get all form values with safe element access (same as updatePreview)
-    const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
+    const title = document.getElementById('title')?.value || 'Titolo <?php echo e(__('invitations.event')); ?>';
     const description = document.getElementById('description')?.value || 'Descrizione evento...';
     const requirements = document.getElementById('requirements')?.value || '';
     const category = document.getElementById('category')?.value || '';
@@ -3020,7 +3048,7 @@ function updatePreviewWithImage(imageSrc) {
                         <div class="col-md-4">
                             <div class="border-start border-primary border-4 ps-3">
                                 <h6 class="mb-1 text-primary">Costo Ingresso</h6>
-                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
+                                <p class="mb-0">${entryFee == 0 ? '<?php echo e(__('common.free')); ?>' : '€' + entryFee}</p>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -3342,7 +3370,7 @@ function getRoleDisplayName(role) {
     const roleNames = {
         'poet': 'Poeta',
         'judge': 'Giudice',
-        'organizer': '{{ __('events.organizer') }}',
+        'organizer': '<?php echo e(__('events.organizer')); ?>',
         'technician': 'Tecnico',
         'audience': 'Pubblico'
     };
@@ -3424,14 +3452,14 @@ function removeInvitation(userId) {
     if (!invitation) return;
 
     Swal.fire({
-        title: '{{ __('events.remove_invitation_title') }}',
-        text: `{{ __('events.remove_invitation_confirm') }} ${invitation.name}?`,
+        title: '<?php echo e(__('events.remove_invitation_title')); ?>',
+        text: `<?php echo e(__('events.remove_invitation_confirm')); ?> ${invitation.name}?`,
         icon: 'question',
         showCancelButton: true,
                 confirmButtonColor: '#dc3545',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: '{{ __('events.yes_remove') }}',
-        cancelButtonText: '{{ __('common.cancel') }}'
+        confirmButtonText: '<?php echo e(__('events.yes_remove')); ?>',
+        cancelButtonText: '<?php echo e(__('common.cancel')); ?>'
     }).then((result) => {
         if (result.isConfirmed) {
             selectedInvitations = selectedInvitations.filter(inv => inv.user_id !== userId);
@@ -3440,8 +3468,8 @@ function removeInvitation(userId) {
 
             Swal.fire({
                 icon: 'success',
-                title: '{{ __('events.invitation_removed') }}',
-                text: `{{ __('events.invitation_removed_message') }} ${invitation.name} {{ __('events.has_been_removed') }}`,
+                title: '<?php echo e(__('events.invitation_removed')); ?>',
+                text: `<?php echo e(__('events.invitation_removed_message')); ?> ${invitation.name} <?php echo e(__('events.has_been_removed')); ?>`,
                 timer: 2000,
                 showConfirmButton: false,
                 toast: true,
@@ -3513,12 +3541,12 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
         // Validate start datetime
     if (!startDateTime) {
-        document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_required') }}';
+        document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_required')); ?>';
         document.getElementById('start_datetime').classList.add('is-invalid');
         document.getElementById('start_datetime').classList.remove('is-valid');
         hasErrors = true;
     } else if (startDate && startDate <= now) {
-        document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_future') }}';
+        document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_future')); ?>';
         document.getElementById('start_datetime').classList.add('is-invalid');
         document.getElementById('start_datetime').classList.remove('is-valid');
         hasErrors = true;
@@ -3529,12 +3557,12 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Validate end datetime
     if (!endDateTime) {
-        document.getElementById('end_datetime-error').textContent = '{{ __('events.end_datetime_required') }}';
+        document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_required')); ?>';
         document.getElementById('end_datetime').classList.add('is-invalid');
         document.getElementById('end_datetime').classList.remove('is-valid');
         hasErrors = true;
     } else if (startDate && endDate && endDate <= startDate) {
-        document.getElementById('end_datetime-error').textContent = '{{ __('events.end_datetime_after_start') }}';
+        document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_after_start')); ?>';
         document.getElementById('end_datetime').classList.add('is-invalid');
         document.getElementById('end_datetime').classList.remove('is-valid');
         hasErrors = true;
@@ -3554,9 +3582,9 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         // Show error alert
         Swal.fire({
             icon: 'error',
-            title: '{{ __('events.validation_error') }}',
-            text: '{{ __('events.validation_error_message') }}',
-            confirmButtonText: '{{ __('common.ok') }}'
+            title: '<?php echo e(__('events.validation_error')); ?>',
+            text: '<?php echo e(__('events.validation_error_message')); ?>',
+            confirmButtonText: '<?php echo e(__('common.ok')); ?>'
         });
         return;
     }
@@ -3570,7 +3598,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Show loading state
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i>{{ __('events.creating') }}';
+    submitBtn.innerHTML = '<i class="ph ph-spinner-gap me-2"></i><?php echo e(__('events.creating')); ?>';
     submitStatus.style.display = 'block';
 
     // Submit the form
@@ -3592,7 +3620,7 @@ function startAutoSave() {
         localStorage.setItem('eventDraft', JSON.stringify(data));
 
         document.getElementById('autosaveStatus').innerHTML =
-            '<i class="ph ph-check me-1"></i>{{ __('events.saved') }} ' + new Date().toLocaleTimeString();
+            '<i class="ph ph-check me-1"></i><?php echo e(__('events.saved')); ?> ' + new Date().toLocaleTimeString();
     }, 30000); // Save every 30 seconds
 }
 
@@ -3624,10 +3652,10 @@ window.addEventListener('load', function() {
     }
 
     // Clear localStorage if we're on a success page (via URL parameter or session)
-    @if(session('success'))
+    <?php if(session('success')): ?>
         localStorage.removeItem('eventDraft');
         console.log('Event created successfully - draft cleared from localStorage');
-    @endif
+    <?php endif; ?>
 });
 
 // Initialize Flatpickr for date/time inputs
@@ -3713,7 +3741,7 @@ function loadSuggestedUsers() {
         displayArtistSuggestedUsers();
     })
     .catch(error => {
-        console.error('{{ __('common.loading_error') }} utenti suggeriti:', error);
+        console.error('<?php echo e(__('common.loading_error')); ?> utenti suggeriti:', error);
     });
 }
 
@@ -3726,7 +3754,7 @@ function displayPrivateSuggestedUsers() {
         container.innerHTML = `
             <div class="col-12 text-center text-muted py-2">
                 <i class="ph ph-users f-s-16 mb-1"></i>
-                <p class="mb-0 small">{{ __('events.no_suggested_users') }}</p>
+                <p class="mb-0 small"><?php echo e(__('events.no_suggested_users')); ?></p>
             </div>
         `;
         return;
@@ -3746,7 +3774,7 @@ function displayPrivateSuggestedUsers() {
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
                                 onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
-                                title="{{ __('events.invite_user') }}">
+                                title="<?php echo e(__('events.invite_user')); ?>">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
                     </div>
@@ -3765,7 +3793,7 @@ function displayArtistSuggestedUsers() {
         container.innerHTML = `
             <div class="col-12 text-center text-muted py-2">
                 <i class="ph ph-users f-s-16 mb-1"></i>
-                <p class="mb-0 small">{{ __('events.no_suggested_users') }}</p>
+                <p class="mb-0 small"><?php echo e(__('events.no_suggested_users')); ?></p>
             </div>
         `;
         return;
@@ -3785,7 +3813,7 @@ function displayArtistSuggestedUsers() {
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
                                 onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
-                                title="{{ __('events.invite_user') }}">
+                                title="<?php echo e(__('events.invite_user')); ?>">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
                     </div>
@@ -3865,7 +3893,8 @@ function displayPrivateSearchResults(users) {
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
                                 onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
-                            <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
+                            <i class="ph ph-plus f-s-12"></i> <?php echo e(__('events.invite_user')); ?>
+
                         </button>
                     </div>
                 </div>
@@ -3904,7 +3933,8 @@ function displayArtistSearchResults(users) {
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
                                 onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
-                            <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
+                            <i class="ph ph-plus f-s-12"></i> <?php echo e(__('events.invite_user')); ?>
+
                         </button>
                     </div>
                 </div>
@@ -4321,7 +4351,7 @@ function updateRecurrencePreview() {
 
     const isRecurring = document.getElementById('is_recurring').checked;
     if (!isRecurring) {
-        previewDiv.innerHTML = '{{ __("events.recurrence_preview_placeholder") }}';
+        previewDiv.innerHTML = '<?php echo e(__("events.recurrence_preview_placeholder")); ?>';
         return;
     }
 
@@ -4465,7 +4495,7 @@ function loadFestivals() {
     if (!festivalSelect) return;
 
     // Pulisci le opzioni esistenti
-    festivalSelect.innerHTML = '<option value="">{{ __("events.select_festival") }}</option>';
+    festivalSelect.innerHTML = '<option value=""><?php echo e(__("events.select_festival")); ?></option>';
 
     // Chiamata API per caricare festival
     fetch('/api/festivals', {
@@ -4713,7 +4743,7 @@ function updateSelectedEventsDisplay(selectedEvents) {
         selectedEventsList.innerHTML = `
             <div class="col-12 text-center text-muted py-3" id="noSelectedEvents">
                 <i class="ph ph-calendar-plus f-s-24 mb-2"></i>
-                <p class="mb-0">{{ __('events.no_events_selected') }}</p>
+                <p class="mb-0"><?php echo e(__('events.no_events_selected')); ?></p>
             </div>
         `;
         selectedEventsCount.textContent = '0';
@@ -4741,7 +4771,8 @@ function updateSelectedEventsDisplay(selectedEvents) {
                         <i class="ph ph-map-pin me-1"></i>${event.venue}
                     </p>
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeEventFromFestival(${event.id})">
-                        <i class="ph ph-minus me-1"></i>{{ __('events.remove_event_from_festival') }}
+                        <i class="ph ph-minus me-1"></i><?php echo e(__('events.remove_event_from_festival')); ?>
+
                     </button>
                 </div>
             </div>
@@ -4817,9 +4848,9 @@ function addGigPosition() {
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][quantity]" min="1" value="1" required>
                     </div>
 
-                    <!-- {{ __('common.language_selector') }} richiesta -->
+                    <!-- <?php echo e(__('common.language_selector')); ?> richiesta -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">{{ __('common.language_selector') }} richiesta (opzionale)</label>
+                        <label class="form-label"><?php echo e(__('common.language_selector')); ?> richiesta (opzionale)</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][language]">
                             <option value="">Nessuna preferenza</option>
                             <option value="italiano">Italiano</option>
@@ -4994,7 +5025,7 @@ function loadRecentVenue(venueId) {
                     }
 
                     // Mostra notifica di successo
-                    showNotification('{{ __("events.venue_loaded_success") }}', 'success');
+                    showNotification('<?php echo e(__("events.venue_loaded_success")); ?>', 'success');
                 } else {
                     showNotification('Luogo non trovato', 'warning');
                 }
@@ -5012,7 +5043,7 @@ function loadRecentVenue(venueId) {
             } else if (error.message.includes('Expected JSON response')) {
                 showNotification('Errore del server: risposta non valida', 'error');
             } else {
-                showNotification('{{ __("events.venue_load_error") }}', 'error');
+                showNotification('<?php echo e(__("events.venue_load_error")); ?>', 'error');
             }
         });
 }
@@ -5042,7 +5073,7 @@ function loadRecentVenueFromDropdown(venueId) {
             }
 
             // Mostra notifica di successo
-            showNotification('{{ __("events.venue_loaded_success") }}', 'success');
+            showNotification('<?php echo e(__("events.venue_loaded_success")); ?>', 'success');
 
         } catch (error) {
             console.error('Error parsing venue data:', error);
@@ -5059,7 +5090,7 @@ function reverseGeocode(lat, lng) {
     const statusEl = document.getElementById('geocoding-status');
     if (statusEl) {
         statusEl.style.display = 'block';
-        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> {{ __("events.searching_address") }}';
+        statusEl.innerHTML = '<i class="ph ph-spinner-gap me-1"></i> <?php echo e(__("events.searching_address")); ?>';
         statusEl.className = 'small text-info mt-1';
     }
 
@@ -5072,7 +5103,7 @@ function reverseGeocode(lat, lng) {
 
                 // Mostra successo
                 if (statusEl) {
-                    statusEl.innerHTML = '<i class="ph ph-check me-1"></i> {{ __("events.address_found") }}';
+                    statusEl.innerHTML = '<i class="ph ph-check me-1"></i> <?php echo e(__("events.address_found")); ?>';
                     statusEl.className = 'small text-success mt-1';
                     setTimeout(() => {
                         statusEl.style.display = 'none';
@@ -5081,7 +5112,7 @@ function reverseGeocode(lat, lng) {
             } else {
                 // Indirizzo non trovato
                 if (statusEl) {
-                    statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> {{ __("events.address_not_found") }}';
+                    statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> <?php echo e(__("events.address_not_found")); ?>';
                     statusEl.className = 'small text-warning mt-1';
                     setTimeout(() => {
                         statusEl.style.display = 'none';
@@ -5092,7 +5123,7 @@ function reverseGeocode(lat, lng) {
         .catch(error => {
             console.error('Reverse geocoding error:', error);
             if (statusEl) {
-                statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> {{ __("events.reverse_geocoding_error") }}';
+                statusEl.innerHTML = '<i class="ph ph-warning me-1"></i> <?php echo e(__("events.reverse_geocoding_error")); ?>';
                 statusEl.className = 'small text-danger mt-1';
                 setTimeout(() => {
                     statusEl.style.display = 'none';
@@ -5201,5 +5232,7 @@ function clearFestivalValidationErrors() {
 </script>
 
 <!-- Flatpickr JS -->
-<script src="{{asset('assets/vendor/datepikar/flatpickr.js')}}"></script>
-@endpush
+<script src="<?php echo e(asset('assets/vendor/datepikar/flatpickr.js')); ?>"></script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/events/create.blade.php ENDPATH**/ ?>

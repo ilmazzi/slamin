@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Video;
+use App\Models\Group;
 use App\Observers\VideoObserver;
+use App\Observers\GroupObserver;
 use App\Services\LoggingService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
@@ -25,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Registra l'observer per i video
         Video::observe(VideoObserver::class);
+
+        // Registra l'observer per i gruppi
+        Group::observe(GroupObserver::class);
 
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();
@@ -88,4 +93,6 @@ class AppServiceProvider extends ServiceProvider
             }
         });
     }
+
+
 }

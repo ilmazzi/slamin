@@ -326,35 +326,7 @@ Route::get('/test-simple-view', function () {
 })->name('test-simple-view');
 
 // IMPORTANTE: events/create DEVE stare PRIMA di events/{event} per evitare conflitti!
-Route::get('/events/create', function () {
-    try {
-        $venueOwners = App\Models\User::whereHas('roles', function ($query) {
-            $query->where('name', 'venue_owner');
-        })->get();
-
-        // Ottieni i luoghi recenti dell'utente autenticato
-        $recentVenues = collect();
-        if (Auth::check()) {
-            $recentVenues = App\Models\RecentVenue::where('user_id', Auth::id())
-                ->orderBy('last_used_at', 'desc')
-                ->limit(4)
-                ->get();
-        }
-
-        // TEST: Prova a renderizzare la view
-        return view('events.create', compact('venueOwners', 'recentVenues'));
-
-    } catch (Exception $e) {
-        // Se c'è un errore nella view, mostriamolo
-        return response()->json([
-            'error' => 'Errore nella view events.create',
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'venue_owners_count' => isset($venueOwners) ? $venueOwners->count() : 'non_definito'
-        ], 500);
-    }
-})->name('events.create')->middleware('auth');
+Route::get('/events/create', [EventController::class, 'create'])->name('events.create')->middleware('auth');
 
 // Route per i luoghi recenti (pubblica)
 Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');

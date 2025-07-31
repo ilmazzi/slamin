@@ -282,14 +282,25 @@ class EventController extends Controller
      */
     public function create(): View
     {
+        // Debug log all'inizio
+        Log::info('EventController::create method started');
+        
         // Controlla se l'utente può creare eventi usando Spatie
         if (!Auth::check() || (!Auth::user()->can('events.create.public') && !Auth::user()->can('events.create.private'))) {
             abort(403, 'Non hai i permessi per creare eventi');
         }
 
+        Log::info('User permissions check passed');
+
         $venueOwners = User::whereHas('roles', function ($query) {
             $query->where('name', 'venue_owner');
         })->get();
+
+        Log::info('Venue owners loaded', ['count' => $venueOwners->count()]);
+
+        // Ottieni i gruppi pubblici per la selezione
+        $groups = \App\Models\Group::public()->get();
+        Log::info('Groups collection created', ['count' => $groups->count(), 'groups' => $groups->pluck('name', 'id')->toArray()]);
 
         // Ottieni i luoghi recenti dell'utente (solo se autenticato)
         $recentVenues = collect(); // Default vuoto
@@ -297,7 +308,12 @@ class EventController extends Controller
             $recentVenues = RecentVenue::getRecentVenues(4);
         }
 
-        return view('events.create', compact('venueOwners', 'recentVenues'));
+        Log::info('About to return view with groups', ['groups_count' => $groups->count(), 'groups_data' => $groups->pluck('name', 'id')->toArray()]);
+
+        // Debug: verifica che la variabile sia passata correttamente
+        Log::info('Variables being passed to view', ['venueOwners_count' => $venueOwners->count(), 'recentVenues_count' => $recentVenues->count(), 'groups_count' => $groups->count()]);
+
+        return view('events.create', compact('venueOwners', 'recentVenues', 'groups'));
     }
 
     /**
@@ -338,6 +354,8 @@ class EventController extends Controller
                 'max_participants' => 'nullable|integer|min:1',
                 'entry_fee' => 'nullable|numeric|min:0',
                 'venue_owner_id' => 'nullable|exists:users,id',
+                'is_linked_to_group' => 'nullable|boolean',
+                'group_id' => 'nullable|exists:groups,id',
                 'allow_requests' => 'nullable',
                 'tags' => 'nullable|string',
                 'event_image' => 'nullable',
@@ -406,6 +424,14 @@ class EventController extends Controller
 
         // Convert is_online to boolean
         $validated['is_online'] = isset($validated['is_online']) && ($validated['is_online'] === '1' || $validated['is_online'] === 1 || $validated['is_online'] === true);
+
+        // Convert is_linked_to_group to boolean
+        $validated['is_linked_to_group'] = isset($validated['is_linked_to_group']) && ($validated['is_linked_to_group'] === '1' || $validated['is_linked_to_group'] === 1 || $validated['is_linked_to_group'] === true);
+
+        // Handle group association
+        if (!$validated['is_linked_to_group']) {
+            $validated['group_id'] = null;
+        }
 
         // Convert numeric recurrence fields
         if (isset($validated['recurrence_interval'])) {
@@ -973,7 +999,15 @@ class EventController extends Controller
             $query->where('name', 'venue_owner');
         })->get();
 
-        return view('events.edit', compact('event', 'venueOwners'));
+        // Ottieni i gruppi pubblici per la selezione
+        try {
+            $groups = \App\Models\Group::public()->get();
+        } catch (\Exception $e) {
+            // Fallback: ottieni tutti i gruppi se la query public() fallisce
+            $groups = \App\Models\Group::all();
+        }
+
+        return view('events.edit', compact('event', 'venueOwners', 'groups'));
     }
 
     /**
@@ -1005,6 +1039,8 @@ class EventController extends Controller
             'max_participants' => 'nullable|integer|min:1',
             'entry_fee' => 'nullable|numeric|min:0',
             'venue_owner_id' => 'nullable|exists:users,id',
+            'is_linked_to_group' => 'nullable|boolean',
+            'group_id' => 'nullable|exists:groups,id',
             'allow_requests' => 'boolean',
             'tags' => 'nullable|string',
             'image_url' => 'nullable|url',
@@ -1029,6 +1065,14 @@ class EventController extends Controller
 
         // Convert is_online to boolean
         $validated['is_online'] = isset($validated['is_online']) && ($validated['is_online'] === '1' || $validated['is_online'] === 1 || $validated['is_online'] === true);
+
+        // Convert is_linked_to_group to boolean
+        $validated['is_linked_to_group'] = isset($validated['is_linked_to_group']) && ($validated['is_linked_to_group'] === '1' || $validated['is_linked_to_group'] === 1 || $validated['is_linked_to_group'] === true);
+
+        // Handle group association
+        if (!$validated['is_linked_to_group']) {
+            $validated['group_id'] = null;
+        }
 
         // Custom validation for physical events
         if (!$validated['is_online']) {
