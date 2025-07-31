@@ -14,53 +14,49 @@
 
         <?php if(auth()->guard()->check()): ?>
         <div class="d-flex align-items-center nav-profile p-3">
-            <span class="h-45 w-45 d-flex-center b-r-10 position-relative bg-primary m-auto">
-                <?php if(auth()->user()->profile_photo): ?>
-                    <img alt="avatar" class="img-fluid b-r-10" src="<?php echo e(auth()->user()->profile_photo_url); ?>">
-                <?php else: ?>
-                    <span class="text-white fw-bold" style="font-size: 16px;">
-                        <?php echo e(substr(auth()->user()->getDisplayName(), 0, 2)); ?>
-
-                    </span>
-                <?php endif; ?>
-                <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-            </span>
-            <div class="flex-grow-1 ps-2">
-                <h6 class="text-primary mb-0 text-truncate" style="max-width: 150px;"><?php echo e(auth()->user()->getDisplayName()); ?></h6>
-                <p class="text-muted f-s-12 mb-0 text-truncate" style="max-width: 150px;">
-                    <?php if(auth()->user()->getRoleNames()->count() > 0): ?>
-                        <?php
-                            $role = auth()->user()->getRoleNames()->first();
-                            $roleDisplay = match($role) {
-                                'admin' => 'Amministratore',
-                                'moderatore' => 'Moderatore',
-                                'organizzatore' => __('events.organizer'),
-                                'poeta' => 'Poeta',
-                                'giudice' => 'Giudice',
-                                'spettatore' => 'Spettatore',
-                                default => ucfirst($role)
-                            };
-                        ?>
-                        <?php echo e($roleDisplay); ?>
-
+            <a href="<?php echo e(route('profile.show')); ?>" class="text-decoration-none d-flex align-items-center flex-grow-1" style="cursor: pointer;">
+                <span class="h-45 w-45 d-flex-center b-r-10 position-relative bg-primary m-auto">
+                    <?php if(auth()->user()->profile_photo): ?>
+                        <img alt="avatar" class="img-fluid b-r-10" src="<?php echo e(auth()->user()->profile_photo_url); ?>">
                     <?php else: ?>
-                        <?php echo e(__('sidebar.slam_in_user')); ?>
+                        <span class="text-white fw-bold" style="font-size: 16px;">
+                            <?php echo e(substr(auth()->user()->getDisplayName(), 0, 2)); ?>
 
+                        </span>
                     <?php endif; ?>
-                </p>
-            </div>
+                    <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                </span>
+                <div class="flex-grow-1 ps-2">
+                    <h6 class="text-primary mb-0 text-truncate" style="max-width: 150px;"><?php echo e(auth()->user()->getDisplayName()); ?></h6>
+                    <p class="text-muted f-s-12 mb-0 text-truncate" style="max-width: 150px;">
+                        <?php if(auth()->user()->getRoleNames()->count() > 0): ?>
+                            <?php
+                                $role = auth()->user()->getRoleNames()->first();
+                                $roleDisplay = match($role) {
+                                    'admin' => 'Amministratore',
+                                    'moderatore' => 'Moderatore',
+                                    'organizzatore' => __('events.organizer'),
+                                    'poeta' => 'Poeta',
+                                    'giudice' => 'Giudice',
+                                    'spettatore' => 'Spettatore',
+                                    default => ucfirst($role)
+                                };
+                            ?>
+                            <?php echo e($roleDisplay); ?>
+
+                        <?php else: ?>
+                            <?php echo e(__('sidebar.slam_in_user')); ?>
+
+                        <?php endif; ?>
+                    </p>
+                </div>
+            </a>
 
             <div class="dropdown profile-menu-dropdown">
                 <a aria-expanded="false" data-bs-auto-close="true" data-bs-placement="top" data-bs-toggle="dropdown" role="button">
                     <i class="ti ti-settings fs-5"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-item">
-                        <a class="f-w-500" href="<?php echo e(route('profile.show')); ?>">
-                            <i class="ph-duotone ph-user-circle pe-1 f-s-20"></i> <?php echo e(__('sidebar.my_profile')); ?>
-
-                        </a>
-                    </li>
                     <li class="dropdown-item">
                         <a class="f-w-500" href="<?php echo e(route('profile.edit')); ?>">
                             <i class="ph-duotone ph-gear pe-1 f-s-20"></i> <?php echo e(__('sidebar.settings')); ?>
@@ -235,16 +231,7 @@
                                 </li>
                                 <?php endif; ?>
 
-                                <!-- Profile Section - Solo per utenti autenticati -->
-                                <li class="no-sub <?php echo e(request()->routeIs('profile.*') ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('profile.show')); ?>">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#document"></use>
-                                        </svg>
-                                        <?php echo e(__('sidebar.my_profile')); ?>
 
-                                    </a>
-                                </li>
 
                                 <?php if(auth()->user()->hasRole(['admin', 'moderator'])): ?>
                                 <!-- Permissions Management Section - Solo per admin/moderator -->
