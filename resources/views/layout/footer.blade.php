@@ -216,10 +216,14 @@ class NotificationManager {
 
     updateBadge() {
         const badge = document.getElementById('notificationBadge');
+        const icon = document.getElementById('notificationIcon');
 
         if (this.unreadCount > 0) {
             badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
             badge.style.display = 'block';
+
+            // Cambia l'icona in bell.gif quando ci sono notifiche
+            icon.src = '{{ asset("assets/images/bell.gif") }}';
 
             // Add pulse animation for new notifications
             badge.classList.add('animate__animated', 'animate__pulse');
@@ -228,6 +232,9 @@ class NotificationManager {
             }, 1000);
         } else {
             badge.style.display = 'none';
+
+            // Cambia l'icona in bell.png quando non ci sono notifiche
+            icon.src = '{{ asset("assets/images/bell.png") }}';
         }
     }
 

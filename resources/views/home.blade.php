@@ -349,7 +349,7 @@ window.addEventListener('load', function() {
                                                 <div class="col-6 col-md-3">
                                                     <div class="text-center p-2 rounded-3 txt-bg-success">
                                                         <div class="d-flex-center mb-1">
-                                                            <i class="ph-duotone ph-hands-clapping f-s-16 f-s-md-18 text-danger"></i>
+                                                            <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);">
                                                         </div>
                                                         <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">{{ number_format($mostPopularVideo->snaps()->count()) }}</h6>
                                                         <small class="text-muted f-s-10">{{ __('common.snap') }}</small>

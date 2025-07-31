@@ -66,7 +66,7 @@
                                             style="width: 70px; height: 70px;"
                                             onclick="createSnapAtCurrentTime()"
                                             title="Crea snap al tempo corrente">
-                                        <i class="ph-duotone ph-hands-clapping f-s-28 text-white"></i>
+                                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
                                     </button>
                                 </div>
 
@@ -103,9 +103,9 @@
                                              title="{{ $firstSnap->display_title }} ({{ $snapCount }} snap)">
 
                                                                                         <!-- Marker principale -->
-                                            <div class="snap-indicator bg-info rounded-circle d-flex align-items-center justify-content-center"
-                                                 style="width: 28px; height: 28px; border: 3px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
-                                                <i class="ph-duotone ph-hands-clapping f-s-16 text-white"></i>
+                                            <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                 style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
+                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
                                             </div>
 
                                             <!-- Badge per numero di snap -->
@@ -217,11 +217,8 @@
                                 <!-- View Counter (Sistema Unificato) -->
                                 <x-social-view-counter :content="$video" type="video" />
 
-                                <!-- Snap Button (Mantenuto esistente) -->
-                                <button type="button" class="btn btn-outline-dark hover-effect" onclick="showSnapModal()">
-                                    <i class="ph-duotone ph-hands-clapping f-s-14 me-1"></i>
-                                    {{ __('common.snap') }}
-                                </button>
+                                <!-- Snap Button (Sistema Unificato) -->
+                                <x-social-snap-button :content="$video" type="video" />
 
                                 <!-- Report Button -->
                                 <x-report-button :content="$video" type="video" />
@@ -311,7 +308,7 @@
                 <div class="card hover-effect mt-3">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
-                            <i class="ph-duotone ph-hands-clapping f-s-16 me-2"></i>
+                            <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; margin-right: 8px;">
                             {{ __('common.snap') }} Popolari
                         </h6>
                     </div>
@@ -329,7 +326,7 @@
                                         </div>
                                     @endif
                                     <div class="position-absolute top-0 end-0 bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 8px; transform: translate(25%, -25%);">
-                                        <i class="ph-duotone ph-hands-clapping f-s-8"></i>
+                                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 8px; height: 8px; filter: brightness(0) invert(1);">
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-2">

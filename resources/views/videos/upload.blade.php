@@ -91,7 +91,7 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('videos.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                             @csrf
 
                             <!-- {{ __('common.video') }} File Upload with Integrated Progress -->

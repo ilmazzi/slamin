@@ -85,7 +85,7 @@
                            role="button"
                            id="notificationTrigger"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                            <i class="ph ph-bell"></i>
+                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="Notifications" style="width: 20px; height: 20px;">
                             <!-- Dynamic notification badge -->
                             <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
                         </a>

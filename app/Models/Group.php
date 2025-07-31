@@ -76,6 +76,16 @@ class Group extends Model
     }
 
     /**
+     * Eventi associati tramite tabella pivot (many-to-many)
+     */
+    public function linkedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_group')
+                    ->withPivot('group_permissions')
+                    ->withTimestamps();
+    }
+
+    /**
      * Scope per gruppi pubblici
      */
     public function scopePublic($query)

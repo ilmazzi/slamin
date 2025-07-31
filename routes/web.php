@@ -702,7 +702,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         })->name('upload');
 
         // Video upload processing
-        Route::post('/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('upload');
+        Route::post('/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('store');
 
         // Video playback and views
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');

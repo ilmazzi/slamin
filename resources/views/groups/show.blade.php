@@ -154,7 +154,7 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    @php $groupEvents = $group->events()->latest()->take(10)->get(); @endphp
+                    @php $groupEvents = $group->linkedEvents()->latest()->take(10)->get(); @endphp
                     @if($groupEvents->count() > 0)
                         <div class="events-slider app-arrow" id="group-events-slider">
                             @foreach($groupEvents as $event)
@@ -223,6 +223,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Eventi associati al gruppo -->
+    @if($group->linkedEvents && $group->linkedEvents->count())
+        <div class="row mt-4">
+            <div class="col-12">
+                <h4 class="mb-3"><i class="ph ph-calendar me-2"></i>Eventi collegati a questo gruppo</h4>
+            </div>
+            @foreach($group->linkedEvents as $event)
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card card-light-primary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">
+                                <a href="{{ route('events.show', $event) }}" class="text-decoration-none text-primary">
+                                    <i class="ph ph-calendar me-1"></i>{{ $event->title }}
+                                </a>
+                            </h5>
+                            <div class="mb-1">
+                                <i class="ph ph-clock me-1"></i>{{ optional($event->start_datetime)->format('d/m/Y H:i') }}
+                            </div>
+                            <div class="mb-1">
+                                <i class="ph ph-map-pin me-1"></i>{{ $event->city }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
     <!-- Statistiche ridotte -->
     <div class="row mb-4">
@@ -461,7 +489,7 @@ $(document).ready(function() {
         console.error('Slick non è caricato!');
         return;
     }
-    
+
     const $groupSlider = $('#group-events-slider');
     if ($groupSlider.length > 0) {
         $groupSlider.slick({

@@ -284,7 +284,7 @@ class EventController extends Controller
     {
         // Debug log all'inizio
         Log::info('EventController::create method started');
-        
+
         // Controlla se l'utente può creare eventi usando Spatie
         if (!Auth::check() || (!Auth::user()->can('events.create.public') && !Auth::user()->can('events.create.private'))) {
             abort(403, 'Non hai i permessi per creare eventi');
@@ -356,7 +356,8 @@ class EventController extends Controller
                 'entry_fee' => 'nullable|numeric|min:0',
                 'venue_owner_id' => 'nullable|exists:users,id',
                 'is_linked_to_group' => 'nullable|boolean',
-                'group_id' => 'nullable|exists:groups,id',
+                'group_ids' => 'nullable|array',
+                'group_ids.*' => 'exists:groups,id',
                 'allow_requests' => 'nullable',
                 'tags' => 'nullable|string',
                 'event_image' => 'nullable',
@@ -548,7 +549,13 @@ class EventController extends Controller
         // Remove selected_festival_events from validated data as it's not part of Event model
         unset($validated['selected_festival_events']);
 
-        DB::transaction(function () use ($validated, $invitations, $privateInvitedUsers, $artistInvitedUsers, $festivalEvents, &$event) {
+        // Save group_ids before removing from validated data
+        $groupIds = $validated['group_ids'] ?? [];
+
+        // Remove group_ids from validated data as it's handled separately
+        unset($validated['group_ids']);
+
+        DB::transaction(function () use ($validated, $invitations, $privateInvitedUsers, $artistInvitedUsers, $festivalEvents, $groupIds, &$event) {
             // Process recurrence settings
             if (isset($validated['is_recurring']) && $validated['is_recurring'] && !empty($validated['recurrence_type'])) {
                 // Set default values for recurrence
@@ -578,6 +585,20 @@ class EventController extends Controller
 
             // Create the event
             $event = Event::create($validated);
+
+            // Process groups if linked to groups
+            if (!empty($groupIds) && is_array($groupIds)) {
+                $groupData = [];
+                foreach ($groupIds as $groupId) {
+                    $groupData[$groupId] = ['group_permissions' => 'creator_only'];
+                }
+                $event->groups()->attach($groupData);
+
+                Log::info('Event groups attached', [
+                    'event_id' => $event->id,
+                    'group_ids' => $groupIds
+                ]);
+            }
 
             // Process festival events if this is a festival
             if ($event->category === Event::CATEGORY_FESTIVAL && !empty($festivalEvents)) {
@@ -828,12 +849,12 @@ class EventController extends Controller
                 // Only users with relevant roles for poetry slam events
                 $q->whereIn('name', ['poet', 'judge', 'technician', 'organizer']);
             });
-            
+
         // Exclude current user only if authenticated
         if (Auth::check()) {
             $users = $users->where('id', '!=', Auth::id());
         }
-        
+
         $users = $users->limit(10)->get()
             ->map(function ($user) {
                 return [
@@ -945,7 +966,7 @@ class EventController extends Controller
             }
         }
 
-        $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user', 'festival.organizer']);
+        $event->load(['organizer', 'venueOwner', 'invitations.invitedUser', 'requests.user', 'festival.organizer', 'groups']);
 
         $canApply = false;
         $hasInvitation = false;
@@ -986,7 +1007,7 @@ class EventController extends Controller
     public function edit(Event $event): View
     {
         // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per modificare questo evento');
         }
@@ -1017,7 +1038,7 @@ class EventController extends Controller
     public function update(Request $request, Event $event): RedirectResponse
     {
         // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per modificare questo evento');
         }
@@ -1195,7 +1216,7 @@ class EventController extends Controller
     public function destroy(Event $event): RedirectResponse
     {
         // Controlla se l'utente può eliminare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per eliminare questo evento');
         }
@@ -1280,7 +1301,7 @@ class EventController extends Controller
     public function manage(Event $event): View
     {
         // Controlla se l'utente può gestire questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') || 
+        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
             (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
             abort(403, 'Non hai i permessi per gestire questo evento');
         }
@@ -1884,7 +1905,7 @@ class EventController extends Controller
                     $hasInvitation = $event->invitations()->where('invited_user_id', $userId)->exists();
                     $hasRequest = $event->requests()->where('user_id', $userId)->exists();
                     $hasWishlist = false;
-                    
+
                     try {
                         $hasWishlist = $event->wishlistedBy()->where('users.id', $userId)->exists();
                     } catch (\Exception $e) {

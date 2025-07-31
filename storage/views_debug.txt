@@ -1474,3 +1474,31 @@ Video User ID: 23
 Current views: 2
 Views incremented! (User is not owner)
 Final views: 3
+=== INCREMENT VIEWS ===
+Video ID: 13
+User ID: 2
+Video User ID: 2
+Current views: 1
+Views NOT incremented! (User is owner)
+Final views: 1
+=== INCREMENT VIEWS ===
+Video ID: 13
+User ID: 2
+Video User ID: 2
+Current views: 1
+Views NOT incremented! (User is owner)
+Final views: 1
+=== INCREMENT VIEWS ===
+Video ID: 13
+User ID: 2
+Video User ID: 2
+Current views: 1
+Views NOT incremented! (User is owner)
+Final views: 1
+=== INCREMENT VIEWS ===
+Video ID: 13
+User ID: 2
+Video User ID: 2
+Current views: 1
+Views NOT incremented! (User is owner)
+Final views: 1

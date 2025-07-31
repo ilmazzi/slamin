@@ -717,7 +717,17 @@ class Event extends Model
     // ========================================
 
     /**
-     * Relazione con il gruppo dell'evento
+     * Relazione con i gruppi dell'evento (many-to-many)
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'event_group')
+                    ->withPivot('group_permissions')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relazione con il gruppo principale dell'evento (per compatibilità)
      */
     public function group(): BelongsTo
     {
@@ -729,7 +739,15 @@ class Event extends Model
      */
     public function belongsToGroup(): bool
     {
-        return !is_null($this->group_id);
+        return $this->groups()->exists();
+    }
+
+    /**
+     * Verifica se l'evento appartiene a un gruppo specifico
+     */
+    public function belongsToGroupId($groupId): bool
+    {
+        return $this->groups()->where('group_id', $groupId)->exists();
     }
 
     /**
@@ -757,15 +775,15 @@ class Event extends Model
             case 'creator_only':
                 // Solo il creatore può modificare
                 return $user->id === $this->organizer_id;
-            
+
             case 'group_admins':
                 // Gli admin del gruppo possono modificare
                 return $user->isAdminOf($this->group);
-            
+
             case 'group_members':
                 // Tutti i membri del gruppo possono modificare
                 return $user->isMemberOf($this->group);
-            
+
             default:
                 return false;
         }

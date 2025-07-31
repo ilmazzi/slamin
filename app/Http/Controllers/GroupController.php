@@ -158,7 +158,7 @@ class GroupController extends Controller
             abort(403, 'Non hai i permessi per visualizzare questo gruppo.');
         }
 
-        $group->load(['creator', 'members.user', 'events']);
+        $group->load(['creator', 'members.user', 'events', 'linkedEvents']);
 
         // Statistiche del gruppo
         $stats = [

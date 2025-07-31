@@ -95,6 +95,9 @@ return [
     'promotional_video_help' => 'Incolla il link di un video YouTube, Vimeo o altro servizio di hosting video',
     'is_paid_event' => 'Questo evento è a pagamento',
     'is_linked_to_group' => 'Questo evento è legato a:',
+    'select_groups' => 'Seleziona gruppi',
+    'groups_help' => 'Associa questo evento a uno o più gruppi per organizzazione e visibilità. Puoi selezionare più gruppi.',
+    'associated_groups' => 'Gruppi associati',
     'select_group' => 'Seleziona gruppo...',
     'group_help' => 'Associa questo evento a un gruppo per organizzazione e visibilità',
     'no_group' => 'Nessun gruppo',
@@ -373,7 +376,7 @@ return [
     'view_event' => 'Vedi Evento',
     'private_event_notice_title' => 'Evento Privato',
     'private_event_notice_text' => 'Questo evento è privato e visibile solo agli organizzatori e ai partecipanti confermati.',
-
+    'associated_groups' => 'Gruppi Associati',
     // Eventi Online
     'online_event' => 'Evento Online',
     'online_event_help' => 'Seleziona se l\'evento si svolgerà online',
