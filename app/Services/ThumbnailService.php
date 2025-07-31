@@ -135,7 +135,7 @@ class ThumbnailService
         }
 
         // Se non c'è URL thumbnail ma c'è ID PeerTube, prova a recuperarlo
-        if ($video->peertube_id && !$video->peertube_thumbnail_url) {
+        if (($video->peertube_id || $video->peertube_video_id) && !$video->peertube_thumbnail_url) {
             $thumbnailUrl = $this->getPeerTubeThumbnailUrl($video);
             if ($thumbnailUrl) {
                 Log::info("✅ URL thumbnail PeerTube recuperato per video {$video->id}: {$thumbnailUrl}");
@@ -157,13 +157,16 @@ class ThumbnailService
     public function getPeerTubeThumbnailUrl(Video $video): ?string
     {
         try {
-            if (!$video->peertube_id) {
+            // Usa peertube_video_id se disponibile, altrimenti peertube_id
+            $peerTubeVideoId = $video->peertube_video_id ?: $video->peertube_id;
+
+            if (!$peerTubeVideoId) {
                 return null;
             }
 
             // Costruisci l'URL dell'API PeerTube
             $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
-            $apiUrl = rtrim($peerTubeUrl, '/') . '/api/v1/videos/' . $video->peertube_id;
+            $apiUrl = rtrim($peerTubeUrl, '/') . '/api/v1/videos/' . $peerTubeVideoId;
 
             Log::info("Tentativo recupero thumbnail PeerTube per video {$video->id}: {$apiUrl}");
 
@@ -281,7 +284,7 @@ class ThumbnailService
             Storage::disk('public')->makeDirectory('videos/thumbnails');
 
             // Usa un placeholder esistente dal progetto
-            $placeholderPath = 'assets/images/placeholder/placeholder-1.jpg';
+            $placeholderPath = 'assets/images/placeholder/placholder-1.jpg';
             $placeholderFullPath = public_path($placeholderPath);
 
             if (file_exists($placeholderFullPath)) {

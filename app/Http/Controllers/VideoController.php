@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['getVideoData']);
+        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps']);
     }
 
     /**
@@ -101,17 +101,22 @@ class VideoController extends Controller
     public function getVideoData(Video $video)
     {
         return response()->json([
-            'id' => $video->id,
-            'title' => $video->title,
-            'description' => $video->description,
-            'views' => $video->view_count,
-            'created_at' => $video->created_at,
-            'embed_url' => $video->embed_url,
-            'is_uploaded_to_peertube' => $video->isUploadedToPeerTube(),
-            'peertube_url' => $video->peer_tube_url,
-            'peertube_embed_url' => $video->peer_tube_embed_url,
-            'status' => $video->status,
-            'is_public' => $video->is_public,
+            'success' => true,
+            'video' => [
+                'id' => $video->id,
+                'title' => $video->title,
+                'description' => $video->description,
+                'views' => $video->view_count,
+                'duration' => $video->duration,
+                'created_at' => $video->created_at,
+                'embed_url' => $video->embed_url,
+                'is_uploaded_to_peertube' => $video->isUploadedToPeerTube(),
+                'peertube_url' => $video->peertube_url,
+                'peertube_embed_url' => $video->peertube_embed_url,
+                'video_url' => $video->video_url,
+                'status' => $video->status,
+                'is_public' => $video->is_public,
+            ]
         ]);
     }
 
@@ -458,6 +463,36 @@ class VideoController extends Controller
 
         return response()->json([
             'success' => true,
+        ]);
+    }
+
+    /**
+     * Ottiene gli snap del video per API
+     */
+    public function getVideoSnaps(Video $video)
+    {
+        $snaps = $video->approvedSnaps()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($snap) {
+                return [
+                    'id' => $snap->id,
+                    'timestamp' => $snap->timestamp,
+                    'title' => $snap->title,
+                    'description' => $snap->description,
+                    'like_count' => $snap->like_count,
+                    'user' => [
+                        'id' => $snap->user->id,
+                        'name' => $snap->user->getDisplayName(),
+                    ],
+                    'created_at' => $snap->created_at->toISOString(),
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'snaps' => $snaps,
         ]);
     }
 }

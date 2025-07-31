@@ -101,7 +101,12 @@ class Video extends Model
      */
     public function getThumbnailUrlAttribute()
     {
-        // Prima controlla se c'è un thumbnail PeerTube (URL completo)
+        // Prima controlla se c'è un thumbnail PeerTube specifico (priorità massima)
+        if ($this->peertube_thumbnail_url) {
+            return $this->peertube_thumbnail_url;
+        }
+
+        // Poi controlla se c'è un thumbnail PeerTube (URL completo)
         if ($this->thumbnail_path && filter_var($this->thumbnail_path, FILTER_VALIDATE_URL)) {
             return $this->thumbnail_path;
         }
@@ -111,18 +116,13 @@ class Video extends Model
             return Storage::url($this->thumbnail_path);
         }
 
-        // Poi controlla se c'è un thumbnail PeerTube specifico
-        if ($this->peertube_thumbnail_url) {
-            return $this->peertube_thumbnail_url;
-        }
-
         // Poi controlla il campo thumbnail generico
         if ($this->thumbnail) {
             return asset('storage/' . $this->thumbnail);
         }
 
         // Fallback: placeholder generico
-        return asset('assets/images/placeholder/placeholder-1.jpg');
+        return asset('assets/images/placeholder/placholder-1.jpg');
     }
 
     /**

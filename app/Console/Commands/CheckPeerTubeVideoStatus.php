@@ -34,8 +34,8 @@ class CheckPeerTubeVideoStatus extends Command
         $this->info('   PeerTube UUID: ' . ($video->peertube_uuid ?: 'N/A'));
         $this->info('   URL attuale: ' . ($video->peertube_url ?: 'N/A'));
 
-        if (!$video->peertube_id) {
-            $this->error('   ❌ Video non ha PeerTube ID');
+        if (!$video->peertube_uuid) {
+            $this->error('   ❌ Video non ha PeerTube UUID');
             return 1;
         }
 
@@ -46,16 +46,16 @@ class CheckPeerTubeVideoStatus extends Command
 
             // Ottieni informazioni video da PeerTube
             $this->info('2. Verifica stato su PeerTube:');
-            
+
             $client = new \GuzzleHttp\Client([
                 'timeout' => 30,
             ]);
 
             $response = $client->get("https://video.slamin.it/api/v1/videos/{$video->peertube_uuid}");
-            
+
             if ($response->getStatusCode() === 200) {
                 $videoInfo = json_decode($response->getBody()->getContents(), true);
-                
+
                 $this->info('   ✅ Video trovato su PeerTube');
                 $this->info('   ID: ' . ($videoInfo['id'] ?? 'N/A'));
                 $this->info('   UUID: ' . ($videoInfo['uuid'] ?? 'N/A'));
@@ -63,12 +63,12 @@ class CheckPeerTubeVideoStatus extends Command
                 $this->info('   Durata: ' . ($videoInfo['duration'] ?? 'N/A') . ' secondi');
                 $this->info('   Stato: ' . ($videoInfo['state']['label'] ?? 'N/A'));
                 $this->info('   Privacy: ' . ($videoInfo['privacy']['label'] ?? 'N/A'));
-                
+
                 // URL del video
                 if (isset($videoInfo['embedPath'])) {
                     $videoUrl = "https://video.slamin.it" . $videoInfo['embedPath'];
                     $this->info('   URL Video: ' . $videoUrl);
-                    
+
                     // Aggiorna il database se l'URL è cambiato
                     if ($video->peertube_url !== $videoUrl) {
                         $video->update([
@@ -81,34 +81,34 @@ class CheckPeerTubeVideoStatus extends Command
                         $this->info('   ℹ️  URL già aggiornato');
                     }
                 }
-                
+
                 // Thumbnail
                 if (isset($videoInfo['thumbnailPath'])) {
                     $thumbnailUrl = "https://video.slamin.it" . $videoInfo['thumbnailPath'];
                     $this->info('   Thumbnail: ' . $thumbnailUrl);
-                    
+
                     if ($video->thumbnail_path !== $thumbnailUrl) {
                         $video->update(['thumbnail_path' => $thumbnailUrl]);
                         $this->info('   ✅ Thumbnail aggiornato nel database');
                     }
                 }
-                
+
                 // Statistiche
                 if (isset($videoInfo['views'])) {
                     $this->info('   Visualizzazioni: ' . $videoInfo['views']);
                     $video->update(['view_count' => $videoInfo['views']]);
                 }
-                
+
                 if (isset($videoInfo['likes'])) {
                     $this->info('   Mi piace: ' . $videoInfo['likes']);
                     $video->update(['like_count' => $videoInfo['likes']]);
                 }
-                
+
                 if (isset($videoInfo['dislikes'])) {
                     $this->info('   Non mi piace: ' . $videoInfo['dislikes']);
                     $video->update(['dislike_count' => $videoInfo['dislikes']]);
                 }
-                
+
             } else {
                 $this->error('   ❌ Errore nel recupero video: ' . $response->getStatusCode());
                 return 1;
@@ -123,4 +123,4 @@ class CheckPeerTubeVideoStatus extends Command
             return 1;
         }
     }
-} 
+}
