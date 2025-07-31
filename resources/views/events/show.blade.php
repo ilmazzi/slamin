@@ -916,7 +916,7 @@
 
                             <!-- {{ __('wishlist.wishlist') }} Button -->
                             <button class="btn btn-outline-danger w-100 mb-2 wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
-                                <i class="ph-duotone ph-heart wishlist-icon"></i>
+                                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
                                 <span class="wishlist-text">Aggiungi alla {{ __('wishlist.wishlist') }}</span>
                             </button>
 

@@ -6,7 +6,7 @@
     $contentType = strtolower(class_basename($content));
 @endphp
 
-<div class="social-like-btn" 
+<div class="social-like-btn"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}"
      onclick="toggleSocialLike(this)"
@@ -14,7 +14,7 @@
      style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
      onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
      onmouseout="this.style.backgroundColor='transparent'">
-    <i class="ti ti-heart f-s-24 {{ $isLiked ? 'text-primary' : 'text-muted' }}"></i>
+    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; {{ $isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
     <span class="text-secondary like-count f-s-12">{{ number_format($likeCount) }}</span>
 </div>
 
@@ -23,11 +23,11 @@ function toggleSocialLike(button) {
     const contentType = button.dataset.contentType;
     const contentId = button.dataset.contentId;
     const likeCountSpan = button.querySelector('.like-count');
-    const heartIcon = button.querySelector('i');
-    
+    const heartIcon = button.querySelector('img');
+
     // Disabilita il pulsante durante la richiesta
     button.style.pointerEvents = 'none';
-    
+
     fetch('/api/social/likes/toggle', {
         method: 'POST',
         headers: {
@@ -44,16 +44,14 @@ function toggleSocialLike(button) {
         if (data.success) {
             // Aggiorna l'aspetto del pulsante
             if (data.liked) {
-                heartIcon.classList.remove('text-muted');
-                heartIcon.classList.add('text-primary');
+                heartIcon.style.filter = 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);';
             } else {
-                heartIcon.classList.remove('text-primary');
-                heartIcon.classList.add('text-muted');
+                heartIcon.style.filter = 'brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);';
             }
-            
+
             // Aggiorna il contatore
             likeCountSpan.textContent = data.like_count.toLocaleString();
-            
+
                          // Nessuna notifica per i like - azione silenziosa
          } else {
              // Solo per errori gravi
@@ -69,4 +67,4 @@ function toggleSocialLike(button) {
 }
 
 
-</script> 
+</script>
