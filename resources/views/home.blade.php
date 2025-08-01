@@ -248,7 +248,7 @@ window.addEventListener('load', function() {
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
                                             <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
-                                                @if($mostPopularVideo->thumbnail_path || $mostPopularVideo->peertube_thumbnail_url)
+                                                @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                                     <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
                                                 @else
                                                     <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
