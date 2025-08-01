@@ -198,6 +198,20 @@ Route::view('product_details', 'product_details')->name('product_details');
 Route::view('product_list', 'product_list')->name('product_list');
 Route::view('profile', 'profile')->name('profile');
 Route::view('progress', 'progress')->name('progress');
+
+// Photo Routes
+Route::prefix('photos')->name('photos.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\PhotoController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\PhotoController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\PhotoController::class, 'store'])->name('store');
+    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'show'])->name('show');
+    Route::get('/{photo}/edit', [App\Http\Controllers\PhotoController::class, 'edit'])->name('edit');
+    Route::put('/{photo}', [App\Http\Controllers\PhotoController::class, 'update'])->name('update');
+    Route::delete('/{photo}', [App\Http\Controllers\PhotoController::class, 'destroy'])->name('destroy');
+
+    // API per ottenere foto di un utente
+    Route::get('/user/{userId}', [App\Http\Controllers\PhotoController::class, 'getUserPhotos'])->name('user');
+});
 Route::view('project_app', 'project_app')->name('project_app');
 Route::view('project_details', 'project_details')->name('project_details');
 Route::view('password_create', 'password_create')->name('password_create');
