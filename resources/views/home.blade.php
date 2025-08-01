@@ -309,7 +309,7 @@ window.addEventListener('load', function() {
 
                                                 <!-- Watch Button -->
                                                 <div class="d-flex gap-2">
-                                                    
+
                                                     <a href="{{ route('videos.show', $mostPopularVideo) }}" class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
                                                         <i class="ph-duotone ph-play f-s-14 me-1"></i>
                                                         Guarda {{ __('common.video') }}
