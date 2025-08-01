@@ -45,19 +45,42 @@
                         <div class="row">
                             <!-- Titolo -->
                             <div class="col-12 mb-3">
-                                <label for="title" class="form-label">{{ __('poems.fields.title') }} <span class="text-danger">*</span></label>
+                                <label for="title" class="form-label">{{ __('poems.fields.title') }}</label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror"
                                        id="title" name="title" value="{{ old('title') }}"
-                                       placeholder="{{ __('poems.create.title_placeholder') }}" required>
+                                       placeholder="{{ __('poems.create.title_placeholder') }}">
                                 @error('title')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <!-- Categoria e Tipo -->
+                            <!-- Testo (Contenuto) - OBBLIGATORIO -->
+                            <div class="col-12 mb-3">
+                                <label for="content" class="form-label">{{ __('poems.fields.content') }} <span class="text-danger">*</span></label>
+                                <textarea class="form-control @error('content') is-invalid @enderror"
+                                          id="content" name="content" rows="12"
+                                          placeholder="{{ __('poems.create.content_placeholder') }}" required>{{ old('content') }}</textarea>
+                                <small class="form-text text-muted">{{ __('poems.create.content_help') }}</small>
+                                @error('content')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Immagine (Thumbnail) -->
+                            <div class="col-12 mb-3">
+                                <label for="thumbnail" class="form-label">{{ __('poems.fields.thumbnail') }}</label>
+                                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror"
+                                       id="thumbnail" name="thumbnail" accept="image/*">
+                                <small class="form-text text-muted">{{ __('poems.create.thumbnail_help') }}</small>
+                                @error('thumbnail')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Categoria e Tipologia -->
                             <div class="col-md-6 mb-3">
-                                <label for="category" class="form-label">{{ __('poems.fields.category') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('category') is-invalid @enderror" id="category" name="category" required>
+                                <label for="category" class="form-label">{{ __('poems.fields.category') }}</label>
+                                <select class="form-select @error('category') is-invalid @enderror" id="category" name="category">
                                     <option value="">{{ __('common.select') }}</option>
                                     @foreach($categories as $key => $category)
                                         <option value="{{ $key }}" {{ old('category') == $key ? 'selected' : '' }}>
@@ -71,8 +94,8 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="poem_type" class="form-label">{{ __('poems.fields.poem_type') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('poem_type') is-invalid @enderror" id="poem_type" name="poem_type" required>
+                                <label for="poem_type" class="form-label">{{ __('poems.fields.poem_type') }}</label>
+                                <select class="form-select @error('poem_type') is-invalid @enderror" id="poem_type" name="poem_type">
                                     <option value="">{{ __('common.select') }}</option>
                                     @foreach($poemTypes as $key => $type)
                                         <option value="{{ $key }}" {{ old('poem_type') == $key ? 'selected' : '' }}>
@@ -85,10 +108,10 @@
                                 @enderror
                             </div>
 
-                            <!-- {{ __('common.language_selector') }} e Tags -->
+                            <!-- Lingua e Tags -->
                             <div class="col-md-6 mb-3">
-                                <label for="language" class="form-label">{{ __('poems.fields.language') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('language') is-invalid @enderror" id="language" name="language" required>
+                                <label for="language" class="form-label">{{ __('poems.fields.language') }}</label>
+                                <select class="form-select @error('language') is-invalid @enderror" id="language" name="language">
                                     <option value="">{{ __('common.select') }}</option>
                                     @foreach($languages as $key => $language)
                                         <option value="{{ $key }}" {{ old('language') == $key ? 'selected' : '' }}>
@@ -120,29 +143,6 @@
                                           placeholder="{{ __('poems.create.description_placeholder') }}">{{ old('description') }}</textarea>
                                 <small class="form-text text-muted">{{ __('poems.create.description_help') }}</small>
                                 @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Contenuto -->
-                            <div class="col-12 mb-3">
-                                <label for="content" class="form-label">{{ __('poems.fields.content') }} <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('content') is-invalid @enderror"
-                                          id="content" name="content" rows="12"
-                                          placeholder="{{ __('poems.create.content_placeholder') }}" required>{{ old('content') }}</textarea>
-                                <small class="form-text text-muted">{{ __('poems.create.content_help') }}</small>
-                                @error('content')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- {{ __('common.thumbnail') }} -->
-                            <div class="col-12 mb-3">
-                                <label for="thumbnail" class="form-label">{{ __('poems.fields.thumbnail') }}</label>
-                                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror"
-                                       id="thumbnail" name="thumbnail" accept="image/*">
-                                <small class="form-text text-muted">{{ __('poems.create.thumbnail_help') }}</small>
-                                @error('thumbnail')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
