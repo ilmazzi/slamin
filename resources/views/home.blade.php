@@ -258,7 +258,6 @@ window.addEventListener('load', function() {
                                                         </div>
                                                     </div>
                                                 @endif
-                                                <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20"></div>
                                                 <div class="position-absolute top-50 start-50 translate-middle">
                                                     <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center" style="width: 70px; height: 70px;">
                                                         <i class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
