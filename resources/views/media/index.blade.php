@@ -40,7 +40,7 @@
                 <div class="card-body p-0">
                     @if($mostPopularVideo)
                         <div class="position-relative">
-                            @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
+                            @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                 <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
                                     <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="card-img-top" style="height: 400px; object-fit: cover;">
                                     <div class="position-absolute top-50 start-50 translate-middle">
@@ -158,7 +158,7 @@
                             @foreach($popularVideos->take(6) as $video)
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                                     <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
+                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                             <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
                                         @else
                                             <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
@@ -201,7 +201,7 @@
                             @foreach($newVideos->take(6) as $video)
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                                     <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
+                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                             <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
                                         @else
                                             <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
@@ -269,14 +269,23 @@
                 <!-- Video Container -->
                 <div class="video-container position-relative d-flex align-items-center justify-content-center" id="modalVideoContainer" style="display: none; height: 100vh;">
                     <div class="video-wrapper" style="max-width: 80%; max-height: 80%; width: 100%;">
+                        <!-- Video Player per video locali -->
                         <video
                             id="modalVideoPlayer"
                             class="w-100 h-100"
-                            style="object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"
+                            style="object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none;"
                             preload="metadata"
                             controls>
                             Il tuo browser non supporta la riproduzione video.
                         </video>
+
+                        <!-- Iframe per video PeerTube -->
+                        <iframe
+                            id="modalPeerTubePlayer"
+                            class="w-100 h-100"
+                            style="object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; border: none;"
+                            allowfullscreen>
+                        </iframe>
                     </div>
 
                     <!-- Pulsante per creare snap al hover -->
@@ -369,23 +378,32 @@ function loadVideoInModal(videoId) {
                 // Imposta il titolo del modal
                 document.getElementById('videoPlayerModalLabel').textContent = video.title;
 
-                // Imposta la sorgente del video
-                if (video.video_url) {
-                    videoPlayer.src = video.video_url;
-                } else if (video.peertube_url) {
-                    // Se è un URL di embed, convertilo in URL diretto
-                    if (video.peertube_url.includes('/videos/embed/')) {
-                        const shortUuid = video.peertube_url.split('/videos/embed/')[1];
-                        videoPlayer.src = `https://video.slamin.it/videos/watch/${shortUuid}`;
-                    } else {
-                        videoPlayer.src = video.peertube_url;
-                    }
-                } else {
-                    throw new Error('Nessuna sorgente video disponibile');
-                }
+                // Determina il tipo di video e imposta il player appropriato
+                const videoPlayer = document.getElementById('modalVideoPlayer');
+                const peerTubePlayer = document.getElementById('modalPeerTubePlayer');
 
-                // Imposta l'ID del video per le funzioni snap
-                videoPlayer.setAttribute('data-video-id', video.id);
+                if (video.peertube_embed_url || video.is_uploaded_to_peertube) {
+                    // Video PeerTube - usa iframe
+                    videoPlayer.style.display = 'none';
+                    peerTubePlayer.style.display = 'block';
+
+                    const embedUrl = video.peertube_embed_url || video.peertube_url;
+                    peerTubePlayer.src = embedUrl;
+                    peerTubePlayer.setAttribute('data-video-id', video.id);
+                } else {
+                    // Video locale - usa tag video
+                    videoPlayer.style.display = 'block';
+                    peerTubePlayer.style.display = 'none';
+
+                    if (video.video_url) {
+                        videoPlayer.src = video.video_url;
+                    } else {
+                        throw new Error('Nessuna sorgente video disponibile');
+                    }
+
+                    // Imposta l'ID del video per le funzioni snap
+                    videoPlayer.setAttribute('data-video-id', video.id);
+                }
 
                 // Carica gli snap
                 loadSnapsForModal(videoId);
@@ -427,19 +445,29 @@ function loadSnapsForModal(videoId) {
 
 // Funzione per inizializzare il player del modal
 function initializeModalVideoPlayer(video) {
-    modalVideoPlayer = document.getElementById('modalVideoPlayer');
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+    const peerTubePlayer = document.getElementById('modalPeerTubePlayer');
     modalVideoDuration = video.duration || 60;
 
-    // Event listeners
-    modalVideoPlayer.addEventListener('loadedmetadata', function() {
-        console.log('🎬 Video caricato nel modal - Durata:', modalVideoPlayer.duration);
-        modalVideoDuration = modalVideoPlayer.duration || modalVideoDuration;
-        updateModalSnapMarkers();
-    });
+    if (video.peertube_embed_url || video.is_uploaded_to_peertube) {
+        // Video PeerTube - usa iframe
+        modalVideoPlayer = peerTubePlayer;
+        console.log('🎬 Video PeerTube caricato nel modal');
+    } else {
+        // Video locale - usa tag video
+        modalVideoPlayer = videoPlayer;
 
-    modalVideoPlayer.addEventListener('timeupdate', function() {
-        modalCurrentVideoTime = modalVideoPlayer.currentTime;
-    });
+        // Event listeners solo per video locali
+        videoPlayer.addEventListener('loadedmetadata', function() {
+            console.log('🎬 Video caricato nel modal - Durata:', videoPlayer.duration);
+            modalVideoDuration = videoPlayer.duration || modalVideoDuration;
+            updateModalSnapMarkers();
+        });
+
+        videoPlayer.addEventListener('timeupdate', function() {
+            modalCurrentVideoTime = videoPlayer.currentTime;
+        });
+    }
 
     // Hover per il pulsante snap
     const videoContainer = document.getElementById('modalVideoContainer');

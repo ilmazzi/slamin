@@ -189,7 +189,7 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card hover-effect">
                 <div class="position-relative">
-                    @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placeholder-1.jpg'))
+                    @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                         <!-- {{ __('common.thumbnail') }} con overlay play -->
                         <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
                             <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
