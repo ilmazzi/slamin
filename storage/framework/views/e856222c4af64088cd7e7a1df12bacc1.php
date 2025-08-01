@@ -1,26 +1,26 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('common.media_section') . ' - Slamin'); ?>
 
-@section('title', __('common.media_section') . ' - Slamin')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">
                 <i class="ph ph-video-camera me-2"></i>
-                {{ __('common.media_section') }}
+                <?php echo e(__('common.media_section')); ?>
+
             </h4>
             <ul class="app-line-breadcrumbs mb-3">
                 <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
+                    <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                            <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                         </span>
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">{{ __('common.media_section') }}</a>
+                    <a href="#" class="f-s-14 f-w-500"><?php echo e(__('common.media_section')); ?></a>
                 </li>
             </ul>
         </div>
@@ -38,11 +38,11 @@
                     </h5>
                 </div>
                 <div class="card-body p-0">
-                    @if($mostPopularVideo)
+                    <?php if($mostPopularVideo): ?>
                         <div class="position-relative">
-                            @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
-                                    <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="card-img-top" style="height: 400px; object-fit: cover;">
+                            <?php if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal(<?php echo e($mostPopularVideo->id); ?>)">
+                                    <img src="<?php echo e($mostPopularVideo->thumbnail_url); ?>" alt="<?php echo e($mostPopularVideo->title); ?>" class="card-img-top" style="height: 400px; object-fit: cover;">
                                     <div class="position-absolute top-50 start-50 translate-middle">
                                         <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                                             <i class="ph-duotone ph-play f-s-32 text-primary"></i>
@@ -51,21 +51,22 @@
                                     <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
                                         <small class="text-white f-s-12">
                                             <i class="ph-duotone ph-clock me-1"></i>
-                                            @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
-                                                {{ $mostPopularVideo->formatted_duration }}
-                                            @else
-                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                            @endif
+                                            <?php if($mostPopularVideo->duration && $mostPopularVideo->duration > 0): ?>
+                                                <?php echo e($mostPopularVideo->formatted_duration); ?>
+
+                                            <?php else: ?>
+                                                <span title="<?php echo e(__('videos.duration_unavailable')); ?>">--:--</span>
+                                            <?php endif; ?>
                                         </small>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
+                                        <span class="badge bg-dark f-s-12"><?php echo e($mostPopularVideo->view_count ?? $mostPopularVideo->views); ?> <?php echo e(__('profile.views')); ?></span>
                                     </div>
                                 </div>
-                            @elseif($mostPopularVideo->peertube_uuid)
+                            <?php elseif($mostPopularVideo->peertube_uuid): ?>
                                                             <div class="card-img-top video-preview bg-gradient-primary d-flex align-items-center justify-content-center position-relative"
                                  style="height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;"
-                                 onclick="openVideoModal({{ $mostPopularVideo->id }})">
+                                 onclick="openVideoModal(<?php echo e($mostPopularVideo->id); ?>)">
                                     <div class="position-absolute top-50 start-50 translate-middle">
                                         <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                                             <i class="ph-duotone ph-play f-s-32 text-primary"></i>
@@ -74,19 +75,20 @@
                                     <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
                                         <small class="text-white f-s-12">
                                             <i class="ph-duotone ph-clock me-1"></i>
-                                            @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
-                                                {{ $mostPopularVideo->formatted_duration }}
-                                            @else
-                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                            @endif
+                                            <?php if($mostPopularVideo->duration && $mostPopularVideo->duration > 0): ?>
+                                                <?php echo e($mostPopularVideo->formatted_duration); ?>
+
+                                            <?php else: ?>
+                                                <span title="<?php echo e(__('videos.duration_unavailable')); ?>">--:--</span>
+                                            <?php endif; ?>
                                         </small>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
+                                        <span class="badge bg-dark f-s-12"><?php echo e($mostPopularVideo->view_count ?? $mostPopularVideo->views); ?> <?php echo e(__('profile.views')); ?></span>
                                     </div>
                                 </div>
-                            @else
-                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
+                            <?php else: ?>
+                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal(<?php echo e($mostPopularVideo->id); ?>)">
                                     <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
                                         <div class="text-center">
                                             <i class="ph-duotone ph-video-camera f-s-64 text-muted mb-3"></i>
@@ -96,42 +98,82 @@
                                         </div>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
+                                        <span class="badge bg-dark f-s-12"><?php echo e($mostPopularVideo->view_count ?? $mostPopularVideo->views); ?> <?php echo e(__('profile.views')); ?></span>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title f-w-600 f-s-16 mb-2">
-                                <a href="{{ route('videos.show', $mostPopularVideo) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                    {{ $mostPopularVideo->title }}
+                                <a href="<?php echo e(route('videos.show', $mostPopularVideo)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                    <?php echo e($mostPopularVideo->title); ?>
+
                                 </a>
                             </h5>
-                            @if($mostPopularVideo->description)
-                                <p class="text-muted f-s-13 mb-3">{{ Str::limit($mostPopularVideo->description, 120) }}</p>
-                            @endif
+                            <?php if($mostPopularVideo->description): ?>
+                                <p class="text-muted f-s-13 mb-3"><?php echo e(Str::limit($mostPopularVideo->description, 120)); ?></p>
+                            <?php endif; ?>
 
                             <!-- Video Actions -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex gap-2">
-                                    <x-social-like-button :content="$mostPopularVideo" type="video" />
-                                    <x-social-view-counter :content="$mostPopularVideo" type="video" />
+                                    <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-like-button','data' => ['content' => $mostPopularVideo,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-like-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mostPopularVideo),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $attributes = $__attributesOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__attributesOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $component = $__componentOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__componentOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+                                    <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $mostPopularVideo,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-counter'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mostPopularVideo),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $attributes = $__attributesOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__attributesOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
                                     
                                 </div>
                                 <small class="text-muted">
                                     <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                    {{ $mostPopularVideo->created_at->format('d/m/Y') }}
+                                    <?php echo e($mostPopularVideo->created_at->format('d/m/Y')); ?>
+
                                 </small>
                             </div>
                         </div>
-                    @else
+                    <?php else: ?>
                         <div class="text-center py-5">
                             <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                                 <i class="ph-duotone ph-video-camera-slash f-s-48 text-primary"></i>
                             </div>
                             <p class="text-muted f-s-16 mb-0">Nessun video disponibile</p>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -158,96 +200,104 @@
                 <div class="card-body">
                     <!-- Contenuto Popolari (Default) -->
                     <div id="popularVideos">
-                        @if($popularVideos->count() > 0)
-                            @foreach($popularVideos->take(6) as $video)
+                        <?php if($popularVideos->count() > 0): ?>
+                            <?php $__currentLoopData = $popularVideos->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                                    <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
-                                        @else
+                                    <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='<?php echo e(route('videos.show', $video)); ?>'">
+                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                            <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e($video->title); ?>" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                        <?php else: ?>
                                             <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
                                                 <i class="ph-duotone ph-video-camera f-s-24 text-muted"></i>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="position-absolute top-50 start-50 translate-middle">
                                             <i class="ph-duotone ph-play f-s-16 text-white"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
-                                            <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ Str::limit($video->title, 40) }}
+                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                <?php echo e(Str::limit($video->title, 40)); ?>
+
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->view_count ?? $video->views }}
+                                                <i class="ph-duotone ph-eye me-1"></i><?php echo e($video->view_count ?? $video->views); ?>
+
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->like_count }}
+                                                <i class="ph-duotone ph-heart me-1"></i><?php echo e($video->like_count); ?>
+
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
+                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1"><?php echo e($video->snap_count ?? 0); ?>
+
                                             </small>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
                             <div class="text-center py-4">
                                 <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-video-camera-slash f-s-24 text-warning"></i>
                                 </div>
                                 <p class="text-muted f-s-14 mb-0">Nessun video popolare</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
                     <!-- Contenuto Nuovi (Nascosto) -->
                     <div id="newVideos" style="display: none;">
-                        @if($newVideos->count() > 0)
-                            @foreach($newVideos->take(6) as $video)
+                        <?php if($newVideos->count() > 0): ?>
+                            <?php $__currentLoopData = $newVideos->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                                    <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
-                                        @else
+                                    <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='<?php echo e(route('videos.show', $video)); ?>'">
+                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                            <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e($video->title); ?>" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
+                                        <?php else: ?>
                                             <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
                                                 <i class="ph-duotone ph-video-camera f-s-24 text-muted"></i>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="position-absolute top-50 start-50 translate-middle">
                                             <i class="ph-duotone ph-play f-s-16 text-white"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
-                                            <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ Str::limit($video->title, 40) }}
+                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                <?php echo e(Str::limit($video->title, 40)); ?>
+
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->view_count ?? $video->views }}
+                                                <i class="ph-duotone ph-eye me-1"></i><?php echo e($video->view_count ?? $video->views); ?>
+
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->like_count }}
+                                                <i class="ph-duotone ph-heart me-1"></i><?php echo e($video->like_count); ?>
+
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
+                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1"><?php echo e($video->snap_count ?? 0); ?>
+
                                             </small>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
                             <div class="text-center py-4">
                                 <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-video-camera-slash f-s-24 text-info"></i>
                                 </div>
                                 <p class="text-muted f-s-14 mb-0">Nessun video nuovo</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -303,7 +353,7 @@
                         <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                                 style="width: 60px; height: 60px;"
                                 onclick="toggleSnapForm()">
-                            <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
+                            <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
                         </button>
                         <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
                             Crea snap
@@ -344,9 +394,9 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
 /* Stili per il modal video */
 .custom-modal {
@@ -386,9 +436,9 @@
     }
 }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 // Variabili globali per il modal
 let modalVideoPlayer = null;
@@ -648,7 +698,7 @@ function updateModalSnapMarkers() {
         marker.innerHTML = `
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
                  style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
-                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
             </div>
             ${snapCount > 1 ? `
                 <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
@@ -756,7 +806,7 @@ function createInlineSnap() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
         },
         body: JSON.stringify({ title: title, timestamp: timestamp })
     })
@@ -885,4 +935,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/media/index.blade.php ENDPATH**/ ?>

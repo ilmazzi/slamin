@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps']);
+        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps', 'addSnap']);
     }
 
     /**
@@ -396,9 +396,20 @@ class VideoController extends Controller
             'description' => 'nullable|string|max:500',
         ]);
 
+        // Se l'utente non è autenticato, usa un utente di default o crea uno snap anonimo
+        $userId = Auth::id();
+        if (!$userId) {
+            // Per ora, reindirizza al login o usa un utente di default
+            return response()->json([
+                'success' => false,
+                'message' => 'Devi essere autenticato per creare uno snap',
+                'redirect' => route('login')
+            ], 401);
+        }
+
         $snap = VideoSnap::create([
             'video_id' => $video->id,
-            'user_id' => Auth::id(),
+            'user_id' => $userId,
             'timestamp' => $request->timestamp,
             'title' => $request->title,
             'description' => $request->description,
