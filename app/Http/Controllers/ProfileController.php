@@ -453,8 +453,32 @@ class ProfileController extends Controller
             \Log::info('Eliminazione video', [
                 'video_id' => $videoId,
                 'user_id' => $user->id,
-                'video_title' => $video->title
+                'video_title' => $video->title,
+                'peertube_uuid' => $video->peertube_uuid,
+                'peertube_video_id' => $video->peertube_video_id
             ]);
+
+            // Elimina il video da PeerTube se ha UUID
+            $peerTubeDeleted = false;
+            if ($video->peertube_uuid) {
+                try {
+                    $peerTubeService = new \App\Services\PeerTubeService();
+                    $peerTubeDeleted = $peerTubeService->deleteVideoByUuid($video->peertube_uuid);
+                    
+                    \Log::info('Tentativo eliminazione PeerTube', [
+                        'video_id' => $videoId,
+                        'peertube_uuid' => $video->peertube_uuid,
+                        'success' => $peerTubeDeleted
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::error('Errore eliminazione PeerTube', [
+                        'video_id' => $videoId,
+                        'peertube_uuid' => $video->peertube_uuid,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Continua anche se l'eliminazione da PeerTube fallisce
+                }
+            }
 
             // Elimina thumbnail se esiste
             if ($video->thumbnail && Storage::disk('public')->exists($video->thumbnail)) {
@@ -466,14 +490,23 @@ class ProfileController extends Controller
                 }
             }
 
-            // Elimina il video
+            // Elimina il video dal database locale
             $video->delete();
 
-            \Log::info('Video eliminato con successo', ['video_id' => $videoId]);
+            \Log::info('Video eliminato con successo', [
+                'video_id' => $videoId,
+                'peer_tube_deleted' => $peerTubeDeleted
+            ]);
+
+            $message = 'Video eliminato con successo!';
+            if ($video->peertube_uuid && !$peerTubeDeleted) {
+                $message .= ' (Nota: il video potrebbe essere ancora presente su PeerTube)';
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Video eliminato con successo!'
+                'message' => $message,
+                'peer_tube_deleted' => $peerTubeDeleted
             ]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

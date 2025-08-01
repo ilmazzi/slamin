@@ -728,4 +728,152 @@ class PeerTubeService
             return null;
         }
     }
+
+    /**
+     * Elimina un video da PeerTube
+     */
+    public function deleteVideo(string $peerTubeVideoId): bool
+    {
+        try {
+            Log::info('PeerTubeService - Tentativo eliminazione video', [
+                'peer_tube_video_id' => $peerTubeVideoId
+            ]);
+
+            // Ottieni il token admin se non è già disponibile
+            if (!$this->accessToken) {
+                $this->accessToken = $this->getAdminToken();
+                if (!$this->accessToken) {
+                    Log::error('PeerTubeService - Impossibile ottenere token admin per eliminazione video', [
+                        'peer_tube_video_id' => $peerTubeVideoId
+                    ]);
+                    return false;
+                }
+            }
+
+            // Crea client Guzzle
+            $client = new Client([
+                'timeout' => 30,
+                'connect_timeout' => 10,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'User-Agent' => 'Slamin-PeerTube-Integration/1.0'
+                ]
+            ]);
+
+            // Esegui la richiesta DELETE
+            $response = $client->delete($this->baseUrl . '/api/v1/videos/' . $peerTubeVideoId);
+
+            Log::info('PeerTubeService - Risposta eliminazione video', [
+                'peer_tube_video_id' => $peerTubeVideoId,
+                'status_code' => $response->getStatusCode(),
+                'successful' => $response->getStatusCode() === 204
+            ]);
+
+            // PeerTube restituisce 204 No Content per eliminazioni riuscite
+            if ($response->getStatusCode() === 204) {
+                Log::info('PeerTubeService - Video eliminato con successo', [
+                    'peer_tube_video_id' => $peerTubeVideoId
+                ]);
+                return true;
+            }
+
+            Log::error('PeerTubeService - Errore eliminazione video', [
+                'peer_tube_video_id' => $peerTubeVideoId,
+                'status_code' => $response->getStatusCode(),
+                'response_body' => $response->getBody()->getContents()
+            ]);
+
+            return false;
+
+        } catch (RequestException $e) {
+            Log::error('PeerTubeService - Errore Guzzle eliminazione video', [
+                'peer_tube_video_id' => $peerTubeVideoId,
+                'status_code' => $e->getResponse() ? $e->getResponse()->getStatusCode() : 'unknown',
+                'response_body' => $e->getResponse() ? $e->getResponse()->getBody()->getContents() : 'no response',
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        } catch (Exception $e) {
+            Log::error('PeerTubeService - Eccezione eliminazione video', [
+                'peer_tube_video_id' => $peerTubeVideoId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Elimina un video usando l'UUID
+     */
+    public function deleteVideoByUuid(string $peerTubeUuid): bool
+    {
+        try {
+            Log::info('PeerTubeService - Tentativo eliminazione video per UUID', [
+                'peer_tube_uuid' => $peerTubeUuid
+            ]);
+
+            // Ottieni il token admin se non è già disponibile
+            if (!$this->accessToken) {
+                $this->accessToken = $this->getAdminToken();
+                if (!$this->accessToken) {
+                    Log::error('PeerTubeService - Impossibile ottenere token admin per eliminazione video UUID', [
+                        'peer_tube_uuid' => $peerTubeUuid
+                    ]);
+                    return false;
+                }
+            }
+
+            // Crea client Guzzle
+            $client = new Client([
+                'timeout' => 30,
+                'connect_timeout' => 10,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'User-Agent' => 'Slamin-PeerTube-Integration/1.0'
+                ]
+            ]);
+
+            // Esegui la richiesta DELETE usando l'UUID
+            $response = $client->delete($this->baseUrl . '/api/v1/videos/' . $peerTubeUuid);
+
+            Log::info('PeerTubeService - Risposta eliminazione video UUID', [
+                'peer_tube_uuid' => $peerTubeUuid,
+                'status_code' => $response->getStatusCode(),
+                'successful' => $response->getStatusCode() === 204
+            ]);
+
+            // PeerTube restituisce 204 No Content per eliminazioni riuscite
+            if ($response->getStatusCode() === 204) {
+                Log::info('PeerTubeService - Video eliminato con successo per UUID', [
+                    'peer_tube_uuid' => $peerTubeUuid
+                ]);
+                return true;
+            }
+
+            Log::error('PeerTubeService - Errore eliminazione video UUID', [
+                'peer_tube_uuid' => $peerTubeUuid,
+                'status_code' => $response->getStatusCode(),
+                'response_body' => $response->getBody()->getContents()
+            ]);
+
+            return false;
+
+        } catch (RequestException $e) {
+            Log::error('PeerTubeService - Errore Guzzle eliminazione video UUID', [
+                'peer_tube_uuid' => $peerTubeUuid,
+                'status_code' => $e->getResponse() ? $e->getResponse()->getStatusCode() : 'unknown',
+                'response_body' => $e->getResponse() ? $e->getResponse()->getBody()->getContents() : 'no response',
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        } catch (Exception $e) {
+            Log::error('PeerTubeService - Eccezione eliminazione video UUID', [
+                'peer_tube_uuid' => $peerTubeUuid,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
 }
