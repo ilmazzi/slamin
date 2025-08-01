@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\DB;
 
 class CleanupAllMedia extends Command
 {
-    protected $signature = 'media:cleanup-all {--force} {--dry-run} {--keep-users} {--keep-events}';
+    protected $signature = 'media:cleanup-all {--force} {--dry-run} {--keep-users} {--keep-events} {--keep-kanban}';
     protected $description = 'Elimina tutti i media dal sito per partire da una situazione pulita';
 
     public function handle()
@@ -45,6 +45,7 @@ class CleanupAllMedia extends Command
         $dryRun = $this->option('dry-run');
         $keepUsers = $this->option('keep-users');
         $keepEvents = $this->option('keep-events');
+        $keepKanban = $this->option('keep-kanban');
 
         if ($dryRun) {
             $this->info('🔍 MODALITÀ DRY-RUN: Nessuna eliminazione verrà eseguita');
@@ -101,8 +102,12 @@ class CleanupAllMedia extends Command
         // 13. ELIMINAZIONE DATI POESIE
         $this->cleanupPoemData($dryRun);
 
-        // 14. ELIMINAZIONE ALTRI DATI
-        $this->cleanupOtherData($dryRun);
+        // 14. ELIMINAZIONE ALTRI DATI (escluso kanban se richiesto)
+        if (!$keepKanban) {
+            $this->cleanupOtherData($dryRun);
+        } else {
+            $this->info('📋 KANBAN MANTENUTO (--keep-kanban)');
+        }
 
         // 16. PULIZIA FILESYSTEM
         $this->cleanupFilesystem($dryRun);
@@ -126,12 +131,16 @@ class CleanupAllMedia extends Command
 
     private function showStatistics()
     {
+        $keepUsers = $this->option('keep-users');
+        $keepEvents = $this->option('keep-events');
+        $keepKanban = $this->option('keep-kanban');
+
         $this->info('📊 STATISTICHE ATUALI:');
         $this->line("   📹 Video: " . Video::count());
         $this->line("   📝 Poesie: " . Poem::count());
-        $this->line("   📅 Eventi: " . Event::count());
+        $this->line("   📅 Eventi: " . Event::count() . ($keepEvents ? ' (MANTENUTI)' : ''));
         $this->line("   👥 Gruppi: " . Group::count());
-        $this->line("   👤 Utenti: " . User::count());
+        $this->line("   👤 Utenti: " . User::count() . ($keepUsers ? ' (MANTENUTI)' : ''));
         $this->line("   🔔 Notifiche: " . Notification::count());
         $this->line("   📊 Log attività: " . ActivityLog::count());
         $this->line("   ❤️ Wishlist: " . Wishlist::count());
@@ -147,8 +156,8 @@ class CleanupAllMedia extends Command
         $this->line("   💬 Commenti video: " . VideoComment::count());
         $this->line("   💬 Commenti poesie: " . PoemComment::count());
         $this->line("   🚨 Segnalazioni: " . Report::count());
-        $this->line("   ✅ Task: " . Task::count());
-        $this->line("   💬 Commenti task: " . TaskComment::count());
+        $this->line("   ✅ Task: " . Task::count() . ($keepKanban ? ' (MANTENUTI)' : ''));
+        $this->line("   💬 Commenti task: " . TaskComment::count() . ($keepKanban ? ' (MANTENUTI)' : ''));
         $this->line("   📷 Foto: " . Photo::count());
         $this->line("   🎠 Carousel: " . Carousel::count());
         $this->line("   🏢 Venue recenti: " . RecentVenue::count());
@@ -622,6 +631,7 @@ class CleanupAllMedia extends Command
 
     private function cleanupOtherData($dryRun)
     {
+        $keepKanban = $this->option('keep-kanban');
         $this->info('📋 ELIMINAZIONE ALTRI DATI...');
 
         // Reports
@@ -640,36 +650,44 @@ class CleanupAllMedia extends Command
             $this->line("   ✅ {$deletedCount} segnalazioni eliminate");
         }
 
-        // Tasks
-        $tasks = Task::all();
-        $this->line("   Trovati {$tasks->count()} task");
-        if (!$dryRun) {
-            $deletedCount = 0;
-            foreach ($tasks as $task) {
-                try {
-                    $task->delete();
-                    $deletedCount++;
-                } catch (\Exception $e) {
-                    $this->error("   ❌ Errore eliminazione task {$task->id}: " . $e->getMessage());
+        // Tasks (solo se non keep-kanban)
+        if (!$keepKanban) {
+            $tasks = Task::all();
+            $this->line("   Trovati {$tasks->count()} task");
+            if (!$dryRun) {
+                $deletedCount = 0;
+                foreach ($tasks as $task) {
+                    try {
+                        $task->delete();
+                        $deletedCount++;
+                    } catch (\Exception $e) {
+                        $this->error("   ❌ Errore eliminazione task {$task->id}: " . $e->getMessage());
+                    }
                 }
+                $this->line("   ✅ {$deletedCount} task eliminati");
             }
-            $this->line("   ✅ {$deletedCount} task eliminati");
+        } else {
+            $this->line("   ✅ Task mantenuti (--keep-kanban)");
         }
 
-        // Task Comments
-        $comments = TaskComment::all();
-        $this->line("   Trovati {$comments->count()} commenti task");
-        if (!$dryRun) {
-            $deletedCount = 0;
-            foreach ($comments as $comment) {
-                try {
-                    $comment->delete();
-                    $deletedCount++;
-                } catch (\Exception $e) {
-                    $this->error("   ❌ Errore eliminazione commento task {$comment->id}: " . $e->getMessage());
+        // Task Comments (solo se non keep-kanban)
+        if (!$keepKanban) {
+            $comments = TaskComment::all();
+            $this->line("   Trovati {$comments->count()} commenti task");
+            if (!$dryRun) {
+                $deletedCount = 0;
+                foreach ($comments as $comment) {
+                    try {
+                        $comment->delete();
+                        $deletedCount++;
+                    } catch (\Exception $e) {
+                        $this->error("   ❌ Errore eliminazione commento task {$comment->id}: " . $e->getMessage());
+                    }
                 }
+                $this->line("   ✅ {$deletedCount} commenti task eliminati");
             }
-            $this->line("   ✅ {$deletedCount} commenti task eliminati");
+        } else {
+            $this->line("   ✅ Commenti task mantenuti (--keep-kanban)");
         }
 
         // Photos
@@ -759,19 +777,37 @@ class CleanupAllMedia extends Command
 
     private function resetAutoIncrement()
     {
+        $keepUsers = $this->option('keep-users');
+        $keepEvents = $this->option('keep-events');
+        $keepKanban = $this->option('keep-kanban');
+        
         $this->info('🔄 RESET AUTO-INCREMENT...');
 
         $tables = [
-            'videos', 'poems', 'events', 'groups', 'users',
+            'videos', 'poems', 'groups',
             'notifications', 'activity_logs', 'wishlists',
             'chats', 'chat_messages', 'chat_participants',
             'group_members', 'group_invitations', 'group_join_requests',
-            'event_invitations', 'event_requests',
             'video_snaps', 'video_likes', 'video_comments',
             'poem_comments',
-            'reports', 'tasks', 'task_comments', 'photos',
-            'carousels', 'recent_venues'
+            'reports', 'photos', 'carousels', 'recent_venues'
         ];
+
+        // Aggiungi tabelle condizionalmente
+        if (!$keepEvents) {
+            $tables[] = 'events';
+            $tables[] = 'event_invitations';
+            $tables[] = 'event_requests';
+        }
+        
+        if (!$keepUsers) {
+            $tables[] = 'users';
+        }
+        
+        if (!$keepKanban) {
+            $tables[] = 'tasks';
+            $tables[] = 'task_comments';
+        }
         
         foreach ($tables as $table) {
             try {
