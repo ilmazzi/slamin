@@ -319,11 +319,11 @@
                         <form id="inlineSnapForm">
                             <div class="mb-3">
                                 <label for="inlineSnapTitle" class="form-label text-white" style="font-size: 12px;">Titolo (opzionale)</label>
-                                <input type="text" class="form-control form-control-sm" id="inlineSnapTitle" placeholder="Titolo dello snap" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                                <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
                             </div>
                             <div class="mb-3">
                                 <label for="inlineSnapDescription" class="form-label text-white" style="font-size: 12px;">Descrizione (opzionale)</label>
-                                <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2" placeholder="Descrizione dello snap" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
+                                <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-white" style="font-size: 12px;">Timestamp: <span id="inlineCurrentTime" class="text-warning">00:00</span></label>
@@ -370,6 +370,18 @@
     white-space: nowrap !important;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
     font-weight: 500 !important;
+}
+
+/* Stili per i placeholder nel form snap */
+#inlineSnapTitle::placeholder,
+#inlineSnapDescription::placeholder {
+    color: rgba(255,255,255,0.7) !important;
+    opacity: 1 !important;
+}
+
+#inlineSnapTitle:focus::placeholder,
+#inlineSnapDescription:focus::placeholder {
+    color: rgba(255,255,255,0.5) !important;
 }
 
 /* Responsive per schermi piccoli */

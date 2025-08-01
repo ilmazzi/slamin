@@ -422,6 +422,18 @@
     font-weight: 500 !important;
 }
 
+/* Stili per i placeholder nel form snap */
+#inlineSnapTitle::placeholder,
+#inlineSnapDescription::placeholder {
+    color: rgba(255,255,255,0.7) !important;
+    opacity: 1 !important;
+}
+
+#inlineSnapTitle:focus::placeholder,
+#inlineSnapDescription:focus::placeholder {
+    color: rgba(255,255,255,0.5) !important;
+}
+
 /* Responsive per schermi piccoli */
 @media (max-width: 768px) {
     #modalVideoContainer {
