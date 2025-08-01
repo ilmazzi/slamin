@@ -449,21 +449,49 @@ class ProfileController extends Controller
             $user = Auth::user();
             $video = $user->videos()->findOrFail($videoId);
 
+            // Log per debug
+            \Log::info('Eliminazione video', [
+                'video_id' => $videoId,
+                'user_id' => $user->id,
+                'video_title' => $video->title
+            ]);
+
             // Elimina thumbnail se esiste
             if ($video->thumbnail && Storage::disk('public')->exists($video->thumbnail)) {
-                Storage::disk('public')->delete($video->thumbnail);
+                try {
+                    Storage::disk('public')->delete($video->thumbnail);
+                } catch (\Exception $e) {
+                    \Log::warning('Errore eliminazione thumbnail', ['error' => $e->getMessage()]);
+                    // Continua anche se l'eliminazione della thumbnail fallisce
+                }
             }
 
+            // Elimina il video
             $video->delete();
+
+            \Log::info('Video eliminato con successo', ['video_id' => $videoId]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Video eliminato con successo!'
             ]);
-        } catch (\Exception $e) {
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Video non trovato', ['video_id' => $videoId, 'user_id' => Auth::id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Errore durante l\'eliminazione del video: ' . $e->getMessage()
+                'message' => 'Video non trovato'
+            ], 404);
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione video', [
+                'video_id' => $videoId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'eliminazione del video. Riprova più tardi.'
             ], 500);
         }
     }
