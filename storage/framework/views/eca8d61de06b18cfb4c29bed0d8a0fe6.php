@@ -240,7 +240,13 @@
                                             <button class="btn btn-light-info icon-btn b-r-4" onclick="editUserPermissions(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.edit_permissions')); ?>">
                                                 <i class="ph ph-shield-check"></i>
                                             </button>
-                                            <?php if(!$user->hasRole('admin')): ?>
+                                            <?php
+                                                $currentUser = auth()->user();
+                                                $isSuperAdmin = $currentUser->hasRole('super-admin');
+                                                $isOwnAccount = $currentUser->id === $user->id;
+                                                $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
+                                            ?>
+                                            <?php if($canDelete): ?>
                                             <button class="btn btn-light-danger icon-btn b-r-4" onclick="deleteUser(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.delete_user')); ?>">
                                                 <i class="ph ph-trash"></i>
                                             </button>
@@ -296,7 +302,13 @@
                                     <i class="ph ph-shield-check me-2"></i><?php echo e(__('permissions.edit_permissions')); ?>
 
                                 </a></li>
-                                <?php if(!$user->hasRole('admin')): ?>
+                                <?php
+                                    $currentUser = auth()->user();
+                                    $isSuperAdmin = $currentUser->hasRole('super-admin');
+                                    $isOwnAccount = $currentUser->id === $user->id;
+                                    $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
+                                ?>
+                                <?php if($canDelete): ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser(<?php echo e($user->id); ?>)">
                                     <i class="ph ph-trash me-2"></i><?php echo e(__('permissions.delete_user')); ?>
