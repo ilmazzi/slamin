@@ -744,33 +744,35 @@ class CleanupAllMedia extends Command
         $this->info('🗂️ PULIZIA FILESYSTEM...');
 
         $directories = [
-            'storage/app/public/videos',
-            'storage/app/public/thumbnails',
-            'storage/app/public/avatars',
-            'storage/app/public/banners',
-            'storage/app/public/events',
-            'storage/app/public/groups',
-            'storage/app/public/poems'
+            'videos',
+            'thumbnails',
+            'avatars',
+            'banners',
+            'events',
+            'groups',
+            'poems'
         ];
 
         foreach ($directories as $dir) {
-            if (is_dir($dir)) {
-                if ($dryRun) {
-                    $files = glob($dir . '/*');
-                    $this->line("   🔍 Eliminerebbe {$dir} (" . count($files) . " file)");
-                } else {
-                    try {
-                        $files = glob($dir . '/*');
+            try {
+                if (Storage::disk('public')->exists($dir)) {
+                    if ($dryRun) {
+                        $files = Storage::disk('public')->files($dir);
+                        $this->line("   🔍 Eliminerebbe {$dir} (" . count($files) . " file)");
+                    } else {
+                        $files = Storage::disk('public')->files($dir);
                         foreach ($files as $file) {
-                            if (is_file($file)) {
-                                unlink($file);
-                            }
+                            Storage::disk('public')->delete($file);
                         }
-                        $this->line("   ✅ Pulito: {$dir}");
-                    } catch (\Exception $e) {
-                        $this->error("   ❌ Errore pulizia {$dir}: " . $e->getMessage());
+                        $this->line("   ✅ Pulito: {$dir} (" . count($files) . " file eliminati)");
+                    }
+                } else {
+                    if ($dryRun) {
+                        $this->line("   🔍 Directory {$dir} non esiste");
                     }
                 }
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore pulizia {$dir}: " . $e->getMessage());
             }
         }
     }
