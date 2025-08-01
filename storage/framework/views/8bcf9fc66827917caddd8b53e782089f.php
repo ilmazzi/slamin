@@ -253,7 +253,7 @@ window.addEventListener('load', function() {
         <?php endif; ?>
 
         <!-- Most Popular <?php echo e(__('common.video')); ?> Section -->
-        <?php if($mostPopularVideo): ?>
+        <?php if($mostPopularVideo && $mostPopularVideo->exists): ?>
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card hover-effect border-0 shadow-sm">
@@ -266,7 +266,7 @@ window.addEventListener('load', function() {
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
                                             <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
-                                                <?php if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                <?php if($mostPopularVideo->thumbnail_url): ?>
                                                     <img src="<?php echo e($mostPopularVideo->thumbnail_url); ?>" alt="<?php echo e($mostPopularVideo->title); ?>" class="w-100 h-100" style="object-fit: cover;">
                                                 <?php else: ?>
                                                     <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
