@@ -738,6 +738,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
     Route::prefix('api/videos')->group(function () {
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'getVideoData'])->name('api.videos.get');
         Route::get('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'getVideoSnaps'])->name('api.videos.snaps');
+        Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
     });
 
     // Media Routes (pubbliche)

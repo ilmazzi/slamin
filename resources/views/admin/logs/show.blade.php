@@ -94,7 +94,7 @@
                                                          class="rounded-circle me-2" width="32" height="32">
                                                     <div>
                                                         <div class="fw-semibold">{{ $log->user->name }}</div>
-                                                        <small class="text-muted">{{ $log->user->email }}</small>
+                                                        <small class="text-muted">{{ $log->user->getPrivacySafeIdentifier() }}</small>
                                                     </div>
                                                 </div>
                                             @else

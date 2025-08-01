@@ -184,7 +184,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="mailto:{{ $user->email }}" class="text-decoration-none">{{ $user->email }}</a>
+                                        <span class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
                                     </td>
                                     <td>
                                         @if($user->nickname)
@@ -229,7 +229,13 @@
                                             <button class="btn btn-light-info icon-btn b-r-4" onclick="editUserPermissions({{ $user->id }})" title="{{ __('permissions.edit_permissions') }}">
                                                 <i class="ph ph-shield-check"></i>
                                             </button>
-                                            @if(!$user->hasRole('admin'))
+                                            @php
+                                                $currentUser = auth()->user();
+                                                $isSuperAdmin = $currentUser->hasRole('super-admin');
+                                                $isOwnAccount = $currentUser->id === $user->id;
+                                                $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
+                                            @endphp
+                                            @if($canDelete)
                                             <button class="btn btn-light-danger icon-btn b-r-4" onclick="deleteUser({{ $user->id }})" title="{{ __('permissions.delete_user') }}">
                                                 <i class="ph ph-trash"></i>
                                             </button>
@@ -281,7 +287,13 @@
                                 <li><a class="dropdown-item" href="#" onclick="editUserPermissions({{ $user->id }})">
                                     <i class="ph ph-shield-check me-2"></i>{{ __('permissions.edit_permissions') }}
                                 </a></li>
-                                @if(!$user->hasRole('admin'))
+                                @php
+                                    $currentUser = auth()->user();
+                                    $isSuperAdmin = $currentUser->hasRole('super-admin');
+                                    $isOwnAccount = $currentUser->id === $user->id;
+                                    $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
+                                @endphp
+                                @if($canDelete)
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser({{ $user->id }})">
                                     <i class="ph ph-trash me-2"></i>{{ __('permissions.delete_user') }}
@@ -293,8 +305,8 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-2">
-                        <i class="ph ph-envelope me-2 text-muted"></i>
-                        <span class="f-s-14">{{ $user->email }}</span>
+                        <i class="ph ph-at me-2 text-muted"></i>
+                        <span class="f-s-14 text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
                     </div>
                     <div class="mb-2">
                         <i class="ph ph-at me-2 text-muted"></i>
@@ -481,7 +493,7 @@
                         <label class="form-label">Seleziona Utenti</label>
                         <select class="form-select" name="user_ids[]" multiple id="bulkUserSelect">
                             @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->getPrivacySafeIdentifier() }})</option>
                             @endforeach
                         </select>
                     </div>

@@ -161,7 +161,7 @@ class Poem extends Model
         if ($this->thumbnail_path) {
             return asset('storage/' . $this->thumbnail_path);
         }
-        return asset('assets/images/background/default-poem.webp');
+        return asset('assets/images/background/default-poem.jpg');
     }
 
     public function getExcerptAttribute()

@@ -89,7 +89,7 @@
                         <!-- Informazioni richiesta -->
                         <div class="flex-grow-1">
                             <h6 class="mb-1">{{ $request->user->name }}</h6>
-                            <p class="text-muted mb-1">{{ $request->user->email }}</p>
+                            <p class="text-muted mb-1">{{ $request->user->getPrivacySafeIdentifier() }}</p>
                             @if($request->message)
                                 <p class="text-muted mb-1"><small>"{{ $request->message }}"</small></p>
                             @endif

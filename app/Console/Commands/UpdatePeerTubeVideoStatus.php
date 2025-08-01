@@ -73,14 +73,39 @@ class UpdatePeerTubeVideoStatus extends Command
 
                 if ($hasFiles || $hasStreamingPlaylists) {
                     $oldStatus = $video->peertube_status;
-                    $video->update(['peertube_status' => 'ready']);
+                    
+                    // Aggiorna status, durata e thumbnail
+                    $updateData = ['peertube_status' => 'ready'];
+                    
+                    // Aggiorna durata se disponibile
+                    if (isset($data['duration']) && $data['duration'] > 0) {
+                        $updateData['duration'] = $data['duration'];
+                        $this->info("⏱️ Durata aggiornata: {$data['duration']} secondi");
+                    }
+                    
+                    // Aggiorna thumbnail se disponibile
+                    if (isset($data['thumbnailPath']) && !$video->peertube_thumbnail_url) {
+                        $thumbnailUrl = rtrim($baseUrl, '/') . $data['thumbnailPath'];
+                        $updateData['peertube_thumbnail_url'] = $thumbnailUrl;
+                        $this->info("🖼️ Thumbnail URL aggiornata: {$thumbnailUrl}");
+                    }
+                    
+                    $video->update($updateData);
 
                     $this->info("✅ Video {$video->id} aggiornato: {$oldStatus} → ready");
                     Log::info("Video PeerTube aggiornato automaticamente", [
                         'video_id' => $video->id,
                         'old_status' => $oldStatus,
-                        'new_status' => 'ready'
+                        'new_status' => 'ready',
+                        'duration_updated' => isset($data['duration']),
+                        'thumbnail_updated' => isset($data['thumbnailPath'])
                     ]);
+                    
+                    // Lancia il job per generare thumbnail locale se necessario
+                    if (isset($data['thumbnailPath']) && !$video->thumbnail_path) {
+                        \App\Jobs\GenerateVideoThumbnailJob::dispatch($video)->delay(now()->addSeconds(5));
+                        $this->info("🔄 Job thumbnail lanciato per video {$video->id}");
+                    }
                 } else {
                     $this->info("⏳ Video {$video->id} ancora in elaborazione");
                 }

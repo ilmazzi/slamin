@@ -11,8 +11,8 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
-<link rel="icon" href="{{('../assets/images/logo/favicon.png')}}" type="image/x-icon">
-<link rel="shortcut icon" href="{{('../assets/images/logo/favicon.png')}}" type="image/x-icon">
+<link rel="icon" href="{{('../assets/images/Loghino_biancosunero.png')}}" type="image/x-icon">
+<link rel="shortcut icon" href="{{('../assets/images/Loghino_biancosunero.png')}}" type="image/x-icon">
 
 <title>@yield('title') | Slam In - A home for poetry</title>
 

@@ -201,7 +201,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
                                 <div>
                                     <h6 class="mb-1">{{ $user->name }}</h6>
-                                    <small class="text-muted">{{ $user->email }}</small>
+                                    <small class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</small>
                                 </div>
                                 <div>
                                     @foreach($user->roles as $role)

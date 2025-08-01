@@ -3065,15 +3065,11 @@ function addGigPosition() {
                         <label class="form-label">Tipologia *</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][type]" required>
                             <option value="">Seleziona tipologia</option>
-                            <option value="fonica">Fonica/Fonico</option>
-                            <option value="illustratrice">Illustratrice/Illustratore</option>
-                            <option value="musicista">Musicista</option>
-                            <option value="mc">MC - Presentatrice/Presentatore</option>
-                            <option value="poeta">Poeta</option>
-                            <option value="traduttrice">Traduttrice/Traduttore</option>
-                            <option value="videomaker">Videomaker</option>
-                            <option value="volontaria">Volontaria/Volontario</option>
-                            <option value="relatrice">Relatrice/Relatore</option>
+                             <option value="poeta">Artista/Poeta</option>
+                              <option value="mc">MC/Ospite</option>
+                            <option value="tecnico">Supporto Tecnico</option>
+                           <option value="volontaria">Volontaria/Volontario</option>
+                           
                         </select>
                     </div>
 

@@ -189,7 +189,7 @@
                                                     </div>
                                                     <div>
                                                         <div class="fw-semibold">{{ $log->user->name }}</div>
-                                                        <small class="text-muted">{{ $log->user->email }}</small>
+                                                        <small class="text-muted">{{ $log->user->getPrivacySafeIdentifier() }}</small>
                                                     </div>
                                                 </div>
                                             @else

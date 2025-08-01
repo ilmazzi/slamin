@@ -34,4 +34,5 @@ return [
     'kanban_board' => 'Kanban Board',
     'popular' => 'Popolari',
     'new' => 'Nuovi',
+    'video' => 'Video',
 ];

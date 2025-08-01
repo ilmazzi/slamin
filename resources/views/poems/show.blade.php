@@ -7,18 +7,27 @@
     <!-- Breadcrumb -->
     <div class="row">
         <div class="col-12">
-            <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">{{ $poem->title }}</h4>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}">{{ __('common.home') }}</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('poems.index') }}">{{ __('poems.title') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active">{{ $poem->title }}</li>
-                    </ol>
+            <div class="page-title-box">
+                <!-- Titolo su mobile, breadcrumb su desktop -->
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                    
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0 small">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}" class="text-decoration-none">
+                                    <i class="ph ph-house me-1"></i>{{ __('common.home') }}
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('poems.index') }}" class="text-decoration-none">
+                                    <i class="ph ph-book-open me-1"></i>{{ __('poems.title') }}
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">
+                                {{ $poem->title }}
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,11 +43,11 @@
                         <div class="flex-grow-1">
                             <h2 class="card-title mb-2">{{ $poem->title }}</h2>
                             <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                                <span class="badge bg-primary">{{ __('poems.categories.' . $poem->category) }}</span>
-                                <span class="badge bg-info">{{ __('poems.poem_types.' . $poem->poem_type) }}</span>
-                                <span class="badge bg-secondary">{{ __('poems.languages.' . $poem->language) }}</span>
+                                <span class="badge bg-light-primary">{{ __('poems.categories.' . $poem->category) }}</span>
+                                <span class="badge bg-light-primary">{{ __('poems.poem_types.' . $poem->poem_type) }}</span>
+                                <span class="badge bg-light-primary">{{ __('poems.languages.' . $poem->language) }}</span>
                                 @if($poem->is_featured)
-                                    <span class="badge bg-warning">
+                                    <span class="badge bg-light-warning">
                                         <i class="ph ph-star me-1"></i>{{ __('poems.status.featured') }}
                                     </span>
                                 @endif
@@ -57,7 +66,7 @@
 
                                                 @auth
                         <div class="dropdown">
-                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="dropdown">
                                 <i class="ph ph-dots-three-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
@@ -150,19 +159,16 @@
                     <!-- {{ __('invitations.actions') }} social -->
                     @auth
                     <div class="d-flex justify-content-center gap-2 mb-4">
-                        <button class="btn btn-outline-primary" onclick="toggleLike()" id="likeBtn">
-                            <i class="ph {{ $poem->is_liked_by_current_user ? 'ph-heart-fill text-danger' : 'ph-heart' }} me-2"></i>
-                            {{ __('poems.actions.like') }}
+                        <button class="btn btn-primary icon-btn" onclick="toggleLike()" id="likeBtn" title="{{ __('poems.actions.like') }}">
+                            <i class="ph {{ $poem->is_liked_by_current_user ? 'ph-heart-fill text-danger' : 'ph-heart' }}"></i>
                         </button>
 
-                        <button class="btn btn-outline-secondary" onclick="toggleBookmark()" id="bookmarkBtn">
-                            <i class="ph {{ $poem->is_bookmarked_by_current_user ? 'ph-bookmark-fill text-warning' : 'ph-bookmark' }} me-2"></i>
-                            {{ __('poems.actions.bookmark') }}
+                        <button class="btn btn-warning icon-btn" onclick="toggleBookmark()" id="bookmarkBtn" title="{{ __('poems.actions.bookmark') }}">
+                            <i class="ph {{ $poem->is_bookmarked_by_current_user ? 'ph-bookmark-fill text-warning' : 'ph-bookmark' }}"></i>
                         </button>
 
-                        <button class="btn btn-outline-info" onclick="sharePoem()">
-                            <i class="ph ph-share me-2"></i>
-                            {{ __('common.share') }}
+                        <button class="btn btn-info icon-btn" onclick="sharePoem()" title="{{ __('common.share') }}">
+                            <i class="ph ph-share"></i>
                         </button>
 
                         @if($poem->translation_available)
@@ -279,8 +285,8 @@
                     </h5>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{{ $poem->user->avatar_url ?? asset('assets/images/avatar/default.png') }}"
-                         class="rounded-circle mb-3" width="80" height="80" alt="{{ $poem->user->name }}">
+                   <img src="{{ $poem->user->getProfilePhotoUrlAttribute() }}"
+                             class="rounded-circle mb-3" width="80" height="80" alt="{{ $poem->user->name }}">
                     <h6>{{ $poem->user->name }}</h6>
                     <p class="text-muted small mb-3">{{ $poem->user->bio ?? __('poems.no_bio') }}</p>
 

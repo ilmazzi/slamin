@@ -16,7 +16,7 @@
         <div class="card-body">
             <div class="text-center mb-4">
                 <h2 class="mb-2">
-                    <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }} Slam in
+                    <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }}
                 </h2>
                 <p class="text-muted mb-0">{{ __('events.create_event_help') }}</p>
             </div>
@@ -4877,16 +4877,11 @@ function addGigPosition() {
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Tipologia *</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][type]" required>
-                            <option value="">Seleziona tipologia</option>
-                            <option value="fonica">Fonica/Fonico</option>
-                            <option value="illustratrice">Illustratrice/Illustratore</option>
-                            <option value="musicista">Musicista</option>
-                            <option value="mc">MC - Presentatrice/Presentatore</option>
-                            <option value="poeta">Poeta</option>
-                            <option value="traduttrice">Traduttrice/Traduttore</option>
-                            <option value="videomaker">Videomaker</option>
-                            <option value="volontaria">Volontaria/Volontario</option>
-                            <option value="relatrice">Relatrice/Relatore</option>
+                             <option value="">Seleziona tipologia</option>
+                             <option value="poeta">Artista/Poeta</option>
+                              <option value="mc">MC/Ospite</option>
+                            <option value="tecnico">Supporto Tecnico</option>
+                           <option value="volontario">Volontaria/Volontario</option>
                         </select>
                     </div>
 

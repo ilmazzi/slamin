@@ -451,7 +451,12 @@ function deleteVideo(videoId) {
                     'Accept': 'application/json',
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     Swal.fire('Eliminato!', data.message, 'success').then(() => {
@@ -460,6 +465,10 @@ function deleteVideo(videoId) {
                 } else {
                     Swal.fire('Errore!', data.message, 'error');
                 }
+            })
+            .catch(error => {
+                console.error('Errore eliminazione video:', error);
+                Swal.fire('Errore!', 'Errore durante l\'eliminazione del video. Riprova.', 'error');
             });
         }
     });

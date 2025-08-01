@@ -53,7 +53,7 @@
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <div class="fw-medium">{{ $invitation->user->name }}</div>
-                                                            <small class="text-muted">{{ $invitation->user->email }}</small>
+                                                            <small class="text-muted">{{ $invitation->user->getPrivacySafeIdentifier() }}</small>
                                                         </div>
                                                     </div>
                                                 @else

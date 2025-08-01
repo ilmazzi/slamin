@@ -31,12 +31,12 @@
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('poems.index') }}" method="GET" class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-md-4">
                                 <input type="text" name="search" class="form-control"
                                        placeholder="{{ __('poems.placeholders.search') }}"
                                        value="{{ request('search') }}">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-6 col-md-2">
                                 <select name="category" class="form-select">
                                     <option value="">{{ __('poems.filters.filter_by_category') }}</option>
                                     @foreach(config('poems.categories') as $key => $category)
@@ -46,7 +46,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-6 col-md-2">
                                 <select name="language" class="form-select">
                                     <option value="">{{ __('poems.filters.filter_by_language') }}</option>
                                     @foreach(config('poems.languages') as $key => $language)
@@ -56,7 +56,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-6 col-md-2">
                                 <select name="sort" class="form-select">
                                     @foreach(__('poems.filters.sort_options') as $key => $option)
                                         <option value="{{ $key }}" {{ request('sort', 'recent') == $key ? 'selected' : '' }}>
@@ -65,7 +65,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-6 col-md-2">
                                 <button type="submit" class="btn btn-primary w-100">
                                     <i class="ph-duotone ph-magnifying-glass me-2"></i>
                                     {{ __('poems.actions.search') }}
@@ -77,27 +77,27 @@
             </div>
         </div>
 
-        <!-- {{ __('invitations.actions') }} -->
+        <!-- Azioni -->
         @auth
         <div class="row mb-4">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-2">
+                    <div class="d-flex flex-column flex-sm-row gap-2">
                         <a href="{{ route('poems.create') }}" class="btn btn-primary">
-                            <i class="ph-duotone ph-plus me-2"></i>
+                            <i class="ph ph-pen-nib"></i>
                             {{ __('poems.actions.create') }}
                         </a>
-                        <a href="{{ route('poems.my-poems') }}" class="btn btn-outline-primary ms-2">
+                        <a href="{{ route('poems.my-poems') }}" class="btn btn-outline-primary">
                             <i class="ph-duotone ph-book-open me-2"></i>
                             {{ __('poems.my_poems.title') }}
                         </a>
-                        <a href="{{ route('poems.drafts') }}" class="btn btn-outline-secondary ms-2">
+                        <a href="{{ route('poems.drafts') }}" class="btn btn-outline-secondary">
                             <i class="ph-duotone ph-file-text me-2"></i>
                             {{ __('poems.filters.drafts') }}
                         </a>
                     </div>
-                    <div>
-                        <a href="{{ route('poems.bookmarks') }}" class="btn btn-outline-warning me-2">
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <a href="{{ route('poems.bookmarks') }}" class="btn btn-outline-warning">
                             <i class="ph-duotone ph-bookmark me-2"></i>
                             {{ __('poems.filters.bookmarks') }}
                         </a>
@@ -114,20 +114,20 @@
         <!-- Lista Poesie -->
         <div class="row">
             @forelse($poems as $poem)
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card hover-effect">
+            <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                <div class="card hover-effect h-100">
                     @if($poem->thumbnail_path)
                     <img src="{{ $poem->thumbnail_url }}" class="card-img-top" alt="{{ $poem->title }}" style="height: 200px; object-fit: cover;">
                     @endif
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title f-w-600 mb-0">
+                            <h5 class="card-title f-w-600 mb-0 flex-grow-1">
                                 <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
                                     {{ $poem->title }}
                                 </a>
                             </h5>
                             @if($poem->is_featured)
-                            <span class="badge bg-warning">
+                            <span class="badge bg-warning ms-2">
                                 <i class="ph-duotone ph-star me-1"></i>
                                 {{ __('poems.filters.featured') }}
                             </span>
@@ -140,47 +140,32 @@
                         </p>
 
                         @if($poem->description)
-                        <p class="card-text">{{ Str::limit($poem->description, 100) }}</p>
+                        <p class="card-text flex-grow-1">{{ Str::limit($poem->description, 100) }}</p>
                         @endif
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="d-flex gap-2">
-                                <span class="badge bg-light text-dark">
-                                    <i class="ph-duotone ph-tag f-s-12 me-1"></i>
-                                    {{ config('poems.categories.' . $poem->category, $poem->category) }}
-                                </span>
-                                <span class="badge bg-light text-dark">
-                                    <i class="ph-duotone ph-book f-s-12 me-1"></i>
-                                    {{ config('poems.poem_types.' . $poem->poem_type, $poem->poem_type) }}
-                                </span>
-                            </div>
-                            <small class="text-muted">
-                                <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                {{ $poem->published_at->diffForHumans() }}
-                            </small>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-3">
-                                <span class="text-muted f-s-14">
-                                    <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                    {{ $poem->view_count }}
-                                </span>
-                                <span class="text-muted f-s-14">
-                                    <i class="ph-duotone ph-heart f-s-12 me-1"></i>
-                                    {{ $poem->like_count }}
-                                </span>
-                                <span class="text-muted f-s-14">
-                                    <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
-                                    {{ $poem->comment_count }}
-                                </span>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('poems.show', $poem) }}" class="btn btn-sm btn-primary">
-                                    <i class="ph-duotone ph-arrow-right f-s-14 me-1"></i>
-                                    {{ __('poems.actions.read') }}
-                                </a>
-                                <x-report-button :content="$poem" type="poem" size="sm" />
+                        <div class="mt-auto">
+                            <div class="d-flex flex-column align-items-center gap-2">
+                                <div class="d-flex gap-3 justify-content-center mb-2">
+                                    <span class="text-muted f-s-14">
+                                        <i class="ph-duotone ph-eye f-s-12 me-1"></i>
+                                        {{ $poem->view_count }}
+                                    </span>
+                                    <span class="text-muted f-s-14">
+                                        <i class="ph-duotone ph-heart f-s-12 me-1"></i>
+                                        {{ $poem->like_count }}
+                                    </span>
+                                    <span class="text-muted f-s-14">
+                                        <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
+                                        {{ $poem->comment_count }}
+                                    </span>
+                                </div>
+                                <div class="d-flex gap-2 justify-content-center align-items-center">
+                                    <a href="{{ route('poems.show', $poem) }}" class="btn btn-primary px-4">
+                                        <i class="ph-bold  ph-read-cv-logo"></i>
+                                        {{ __('poems.actions.read') }}
+                                    </a>
+                                    <x-report-button :content="$poem" type="poem" size="sm" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,7 +180,7 @@
                         <p class="text-muted">{{ __('poems.no_poems_description') }}</p>
                         @auth
                         <a href="{{ route('poems.create') }}" class="btn btn-primary">
-                            <i class="ph-duotone ph-plus me-2"></i>
+                            <i class="ph ph-pen-nib"></i>
                             {{ __('poems.actions.create') }}
                         </a>
                         @endauth

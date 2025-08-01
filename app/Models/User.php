@@ -126,6 +126,19 @@ class User extends Authenticatable
     {
         return $this->nickname ?: $this->name;
     }
+    
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get privacy-safe display identifier (no email)
+     */
+    public function getPrivacySafeIdentifier(): string
+    {
+        return $this->nickname ?: 'ID: ' . $this->id;
+    }
 
     /**
      * Check if user can judge competitions
@@ -325,6 +338,7 @@ class User extends Authenticatable
         if ($this->hasRole('judge')) return 'judge';
         if ($this->hasRole('venue_owner')) return 'venue_owner';
         if ($this->hasRole('technician')) return 'technician';
+        
         return 'audience';
     }
 

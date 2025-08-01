@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Video;
 use App\Services\ThumbnailService;
 use App\Jobs\GenerateVideoThumbnailJob;
+use App\Jobs\UpdatePeerTubeVideoStatusJob;
 use Illuminate\Support\Facades\Log;
 
 class VideoObserver
@@ -22,6 +23,12 @@ class VideoObserver
     public function created(Video $video): void
     {
         Log::info("Video created: {$video->id} - {$video->title}");
+
+        // Se è un video PeerTube in elaborazione, lancia il job di controllo
+        if ($video->peertube_uuid && $video->peertube_status === 'processing') {
+            Log::info("🔄 Lanciando job controllo stato PeerTube per video {$video->id}");
+            UpdatePeerTubeVideoStatusJob::dispatch($video)->delay(now()->addMinutes(1));
+        }
 
         // Genera thumbnail automaticamente se non esiste (in background)
         if (!$video->thumbnail_path) {
