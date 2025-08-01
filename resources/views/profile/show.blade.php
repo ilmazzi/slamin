@@ -3,6 +3,9 @@
 @section('title', $user->getDisplayName() . ' - ' . __('profile.profile') . ' - Slamin')
 
 @section('css')
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
 <style>
 /* Stili per i pulsanti delle azioni */
 .btn-sm {
@@ -987,6 +990,10 @@
 @endsection
 
 @push('scripts')
+<!-- Slick JS -->
+<script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
+<script src="{{ asset('assets/js/slick.js') }}"></script>
+
 <script>
 // Tab functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -1190,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ]
         });
-        
+
         console.log('Profile photos slider initialized successfully');
     }
 });
