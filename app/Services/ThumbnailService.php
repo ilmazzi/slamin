@@ -135,11 +135,14 @@ class ThumbnailService
         }
 
         // Se non c'è URL thumbnail ma c'è ID PeerTube, prova a recuperarlo
-        if (($video->peertube_id || $video->peertube_video_id) && !$video->peertube_thumbnail_url) {
+        if (($video->peertube_id || $video->peertube_video_id || $video->peertube_uuid) && !$video->peertube_thumbnail_url) {
+            Log::info("Tentativo recupero thumbnail da PeerTube API per video {$video->id}");
             $thumbnailUrl = $this->getPeerTubeThumbnailUrl($video);
             if ($thumbnailUrl) {
                 Log::info("✅ URL thumbnail PeerTube recuperato per video {$video->id}: {$thumbnailUrl}");
                 return $thumbnailUrl;
+            } else {
+                Log::warning("❌ Impossibile recuperare thumbnail da PeerTube API per video {$video->id}");
             }
         }
 
@@ -157,10 +160,11 @@ class ThumbnailService
     public function getPeerTubeThumbnailUrl(Video $video): ?string
     {
         try {
-            // Usa peertube_video_id se disponibile, altrimenti peertube_id
-            $peerTubeVideoId = $video->peertube_video_id ?: $video->peertube_id;
+            // Usa peertube_video_id se disponibile, altrimenti peertube_id, infine peertube_uuid
+            $peerTubeVideoId = $video->peertube_video_id ?: $video->peertube_id ?: $video->peertube_uuid;
 
             if (!$peerTubeVideoId) {
+                Log::warning("❌ Nessun ID PeerTube disponibile per video {$video->id} (peertube_video_id: {$video->peertube_video_id}, peertube_id: {$video->peertube_id}, peertube_uuid: {$video->peertube_uuid})");
                 return null;
             }
 
@@ -168,12 +172,13 @@ class ThumbnailService
             $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
             $apiUrl = rtrim($peerTubeUrl, '/') . '/api/v1/videos/' . $peerTubeVideoId;
 
-            Log::info("Tentativo recupero thumbnail PeerTube per video {$video->id}: {$apiUrl}");
+            Log::info("🌐 Tentativo recupero thumbnail PeerTube per video {$video->id}: {$apiUrl}");
 
             $response = \Illuminate\Support\Facades\Http::timeout(30)->get($apiUrl);
 
             if ($response->successful()) {
                 $data = $response->json();
+                Log::info("📡 Risposta API PeerTube per video {$video->id}: " . json_encode($data, JSON_PRETTY_PRINT));
 
                 if (isset($data['thumbnailPath'])) {
                     $thumbnailUrl = rtrim($peerTubeUrl, '/') . $data['thumbnailPath'];
@@ -184,10 +189,10 @@ class ThumbnailService
 
                     return $thumbnailUrl;
                 } else {
-                    Log::warning("❌ Thumbnail path non trovato nella risposta PeerTube per video {$video->id}");
+                    Log::warning("❌ Thumbnail path non trovato nella risposta PeerTube per video {$video->id}. Dati disponibili: " . implode(', ', array_keys($data)));
                 }
             } else {
-                Log::warning("❌ API PeerTube non raggiungibile per video {$video->id}. Status: {$response->status()}");
+                Log::warning("❌ API PeerTube non raggiungibile per video {$video->id}. Status: {$response->status()}, Response: {$response->body()}");
             }
 
             return null;
@@ -316,8 +321,8 @@ class ThumbnailService
         $attempts = [];
 
         // 1. Prova PeerTube (incluso recupero URL)
-        if ($video->peertube_id || $video->peertube_thumbnail_url) {
-            Log::info("Tentativo PeerTube per video {$video->id}");
+        if ($video->peertube_id || $video->peertube_video_id || $video->peertube_uuid || $video->peertube_thumbnail_url) {
+            Log::info("Tentativo PeerTube per video {$video->id} (peertube_id: {$video->peertube_id}, peertube_video_id: {$video->peertube_video_id}, peertube_uuid: {$video->peertube_uuid}, peertube_thumbnail_url: {$video->peertube_thumbnail_url})");
             $thumbnailPath = $this->generatePeerTubeThumbnail($video);
             if ($thumbnailPath) {
                 Log::info("✅ Thumbnail PeerTube generata per video {$video->id}: {$thumbnailPath}");

@@ -675,56 +675,6 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Le Mie Foto</h5>
-                                @if($isOwnProfile)
-                                <button type="button" class="btn btn-sm btn-primary hover-effect" onclick="openPhotoUploadModal()">
-                                    <i class="ph ph-plus me-1"></i>Carica Foto
-                                </button>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            @if($user->photos()->approved()->count() > 0)
-                                <div class="fade-s app-arrow slick-initialized slick-slider slick-dotted" dir="rtl">
-                                    <div class="slick-list draggable">
-                                        <div class="slick-track" style="opacity: 1; width: 100%;">
-                                            @foreach($user->photos()->approved()->orderBy('created_at', 'desc')->take(10)->get() as $photo)
-                                            <div class="item slick-slide" data-slick-index="{{ $loop->index }}" aria-hidden="{{ $loop->first ? 'false' : 'true' }}" tabindex="{{ $loop->first ? '0' : '-1' }}" role="tabpanel" style="width: 100%; position: relative; right: 0px; top: 0px; z-index: {{ $loop->first ? '1000' : '998' }}; opacity: {{ $loop->first ? '1' : '0' }}; transition: opacity 500ms linear;">
-                                                <img src="{{ $photo->image_url }}" class="img-fluid rounded" alt="{{ $photo->alt_text ?: $photo->title ?: 'Foto di ' . $user->getDisplayName() }}" style="width: 100%; height: 400px; object-fit: cover;">
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                    <ul class="slick-dots" role="tablist" style="">
-                                        @foreach($user->photos()->approved()->orderBy('created_at', 'desc')->take(10)->get() as $photo)
-                                        <li class="{{ $loop->first ? 'slick-active' : '' }}" role="presentation">
-                                            <button type="button" role="tab" aria-controls="slick-slide{{ $loop->index }}" aria-label="{{ $loop->iteration }} of {{ $user->photos()->approved()->count() }}" tabindex="{{ $loop->first ? '0' : '-1' }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">{{ $loop->iteration }}</button>
-                                        </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @else
-                                <div class="text-center py-4">
-                                    <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-photo-slash f-s-24 text-info"></i>
-                                    </div>
-                                    <p class="text-muted f-s-14 mb-0">Nessuna foto caricata</p>
-                                    @if($isOwnProfile)
-                                    <button type="button" class="btn btn-sm btn-primary mt-2" onclick="openPhotoUploadModal()">
-                                        <i class="ph ph-plus me-1"></i>Carica la Prima Foto
-                                    </button>
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab 4: Organized Events -->
-                <div id="tab-4" class="tabs-content">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">{{ __('profile.organized_events_title') }}</h5>
                                 <a href="#" class="btn btn-sm btn-primary hover-effect">
                                     {{ __('profile.view_all_events') }}
@@ -764,8 +714,8 @@
                     </div>
                 </div>
 
-                <!-- Tab 5: Activities -->
-                <div id="tab-5" class="tabs-content">
+                <!-- Tab 4: Activities -->
+                <div id="tab-4" class="tabs-content">
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
@@ -804,50 +754,72 @@
                     </div>
                 </div>
 
-                <!-- Tab 6: Settings (Only for own profile) -->
+
+
+                <!-- Tab 5: Settings (only for own profile) -->
                 @if($isOwnProfile)
-                <div id="tab-6" class="tabs-content">
+                <div id="tab-5" class="tabs-content">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0">{{ __('profile.settings') }}</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <a href="{{ route('profile.edit') }}" class="card card-light-primary hover-effect text-decoration-none">
-                                        <div class="card-body text-center py-3">
-                                            <i class="ti ti-edit f-s-30 text-primary mb-2"></i>
-                                            <h6 class="mb-1">{{ __('profile.modify_profile') }}</h6>
-                                            <small class="text-muted">{{ __('profile.edit_my_profile') }}</small>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card card-light-primary hover-effect">
+                                        <div class="card-body text-center">
+                                            <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
+                                                <i class="ti ti-edit f-s-24 text-primary"></i>
+                                            </div>
+                                            <h6 class="mb-2">{{ __('profile.modify_profile') }}</h6>
+                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.modify_profile_desc') }}</p>
+                                            <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">
+                                                <i class="ti ti-edit me-1"></i>{{ __('profile.edit_profile') }}
+                                            </a>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <a href="{{ route('profile.videos') }}" class="card card-light-success hover-effect text-decoration-none">
-                                        <div class="card-body text-center py-3">
-                                            <i class="ti ti-video-camera f-s-30 text-success mb-2"></i>
-                                            <h6 class="mb-1">{{ __('profile.my_videos') }}</h6>
-                                            <small class="text-muted">{{ __('profile.view_my_videos') }}</small>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card card-light-success hover-effect">
+                                        <div class="card-body text-center">
+                                            <div class="bg-light-success h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
+                                                <i class="ti ti-video-camera f-s-24 text-success"></i>
+                                            </div>
+                                            <h6 class="mb-2">{{ __('profile.manage_videos') }}</h6>
+                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.manage_videos_desc') }}</p>
+                                            <a href="{{ route('profile.videos') }}" class="btn btn-success btn-sm">
+                                                <i class="ti ti-video-camera me-1"></i>{{ __('profile.manage_videos') }}
+                                            </a>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <a href="{{ route('profile.activity') }}" class="card card-light-warning hover-effect text-decoration-none">
-                                        <div class="card-body text-center py-3">
-                                            <i class="ti ti-activity f-s-30 text-warning mb-2"></i>
-                                            <h6 class="mb-1">{{ __('profile.my_activities') }}</h6>
-                                            <small class="text-muted">{{ __('profile.view_my_activities') }}</small>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card card-light-info hover-effect">
+                                        <div class="card-body text-center">
+                                            <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
+                                                <i class="ti ti-activity f-s-24 text-info"></i>
+                                            </div>
+                                            <h6 class="mb-2">{{ __('profile.view_all_activity') }}</h6>
+                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.view_all_activity_desc') }}</p>
+                                            <a href="{{ route('profile.activity') }}" class="btn btn-info btn-sm">
+                                                <i class="ti ti-activity me-1"></i>{{ __('profile.view_all_activity') }}
+                                            </a>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <a href="#" class="card card-light-info hover-effect text-decoration-none">
-                                        <div class="card-body text-center py-3">
-                                            <i class="ti ti-bell f-s-30 text-info mb-2"></i>
-                                            <h6 class="mb-1">{{ __('profile.notifications') }}</h6>
-                                            <small class="text-muted">{{ __('profile.manage_notifications') }}</small>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card card-light-warning hover-effect">
+                                        <div class="card-body text-center">
+                                            <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
+                                                <i class="ti ti-shield f-s-24 text-warning"></i>
+                                            </div>
+                                            <h6 class="mb-2">Impostazioni Privacy</h6>
+                                            <p class="text-muted f-s-12 mb-3">Gestisci le impostazioni di privacy del tuo profilo</p>
+                                            <button class="btn btn-warning btn-sm" onclick="Swal.fire('Info', 'Funzionalità in sviluppo', 'info')">
+                                                <i class="ti ti-shield me-1"></i>Impostazioni Privacy
+                                            </button>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

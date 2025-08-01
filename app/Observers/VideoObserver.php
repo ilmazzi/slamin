@@ -92,9 +92,14 @@ class VideoObserver
 
             // Elimina anche eventuali thumbnail con pattern matching
             $pattern = "videos/thumbnails/{$video->id}_*";
-            $files = \Illuminate\Support\Facades\Storage::disk('public')->glob($pattern);
+            $files = \Illuminate\Support\Facades\Storage::disk('public')->files('videos/thumbnails');
 
-            foreach ($files as $file) {
+            // Filtra i file che corrispondono al pattern
+            $matchingFiles = array_filter($files, function($file) use ($video) {
+                return strpos($file, "videos/thumbnails/{$video->id}_") === 0;
+            });
+
+            foreach ($matchingFiles as $file) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($file);
                 Log::info("Additional thumbnail deleted: {$file}");
             }
