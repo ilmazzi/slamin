@@ -876,4 +876,135 @@ class PeerTubeService
             return false;
         }
     }
+
+    /**
+     * Elimina un utente da PeerTube
+     */
+    public function deleteUser(int $peerTubeUserId): bool
+    {
+        try {
+            Log::info('PeerTubeService - Tentativo eliminazione utente', [
+                'peer_tube_user_id' => $peerTubeUserId
+            ]);
+
+            // Ottieni il token admin se non è già disponibile
+            if (!$this->accessToken) {
+                $this->accessToken = $this->getAdminToken();
+                if (!$this->accessToken) {
+                    Log::error('PeerTubeService - Impossibile ottenere token admin per eliminazione utente', [
+                        'peer_tube_user_id' => $peerTubeUserId
+                    ]);
+                    return false;
+                }
+            }
+
+            // Crea client Guzzle
+            $client = new Client([
+                'timeout' => 30,
+                'connect_timeout' => 10,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'User-Agent' => 'Slamin-PeerTube-Integration/1.0'
+                ]
+            ]);
+
+            // Esegui la richiesta DELETE
+            $response = $client->delete($this->baseUrl . '/api/v1/users/' . $peerTubeUserId);
+
+            Log::info('PeerTubeService - Risposta eliminazione utente', [
+                'peer_tube_user_id' => $peerTubeUserId,
+                'status_code' => $response->getStatusCode(),
+                'successful' => $response->getStatusCode() === 204
+            ]);
+
+            // PeerTube restituisce 204 No Content per eliminazioni riuscite
+            if ($response->getStatusCode() === 204) {
+                Log::info('PeerTubeService - Utente eliminato con successo', [
+                    'peer_tube_user_id' => $peerTubeUserId
+                ]);
+                return true;
+            }
+
+            Log::error('PeerTubeService - Errore eliminazione utente', [
+                'peer_tube_user_id' => $peerTubeUserId,
+                'status_code' => $response->getStatusCode(),
+                'response_body' => $response->getBody()->getContents()
+            ]);
+
+            return false;
+
+        } catch (RequestException $e) {
+            Log::error('PeerTubeService - Errore Guzzle eliminazione utente', [
+                'peer_tube_user_id' => $peerTubeUserId,
+                'status_code' => $e->getResponse() ? $e->getResponse()->getStatusCode() : 'unknown',
+                'response_body' => $e->getResponse() ? $e->getResponse()->getBody()->getContents() : 'no response',
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        } catch (Exception $e) {
+            Log::error('PeerTubeService - Eccezione eliminazione utente', [
+                'peer_tube_user_id' => $peerTubeUserId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
+
+    /**
+     * Elimina un utente usando l'ID locale
+     */
+    public function deleteUserByLocalId(int $localUserId): bool
+    {
+        try {
+            Log::info('PeerTubeService - Tentativo eliminazione utente per ID locale', [
+                'local_user_id' => $localUserId
+            ]);
+
+            // Trova l'utente nel database locale
+            $user = User::find($localUserId);
+            if (!$user) {
+                Log::error('PeerTubeService - Utente non trovato nel database locale', [
+                    'local_user_id' => $localUserId
+                ]);
+                return false;
+            }
+
+            // Verifica se l'utente ha un account PeerTube
+            if (!$user->peertube_user_id) {
+                Log::info('PeerTubeService - Utente non ha account PeerTube, eliminazione locale completata', [
+                    'local_user_id' => $localUserId,
+                    'user_email' => $user->email
+                ]);
+                return true; // Non è un errore se l'utente non ha account PeerTube
+            }
+
+            // Elimina l'utente da PeerTube
+            $deleted = $this->deleteUser($user->peertube_user_id);
+            
+            if ($deleted) {
+                Log::info('PeerTubeService - Utente eliminato da PeerTube con successo', [
+                    'local_user_id' => $localUserId,
+                    'peer_tube_user_id' => $user->peertube_user_id,
+                    'user_email' => $user->email
+                ]);
+            } else {
+                Log::warning('PeerTubeService - Impossibile eliminare utente da PeerTube, continuando con eliminazione locale', [
+                    'local_user_id' => $localUserId,
+                    'peer_tube_user_id' => $user->peertube_user_id,
+                    'user_email' => $user->email
+                ]);
+            }
+
+            return true; // Ritorna true anche se PeerTube fallisce, per permettere l'eliminazione locale
+
+        } catch (Exception $e) {
+            Log::error('PeerTubeService - Eccezione eliminazione utente per ID locale', [
+                'local_user_id' => $localUserId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
 }

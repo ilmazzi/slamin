@@ -318,9 +318,23 @@ class CleanupAllMedia extends Command
             return;
         }
 
+        $peerTubeService = new PeerTubeService();
         $deletedCount = 0;
+        $peerTubeDeletedCount = 0;
+
         foreach ($users as $user) {
             try {
+                // Elimina da PeerTube se ha account
+                if ($user->peertube_user_id) {
+                    $peerTubeDeleted = $peerTubeService->deleteUser($user->peertube_user_id);
+                    if ($peerTubeDeleted) {
+                        $peerTubeDeletedCount++;
+                        $this->line("   🔗 Eliminato da PeerTube: {$user->name} (ID: {$user->peertube_user_id})");
+                    } else {
+                        $this->line("   ⚠️ Impossibile eliminare da PeerTube: {$user->name} (ID: {$user->peertube_user_id})");
+                    }
+                }
+
                 // Elimina avatar se presente
                 if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                     Storage::disk('public')->delete($user->avatar);
@@ -339,7 +353,7 @@ class CleanupAllMedia extends Command
             }
         }
 
-        $this->info("   📊 Risultati: {$deletedCount} utenti eliminati");
+        $this->info("   📊 Risultati: {$deletedCount} utenti eliminati, {$peerTubeDeletedCount} da PeerTube");
     }
 
     private function cleanupNotifications($dryRun)
