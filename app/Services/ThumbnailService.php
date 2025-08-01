@@ -184,8 +184,18 @@ class ThumbnailService
                     $thumbnailUrl = rtrim($peerTubeUrl, '/') . $data['thumbnailPath'];
                     Log::info("✅ Thumbnail URL recuperata per video {$video->id}: {$thumbnailUrl}");
 
-                    // Aggiorna il video con l'URL della thumbnail
-                    $video->update(['peertube_thumbnail_url' => $thumbnailUrl]);
+                    // Prepara i dati da aggiornare
+                    $updateData = ['peertube_thumbnail_url' => $thumbnailUrl];
+
+                    // Recupera anche la durata del video se disponibile
+                    if (isset($data['duration'])) {
+                        $duration = $data['duration'];
+                        $updateData['duration'] = $duration;
+                        Log::info("⏱️ Durata video recuperata per video {$video->id}: {$duration} secondi");
+                    }
+
+                    // Aggiorna il video con thumbnail e durata
+                    $video->update($updateData);
 
                     return $thumbnailUrl;
                 } else {
@@ -199,6 +209,54 @@ class ThumbnailService
 
         } catch (\Exception $e) {
             Log::error("❌ Errore recupero thumbnail PeerTube per video {$video->id}: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Recupera la durata del video da PeerTube
+     */
+    public function getPeerTubeVideoDuration(Video $video): ?int
+    {
+        try {
+            // Usa peertube_video_id se disponibile, altrimenti peertube_id, infine peertube_uuid
+            $peerTubeVideoId = $video->peertube_video_id ?: $video->peertube_id ?: $video->peertube_uuid;
+
+            if (!$peerTubeVideoId) {
+                Log::warning("❌ Nessun ID PeerTube disponibile per recuperare durata video {$video->id}");
+                return null;
+            }
+
+            // Costruisci l'URL dell'API PeerTube
+            $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
+            $apiUrl = rtrim($peerTubeUrl, '/') . '/api/v1/videos/' . $peerTubeVideoId;
+
+            Log::info("⏱️ Tentativo recupero durata PeerTube per video {$video->id}: {$apiUrl}");
+
+            $response = \Illuminate\Support\Facades\Http::timeout(30)->get($apiUrl);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if (isset($data['duration'])) {
+                    $duration = (int) $data['duration'];
+                    Log::info("✅ Durata video recuperata per video {$video->id}: {$duration} secondi");
+
+                    // Aggiorna il video con la durata
+                    $video->update(['duration' => $duration]);
+
+                    return $duration;
+                } else {
+                    Log::warning("❌ Durata non trovata nella risposta PeerTube per video {$video->id}");
+                }
+            } else {
+                Log::warning("❌ API PeerTube non raggiungibile per durata video {$video->id}. Status: {$response->status()}");
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error("❌ Errore recupero durata PeerTube per video {$video->id}: " . $e->getMessage());
             return null;
         }
     }

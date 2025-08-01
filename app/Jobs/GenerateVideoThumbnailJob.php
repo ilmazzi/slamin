@@ -47,6 +47,14 @@ class GenerateVideoThumbnailJob implements ShouldQueue
             $this->video->update(['thumbnail_path' => $thumbnailPath]);
             Log::info("Thumbnail generated successfully for video {$this->video->id}: {$thumbnailPath}");
 
+            // Recupera anche la durata del video se non è già impostata
+            if (!$this->video->duration && ($this->video->peertube_id || $this->video->peertube_video_id || $this->video->peertube_uuid)) {
+                $duration = $thumbnailService->getPeerTubeVideoDuration($this->video);
+                if ($duration) {
+                    Log::info("Duration updated for video {$this->video->id}: {$duration} seconds");
+                }
+            }
+
         } catch (\Exception $e) {
             Log::error("Error in thumbnail generation job for video {$this->video->id}: " . $e->getMessage());
             throw $e; // Rilancia l'eccezione per permettere i retry
