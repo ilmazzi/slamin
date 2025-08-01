@@ -184,7 +184,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="mailto:{{ $user->email }}" class="text-decoration-none">{{ $user->email }}</a>
+                                        <span class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
                                     </td>
                                     <td>
                                         @if($user->nickname)
@@ -305,8 +305,8 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-2">
-                        <i class="ph ph-envelope me-2 text-muted"></i>
-                        <span class="f-s-14">{{ $user->email }}</span>
+                        <i class="ph ph-at me-2 text-muted"></i>
+                        <span class="f-s-14 text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
                     </div>
                     <div class="mb-2">
                         <i class="ph ph-at me-2 text-muted"></i>
@@ -493,7 +493,7 @@
                         <label class="form-label">Seleziona Utenti</label>
                         <select class="form-select" name="user_ids[]" multiple id="bulkUserSelect">
                             @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->getPrivacySafeIdentifier() }})</option>
                             @endforeach
                         </select>
                     </div>

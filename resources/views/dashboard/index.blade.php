@@ -47,28 +47,51 @@
         <!-- User Welcome Card semplificata -->
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card bg-primary text-white hover-effect">
+                <div class="card hover-effect b-e-4-primary">
+
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h4 class="text-white mb-1 f-w-600">{{ __('dashboard.welcome', ['name' => $user->getDisplayName()]) }}</h4>
-                                <p class="text-white-50 mb-2 f-s-14">{{ $user->email }}</p>
+                                <h4 class=" mb-1 f-w-600">{{ __('dashboard.welcome', ['name' => $user->getDisplayName()]) }}</h4>
+                                <p class="text-primary-50 mb-2 f-s-14">{{ $user->getName() }}</p>
                                 <div class="d-flex flex-wrap gap-1">
                                     @foreach($user->getRoleNames() as $role)
-                                        <span class="badge bg-light text-dark f-s-12">
-                                            {{ __('auth.role_' . $role) }}
+                                        <span class="badge bg-light-success text-dark f-s-12">
+                                            {{ __('auth.role_' . $role) ?: ucfirst($role) }}
                                         </span>
                                     @endforeach
                                 </div>
                             </div>
                             <div class="col-md-4 text-end">
                                 <div class="bg-white-500 h-50 w-50 d-flex-center rounded-circle ms-auto">
-                                    <i class="ph ph-user f-s-24 text-primary"></i>
+                                    @if($user->getProfilePhotoUrlAttribute())
+                                        <img src="{{ $user->getProfilePhotoUrlAttribute() }}" alt="{{ $user->name }}" class="rounded-circle" style="width: 90px; height: 90px; object-fit: cover;">
+                                    @else
+                                        <i class="ph ph-user f-s-24 text-primary"></i>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
 

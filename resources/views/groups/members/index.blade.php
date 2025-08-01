@@ -102,7 +102,7 @@
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h6 class="mb-1">{{ $member->user->getDisplayName() }}</h6>
-                                    <p class="text-muted mb-1">{{ $member->user->email }}</p>
+                                    <p class="text-muted mb-1">{{ $member->user->getPrivacySafeIdentifier() }}</p>
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="badge bg-{{ $member->role == 'admin' ? 'success' : ($member->role == 'moderator' ? 'info' : 'secondary') }}">
                                             {{ __('groups.role_' . $member->role) }}

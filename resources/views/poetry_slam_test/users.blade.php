@@ -55,7 +55,7 @@
                                             <td>
                                                 <div>
                                                     <strong>{{ $user->name }}</strong><br>
-                                                    <small class="text-muted">{{ $user->email }}</small><br>
+                                                    <small class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</small><br>
                                                     <small class="text-muted">Joined: {{ $user->created_at->format('M d, Y') }}</small>
                                                 </div>
                                             </td>

@@ -185,32 +185,32 @@
                     </li>
 
                     <?php if(auth()->guard()->check()): ?>
-                    <!-- Wiki - Prossimamente - Solo per utenti autenticati -->
+                    <!-- Wiki - Prossimamente - Solo per utenti autenticati 
                     <li class="header-wiki">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wiki (Prossimamente)"
                            style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-book-open"></i>
                         </a>
-                    </li>
+                    </li>-->
 
-                    <!-- Corsi - Prossimamente - Solo per utenti autenticati -->
+                    <!-- Corsi - Prossimamente - Solo per utenti autenticati 
                     <li class="header-courses">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Corsi (Prossimamente)"
                            style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-graduation-cap"></i>
                         </a>
-                    </li>
+                    </li>-->
 
-                    <!-- Forum - Prossimamente - Solo per utenti autenticati -->
+                    <!-- Forum - Prossimamente - Solo per utenti autenticati 
                     <li class="header-forum">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Forum (Prossimamente)"
                            style="opacity: 0.5; cursor: not-allowed;">
                             <i class="ph ph-chats-circle"></i>
                         </a>
-                    </li>
+                    </li>-->
                     <?php endif; ?>
 
                 </ul>

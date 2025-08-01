@@ -140,7 +140,7 @@
                                             </div>
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1">{{ $invitation->user->name }}</h6>
-                                                <p class="text-muted mb-0">{{ $invitation->user->email }}</p>
+                                                <p class="text-muted mb-0">{{ $invitation->user->getPrivacySafeIdentifier() }}</p>
                                             </div>
                                         </div>
                                     @else

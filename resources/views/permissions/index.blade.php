@@ -343,7 +343,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="mailto:{{ $user->email }}" class="text-primary">{{ $user->email }}</a>
+                                        <span class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
                                     </td>
                                     <td class="text-center">
                                         @foreach($user->roles->take(2) as $role)

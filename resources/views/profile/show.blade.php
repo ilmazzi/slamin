@@ -164,10 +164,10 @@
                     @endif
 
                     <div class="about-list">
-                        @if($user->email)
+                        @if($user->nickname)
                         <div>
-                            <span class="fw-medium"><i class="ti ti-mail"></i> {{ __('profile.email') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->email }}</span>
+                            <span class="fw-medium"><i class="ti ti-at"></i> {{ __('profile.nickname') }}</span>
+                            <span class="float-end f-s-13 text-secondary">{{ $user->nickname }}</span>
                         </div>
                         @endif
                         @if($user->phone)
@@ -480,10 +480,10 @@
                                 @endif
 
                                 <div class="about-list">
-                                    @if($user->email)
+                                    @if($user->nickname)
                                     <div>
-                                        <span class="fw-medium"><i class="ti ti-mail"></i> {{ __('profile.email') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->email }}</span>
+                                        <span class="fw-medium"><i class="ti ti-at"></i> {{ __('profile.nickname') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->nickname }}</span>
                                     </div>
                                     @endif
                                     @if($user->phone)
