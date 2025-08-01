@@ -149,7 +149,7 @@
 
                             <!-- Opzioni di pubblicazione -->
                             <div class="col-12">
-                                <div class="card card-light">
+                                <div class="card card-light-success">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
                                             <i class="ph ph-gear text-info me-2"></i>
@@ -212,7 +212,7 @@
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between">
-                                    <a href="{{ route('poems.index') }}" class="btn btn-light">
+                                    <a href="{{ route('poems.index') }}" class="btn btn-secondary">
                                         <i class="ph ph-arrow-left me-2"></i>
                                         {{ __('common.cancel') }}
                                     </a>
