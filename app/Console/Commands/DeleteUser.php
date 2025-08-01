@@ -75,6 +75,25 @@ class DeleteUser extends Command
         // Mostra statistiche delle correlazioni
         $this->showUserStatistics($user);
 
+        // Controlli di sicurezza per ruoli speciali
+        if ($user->hasRole('admin') && !$dryRun) {
+            $adminCount = User::role('admin')->count();
+            if ($adminCount <= 1) {
+                $this->error('❌ Impossibile eliminare l\'ultimo amministratore!');
+                return 1;
+            }
+            $this->warn("⚠️ ATTENZIONE: Stai eliminando un amministratore (rimarranno " . ($adminCount - 1) . " admin)");
+        }
+        
+        if ($user->hasRole('super-admin') && !$dryRun) {
+            $superAdminCount = User::role('super-admin')->count();
+            if ($superAdminCount <= 1) {
+                $this->error('❌ Impossibile eliminare l\'ultimo super amministratore!');
+                return 1;
+            }
+            $this->warn("⚠️ ATTENZIONE: Stai eliminando un super amministratore (rimarranno " . ($superAdminCount - 1) . " super-admin)");
+        }
+
         if (!$force && !$dryRun && !$this->confirm('Sei SICURO di voler eliminare questo utente e TUTTE le sue correlazioni? Questa operazione è IRREVERSIBILE!')) {
             $this->error('❌ Operazione annullata');
             return 1;

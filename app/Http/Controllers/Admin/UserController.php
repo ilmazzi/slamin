@@ -73,10 +73,23 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->hasRole('admin') && User::role('admin')->count() <= 1) {
+        // Controlla se l'utente corrente è super-admin
+        $currentUser = auth()->user();
+        $isSuperAdmin = $currentUser->hasRole('super-admin');
+        
+        // Se l'utente da eliminare è admin e non c'è un super-admin che lo elimina
+        if ($user->hasRole('admin') && !$isSuperAdmin && User::role('admin')->count() <= 1) {
             return response()->json([
                 'success' => false,
                 'message' => __('admin.cannot_delete_last_admin')
+            ], 400);
+        }
+        
+        // Se l'utente da eliminare è super-admin e non c'è un altro super-admin che lo elimina
+        if ($user->hasRole('super-admin') && !$isSuperAdmin && User::role('super-admin')->count() <= 1) {
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.cannot_delete_last_super_admin')
             ], 400);
         }
 
