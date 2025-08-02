@@ -359,9 +359,6 @@
                                                 <i class="ph-duotone ph-heart me-1"></i><?php echo e($photo->like_count); ?>
 
                                             </small>
-                                            <small class="text-muted f-s-11">
-                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">0
-                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -408,9 +405,6 @@
                                             <small class="text-muted f-s-11">
                                                 <i class="ph-duotone ph-heart me-1"></i><?php echo e($photo->like_count); ?>
 
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">0
                                             </small>
                                         </div>
                                     </div>
@@ -575,42 +569,7 @@
                     </div>
                 </div>
 
-                <!-- Pulsante per creare snap con scritta sotto -->
-                <div class="position-absolute" id="modalFloatingPhotoSnapButton" style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                    <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
-                            style="width: 60px; height: 60px;"
-                            onclick="togglePhotoSnapForm()">
-                        <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
-                    </button>
-                    <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
-                        Crea snap
-                    </div>
-                </div>
 
-                <!-- Form inline per creare snap -->
-                <div class="position-absolute" id="modalPhotoSnapForm" style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-white mb-0">Crea Snap</h6>
-                        <button type="button" class="btn-close btn-close-white" onclick="togglePhotoSnapForm()"></button>
-                    </div>
-                    <form id="inlinePhotoSnapForm">
-                        <div class="mb-3">
-                            <label for="inlinePhotoSnapTitle" class="form-label text-white" style="font-size: 12px;">Titolo (opzionale)</label>
-                            <input type="text" class="form-control form-control-sm" id="inlinePhotoSnapTitle"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
-                        </div>
-                        <div class="mb-3">
-                            <label for="inlinePhotoSnapDescription" class="form-label text-white" style="font-size: 12px;">Descrizione (opzionale)</label>
-                            <textarea class="form-control form-control-sm" id="inlinePhotoSnapDescription" rows="2"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <input type="hidden" id="inlinePhotoSnapPhotoId" value="">
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-sm btn-secondary" onclick="togglePhotoSnapForm()">Annulla</button>
-                            <button type="button" class="btn btn-sm btn-primary" onclick="createInlinePhotoSnap()">Crea Snap</button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
@@ -768,7 +727,7 @@ let modalVideoPlayer = null;
 let modalCurrentVideoTime = 0;
 let modalVideoDuration = 0;
 let modalSnaps = [];
-let modalPhotoSnaps = [];
+
 
 function toggleVideoContent() {
     const toggle = document.getElementById('videoToggle');
@@ -1273,8 +1232,7 @@ function closePhotoModal() {
     modal.style.display = 'none';
     document.body.style.overflow = 'auto'; // Ripristina lo scroll
 
-    // Reset variabili
-    modalPhotoSnaps = [];
+
 }
 
 // Funzione per caricare la foto nel modal
@@ -1310,9 +1268,8 @@ async function loadPhotoInModal(photoId) {
             photoImage.src = photo.image_url;
             photoImage.alt = photo.title;
 
-            // Imposta l'ID della foto per le funzioni snap
+            // Imposta l'ID della foto
             photoImage.setAttribute('data-photo-id', photo.id);
-            document.getElementById('inlinePhotoSnapPhotoId').value = photo.id;
 
             // Nascondi loading e mostra foto
             loadingDiv.style.display = 'none';
@@ -1331,82 +1288,7 @@ async function loadPhotoInModal(photoId) {
     }
 }
 
-// Funzione per mostrare/nascondere il form inline degli snap per le foto
-function togglePhotoSnapForm() {
-    const snapForm = document.getElementById('modalPhotoSnapForm');
-    const snapButton = document.getElementById('modalFloatingPhotoSnapButton');
 
-    if (snapForm.style.display === 'none') {
-        // Mostra il form
-        snapForm.style.display = 'block';
-        snapButton.style.display = 'none';
-
-        console.log('📸 Form snap foto aperto');
-    } else {
-        // Nascondi il form
-        snapForm.style.display = 'none';
-        snapButton.style.display = 'flex';
-
-        // Pulisci i campi
-        document.getElementById('inlinePhotoSnapTitle').value = '';
-        document.getElementById('inlinePhotoSnapDescription').value = '';
-
-        console.log('📸 Form snap foto chiuso');
-    }
-}
-
-// Funzione per creare lo snap dalla foto dal form inline
-function createInlinePhotoSnap() {
-    const title = document.getElementById('inlinePhotoSnapTitle').value.trim();
-    const photoId = document.getElementById('inlinePhotoSnapPhotoId').value;
-
-    console.log('📸 Creazione snap foto inline - title:', title, 'photoId:', photoId);
-
-    if (!photoId) {
-        console.log('❌ Validazione fallita - photoId:', photoId);
-        return;
-    }
-
-    fetch(`/api/photos/${photoId}/snaps`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
-        },
-        body: JSON.stringify({ title: title })
-    })
-    .then(response => {
-        if (response.status === 401) {
-            // Utente non autenticato
-            return response.json().then(data => {
-                if (data.redirect) {
-                    window.location.href = data.redirect;
-                } else {
-                    showErrorMessage('Devi essere autenticato per creare uno snap');
-                }
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            console.log('✅ Snap foto creato con successo:', data.snap);
-
-            // Chiudi il form
-            togglePhotoSnapForm();
-
-            // Mostra un messaggio di successo
-            showSuccessMessage('Snap foto creato con successo!');
-        } else {
-            console.log('❌ Errore nella creazione dello snap foto:', data);
-            showErrorMessage(data.message || 'Errore nella creazione dello snap foto. Riprova.');
-        }
-    })
-    .catch(error => {
-        console.error('❌ Errore nella creazione dello snap foto:', error);
-        showErrorMessage('Errore nella creazione dello snap foto. Riprova.');
-    });
-}
 
 // Event listeners per i label
 document.addEventListener('DOMContentLoaded', function() {
