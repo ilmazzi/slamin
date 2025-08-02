@@ -825,7 +825,8 @@ window.addEventListener('load', function() {
                     </div>
                 </div>
 
-                <!-- Pulsante per creare snap con scritta sotto -->
+                <!-- Pulsante per creare snap con scritta sotto (solo per utenti autenticati) -->
+                @auth
                 <div class="position-absolute" id="modalFloatingSnapButton" style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
                     <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                             style="width: 60px; height: 60px;"
@@ -836,8 +837,10 @@ window.addEventListener('load', function() {
                         Crea snap
                     </div>
                 </div>
+                @endauth
 
-                <!-- Form inline per creare snap -->
+                <!-- Form inline per creare snap (solo per utenti autenticati) -->
+                @auth
                 <div class="position-absolute" id="modalSnapForm" style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="text-white mb-0">Crea Snap</h6>
@@ -863,6 +866,7 @@ window.addEventListener('load', function() {
                         </div>
                     </form>
                 </div>
+                @endauth
             </div>
         </div>
     </div>
