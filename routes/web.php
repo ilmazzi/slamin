@@ -734,17 +734,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::post('/snaps/{snap}/like', [App\Http\Controllers\VideoController::class, 'toggleSnapLike'])->name('snap-like');
     });
 
-    // API routes for videos (without auth middleware)
-    Route::prefix('api/videos')->group(function () {
-        Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'getVideoData'])->name('api.videos.get');
-        Route::get('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'getVideoSnaps'])->name('api.videos.snaps');
-        Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
-    });
 
-    // API routes for photos (without auth middleware)
-    Route::prefix('api/photos')->group(function () {
-        Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
-    });
 
     // Media Routes (pubbliche)
     Route::prefix('media')->name('media.')->group(function () {
@@ -991,6 +981,20 @@ Route::prefix('groups/{group}/requests')->name('groups.requests.')->middleware('
     Route::get('/pending', [App\Http\Controllers\GroupJoinRequestController::class, 'pending'])->name('pending');
     Route::get('/stats', [App\Http\Controllers\GroupJoinRequestController::class, 'stats'])->name('stats');
     Route::post('/store', [App\Http\Controllers\GroupJoinRequestController::class, 'store'])->name('store');
+});
+
+// ===== ROUTE API PUBBLICHE (fuori da qualsiasi middleware) =====
+
+// API routes for videos (completamente pubbliche)
+Route::prefix('api/videos')->group(function () {
+    Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'getVideoData'])->name('api.videos.get');
+    Route::get('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'getVideoSnaps'])->name('api.videos.snaps');
+    Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
+});
+
+// API routes for photos (completamente pubbliche)
+Route::prefix('api/photos')->group(function () {
+    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
 });
 
 

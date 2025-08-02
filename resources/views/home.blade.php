@@ -1134,6 +1134,7 @@ let modalSnaps = [];
 // Funzione per aprire il modal video
 window.openVideoModal = function(videoId) {
     console.log('🎬 Apertura modal video per ID:', videoId);
+    console.log('🔍 Debug: Funzione openVideoModal chiamata');
 
     // Controlla se l'ID del video è valido
     if (!videoId || videoId === 0) {
@@ -1143,6 +1144,13 @@ window.openVideoModal = function(videoId) {
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('videoPlayerModal');
+    console.log('🔍 Debug: Modal trovato:', !!modal);
+
+    if (!modal) {
+        console.error('❌ Modal video non trovato nel DOM');
+        return;
+    }
+
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden'; // Previene lo scroll
 
