@@ -735,12 +735,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 
 
 
-    // Media Routes (pubbliche)
-    Route::prefix('media')->name('media.')->group(function () {
-        Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
-        Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
-        Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
-    });
+
 
     // PeerTube upload route alias
     Route::get('/peertube/upload', function() {
@@ -764,6 +759,13 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 
     // Public Profile Routes (accessibili a tutti)
     Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
+});
+
+// Media Routes (pubbliche - fuori dal gruppo auth)
+Route::prefix('media')->name('media.')->group(function () {
+    Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
+    Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
+    Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
 });
 
 
@@ -1015,6 +1017,9 @@ Route::prefix('api/social')->group(function () {
     Route::post('/comments/{comment}/reject', [App\Http\Controllers\CommentController::class, 'reject'])->name('api.social.comments.reject');
     Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('api.social.comments.list');
     Route::get('/comments/{comment}/replies', [App\Http\Controllers\CommentController::class, 'getReplies'])->name('api.social.comments.replies');
+
+    // Route per incremento visualizzazioni (pubblica)
+    Route::post('/views/increment', [App\Http\Controllers\ViewController::class, 'increment'])->name('api.social.views.increment');
 });
 
 

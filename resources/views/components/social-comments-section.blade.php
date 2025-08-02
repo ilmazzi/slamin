@@ -40,7 +40,7 @@
         @else
         <div class="alert alert-info">
             <i class="ti ti-info-circle f-s-16 me-2"></i>
-            <a href="{{ route('login') }}">Accedi</a> per lasciare un commento.
+            <a href="{{ route('login') }}" class="text-decoration-none">Accedi</a> per lasciare un commento e interagire con il contenuto.
         </div>
         @endauth
 

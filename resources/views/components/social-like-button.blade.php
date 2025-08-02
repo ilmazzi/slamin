@@ -6,6 +6,7 @@
     $contentType = strtolower(class_basename($content));
 @endphp
 
+@auth
 <div class="social-like-btn"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}"
@@ -17,6 +18,13 @@
     <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; {{ $isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
     <span class="text-secondary like-count f-s-12">{{ number_format($likeCount) }}</span>
 </div>
+@else
+<div class="social-like-counter"
+     style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
+    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+    <span class="text-secondary like-count f-s-12">{{ number_format($likeCount) }}</span>
+</div>
+@endauth
 
 <script>
 function toggleSocialLike(button) {
@@ -25,6 +33,15 @@ function toggleSocialLike(button) {
     const likeCountSpan = button.querySelector('.like-count');
     const heartIcon = button.querySelector('img');
 
+    // Verifica se l'utente è autenticato
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+    if (!isAuthenticated) {
+        // Reindirizza al login
+        window.location.href = '{{ route("login") }}';
+        return;
+    }
+
     // Disabilita il pulsante durante la richiesta
     button.style.pointerEvents = 'none';
 
@@ -32,7 +49,8 @@ function toggleSocialLike(button) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
         body: JSON.stringify({
             likeable_type: contentType,
