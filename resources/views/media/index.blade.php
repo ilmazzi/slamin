@@ -1956,7 +1956,8 @@ async function submitComment() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({
                 commentable_type: mediaType,
@@ -2017,8 +2018,12 @@ async function submitComment() {
         } else {
             if (response.status === 401) {
                 window.location.href = '{{ route("login") }}';
+            } else if (response.status === 419) {
+                // CSRF token mismatch
+                alert('Errore di sicurezza. Ricarica la pagina e riprova.');
+                location.reload();
             } else {
-                throw new Error(data.error || 'Errore nell\'invio del commento');
+                throw new Error(data.error || data.message || 'Errore nell\'invio del commento');
             }
         }
     } catch (error) {

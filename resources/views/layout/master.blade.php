@@ -6,6 +6,9 @@
 @include('layout.head')
 <!-- meta and title end-->
 
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <!-- css start !-->
 @include('layout.css')
 <!-- css end !-->
