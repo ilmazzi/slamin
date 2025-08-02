@@ -251,7 +251,7 @@ window.addEventListener('load', function() {
                                     <!-- {{ __('common.video') }} {{ __('common.thumbnail') }} Column -->
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
-                                            <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9; cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
+                                            <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9; cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
                                                 @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                                     <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
                                                 @else
@@ -262,7 +262,7 @@ window.addEventListener('load', function() {
                                                         </div>
                                                     </div>
                                                 @endif
-                                                <div class="position-absolute top-50 start-50 translate-middle" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
+                                                <div class="position-absolute top-50 start-50 translate-middle" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
                                                     <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center" style="width: 70px; height: 70px;">
                                                         <i class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
                                                     </div>
@@ -1134,6 +1134,12 @@ let modalSnaps = [];
 // Funzione per aprire il modal video
 window.openVideoModal = function(videoId) {
     console.log('🎬 Apertura modal video per ID:', videoId);
+
+    // Controlla se l'ID del video è valido
+    if (!videoId || videoId === 0) {
+        console.error('❌ ID video non valido:', videoId);
+        return;
+    }
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('videoPlayerModal');
