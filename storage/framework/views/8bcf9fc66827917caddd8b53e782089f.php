@@ -266,7 +266,7 @@ window.addEventListener('load', function() {
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
                                             <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
-                                                <?php if($mostPopularVideo->thumbnail_url): ?>
+                                                <?php if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
                                                     <img src="<?php echo e($mostPopularVideo->thumbnail_url); ?>" alt="<?php echo e($mostPopularVideo->title); ?>" class="w-100 h-100" style="object-fit: cover;">
                                                 <?php else: ?>
                                                     <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
@@ -276,7 +276,6 @@ window.addEventListener('load', function() {
                                                         </div>
                                                     </div>
                                                 <?php endif; ?>
-                                                <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20"></div>
                                                 <div class="position-absolute top-50 start-50 translate-middle">
                                                     <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center" style="width: 70px; height: 70px;">
                                                         <i class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>

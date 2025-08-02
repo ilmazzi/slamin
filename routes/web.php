@@ -741,6 +741,13 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
     });
 
+    // API routes for photos (without auth middleware)
+    Route::prefix('api/photos')->group(function () {
+        Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
+        Route::get('/{photo}/snaps', [App\Http\Controllers\PhotoController::class, 'getPhotoSnaps'])->name('api.photos.snaps');
+        Route::post('/{photo}/snaps', [App\Http\Controllers\PhotoController::class, 'addSnap'])->name('api.photos.add-snap');
+    });
+
     // Media Routes (pubbliche)
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');

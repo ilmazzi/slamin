@@ -203,4 +203,94 @@ class PhotoController extends Controller
             })
         ]);
     }
+
+    /**
+     * API per ottenere i dati di una foto
+     */
+    public function getPhotoData(Photo $photo)
+    {
+        if (!$photo->isApproved()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto non disponibile'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'photo' => [
+                'id' => $photo->id,
+                'title' => $photo->title,
+                'description' => $photo->description,
+                'image_url' => $photo->image_url,
+                'thumbnail_url' => $photo->thumbnail_url,
+                'alt_text' => $photo->alt_text,
+                'created_at' => $photo->created_at,
+                'like_count' => $photo->like_count,
+                'view_count' => $photo->view_count,
+                'user' => [
+                    'id' => $photo->user->id,
+                    'name' => $photo->user->name,
+                    'username' => $photo->user->username,
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * API per ottenere gli snap di una foto
+     */
+    public function getPhotoSnaps(Photo $photo)
+    {
+        if (!$photo->isApproved()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto non disponibile'
+            ], 404);
+        }
+
+        // Per ora restituiamo un array vuoto perché non abbiamo ancora implementato gli snap per le foto
+        return response()->json([
+            'success' => true,
+            'snaps' => []
+        ]);
+    }
+
+    /**
+     * API per aggiungere uno snap a una foto
+     */
+    public function addSnap(Request $request, Photo $photo)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Devi essere autenticato per creare uno snap',
+                'redirect' => route('login')
+            ], 401);
+        }
+
+        if (!$photo->isApproved()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto non disponibile'
+            ], 404);
+        }
+
+        // Per ora restituiamo un messaggio di successo fittizio perché non abbiamo ancora implementato gli snap per le foto
+        return response()->json([
+            'success' => true,
+            'snap' => [
+                'id' => 1,
+                'title' => $request->title ?: 'Snap foto',
+                'description' => $request->description,
+                'created_at' => now(),
+                'user' => [
+                    'id' => Auth::id(),
+                    'name' => Auth::user()->name,
+                    'username' => Auth::user()->username,
+                ]
+            ],
+            'message' => 'Snap creato con successo'
+        ]);
+    }
 }

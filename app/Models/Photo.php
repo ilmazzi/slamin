@@ -77,7 +77,7 @@ class Photo extends Model
      */
     public function isApproved(): bool
     {
-        return $this->status === 'approved';
+        return $this->moderation_status === 'approved';
     }
 
     /**
@@ -154,4 +154,6 @@ class Photo extends Model
     {
         return $this->description ?: 'Foto condivisa su Slamin';
     }
+
+
 }

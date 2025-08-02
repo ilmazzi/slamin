@@ -42,7 +42,32 @@ class MediaController extends Controller
         // Video nuovi (ordinati per data di creazione)
         $newVideos = $videosQuery->orderBy('created_at', 'desc')->take(6)->get();
 
-        return view('media.index', compact('mostPopularVideo', 'popularVideos', 'newVideos'));
+        // Query base per foto
+        $photosQuery = Photo::with(['user', 'likes', 'comments'])
+            ->where('moderation_status', 'approved');
+
+        // Foto più popolare (somma di like, commenti, snap e views)
+        $mostPopularPhoto = $photosQuery->get()->map(function($photo) {
+            $photo->total_interactions = ($photo->like_count ?? 0) +
+                                       ($photo->comment_count ?? 0) +
+                                       ($photo->snap_count ?? 0) +
+                                       ($photo->view_count ?? $photo->views ?? 0);
+            return $photo;
+        })->sortByDesc('total_interactions')->first();
+
+        // Foto popolari (ordinati per interazioni totali)
+        $popularPhotos = $photosQuery->get()->map(function($photo) {
+            $photo->total_interactions = ($photo->like_count ?? 0) +
+                                       ($photo->comment_count ?? 0) +
+                                       ($photo->snap_count ?? 0) +
+                                       ($photo->view_count ?? $photo->views ?? 0);
+            return $photo;
+        })->sortByDesc('total_interactions')->take(6);
+
+        // Foto nuove (ordinate per data di creazione)
+        $newPhotos = $photosQuery->orderBy('created_at', 'desc')->take(6)->get();
+
+        return view('media.index', compact('mostPopularVideo', 'popularVideos', 'newVideos', 'mostPopularPhoto', 'popularPhotos', 'newPhotos'));
     }
 
     private function applySorting($query, $sort)
