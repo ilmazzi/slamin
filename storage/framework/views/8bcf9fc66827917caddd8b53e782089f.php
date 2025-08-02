@@ -215,6 +215,10 @@ window.addEventListener('load', function() {
                                                         <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="<?php echo e($event->id); ?>" title="Aggiungi/<?php echo e(__('wishlist.remove_from_wishlist')); ?>">
                                                             <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
                                                         </button>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo e(route('login')); ?>" class="btn btn-sm btn-outline-danger" title="<?php echo e(__('auth.login_required')); ?>">
+                                                            <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
+                                                        </a>
                                                     <?php endif; ?>
                                                     <a href="<?php echo e(route('events.show', $event)); ?>" class="btn btn-sm btn-warning">
                                                         <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
@@ -664,6 +668,11 @@ window.addEventListener('load', function() {
                             <div class="d-flex gap-2 justify-content-center">
                                 <?php if(auth()->guard()->check()): ?>
                                 <a href="<?php echo e(route('poems.create')); ?>" class="btn btn-info btn-sm">
+                                    <i class="ph-duotone ph-plus f-s-12 me-1"></i>
+                                    Crea poesia
+                                </a>
+                                <?php else: ?>
+                                <a href="<?php echo e(route('login')); ?>" class="btn btn-info btn-sm" title="<?php echo e(__('auth.login_required')); ?>">
                                     <i class="ph-duotone ph-plus f-s-12 me-1"></i>
                                     Crea poesia
                                 </a>

@@ -98,9 +98,10 @@ return [
     'password_reset_success' => 'Password resettata con successo',
     'verify_email' => 'Verifica Email',
     'verify_email_title' => 'Verifica il tuo indirizzo email',
+    'login_required' => 'Login richiesto',
     'verify_email_subtitle' => 'Abbiamo inviato un link di verifica alla tua email',
     'resend_verification' => 'Rinvia Verifica',
     'email_verified' => 'Email verificata',
     'email_not_verified' => 'Email non verificata',
     'check_email_first' => 'Controlla prima la tua email',
-]; 
+];

@@ -216,6 +216,10 @@ window.addEventListener('load', function() {
                                                         <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
                                                             <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
                                                         </button>
+                                                    @else
+                                                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger" title="{{ __('auth.login_required') }}">
+                                                            <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
+                                                        </a>
                                                     @endauth
                                                     <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
                                                         <i class="ph-duotone ph-info f-s-14 me-1"></i>Dettagli
@@ -621,6 +625,11 @@ window.addEventListener('load', function() {
                             <div class="d-flex gap-2 justify-content-center">
                                 @auth
                                 <a href="{{ route('poems.create') }}" class="btn btn-info btn-sm">
+                                    <i class="ph-duotone ph-plus f-s-12 me-1"></i>
+                                    Crea poesia
+                                </a>
+                                @else
+                                <a href="{{ route('login') }}" class="btn btn-info btn-sm" title="{{ __('auth.login_required') }}">
                                     <i class="ph-duotone ph-plus f-s-12 me-1"></i>
                                     Crea poesia
                                 </a>
