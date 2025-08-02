@@ -1,11 +1,9 @@
-@extends('layout.master')
+<?php $__env->startSection('title', $user->getDisplayName() . ' - ' . __('profile.profile') . ' - Slamin'); ?>
 
-@section('title', $user->getDisplayName() . ' - ' . __('profile.profile') . ' - Slamin')
-
-@section('css')
+<?php $__env->startSection('css'); ?>
 <!-- Slick CSS -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick.css')); ?>">
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick-theme.css')); ?>">
 <style>
 /* Stili per i pulsanti delle azioni */
 .btn-sm {
@@ -109,24 +107,25 @@
     margin-bottom: 0;
 }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row m-1">
         <div class="col-12">
-            <h4 class="main-title">{{ $user->getDisplayName() }}</h4>
+            <h4 class="main-title"><?php echo e($user->getDisplayName()); ?></h4>
             <ul class="app-line-breadcrumbs mb-3">
                 <li class="">
                     <a href="/" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                            <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                         </span>
                     </a>
                 </li>
                 <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">{{ __('profile.breadcrumb_profile') }}</a>
+                    <a href="#" class="f-s-14 f-w-500"><?php echo e(__('profile.breadcrumb_profile')); ?></a>
                 </li>
             </ul>
         </div>
@@ -140,61 +139,64 @@
                 <div class="card-body p-0">
                     <div class="profile-container">
                         <div class="image-details">
-                            <div class="profile-image" style="background-image: url('{{ $user->banner_image_url }}')">
-                                @if($isOwnProfile)
+                            <div class="profile-image" style="background-image: url('<?php echo e($user->banner_image_url); ?>')">
+                                <?php if($isOwnProfile): ?>
                                 <div class="banner-edit">
                                     <input type="file" id="bannerUploadMobile" accept=".png, .jpg, .jpeg" onchange="uploadBannerImage(this)">
                                     <label for="bannerUploadMobile" class="btn btn-light btn-sm">
-                                        <i class="ti ti-photo-heart me-1"></i>{{ __('profile.change_banner') }}
+                                        <i class="ti ti-photo-heart me-1"></i><?php echo e(__('profile.change_banner')); ?>
+
                                     </label>
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                             <div class="profile-pic">
                                 <div class="avatar-upload">
-                                    @if($isOwnProfile)
+                                    <?php if($isOwnProfile): ?>
                                     <div class="avatar-edit">
                                         <input type="file" id="imageUploadMobile" accept=".png, .jpg, .jpeg" onchange="uploadProfilePhoto(this)">
                                         <label for="imageUploadMobile"><i class="ti ti-photo-heart"></i></label>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                     <div class="avatar-preview">
                                         <div id="imgPreviewMobile">
-                                            @if($user->profile_photo)
-                                                <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid">
-                                            @else
+                                            <?php if($user->profile_photo): ?>
+                                                <img src="<?php echo e($user->profile_photo_url); ?>" alt="Profile Photo" class="img-fluid">
+                                            <?php else: ?>
                                                 <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50">
-                                                    <span class="text-primary fw-bold f-s-24">{{ substr($user->getDisplayName(), 0, 2) }}</span>
+                                                    <span class="text-primary fw-bold f-s-24"><?php echo e(substr($user->getDisplayName(), 0, 2)); ?></span>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="person-details">
-                            <h5 class="f-w-600">{{ $user->getDisplayName() }}</h5>
-                            @if($user->nickname && $user->nickname !== $user->name)
-                            <p class="text-muted">{{ $user->nickname }}</p>
-                            @endif
+                            <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?></h5>
+                            <?php if($user->nickname && $user->nickname !== $user->name): ?>
+                            <p class="text-muted"><?php echo e($user->nickname); ?></p>
+                            <?php endif; ?>
 
                             <!-- Roles -->
                             <div class="mb-3">
-                                @foreach($user->getRoleNames() as $role)
-                                <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
-                                @endforeach
+                                <?php $__currentLoopData = $user->getRoleNames(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <span class="badge bg-primary me-1 f-s-12"><?php echo e(__('auth.role_' . $role)); ?></span>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
 
-                            @if(!$isOwnProfile)
+                            <?php if(!$isOwnProfile): ?>
                             <div class="my-2">
-                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})">
-                                    <i class="ti ti-user-plus me-2"></i>{{ __('profile.follow') }}
+                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)">
+                                    <i class="ti ti-user-plus me-2"></i><?php echo e(__('profile.follow')); ?>
+
                                 </button>
-                                <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage({{ $user->id }})">
-                                    <i class="ti ti-message-circle me-2"></i>{{ __('profile.send_message') }}
+                                <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage(<?php echo e($user->id); ?>)">
+                                    <i class="ti ti-message-circle me-2"></i><?php echo e(__('profile.send_message')); ?>
+
                                 </button>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -208,37 +210,37 @@
             <!-- About Me Mobile -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5>{{ __('profile.about_me') }}</h5>
+                    <h5><?php echo e(__('profile.about_me')); ?></h5>
                 </div>
                 <div class="card-body">
-                    @if($user->bio)
-                    <p class="text-muted f-s-13">{{ $user->bio }}</p>
-                    @else
-                    <p class="text-muted f-s-13">{{ __('profile.no_bio_available') }}</p>
-                    @endif
+                    <?php if($user->bio): ?>
+                    <p class="text-muted f-s-13"><?php echo e($user->bio); ?></p>
+                    <?php else: ?>
+                    <p class="text-muted f-s-13"><?php echo e(__('profile.no_bio_available')); ?></p>
+                    <?php endif; ?>
 
                     <div class="about-list">
-                        @if($user->nickname)
+                        <?php if($user->nickname): ?>
                         <div>
-                            <span class="fw-medium"><i class="ti ti-at"></i> {{ __('profile.nickname') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->nickname }}</span>
+                            <span class="fw-medium"><i class="ti ti-at"></i> <?php echo e(__('profile.nickname')); ?></span>
+                            <span class="float-end f-s-13 text-secondary"><?php echo e($user->nickname); ?></span>
                         </div>
-                        @endif
-                        @if($user->phone)
+                        <?php endif; ?>
+                        <?php if($user->phone): ?>
                         <div>
-                            <span class="fw-medium"><i class="ti ti-phone"></i> {{ __('profile.phone') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->phone }}</span>
+                            <span class="fw-medium"><i class="ti ti-phone"></i> <?php echo e(__('profile.phone')); ?></span>
+                            <span class="float-end f-s-13 text-secondary"><?php echo e($user->phone); ?></span>
                         </div>
-                        @endif
-                        @if($user->location)
+                        <?php endif; ?>
+                        <?php if($user->location): ?>
                         <div>
-                            <span class="fw-semibold"><i class="ti ti-map-pin"></i> {{ __('profile.location') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->location }}</span>
+                            <span class="fw-semibold"><i class="ti ti-map-pin"></i> <?php echo e(__('profile.location')); ?></span>
+                            <span class="float-end f-s-13 text-secondary"><?php echo e($user->location); ?></span>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         <div>
-                            <span class="fw-medium"><i class="ti ti-calendar"></i> {{ __('profile.member_since') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->created_at->format('M Y') }}</span>
+                            <span class="fw-medium"><i class="ti ti-calendar"></i> <?php echo e(__('profile.member_since')); ?></span>
+                            <span class="float-end f-s-13 text-secondary"><?php echo e($user->created_at->format('M Y')); ?></span>
                         </div>
                     </div>
                 </div>
@@ -247,7 +249,7 @@
             <!-- Statistics Mobile -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5>{{ __('profile.statistics') }}</h5>
+                    <h5><?php echo e(__('profile.statistics')); ?></h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
@@ -257,8 +259,8 @@
                                     <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-calendar-plus f-s-18 text-primary"></i>
                                     </div>
-                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.organized_events') }}</p>
+                                    <h4 class="text-primary mb-1 f-w-600"><?php echo e($stats['total_events']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.organized_events')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -268,8 +270,8 @@
                                     <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-users f-s-18 text-success"></i>
                                     </div>
-                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.participated_events') }}</p>
+                                    <h4 class="text-success mb-1 f-w-600"><?php echo e($stats['participated_events']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.participated_events')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -279,8 +281,8 @@
                                     <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-video-camera f-s-18 text-warning"></i>
                                     </div>
-                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.uploaded_videos') }}</p>
+                                    <h4 class="text-warning mb-1 f-w-600"><?php echo e($stats['total_videos']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.uploaded_videos')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -290,8 +292,8 @@
                                     <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-clock f-s-18 text-info"></i>
                                     </div>
-                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['pending_requests'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.pending_requests') }}</p>
+                                    <h4 class="text-info mb-1 f-w-600"><?php echo e($stats['pending_requests']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.pending_requests')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -303,78 +305,79 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">{{ __('profile.organized_events_title') }}</h5>
+                        <h5 class="mb-0"><?php echo e(__('profile.organized_events_title')); ?></h5>
                         <a href="#" class="btn btn-sm btn-primary hover-effect">
-                            {{ __('profile.view_all_events') }}
+                            <?php echo e(__('profile.view_all_events')); ?>
+
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    @if($recentEvents->count() > 0)
+                    <?php if($recentEvents->count() > 0): ?>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-                                @foreach($recentEvents->take(3) as $event)
+                                <?php $__currentLoopData = $recentEvents->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
                                         <div>
-                                            <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($event->title); ?></h6>
+                                            <small class="text-muted f-s-12"><?php echo e($event->start_datetime->format('d/m/Y H:i')); ?></small>
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span class="badge bg-primary f-s-11">{{ $event->status }}</span>
+                                        <span class="badge bg-primary f-s-11"><?php echo e($event->status); ?></span>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
-                    @else
+                    <?php else: ?>
                     <div class="text-center py-4">
                         <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                             <i class="ti ti-calendar-x f-s-24 text-primary"></i>
                         </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_organized_events') }}</p>
+                        <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_organized_events')); ?></p>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
 
             <!-- Participated Events Mobile -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5>{{ __('profile.participated_events_title') }}</h5>
+                    <h5><?php echo e(__('profile.participated_events_title')); ?></h5>
                 </div>
                 <div class="card-body">
-                    @if($participatedEvents->count() > 0)
+                    <?php if($participatedEvents->count() > 0): ?>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-                                @foreach($participatedEvents->take(3) as $participation)
+                                <?php $__currentLoopData = $participatedEvents->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $participation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
                                         <div>
-                                            <h6 class="mb-0 f-w-600 f-s-14">{{ $participation->event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $participation->event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($participation->event->title); ?></h6>
+                                            <small class="text-muted f-s-12"><?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?></small>
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span class="badge bg-success f-s-11">{{ __('profile.participated') }}</span>
+                                        <span class="badge bg-success f-s-11"><?php echo e(__('profile.participated')); ?></span>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
-                    @else
+                    <?php else: ?>
                     <div class="text-center py-4">
                         <div class="bg-light-success h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                             <i class="ti ti-users-slash f-s-24 text-success"></i>
                         </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_participated_events') }}</p>
+                        <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_participated_events')); ?></p>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -389,112 +392,123 @@
                     <div class="tab-wrapper">
                         <ul class="profile-app-tabs">
                             <li class="tab-link fw-medium f-s-16 f-w-600 active" data-tab="1">
-                                <i class="ti ti-user fw-bold"></i> {{ __('profile.profile') }}
+                                <i class="ti ti-user fw-bold"></i> <?php echo e(__('profile.profile')); ?>
+
                             </li>
                             <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="2">
                                 <i class="ti ti-device-tv fw-bold"></i> I Miei Media
-                                @if($videos->count() > 0 || $user->photos()->approved()->count() > 0)
+                                <?php if($videos->count() > 0 || $user->photos()->approved()->count() > 0): ?>
                                 <span class="badge rounded-pill bg-success badge-notification">
-                                    {{ $videos->count() + $user->photos()->approved()->count() }}
+                                    <?php echo e($videos->count() + $user->photos()->approved()->count()); ?>
+
                                 </span>
-                                @endif
+                                <?php endif; ?>
                             </li>
 
                             <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="3">
-                                <i class="ti ti-calendar fw-bold"></i> {{ __('profile.organized_events_title') }}
-                                @if($recentEvents->count() > 0)
+                                <i class="ti ti-calendar fw-bold"></i> <?php echo e(__('profile.organized_events_title')); ?>
+
+                                <?php if($recentEvents->count() > 0): ?>
                                 <span class="badge rounded-pill bg-primary badge-notification">
-                                    {{ $recentEvents->count() }}
+                                    <?php echo e($recentEvents->count()); ?>
+
                                 </span>
-                                @endif
+                                <?php endif; ?>
                             </li>
                             <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="4">
-                                <i class="ti ti-activity fw-bold"></i> {{ __('profile.my_activities') }}
-                                @if($recentActivity->count() > 0)
+                                <i class="ti ti-activity fw-bold"></i> <?php echo e(__('profile.my_activities')); ?>
+
+                                <?php if($recentActivity->count() > 0): ?>
                                 <span class="badge rounded-pill bg-info badge-notification">
-                                    {{ $recentActivity->count() }}
+                                    <?php echo e($recentActivity->count()); ?>
+
                                 </span>
-                                @endif
+                                <?php endif; ?>
                             </li>
-                            @if($isOwnProfile)
+                            <?php if($isOwnProfile): ?>
                             <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="5">
-                                <i class="ti ti-settings fw-bold"></i> {{ __('profile.settings') }}
+                                <i class="ti ti-settings fw-bold"></i> <?php echo e(__('profile.settings')); ?>
+
                             </li>
-                            @endif
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            @if($isOwnProfile)
+            <?php if($isOwnProfile): ?>
             <div class="card d-lg-block d-none">
                 <div class="card-header">
-                    <h5>{{ __('profile.quick_actions') }}</h5>
+                    <h5><?php echo e(__('profile.quick_actions')); ?></h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex flex-column gap-2">
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary hover-effect">
-                            <i class="ti ti-edit me-2"></i>{{ __('profile.modify_profile') }}
+                        <a href="<?php echo e(route('profile.edit')); ?>" class="btn btn-primary hover-effect">
+                            <i class="ti ti-edit me-2"></i><?php echo e(__('profile.modify_profile')); ?>
+
                         </a>
-                        <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
-                            <i class="ti ti-video-camera me-2"></i>{{ __('profile.manage_videos') }}
+                        <a href="<?php echo e(route('profile.videos')); ?>" class="btn btn-success hover-effect">
+                            <i class="ti ti-video-camera me-2"></i><?php echo e(__('profile.manage_videos')); ?>
+
                         </a>
-                        <a href="{{ route('profile.activity') }}" class="btn btn-info hover-effect">
-                            <i class="ti ti-activity me-2"></i>{{ __('profile.view_all_activity') }}
+                        <a href="<?php echo e(route('profile.activity')); ?>" class="btn btn-info hover-effect">
+                            <i class="ti ti-activity me-2"></i><?php echo e(__('profile.view_all_activity')); ?>
+
                         </a>
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Friends Card (Following) -->
             <div class="card d-lg-block d-none">
                 <div class="card-header">
-                    <h5>{{ __('profile.following') }}</h5>
+                    <h5><?php echo e(__('profile.following')); ?></h5>
                 </div>
                 <div class="card-body profile-friends">
-                    @forelse($following as $followedUser)
-                    <div class="d-flex align-items-center {{ !$loop->last ? 'mb-3' : '' }}">
+                    <?php $__empty_1 = true; $__currentLoopData = $following; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $followedUser): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="d-flex align-items-center <?php echo e(!$loop->last ? 'mb-3' : ''); ?>">
                         <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-light">
-                            @if($followedUser->profile_photo)
-                                <img src="{{ $followedUser->profile_photo_url }}" alt="{{ $followedUser->getDisplayName() }}" class="img-fluid">
-                            @else
+                            <?php if($followedUser->profile_photo): ?>
+                                <img src="<?php echo e($followedUser->profile_photo_url); ?>" alt="<?php echo e($followedUser->getDisplayName()); ?>" class="img-fluid">
+                            <?php else: ?>
                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary">
-                                    <span class="text-white fw-bold f-s-14">{{ substr($followedUser->getDisplayName(), 0, 2) }}</span>
+                                    <span class="text-white fw-bold f-s-14"><?php echo e(substr($followedUser->getDisplayName(), 0, 2)); ?></span>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="flex-grow-1 ps-2">
-                            <div class="fw-medium">{{ $followedUser->getDisplayName() }}</div>
+                            <div class="fw-medium"><?php echo e($followedUser->getDisplayName()); ?></div>
                             <div class="text-muted f-s-12">
-                                {{ $followedUser->videos_count + $followedUser->photos_count + $followedUser->poems_count }} contenuti
+                                <?php echo e($followedUser->videos_count + $followedUser->photos_count + $followedUser->poems_count); ?> contenuti
                             </div>
                         </div>
-                        @auth
-                        <button type="button" class="btn btn-light-secondary icon-btn b-r-22" onclick="followUser({{ $followedUser->id }})" id="followBtn{{ $followedUser->id }}">
-                            <i class="ti {{ $followedUser->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }}"></i>
+                        <?php if(auth()->guard()->check()): ?>
+                        <button type="button" class="btn btn-light-secondary icon-btn b-r-22" onclick="followUser(<?php echo e($followedUser->id); ?>)" id="followBtn<?php echo e($followedUser->id); ?>">
+                            <i class="ti <?php echo e($followedUser->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user'); ?>"></i>
                         </button>
-                        @else
+                        <?php else: ?>
                         <div class="btn btn-light-secondary icon-btn b-r-22" style="opacity: 0.6;">
                             <i class="ti ti-user"></i>
                         </div>
-                        @endauth
+                        <?php endif; ?>
                     </div>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="text-center text-muted py-3">
                         <i class="ti ti-users f-s-24 mb-2"></i>
-                        <p class="mb-0">{{ __('profile.no_following') }}</p>
+                        <p class="mb-0"><?php echo e(__('profile.no_following')); ?></p>
                     </div>
-                    @endforelse
+                    <?php endif; ?>
 
-                    @if($following->count() > 0)
+                    <?php if($following->count() > 0): ?>
                     <div class="text-center mt-3">
-                        <a href="{{ route('profile.following') }}" class="btn btn-outline-primary btn-sm">
-                            {{ __('profile.view_all_following') }}
+                        <a href="<?php echo e(route('profile.following')); ?>" class="btn btn-outline-primary btn-sm">
+                            <?php echo e(__('profile.view_all_following')); ?>
+
                         </a>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -510,63 +524,66 @@
                             <div class="card-body">
                                 <div class="profile-container">
                                     <div class="image-details">
-                                        <div class="profile-image" style="background-image: url('{{ $user->banner_image_url }}')">
-                                            @if($isOwnProfile)
+                                        <div class="profile-image" style="background-image: url('<?php echo e($user->banner_image_url); ?>')">
+                                            <?php if($isOwnProfile): ?>
                                             <div class="banner-edit">
                                                 <input type="file" id="bannerUpload" accept=".png, .jpg, .jpeg" onchange="uploadBannerImage(this)">
                                                 <label for="bannerUpload" class="btn btn-light btn-sm">
-                                                    <i class="ti ti-photo-heart me-1"></i>{{ __('profile.change_banner') }}
+                                                    <i class="ti ti-photo-heart me-1"></i><?php echo e(__('profile.change_banner')); ?>
+
                                                 </label>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="profile-pic">
                                             <div class="avatar-upload">
-                                                @if($isOwnProfile)
+                                                <?php if($isOwnProfile): ?>
                                                 <div class="avatar-edit">
                                                     <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" onchange="uploadProfilePhoto(this)">
                                                     <label for="imageUpload"><i class="ti ti-photo-heart"></i></label>
                                                 </div>
-                                                @endif
+                                                <?php endif; ?>
                                                 <div class="avatar-preview">
                                                     <div id="imgPreview">
-                                                        @if($user->profile_photo)
-                                                            <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid">
-                                                        @else
+                                                        <?php if($user->profile_photo): ?>
+                                                            <img src="<?php echo e($user->profile_photo_url); ?>" alt="Profile Photo" class="img-fluid">
+                                                        <?php else: ?>
                                                             <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50">
-                                                                <span class="text-primary fw-bold f-s-24">{{ substr($user->getDisplayName(), 0, 2) }}</span>
+                                                                <span class="text-primary fw-bold f-s-24"><?php echo e(substr($user->getDisplayName(), 0, 2)); ?></span>
                                                             </div>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="person-details">
-                                        <h5 class="f-w-600">{{ $user->getDisplayName() }}</h5>
-                                        @if($user->nickname && $user->nickname !== $user->name)
-                                        <p class="text-muted">{{ $user->nickname }}</p>
-                                        @endif
+                                        <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?></h5>
+                                        <?php if($user->nickname && $user->nickname !== $user->name): ?>
+                                        <p class="text-muted"><?php echo e($user->nickname); ?></p>
+                                        <?php endif; ?>
 
                                         <!-- Roles -->
                                         <div class="mb-3">
-                                            @foreach($user->getRoleNames() as $role)
-                                            <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
-                                            @endforeach
+                                            <?php $__currentLoopData = $user->getRoleNames(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <span class="badge bg-primary me-1 f-s-12"><?php echo e(__('auth.role_' . $role)); ?></span>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
 
                                         <!-- Statistics removed from desktop profile header - now in sidebar -->
 
-                                        @if(!$isOwnProfile)
+                                        <?php if(!$isOwnProfile): ?>
                                         <div class="my-2">
-                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})">
-                                                <i class="ti ti-user-plus me-2"></i>{{ __('profile.follow') }}
+                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)">
+                                                <i class="ti ti-user-plus me-2"></i><?php echo e(__('profile.follow')); ?>
+
                                             </button>
-                                            <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage({{ $user->id }})">
-                                                <i class="ti ti-message-circle me-2"></i>{{ __('profile.send_message') }}
+                                            <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage(<?php echo e($user->id); ?>)">
+                                                <i class="ti ti-message-circle me-2"></i><?php echo e(__('profile.send_message')); ?>
+
                                             </button>
                                         </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -575,37 +592,37 @@
                         <!-- About Me -->
                         <div class="card">
                             <div class="card-header">
-                                <h5>{{ __('profile.about_me') }}</h5>
+                                <h5><?php echo e(__('profile.about_me')); ?></h5>
                             </div>
                             <div class="card-body">
-                                @if($user->bio)
-                                <p class="text-muted f-s-13">{{ $user->bio }}</p>
-                                @else
-                                <p class="text-muted f-s-13">{{ __('profile.no_bio_available') }}</p>
-                                @endif
+                                <?php if($user->bio): ?>
+                                <p class="text-muted f-s-13"><?php echo e($user->bio); ?></p>
+                                <?php else: ?>
+                                <p class="text-muted f-s-13"><?php echo e(__('profile.no_bio_available')); ?></p>
+                                <?php endif; ?>
 
                                 <div class="about-list">
-                                    @if($user->nickname)
+                                    <?php if($user->nickname): ?>
                                     <div>
-                                        <span class="fw-medium"><i class="ti ti-at"></i> {{ __('profile.nickname') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->nickname }}</span>
+                                        <span class="fw-medium"><i class="ti ti-at"></i> <?php echo e(__('profile.nickname')); ?></span>
+                                        <span class="float-end f-s-13 text-secondary"><?php echo e($user->nickname); ?></span>
                                     </div>
-                                    @endif
-                                    @if($user->phone)
+                                    <?php endif; ?>
+                                    <?php if($user->phone): ?>
                                     <div>
-                                        <span class="fw-medium"><i class="ti ti-phone"></i> {{ __('profile.phone') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->phone }}</span>
+                                        <span class="fw-medium"><i class="ti ti-phone"></i> <?php echo e(__('profile.phone')); ?></span>
+                                        <span class="float-end f-s-13 text-secondary"><?php echo e($user->phone); ?></span>
                                     </div>
-                                    @endif
-                                    @if($user->location)
+                                    <?php endif; ?>
+                                    <?php if($user->location): ?>
                                     <div>
-                                        <span class="fw-semibold"><i class="ti ti-map-pin"></i> {{ __('profile.location') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->location }}</span>
+                                        <span class="fw-semibold"><i class="ti ti-map-pin"></i> <?php echo e(__('profile.location')); ?></span>
+                                        <span class="float-end f-s-13 text-secondary"><?php echo e($user->location); ?></span>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                     <div>
-                                        <span class="fw-medium"><i class="ti ti-calendar"></i> {{ __('profile.member_since') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->created_at->format('M Y') }}</span>
+                                        <span class="fw-medium"><i class="ti ti-calendar"></i> <?php echo e(__('profile.member_since')); ?></span>
+                                        <span class="float-end f-s-13 text-secondary"><?php echo e($user->created_at->format('M Y')); ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -619,25 +636,26 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ __('profile.my_videos') }}</h5>
-                                @if($isOwnProfile)
-                                <a href="{{ route('profile.videos') }}" class="btn btn-sm btn-warning hover-effect">
-                                    {{ __('profile.manage_videos') }}
+                                <h5 class="mb-0"><?php echo e(__('profile.my_videos')); ?></h5>
+                                <?php if($isOwnProfile): ?>
+                                <a href="<?php echo e(route('profile.videos')); ?>" class="btn btn-sm btn-warning hover-effect">
+                                    <?php echo e(__('profile.manage_videos')); ?>
+
                                 </a>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if($videos->count() > 0)
+                            <?php if($videos->count() > 0): ?>
                             <div class="row">
-                                @foreach($videos->take(6) as $video)
+                                <?php $__currentLoopData = $videos->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-md-6 mb-3">
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                                <!-- {{ __('common.thumbnail') }} con overlay play -->
-                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                                    <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                            <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                <!-- <?php echo e(__('common.thumbnail')); ?> con overlay play -->
+                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='<?php echo e(route('videos.show', $video)); ?>'">
+                                                    <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e($video->title); ?>" class="card-img-top" style="height: 200px; object-fit: cover;">
                                                     <!-- Overlay play button -->
                                                     <div class="position-absolute top-50 start-50 translate-middle">
                                                         <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
@@ -648,23 +666,24 @@
                                                     <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
                                                         <small class="text-white f-s-12">
                                                             <i class="ph-duotone ph-clock me-1"></i>
-                                                            @if($video->duration && $video->duration > 0)
-                                                                {{ $video->formatted_duration }}
-                                                            @else
-                                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                                            @endif
+                                                            <?php if($video->duration && $video->duration > 0): ?>
+                                                                <?php echo e($video->formatted_duration); ?>
+
+                                                            <?php else: ?>
+                                                                <span title="<?php echo e(__('videos.duration_unavailable')); ?>">--:--</span>
+                                                            <?php endif; ?>
                                                         </small>
                                                     </div>
                                                     <!-- Views badge -->
                                                     <div class="position-absolute top-0 end-0 m-2">
-                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                        <span class="badge bg-dark f-s-11"><?php echo e($video->view_count ?? $video->views); ?> <?php echo e(__('profile.views')); ?></span>
                                                     </div>
                                                 </div>
-                                            @elseif($video->peertube_uuid)
+                                            <?php elseif($video->peertube_uuid): ?>
                                                 <!-- Anteprima video con overlay play -->
                                                 <div class="card-img-top video-preview bg-gradient-primary d-flex align-items-center justify-content-center position-relative"
                                                      style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;"
-                                                     onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                                                     onclick="window.location.href='<?php echo e(route('videos.show', $video)); ?>'">
                                                     <div class="position-absolute top-50 start-50 translate-middle">
                                                         <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;">
                                                             <i class="ph-duotone ph-play f-s-24 text-primary"></i>
@@ -673,21 +692,22 @@
                                                     <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
                                                         <small class="text-white f-s-12">
                                                             <i class="ph-duotone ph-clock me-1"></i>
-                                                            @if($video->duration && $video->duration > 0)
-                                                                {{ $video->formatted_duration }}
-                                                            @else
-                                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                                            @endif
+                                                            <?php if($video->duration && $video->duration > 0): ?>
+                                                                <?php echo e($video->formatted_duration); ?>
+
+                                                            <?php else: ?>
+                                                                <span title="<?php echo e(__('videos.duration_unavailable')); ?>">--:--</span>
+                                                            <?php endif; ?>
                                                         </small>
                                                     </div>
                                                     <!-- Views badge -->
                                                     <div class="position-absolute top-0 end-0 m-2">
-                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                        <span class="badge bg-dark f-s-11"><?php echo e($video->view_count ?? $video->views); ?> <?php echo e(__('profile.views')); ?></span>
                                                     </div>
                                                 </div>
-                                            @else
+                                            <?php else: ?>
                                                 <!-- Fallback per video senza thumbnail -->
-                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
+                                                <div class="position-relative" style="cursor: pointer;" onclick="window.location.href='<?php echo e(route('videos.show', $video)); ?>'">
                                                     <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                                                         <div class="text-center">
                                                             <i class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
@@ -698,30 +718,30 @@
                                                     </div>
                                                     <!-- Views badge -->
                                                     <div class="position-absolute top-0 end-0 m-2">
-                                                        <span class="badge bg-dark f-s-11">{{ $video->view_count ?? $video->views }} {{ __('profile.views') }}</span>
+                                                        <span class="badge bg-dark f-s-11"><?php echo e($video->view_count ?? $video->views); ?> <?php echo e(__('profile.views')); ?></span>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="card-body pa-15">
-                                            <h6 class="card-title f-w-600 f-s-14 mb-1">{{ $video->title }}</h6>
-                                            @if($video->description)
-                                            <p class="text-muted f-s-12 mb-2">{{ Str::limit($video->description, 60) }}</p>
-                                            @endif
-                                            <small class="text-muted f-s-11">{{ $video->created_at->diffForHumans() }}</small>
+                                            <h6 class="card-title f-w-600 f-s-14 mb-1"><?php echo e($video->title); ?></h6>
+                                            <?php if($video->description): ?>
+                                            <p class="text-muted f-s-12 mb-2"><?php echo e(Str::limit($video->description, 60)); ?></p>
+                                            <?php endif; ?>
+                                            <small class="text-muted f-s-11"><?php echo e($video->created_at->diffForHumans()); ?></small>
                                         </div>
                                     </div>
                                 </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                            @else
+                            <?php else: ?>
                             <div class="text-center py-4">
                                 <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ti ti-video-camera-slash f-s-24 text-warning"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_videos_uploaded') }}</p>
+                                <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_videos_uploaded')); ?></p>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -730,49 +750,49 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Le Mie Foto</h5>
-                                @if($isOwnProfile)
+                                <?php if($isOwnProfile): ?>
                                 <button type="button" class="btn btn-sm btn-primary hover-effect" onclick="openPhotoUploadModal()">
                                     <i class="ph ph-plus me-1"></i>Carica Foto
                                 </button>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if($user->photos()->approved()->count() > 0)
+                            <?php if($user->photos()->approved()->count() > 0): ?>
                                 <div class="profile-photos-slider app-arrow" id="profile-photos-slider">
-                                    @foreach($user->photos()->approved()->orderBy('created_at', 'desc')->take(10)->get() as $photo)
+                                    <?php $__currentLoopData = $user->photos()->approved()->orderBy('created_at', 'desc')->take(10)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $photo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="photo-slide">
                                         <div class="photo-card hover-effect">
-                                            <img src="{{ $photo->image_url }}" class="img-fluid rounded" alt="{{ $photo->alt_text ?: $photo->title ?: 'Foto di ' . $user->getDisplayName() }}" style="width: 100%; height: 400px; object-fit: cover;">
-                                            @if($photo->title || $photo->description)
+                                            <img src="<?php echo e($photo->image_url); ?>" class="img-fluid rounded" alt="<?php echo e($photo->alt_text ?: $photo->title ?: 'Foto di ' . $user->getDisplayName()); ?>" style="width: 100%; height: 400px; object-fit: cover;">
+                                            <?php if($photo->title || $photo->description): ?>
                                             <div class="photo-overlay">
                                                 <div class="photo-info">
-                                                    @if($photo->title)
-                                                    <h6 class="photo-title">{{ $photo->title }}</h6>
-                                                    @endif
-                                                    @if($photo->description)
-                                                    <p class="photo-description">{{ Str::limit($photo->description, 100) }}</p>
-                                                    @endif
+                                                    <?php if($photo->title): ?>
+                                                    <h6 class="photo-title"><?php echo e($photo->title); ?></h6>
+                                                    <?php endif; ?>
+                                                    <?php if($photo->description): ?>
+                                                    <p class="photo-description"><?php echo e(Str::limit($photo->description, 100)); ?></p>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
-                            @else
+                            <?php else: ?>
                                 <div class="text-center py-4">
                                     <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-photo-slash f-s-24 text-info"></i>
                                     </div>
                                     <p class="text-muted f-s-14 mb-0">Nessuna foto caricata</p>
-                                    @if($isOwnProfile)
+                                    <?php if($isOwnProfile): ?>
                                     <button type="button" class="btn btn-sm btn-primary mt-2" onclick="openPhotoUploadModal()">
                                         <i class="ph ph-plus me-1"></i>Carica la Prima Foto
                                     </button>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -782,41 +802,42 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ __('profile.organized_events_title') }}</h5>
+                                <h5 class="mb-0"><?php echo e(__('profile.organized_events_title')); ?></h5>
                                 <a href="#" class="btn btn-sm btn-primary hover-effect">
-                                    {{ __('profile.view_all_events') }}
+                                    <?php echo e(__('profile.view_all_events')); ?>
+
                                 </a>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if($recentEvents->count() > 0)
+                            <?php if($recentEvents->count() > 0): ?>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <tbody>
-                                        @foreach($recentEvents as $event)
+                                        <?php $__currentLoopData = $recentEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
                                                 <div>
-                                                    <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
-                                                    <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
+                                                    <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($event->title); ?></h6>
+                                                    <small class="text-muted f-s-12"><?php echo e($event->start_datetime->format('d/m/Y H:i')); ?></small>
                                                 </div>
                                             </td>
                                             <td class="text-end">
-                                                <span class="badge bg-primary f-s-11">{{ $event->status }}</span>
+                                                <span class="badge bg-primary f-s-11"><?php echo e($event->status); ?></span>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>
                                 </table>
                             </div>
-                            @else
+                            <?php else: ?>
                             <div class="text-center py-4">
                                 <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ti ti-calendar-x f-s-24 text-primary"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_organized_events') }}</p>
+                                <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_organized_events')); ?></p>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -826,37 +847,38 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ __('profile.recent_activity') }}</h5>
-                                @if($isOwnProfile)
-                                <a href="{{ route('profile.activity') }}" class="btn btn-sm btn-info hover-effect">
-                                    {{ __('profile.view_all_activity') }}
+                                <h5 class="mb-0"><?php echo e(__('profile.recent_activity')); ?></h5>
+                                <?php if($isOwnProfile): ?>
+                                <a href="<?php echo e(route('profile.activity')); ?>" class="btn btn-sm btn-info hover-effect">
+                                    <?php echo e(__('profile.view_all_activity')); ?>
+
                                 </a>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if($recentActivity->count() > 0)
-                            @foreach($recentActivity->take(5) as $activity)
+                            <?php if($recentActivity->count() > 0): ?>
+                            <?php $__currentLoopData = $recentActivity->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                                 <div class="flex-shrink-0">
-                                    <div class="bg-light-{{ $activity['color'] }} h-35 w-35 d-flex-center rounded-circle">
-                                        <i class="ti {{ $activity['icon'] }} text-{{ $activity['color'] }} f-s-14"></i>
+                                    <div class="bg-light-<?php echo e($activity['color']); ?> h-35 w-35 d-flex-center rounded-circle">
+                                        <i class="ti <?php echo e($activity['icon']); ?> text-<?php echo e($activity['color']); ?> f-s-14"></i>
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <p class="mb-0 fw-500 f-s-14">{{ $activity['title'] }}</p>
-                                    <small class="text-muted f-s-12">{{ $activity['date']->diffForHumans() }}</small>
+                                    <p class="mb-0 fw-500 f-s-14"><?php echo e($activity['title']); ?></p>
+                                    <small class="text-muted f-s-12"><?php echo e($activity['date']->diffForHumans()); ?></small>
                                 </div>
                             </div>
-                            @endforeach
-                            @else
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php else: ?>
                             <div class="text-center py-4">
                                 <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ti ti-activity-slash f-s-24 text-info"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">{{ __('profile.no_recent_activity') }}</p>
+                                <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_recent_activity')); ?></p>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -864,11 +886,11 @@
 
 
                 <!-- Tab 5: Settings (only for own profile) -->
-                @if($isOwnProfile)
+                <?php if($isOwnProfile): ?>
                 <div id="tab-5" class="tabs-content">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">{{ __('profile.settings') }}</h5>
+                            <h5 class="mb-0"><?php echo e(__('profile.settings')); ?></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -878,10 +900,11 @@
                                             <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
                                                 <i class="ti ti-edit f-s-24 text-primary"></i>
                                             </div>
-                                            <h6 class="mb-2">{{ __('profile.modify_profile') }}</h6>
-                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.modify_profile_desc') }}</p>
-                                            <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">
-                                                <i class="ti ti-edit me-1"></i>{{ __('profile.edit_profile') }}
+                                            <h6 class="mb-2"><?php echo e(__('profile.modify_profile')); ?></h6>
+                                            <p class="text-muted f-s-12 mb-3"><?php echo e(__('profile.modify_profile_desc')); ?></p>
+                                            <a href="<?php echo e(route('profile.edit')); ?>" class="btn btn-primary btn-sm">
+                                                <i class="ti ti-edit me-1"></i><?php echo e(__('profile.edit_profile')); ?>
+
                                             </a>
                                         </div>
                                     </div>
@@ -892,10 +915,11 @@
                                             <div class="bg-light-success h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
                                                 <i class="ti ti-video-camera f-s-24 text-success"></i>
                                             </div>
-                                            <h6 class="mb-2">{{ __('profile.manage_videos') }}</h6>
-                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.manage_videos_desc') }}</p>
-                                            <a href="{{ route('profile.videos') }}" class="btn btn-success btn-sm">
-                                                <i class="ti ti-video-camera me-1"></i>{{ __('profile.manage_videos') }}
+                                            <h6 class="mb-2"><?php echo e(__('profile.manage_videos')); ?></h6>
+                                            <p class="text-muted f-s-12 mb-3"><?php echo e(__('profile.manage_videos_desc')); ?></p>
+                                            <a href="<?php echo e(route('profile.videos')); ?>" class="btn btn-success btn-sm">
+                                                <i class="ti ti-video-camera me-1"></i><?php echo e(__('profile.manage_videos')); ?>
+
                                             </a>
                                         </div>
                                     </div>
@@ -906,10 +930,11 @@
                                             <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
                                                 <i class="ti ti-activity f-s-24 text-info"></i>
                                             </div>
-                                            <h6 class="mb-2">{{ __('profile.view_all_activity') }}</h6>
-                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.view_all_activity_desc') }}</p>
-                                            <a href="{{ route('profile.activity') }}" class="btn btn-info btn-sm">
-                                                <i class="ti ti-activity me-1"></i>{{ __('profile.view_all_activity') }}
+                                            <h6 class="mb-2"><?php echo e(__('profile.view_all_activity')); ?></h6>
+                                            <p class="text-muted f-s-12 mb-3"><?php echo e(__('profile.view_all_activity_desc')); ?></p>
+                                            <a href="<?php echo e(route('profile.activity')); ?>" class="btn btn-info btn-sm">
+                                                <i class="ti ti-activity me-1"></i><?php echo e(__('profile.view_all_activity')); ?>
+
                                             </a>
                                         </div>
                                     </div>
@@ -932,7 +957,7 @@
                         </div>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
@@ -940,7 +965,7 @@
             <!-- Statistics Cards -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5>{{ __('profile.statistics') }}</h5>
+                    <h5><?php echo e(__('profile.statistics')); ?></h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
@@ -950,8 +975,8 @@
                                     <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-calendar-plus f-s-18 text-primary"></i>
                                     </div>
-                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.organized_events') }}</p>
+                                    <h4 class="text-primary mb-1 f-w-600"><?php echo e($stats['total_events']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.organized_events')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -961,8 +986,8 @@
                                     <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-users f-s-18 text-success"></i>
                                     </div>
-                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.participated_events') }}</p>
+                                    <h4 class="text-success mb-1 f-w-600"><?php echo e($stats['participated_events']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.participated_events')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -972,8 +997,8 @@
                                     <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-video-camera f-s-18 text-warning"></i>
                                     </div>
-                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.uploaded_videos') }}</p>
+                                    <h4 class="text-warning mb-1 f-w-600"><?php echo e($stats['total_videos']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.uploaded_videos')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -983,8 +1008,8 @@
                                     <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
                                         <i class="ti ti-clock f-s-18 text-info"></i>
                                     </div>
-                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['pending_requests'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.pending_requests') }}</p>
+                                    <h4 class="text-info mb-1 f-w-600"><?php echo e($stats['pending_requests']); ?></h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0"><?php echo e(__('profile.pending_requests')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -995,37 +1020,37 @@
             <!-- Participated Events -->
             <div class="card">
                 <div class="card-header">
-                    <h5>{{ __('profile.participated_events_title') }}</h5>
+                    <h5><?php echo e(__('profile.participated_events_title')); ?></h5>
                 </div>
                 <div class="card-body">
-                    @if($participatedEvents->count() > 0)
+                    <?php if($participatedEvents->count() > 0): ?>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-                                @foreach($participatedEvents as $participation)
+                                <?php $__currentLoopData = $participatedEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $participation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
                                         <div>
-                                            <h6 class="mb-0 f-w-600 f-s-14">{{ $participation->event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $participation->event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($participation->event->title); ?></h6>
+                                            <small class="text-muted f-s-12"><?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?></small>
                                         </div>
                                     </td>
                                     <td class="text-end">
-                                        <span class="badge bg-success f-s-11">{{ __('profile.participated') }}</span>
+                                        <span class="badge bg-success f-s-11"><?php echo e(__('profile.participated')); ?></span>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
-                    @else
+                    <?php else: ?>
                     <div class="text-center py-4">
                         <div class="bg-light-success h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                             <i class="ti ti-users-slash f-s-24 text-success"></i>
                         </div>
-                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_participated_events') }}</p>
+                        <p class="text-muted f-s-14 mb-0"><?php echo e(__('profile.no_participated_events')); ?></p>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -1033,16 +1058,16 @@
 </div>
 
 <!-- Hidden file input for profile photo -->
-@if($isOwnProfile)
+<?php if($isOwnProfile): ?>
 <input type="file" id="profile-photo-input" style="display: none;" accept="image/*" onchange="uploadProfilePhoto(this)">
-@endif
+<?php endif; ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <!-- Slick JS -->
-<script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
-<script src="{{ asset('assets/js/slick.js') }}"></script>
+<script src="<?php echo e(asset('assets/vendor/slick/slick.min.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/js/slick.js')); ?>"></script>
 
 <script>
 // Tab functionality
@@ -1067,10 +1092,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function followUser(userId) {
     // Verifica se l'utente è autenticato
-    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    const isAuthenticated = <?php echo e(auth()->check() ? 'true' : 'false'); ?>;
 
     if (!isAuthenticated) {
-        window.location.href = '{{ route("login") }}';
+        window.location.href = '<?php echo e(route("login")); ?>';
         return;
     }
 
@@ -1128,17 +1153,17 @@ function followUser(userId) {
 
 function sendMessage(userId) {
     // Implementazione messaggi
-    Swal.fire('Info', '{{ __('profile.messages_development') }}', 'info');
+    Swal.fire('Info', '<?php echo e(__('profile.messages_development')); ?>', 'info');
 }
 
 function uploadProfilePhoto(input) {
     if (input.files && input.files[0]) {
         const formData = new FormData();
         formData.append('profile_photo', input.files[0]);
-        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('_token', '<?php echo e(csrf_token()); ?>');
         formData.append('_method', 'PUT');
 
-        fetch('{{ route("profile.update") }}', {
+        fetch('<?php echo e(route("profile.update")); ?>', {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -1169,10 +1194,10 @@ function uploadBannerImage(input) {
     if (input.files && input.files[0]) {
         const formData = new FormData();
         formData.append('banner_image', input.files[0]);
-        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('_token', '<?php echo e(csrf_token()); ?>');
         formData.append('_method', 'PUT');
 
-        fetch('{{ route("profile.update") }}', {
+        fetch('<?php echo e(route("profile.update")); ?>', {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -1229,11 +1254,11 @@ function uploadPhoto() {
     successDiv.style.display = 'none';
     errorDiv.style.display = 'none';
 
-    fetch('{{ route("photos.store") }}', {
+    fetch('<?php echo e(route("photos.store")); ?>', {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
         },
         body: formData
     })
@@ -1308,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
 <!-- Photo Upload Modal -->
 <div class="modal fade" id="photoUploadModal" tabindex="-1" aria-labelledby="photoUploadModalLabel" aria-hidden="true">
@@ -1375,3 +1400,5 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/profile/show.blade.php ENDPATH**/ ?>

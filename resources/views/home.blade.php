@@ -484,10 +484,19 @@ window.addEventListener('load', function() {
                                     </div>
                                 </div>
                                 <div class="my-2">
-                                    <button type="button" class="btn btn-primary b-r-22" onclick="event.stopPropagation(); followUser({{ $user->id }})">
-                                        <i class="ti ti-user"></i>
-                                        Follow
+                                    @auth
+                                    <button type="button" class="btn {{ $user->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-primary' }} b-r-22" onclick="event.stopPropagation(); followUser({{ $user->id }})" id="followBtn{{ $user->id }}">
+                                        <i class="ti {{ $user->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }}"></i>
+                                        <span id="followText{{ $user->id }}">{{ $user->is_followed_by_current_user ?? false ? 'Following' : 'Follow' }}</span>
                                     </button>
+                                    @else
+                                    <div class="text-center">
+                                        <div class="social-counter" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
+                                            <i class="ti ti-user f-s-24 text-muted" style="opacity: 0.6;"></i>
+                                            <span class="text-secondary f-s-12">Follow</span>
+                                        </div>
+                                    </div>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -1028,27 +1037,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Funzione per seguire un utente
     window.followUser = function(userId) {
-        // Per ora mostra un alert, in futuro implementare la logica di follow
-        alert('Funzionalità Follow in sviluppo per l\'utente ID: ' + userId);
+        // Verifica se l'utente è autenticato
+        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
-        // TODO: Implementare chiamata AJAX per follow/unfollow
-        // fetch('/api/follow/' + userId, {
-        //     method: 'POST',
-        //     headers: {
-        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        //         'Content-Type': 'application/json',
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (data.success) {
-        //         // Aggiorna il bottone
-        //         const button = event.target;
-        //         button.innerHTML = data.following ? '<i class="ti ti-user-check"></i> Following' : '<i class="ti ti-user"></i> Follow';
-        //         button.classList.toggle('btn-success', data.following);
-        //         button.classList.toggle('btn-primary', !data.following);
-        //     }
-        // });
+        if (!isAuthenticated) {
+            window.location.href = '{{ route("login") }}';
+            return;
+        }
+
+        const button = document.getElementById('followBtn' + userId);
+        const text = document.getElementById('followText' + userId);
+
+        // Disabilita il pulsante durante la richiesta
+        button.disabled = true;
+
+        fetch('/api/follow/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                user_id: userId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Aggiorna il pulsante
+                if (data.following) {
+                    button.innerHTML = '<i class="ti ti-user-check"></i><span id="followText' + userId + '">Following</span>';
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-success');
+                } else {
+                    button.innerHTML = '<i class="ti ti-user"></i><span id="followText' + userId + '">Follow</span>';
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-primary');
+                }
+
+                // Aggiorna i contatori se presenti
+                const followersElement = document.querySelector(`[data-user-id="${userId}"] .followers-count`);
+                if (followersElement && data.followers_count !== undefined) {
+                    followersElement.textContent = data.followers_count;
+                }
+            } else {
+                console.error('Errore follow:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Errore connessione follow:', error);
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
     };
 
     // Stili personalizzati per gli switch

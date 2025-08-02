@@ -41,9 +41,18 @@ class HomeController extends Controller
         $newUsers = User::withCount(['videos' => function($query) {
                 $query->where('moderation_status', 'approved');
             }])
+            ->withCount('followers')
+            ->withCount('following')
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
+
+        // Aggiungi lo stato follow per l'utente autenticato
+        if (auth()->check()) {
+            $newUsers->each(function($user) {
+                $user->is_followed_by_current_user = auth()->user()->isFollowing($user);
+            });
+        }
 
         // Poesie recenti per sezione Poesia
         $recentPoems = Poem::where('moderation_status', 'approved')

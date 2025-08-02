@@ -126,7 +126,7 @@ class User extends Authenticatable
     {
         return $this->nickname ?: $this->name;
     }
-    
+
     public function getName(): string
     {
         return $this->name;
@@ -338,7 +338,7 @@ class User extends Authenticatable
         if ($this->hasRole('judge')) return 'judge';
         if ($this->hasRole('venue_owner')) return 'venue_owner';
         if ($this->hasRole('technician')) return 'technician';
-        
+
         return 'audience';
     }
 
@@ -865,5 +865,105 @@ class User extends Authenticatable
                     ->where('viewable_type', \App\Models\Event::class)
                     ->withTimestamps()
             );
+    }
+
+    /**
+     * Relazioni per il sistema follow
+     */
+
+    /**
+     * Utenti che questo utente segue (following)
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Utenti che seguono questo utente (followers)
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Controlla se questo utente segue un altro utente
+     */
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()->where('following_id', $user->id)->exists();
+    }
+
+    /**
+     * Controlla se questo utente è seguito da un altro utente
+     */
+    public function isFollowedBy(User $user): bool
+    {
+        return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+
+    /**
+     * Segue un utente
+     */
+    public function follow(User $user): bool
+    {
+        if ($this->id === $user->id) {
+            return false; // Non può seguire se stesso
+        }
+
+        if (!$this->isFollowing($user)) {
+            $this->following()->attach($user->id);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Smette di seguire un utente
+     */
+    public function unfollow(User $user): bool
+    {
+        if ($this->id === $user->id) {
+            return false; // Non può unfolloware se stesso
+        }
+
+        if ($this->isFollowing($user)) {
+            $this->following()->detach($user->id);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Toggle follow/unfollow
+     */
+    public function toggleFollow(User $user): bool
+    {
+        if ($this->isFollowing($user)) {
+            return $this->unfollow($user);
+        } else {
+            return $this->follow($user);
+        }
+    }
+
+    /**
+     * Accessor per il conteggio dei followers
+     */
+    public function getFollowersCountAttribute(): int
+    {
+        return $this->followers()->count();
+    }
+
+    /**
+     * Accessor per il conteggio dei following
+     */
+    public function getFollowingCountAttribute(): int
+    {
+        return $this->following()->count();
     }
 }

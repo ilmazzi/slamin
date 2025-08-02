@@ -56,6 +56,19 @@ class ProfileController extends Controller
         // Attività recenti
         $recentActivity = $this->getUserActivity($user);
 
+        // Following dell'utente per la card Friends
+        $following = $user->following()
+            ->withCount(['videos', 'photos', 'poems'])
+            ->limit(6)
+            ->get();
+
+        // Aggiungi lo stato follow per l'utente autenticato
+        if (auth()->check()) {
+            $following->each(function($followedUser) {
+                $followedUser->is_followed_by_current_user = auth()->user()->isFollowing($followedUser);
+            });
+        }
+
         return view('profile.show', compact(
             'user',
             'isOwnProfile',
@@ -63,7 +76,8 @@ class ProfileController extends Controller
             'recentEvents',
             'participatedEvents',
             'videos',
-            'recentActivity'
+            'recentActivity',
+            'following'
         ));
     }
 
@@ -464,7 +478,7 @@ class ProfileController extends Controller
                 try {
                     $peerTubeService = new \App\Services\PeerTubeService();
                     $peerTubeDeleted = $peerTubeService->deleteVideoByUuid($video->peertube_uuid);
-                    
+
                     \Log::info('Tentativo eliminazione PeerTube', [
                         'video_id' => $videoId,
                         'peertube_uuid' => $video->peertube_uuid,
@@ -521,7 +535,7 @@ class ProfileController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Errore durante l\'eliminazione del video. Riprova più tardi.'
@@ -538,6 +552,54 @@ class ProfileController extends Controller
         $activities = $this->getUserActivity($user, 20);
 
         return view('profile.activity', compact('user', 'activities'));
+    }
+
+    /**
+     * Mostra i followers di un utente
+     */
+    public function followers($userId = null)
+    {
+        $user = $userId ? User::findOrFail($userId) : Auth::user();
+        $isOwnProfile = Auth::check() && Auth::id() == $user->id;
+
+        $followers = $user->followers()
+            ->withCount(['videos', 'photos', 'poems'])
+            ->withCount('followers')
+            ->withCount('following')
+            ->paginate(20);
+
+        // Aggiungi lo stato follow per l'utente autenticato
+        if (auth()->check()) {
+            $followers->each(function($follower) {
+                $follower->is_followed_by_current_user = auth()->user()->isFollowing($follower);
+            });
+        }
+
+        return view('profile.followers', compact('user', 'followers', 'isOwnProfile'));
+    }
+
+    /**
+     * Mostra gli utenti che un utente segue
+     */
+    public function following($userId = null)
+    {
+        $user = $userId ? User::findOrFail($userId) : Auth::user();
+        $isOwnProfile = Auth::check() && Auth::id() == $user->id;
+
+        $following = $user->following()
+            ->withCount(['videos', 'photos', 'poems'])
+            ->withCount('followers')
+            ->withCount('following')
+            ->paginate(20);
+
+        // Aggiungi lo stato follow per l'utente autenticato
+        if (auth()->check()) {
+            $following->each(function($followedUser) {
+                $followedUser->is_followed_by_current_user = auth()->user()->isFollowing($followedUser);
+            });
+        }
+
+        return view('profile.following', compact('user', 'following', 'isOwnProfile'));
     }
 
     /**

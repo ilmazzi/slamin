@@ -78,5 +78,11 @@ return [
     'view_my_activities' => 'Vedi le mie attività',
     'follow_development' => 'Funzionalità follow in sviluppo',
     'messages_development' => 'Funzionalità messaggi in sviluppo',
+    'following' => 'Following',
+    'followers' => 'Followers',
+    'no_following' => 'Non stai seguendo nessuno',
+    'no_followers' => 'Nessun follower',
+    'view_all_following' => 'Vedi tutti i following',
+    'view_all_followers' => 'Vedi tutti i followers',
 
 ];

@@ -701,7 +701,14 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/videos', [App\Http\Controllers\ProfileController::class, 'videos'])->name('videos');
         Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
+        Route::get('/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('followers');
+        Route::get('/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('following');
     });
+
+    // Public Profile Routes (accessibili a tutti)
+    Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
+    Route::get('/user/{user}/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('user.followers');
+    Route::get('/user/{user}/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('user.following');
 
     // Video Routes
     Route::prefix('videos')->name('videos.')->middleware('auth')->group(function () {
@@ -1020,6 +1027,14 @@ Route::prefix('api/social')->group(function () {
 
     // Route per incremento visualizzazioni (pubblica)
     Route::post('/views/increment', [App\Http\Controllers\ViewController::class, 'increment'])->name('api.social.views.increment');
+});
+
+// API routes per sistema follow
+Route::prefix('api/follow')->middleware('auth')->group(function () {
+    Route::post('/toggle', [App\Http\Controllers\FollowController::class, 'toggle'])->name('api.follow.toggle');
+    Route::get('/check', [App\Http\Controllers\FollowController::class, 'check'])->name('api.follow.check');
+    Route::get('/{user}/followers', [App\Http\Controllers\FollowController::class, 'followers'])->name('api.follow.followers');
+    Route::get('/{user}/following', [App\Http\Controllers\FollowController::class, 'following'])->name('api.follow.following');
 });
 
 
