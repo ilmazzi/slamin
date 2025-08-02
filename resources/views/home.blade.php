@@ -247,7 +247,7 @@ window.addEventListener('load', function() {
                                     <!-- {{ __('common.video') }} {{ __('common.thumbnail') }} Column -->
                                     <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                         <div class="position-relative">
-                                            <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9;">
+                                            <div class="position-relative overflow-hidden rounded-3" style="aspect-ratio: 16/9; cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
                                                 @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
                                                     <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="w-100 h-100" style="object-fit: cover;">
                                                 @else
@@ -258,7 +258,7 @@ window.addEventListener('load', function() {
                                                         </div>
                                                     </div>
                                                 @endif
-                                                <div class="position-absolute top-50 start-50 translate-middle">
+                                                <div class="position-absolute top-50 start-50 translate-middle" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
                                                     <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center" style="width: 70px; height: 70px;">
                                                         <i class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
                                                     </div>
@@ -1001,5 +1001,548 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ===== FUNZIONI PER IL MODAL VIDEO =====
+
+// Variabili globali per il modal
+let modalVideoPlayer = null;
+let modalCurrentVideoTime = 0;
+let modalVideoDuration = 0;
+let modalSnaps = [];
+
+// Funzione per aprire il modal video
+function openVideoModal(videoId) {
+    console.log('🎬 Apertura modal video per ID:', videoId);
+
+    // Mostra il modal personalizzato
+    const modal = document.getElementById('videoPlayerModal');
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Previene lo scroll
+
+    // Carica il video
+    loadVideoInModal(videoId);
+}
+
+// Funzione per chiudere il modal video
+function closeVideoModal() {
+    const modal = document.getElementById('videoPlayerModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Ripristina lo scroll
+
+    // Ferma il video se in riproduzione
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+    if (videoPlayer && !videoPlayer.paused) {
+        videoPlayer.pause();
+    }
+
+    // Reset variabili
+    modalCurrentVideoTime = 0;
+    modalVideoDuration = 0;
+    modalSnaps = [];
+}
+
+// Funzione per caricare il video nel modal
+async function loadVideoInModal(videoId) {
+    const loadingDiv = document.getElementById('modalVideoLoading');
+    const errorDiv = document.getElementById('modalVideoError');
+    const containerDiv = document.getElementById('modalVideoContainer');
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+
+    // Mostra loading
+    loadingDiv.style.display = 'block';
+    errorDiv.style.display = 'none';
+    containerDiv.style.display = 'none';
+
+    try {
+        console.log('🎬 Caricamento video nel modal per ID:', videoId);
+
+        // Prima ottieni i dati del video
+        const videoResponse = await fetch(`/api/videos/${videoId}`);
+        const videoData = await videoResponse.json();
+
+        if (!videoData.success) {
+            throw new Error(videoData.message || 'Errore nel caricamento del video');
+        }
+
+        const video = videoData.video;
+
+        // Imposta il titolo del modal
+        document.getElementById('videoPlayerModalLabel').textContent = video.title;
+
+        // Usa sempre il player HTML5 nativo
+        videoPlayer.style.display = 'block';
+
+        console.log('🔗 Richiesta URL diretto per video ID:', videoId);
+
+        // Ottieni l'URL diretto del video da PeerTube
+        const urlResponse = await fetch(`/videos/${videoId}/peertube-url`);
+        const urlData = await urlResponse.json();
+
+        // Gestisci il caso in cui il video è ancora in elaborazione
+        if (urlData.status === 'processing') {
+            throw new Error('Il video è ancora in elaborazione su PeerTube. Riprova tra qualche minuto.');
+        }
+
+        if (urlData.success && urlData.files && urlData.files.length > 0) {
+            // Usa il primo file disponibile (migliore qualità)
+            const videoFile = urlData.files[0];
+            console.log('✅ URL video ottenuto:', videoFile.url);
+
+            // Crea l'elemento source
+            const source = document.createElement('source');
+            source.src = videoFile.url;
+            source.type = 'video/mp4';
+
+            // Rimuovi eventuali source esistenti e aggiungi quello nuovo
+            videoPlayer.innerHTML = '';
+            videoPlayer.appendChild(source);
+
+            // Forza il caricamento del video
+            videoPlayer.load();
+        } else {
+            throw new Error('Nessuna sorgente video disponibile');
+        }
+
+        // Imposta l'ID del video per le funzioni snap
+        videoPlayer.setAttribute('data-video-id', video.id);
+
+        // Carica gli snap
+        loadSnapsForModal(videoId);
+
+        // Nascondi loading e mostra video
+        loadingDiv.style.display = 'none';
+        containerDiv.style.display = 'block';
+
+        // Inizializza il player
+        initializeModalVideoPlayer(video);
+
+    } catch (error) {
+        console.error('❌ Errore caricamento video nel modal:', error);
+        loadingDiv.style.display = 'none';
+        errorDiv.style.display = 'block';
+        document.getElementById('modalErrorMessage').textContent = error.message;
+    }
+}
+
+// Funzione per caricare gli snap nel modal
+function loadSnapsForModal(videoId) {
+    console.log('🎯 Caricamento snap per video ID:', videoId);
+
+    fetch(`/api/videos/${videoId}/snaps`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                modalSnaps = data.snaps || [];
+                console.log('✅ Snap caricati nel modal:', modalSnaps.length);
+                updateModalSnapMarkers();
+            } else {
+                console.log('⚠️ Nessun snap trovato per il video');
+                modalSnaps = [];
+                updateModalSnapMarkers();
+            }
+        })
+        .catch(error => {
+            console.error('❌ Errore caricamento snap:', error);
+            modalSnaps = [];
+            updateModalSnapMarkers();
+        });
+}
+
+// Funzione per inizializzare il player del modal
+function initializeModalVideoPlayer(video) {
+    const videoPlayer = document.getElementById('modalVideoPlayer');
+    modalVideoDuration = video.duration || 60;
+    modalVideoPlayer = videoPlayer;
+
+    // Event listeners per il player HTML5
+    videoPlayer.addEventListener('loadedmetadata', function() {
+        console.log('🎬 Video caricato nel modal - Durata:', videoPlayer.duration);
+        modalVideoDuration = videoPlayer.duration || modalVideoDuration;
+        updateModalSnapMarkers();
+    });
+
+    videoPlayer.addEventListener('timeupdate', function() {
+        modalCurrentVideoTime = videoPlayer.currentTime;
+    });
+
+    videoPlayer.addEventListener('durationchange', function() {
+        console.log('🔄 Durata video cambiata nel modal:', videoPlayer.duration);
+        modalVideoDuration = videoPlayer.duration;
+        updateModalSnapMarkers();
+    });
+
+    videoPlayer.addEventListener('canplay', function() {
+        console.log('▶️ Video nel modal pronto per la riproduzione');
+    });
+
+    videoPlayer.addEventListener('error', function() {
+        console.error('❌ Errore nel video del modal:', videoPlayer.error);
+        const errorDiv = document.getElementById('modalVideoError');
+        if (errorDiv) {
+            errorDiv.style.display = 'block';
+            document.getElementById('modalErrorMessage').textContent = 'Errore nella riproduzione del video. Riprova più tardi.';
+        }
+    });
+
+    // Pulsante snap sempre visibile
+    const snapButton = document.getElementById('modalFloatingSnapButton');
+    if (snapButton) {
+        snapButton.style.opacity = '1';
+    }
+}
+
+// Funzione per aggiornare i marker degli snap nel modal
+function updateModalSnapMarkers() {
+    const markersContainer = document.getElementById('modalSnapMarkers');
+    if (!markersContainer) return;
+
+    markersContainer.innerHTML = '';
+
+    if (!modalSnaps || modalSnaps.length === 0) return;
+
+    console.log('🎯 Aggiornamento snap markers nel modal - Snap:', modalSnaps.length, 'Durata:', modalVideoDuration);
+
+    // Raggruppa gli snap per timestamp
+    const snapsByTimestamp = {};
+    modalSnaps.forEach(snap => {
+        if (!snapsByTimestamp[snap.timestamp]) {
+            snapsByTimestamp[snap.timestamp] = [];
+        }
+        snapsByTimestamp[snap.timestamp].push(snap);
+    });
+
+    // Crea i marker
+    Object.keys(snapsByTimestamp).forEach(timestamp => {
+        const snapsAtTime = snapsByTimestamp[timestamp];
+        const snapCount = snapsAtTime.length;
+        const firstSnap = snapsAtTime[0];
+
+        const percentage = (timestamp / modalVideoDuration) * 100;
+        const leftPosition = percentage + '%';
+
+        const marker = document.createElement('div');
+        marker.className = 'snap-marker position-absolute';
+        marker.style.cssText = `left: ${leftPosition}; transform: translateX(-50%); pointer-events: auto; cursor: pointer;`;
+        marker.setAttribute('data-timestamp', timestamp);
+        marker.onclick = () => seekToTimeInModal(timestamp);
+        marker.title = `${firstSnap.title || 'Snap'} (${snapCount} snap)`;
+
+        marker.innerHTML = `
+            <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
+                 style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
+                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+            </div>
+            ${snapCount > 1 ? `
+                <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
+                     style="width: 24px; height: 24px; font-size: 12px; font-weight: bold; transform: translate(30%, -30%);">
+                    ${snapCount}
+                </div>
+            ` : ''}
+            <div class="snap-tooltip position-absolute bottom-100 start-50 translate-middle-x mb-1 bg-dark text-white rounded p-2"
+                 style="font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; pointer-events: none;">
+                <strong>${firstSnap.title || 'Snap'}</strong>
+                ${snapCount > 1 ? `<br><small>+${snapCount - 1} altri</small>` : ''}
+            </div>
+        `;
+
+        markersContainer.appendChild(marker);
+    });
+
+    console.log('✅ Snap markers aggiornati nel modal - Posizionati sulla barra di progressione');
+
+    // Aggiungi event listeners per i tooltip
+    const snapMarkers = markersContainer.querySelectorAll('.snap-marker');
+    snapMarkers.forEach(marker => {
+        const tooltip = marker.querySelector('.snap-tooltip');
+        if (tooltip) {
+            marker.addEventListener('mouseenter', function() {
+                tooltip.style.opacity = '1';
+            });
+            marker.addEventListener('mouseleave', function() {
+                tooltip.style.opacity = '0';
+            });
+        }
+    });
+}
+
+// Funzione per saltare al tempo specifico nel modal
+function seekToTimeInModal(timestamp) {
+    if (modalVideoPlayer) {
+        modalVideoPlayer.currentTime = timestamp;
+        modalVideoPlayer.play();
+    }
+}
+
+// Funzione per mostrare/nascondere il form inline degli snap
+function toggleSnapForm() {
+    const snapForm = document.getElementById('modalSnapForm');
+    const snapButton = document.getElementById('modalFloatingSnapButton');
+
+    if (snapForm.style.display === 'none') {
+        // Mostra il form
+        snapForm.style.display = 'block';
+        snapButton.style.display = 'none';
+
+        // Aggiorna il tempo corrente
+        updateInlineSnapTime();
+
+        console.log('🎯 Form snap aperto');
+    } else {
+        // Nascondi il form
+        snapForm.style.display = 'none';
+        snapButton.style.display = 'flex';
+
+        // Pulisci i campi
+        document.getElementById('inlineSnapTitle').value = '';
+        document.getElementById('inlineSnapDescription').value = '';
+
+        console.log('🎯 Form snap chiuso');
+    }
+}
+
+// Funzione per aggiornare il tempo nel form inline
+function updateInlineSnapTime() {
+    const currentTimeElement = document.getElementById('inlineCurrentTime');
+    const timestampElement = document.getElementById('inlineSnapTimestamp');
+    const videoIdElement = document.getElementById('inlineSnapVideoId');
+
+    if (currentTimeElement && timestampElement && videoIdElement && modalVideoPlayer) {
+        const currentTime = Math.floor(modalVideoPlayer.currentTime);
+        currentTimeElement.textContent = formatTimestamp(currentTime);
+        timestampElement.value = currentTime;
+        videoIdElement.value = modalVideoPlayer.getAttribute('data-video-id');
+    }
+}
+
+// Funzione per formattare il timestamp
+function formatTimestamp(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+// Funzione per creare lo snap dal form inline
+function createInlineSnap() {
+    const title = document.getElementById('inlineSnapTitle').value.trim();
+    const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
+    const videoId = document.getElementById('inlineSnapVideoId').value;
+
+    console.log('🎯 Creazione snap inline - title:', title, 'timestamp:', timestamp, 'videoId:', videoId);
+
+    if (timestamp < 0 || !videoId) {
+        console.log('❌ Validazione fallita - timestamp:', timestamp, 'videoId:', videoId);
+        return;
+    }
+
+    fetch(`/api/videos/${videoId}/snaps`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ title: title, timestamp: timestamp })
+    })
+    .then(response => {
+        if (response.status === 401) {
+            // Utente non autenticato
+            return response.json().then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    showErrorMessage('Devi essere autenticato per creare uno snap');
+                }
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('✅ Snap creato con successo:', data.snap);
+
+            // Chiudi il form
+            toggleSnapForm();
+
+            // Ricarica gli snap nel modal video
+            loadVideoSnaps(videoId);
+
+            // Mostra un messaggio di successo
+            showSuccessMessage('Snap creato con successo!');
+        } else {
+            console.log('❌ Errore nella creazione dello snap:', data);
+            showErrorMessage(data.message || 'Errore nella creazione dello snap. Riprova.');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Errore nella creazione dello snap:', error);
+        showErrorMessage('Errore nella creazione dello snap. Riprova.');
+    });
+}
+
+// Funzione per mostrare messaggio di successo
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'position-fixed';
+    successDiv.style.cssText = 'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+    successDiv.textContent = message;
+    document.body.appendChild(successDiv);
+
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
+}
+
+// Funzione per caricare gli snap di un video
+function loadVideoSnaps(videoId) {
+    console.log('🎯 Ricaricamento snap per video ID:', videoId);
+
+    fetch(`/api/videos/${videoId}/snaps`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                modalSnaps = data.snaps || [];
+                console.log('✅ Snap ricaricati nel modal:', modalSnaps.length);
+                updateModalSnapMarkers();
+            } else {
+                console.log('⚠️ Nessun snap trovato per il video');
+                modalSnaps = [];
+                updateModalSnapMarkers();
+            }
+        })
+        .catch(error => {
+            console.error('❌ Errore ricaricamento snap:', error);
+            modalSnaps = [];
+            updateModalSnapMarkers();
+        });
+}
+
+// Funzione per mostrare messaggio di errore
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'position-fixed';
+    errorDiv.style.cssText = 'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 3000);
+}
+
+// Event listeners per il modal video
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestione chiusura modal video con ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const videoModal = document.getElementById('videoPlayerModal');
+            if (videoModal && videoModal.style.display === 'block') {
+                closeVideoModal();
+            }
+        }
+    });
+
+    // Gestione click fuori dal modal per chiudere
+    document.getElementById('videoPlayerModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeVideoModal();
+        }
+    });
+});
 </script>
+
+<!-- Video Player Modal a Tutta Pagina -->
+<div class="custom-modal" id="videoPlayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);">
+    <div class="modal-content" style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
+        <div class="modal-header" style="background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <h5 class="modal-title text-white" id="videoPlayerModalLabel">Video Player</h5>
+            <button type="button" class="btn-close btn-close-white" onclick="closeVideoModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="flex: 1; padding: 0; position: relative;">
+            <!-- Loading indicator -->
+            <div class="text-center position-absolute top-50 start-50 translate-middle" id="modalVideoLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Caricamento video...</span>
+                </div>
+                <p class="mt-2 text-white">Caricamento video...</p>
+            </div>
+
+            <!-- Error message -->
+            <div class="alert alert-danger position-absolute top-50 start-50 translate-middle" id="modalVideoError" style="display: none; z-index: 1000;">
+                <i class="ph-duotone ph-warning f-s-16 me-2"></i>
+                <span id="modalErrorMessage">Errore nel caricamento del video</span>
+            </div>
+
+            <!-- Video Container -->
+            <div class="video-container position-relative d-flex align-items-center justify-content-center" id="modalVideoContainer" style="display: none; padding: 20px;">
+                <div class="w-100" style="max-width: 1200px;">
+                    <div class="video-container position-relative">
+                        <!-- Video Player HTML5 Nativo -->
+                        <video
+                            id="modalVideoPlayer"
+                            class="w-100"
+                            style="height: 500px; max-height: 500px; object-fit: cover; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); background: #000;"
+                            preload="metadata"
+                            controls>
+                            Il tuo browser non supporta la riproduzione video.
+                        </video>
+
+                        <!-- Snap Markers sulla Progress Bar del Player -->
+                        <div class="snap-markers-overlay position-absolute" id="modalSnapMarkers" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
+                            <!-- Snap markers verranno aggiunti dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pulsante per creare snap con scritta sotto -->
+                <div class="position-absolute" id="modalFloatingSnapButton" style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
+                            style="width: 60px; height: 60px;"
+                            onclick="toggleSnapForm()">
+                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
+                    </button>
+                    <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
+                        Crea snap
+                    </div>
+                </div>
+
+                <!-- Form inline per creare snap -->
+                <div class="position-absolute" id="modalSnapForm" style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-white mb-0">Crea Snap</h6>
+                        <button type="button" class="btn-close btn-close-white" onclick="toggleSnapForm()"></button>
+                    </div>
+                    <form id="inlineSnapForm">
+                        <div class="mb-3">
+                            <label for="inlineSnapTitle" class="form-label text-white" style="font-size: 12px;">Titolo (opzionale)</label>
+                            <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inlineSnapDescription" class="form-label text-white" style="font-size: 12px;">Descrizione (opzionale)</label>
+                            <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white" style="font-size: 12px;">Timestamp: <span id="inlineCurrentTime" class="text-warning">00:00</span></label>
+                            <input type="hidden" id="inlineSnapTimestamp" value="0">
+                            <input type="hidden" id="inlineSnapVideoId" value="">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="toggleSnapForm()">Annulla</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">Crea Snap</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
