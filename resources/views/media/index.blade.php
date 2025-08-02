@@ -116,7 +116,17 @@
                                 <div class="d-flex gap-2">
                                     <x-social-like-button :content="$mostPopularVideo" type="video" />
                                     <x-social-view-counter :content="$mostPopularVideo" type="video" />
-
+                                    <div class="social-comment-btn"
+                                         data-content-type="video"
+                                         data-content-id="{{ $mostPopularVideo->id }}"
+                                         onclick="showVideoComments({{ $mostPopularVideo->id }}, event)"
+                                         title="Commenti"
+                                         style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                                         onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                                         onmouseout="this.style.backgroundColor='transparent'">
+                                        <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
+                                        <span class="text-secondary comment-count f-s-12 comment-count-{{ $mostPopularVideo->id }}">{{ $mostPopularVideo->comments()->where('status', 'approved')->count() }}</span>
+                                    </div>
                                 </div>
                                 <small class="text-muted">
                                     <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
@@ -189,6 +199,9 @@
                                             <small class="text-muted f-s-11">
                                                 <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
                                             </small>
+                                            <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
+                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments()->where('status', 'approved')->count() }}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -235,6 +248,9 @@
                                             </small>
                                             <small class="text-muted f-s-11">
                                                 <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
+                                            </small>
+                                            <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
+                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments()->where('status', 'approved')->count() }}
                                             </small>
                                         </div>
                                     </div>
