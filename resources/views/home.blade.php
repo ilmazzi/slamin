@@ -239,7 +239,7 @@ window.addEventListener('load', function() {
         @endif
 
         <!-- Most Popular {{ __('common.video') }} Section -->
-        @if($mostPopularVideo && $mostPopularVideo->exists)
+        @if($mostPopularVideo)
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card hover-effect border-0 shadow-sm">
@@ -498,6 +498,32 @@ window.addEventListener('load', function() {
             </div>
             @endforeach
 
+        </div>
+        @else
+        <!-- No Videos Available Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card hover-effect border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
+                            <i class="ph-duotone ph-video-camera-slash f-s-48 text-primary"></i>
+                        </div>
+                        <h4 class="text-dark f-w-600 mb-2">Nessun video disponibile</h4>
+                        <p class="text-muted mb-3">Al momento non ci sono video popolari da mostrare.</p>
+                        @auth
+                        <a href="{{ route('videos.upload') }}" class="btn btn-primary">
+                            <i class="ph-duotone ph-upload me-2"></i>
+                            Carica il primo video
+                        </a>
+                        @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">
+                            <i class="ph-duotone ph-sign-in me-2"></i>
+                            Accedi per caricare video
+                        </a>
+                        @endauth
+                    </div>
+                </div>
+            </div>
         </div>
         @endif
 
@@ -1153,6 +1179,13 @@ window.loadVideoInModal = async function(videoId) {
 
         // Prima ottieni i dati del video
         const videoResponse = await fetch(`/api/videos/${videoId}`);
+
+        // Controlla se la risposta è JSON
+        const contentType = videoResponse.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Video non trovato o non disponibile');
+        }
+
         const videoData = await videoResponse.json();
 
         if (!videoData.success) {
@@ -1215,7 +1248,20 @@ window.loadVideoInModal = async function(videoId) {
         console.error('❌ Errore caricamento video nel modal:', error);
         loadingDiv.style.display = 'none';
         errorDiv.style.display = 'block';
-        document.getElementById('modalErrorMessage').textContent = error.message;
+
+        // Messaggi di errore più specifici
+        let errorMessage = 'Errore nel caricamento del video';
+        if (error.message.includes('Video non trovato')) {
+            errorMessage = 'Video non trovato o non disponibile';
+        } else if (error.message.includes('elaborazione')) {
+            errorMessage = 'Il video è ancora in elaborazione. Riprova tra qualche minuto.';
+        } else if (error.message.includes('JSON')) {
+            errorMessage = 'Errore di comunicazione con il server';
+        } else {
+            errorMessage = error.message;
+        }
+
+        document.getElementById('modalErrorMessage').textContent = errorMessage;
     }
 }
 
