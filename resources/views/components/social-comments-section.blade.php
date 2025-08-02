@@ -6,7 +6,7 @@
     $comments = $content->approvedComments ?? collect();
 @endphp
 
-<div class="card hover-effect mt-3 social-comments-section" 
+<div class="card hover-effect mt-3 social-comments-section"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}">
     <div class="card-header">
@@ -21,11 +21,11 @@
         <div class="mb-4">
             <form class="comment-form">
                 <div class="mb-3">
-                    <textarea class="form-control" 
-                              name="content" 
-                              rows="3" 
-                              placeholder="Scrivi un commento..." 
-                              maxlength="1000" 
+                    <textarea class="form-control"
+                              name="content"
+                              rows="3"
+                              placeholder="Scrivi un commento..."
+                              maxlength="1000"
                               required></textarea>
                     <div class="form-text">
                         <span class="char-count">0</span>/1000 caratteri
@@ -50,8 +50,8 @@
                 <div class="comment-box mb-3" data-comment-id="{{ $comment->id }}">
                     <div class="d-flex align-items-start">
                         <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden bg-primary me-3">
-                            @if($comment->user->profile_photo)
-                                <img src="{{ $comment->user->profile_photo_url }}" alt="" class="img-fluid">
+                            @if($comment->user->avatar_url)
+                                <img src="{{ $comment->user->avatar_url }}" alt="{{ $comment->user->name }}" class="img-fluid">
                             @else
                                 <span class="text-white fw-bold">{{ substr($comment->user->name, 0, 2) }}</span>
                             @endif
@@ -76,7 +76,7 @@
                                 @endif
                             </div>
                             <div class="comment-content">{{ $comment->content }}</div>
-                            
+
                             <!-- Like del commento -->
                             <div class="mt-2">
                                 <x-social-like-button :content="$comment" type="comment" />
@@ -93,7 +93,7 @@
 // Gestione form commenti
 document.addEventListener('DOMContentLoaded', function() {
     const commentForms = document.querySelectorAll('.comment-form');
-    
+
     commentForms.forEach(form => {
         const textarea = form.querySelector('textarea');
         const charCount = form.querySelector('.char-count');
@@ -102,22 +102,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const contentId = commentsSection.dataset.contentId;
         const commentsList = commentsSection.querySelector('.comments-list');
         const commentCountSpan = commentsSection.querySelector('.comment-count');
-        
+
         // Contatore caratteri
         textarea.addEventListener('input', function() {
             charCount.textContent = this.value.length;
         });
-        
+
         // Submit form
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const content = textarea.value.trim();
             if (!content) return;
-            
+
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
-            
+
             fetch('/api/social/comments', {
                 method: 'POST',
                             headers: {
@@ -136,14 +136,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Aggiungi il nuovo commento alla lista
                     const newComment = createCommentElement(data.comment);
                     commentsList.insertBefore(newComment, commentsList.firstChild);
-                    
+
                     // Aggiorna contatore
                     commentCountSpan.textContent = data.comment_count.toLocaleString();
-                    
+
                     // Reset form
                     textarea.value = '';
                     charCount.textContent = '0';
-                    
+
                     showToast('Commento pubblicato con successo!', 'success');
                 } else {
                     showToast(data.message || 'Errore durante la pubblicazione', 'error');
@@ -165,14 +165,17 @@ function createCommentElement(comment) {
     const div = document.createElement('div');
     div.className = 'comment-box mb-3';
     div.dataset.commentId = comment.id;
-    
+
     const userName = comment.user.name;
     const userInitials = userName.substring(0, 2).toUpperCase();
-    
+    const userAvatar = comment.user.avatar_url ?
+        `<img src="${comment.user.avatar_url}" alt="${userName}" class="img-fluid">` :
+        `<span class="text-white fw-bold">${userInitials}</span>`;
+
     div.innerHTML = `
         <div class="d-flex align-items-start">
             <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden bg-primary me-3">
-                <span class="text-white fw-bold">${userInitials}</span>
+                ${userAvatar}
             </div>
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-start mb-2">
@@ -195,14 +198,14 @@ function createCommentElement(comment) {
             </div>
         </div>
     `;
-    
+
     return div;
 }
 
 // Elimina commento
 function deleteComment(commentId) {
     if (!confirm('Sei sicuro di voler eliminare questo commento?')) return;
-    
+
     fetch(`/api/social/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
@@ -215,14 +218,14 @@ function deleteComment(commentId) {
             const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
             if (commentElement) {
                 commentElement.remove();
-                
+
                 // Aggiorna contatore
                 const commentsSection = commentElement.closest('.social-comments-section');
                 const commentCountSpan = commentsSection.querySelector('.comment-count');
                 const currentCount = parseInt(commentCountSpan.textContent.replace(/,/g, ''));
                 commentCountSpan.textContent = (currentCount - 1).toLocaleString();
             }
-            
+
             showToast('Commento eliminato con successo!', 'success');
         } else {
             showToast(data.message || 'Errore durante l\'eliminazione', 'error');
@@ -249,4 +252,4 @@ function showToast(message, type = 'info') {
         alert(message);
     }
 }
-</script> 
+</script>

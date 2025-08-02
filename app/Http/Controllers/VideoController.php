@@ -26,13 +26,15 @@ class VideoController extends Controller
         // Incrementa le visualizzazioni solo se l'utente non è il proprietario
         $video->incrementViewsIfNotOwner();
 
-        // Carica i commenti approvati con l'utente
-        $comments = $video->approvedComments()->with('user')->orderBy('created_at', 'desc')->get();
+        // Carica i commenti approvati con l'utente e aggiungili al video
+        $video->approvedComments = $video->approvedComments()->with('user')->orderBy('created_at', 'desc')->get()
+            ->map(function ($comment) {
+                $comment->user->avatar_url = \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user);
+                return $comment;
+            });
 
         // Carica gli snap approvati (prima i più recenti, poi i più popolari)
         $snaps = $video->approvedSnaps()->with('user')->orderBy('created_at', 'desc')->get();
-
-
 
         // Verifica se l'utente ha già messo like
         $userLike = null;
@@ -40,7 +42,7 @@ class VideoController extends Controller
             $userLike = $video->likes()->where('user_id', Auth::id())->first();
         }
 
-        return view('videos.show', compact('video', 'comments', 'snaps', 'userLike'));
+        return view('videos.show', compact('video', 'snaps', 'userLike'));
     }
 
     /**
