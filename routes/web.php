@@ -1006,5 +1006,16 @@ Route::get('/api/media/search', [App\Http\Controllers\MediaController::class, 's
 Route::get('/api/videos/{video}/comments', [App\Http\Controllers\VideoController::class, 'getComments'])->name('api.videos.comments');
 Route::get('/api/photos/{photo}/comments', [App\Http\Controllers\PhotoController::class, 'getComments'])->name('api.photos.comments');
 
+// API routes per sistema commenti unificato
+Route::prefix('api/social')->group(function () {
+    Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('api.social.comments.store');
+    Route::put('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'update'])->name('api.social.comments.update');
+    Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('api.social.comments.destroy');
+    Route::post('/comments/{comment}/approve', [App\Http\Controllers\CommentController::class, 'approve'])->name('api.social.comments.approve');
+    Route::post('/comments/{comment}/reject', [App\Http\Controllers\CommentController::class, 'reject'])->name('api.social.comments.reject');
+    Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('api.social.comments.list');
+    Route::get('/comments/{comment}/replies', [App\Http\Controllers\CommentController::class, 'getReplies'])->name('api.social.comments.replies');
+});
+
 
 

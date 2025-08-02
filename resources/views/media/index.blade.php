@@ -1952,16 +1952,15 @@ async function submitComment() {
     submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-12 me-1"></i>Invio...';
 
     try {
-        const response = await fetch('/media/comment', {
+        const response = await fetch('/api/social/comments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                type: mediaType,
-                id: mediaId,
+                commentable_type: mediaType,
+                commentable_id: mediaId,
                 content: content
             })
         });
@@ -1971,19 +1970,27 @@ async function submitComment() {
         if (response.ok) {
             // Aggiungi il nuovo commento alla lista
             const commentsList = document.getElementById('commentsList');
+
+            // Crea il nuovo commento con avatar
+            const userName = data.comment.user.name;
+            const userInitials = userName.substring(0, 2).toUpperCase();
+            const userAvatar = data.comment.user.avatar_url ?
+                `<img src="${data.comment.user.avatar_url}" alt="${userName}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">` :
+                `<div class="h-40 w-40 d-flex-center rounded-circle bg-light-primary">
+                    <i class="ph-duotone ph-user f-s-16 text-primary"></i>
+                </div>`;
+
             const newCommentHtml = `
                 <div class="d-flex mb-3">
                     <div class="flex-shrink-0 me-3">
-                        <div class="h-40 w-40 d-flex-center rounded-circle bg-light-primary">
-                            <i class="ph-duotone ph-user f-s-16 text-primary"></i>
-                        </div>
+                        ${userAvatar}
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-start mb-1">
-                            <h6 class="mb-0 f-s-14 f-w-600">Tu</h6>
+                            <h6 class="mb-0 f-s-14 f-w-600">${userName}</h6>
                             <small class="text-muted f-s-12">Ora</small>
                         </div>
-                        <p class="mb-0 f-s-13">${content}</p>
+                        <p class="mb-0 f-s-13">${data.comment.content}</p>
                     </div>
                 </div>
             `;
@@ -2001,8 +2008,8 @@ async function submitComment() {
 
             // Aggiorna il contatore nel pulsante commenti con il valore dal server
             const commentButton = document.querySelector(`.social-comment-btn[data-content-id="${mediaId}"] .comment-count`);
-            if (commentButton && data.comments_count !== undefined) {
-                commentButton.textContent = data.comments_count;
+            if (commentButton && data.comment_count !== undefined) {
+                commentButton.textContent = data.comment_count;
             }
 
             // Mostra messaggio di successo

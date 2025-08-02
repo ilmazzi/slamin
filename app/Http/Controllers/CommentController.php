@@ -38,7 +38,7 @@ class CommentController extends Controller
         // Verifica se il tipo di contenuto è commentabile
         $commentableContent = SystemSetting::get('social_commentable_content', ['video', 'photo', 'poem', 'article', 'event']);
         $contentType = $request->commentable_type; // Usa direttamente il tipo ricevuto
-        
+
         if (!in_array($contentType, $commentableContent)) {
             return response()->json([
                 'success' => false,
@@ -48,7 +48,7 @@ class CommentController extends Controller
 
         // Ottieni il contenuto
         $content = $this->getContent($request->commentable_type, $request->commentable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -69,15 +69,18 @@ class CommentController extends Controller
         // Invia notifica se abilitata
         if (SystemSetting::get('social_enable_notifications', true)) {
             $notificationTypes = SystemSetting::get('social_notification_types', ['like', 'comment', 'snap']);
-            
+
             if (in_array('comment', $notificationTypes)) {
                 $this->sendCommentNotification($content, $user, $comment);
             }
         }
 
+        $comment->load('user');
+        $comment->user->avatar_url = \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user);
+
         return response()->json([
             'success' => true,
-            'comment' => $comment->load('user'),
+            'comment' => $comment,
             'comment_count' => $content->comment_count,
             'message' => 'Commento aggiunto con successo'
         ]);
@@ -193,7 +196,7 @@ class CommentController extends Controller
         ]);
 
         $content = $this->getContent($request->commentable_type, $request->commentable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -237,7 +240,7 @@ class CommentController extends Controller
     private function getContent(string $type, int $id)
     {
         $modelClass = $this->getModelClass($type);
-        
+
         if (!$modelClass) {
             return null;
         }
@@ -335,7 +338,7 @@ class CommentController extends Controller
     private function getContentTitle($content): string
     {
         $methods = ['title', 'name', 'subject'];
-        
+
         foreach ($methods as $method) {
             if (method_exists($content, $method)) {
                 return $content->$method;
@@ -351,7 +354,7 @@ class CommentController extends Controller
     private function getContentUrl($content): string
     {
         $type = $this->getContentTypeFromClass(get_class($content));
-        
+
         switch ($type) {
             case 'video':
                 return route('videos.show', $content);
