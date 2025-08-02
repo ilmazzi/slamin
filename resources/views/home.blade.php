@@ -1011,7 +1011,7 @@ let modalVideoDuration = 0;
 let modalSnaps = [];
 
 // Funzione per aprire il modal video
-function openVideoModal(videoId) {
+window.openVideoModal = function(videoId) {
     console.log('🎬 Apertura modal video per ID:', videoId);
 
     // Mostra il modal personalizzato
@@ -1024,7 +1024,7 @@ function openVideoModal(videoId) {
 }
 
 // Funzione per chiudere il modal video
-function closeVideoModal() {
+window.closeVideoModal = function() {
     const modal = document.getElementById('videoPlayerModal');
     modal.style.display = 'none';
     document.body.style.overflow = 'auto'; // Ripristina lo scroll
@@ -1042,7 +1042,7 @@ function closeVideoModal() {
 }
 
 // Funzione per caricare il video nel modal
-async function loadVideoInModal(videoId) {
+window.loadVideoInModal = async function(videoId) {
     const loadingDiv = document.getElementById('modalVideoLoading');
     const errorDiv = document.getElementById('modalVideoError');
     const containerDiv = document.getElementById('modalVideoContainer');
@@ -1125,7 +1125,7 @@ async function loadVideoInModal(videoId) {
 }
 
 // Funzione per caricare gli snap nel modal
-function loadSnapsForModal(videoId) {
+window.loadSnapsForModal = function(videoId) {
     console.log('🎯 Caricamento snap per video ID:', videoId);
 
     fetch(`/api/videos/${videoId}/snaps`)
@@ -1154,7 +1154,7 @@ function loadSnapsForModal(videoId) {
 }
 
 // Funzione per inizializzare il player del modal
-function initializeModalVideoPlayer(video) {
+window.initializeModalVideoPlayer = function(video) {
     const videoPlayer = document.getElementById('modalVideoPlayer');
     modalVideoDuration = video.duration || 60;
     modalVideoPlayer = videoPlayer;
@@ -1197,7 +1197,7 @@ function initializeModalVideoPlayer(video) {
 }
 
 // Funzione per aggiornare i marker degli snap nel modal
-function updateModalSnapMarkers() {
+window.updateModalSnapMarkers = function() {
     const markersContainer = document.getElementById('modalSnapMarkers');
     if (!markersContainer) return;
 
@@ -1271,7 +1271,7 @@ function updateModalSnapMarkers() {
 }
 
 // Funzione per saltare al tempo specifico nel modal
-function seekToTimeInModal(timestamp) {
+window.seekToTimeInModal = function(timestamp) {
     if (modalVideoPlayer) {
         modalVideoPlayer.currentTime = timestamp;
         modalVideoPlayer.play();
@@ -1279,7 +1279,7 @@ function seekToTimeInModal(timestamp) {
 }
 
 // Funzione per mostrare/nascondere il form inline degli snap
-function toggleSnapForm() {
+window.toggleSnapForm = function() {
     const snapForm = document.getElementById('modalSnapForm');
     const snapButton = document.getElementById('modalFloatingSnapButton');
 
@@ -1306,7 +1306,7 @@ function toggleSnapForm() {
 }
 
 // Funzione per aggiornare il tempo nel form inline
-function updateInlineSnapTime() {
+window.updateInlineSnapTime = function() {
     const currentTimeElement = document.getElementById('inlineCurrentTime');
     const timestampElement = document.getElementById('inlineSnapTimestamp');
     const videoIdElement = document.getElementById('inlineSnapVideoId');
@@ -1320,14 +1320,14 @@ function updateInlineSnapTime() {
 }
 
 // Funzione per formattare il timestamp
-function formatTimestamp(seconds) {
+window.formatTimestamp = function(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
 // Funzione per creare lo snap dal form inline
-function createInlineSnap() {
+window.createInlineSnap = function() {
     const title = document.getElementById('inlineSnapTitle').value.trim();
     const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
     const videoId = document.getElementById('inlineSnapVideoId').value;
@@ -1384,7 +1384,7 @@ function createInlineSnap() {
 }
 
 // Funzione per mostrare messaggio di successo
-function showSuccessMessage(message) {
+window.showSuccessMessage = function(message) {
     const successDiv = document.createElement('div');
     successDiv.className = 'position-fixed';
     successDiv.style.cssText = 'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
@@ -1397,7 +1397,7 @@ function showSuccessMessage(message) {
 }
 
 // Funzione per caricare gli snap di un video
-function loadVideoSnaps(videoId) {
+window.loadVideoSnaps = function(videoId) {
     console.log('🎯 Ricaricamento snap per video ID:', videoId);
 
     fetch(`/api/videos/${videoId}/snaps`)
@@ -1426,7 +1426,7 @@ function loadVideoSnaps(videoId) {
 }
 
 // Funzione per mostrare messaggio di errore
-function showErrorMessage(message) {
+window.showErrorMessage = function(message) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'position-fixed';
     errorDiv.style.cssText = 'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
