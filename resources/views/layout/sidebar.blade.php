@@ -92,6 +92,18 @@
                 </ul>
             </div>
         </div>
+        @else
+        <!-- Login/Register Buttons per utenti non autenticati - Nella sezione profilo -->
+        <div class="d-flex align-items-center nav-profile p-3">
+            <div class="d-flex flex-column gap-2 w-100">
+                <a href="{{ route('login') }}" class="btn btn-primary w-100">
+                    <i class="ph ph-sign-in me-2"></i> {{ __('auth.login') }}
+                </a>
+                <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">
+                    <i class="ph ph-user-plus me-2"></i> {{ __('auth.register') }}
+                </a>
+            </div>
+        </div>
         @endauth
     </div>
     <div class="app-nav simplebar-scrollable-y" id="app-simple-bar" data-simplebar="init">
@@ -139,7 +151,7 @@
 
                                 @auth
                                 <!-- {{ __('common.gigs') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled">
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.gigs') }}</span>
@@ -148,7 +160,7 @@
                                 @endauth
 
                                 <!-- {{ __('common.news') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled">
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.news') }}</span>
@@ -283,19 +295,6 @@
                                     </a>
                                 </li>
                                 @endif
-                                @else
-                                <!-- Guest Menu - Login in basso -->
-                                <li class="menu-title">
-                                    <span>{{ __('sidebar.guest_menu_title') }}</span>
-                                </li>
-                                <li class="no-sub">
-                                    <a href="{{ route('events.index') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#stack"></use>
-                                        </svg>
-                                        {{ __('events.events') }}
-                                    </a>
-                                </li>
                                 @endauth
                             </ul>
                         </div>
@@ -306,16 +305,7 @@
         <div class="simplebar-placeholder" style="width: 288px; height: 1261px;"></div>
     </div>
 
-    <!-- Login Button per utenti non autenticati - In basso -->
-    @guest
-    <div class="sidebar-footer p-3 border-top">
-        <div class="text-center">
-            <a href="{{ route('login') }}" class="btn btn-primary w-100">
-                <i class="ph ph-sign-in me-2"></i> {{ __('sidebar.login') }}
-            </a>
-        </div>
-    </div>
-    @endguest
+
 
     <div class="menu-navs">
         <span class="menu-previous d-none"><i class="ti ti-chevron-left"></i></span>

@@ -145,6 +145,8 @@
                     </li>
                     @endauth
 
+
+
                     <!-- Theme Toggle - Per tutti gli utenti -->
                     <li class="header-dark">
                         <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
@@ -183,7 +185,7 @@
                     </li>
 
                     @auth
-                    <!-- Wiki - Prossimamente - Solo per utenti autenticati 
+                    <!-- Wiki - Prossimamente - Solo per utenti autenticati
                     <li class="header-wiki">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wiki (Prossimamente)"
@@ -192,7 +194,7 @@
                         </a>
                     </li>-->
 
-                    <!-- Corsi - Prossimamente - Solo per utenti autenticati 
+                    <!-- Corsi - Prossimamente - Solo per utenti autenticati
                     <li class="header-courses">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Corsi (Prossimamente)"
@@ -201,7 +203,7 @@
                         </a>
                     </li>-->
 
-                    <!-- Forum - Prossimamente - Solo per utenti autenticati 
+                    <!-- Forum - Prossimamente - Solo per utenti autenticati
                     <li class="header-forum">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Forum (Prossimamente)"
