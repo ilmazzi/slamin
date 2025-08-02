@@ -1183,16 +1183,26 @@ window.loadVideoInModal = async function(videoId) {
     try {
         console.log('🎬 Caricamento video nel modal per ID:', videoId);
 
-        // Prima ottieni i dati del video
+                // Prima ottieni i dati del video
+        console.log('🔍 Debug: Richiesta API per video ID:', videoId);
         const videoResponse = await fetch(`/api/videos/${videoId}`);
+
+        console.log('🔍 Debug: Status risposta:', videoResponse.status);
+        console.log('🔍 Debug: Headers risposta:', Object.fromEntries(videoResponse.headers.entries()));
 
         // Controlla se la risposta è JSON
         const contentType = videoResponse.headers.get('content-type');
+        console.log('🔍 Debug: Content-Type:', contentType);
+
         if (!contentType || !contentType.includes('application/json')) {
+            // Debug: leggi il contenuto della risposta
+            const responseText = await videoResponse.text();
+            console.error('🔍 Debug: Risposta non-JSON ricevuta:', responseText.substring(0, 500));
             throw new Error('Video non trovato o non disponibile');
         }
 
         const videoData = await videoResponse.json();
+        console.log('🔍 Debug: Dati video ricevuti:', videoData);
 
         if (!videoData.success) {
             throw new Error(videoData.message || 'Errore nel caricamento del video');

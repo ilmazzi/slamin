@@ -100,6 +100,19 @@ class VideoController extends Controller
      */
     public function getVideoData(Video $video)
     {
+        // Debug temporaneo per produzione
+        \Log::info('getVideoData chiamato', [
+            'video_id' => $video->id,
+            'video_title' => $video->title,
+            'user_authenticated' => auth()->check(),
+            'user_id' => auth()->id(),
+            'request_url' => request()->fullUrl(),
+            'request_method' => request()->method(),
+            'request_headers' => request()->headers->all(),
+            'video_moderation_status' => $video->moderation_status,
+            'video_is_public' => $video->is_public,
+        ]);
+
         return response()->json([
             'success' => true,
             'video' => [
