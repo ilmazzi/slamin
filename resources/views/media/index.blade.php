@@ -1983,21 +1983,10 @@ async function submitComment() {
             document.getElementById('commentContent').value = '';
             document.getElementById('commentCharCount').textContent = '0';
 
-            // Aggiorna il contatore nella card
-            const commentCountElement = document.querySelector(`.comment-count-${mediaId}`);
-            if (commentCountElement) {
-                const currentCount = parseInt(commentCountElement.textContent) || 0;
-                commentCountElement.textContent = currentCount + 1;
-            }
-
-            // Aggiorna anche il contatore nel pulsante commenti se presente
-            const commentButton = document.querySelector(`.social-comment-btn[data-content-id="${mediaId}"]`);
-            if (commentButton) {
-                const buttonCountElement = commentButton.querySelector('.comment-count');
-                if (buttonCountElement) {
-                    const currentCount = parseInt(buttonCountElement.textContent) || 0;
-                    buttonCountElement.textContent = currentCount + 1;
-                }
+            // Aggiorna il contatore nel pulsante commenti con il valore dal server
+            const commentButton = document.querySelector(`.social-comment-btn[data-content-id="${mediaId}"] .comment-count`);
+            if (commentButton && data.comments_count !== undefined) {
+                commentButton.textContent = data.comments_count;
             }
 
             // Mostra messaggio di successo
