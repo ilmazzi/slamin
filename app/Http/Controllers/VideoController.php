@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps', 'addSnap']);
+        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps', 'addSnap', 'getPeerTubeUrl']);
     }
 
     /**
