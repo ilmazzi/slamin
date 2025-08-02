@@ -1002,7 +1002,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ===== FUNZIONI PER IL MODAL VIDEO =====
+// ===== FUNZIONI GLOBALI PER IL MODAL VIDEO =====
 
 // Variabili globali per il modal
 let modalVideoPlayer = null;
@@ -1438,7 +1438,7 @@ function showErrorMessage(message) {
     }, 3000);
 }
 
-// Event listeners per il modal video
+// Event listeners per il modal video (da eseguire quando il DOM è pronto)
 document.addEventListener('DOMContentLoaded', function() {
     // Gestione chiusura modal video con ESC
     document.addEventListener('keydown', function(event) {
@@ -1451,11 +1451,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gestione click fuori dal modal per chiudere
-    document.getElementById('videoPlayerModal').addEventListener('click', function(event) {
-        if (event.target === this) {
-            closeVideoModal();
-        }
-    });
+    const videoModal = document.getElementById('videoPlayerModal');
+    if (videoModal) {
+        videoModal.addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeVideoModal();
+            }
+        });
+    }
 });
 </script>
 
