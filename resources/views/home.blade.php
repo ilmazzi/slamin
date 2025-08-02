@@ -1193,7 +1193,15 @@ window.loadVideoInModal = async function(videoId) {
 
                 // Prima ottieni i dati del video
         console.log('🔍 Debug: Richiesta API per video ID:', videoId);
-        const videoResponse = await fetch(`/api/videos/${videoId}`);
+        const videoResponse = await fetch(`/api/videos/${videoId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        });
 
         console.log('🔍 Debug: Status risposta:', videoResponse.status);
         console.log('🔍 Debug: Headers risposta:', Object.fromEntries(videoResponse.headers.entries()));
@@ -1227,7 +1235,14 @@ window.loadVideoInModal = async function(videoId) {
         console.log('🔗 Richiesta URL diretto per video ID:', videoId);
 
         // Ottieni l'URL diretto del video da PeerTube
-        const urlResponse = await fetch(`/videos/${videoId}/peertube-url`);
+        const urlResponse = await fetch(`/videos/${videoId}/peertube-url`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        });
         const urlData = await urlResponse.json();
 
         // Gestisci il caso in cui il video è ancora in elaborazione
