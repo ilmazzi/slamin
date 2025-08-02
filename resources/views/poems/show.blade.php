@@ -10,7 +10,7 @@
             <div class="page-title-box">
                 <!-- Titolo su mobile, breadcrumb su desktop -->
                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
-                    
+
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0 small">
                             <li class="breadcrumb-item">
@@ -181,6 +181,28 @@
                         <x-report-button :content="$poem" type="poem" />
                     </div>
                     @else
+                    <!-- Contatori social per utenti non autenticati -->
+                    <div class="d-flex justify-content-center gap-4 mb-4">
+                        <div class="text-center">
+                            <div class="social-counter" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
+                                <i class="ph ph-heart f-s-24 text-muted" style="opacity: 0.6;"></i>
+                                <span class="text-secondary f-s-12">{{ number_format($poem->like_count) }}</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="social-counter" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
+                                <i class="ph ph-bookmark f-s-24 text-muted" style="opacity: 0.6;"></i>
+                                <span class="text-secondary f-s-12">{{ number_format($poem->bookmark_count) }}</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="social-counter" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
+                                <i class="ph ph-share f-s-24 text-muted" style="opacity: 0.6;"></i>
+                                <span class="text-secondary f-s-12">Condividi</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="text-center mb-4">
                         <p class="text-muted">{{ __('poems.login_to_interact') }}</p>
                         <div class="d-flex justify-content-center gap-2">
@@ -220,7 +242,12 @@
                             {{ __('poems.tooltips.post_comment') }}
                         </button>
                     </form>
-                    @endif
+                    @else
+                    <div class="alert alert-info mb-4">
+                        <i class="ph ph-info-circle f-s-16 me-2"></i>
+                        <a href="{{ route('login') }}" class="text-decoration-none">Accedi</a> per lasciare un commento e interagire con la poesia.
+                    </div>
+                    @endauth
 
                     <!-- Lista commenti -->
                     <div id="commentsList">

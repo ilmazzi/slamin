@@ -164,7 +164,9 @@
                                         <i class="ph-bold  ph-read-cv-logo"></i>
                                         {{ __('poems.actions.read') }}
                                     </a>
+                                    @auth
                                     <x-report-button :content="$poem" type="poem" size="sm" />
+                                    @endauth
                                 </div>
                             </div>
                         </div>
