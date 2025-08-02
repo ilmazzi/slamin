@@ -84,5 +84,6 @@ return [
     'no_followers' => 'Nessun follower',
     'view_all_following' => 'Vedi tutti i following',
     'view_all_followers' => 'Vedi tutti i followers',
+    'posts' => 'Post',
 
 ];

@@ -173,26 +173,40 @@
                             </div>
                         </div>
                         <div class="person-details">
-                            <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?></h5>
+                            <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?>
+
+                                <?php if($user->verified_at): ?>
+                                <img src="<?php echo e(asset('assets/images/profile-app/01.png')); ?>" class="w-20 h-20" alt="verified-check-mark">
+                                <?php endif; ?>
+                            </h5>
                             <?php if($user->nickname && $user->nickname !== $user->name): ?>
-                            <p class="text-muted"><?php echo e($user->nickname); ?></p>
+                            <p><?php echo e($user->nickname); ?></p>
+                            <?php elseif($user->bio): ?>
+                            <p><?php echo e(Str::limit($user->bio, 50)); ?></p>
+                            <?php else: ?>
+                            <p><?php echo e(__('profile.member_since')); ?> <?php echo e($user->created_at->format('M Y')); ?></p>
                             <?php endif; ?>
 
-                            <!-- Roles -->
-                            <div class="mb-3">
-                                <?php $__currentLoopData = $user->getRoleNames(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <span class="badge bg-primary me-1 f-s-12"><?php echo e(__('auth.role_' . $role)); ?></span>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <div class="details">
+                                <div>
+                                    <h4 class="text-primary"><?php echo e($user->videos_count + $user->photos_count + $user->poems_count); ?></h4>
+                                    <p class="text-secondary"><?php echo e(__('profile.posts')); ?></p>
+                                </div>
+                                <div>
+                                    <h4 class="text-primary"><?php echo e($user->followers_count); ?></h4>
+                                    <p class="text-secondary"><?php echo e(__('profile.followers')); ?></p>
+                                </div>
+                                <div>
+                                    <h4 class="text-primary"><?php echo e($user->following_count); ?></h4>
+                                    <p class="text-secondary"><?php echo e(__('profile.following')); ?></p>
+                                </div>
                             </div>
 
                             <?php if(!$isOwnProfile): ?>
                             <div class="my-2">
-                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)">
-                                    <i class="ti ti-user-plus me-2"></i><?php echo e(__('profile.follow')); ?>
-
-                                </button>
-                                <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage(<?php echo e($user->id); ?>)">
-                                    <i class="ti ti-message-circle me-2"></i><?php echo e(__('profile.send_message')); ?>
+                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)" id="followButtonMobile">
+                                    <i class="ti ti-user"></i>
+                                    <?php echo e($user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow')); ?>
 
                                 </button>
                             </div>
@@ -558,28 +572,38 @@
                                         </div>
                                     </div>
                                     <div class="person-details">
-                                        <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?></h5>
+                                        <h5 class="f-w-600"><?php echo e($user->getDisplayName()); ?>
+
+                                            <?php if($user->verified_at): ?>
+                                            <img src="<?php echo e(asset('assets/images/profile-app/01.png')); ?>" class="w-20 h-20" alt="verified-check-mark">
+                                            <?php endif; ?>
+                                        </h5>
                                         <?php if($user->nickname && $user->nickname !== $user->name): ?>
-                                        <p class="text-muted"><?php echo e($user->nickname); ?></p>
+                                        <p><?php echo e($user->nickname); ?></p>
+                                        <?php elseif($user->bio): ?>
+                                        <p><?php echo e(Str::limit($user->bio, 50)); ?></p>
+                                        <?php else: ?>
+                                        <p><?php echo e(__('profile.member_since')); ?> <?php echo e($user->created_at->format('M Y')); ?></p>
                                         <?php endif; ?>
-
-                                        <!-- Roles -->
-                                        <div class="mb-3">
-                                            <?php $__currentLoopData = $user->getRoleNames(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <span class="badge bg-primary me-1 f-s-12"><?php echo e(__('auth.role_' . $role)); ?></span>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="details">
+                                            <div>
+                                                <h4 class="text-primary"><?php echo e($user->videos_count + $user->photos_count + $user->poems_count); ?></h4>
+                                                <p class="text-secondary"><?php echo e(__('profile.posts')); ?></p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-primary"><?php echo e($user->followers_count); ?></h4>
+                                                <p class="text-secondary"><?php echo e(__('profile.followers')); ?></p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-primary"><?php echo e($user->following_count); ?></h4>
+                                                <p class="text-secondary"><?php echo e(__('profile.following')); ?></p>
+                                            </div>
                                         </div>
-
-                                        <!-- Statistics removed from desktop profile header - now in sidebar -->
-
                                         <?php if(!$isOwnProfile): ?>
                                         <div class="my-2">
-                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)">
-                                                <i class="ti ti-user-plus me-2"></i><?php echo e(__('profile.follow')); ?>
-
-                                            </button>
-                                            <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage(<?php echo e($user->id); ?>)">
-                                                <i class="ti ti-message-circle me-2"></i><?php echo e(__('profile.send_message')); ?>
+                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser(<?php echo e($user->id); ?>)" id="followButton">
+                                                <i class="ti ti-user"></i>
+                                                <?php echo e($user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow')); ?>
 
                                             </button>
                                         </div>
@@ -1099,10 +1123,15 @@ function followUser(userId) {
         return;
     }
 
+    // Trova entrambi i pulsanti (desktop e mobile)
     const button = document.getElementById('followBtn' + userId);
+    const buttonMobile = document.getElementById('followButtonMobile');
+    const buttonDesktop = document.getElementById('followButton');
 
-    // Disabilita il pulsante durante la richiesta
-    button.disabled = true;
+    // Disabilita i pulsanti durante la richiesta
+    if (button) button.disabled = true;
+    if (buttonMobile) buttonMobile.disabled = true;
+    if (buttonDesktop) buttonDesktop.disabled = true;
 
     fetch('/api/follow/toggle', {
         method: 'POST',
@@ -1118,17 +1147,31 @@ function followUser(userId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Aggiorna il pulsante
-            const icon = button.querySelector('i');
-            if (data.following) {
-                icon.className = 'ti ti-user-check';
-                button.classList.remove('btn-light-secondary');
-                button.classList.add('btn-success');
-            } else {
-                icon.className = 'ti ti-user';
-                button.classList.remove('btn-success');
-                button.classList.add('btn-light-secondary');
-            }
+            // Aggiorna tutti i pulsanti
+            const buttonsToUpdate = [button, buttonMobile, buttonDesktop].filter(btn => btn);
+
+            buttonsToUpdate.forEach(btn => {
+                const icon = btn.querySelector('i');
+                const text = btn.textContent.trim();
+
+                if (data.following) {
+                    icon.className = 'ti ti-user-check';
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-success');
+                    // Aggiorna il testo se presente
+                    if (text.includes('<?php echo e(__("profile.follow")); ?>')) {
+                        btn.innerHTML = '<i class="ti ti-user-check"></i> <?php echo e(__("profile.following")); ?>';
+                    }
+                } else {
+                    icon.className = 'ti ti-user';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-primary');
+                    // Aggiorna il testo se presente
+                    if (text.includes('<?php echo e(__("profile.following")); ?>')) {
+                        btn.innerHTML = '<i class="ti ti-user"></i> <?php echo e(__("profile.follow")); ?>';
+                    }
+                }
+            });
 
             // Mostra notifica
             Swal.fire({
@@ -1147,7 +1190,10 @@ function followUser(userId) {
         Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
     })
     .finally(() => {
-        button.disabled = false;
+        // Riabilita tutti i pulsanti
+        if (button) button.disabled = false;
+        if (buttonMobile) buttonMobile.disabled = false;
+        if (buttonDesktop) buttonDesktop.disabled = false;
     });
 }
 

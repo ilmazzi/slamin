@@ -173,25 +173,39 @@
                             </div>
                         </div>
                         <div class="person-details">
-                            <h5 class="f-w-600">{{ $user->getDisplayName() }}</h5>
+                            <h5 class="f-w-600">{{ $user->getDisplayName() }}
+                                @if($user->verified_at)
+                                <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="verified-check-mark">
+                                @endif
+                            </h5>
                             @if($user->nickname && $user->nickname !== $user->name)
-                            <p class="text-muted">{{ $user->nickname }}</p>
+                            <p>{{ $user->nickname }}</p>
+                            @elseif($user->bio)
+                            <p>{{ Str::limit($user->bio, 50) }}</p>
+                            @else
+                            <p>{{ __('profile.member_since') }} {{ $user->created_at->format('M Y') }}</p>
                             @endif
 
-                            <!-- Roles -->
-                            <div class="mb-3">
-                                @foreach($user->getRoleNames() as $role)
-                                <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
-                                @endforeach
+                            <div class="details">
+                                <div>
+                                    <h4 class="text-primary">{{ $user->videos_count + $user->photos_count + $user->poems_count }}</h4>
+                                    <p class="text-secondary">{{ __('profile.posts') }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-primary">{{ $user->followers_count }}</h4>
+                                    <p class="text-secondary">{{ __('profile.followers') }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-primary">{{ $user->following_count }}</h4>
+                                    <p class="text-secondary">{{ __('profile.following') }}</p>
+                                </div>
                             </div>
 
                             @if(!$isOwnProfile)
                             <div class="my-2">
-                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})">
-                                    <i class="ti ti-user-plus me-2"></i>{{ __('profile.follow') }}
-                                </button>
-                                <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage({{ $user->id }})">
-                                    <i class="ti ti-message-circle me-2"></i>{{ __('profile.send_message') }}
+                                <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})" id="followButtonMobile">
+                                    <i class="ti ti-user"></i>
+                                    {{ $user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow') }}
                                 </button>
                             </div>
                             @endif
@@ -543,27 +557,37 @@
                                         </div>
                                     </div>
                                     <div class="person-details">
-                                        <h5 class="f-w-600">{{ $user->getDisplayName() }}</h5>
+                                        <h5 class="f-w-600">{{ $user->getDisplayName() }}
+                                            @if($user->verified_at)
+                                            <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="verified-check-mark">
+                                            @endif
+                                        </h5>
                                         @if($user->nickname && $user->nickname !== $user->name)
-                                        <p class="text-muted">{{ $user->nickname }}</p>
+                                        <p>{{ $user->nickname }}</p>
+                                        @elseif($user->bio)
+                                        <p>{{ Str::limit($user->bio, 50) }}</p>
+                                        @else
+                                        <p>{{ __('profile.member_since') }} {{ $user->created_at->format('M Y') }}</p>
                                         @endif
-
-                                        <!-- Roles -->
-                                        <div class="mb-3">
-                                            @foreach($user->getRoleNames() as $role)
-                                            <span class="badge bg-primary me-1 f-s-12">{{ __('auth.role_' . $role) }}</span>
-                                            @endforeach
+                                        <div class="details">
+                                            <div>
+                                                <h4 class="text-primary">{{ $user->videos_count + $user->photos_count + $user->poems_count }}</h4>
+                                                <p class="text-secondary">{{ __('profile.posts') }}</p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-primary">{{ $user->followers_count }}</h4>
+                                                <p class="text-secondary">{{ __('profile.followers') }}</p>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-primary">{{ $user->following_count }}</h4>
+                                                <p class="text-secondary">{{ __('profile.following') }}</p>
+                                            </div>
                                         </div>
-
-                                        <!-- Statistics removed from desktop profile header - now in sidebar -->
-
                                         @if(!$isOwnProfile)
                                         <div class="my-2">
-                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})">
-                                                <i class="ti ti-user-plus me-2"></i>{{ __('profile.follow') }}
-                                            </button>
-                                            <button type="button" class="btn btn-outline-primary b-r-22 ms-2" onclick="sendMessage({{ $user->id }})">
-                                                <i class="ti ti-message-circle me-2"></i>{{ __('profile.send_message') }}
+                                            <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})" id="followButton">
+                                                <i class="ti ti-user"></i>
+                                                {{ $user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow') }}
                                             </button>
                                         </div>
                                         @endif
@@ -1074,10 +1098,15 @@ function followUser(userId) {
         return;
     }
 
+    // Trova entrambi i pulsanti (desktop e mobile)
     const button = document.getElementById('followBtn' + userId);
+    const buttonMobile = document.getElementById('followButtonMobile');
+    const buttonDesktop = document.getElementById('followButton');
 
-    // Disabilita il pulsante durante la richiesta
-    button.disabled = true;
+    // Disabilita i pulsanti durante la richiesta
+    if (button) button.disabled = true;
+    if (buttonMobile) buttonMobile.disabled = true;
+    if (buttonDesktop) buttonDesktop.disabled = true;
 
     fetch('/api/follow/toggle', {
         method: 'POST',
@@ -1093,17 +1122,31 @@ function followUser(userId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Aggiorna il pulsante
-            const icon = button.querySelector('i');
-            if (data.following) {
-                icon.className = 'ti ti-user-check';
-                button.classList.remove('btn-light-secondary');
-                button.classList.add('btn-success');
-            } else {
-                icon.className = 'ti ti-user';
-                button.classList.remove('btn-success');
-                button.classList.add('btn-light-secondary');
-            }
+            // Aggiorna tutti i pulsanti
+            const buttonsToUpdate = [button, buttonMobile, buttonDesktop].filter(btn => btn);
+
+            buttonsToUpdate.forEach(btn => {
+                const icon = btn.querySelector('i');
+                const text = btn.textContent.trim();
+
+                if (data.following) {
+                    icon.className = 'ti ti-user-check';
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-success');
+                    // Aggiorna il testo se presente
+                    if (text.includes('{{ __("profile.follow") }}')) {
+                        btn.innerHTML = '<i class="ti ti-user-check"></i> {{ __("profile.following") }}';
+                    }
+                } else {
+                    icon.className = 'ti ti-user';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-outline-primary');
+                    // Aggiorna il testo se presente
+                    if (text.includes('{{ __("profile.following") }}')) {
+                        btn.innerHTML = '<i class="ti ti-user"></i> {{ __("profile.follow") }}';
+                    }
+                }
+            });
 
             // Mostra notifica
             Swal.fire({
@@ -1122,7 +1165,10 @@ function followUser(userId) {
         Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
     })
     .finally(() => {
-        button.disabled = false;
+        // Riabilita tutti i pulsanti
+        if (button) button.disabled = false;
+        if (buttonMobile) buttonMobile.disabled = false;
+        if (buttonDesktop) buttonDesktop.disabled = false;
     });
 }
 
