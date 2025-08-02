@@ -722,7 +722,6 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
         Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
-        Route::get('/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeUrl'])->name('peertube-url');
 
 
         // Video interactions (comments, likes, snaps)
@@ -991,6 +990,9 @@ Route::prefix('api/videos')->group(function () {
     Route::get('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'getVideoSnaps'])->name('api.videos.snaps');
     Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
 });
+
+// Route pubblica per URL PeerTube
+Route::get('/videos/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeUrl'])->name('videos.peertube-url');
 
 // API routes for photos (completamente pubbliche)
 Route::prefix('api/photos')->group(function () {
