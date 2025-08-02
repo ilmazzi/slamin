@@ -999,5 +999,12 @@ Route::prefix('api/photos')->group(function () {
     Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
 });
 
+// API route per ricerca media (completamente pubblica)
+Route::get('/api/media/search', [App\Http\Controllers\MediaController::class, 'search'])->name('api.media.search');
+
+// API routes per commenti (pubbliche per lettura)
+Route::get('/api/videos/{video}/comments', [App\Http\Controllers\VideoController::class, 'getComments'])->name('api.videos.comments');
+Route::get('/api/photos/{photo}/comments', [App\Http\Controllers\PhotoController::class, 'getComments'])->name('api.photos.comments');
+
 
 

@@ -120,9 +120,21 @@ class MediaController extends Controller
                 ->where('type', 'like')
                 ->count();
         } else {
-            // Per le foto (snap), per ora non implementiamo i like
-            // perché VideoLike è specifico per i video
-            return response()->json(['error' => 'Like non disponibili per le foto'], 400);
+            // Per le foto, usa il sistema di like delle foto
+            $photo = Photo::findOrFail($request->id);
+            $existingLike = $photo->likes()->where('user_id', $user->id)->first();
+
+            if ($existingLike) {
+                $existingLike->delete();
+                $action = 'unliked';
+            } else {
+                $photo->likes()->create([
+                    'user_id' => $user->id
+                ]);
+                $action = 'liked';
+            }
+
+            $likesCount = $photo->likes()->count();
         }
 
         return response()->json([
@@ -159,14 +171,159 @@ class MediaController extends Controller
                 ->where('status', 'approved')
                 ->count();
         } else {
-            // Per le foto (snap), per ora non implementiamo i commenti
-            // perché VideoComment è specifico per i video
-            return response()->json(['error' => 'Commenti non disponibili per le foto'], 400);
+            // Per le foto, usa il sistema di commenti delle foto
+            $photo = Photo::findOrFail($request->id);
+            $comment = $photo->comments()->create([
+                'user_id' => $user->id,
+                'content' => $request->content,
+                'status' => 'approved'
+            ]);
+
+            $comment->load('user');
+            $commentsCount = $photo->comments()->where('status', 'approved')->count();
         }
 
         return response()->json([
             'comment' => $comment,
             'comments_count' => $commentsCount
+        ]);
+    }
+
+    /**
+     * Ricerca media (video e foto)
+     */
+    public function search(Request $request)
+    {
+        $query = $request->get('query', '');
+        $type = $request->get('type', '');
+        $sort = $request->get('sort', 'recent');
+        $limit = 12; // Limite risultati per pagina
+
+        $results = collect();
+
+        // Ricerca video
+        if ($type === '' || $type === 'video') {
+            $videoQuery = Video::with(['user', 'likes', 'comments'])
+                ->where('is_public', true)
+                ->where('moderation_status', 'approved');
+
+            if ($query) {
+                $videoQuery->where(function($q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                      ->orWhere('description', 'like', "%{$query}%");
+                });
+            }
+
+            // Applica ordinamento
+            switch ($sort) {
+                case 'popular':
+                    $videoQuery->withCount(['likes', 'snaps'])
+                        ->withCount(['comments' => function($query) {
+                            $query->where('status', 'approved');
+                        }])
+                        ->orderBy('likes_count', 'desc')
+                        ->orderBy('comments_count', 'desc')
+                        ->orderBy('snaps_count', 'desc');
+                    break;
+                case 'views':
+                    $videoQuery->orderBy('view_count', 'desc');
+                    break;
+                case 'likes':
+                    $videoQuery->withCount('likes')->orderBy('likes_count', 'desc');
+                    break;
+                default: // recent
+                    $videoQuery->withCount(['comments' => function($query) {
+                        $query->where('status', 'approved');
+                    }]);
+                    $videoQuery->orderBy('created_at', 'desc');
+            }
+
+            $videos = $videoQuery->take($limit)->get();
+
+            // Aggiungi tipo e formatta per il frontend
+            $videos->each(function($video) {
+                $video->type = 'video';
+                $video->thumbnail_url = $video->thumbnail_url ?? null;
+                $video->views = $video->view_count ?? $video->views ?? 0;
+            });
+
+            $results = $results->merge($videos);
+        }
+
+        // Ricerca foto
+        if ($type === '' || $type === 'photo') {
+            $photoQuery = Photo::with(['user', 'likes', 'comments'])
+                ->where('moderation_status', 'approved');
+
+            if ($query) {
+                $photoQuery->where(function($q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                      ->orWhere('description', 'like', "%{$query}%");
+                });
+            }
+
+            // Applica ordinamento
+            switch ($sort) {
+                case 'popular':
+                    $photoQuery->withCount('likes')
+                        ->withCount(['comments' => function($query) {
+                            $query->where('status', 'approved');
+                        }])
+                        ->orderBy('likes_count', 'desc')
+                        ->orderBy('comments_count', 'desc');
+                    break;
+                case 'views':
+                    $photoQuery->orderBy('view_count', 'desc');
+                    break;
+                case 'likes':
+                    $photoQuery->withCount('likes')->orderBy('likes_count', 'desc');
+                    break;
+                default: // recent
+                    $photoQuery->withCount(['comments' => function($query) {
+                        $query->where('status', 'approved');
+                    }]);
+                    $photoQuery->orderBy('created_at', 'desc');
+            }
+
+            $photos = $photoQuery->take($limit)->get();
+
+            // Aggiungi tipo e formatta per il frontend
+            $photos->each(function($photo) {
+                $photo->type = 'photo';
+                $photo->image_url = $photo->image_url ?? null;
+                $photo->views = $photo->view_count ?? $photo->views ?? 0;
+            });
+
+            $results = $results->merge($photos);
+        }
+
+        // Riordina i risultati se sono misti
+        if ($type === '') {
+            switch ($sort) {
+                case 'recent':
+                    $results = $results->sortByDesc('created_at');
+                    break;
+                case 'popular':
+                    $results = $results->sortByDesc(function($item) {
+                        return ($item->like_count ?? 0) + ($item->comment_count ?? 0);
+                    });
+                    break;
+                case 'views':
+                    $results = $results->sortByDesc('views');
+                    break;
+                case 'likes':
+                    $results = $results->sortByDesc('like_count');
+                    break;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'results' => $results->take($limit)->values(),
+            'total' => $results->count(),
+            'query' => $query,
+            'type' => $type,
+            'sort' => $sort
         ]);
     }
 }

@@ -443,6 +443,194 @@
     </div>
 </div>
 
+<!-- Terza Riga: Box di Ricerca Media -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card hover-effect">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="ph-duotone ph-magnifying-glass me-2"></i>
+                    Cerca Media
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="mediaSearchForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="searchQuery" class="form-label">
+                            <i class="ph-duotone ph-search me-1"></i>
+                            Parole chiave
+                        </label>
+                        <input type="text" class="form-control" id="searchQuery" name="query" placeholder="Cerca video e foto..." value="{{ request('query') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="mediaType" class="form-label">
+                            <i class="ph-duotone ph-files me-1"></i>
+                            Tipo di media
+                        </label>
+                        <select class="form-select" id="mediaType" name="type">
+                            <option value="">Tutti i media</option>
+                            <option value="video" {{ request('type') == 'video' ? 'selected' : '' }}>Solo video</option>
+                            <option value="photo" {{ request('type') == 'photo' ? 'selected' : '' }}>Solo foto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sortBy" class="form-label">
+                            <i class="ph-duotone ph-sort-ascending me-1"></i>
+                            Ordina per
+                        </label>
+                        <select class="form-select" id="sortBy" name="sort">
+                            <option value="recent" {{ request('sort') == 'recent' ? 'selected' : '' }}>Più recenti</option>
+                            <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Più popolari</option>
+                            <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>Più visualizzazioni</option>
+                            <option value="likes" {{ request('sort') == 'likes' ? 'selected' : '' }}>Più apprezzati</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ph-duotone ph-magnifying-glass me-1"></i>
+                                Cerca
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="clearSearch()">
+                                <i class="ph-duotone ph-arrow-clockwise me-1"></i>
+                                Pulisci
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quarta Riga: Risultati della Ricerca -->
+<div class="row" id="searchResults" style="display: none;">
+    <div class="col-12">
+        <div class="card hover-effect">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="ph-duotone ph-list me-2"></i>
+                    Risultati della ricerca
+                </h5>
+                <span class="badge bg-primary" id="resultsCount">0 risultati</span>
+            </div>
+            <div class="card-body">
+                <div class="row" id="resultsContainer">
+                    <!-- I risultati verranno caricati dinamicamente qui -->
+                </div>
+                <div class="text-center mt-3" id="loadingResults" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento risultati...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Caricamento risultati...</p>
+                </div>
+                <div class="text-center mt-3" id="noResults" style="display: none;">
+                    <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
+                        <i class="ph-duotone ph-magnifying-glass f-s-48 text-primary"></i>
+                    </div>
+                    <p class="text-muted f-s-16 mb-0">Nessun risultato trovato</p>
+                    <p class="text-muted f-s-14">Prova a modificare i criteri di ricerca</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Commenti per Risultati di Ricerca -->
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentsModalLabel">
+                    <i class="ph-duotone ph-chat-circle me-2"></i>
+                    Commenti
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Loading indicator -->
+                <div class="text-center" id="commentsLoading" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento commenti...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Caricamento commenti...</p>
+                </div>
+
+                <!-- Error message -->
+                <div class="alert alert-danger" id="commentsError" style="display: none;">
+                    <i class="ph-duotone ph-warning me-2"></i>
+                    <span id="commentsErrorMessage">Errore nel caricamento dei commenti</span>
+                </div>
+
+                <!-- Comments Container -->
+                <div id="commentsContainer" style="display: none;">
+                    <!-- Lista commenti -->
+                    <div id="commentsList" class="mb-3">
+                        <!-- I commenti verranno caricati qui -->
+                    </div>
+
+                    <!-- Form per nuovo commento -->
+                    <div class="border-top pt-3">
+                        <h6 class="mb-3">
+                            <i class="ph-duotone ph-plus-circle me-2"></i>
+                            Aggiungi un commento
+                        </h6>
+                        <form id="newCommentForm">
+                            <input type="hidden" id="commentMediaType" value="">
+                            <input type="hidden" id="commentMediaId" value="">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="commentContent" rows="3" placeholder="Scrivi il tuo commento..." maxlength="500"></textarea>
+                                <div class="form-text">
+                                    <span id="commentCharCount">0</span>/500 caratteri
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-primary" id="submitCommentBtn">
+                                    <i class="ph-duotone ph-paper-plane-right me-1"></i>
+                                    Invia commento
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Chiudi
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="col-12">
+        <div class="card hover-effect">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="ph-duotone ph-list me-2"></i>
+                    Risultati della ricerca
+                </h5>
+                <span class="badge bg-primary" id="resultsCount">0 risultati</span>
+            </div>
+            <div class="card-body">
+                <div class="row" id="resultsContainer">
+                    <!-- I risultati verranno caricati dinamicamente qui -->
+                </div>
+                <div class="text-center mt-3" id="loadingResults" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento risultati...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Caricamento risultati...</p>
+                </div>
+                <div class="text-center mt-3" id="noResults" style="display: none;">
+                    <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
+                        <i class="ph-duotone ph-magnifying-glass f-s-48 text-primary"></i>
+                    </div>
+                    <p class="text-muted f-s-16 mb-0">Nessun risultato trovato</p>
+                    <p class="text-muted f-s-14">Prova a modificare i criteri di ricerca</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Photo Viewer Modal a Tutta Pagina -->
 <div class="custom-modal" id="photoViewerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px);">
     <div class="modal-content" style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
@@ -1253,6 +1441,582 @@ document.addEventListener('DOMContentLoaded', function() {
             closePhotoModal();
         }
     });
+
+    // Gestione form di ricerca media
+    const mediaSearchForm = document.getElementById('mediaSearchForm');
+    if (mediaSearchForm) {
+        mediaSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            performMediaSearch();
+        });
+    }
+
+    // Inizializza i contatori di visualizzazioni per i risultati di ricerca
+    initializeSearchViewCounters();
 });
+
+// Inizializza i contatori di visualizzazioni per i risultati di ricerca
+function initializeSearchViewCounters() {
+    const viewCounters = document.querySelectorAll('.social-view-counter');
+
+    viewCounters.forEach(counter => {
+        const contentType = counter.dataset.contentType;
+        const contentId = counter.dataset.contentId;
+        const viewCountSpan = counter.querySelector('.view-count');
+
+        // Incrementa le visualizzazioni
+        fetch('/api/social/views/increment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                viewable_type: contentType,
+                viewable_id: contentId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Aggiorna il contatore
+                viewCountSpan.textContent = data.view_count.toLocaleString();
+
+                // Aggiorna anche il badge
+                const badge = document.querySelector(`.view-badge-${contentId}`);
+                if (badge) {
+                    badge.textContent = `${data.view_count} visualizzazioni`;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Errore incremento visualizzazioni:', error);
+        });
+    });
+}
+
+// Funzione per eseguire la ricerca media
+async function performMediaSearch() {
+    const query = document.getElementById('searchQuery').value.trim();
+    const type = document.getElementById('mediaType').value;
+    const sort = document.getElementById('sortBy').value;
+
+    // Mostra loading
+    document.getElementById('searchResults').style.display = 'block';
+    document.getElementById('loadingResults').style.display = 'block';
+    document.getElementById('noResults').style.display = 'none';
+    document.getElementById('resultsContainer').innerHTML = '';
+
+    try {
+        const params = new URLSearchParams();
+        if (query) params.append('query', query);
+        if (type) params.append('type', type);
+        if (sort) params.append('sort', sort);
+
+        const response = await fetch(`/api/media/search?${params.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            displaySearchResults(data.results, data.total);
+        } else {
+            showNoResults();
+        }
+    } catch (error) {
+        console.error('Errore nella ricerca:', error);
+        showNoResults();
+    } finally {
+        document.getElementById('loadingResults').style.display = 'none';
+    }
+}
+
+// Funzione per visualizzare i risultati
+function displaySearchResults(results, total) {
+    const container = document.getElementById('resultsContainer');
+    const countElement = document.getElementById('resultsCount');
+
+    countElement.textContent = `${total} risultato${total !== 1 ? 'i' : ''}`;
+
+    if (results.length === 0) {
+        showNoResults();
+        return;
+    }
+
+    let html = '';
+    results.forEach(item => {
+        if (item.type === 'video') {
+            html += createVideoCard(item);
+        } else if (item.type === 'photo') {
+            html += createPhotoCard(item);
+        }
+    });
+
+    container.innerHTML = html;
+
+    // Inizializza i contatori di visualizzazioni per i nuovi risultati
+    setTimeout(() => {
+        initializeSearchViewCounters();
+    }, 100);
+}
+
+// Funzione per creare card video
+function createVideoCard(video) {
+    return `
+        <div class="col-lg-4 col-md-6 mb-3">
+            <div class="card hover-effect h-100">
+                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal(${video.id})">
+                    ${video.thumbnail_url ?
+                        `<img src="${video.thumbnail_url}" alt="${video.title}" class="card-img-top" style="height: 200px; object-fit: cover;">` :
+                        `<div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                        </div>`
+                    }
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                            <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-dark f-s-11 view-badge-${video.id}">${video.view_count || video.views || 0} visualizzazioni</span>
+                    </div>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title f-w-600 f-s-14 mb-2">${video.title}</h6>
+                    ${video.description ? `<p class="text-muted f-s-12 mb-2">${video.description.substring(0, 80)}${video.description.length > 80 ? '...' : ''}</p>` : ''}
+
+                    <!-- Social Actions -->
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex gap-2">
+                                <div class="social-like-btn"
+                                     data-content-type="video"
+                                     data-content-id="${video.id}"
+                                     onclick="toggleSocialLike(this)"
+                                     title="Metti like"
+                                     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                                     onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                                     onmouseout="this.style.backgroundColor='transparent'">
+                                    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
+                                    <span class="text-secondary like-count f-s-12">${(video.likes_count || 0).toLocaleString()}</span>
+                                </div>
+                                <div class="post-icon social-view-counter"
+                                     data-content-type="video"
+                                     data-content-id="${video.id}"
+                                     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                    <i class="ti ti-eye f-s-30"></i>
+                                    <p class="text-secondary view-count">${(video.view_count || video.views || 0).toLocaleString()}</p>
+                                </div>
+                                <div class="social-comment-btn"
+                                     data-content-type="video"
+                                     data-content-id="${video.id}"
+                                     onclick="showVideoComments(${video.id}, event)"
+                                     title="Commenti"
+                                     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                                     onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                                     onmouseout="this.style.backgroundColor='transparent'">
+                                    <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
+                                    <span class="text-secondary comment-count f-s-12 comment-count-${video.id}">${video.comments_count || 0}</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-info f-s-11">Video</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="ph-duotone ph-calendar f-s-11 me-1"></i>
+                                ${new Date(video.created_at).toLocaleDateString('it-IT')}
+                            </small>
+                            <small class="text-muted">
+                                <i class="ph-duotone ph-user f-s-11 me-1"></i>
+                                ${video.user ? video.user.name : 'Utente'}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Funzione per creare card foto
+function createPhotoCard(photo) {
+    return `
+        <div class="col-lg-4 col-md-6 mb-3">
+            <div class="card hover-effect h-100">
+                <div class="position-relative" style="cursor: pointer;" onclick="openPhotoModal(${photo.id})">
+                    ${photo.image_url ?
+                        `<img src="${photo.image_url}" alt="${photo.title}" class="card-img-top" style="height: 200px; object-fit: cover;">` :
+                        `<div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="ph-duotone ph-image f-s-48 text-muted"></i>
+                        </div>`
+                    }
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <div class="zoom-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                            <i class="ph-duotone ph-magnifying-glass-plus f-s-24 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-dark f-s-11 view-badge-${photo.id}">${photo.view_count || photo.views || 0} visualizzazioni</span>
+                    </div>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title f-w-600 f-s-14 mb-2">${photo.title}</h6>
+                    ${photo.description ? `<p class="text-muted f-s-12 mb-2">${photo.description.substring(0, 80)}${photo.description.length > 80 ? '...' : ''}</p>` : ''}
+
+                    <!-- Social Actions -->
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex gap-2">
+                                <div class="social-like-btn"
+                                     data-content-type="photo"
+                                     data-content-id="${photo.id}"
+                                     onclick="toggleSocialLike(this)"
+                                     title="Metti like"
+                                     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                                     onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                                     onmouseout="this.style.backgroundColor='transparent'">
+                                    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
+                                    <span class="text-secondary like-count f-s-12">${(photo.likes_count || 0).toLocaleString()}</span>
+                                </div>
+                                <div class="post-icon social-view-counter"
+                                     data-content-type="photo"
+                                     data-content-id="${photo.id}"
+                                     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                    <i class="ti ti-eye f-s-30"></i>
+                                    <p class="text-secondary view-count">${(photo.view_count || photo.views || 0).toLocaleString()}</p>
+                                </div>
+                                <div class="social-comment-btn"
+                                     data-content-type="photo"
+                                     data-content-id="${photo.id}"
+                                     onclick="showPhotoComments(${photo.id}, event)"
+                                     title="Commenti"
+                                     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                                     onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                                     onmouseout="this.style.backgroundColor='transparent'">
+                                    <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
+                                    <span class="text-secondary comment-count f-s-12 comment-count-${photo.id}">${photo.comments_count || 0}</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-success f-s-11">Foto</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="ph-duotone ph-calendar f-s-11 me-1"></i>
+                                ${new Date(photo.created_at).toLocaleDateString('it-IT')}
+                            </small>
+                            <small class="text-muted">
+                                <i class="ph-duotone ph-user f-s-11 me-1"></i>
+                                ${photo.user ? photo.user.name : 'Utente'}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Funzione per mostrare nessun risultato
+function showNoResults() {
+    document.getElementById('resultsCount').textContent = '0 risultati';
+    document.getElementById('noResults').style.display = 'block';
+    document.getElementById('resultsContainer').innerHTML = '';
+}
+
+// Funzione per pulire la ricerca
+function clearSearch() {
+    document.getElementById('searchQuery').value = '';
+    document.getElementById('mediaType').value = '';
+    document.getElementById('sortBy').value = 'recent';
+    document.getElementById('searchResults').style.display = 'none';
+}
+
+// ===== FUNZIONI SOCIAL PER RISULTATI RICERCA =====
+
+// Funzione toggleSocialLike (già definita nei componenti, ma la includiamo qui per sicurezza)
+function toggleSocialLike(button) {
+    const contentType = button.dataset.contentType;
+    const contentId = button.dataset.contentId;
+    const likeCountSpan = button.querySelector('.like-count');
+    const heartIcon = button.querySelector('img');
+
+    // Disabilita il pulsante durante la richiesta
+    button.style.pointerEvents = 'none';
+
+    fetch('/api/social/likes/toggle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            likeable_type: contentType,
+            likeable_id: contentId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Aggiorna l'aspetto del pulsante
+            if (data.liked) {
+                heartIcon.style.filter = 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);';
+            } else {
+                heartIcon.style.filter = 'brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);';
+            }
+
+            // Aggiorna il contatore
+            likeCountSpan.textContent = data.like_count.toLocaleString();
+        } else {
+            console.error('Errore like:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Errore connessione like:', error);
+    })
+    .finally(() => {
+        button.style.pointerEvents = 'auto';
+    });
+}
+
+// Mostra commenti per video nei risultati
+function showVideoComments(videoId, event) {
+    event.stopPropagation(); // Previene l'apertura del modal
+    openCommentsModal('video', videoId);
+}
+
+// Mostra commenti per foto nei risultati
+function showPhotoComments(photoId, event) {
+    event.stopPropagation(); // Previene l'apertura del modal
+    openCommentsModal('photo', photoId);
+}
+
+// Apre il modal dei commenti
+async function openCommentsModal(mediaType, mediaId) {
+    // Imposta i valori nel form
+    document.getElementById('commentMediaType').value = mediaType;
+    document.getElementById('commentMediaId').value = mediaId;
+
+    // Aggiorna il titolo del modal
+    const modalTitle = document.getElementById('commentsModalLabel');
+    modalTitle.innerHTML = `<i class="ph-duotone ph-chat-circle me-2"></i>Commenti ${mediaType === 'video' ? 'Video' : 'Foto'}`;
+
+    // Mostra loading
+    document.getElementById('commentsLoading').style.display = 'block';
+    document.getElementById('commentsError').style.display = 'none';
+    document.getElementById('commentsContainer').style.display = 'none';
+
+    // Apri il modal
+    const modal = new bootstrap.Modal(document.getElementById('commentsModal'));
+    modal.show();
+
+    // Carica i commenti
+    await loadComments(mediaType, mediaId);
+}
+
+// Carica i commenti
+async function loadComments(mediaType, mediaId) {
+    try {
+        const response = await fetch(`/api/${mediaType}s/${mediaId}/comments`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            displayComments(data.comments);
+        } else {
+            throw new Error(data.message || 'Errore nel caricamento dei commenti');
+        }
+    } catch (error) {
+        console.error('Errore caricamento commenti:', error);
+        showCommentsError(error.message);
+    } finally {
+        document.getElementById('commentsLoading').style.display = 'none';
+    }
+}
+
+// Visualizza i commenti
+function displayComments(comments) {
+    const commentsList = document.getElementById('commentsList');
+
+    if (comments.length === 0) {
+        commentsList.innerHTML = `
+            <div class="text-center py-4">
+                <i class="ph-duotone ph-chat-circle f-s-48 text-muted mb-3"></i>
+                <p class="text-muted mb-0">Nessun commento ancora</p>
+                <p class="text-muted f-s-14">Sii il primo a commentare!</p>
+            </div>
+        `;
+    } else {
+        let html = '';
+        comments.forEach(comment => {
+            const userAvatar = comment.user && comment.user.avatar_url ?
+                `<img src="${comment.user.avatar_url}" alt="${comment.user.name}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">` :
+                `<div class="h-40 w-40 d-flex-center rounded-circle bg-light-primary">
+                    <i class="ph-duotone ph-user f-s-16 text-primary"></i>
+                </div>`;
+
+            html += `
+                <div class="d-flex mb-3">
+                    <div class="flex-shrink-0 me-3">
+                        ${userAvatar}
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="mb-0 f-s-14 f-w-600">${comment.user ? comment.user.name : 'Utente'}</h6>
+                            <small class="text-muted f-s-12">${new Date(comment.created_at).toLocaleDateString('it-IT')}</small>
+                        </div>
+                        <p class="mb-0 f-s-13">${comment.content}</p>
+                    </div>
+                </div>
+            `;
+        });
+        commentsList.innerHTML = html;
+    }
+
+    document.getElementById('commentsContainer').style.display = 'block';
+}
+
+// Mostra errore nei commenti
+function showCommentsError(message) {
+    document.getElementById('commentsErrorMessage').textContent = message;
+    document.getElementById('commentsError').style.display = 'block';
+}
+
+// Gestione form nuovo commento
+document.addEventListener('DOMContentLoaded', function() {
+    const commentForm = document.getElementById('newCommentForm');
+    const commentContent = document.getElementById('commentContent');
+    const charCount = document.getElementById('commentCharCount');
+
+    if (commentForm) {
+        commentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await submitComment();
+        });
+    }
+
+    if (commentContent) {
+        commentContent.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+
+            if (count > 450) {
+                charCount.classList.add('text-warning');
+            } else {
+                charCount.classList.remove('text-warning');
+            }
+        });
+    }
+});
+
+// Invia nuovo commento
+async function submitComment() {
+    const mediaType = document.getElementById('commentMediaType').value;
+    const mediaId = document.getElementById('commentMediaId').value;
+    const content = document.getElementById('commentContent').value.trim();
+    const submitBtn = document.getElementById('submitCommentBtn');
+
+    if (!content) {
+        alert('Inserisci un commento');
+        return;
+    }
+
+    // Disabilita il pulsante durante l'invio
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-12 me-1"></i>Invio...';
+
+    try {
+        const response = await fetch('/media/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                type: mediaType,
+                id: mediaId,
+                content: content
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Aggiungi il nuovo commento alla lista
+            const commentsList = document.getElementById('commentsList');
+            const newCommentHtml = `
+                <div class="d-flex mb-3">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="h-40 w-40 d-flex-center rounded-circle bg-light-primary">
+                            <i class="ph-duotone ph-user f-s-16 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="mb-0 f-s-14 f-w-600">Tu</h6>
+                            <small class="text-muted f-s-12">Ora</small>
+                        </div>
+                        <p class="mb-0 f-s-13">${content}</p>
+                    </div>
+                </div>
+            `;
+
+            // Se non ci sono commenti, rimuovi il messaggio "nessun commento"
+            if (commentsList.querySelector('.text-center')) {
+                commentsList.innerHTML = '';
+            }
+
+            commentsList.insertAdjacentHTML('afterbegin', newCommentHtml);
+
+            // Pulisci il form
+            document.getElementById('commentContent').value = '';
+            document.getElementById('commentCharCount').textContent = '0';
+
+            // Aggiorna il contatore nella card
+            const commentCountElement = document.querySelector(`.comment-count-${mediaId}`);
+            if (commentCountElement) {
+                const currentCount = parseInt(commentCountElement.textContent) || 0;
+                commentCountElement.textContent = currentCount + 1;
+            }
+
+            // Aggiorna anche il contatore nel pulsante commenti se presente
+            const commentButton = document.querySelector(`.social-comment-btn[data-content-id="${mediaId}"]`);
+            if (commentButton) {
+                const buttonCountElement = commentButton.querySelector('.comment-count');
+                if (buttonCountElement) {
+                    const currentCount = parseInt(buttonCountElement.textContent) || 0;
+                    buttonCountElement.textContent = currentCount + 1;
+                }
+            }
+
+            // Mostra messaggio di successo
+            showSuccessMessage('Commento inviato con successo!');
+        } else {
+            if (response.status === 401) {
+                window.location.href = '{{ route("login") }}';
+            } else {
+                throw new Error(data.error || 'Errore nell\'invio del commento');
+            }
+        }
+    } catch (error) {
+        console.error('Errore invio commento:', error);
+        alert('Errore nell\'invio del commento: ' + error.message);
+    } finally {
+        // Riabilita il pulsante
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="ph-duotone ph-paper-plane-right me-1"></i>Invia commento';
+    }
+}
 </script>
 @endpush

@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps', 'addSnap', 'getPeerTubeUrl']);
+        $this->middleware('auth')->except(['getVideoData', 'getVideoSnaps', 'addSnap', 'getPeerTubeUrl', 'getComments']);
     }
 
     /**
@@ -517,6 +517,26 @@ class VideoController extends Controller
         return response()->json([
             'success' => true,
             'snaps' => $snaps,
+        ]);
+    }
+
+    /**
+     * Ottiene i commenti di un video per API
+     */
+    public function getComments(Video $video)
+    {
+        $comments = $video->approvedComments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($comment) {
+                $comment->user->avatar_url = \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user);
+                return $comment;
+            });
+
+        return response()->json([
+            'success' => true,
+            'comments' => $comments
         ]);
     }
 }

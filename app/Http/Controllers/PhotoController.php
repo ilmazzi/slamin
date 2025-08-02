@@ -16,7 +16,7 @@ class PhotoController extends Controller
     public function __construct(ImageService $imageService)
     {
         $this->imageService = $imageService;
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'getComments']);
     }
 
     /**
@@ -237,5 +237,23 @@ class PhotoController extends Controller
         ]);
     }
 
+    /**
+     * Ottiene i commenti di una foto per API
+     */
+    public function getComments(Photo $photo)
+    {
+        $comments = $photo->approvedComments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($comment) {
+                $comment->user->avatar_url = \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user);
+                return $comment;
+            });
 
+        return response()->json([
+            'success' => true,
+            'comments' => $comments
+        ]);
+    }
 }
