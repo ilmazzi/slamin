@@ -20,6 +20,13 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug: log della richiesta
+        \Log::info('CommentController::store chiamato', [
+            'request_data' => $request->all(),
+            'user_authenticated' => auth()->check(),
+            'user_id' => auth()->id(),
+        ]);
+
         $request->validate([
             'commentable_type' => 'required|string',
             'commentable_id' => 'required|integer',
@@ -46,8 +53,15 @@ class CommentController extends Controller
             ], 403);
         }
 
-        // Ottieni il contenuto
+                // Ottieni il contenuto
         $content = $this->getContent($request->commentable_type, $request->commentable_id);
+
+        \Log::info('Contenuto cercato', [
+            'type' => $request->commentable_type,
+            'id' => $request->commentable_id,
+            'found' => $content ? 'yes' : 'no',
+            'content_class' => $content ? get_class($content) : 'null'
+        ]);
 
         if (!$content) {
             return response()->json([
@@ -57,12 +71,38 @@ class CommentController extends Controller
         }
 
         $user = Auth::user();
-        $comment = $content->addComment($request->content, $user, $request->parent_id);
 
-        if (!$comment) {
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Impossibile aggiungere il commento'
+                'message' => 'Devi essere autenticato per commentare'
+            ], 401);
+        }
+
+        try {
+            $comment = $content->addComment($request->content, $user, $request->parent_id);
+
+            \Log::info('Commento creato', [
+                'comment_id' => $comment ? $comment->id : 'null',
+                'content_id' => $content->id,
+                'content_type' => get_class($content)
+            ]);
+
+            if (!$comment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile aggiungere il commento'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione commento', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la creazione del commento: ' . $e->getMessage()
             ], 500);
         }
 
