@@ -746,9 +746,95 @@ window.addEventListener('load', function() {
 
     </div>
 </div>
+
+<!-- Video Player Modal a Tutta Pagina -->
+<div class="custom-modal" id="videoPlayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);">
+    <div class="modal-content" style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
+        <div class="modal-header" style="background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <h5 class="modal-title text-white" id="videoPlayerModalLabel">Video Player</h5>
+            <button type="button" class="btn-close btn-close-white" onclick="closeVideoModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="flex: 1; padding: 0; position: relative;">
+            <!-- Loading indicator -->
+            <div class="text-center position-absolute top-50 start-50 translate-middle" id="modalVideoLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Caricamento video...</span>
+                </div>
+                <p class="mt-2 text-white">Caricamento video...</p>
+            </div>
+
+            <!-- Error message -->
+            <div class="alert alert-danger position-absolute top-50 start-50 translate-middle" id="modalVideoError" style="display: none; z-index: 1000;">
+                <i class="ph-duotone ph-warning f-s-16 me-2"></i>
+                <span id="modalErrorMessage">Errore nel caricamento del video</span>
+            </div>
+
+            <!-- Video Container -->
+            <div class="video-container position-relative d-flex align-items-center justify-content-center" id="modalVideoContainer" style="display: none; padding: 20px;">
+                <div class="w-100" style="max-width: 1200px;">
+                    <div class="video-container position-relative">
+                        <!-- Video Player HTML5 Nativo -->
+                        <video
+                            id="modalVideoPlayer"
+                            class="w-100"
+                            style="height: 500px; max-height: 500px; object-fit: cover; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); background: #000;"
+                            preload="metadata"
+                            controls>
+                            Il tuo browser non supporta la riproduzione video.
+                        </video>
+
+                        <!-- Snap Markers sulla Progress Bar del Player -->
+                        <div class="snap-markers-overlay position-absolute" id="modalSnapMarkers" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
+                            <!-- Snap markers verranno aggiunti dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pulsante per creare snap con scritta sotto -->
+                <div class="position-absolute" id="modalFloatingSnapButton" style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
+                            style="width: 60px; height: 60px;"
+                            onclick="toggleSnapForm()">
+                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
+                    </button>
+                    <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
+                        Crea snap
+                    </div>
+                </div>
+
+                <!-- Form inline per creare snap -->
+                <div class="position-absolute" id="modalSnapForm" style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-white mb-0">Crea Snap</h6>
+                        <button type="button" class="btn-close btn-close-white" onclick="toggleSnapForm()"></button>
+                    </div>
+                    <form id="inlineSnapForm">
+                        <div class="mb-3">
+                            <label for="inlineSnapTitle" class="form-label text-white" style="font-size: 12px;">Titolo (opzionale)</label>
+                            <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inlineSnapDescription" class="form-label text-white" style="font-size: 12px;">Descrizione (opzionale)</label>
+                            <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white" style="font-size: 12px;">Timestamp: <span id="inlineCurrentTime" class="text-warning">00:00</span></label>
+                            <input type="hidden" id="inlineSnapTimestamp" value="0">
+                            <input type="hidden" id="inlineSnapVideoId" value="">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="toggleSnapForm()">Annulla</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">Crea Snap</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
-@section('js')
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Inizializza il carosello Bootstrap
@@ -1462,90 +1548,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Video Player Modal a Tutta Pagina -->
-<div class="custom-modal" id="videoPlayerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);">
-    <div class="modal-content" style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
-        <div class="modal-header" style="background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <h5 class="modal-title text-white" id="videoPlayerModalLabel">Video Player</h5>
-            <button type="button" class="btn-close btn-close-white" onclick="closeVideoModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="flex: 1; padding: 0; position: relative;">
-            <!-- Loading indicator -->
-            <div class="text-center position-absolute top-50 start-50 translate-middle" id="modalVideoLoading">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Caricamento video...</span>
-                </div>
-                <p class="mt-2 text-white">Caricamento video...</p>
-            </div>
 
-            <!-- Error message -->
-            <div class="alert alert-danger position-absolute top-50 start-50 translate-middle" id="modalVideoError" style="display: none; z-index: 1000;">
-                <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                <span id="modalErrorMessage">Errore nel caricamento del video</span>
-            </div>
 
-            <!-- Video Container -->
-            <div class="video-container position-relative d-flex align-items-center justify-content-center" id="modalVideoContainer" style="display: none; padding: 20px;">
-                <div class="w-100" style="max-width: 1200px;">
-                    <div class="video-container position-relative">
-                        <!-- Video Player HTML5 Nativo -->
-                        <video
-                            id="modalVideoPlayer"
-                            class="w-100"
-                            style="height: 500px; max-height: 500px; object-fit: cover; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); background: #000;"
-                            preload="metadata"
-                            controls>
-                            Il tuo browser non supporta la riproduzione video.
-                        </video>
-
-                        <!-- Snap Markers sulla Progress Bar del Player -->
-                        <div class="snap-markers-overlay position-absolute" id="modalSnapMarkers" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
-                            <!-- Snap markers verranno aggiunti dinamicamente -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pulsante per creare snap con scritta sotto -->
-                <div class="position-absolute" id="modalFloatingSnapButton" style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                    <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
-                            style="width: 60px; height: 60px;"
-                            onclick="toggleSnapForm()">
-                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
-                    </button>
-                    <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
-                        Crea snap
-                    </div>
-                </div>
-
-                <!-- Form inline per creare snap -->
-                <div class="position-absolute" id="modalSnapForm" style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-white mb-0">Crea Snap</h6>
-                        <button type="button" class="btn-close btn-close-white" onclick="toggleSnapForm()"></button>
-                    </div>
-                    <form id="inlineSnapForm">
-                        <div class="mb-3">
-                            <label for="inlineSnapTitle" class="form-label text-white" style="font-size: 12px;">Titolo (opzionale)</label>
-                            <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
-                        </div>
-                        <div class="mb-3">
-                            <label for="inlineSnapDescription" class="form-label text-white" style="font-size: 12px;">Descrizione (opzionale)</label>
-                            <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"  style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-white" style="font-size: 12px;">Timestamp: <span id="inlineCurrentTime" class="text-warning">00:00</span></label>
-                            <input type="hidden" id="inlineSnapTimestamp" value="0">
-                            <input type="hidden" id="inlineSnapVideoId" value="">
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-sm btn-secondary" onclick="toggleSnapForm()">Annulla</button>
-                            <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">Crea Snap</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@endsection
+@endpush
