@@ -4,8 +4,87 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 <style>
-            .custom-marker { background: transparent; border: none; }
-            </style>
+.custom-marker { background: transparent; border: none; }
+
+/* Mobile-First Responsive Styles */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+
+    .form-select-sm {
+        font-size: 0.875rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .badge {
+        font-size: 0.625rem;
+    }
+
+    .f-s-10 {
+        font-size: 0.625rem !important;
+    }
+
+    .f-s-12 {
+        font-size: 0.75rem !important;
+    }
+
+    .f-s-14 {
+        font-size: 0.875rem !important;
+    }
+
+    .f-s-16 {
+        font-size: 1rem !important;
+    }
+
+    .f-s-20 {
+        font-size: 1.25rem !important;
+    }
+
+    /* Map controls mobile optimization */
+    .map-controls .btn {
+        width: 35px;
+        height: 35px;
+        padding: 0.25rem;
+    }
+
+    /* Event card mobile optimization */
+    .card.h-100 {
+        min-height: auto;
+    }
+
+    /* Social actions mobile optimization */
+    .social-like-btn,
+    .social-view-counter,
+    .social-comment-btn {
+        padding: 0.25rem !important;
+    }
+
+    .social-like-btn img,
+    .social-view-counter i,
+    .social-comment-btn i {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 18px !important;
+    }
+}
+
+/* Tablet optimization */
+@media (min-width: 577px) and (max-width: 768px) {
+    .card-body {
+        padding: 1.25rem !important;
+    }
+
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+</style>
 @endsection
 
 @section('breadcrumb-title')
@@ -46,21 +125,21 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body p-0">
-                    <div id="eventsMap" style="height: 400px; border-radius: 10px; overflow: hidden; position: relative;">
-                        <div class="map-controls position-absolute top-0 end-0 p-3" style="z-index: 1000;">
-                            <button class="btn btn-light btn-sm mb-2 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
-                                <i class="ph ph-crosshairs"></i>
+                    <div id="eventsMap" style="height: 300px; border-radius: 10px; overflow: hidden; position: relative;">
+                        <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1000;">
+                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
+                                <i class="ph ph-crosshairs f-s-14"></i>
                             </button>
-                            <button class="btn btn-light btn-sm mb-2 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
-                                <i class="ph ph-arrow-clockwise"></i>
+                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
+                                <i class="ph ph-arrow-clockwise f-s-14"></i>
                             </button>
                             <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="Mostra tutti gli eventi">
-                                <i class="ph ph-globe"></i>
+                                <i class="ph ph-globe f-s-14"></i>
                             </button>
-                </div>
-                                </div>
                         </div>
-                                </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -70,9 +149,10 @@
             <div class="card">
                 <div class="card-body">
                     <form method="GET" id="filterForm">
-                        <!-- First Row: Main Filters -->
-                        <div class="row g-3 mb-3">
-                            <div class="col-lg-3 col-md-12">
+                        <!-- Mobile-First Filters -->
+                        <div class="row g-3">
+                            <!-- Search - Full width on mobile -->
+                            <div class="col-12">
                                 <div class="input-group">
                                     <span class="input-group-text bg-light-primary border-end-0">
                                         <i class="ph ph-magnifying-glass text-muted"></i>
@@ -82,7 +162,9 @@
                                            value="{{ request('search') }}">
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-4">
+
+                            <!-- City Filter - Full width on mobile, half on tablet -->
+                            <div class="col-12 col-sm-6">
                                 <select name="city" class="form-select">
                                     <option value="">{{ __('events.filter_by_city') }}</option>
                                     @foreach($events->pluck('city')->unique()->filter() as $city)
@@ -92,12 +174,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-2 col-md-4">
+
+                            <!-- Type Filter - Full width on mobile, half on tablet -->
+                            <div class="col-12 col-sm-6">
                                 <select name="type" class="form-select">
                                     <option value="">{{ __('events.all_types') }}</option>
                                     <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
                                     <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
+                            </div>
                             </div>
                         </div>
 
@@ -154,10 +239,10 @@
     <!-- Events Grid with Pagination Controls -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
                 <h5 class="mb-0">{{ __('events.events_list') }}</h5>
                 <div class="d-flex align-items-center gap-2">
-                    <label class="form-label mb-0">{{ __('events.show') }}:</label>
+                    <label class="form-label mb-0 f-s-14">{{ __('events.show') }}:</label>
                     <select class="form-select form-select-sm" style="width: auto;" onchange="changePerPage(this.value)">
                         <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
                         <option value="20" {{ request('per_page', 10) == 20 ? 'selected' : '' }}>20</option>
@@ -170,25 +255,27 @@
 
     <div class="row" id="eventsGrid">
         @forelse($events->take(request('per_page', 10)) as $event)
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-12 col-sm-6 col-lg-4 mb-4">
                 <div class="card h-100 position-relative">
                     <!-- Event Status Badge -->
-                    <div class="position-absolute top-0 end-0 p-3" style="z-index: 3;">
-                        @if($event->is_public)
-                            <span class="badge bg-success">{{ __('events.public') }}</span>
-                        @else
-                            <span class="badge bg-warning">{{ __('events.private') }}</span>
-                        @endif
-                        @if($event->acceptsRequests())
-                            <span class="badge bg-primary ms-1">
-                                <i class="ph ph-check me-1"></i>{{ __('events.apply_to_event') }}
-                            </span>
-                        @endif
-                        @if($event->category)
-                            <span class="badge {{ $event->category_color_class }} ms-1">
-                                {{ $event->getCategoryDisplayName() }}
-                            </span>
-                        @endif
+                    <div class="position-absolute top-0 end-0 p-2" style="z-index: 3;">
+                        <div class="d-flex flex-column gap-1">
+                            @if($event->is_public)
+                                <span class="badge bg-success f-s-10">{{ __('events.public') }}</span>
+                            @else
+                                <span class="badge bg-warning f-s-10">{{ __('events.private') }}</span>
+                            @endif
+                            @if($event->acceptsRequests())
+                                <span class="badge bg-primary f-s-10">
+                                    <i class="ph ph-check me-1"></i>{{ __('events.apply_to_event') }}
+                                </span>
+                            @endif
+                            @if($event->category)
+                                <span class="badge {{ $event->category_color_class }} f-s-10">
+                                    {{ $event->getCategoryDisplayName() }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Event Image with Overlay Info -->
@@ -204,80 +291,84 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="position-absolute bottom-0 start-0 text-white p-3 w-100" style="z-index: 2;">
+                        <div class="position-absolute bottom-0 start-0 text-white p-2 w-100" style="z-index: 2;">
                             @if($event->is_online)
-                                <h6 class="mb-1 text-white">{{ __('events.online_event') }}</h6>
-                                <small class="text-white-50"><i class="ph ph-globe me-1"></i>{{ __('events.virtual_event') }}</small>
+                                <h6 class="mb-1 text-white f-s-12">{{ __('events.online_event') }}</h6>
+                                <small class="text-white-50 f-s-10"><i class="ph ph-globe me-1"></i>{{ __('events.virtual_event') }}</small>
                             @else
-                            <h6 class="mb-1 text-white">{{ $event->venue_name }}</h6>
-                            <small class="text-white-50"><i class="ph ph-map-pin me-1"></i>{{ $event->city }}</small>
+                            <h6 class="mb-1 text-white f-s-12">{{ Str::limit($event->venue_name, 30) }}</h6>
+                            <small class="text-white-50 f-s-10"><i class="ph ph-map-pin me-1"></i>{{ $event->city }}</small>
                             @endif
                         </div>
                     </div>
 
-                    <div class="card-body d-flex flex-column p-4">
+                    <div class="card-body d-flex flex-column p-3">
                         <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="card-title mb-2 fw-bold">
+                            <div class="flex-grow-1 me-2">
+                                <h6 class="card-title mb-2 fw-bold f-s-14">
                                     <a href="{{ route('events.show', $event) }}" class="text-decoration-none text-dark">
-                                        {{ $event->title }}
+                                        {{ Str::limit($event->title, 50) }}
                                     </a>
-                                </h5>
+                                </h6>
                                 @if($event->subtitle)
-                                    <h6 class="text-muted mb-2">{{ $event->subtitle }}</h6>
+                                    <h6 class="text-muted mb-2 f-s-12">{{ Str::limit($event->subtitle, 40) }}</h6>
                                 @endif
-                                <p class="text-muted mb-2">
-                                    {{ Str::limit($event->description, 80) }}
+                                <p class="text-muted mb-2 f-s-12">
+                                    {{ Str::limit($event->description, 60) }}
                                 </p>
                             </div>
-                            <div class="flex-shrink-0 ms-3">
-                                <div class="bg-light-primary text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 50px; min-height: 50px; font-size: 12px; border-radius: 8px;">
-                                    <div class="fw-bold fs-6">{{ $event->start_datetime->format('d') }}</div>
-                                    <div class="small">{{ $event->start_datetime->format('M') }}</div>
+                            <div class="flex-shrink-0">
+                                <div class="bg-light-primary text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 45px; min-height: 45px; font-size: 11px; border-radius: 6px;">
+                                    <div class="fw-bold f-s-12">{{ $event->start_datetime->format('d') }}</div>
+                                    <div class="f-s-10">{{ $event->start_datetime->format('M') }}</div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <div class="d-flex align-items-center text-muted mb-2">
-                                <i class="ph ph-clock me-2"></i>
-                                <span>{{ $event->start_datetime->format('H:i') }} - {{ $event->end_datetime->format('H:i') }}</span>
+                            <div class="d-flex align-items-center text-muted mb-1">
+                                <i class="ph ph-clock me-1 f-s-12"></i>
+                                <span class="f-s-12">{{ $event->start_datetime->format('H:i') }} - {{ $event->end_datetime->format('H:i') }}</span>
                             </div>
-                            <div class="d-flex align-items-center text-muted mb-2">
-                                <i class="ph ph-user me-2"></i>
-                                <span>{{ $event->organizer->name }}</span>
+                            <div class="d-flex align-items-center text-muted mb-1">
+                                <i class="ph ph-user me-1 f-s-12"></i>
+                                <span class="f-s-12">
+                                    <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">
+                                        {{ $event->organizer->getDisplayName() }}
+                                    </a>
+                                </span>
                             </div>
                             @if($event->is_online)
-                                <div class="d-flex align-items-center text-muted mb-2">
-                                    <i class="ph ph-globe me-2"></i>
-                                    <span>{{ $event->timezone }}</span>
+                                <div class="d-flex align-items-center text-muted mb-1">
+                                    <i class="ph ph-globe me-1 f-s-12"></i>
+                                    <span class="f-s-12">{{ $event->timezone }}</span>
                                 </div>
                             @else
-                                <div class="d-flex align-items-center text-muted mb-2">
-                                    <i class="ph ph-map-pin me-2"></i>
-                                    <span>{{ $event->city }}, {{ $event->country }}</span>
+                                <div class="d-flex align-items-center text-muted mb-1">
+                                    <i class="ph ph-map-pin me-1 f-s-12"></i>
+                                    <span class="f-s-12">{{ $event->city }}, {{ $event->country }}</span>
                                 </div>
                             @endif
                         </div>
 
                         <div class="mt-auto">
                             <!-- Event Info -->
-                            <div class="d-flex align-items-center gap-2 mb-3">
+                            <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
                                 @if($event->entry_fee > 0)
-                                    <span class="badge bg-warning">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
+                                    <span class="badge bg-warning f-s-10">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
                                 @else
-                                    <span class="badge bg-success">{{ __('events.free') }}</span>
+                                    <span class="badge bg-success f-s-10">{{ __('events.free') }}</span>
                                 @endif
                                 @if($event->max_participants)
-                                    <small class="text-muted">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
+                                    <small class="text-muted f-s-10">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
                                 @endif
                             </div>
-                            
+
                             <!-- Social Actions & Action Buttons -->
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                                 <!-- Social Actions -->
                                 @if(Auth::check())
-                                    <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-2">
                                         <x-social-like-button :content="$event" type="event" />
                                         <x-social-view-display :content="$event" type="event" />
                                         <x-report-button :content="$event" type="event" />
@@ -285,15 +376,15 @@
                                 @else
                                     <div></div>
                                 @endif
-                                
+
                                 <!-- Action Buttons -->
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-1">
                                     <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm">
                                         <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
                                     </a>
                                     @can('events.manage.own')
                                         @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
-                                            <button type="button" class="btn btn-light btn-sm" 
+                                            <button type="button" class="btn btn-light btn-sm"
                                                     onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
                                                     title="Elimina evento">
                                                 <i class="ti ti-trash"></i>
@@ -328,59 +419,59 @@
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-calendar" style="font-size: 24px;"></i>
-                                        </div>
-                                    </div>
-                    <h4 class="mb-1">{{ $statistics['total_events'] }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.total_events') }}</p>
-                                    </div>
-                        </div>
-                            </div>
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-globe" style="font-size: 24px;"></i>
-                                </div>
-                                </div>
-                    <h4 class="mb-1">{{ $statistics['public_events'] }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.public_events_count') }}</p>
-                                </div>
-                                </div>
-                            </div>
-        <div class="col-md-3 col-6 mb-3">
-            <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-clock" style="font-size: 24px;"></i>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card hover-effect equal-card">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="ph ph-calendar f-s-20"></i>
                         </div>
                     </div>
-                    <h4 class="mb-1">{{ $statistics['upcoming_events'] }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.upcoming_events_count') }}</p>
+                    <h5 class="mb-1 f-s-16">{{ $statistics['total_events'] }}</h5>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.total_events') }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-6 mb-3">
-                <div class="card">
-                <div class="card-body text-center py-4">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                        <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="ph ph-map-pin" style="font-size: 24px;"></i>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card hover-effect equal-card">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="ph ph-globe f-s-20"></i>
+                        </div>
                     </div>
+                    <h5 class="mb-1 f-s-16">{{ $statistics['public_events'] }}</h5>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.public_events_count') }}</p>
                 </div>
-                    <h4 class="mb-1">{{ $statistics['cities_count'] }}</h4>
-                    <p class="text-muted mb-0">{{ __('events.cities_count') }}</p>
             </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card hover-effect equal-card">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="ph ph-clock f-s-20"></i>
+                        </div>
+                    </div>
+                    <h5 class="mb-1 f-s-16">{{ $statistics['upcoming_events'] }}</h5>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.upcoming_events_count') }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+            <div class="card hover-effect equal-card">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="ph ph-map-pin f-s-20"></i>
+                        </div>
+                    </div>
+                    <h5 class="mb-1 f-s-16">{{ $statistics['cities_count'] }}</h5>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.cities_count') }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-            </div>
-        </div>
 </div>
 
     <!-- Event Details Modal -->
@@ -449,10 +540,10 @@ function changePerPage(value) {
 function confirmDeleteEvent(eventId, eventTitle) {
     // Set the event title in the modal
     document.getElementById('deleteEventTitle').textContent = eventTitle;
-    
+
     // Set the form action
     document.getElementById('deleteEventForm').action = `/events/${eventId}`;
-    
+
     // Show the modal
     const modal = new bootstrap.Modal(document.getElementById('deleteEventModal'));
     modal.show();
@@ -500,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initMap() {
     console.log('Initializing map...');
-    
+
     // Inizializza la mappa
     map = L.map('eventsMap').setView([41.9028, 12.4964], 10);
 
@@ -514,10 +605,10 @@ function initMap() {
 
 function loadEventsWithCurrentFilters() {
     const params = {};
-    
+
     // Ottieni i parametri correnti dall'URL
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     // Applica i filtri correnti
     if (urlParams.has('search')) {
         params.search = urlParams.get('search');
@@ -540,7 +631,7 @@ function loadEventsWithCurrentFilters() {
     if (urlParams.has('type')) {
         params.type = urlParams.get('type');
     }
-    
+
     // Applica coordinate solo se esplicitamente specificate o se è il filtro 'nearby'
     if (urlParams.has('lat') && urlParams.has('lng')) {
         params.latitude = parseFloat(urlParams.get('lat'));
@@ -563,7 +654,7 @@ function loadEventsWithCurrentFilters() {
             return;
         }
     }
-    
+
     console.log('Loading events with current filters:', params);
     loadEventsOnMapWithFilter(params);
 }
@@ -577,7 +668,7 @@ function loadEventsOnMap(lat = 45.59614070, lng = 8.91219860) {
 
 function loadEventsOnMapWithFilter(params) {
     console.log('loadEventsOnMapWithFilter called with params:', params);
-    
+
     // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
@@ -591,15 +682,15 @@ function loadEventsOnMapWithFilter(params) {
         // Se non abbiamo coordinate, usa l'endpoint /api/events (senza filtro di posizione)
         url = new URL('/api/events', window.location.origin);
     }
-    
+
     Object.keys(params).forEach(key => {
         if (params[key] !== null && params[key] !== undefined) {
             url.searchParams.append(key, params[key]);
         }
     });
-    
+
     console.log('Fetching from URL:', url.toString());
-    
+
     fetch(url)
         .then(response => {
             console.log('Response status:', response.status);
@@ -608,16 +699,16 @@ function loadEventsOnMapWithFilter(params) {
     .then(events => {
             console.log('Events received:', events);
             console.log('Number of events:', events.length);
-            
+
             if (events.length === 0) {
                 console.log('No events found with current filters');
                 showNotification('Nessun evento trovato con i filtri applicati.', 'info');
                 return;
             }
-            
+
             events.forEach((event, index) => {
                 console.log(`Adding marker ${index + 1}:`, event);
-                
+
             if (event.latitude && event.longitude) {
                     // Determina il colore del marker basato sulla categoria
                     let markerColor = '#6c757d'; // Default secondary (grigio)
@@ -639,20 +730,20 @@ function loadEventsOnMapWithFilter(params) {
                         };
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
                     }
-                    
+
                     console.log(`Marker color for event ${event.id} (${event.category}): ${markerColor}`);
-                    
+
                     // Gestione marker sovrapposti - sposta leggermente i marker alla stessa posizione
                     let lat = parseFloat(event.latitude);
                     let lng = parseFloat(event.longitude);
-                    
+
                     // Controlla se ci sono altri marker alla stessa posizione
                     const existingMarkersAtPosition = markers.filter(marker => {
                         const markerLat = marker.getLatLng().lat;
                         const markerLng = marker.getLatLng().lng;
                         return Math.abs(markerLat - lat) < 0.0001 && Math.abs(markerLng - lng) < 0.0001;
                     });
-                    
+
                     if (existingMarkersAtPosition.length > 0) {
                         // Sposta il marker di una piccola quantità per renderlo visibile
                         const offset = 0.0002; // Circa 20 metri
@@ -660,7 +751,7 @@ function loadEventsOnMapWithFilter(params) {
                         lng += (existingMarkersAtPosition.length * offset);
                         console.log(`Marker ${event.id} offset to [${lat}, ${lng}] due to overlap`);
                     }
-                    
+
                     // Crea icona personalizzata con colore ma stile standard
                     const customIcon = L.divIcon({
                         className: 'custom-marker',
@@ -668,26 +759,26 @@ function loadEventsOnMapWithFilter(params) {
                         iconSize: [20, 20],
                         iconAnchor: [10, 10]
                     });
-                    
+
                     const marker = L.marker([lat, lng], {
                         icon: customIcon
                     }).addTo(map);
-                    
+
                     console.log(`Marker added to map at [${lat}, ${lng}]`);
-                    
+
                     // Add click handler to open modal instead of popup
                     marker.on('click', function() {
                         openEventDetailsModal(event);
                     });
-                    
+
                 markers.push(marker);
                 } else {
                     console.log(`Event ${event.id} has no coordinates:`, event);
                 }
             });
-            
+
             console.log(`Total markers added: ${markers.length}`);
-            
+
             // Fit map to show all markers
             if (markers.length > 0) {
                 const group = new L.featureGroup(markers);
@@ -746,7 +837,7 @@ function showAllEvents() {
                             .bindPopup(`
                                 <div class="p-2">
                                     <h6>${event.title}</h6>
-                                    ${event.is_online ? 
+                                    ${event.is_online ?
                                         `<p class="mb-2"><i class="ph ph-globe me-1"></i>Evento Online</p>` :
                                         `<p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>`
                                     }
@@ -797,7 +888,7 @@ function applyQuickFilter(filterType) {
 function updateEventsList(params) {
     // Costruisci l'URL con i parametri di filtro
     const url = new URL(window.location);
-    
+
     // Rimuovi parametri esistenti
     url.searchParams.delete('date_from');
     url.searchParams.delete('date_to');
@@ -806,7 +897,7 @@ function updateEventsList(params) {
     url.searchParams.delete('lat');
     url.searchParams.delete('lng');
     url.searchParams.delete('radius');
-    
+
     // Aggiungi i nuovi parametri
     if (params.date_from) url.searchParams.set('date_from', params.date_from);
     if (params.date_to) url.searchParams.set('date_to', params.date_to);
@@ -815,7 +906,7 @@ function updateEventsList(params) {
     if (params.lat) url.searchParams.set('lat', params.lat);
     if (params.lng) url.searchParams.set('lng', params.lng);
     if (params.radius) url.searchParams.set('radius', params.radius);
-    
+
     // Aggiorna la pagina con i nuovi filtri
     window.location.href = url.toString();
 }
@@ -861,7 +952,7 @@ function applyFilterToList(filterType) {
                     addHiddenInput(form, 'lat', position.coords.latitude);
                     addHiddenInput(form, 'lng', position.coords.longitude);
                     addHiddenInput(form, 'radius', '10');
-                    
+
                     // Crea i parametri per la mappa
                     const mapParams = {
                         filter: 'nearby',
@@ -869,10 +960,10 @@ function applyFilterToList(filterType) {
                         longitude: position.coords.longitude,
                         radius: '10'
                     };
-                    
+
                     // Aggiorna la mappa
                     loadEventsOnMapWithFilter(mapParams);
-                    
+
                     // Aggiorna la lista
                     updateEventsList({
                         filter: 'nearby',
@@ -896,10 +987,10 @@ function applyFilterToList(filterType) {
 
     // Aggiorna solo la mappa con i nuovi filtri (senza posizione automatica)
     const mapParams = { ...params };
-    
+
     console.log('Applying filter to map only:', filterType, mapParams);
     loadEventsOnMapWithFilter(mapParams);
-    
+
     // Aggiorna anche la lista ricaricando la pagina
     updateEventsList(params);
 }
@@ -972,7 +1063,7 @@ function addHiddenInput(form, name, value) {
     if (existingInput) {
         existingInput.remove();
     }
-    
+
     // Aggiungi nuovo input
     const input = document.createElement('input');
     input.type = 'hidden';
@@ -985,14 +1076,14 @@ function addHiddenInput(form, name, value) {
 function openEventDetailsModal(event) {
     const modalBody = document.getElementById('eventDetailsModalBody');
     const modalLink = document.getElementById('eventDetailsModalLink');
-    
+
     // Create modal content with horizontal layout
     let modalContent = `
         <div class="row">
             <div class="col-md-4">
-                <img src="${event.image_url || '/assets/images/events/default-event.jpg'}" 
-                     class="img-fluid rounded" 
-                     alt="${event.title}" 
+                <img src="${event.image_url || '/assets/images/events/default-event.jpg'}"
+                     class="img-fluid rounded"
+                     alt="${event.title}"
                      onerror="this.src='/assets/images/events/default-event.jpg'">
             </div>
             <div class="col-md-8">
@@ -1000,7 +1091,7 @@ function openEventDetailsModal(event) {
                     <h4 class="mb-0">${event.title}</h4>
                     <span class="badge ${event.category_color_class} fs-6">${event.category_name || 'N/A'}</span>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-calendar-alt text-primary me-2"></i>
@@ -1008,7 +1099,7 @@ function openEventDetailsModal(event) {
                     </div>
                 </div>
     `;
-    
+
     if (event.is_online) {
         modalContent += `
                 <div class="row mb-3">
@@ -1030,7 +1121,7 @@ function openEventDetailsModal(event) {
                 </div>
         `;
     }
-    
+
     modalContent += `
                 <div class="row mb-3">
                     <div class="col-12">
@@ -1038,7 +1129,7 @@ function openEventDetailsModal(event) {
                         <strong>Organizzatore:</strong> ${event.organizer}
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-6">
                         <i class="fas fa-users text-warning me-2"></i>
@@ -1052,10 +1143,10 @@ function openEventDetailsModal(event) {
             </div>
         </div>
     `;
-    
+
     modalBody.innerHTML = modalContent;
     modalLink.href = event.url;
-    
+
     // Open the modal
     const modal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
     modal.show();
@@ -1070,11 +1161,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const filterType = this.getAttribute('data-filter');
             console.log('Quick filter clicked:', filterType);
-            
+
             // Update form with quick filter
             const form = document.getElementById('filterForm');
             addHiddenInput(form, 'quick_filter', filterType);
-            
+
             // Submit form
             form.submit();
     });
@@ -1082,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Remove ALL auto-submit behavior
     const form = document.getElementById('filterForm');
-    
+
     // Prevent form from auto-submitting on any input change
     form.addEventListener('submit', function(e) {
         // Only allow submit if it's the filter button or quick filter
@@ -1092,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     });
-    
+
     // Remove any existing change/input listeners that might cause auto-submit
     const inputs = form.querySelectorAll('input, select');
     inputs.forEach(input => {
