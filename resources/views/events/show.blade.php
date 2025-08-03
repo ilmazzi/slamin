@@ -3,6 +3,119 @@
 @section('title', $event->title)
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
+<style>
+/* Mobile-First Responsive Styles for Events Show */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .badge {
+        font-size: 0.625rem;
+    }
+    
+    .f-s-10 {
+        font-size: 0.625rem !important;
+    }
+    
+    .f-s-12 {
+        font-size: 0.75rem !important;
+    }
+    
+    .f-s-14 {
+        font-size: 0.875rem !important;
+    }
+    
+    .f-s-16 {
+        font-size: 1rem !important;
+    }
+    
+    .f-s-18 {
+        font-size: 1.125rem !important;
+    }
+    
+    .f-s-48 {
+        font-size: 3rem !important;
+    }
+    
+    /* Hero section mobile optimization */
+    .position-relative.overflow-hidden.rounded-3 {
+        height: 200px !important;
+    }
+    
+    /* Event info mobile optimization */
+    .d-flex.align-items-center {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Participants cards mobile optimization */
+    .card.border-0 .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    /* Sidebar mobile optimization */
+    .position-sticky {
+        position: static !important;
+        top: auto !important;
+    }
+    
+    /* Map mobile optimization */
+    #eventMap {
+        height: 200px !important;
+    }
+    
+    /* Alert mobile optimization */
+    .alert {
+        padding: 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    /* Timeline mobile optimization */
+    .border-start.border-4 {
+        padding-left: 0.75rem !important;
+    }
+}
+
+/* Tablet optimization */
+@media (min-width: 577px) and (max-width: 768px) {
+    .card-body {
+        padding: 1.25rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .position-relative.overflow-hidden.rounded-3 {
+        height: 225px !important;
+    }
+    
+    #eventMap {
+        height: 225px !important;
+    }
+}
+
+/* Desktop optimization */
+@media (min-width: 769px) {
+    .position-relative.overflow-hidden.rounded-3 {
+        height: 250px !important;
+    }
+    
+    #eventMap {
+        height: 250px !important;
+    }
+}
+</style>
 @endsection
 
 @section('breadcrumb-title')
@@ -20,72 +133,74 @@
     <!-- Event Hero Section -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="position-relative overflow-hidden rounded-3" style="height: 400px;">
+            <div class="position-relative overflow-hidden rounded-3" style="height: 250px;">
                 @if($event->image_url)
                     <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="position-absolute w-100 h-100" style="object-fit: cover;">
                     <div class="position-absolute w-100 h-100" style="background: linear-gradient(135deg, rgba(15, 98, 106, 0.7) 0%, rgba(12, 78, 85, 0.7) 100%);"></div>
                 @else
                     <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0f626a 0%, #0c4e55 100%);">
                         <div class="text-center text-white">
-                            <i class="ph ph-calendar f-s-72 mb-3"></i>
-                            <div class="f-s-24 f-w-600">{{ $event->title }}</div>
+                            <i class="ph ph-calendar f-s-48 mb-2"></i>
+                            <div class="f-s-16 f-w-600">{{ Str::limit($event->title, 50) }}</div>
                         </div>
                     </div>
                 @endif
                 @if($event->is_public)
-                    <span class="badge bg-success position-absolute top-0 end-0 m-4 fs-6">
+                    <span class="badge bg-success position-absolute top-0 end-0 m-2 f-s-10">
                         <i class="ph ph-globe me-1"></i> {{ __('events.event_public_badge') }}
                     </span>
                 @else
-                    <span class="badge bg-warning position-absolute top-0 end-0 m-4 fs-6">
+                    <span class="badge bg-warning position-absolute top-0 end-0 m-2 f-s-10">
                         <i class="ph ph-lock me-1"></i> {{ __('events.event_private_badge') }}
                     </span>
                 @endif
 
                 <!-- Category Badge -->
                 @if($event->category)
-                    <span class="badge {{ $event->category_color_class }} position-absolute top-0 start-0 m-4 fs-6">
+                    <span class="badge {{ $event->category_color_class }} position-absolute top-0 start-0 m-2 f-s-10">
                         <i class="ph ph-tag me-1"></i> {{ __('events.category_' . $event->category) }}
                     </span>
                 @endif
 
-                <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 2;">
-                    <h1 class="display-4 fw-bold mb-2 text-white">{{ $event->title }}</h1>
+                <div class="position-absolute bottom-0 start-0 text-white p-3 w-100" style="z-index: 2;">
+                    <h2 class="f-s-18 fw-bold mb-2 text-white">{{ Str::limit($event->title, 60) }}</h2>
                     @if($event->subtitle)
-                        <h4 class="text-white-50 mb-3">{{ $event->subtitle }}</h4>
+                        <h6 class="text-white-50 mb-2 f-s-14">{{ Str::limit($event->subtitle, 40) }}</h6>
                     @endif
                     @if($event->groups && $event->groups->count())
                         <div class="mb-2">
-                            <small class="text-white mb-1 d-block">
+                            <small class="text-white mb-1 d-block f-s-10">
                                 <i class="ph ph-link me-1"></i>{{ __('events.associated_groups') }}:
                             </small>
-                            @foreach($event->groups as $group)
-                                <a href="{{ route('groups.show', $group) }}" class="badge bg-primary me-2 text-decoration-none">
-                                    <i class="ph ph-users me-1"></i>{{ $group->name }}
-                                </a>
-                            @endforeach
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach($event->groups as $group)
+                                    <a href="{{ route('groups.show', $group) }}" class="badge bg-primary text-decoration-none f-s-10">
+                                        <i class="ph ph-users me-1"></i>{{ Str::limit($group->name, 15) }}
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="ph ph-calendar-check me-2 fs-5"></i>
-                        <span class="fs-5">{{ $event->start_datetime->format('d F Y, H:i') }}</span>
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="ph ph-calendar-check me-1 f-s-12"></i>
+                        <span class="f-s-12">{{ $event->start_datetime->format('d/m/Y, H:i') }}</span>
                     </div>
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="ph ph-map-pin me-2 fs-5"></i>
-                        <span class="fs-5">
+                    <div class="d-flex align-items-center mb-1">
+                        <i class="ph ph-map-pin me-1 f-s-12"></i>
+                        <span class="f-s-12">
                             @if($event->is_online)
                                 <i class="ph ph-globe me-1"></i>{{ __('events.online_event') }}
                                 @if($event->online_url)
-                                    - <a href="{{ $event->online_url }}" target="_blank" class="text-white text-decoration-underline">{{ __('events.join_online') }}</a>
+                                    - <a href="{{ $event->online_url }}" target="_blank" class="text-white text-decoration-underline f-s-10">{{ __('events.join_online') }}</a>
                                 @endif
                             @else
-                                {{ $event->venue_name }}, {{ $event->city }}
+                                {{ Str::limit($event->venue_name, 25) }}, {{ $event->city }}
                             @endif
                         </span>
                     </div>
                     <div class="d-flex align-items-center">
-                        <i class="ph ph-user me-2 fs-5"></i>
-                        <span class="fs-5">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
+                        <i class="ph ph-user me-1 f-s-12"></i>
+                        <span class="f-s-12">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
                     </div>
                 </div>
             </div>
@@ -94,7 +209,7 @@
 
     <div class="row">
         <!-- Main Content -->
-        <div class="col-lg-8">
+        <div class="col-12 col-lg-8">
 
             <!-- Private Event Notice -->
             @if(!$event->is_public)
@@ -119,34 +234,34 @@
                 <div class="card-body">
                     <div class="row">
                         @if($event->category)
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-3">
                             <div class="d-flex align-items-center">
-                                <i class="ph ph-tag me-2 text-muted"></i>
+                                <i class="ph ph-tag me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block">{{ __('events.category') }}</small>
-                                    <span class="badge {{ $event->category_color_class }} fs-6">{{ __('events.category_' . $event->category) }}</span>
+                                    <small class="text-muted d-block f-s-12">{{ __('events.category') }}</small>
+                                    <span class="badge {{ $event->category_color_class }} f-s-12">{{ __('events.category_' . $event->category) }}</span>
                                 </div>
                             </div>
                         </div>
                         @endif
 
                         @if($event->entry_fee > 0)
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-3">
                             <div class="d-flex align-items-center">
-                                <i class="ph ph-currency-eur me-2 text-muted"></i>
+                                <i class="ph ph-currency-eur me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block">{{ __('events.entry_fee') }}</small>
-                                    <span class="fw-semibold">{{ number_format($event->entry_fee, 2) }}€</span>
+                                    <small class="text-muted d-block f-s-12">{{ __('events.entry_fee') }}</small>
+                                    <span class="fw-semibold f-s-14">{{ number_format($event->entry_fee, 2) }}€</span>
                                 </div>
                             </div>
                         </div>
                         @else
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-3">
                             <div class="d-flex align-items-center">
-                                <i class="ph ph-currency-eur me-2 text-muted"></i>
+                                <i class="ph ph-currency-eur me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block">{{ __('events.entry_fee') }}</small>
-                                    <span class="badge bg-success">{{ __('common.free') }}</span>
+                                    <small class="text-muted d-block f-s-12">{{ __('events.entry_fee') }}</small>
+                                    <span class="badge bg-success f-s-12">{{ __('common.free') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -163,14 +278,16 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p class="fs-6 lh-lg">{{ $event->description }}</p>
+                    <p class="f-s-14 lh-lg">{{ $event->description }}</p>
 
                     @if($event->tags)
-                        <div class="mt-4">
-                            <h6 class="mb-2">Tags:</h6>
-                            @foreach($event->tags as $tag)
-                                <span class="badge bg-light text-dark me-2 mb-2">#{{ $tag }}</span>
-                            @endforeach
+                        <div class="mt-3">
+                            <h6 class="mb-2 f-s-14">Tags:</h6>
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach($event->tags as $tag)
+                                    <span class="badge bg-light text-dark f-s-10">#{{ $tag }}</span>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -186,7 +303,7 @@
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info">
-                        <p class="mb-0">{{ $event->requirements }}</p>
+                        <p class="mb-0 f-s-14">{{ $event->requirements }}</p>
                     </div>
                 </div>
             </div>
@@ -202,32 +319,32 @@
                 <div class="card-body">
                     @if($event->registration_deadline)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.deadline_registration') }}</h6>
-                        <p class="text-muted mb-0">{{ $event->registration_deadline->format('d F Y, H:i') }}</p>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.deadline_registration') }}</h6>
+                        <p class="text-muted mb-0 f-s-12">{{ $event->registration_deadline->format('d/m/Y, H:i') }}</p>
                     </div>
                     @endif
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.start_event') }}</h6>
-                        <p class="text-muted mb-0">{{ $event->start_datetime->format('d F Y, H:i') }}</p>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.start_event') }}</h6>
+                        <p class="text-muted mb-0 f-s-12">{{ $event->start_datetime->format('d/m/Y, H:i') }}</p>
                     </div>
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.end_event') }}</h6>
-                        <p class="text-muted mb-0">{{ $event->end_datetime->format('d F Y, H:i') }}</p>
-                        <small class="text-muted">{{ __('events.duration') }}: {{ $event->duration }} {{ __('events.duration_hours') }}</small>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.end_event') }}</h6>
+                        <p class="text-muted mb-0 f-s-12">{{ $event->end_datetime->format('d/m/Y, H:i') }}</p>
+                        <small class="text-muted f-s-10">{{ __('events.duration') }}: {{ $event->duration }} {{ __('events.duration_hours') }}</small>
                     </div>
                 </div>
             </div>
 
             <!-- Participants -->
             <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                     <h5 class="mb-0">
                         <i class="ph ph-users me-2"></i>{{ __('events.participants') }}
                     </h5>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-light-primary">
+                        <span class="badge bg-light-primary f-s-12">
                             {{ $event->invitations->where('status', 'accepted')->count() + $event->requests->where('status', 'accepted')->count() }}
                             @if($event->max_participants)
                                 / {{ $event->max_participants }}
@@ -259,11 +376,11 @@
                             <div class="row">
                                 <!-- Invited Participants -->
                                 @foreach($acceptedInvitations as $invitation)
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-12 col-sm-6 mb-3">
                                         <div class="card border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 40px; height: 40px; font-weight: bold; font-size: 14px;">
                                                         @if($invitation->invitedUser->profile_photo)
                                                             <img src="{{ $invitation->invitedUser->profile_photo_url }}" alt="{{ $invitation->invitedUser->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                                         @else
@@ -271,9 +388,13 @@
                                                         @endif
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
+                                                        <h6 class="mb-1 fw-bold f-s-14">
+                                                            <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
+                                                                {{ $invitation->invitedUser->getDisplayName() }}
+                                                            </a>
+                                                        </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-light-success">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-success f-s-10">{{ ucfirst($invitation->role) }}</span>
                                                             <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->compensation)
@@ -290,11 +411,11 @@
 
                                 <!-- Requested Participants -->
                                 @foreach($acceptedRequests as $request)
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-12 col-sm-6 mb-3">
                                         <div class="card card-light-success border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 40px; height: 40px; font-weight: bold; font-size: 14px;">
                                                         @if($request->user->profile_photo)
                                                             <img src="{{ $request->user->profile_photo_url }}" alt="{{ $request->user->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                                         @else
@@ -302,13 +423,17 @@
                                                         @endif
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
+                                                        <h6 class="mb-1 fw-bold f-s-14">
+                                                            <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">
+                                                                {{ $request->user->getDisplayName() }}
+                                                            </a>
+                                                        </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-success">{{ ucfirst($request->requested_role) }}</span>
-                                                            <span class="badge bg-light-warning">{{ __('events.participant_applied') }}</span>
+                                                            <span class="badge bg-success f-s-10">{{ ucfirst($request->requested_role) }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ __('events.participant_applied') }}</span>
                                                         </div>
                                                         @if($request->experience)
-                                                            <small class="text-muted">
+                                                            <small class="text-muted f-s-10">
                                                                 <i class="ph ph-star me-1"></i>{{ Str::limit($request->experience, 50) }}
                                                             </small>
                                                         @endif
@@ -331,11 +456,11 @@
                             <div class="row">
                                 <!-- Pending Invitations -->
                                 @foreach($pendingInvitations as $invitation)
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-12 col-sm-6 mb-3">
                                         <div class="card card-light-warning border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-light-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                    <div class="rounded-circle bg-light-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 40px; height: 40px; font-weight: bold; font-size: 14px;">
                                                         @if($invitation->invitedUser->profile_photo)
                                                             <img src="{{ $invitation->invitedUser->profile_photo_url }}" alt="{{ $invitation->invitedUser->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                                         @else
@@ -343,13 +468,17 @@
                                                         @endif
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold">{{ $invitation->invitedUser->getDisplayName() }}</h6>
+                                                        <h6 class="mb-1 fw-bold f-s-14">
+                                                            <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
+                                                                {{ $invitation->invitedUser->getDisplayName() }}
+                                                            </a>
+                                                        </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-light-warning">{{ ucfirst($invitation->role) }}</span>
-                                                            <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ ucfirst($invitation->role) }}</span>
+                                                            <span class="badge bg-light-secondary f-s-10">{{ __('events.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->expires_at)
-                                                            <small class="text-muted">
+                                                            <small class="text-muted f-s-10">
                                                                 <i class="ph ph-timer me-1"></i>Scade {{ $invitation->expires_at->diffForHumans() }}
                                                             </small>
                                                         @endif
@@ -362,11 +491,11 @@
 
                                 <!-- Pending Requests -->
                                 @foreach($pendingRequests as $request)
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-12 col-sm-6 mb-3">
                                         <div class="card card-light-warning border-0">
                                             <div class="card-body p-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 45px; height: 45px; font-weight: bold; font-size: 16px;">
+                                                    <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center me-3 overflow-hidden" style="width: 40px; height: 40px; font-weight: bold; font-size: 14px;">
                                                         @if($request->user->profile_photo)
                                                             <img src="{{ $request->user->profile_photo_url }}" alt="{{ $request->user->getDisplayName() }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                                         @else
@@ -374,13 +503,17 @@
                                                         @endif
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold">{{ $request->user->getDisplayName() }}</h6>
+                                                        <h6 class="mb-1 fw-bold f-s-14">
+                                                            <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">
+                                                                {{ $request->user->getDisplayName() }}
+                                                            </a>
+                                                        </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                                            <span class="badge bg-light-warning">{{ ucfirst($request->requested_role) }}</span>
-                                                            <span class="badge bg-light-warning">{{ __('events.participant_applied') }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ ucfirst($request->requested_role) }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ __('events.participant_applied') }}</span>
                                                         </div>
                                                         @if($request->message)
-                                                            <small class="text-muted">
+                                                            <small class="text-muted f-s-10">
                                                                 <i class="ph ph-chat-circle me-1"></i>{{ Str::limit($request->message, 50) }}
                                                             </small>
                                                         @endif
@@ -674,12 +807,12 @@
                 <div class="card-body">
                     <div class="row">
                         @if($event->online_url)
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-3">
                             <div class="d-flex align-items-center">
-                                <i class="ph ph-link me-2 text-muted"></i>
+                                <i class="ph ph-link me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block">{{ __('events.online_url') }}</small>
-                                    <a href="{{ $event->online_url }}" target="_blank" class="text-decoration-none">
+                                    <small class="text-muted d-block f-s-12">{{ __('events.online_url') }}</small>
+                                    <a href="{{ $event->online_url }}" target="_blank" class="text-decoration-none f-s-14">
                                         {{ __('events.join_online') }}
                                     </a>
                                 </div>
@@ -687,12 +820,12 @@
                         </div>
                         @endif
                         @if($event->timezone)
-                        <div class="col-md-6 mb-3">
+                        <div class="col-12 col-sm-6 mb-3">
                             <div class="d-flex align-items-center">
-                                <i class="ph ph-clock me-2 text-muted"></i>
+                                <i class="ph ph-clock me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block">{{ __('events.timezone') }}</small>
-                                    <span class="fw-semibold">{{ $event->timezone }}</span>
+                                    <small class="text-muted d-block f-s-12">{{ __('events.timezone') }}</small>
+                                    <span class="fw-semibold f-s-14">{{ $event->timezone }}</span>
                                 </div>
                             </div>
                         </div>
@@ -712,7 +845,7 @@
                     </h5>
                 </div>
                 <div class="card-body p-0">
-                    <div id="eventMap" style="height: 350px; border-radius: 10px; overflow: hidden;"></div>
+                    <div id="eventMap" style="height: 250px; border-radius: 10px; overflow: hidden;"></div>
                 </div>
                 <div class="card-footer">
                     <p class="mb-0">
@@ -726,7 +859,7 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="col-lg-4">
+        <div class="col-12 col-lg-4">
 
             <!-- Action Buttons -->
             <div class="position-sticky" style="top: 20px;">
