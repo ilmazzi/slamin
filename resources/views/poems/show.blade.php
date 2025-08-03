@@ -54,7 +54,7 @@
                             </div>
                             <div class="d-flex align-items-center text-muted small">
                                 <i class="ph ph-user me-1"></i>
-                                <a href="#" class="text-decoration-none">{{ $poem->user->name }}</a>
+                                <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
                                 <span class="mx-2">•</span>
                                 <i class="ph ph-calendar me-1"></i>
                                 {{ $poem->published_at ? $poem->published_at->format('d/m/Y') : $poem->created_at->format('d/m/Y') }}
@@ -260,7 +260,11 @@
                                 <div class="flex-grow-1 ms-3">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
-                                            <h6 class="mb-1">{{ $comment->user->name }}</h6>
+                                            <h6 class="mb-1">
+                                                <a href="{{ route('user.show', $comment->user) }}" class="text-decoration-none hover-effect">
+                                                    {{ $comment->user->getDisplayName() }}
+                                                </a>
+                                            </h6>
                                             <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                                         </div>
                                         @if($comment->canBeEditedBy(auth()->user()))
@@ -314,7 +318,11 @@
                 <div class="card-body text-center">
                    <img src="{{ $poem->user->getProfilePhotoUrlAttribute() }}"
                              class="rounded-circle mb-3" width="80" height="80" alt="{{ $poem->user->name }}">
-                    <h6>{{ $poem->user->name }}</h6>
+                    <h6>
+                        <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">
+                            {{ $poem->user->getDisplayName() }}
+                        </a>
+                    </h6>
                     <p class="text-muted small mb-3">{{ $poem->user->bio ?? __('poems.no_bio') }}</p>
 
                     <div class="row text-center">
@@ -356,7 +364,11 @@
                                         {{ $relatedPoem->title }}
                                     </a>
                                 </h6>
-                                <small class="text-muted">{{ $relatedPoem->user->name }}</small>
+                                <small class="text-muted">
+                                    <a href="{{ route('user.show', $relatedPoem->user) }}" class="text-decoration-none hover-effect">
+                                        {{ $relatedPoem->user->getDisplayName() }}
+                                    </a>
+                                </small>
                                 <div class="d-flex align-items-center mt-1">
                                     <small class="text-muted me-3">
                                         <i class="ph ph-heart me-1"></i>{{ $relatedPoem->like_count }}

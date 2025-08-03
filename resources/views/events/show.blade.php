@@ -85,7 +85,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="ph ph-user me-2 fs-5"></i>
-                        <span class="fs-5">{{ __('events.organized_by') }} {{ $event->organizer->getDisplayName() }}</span>
+                        <span class="fs-5">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
                     </div>
                 </div>
             </div>

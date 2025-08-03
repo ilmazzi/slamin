@@ -59,7 +59,11 @@
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
-                                    <div class="fw-bold">{{ $comment->user->name }}</div>
+                                    <div class="fw-bold">
+                                        <a href="{{ route('user.show', $comment->user) }}" class="text-decoration-none hover-effect">
+                                            {{ $comment->user->getDisplayName() }}
+                                        </a>
+                                    </div>
                                     <div class="text-muted f-s-12">{{ $comment->created_at->diffForHumans() }}</div>
                                 </div>
                                 @if(auth()->id() === $comment->user_id || (auth()->user() && auth()->user()->hasRole('admin')))
@@ -180,7 +184,11 @@ function createCommentElement(comment) {
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <div class="fw-bold">${userName}</div>
+                        <div class="fw-bold">
+                            <a href="/user/${comment.user.id}" class="text-decoration-none hover-effect">
+                                ${comment.user.name}
+                            </a>
+                        </div>
                         <div class="text-muted f-s-12">Adesso</div>
                     </div>
                     <div class="dropdown">

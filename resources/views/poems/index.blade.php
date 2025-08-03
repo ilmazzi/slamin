@@ -136,7 +136,9 @@
 
                         <p class="card-text text-muted f-s-14 mb-2">
                             <i class="ph-duotone ph-user f-s-12 me-1"></i>
-                            {{ $poem->user->name }}
+                            <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">
+                                {{ $poem->user->getDisplayName() }}
+                            </a>
                         </p>
 
                         @if($poem->description)

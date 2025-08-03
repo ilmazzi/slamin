@@ -297,7 +297,7 @@
                             @endif
                             <li class="mb-2">
                                 <i class="ph-duotone ph-user f-s-14 me-2 text-muted"></i>
-                                Autore: {{ $video->user->name }}
+                                Autore: <a href="{{ route('user.show', $video->user) }}" class="text-decoration-none hover-effect">{{ $video->user->getDisplayName() }}</a>
                             </li>
                         </ul>
                     </div>
