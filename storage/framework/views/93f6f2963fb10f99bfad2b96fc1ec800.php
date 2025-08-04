@@ -1,17 +1,15 @@
-@extends('layout.master')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="page-content">
     <div class="container-fluid">
         <!-- start page title -->
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                    <h4 class="mb-0">{{ __('chat.title') }}</h4>
+                    <h4 class="mb-0"><?php echo e(__('chat.title')); ?></h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('sidebar.dashboard') }}</a></li>
-                            <li class="breadcrumb-item active">{{ __('chat.title') }}</li>
+                            <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('sidebar.dashboard')); ?></a></li>
+                            <li class="breadcrumb-item active"><?php echo e(__('chat.title')); ?></li>
                         </ol>
                     </div>
                 </div>
@@ -27,12 +25,12 @@
                         <div class="card-header">
                             <div class="d-flex align-items-center">
                                 <span class="chatdp h-30 w-30 d-flex-center b-r-50 position-relative bg-danger">
-                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}" alt="" class="img-fluid b-r-50">
+                                    <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user())); ?>" alt="" class="img-fluid b-r-50">
                                     <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
                                 </span>
                                 <div class="flex-grow-1 ps-2">
-                                    <div class="fs-6">{{ auth()->user()->name }}</div>
-                                    <div class="text-muted f-s-12">{{ auth()->user()->role ?? 'User' }}</div>
+                                    <div class="fs-6"><?php echo e(auth()->user()->name); ?></div>
+                                    <div class="text-muted f-s-12"><?php echo e(auth()->user()->role ?? 'User'); ?></div>
                                 </div>
                                 <div>
                                     <div class="btn-group dropdown-icon-none">
@@ -80,95 +78,104 @@
                                                 <!-- Private Chat -->
                                                 <div class="tab-pane fade show active" id="private-tab-pane" role="tabpanel" aria-labelledby="private-tab" tabindex="0">
                                                     <div class="chat-contact" id="privateChatsList">
-                                                        @forelse($chats->where('type', 'private') as $chat)
-                                                            @php
+                                                        <?php $__empty_1 = true; $__currentLoopData = $chats->where('type', 'private'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                            <?php
                                                                 $otherUser = $chat->participants->where('user_id', '!=', auth()->id())->first()->user ?? null;
                                                                 $unreadCount = $chat->getUnreadCount(auth()->user());
-                                                            @endphp
-                                                            <div class="chat-contactbox" data-chat-id="{{ $chat->id }}" onclick="loadChat({{ $chat->id }})">
+                                                            ?>
+                                                            <div class="chat-contactbox" data-chat-id="<?php echo e($chat->id); ?>" onclick="loadChat(<?php echo e($chat->id); ?>)">
                                                                 <div class="position-absolute">
                                                                     <span class="h-30 w-30 d-flex-center b-r-50 position-relative bg-primary">
-                                                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($otherUser) }}" alt="" class="img-fluid b-r-50">
+                                                                        <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($otherUser)); ?>" alt="" class="img-fluid b-r-50">
                                                                         <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
                                                                     </span>
                                                                 </div>
                                                                 <div class="flex-grow-1 text-start mg-s-50">
-                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $otherUser ? $otherUser->name : __('chat.unknown_user') }}</p>
+                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1"><?php echo e($otherUser ? $otherUser->name : __('chat.unknown_user')); ?></p>
                                                                     <p class="text-secondary mb-0 f-s-12 mb-0 chat-message">
                                                                         <i class="ti ti-checks"></i>
-                                                                        @if($chat->lastMessage)
-                                                                            {{ Str::limit($chat->lastMessage->message, 30) }}
-                                                                        @else
-                                                                            {{ __('chat.no_messages') }}
-                                                                        @endif
-                                                                        @if($unreadCount > 0)
-                                                                            <span class="badge bg-danger ms-1">{{ $unreadCount }}</span>
-                                                                        @endif
+                                                                        <?php if($chat->lastMessage): ?>
+                                                                            <?php echo e(Str::limit($chat->lastMessage->message, 30)); ?>
+
+                                                                        <?php else: ?>
+                                                                            <?php echo e(__('chat.no_messages')); ?>
+
+                                                                        <?php endif; ?>
+                                                                        <?php if($unreadCount > 0): ?>
+                                                                            <span class="badge bg-danger ms-1"><?php echo e($unreadCount); ?></span>
+                                                                        <?php endif; ?>
                                                                     </p>
                                                                 </div>
                                                                 <div>
                                                                     <p class="f-s-12 chat-time">
-                                                                        @if($chat->lastMessage)
-                                                                            {{ $chat->lastMessage->created_at->diffForHumans() }}
-                                                                        @else
-                                                                            {{ __('chat.no_messages') }}
-                                                                        @endif
+                                                                        <?php if($chat->lastMessage): ?>
+                                                                            <?php echo e($chat->lastMessage->created_at->diffForHumans()); ?>
+
+                                                                        <?php else: ?>
+                                                                            <?php echo e(__('chat.no_messages')); ?>
+
+                                                                        <?php endif; ?>
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                        @empty
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                             <div class="text-center py-3">
-                                                                <p class="text-muted">{{ __('chat.no_private_chats') }}</p>
+                                                                <p class="text-muted"><?php echo e(__('chat.no_private_chats')); ?></p>
                                                             </div>
-                                                        @endforelse
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <!-- Group Chat -->
                                                 <div class="tab-pane fade" id="groups-tab-pane" role="tabpanel" aria-labelledby="groups-tab" tabindex="0">
                                                     <div class="chat-contact chat-group-list" id="groupChatsList">
-                                                        @forelse($chats->where('type', 'group') as $chat)
-                                                            @php
+                                                        <?php $__empty_1 = true; $__currentLoopData = $chats->where('type', 'group'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                            <?php
                                                                 $unreadCount = $chat->getUnreadCount(auth()->user());
-                                                            @endphp
-                                                            <div class="chat-contactbox" data-chat-id="{{ $chat->id }}" onclick="loadChat({{ $chat->id }})">
+                                                            ?>
+                                                            <div class="chat-contactbox" data-chat-id="<?php echo e($chat->id); ?>" onclick="loadChat(<?php echo e($chat->id); ?>)">
                                                                 <div class="position-absolute">
                                                                     <ul class="avatar-group">
                                                                         <li class="text-bg-warning h-45 w-45 d-flex-center b-r-50">
-                                                                            {{ substr($chat->name, 0, 1) }}
+                                                                            <?php echo e(substr($chat->name, 0, 1)); ?>
+
                                                                         </li>
                                                                         <li class="text-bg-secondary h-35 w-35 d-flex-center b-r-50" data-bs-toggle="tooltip" data-bs-title="2 More">
-                                                                            {{ $chat->participants->count() }}+
+                                                                            <?php echo e($chat->participants->count()); ?>+
                                                                         </li>
                                                                     </ul>
                                                                 </div>
                                                                 <div class="flex-grow-1 text-start mg-s-75">
-                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $chat->name }}</p>
+                                                                    <p class="mb-0 f-w-500 text-dark txt-ellipsis-1"><?php echo e($chat->name); ?></p>
                                                                     <p class="text-secondary f-s-12 chat-message">
-                                                                        @if($chat->lastMessage)
-                                                                            {{ Str::limit($chat->lastMessage->message, 30) }}
-                                                                        @else
-                                                                            {{ __('chat.no_messages') }}
-                                                                        @endif
-                                                                        @if($unreadCount > 0)
-                                                                            <span class="badge bg-danger ms-1">{{ $unreadCount }}</span>
-                                                                        @endif
+                                                                        <?php if($chat->lastMessage): ?>
+                                                                            <?php echo e(Str::limit($chat->lastMessage->message, 30)); ?>
+
+                                                                        <?php else: ?>
+                                                                            <?php echo e(__('chat.no_messages')); ?>
+
+                                                                        <?php endif; ?>
+                                                                        <?php if($unreadCount > 0): ?>
+                                                                            <span class="badge bg-danger ms-1"><?php echo e($unreadCount); ?></span>
+                                                                        <?php endif; ?>
                                                                     </p>
                                                                 </div>
                                                                 <div>
                                                                     <p class="f-s-12 chat-time">
-                                                                        @if($chat->lastMessage)
-                                                                            {{ $chat->lastMessage->created_at->diffForHumans() }}
-                                                                        @else
-                                                                            {{ __('chat.no_messages') }}
-                                                                        @endif
+                                                                        <?php if($chat->lastMessage): ?>
+                                                                            <?php echo e($chat->lastMessage->created_at->diffForHumans()); ?>
+
+                                                                        <?php else: ?>
+                                                                            <?php echo e(__('chat.no_messages')); ?>
+
+                                                                        <?php endif; ?>
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                        @empty
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                             <div class="text-center py-3">
-                                                                <p class="text-muted">{{ __('chat.no_group_chats') }}</p>
+                                                                <p class="text-muted"><?php echo e(__('chat.no_group_chats')); ?></p>
                                                             </div>
-                                                        @endforelse
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="float-end">
@@ -178,10 +185,10 @@
                                                         </button>
                                                         <ul class="dropdown-menu" data-popper-placement="bottom-start">
                                                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createPrivateChatModal">
-                                                                <i class="ti ti-brand-hipchat"></i> <span class="f-s-13">{{ __('chat.create_private') }}</span>
+                                                                <i class="ti ti-brand-hipchat"></i> <span class="f-s-13"><?php echo e(__('chat.create_private')); ?></span>
                                                             </a></li>
                                                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createGroupChatModal">
-                                                                <i class="ti ti-phone-call"></i> <span class="f-s-13">{{ __('chat.create_group') }}</span>
+                                                                <i class="ti ti-phone-call"></i> <span class="f-s-13"><?php echo e(__('chat.create_group')); ?></span>
                                                             </a></li>
                                                         </ul>
                                                     </div>
@@ -197,7 +204,7 @@
                                         <div class="updates-box">
                                             <div class="b-2-success b-r-50 p-1">
                                                 <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                                                    <img src="{{ asset('assets/images/avatar/16.png') }}" alt="" class="img-fluid b-r-50">
+                                                    <img src="<?php echo e(asset('assets/images/avatar/16.png')); ?>" alt="" class="img-fluid b-r-50">
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 text-start ps-2">
@@ -226,7 +233,7 @@
                                         <div class="d-flex align-items-center py-3">
                                             <div>
                                                 <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
-                                                    <img src="{{ asset('assets/images/avatar/13.png') }}" alt="" class="img-fluid b-r-50">
+                                                    <img src="<?php echo e(asset('assets/images/avatar/13.png')); ?>" alt="" class="img-fluid b-r-50">
                                                     <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
                                                 </span>
                                             </div>
@@ -272,12 +279,12 @@
                                 <a class="me-3 toggle-btn" role="button"><i class="ti ti-align-justified"></i></a>
                             </div>
                             <span class="profileimg h-30 w-30 d-flex-center b-r-50 position-relative bg-light">
-                                <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}" alt="" class="img-fluid b-r-50">
+                                <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user())); ?>" alt="" class="img-fluid b-r-50">
                                 <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
                             </span>
                             <div class="flex-grow-1 ps-2 pe-2">
-                                <div class="fs-6" id="chatHeaderName">{{ __('chat.select_chat') }}</div>
-                                <div class="text-muted f-s-12 text-success" id="chatHeaderStatus">{{ __('chat.select_chat_description') }}</div>
+                                <div class="fs-6" id="chatHeaderName"><?php echo e(__('chat.select_chat')); ?></div>
+                                <div class="text-muted f-s-12 text-success" id="chatHeaderStatus"><?php echo e(__('chat.select_chat_description')); ?></div>
                             </div>
                             <button type="button" class="btn btn-success h-45 w-45 icon-btn b-r-22 me-sm-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="ti ti-phone-call f-s-20"></i>
@@ -287,7 +294,7 @@
                                     <div class="modal-body p-0">
                                         <div class="call">
                                             <div class="call-div">
-                                                <img src="{{ asset('assets/images/profile-app/32.jpg') }}" class="w-100" alt="">
+                                                <img src="<?php echo e(asset('assets/images/profile-app/32.jpg')); ?>" class="w-100" alt="">
                                                 <div class="call-caption">
                                                     <h2 class="text-white" id="callUserName">User</h2>
                                                     <div class="d-flex justify-content-center">
@@ -312,7 +319,7 @@
                                     <div class="modal-body p-0">
                                         <div class="call">
                                             <div class="call-div pointer-events-auto">
-                                                <img src="{{ asset('assets/images/profile-app/25.jpg') }}" class="w-100" alt="">
+                                                <img src="<?php echo e(asset('assets/images/profile-app/25.jpg')); ?>" class="w-100" alt="">
                                                 <div class="call-caption">
                                                     <div class="d-flex justify-content-center align-items-center">
                                                         <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
@@ -328,7 +335,7 @@
                                                 </div>
                                             </div>
                                             <div class="video-div">
-                                                <img src="{{ asset('assets/images/profile-app/31.jpg') }}" class="w-100 rounded" alt="">
+                                                <img src="<?php echo e(asset('assets/images/profile-app/31.jpg')); ?>" class="w-100 rounded" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -350,8 +357,8 @@
                         <div class="chat-container" id="chatMessages">
                             <div class="text-center py-5">
                                 <i class="ph-duotone ph-chat-circle-text f-s-50 text-muted mb-3"></i>
-                                <h5 class="text-muted">{{ __('chat.select_chat_to_start') }}</h5>
-                                <p class="text-muted">{{ __('chat.select_chat_description') }}</p>
+                                <h5 class="text-muted"><?php echo e(__('chat.select_chat_to_start')); ?></h5>
+                                <p class="text-muted"><?php echo e(__('chat.select_chat_description')); ?></p>
                             </div>
                         </div>
                     </div>
@@ -364,9 +371,9 @@
                                             <i class="ti ti-mood-smile f-s-18"></i>
                                         </a>
                                     </span>
-                                    <input type="text" class="form-control b-r-6" id="messageInput" placeholder="{{ __('chat.type_message') }}" aria-label="Recipient's username">
+                                    <input type="text" class="form-control b-r-6" id="messageInput" placeholder="<?php echo e(__('chat.type_message')); ?>" aria-label="Recipient's username">
                                     <button class="btn btn-sm btn-primary ms-2 me-2 b-r-4" type="button" onclick="sendMessage()">
-                                        <i class="ti ti-send"></i> <span>{{ __('chat.send_message') }}</span>
+                                        <i class="ti ti-send"></i> <span><?php echo e(__('chat.send_message')); ?></span>
                                     </button>
                                 </div>
                             </div>
@@ -412,19 +419,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createPrivateChatModalLabel">{{ __('chat.create_private_chat') }}</h5>
+                <h5 class="modal-title" id="createPrivateChatModalLabel"><?php echo e(__('chat.create_private_chat')); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="searchUser" class="form-label">{{ __('chat.search_user') }}</label>
-                    <input type="text" class="form-control" id="searchUser" placeholder="{{ __('chat.type_to_search') }}">
+                    <label for="searchUser" class="form-label"><?php echo e(__('chat.search_user')); ?></label>
+                    <input type="text" class="form-control" id="searchUser" placeholder="<?php echo e(__('chat.type_to_search')); ?>">
                 </div>
                 <div id="searchResults" class="list-group"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
-                <button type="button" class="btn btn-primary" id="createPrivateChatBtn" disabled>{{ __('chat.create') }}</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal"><?php echo e(__('common.cancel')); ?></button>
+                <button type="button" class="btn btn-primary" id="createPrivateChatBtn" disabled><?php echo e(__('chat.create')); ?></button>
             </div>
         </div>
     </div>
@@ -435,34 +442,34 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createGroupChatModalLabel">{{ __('chat.create_group_chat') }}</h5>
+                <h5 class="modal-title" id="createGroupChatModalLabel"><?php echo e(__('chat.create_group_chat')); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="groupName" class="form-label">{{ __('chat.group_name') }}</label>
-                    <input type="text" class="form-control" id="groupName" placeholder="{{ __('chat.enter_group_name') }}">
+                    <label for="groupName" class="form-label"><?php echo e(__('chat.group_name')); ?></label>
+                    <input type="text" class="form-control" id="groupName" placeholder="<?php echo e(__('chat.enter_group_name')); ?>">
                 </div>
                 <div class="mb-3">
-                    <label for="searchGroupUsers" class="form-label">{{ __('chat.add_participants') }}</label>
-                    <input type="text" class="form-control" id="searchGroupUsers" placeholder="{{ __('chat.type_to_search') }}">
+                    <label for="searchGroupUsers" class="form-label"><?php echo e(__('chat.add_participants')); ?></label>
+                    <input type="text" class="form-control" id="searchGroupUsers" placeholder="<?php echo e(__('chat.type_to_search')); ?>">
                 </div>
                 <div id="groupSearchResults" class="list-group mb-3"></div>
                 <div id="selectedUsers" class="mb-3">
-                    <label class="form-label">{{ __('chat.selected_participants') }}</label>
+                    <label class="form-label"><?php echo e(__('chat.selected_participants')); ?></label>
                     <div id="selectedUsersList" class="d-flex flex-wrap gap-2"></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
-                <button type="button" class="btn btn-primary" id="createGroupChatBtn" disabled>{{ __('chat.create') }}</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal"><?php echo e(__('common.cancel')); ?></button>
+                <button type="button" class="btn btn-primary" id="createGroupChatBtn" disabled><?php echo e(__('chat.create')); ?></button>
             </div>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 let currentChatId = null;
 let selectedUsers = [];
@@ -574,7 +581,7 @@ function updateChatHeader(chatId) {
 
 // Carica messaggi
 function loadMessages(chatId) {
-    $.get(`{{ route('chat.messages', ':chatId') }}`.replace(':chatId', chatId))
+    $.get(`<?php echo e(route('chat.messages', ':chatId')); ?>`.replace(':chatId', chatId))
         .done(function(response) {
             if (response.success) {
                 displayMessages(response.messages);
@@ -594,7 +601,7 @@ function displayMessages(messages) {
         container.html(`
             <div class="text-center py-5">
                 <i class="ph-duotone ph-chat-circle-text f-s-50 text-muted mb-3"></i>
-                <h5 class="text-muted">{{ __('chat.no_messages') }}</h5>
+                <h5 class="text-muted"><?php echo e(__('chat.no_messages')); ?></h5>
             </div>
         `);
         return;
@@ -614,12 +621,12 @@ function displayMessages(messages) {
 
 // Crea HTML per un messaggio
 function createMessageHtml(message) {
-    const isOwn = message.user_id == {{ auth()->id() }};
+    const isOwn = message.user_id == <?php echo e(auth()->id()); ?>;
     const messageClass = isOwn ? 'chat-box-right' : 'chat-box';
     const avatarClass = isOwn ? 'end-0 top-0 bg-danger' : 'start-0 bg-light';
     const avatarImg = isOwn ?
-        '{{ asset("assets/images/avatar/09.png") }}' :
-        (message.user.avatar ? `{{ asset('storage/') }}/${message.user.avatar}` : '{{ asset("assets/images/avatar/14.png") }}');
+        '<?php echo e(asset("assets/images/avatar/09.png")); ?>' :
+        (message.user.avatar ? `<?php echo e(asset('storage/')); ?>/${message.user.avatar}` : '<?php echo e(asset("assets/images/avatar/14.png")); ?>');
 
     let content = '';
 
@@ -670,7 +677,7 @@ function sendMessage() {
     }
 
     $.ajax({
-        url: `{{ route('chat.messages.store', ':chatId') }}`.replace(':chatId', currentChatId),
+        url: `<?php echo e(route('chat.messages.store', ':chatId')); ?>`.replace(':chatId', currentChatId),
         method: 'POST',
         data: formData,
         processData: false,
@@ -693,7 +700,7 @@ function sendMessage() {
 
 // Ricerca utenti
 function searchUsers(query, targetId) {
-    $.get(`{{ route('chat.users.search') }}?q=${encodeURIComponent(query)}`)
+    $.get(`<?php echo e(route('chat.users.search')); ?>?q=${encodeURIComponent(query)}`)
         .done(function(response) {
             if (response.success) {
                 displaySearchResults(response.users, targetId);
@@ -712,7 +719,7 @@ function displaySearchResults(users, targetId) {
     users.forEach(function(user) {
         const item = `
             <div class="list-group-item list-group-item-action d-flex align-items-center" data-user-id="${user.id}">
-                <img src="${user.avatar_url || '{{ asset("assets/images/avatar/1.png") }}'}"
+                <img src="${user.avatar_url || '<?php echo e(asset("assets/images/avatar/1.png")); ?>'}"
                      alt="user-img" class="rounded-circle h-25 w-25 me-3">
                 <div>
                     <h6 class="mb-0">${user.name}</h6>
@@ -768,7 +775,7 @@ function removeSelectedUser(userId) {
 
 // Crea chat privata
 function createPrivateChat(userId) {
-    $.post('{{ route("chat.create.private") }}', {
+    $.post('<?php echo e(route("chat.create.private")); ?>', {
         user_id: userId,
         _token: $('meta[name="csrf-token"]').attr('content')
     })
@@ -785,7 +792,7 @@ function createPrivateChat(userId) {
 
 // Crea chat di gruppo
 function createGroupChat(name, userIds) {
-    $.post('{{ route("chat.create.group") }}', {
+    $.post('<?php echo e(route("chat.create.group")); ?>', {
         name: name,
         user_ids: userIds.map(u => u.id),
         _token: $('meta[name="csrf-token"]').attr('content')
@@ -809,7 +816,7 @@ function updateChatHeader(chatId) {
 
     // Aggiorna header
     $('#chatHeaderName').text(chatName);
-    $('#chatHeaderStatus').text('{{ __("chat.online") }}');
+    $('#chatHeaderStatus').text('<?php echo e(__("chat.online")); ?>');
     $('#callUserName').text(chatName);
 }
 
@@ -829,4 +836,6 @@ $(window).on('beforeunload', function() {
     }
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/chat.blade.php ENDPATH**/ ?>

@@ -88,7 +88,7 @@ class ChatController extends Controller
         // Crea o trova la chat esistente
         $chat = Chat::createPrivate($user, $otherUser);
 
-        return redirect()->route('chat.show', $chat)
+        return redirect()->route('chat.index')
                         ->with('success', 'Chat privata creata con successo.');
     }
 
@@ -113,7 +113,7 @@ class ChatController extends Controller
         // Crea la chat di gruppo
         $chat = Chat::createGroupChat($group, $user, $request->name);
 
-        return redirect()->route('chat.show', $chat)
+        return redirect()->route('chat.index')
                         ->with('success', 'Chat di gruppo creata con successo.');
     }
 
@@ -143,6 +143,7 @@ class ChatController extends Controller
         }
 
         return response()->json([
+            'success' => true,
             'messages' => $messages->items(),
             'pagination' => [
                 'current_page' => $messages->currentPage(),
@@ -179,11 +180,11 @@ class ChatController extends Controller
     public function searchUsers(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|min:2',
+            'q' => 'required|string|min:2',
         ]);
 
         $user = Auth::user();
-        $query = $request->get('query');
+        $query = $request->get('q');
 
         $users = User::where('id', '!=', $user->id)
                     ->where(function ($q) use ($query) {
@@ -194,7 +195,18 @@ class ChatController extends Controller
                     ->limit(10)
                     ->get(['id', 'name', 'email', 'nickname', 'profile_photo']);
 
-        return response()->json($users);
+        // Aggiungi l'URL dell'avatar per ogni utente
+        $usersWithAvatars = $users->map(function($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'nickname' => $user->nickname,
+                'avatar_url' => \App\Helpers\AvatarHelper::getUserAvatarUrl($user)
+            ];
+        });
+
+        return response()->json(['success' => true, 'users' => $usersWithAvatars]);
     }
 
     /**

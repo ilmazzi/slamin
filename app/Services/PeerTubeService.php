@@ -445,6 +445,9 @@ class PeerTubeService
                 'password_length' => strlen($password)
             ]);
 
+            // Controlla se l'utente ha già un account PeerTube
+            $isNewUser = !$user->peertube_user_id;
+
             // 1. Crea utente su PeerTube
             Log::info('Passo 1: Creazione utente su PeerTube', ['user_id' => $user->id]);
             $peerTubeUser = $this->createUser($user, $password);
@@ -512,6 +515,23 @@ class PeerTubeService
                 'peertube_user_id' => $peerTubeUser['id']
             ]);
 
+            // 5. Verifica email se l'utente è appena stato creato
+            // NOTA: Temporaneamente disabilitata perché l'API PeerTube richiede una stringa di verifica
+            // che non possiamo generare automaticamente. L'utente dovrà verificare manualmente.
+            if ($isNewUser) {
+                Log::info('Passo 5: Verifica email PeerTube - DISABILITATA', [
+                    'user_id' => $user->id,
+                    'peertube_user_id' => $peerTubeUser['id'],
+                    'reason' => 'API richiede verificationString che non possiamo generare automaticamente'
+                ]);
+
+                Log::info('Utente dovrà verificare email manualmente su PeerTube', [
+                    'user_id' => $user->id,
+                    'peertube_user_id' => $peerTubeUser['id'],
+                    'peertube_url' => $this->baseUrl
+                ]);
+            }
+
             return true;
         } catch (Exception $e) {
             Log::error('Errore processo creazione utente PeerTube', [
@@ -538,6 +558,87 @@ class PeerTubeService
     public function isConfigured(): bool
     {
         return $this->validateConfiguration();
+    }
+
+    /**
+     * Verifica l'email di un utente PeerTube appena creato
+     */
+    public function verifyPeerTubeEmail(int $peerTubeUserId): bool
+    {
+        try {
+            if (!$this->accessToken) {
+                $this->getAdminToken();
+            }
+
+            if (!$this->accessToken) {
+                Log::error('Impossibile ottenere token admin per verifica email PeerTube', [
+                    'peertube_user_id' => $peerTubeUserId
+                ]);
+                return false;
+            }
+
+            Log::info('Tentativo verifica email PeerTube', [
+                'peertube_user_id' => $peerTubeUserId
+            ]);
+
+            // Prima ottieni i dettagli dell'utente per vedere se ha una stringa di verifica
+            $userResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->accessToken,
+            ])->get($this->baseUrl . '/api/v1/users/' . $peerTubeUserId);
+
+            if (!$userResponse->successful()) {
+                Log::error('Errore ottenimento dettagli utente per verifica email', [
+                    'peertube_user_id' => $peerTubeUserId,
+                    'status' => $userResponse->status(),
+                    'response' => $userResponse->body()
+                ]);
+                return false;
+            }
+
+            $userData = $userResponse->json();
+            Log::info('Dettagli utente per verifica email', [
+                'peertube_user_id' => $peerTubeUserId,
+                'emailVerified' => $userData['emailVerified'] ?? 'N/A',
+                'pendingEmail' => $userData['pendingEmail'] ?? 'N/A'
+            ]);
+
+            // Se l'email è già verificata, non serve fare nulla
+            if ($userData['emailVerified'] === true) {
+                Log::info('Email già verificata', [
+                    'peertube_user_id' => $peerTubeUserId
+                ]);
+                return true;
+            }
+
+            // Prova a verificare senza stringa di verifica (solo per admin)
+            $verifyResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->accessToken,
+            ])->post($this->baseUrl . '/api/v1/users/' . $peerTubeUserId . '/verify-email', [
+                'isPendingEmail' => true
+            ]);
+
+            if ($verifyResponse->successful()) {
+                Log::info('Email PeerTube verificata con successo', [
+                    'peertube_user_id' => $peerTubeUserId
+                ]);
+                return true;
+            }
+
+            Log::error('Errore verifica email PeerTube', [
+                'peertube_user_id' => $peerTubeUserId,
+                'status' => $verifyResponse->status(),
+                'response' => $verifyResponse->body()
+            ]);
+
+            return false;
+
+        } catch (\Exception $e) {
+            Log::error('Eccezione verifica email PeerTube', [
+                'peertube_user_id' => $peerTubeUserId,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
     }
 
     /**

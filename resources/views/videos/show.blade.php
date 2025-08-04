@@ -473,13 +473,20 @@ function toggleLike(type) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         body: JSON.stringify({ type: type })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.status === 419) {
+            alert('Sessione scaduta. La pagina verrà ricaricata.');
+            location.reload();
+            return;
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             document.getElementById('likeCount').textContent = data.like_count;
             document.getElementById('dislikeCount').textContent = data.dislike_count;
             updateLikeButtons(data.user_like);
@@ -518,19 +525,32 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         body: JSON.stringify({ content: content })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.status === 419) {
+            // CSRF token mismatch - ricarica la pagina per ottenere un nuovo token
+            alert('Sessione scaduta. La pagina verrà ricaricata.');
+            location.reload();
+            return;
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             document.getElementById('commentContent').value = '';
             document.getElementById('charCount').textContent = '0';
             loadComments();
+        } else if (data && data.error) {
+            alert('Errore: ' + data.error);
         }
     })
-    .catch(error => console.error('Errore:', error));
+    .catch(error => {
+        console.error('Errore:', error);
+        alert('Errore durante l\'invio del commento. Riprova.');
+    });
 });
 
 function loadComments() {
@@ -588,13 +608,20 @@ function createSnap() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
         body: JSON.stringify({ title: title, timestamp: timestamp })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.status === 419) {
+            alert('Sessione scaduta. La pagina verrà ricaricata.');
+            location.reload();
+            return;
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             console.log('✅ {{ __('common.snap') }} creato con successo:', data.snap);
 
             document.getElementById('snapTitle').value = '';
