@@ -521,24 +521,34 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
     const content = document.getElementById('commentContent').value.trim();
     if (!content) return;
 
+    // Ottieni il token CSRF dal meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log('CSRF Token:', csrfToken);
+
     fetch('{{ route("videos.add-comment", $video) }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
         },
         body: JSON.stringify({ content: content })
     })
     .then(response => {
+        console.log('Response status:', response.status);
         if (response.status === 419) {
             // CSRF token mismatch - ricarica la pagina per ottenere un nuovo token
             alert('Sessione scaduta. La pagina verrà ricaricata.');
             location.reload();
             return;
         }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return response.json();
     })
     .then(data => {
+        console.log('Response data:', data);
         if (data && data.success) {
             document.getElementById('commentContent').value = '';
             document.getElementById('charCount').textContent = '0';

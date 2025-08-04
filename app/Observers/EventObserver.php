@@ -125,7 +125,7 @@ class EventObserver
             'description' => $position['description'] ?? "Posizione per l'evento {$event->title}",
             'requirements' => $position['requirements'] ?? null,
             'compensation' => $position['cachet_amount'] ?? null,
-            'deadline' => $event->invitation_deadline ?? $event->registration_deadline,
+            'deadline' => $event->invitation_deadline ?? $event->registration_deadline ?? $event->start_datetime,
             'event_id' => $event->id,
             'group_id' => $event->group_id,
             'user_id' => $event->organizer_id,
