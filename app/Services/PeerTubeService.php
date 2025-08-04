@@ -363,9 +363,14 @@ class PeerTubeService
     public function createPeerTubeUser(User $user, string $password): bool
     {
         try {
-            Log::info('Inizio creazione utente PeerTube', ['user_id' => $user->id]);
+            Log::info('Inizio creazione utente PeerTube', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'password_length' => strlen($password)
+            ]);
 
             // 1. Crea utente su PeerTube
+            Log::info('Passo 1: Creazione utente su PeerTube', ['user_id' => $user->id]);
             $peerTubeUser = $this->createUser($user, $password);
 
             if (!$peerTubeUser) {
@@ -384,9 +389,18 @@ class PeerTubeService
                     Log::error('Utente PeerTube non trovato e non creato', ['user_id' => $user->id]);
                     return false;
                 }
+            } else {
+                Log::info('Utente PeerTube creato con successo', [
+                    'user_id' => $user->id,
+                    'peertube_user_id' => $peerTubeUser['id']
+                ]);
             }
 
             // 2. Ottieni dettagli completi
+            Log::info('Passo 2: Ottenimento dettagli utente PeerTube', [
+                'user_id' => $user->id,
+                'peertube_user_id' => $peerTubeUser['id']
+            ]);
             $userDetails = $this->getUserDetails($peerTubeUser['id']);
             if (!$userDetails) {
                 Log::error('Impossibile ottenere dettagli utente PeerTube', [
@@ -395,18 +409,27 @@ class PeerTubeService
                 ]);
                 return false;
             }
+            Log::info('Dettagli utente PeerTube ottenuti', [
+                'user_id' => $user->id,
+                'peertube_user_id' => $peerTubeUser['id'],
+                'username' => $userDetails['username'] ?? 'N/A'
+            ]);
 
             // 3. Aggiorna dati nel nostro DB
+            Log::info('Passo 3: Aggiornamento dati nel DB', ['user_id' => $user->id]);
             if (!$this->updateUserPeerTubeData($user, $userDetails)) {
                 Log::error('Impossibile aggiornare dati PeerTube nel DB', ['user_id' => $user->id]);
                 return false;
             }
+            Log::info('Dati PeerTube aggiornati nel DB', ['user_id' => $user->id]);
 
             // 4. Salva password criptata
+            Log::info('Passo 4: Salvataggio password criptata', ['user_id' => $user->id]);
             if (!$this->savePeerTubePassword($user, $password)) {
                 Log::error('Impossibile salvare password PeerTube', ['user_id' => $user->id]);
                 return false;
             }
+            Log::info('Password PeerTube salvata nel DB', ['user_id' => $user->id]);
 
             Log::info('Utente PeerTube creato/aggiornato con successo', [
                 'user_id' => $user->id,
