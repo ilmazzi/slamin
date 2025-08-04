@@ -213,6 +213,9 @@
                                             <i class="ph ph-lock me-1"></i> {{ __('events.my_private_events') }}
                                         </span>
                                     @endauth
+                                    <span class="bg-light-danger rounded px-3 py-2" data-filter="past" style="cursor: pointer;">
+                                        <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('events.past_events') }}
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-12">
@@ -257,6 +260,13 @@
         @forelse($events->take(request('per_page', 10)) as $event)
             <div class="col-12 col-sm-6 col-lg-4 mb-4">
                 <div class="card h-100 position-relative">
+                    <!-- Past Event Ribbon -->
+                    @if($event->start_datetime < now())
+                        <div class="arrow-ribbon arrow-left ribbon-danger" style="z-index: 5000;">
+                            <span>{{ __('events.past_event') }}</span>
+                        </div>
+                    @endif
+
                     <!-- Event Status Badge -->
                     <div class="position-absolute top-0 end-0 p-2" style="z-index: 3;">
                         <div class="d-flex flex-column gap-1">
@@ -383,7 +393,7 @@
                                         <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
                                     </a>
                                     @can('events.manage.own')
-                                        @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
+                                        @if(Auth::user()->hasRole(['admin', 'moderator']) || ($event->organizer_id === Auth::id() && $event->start_datetime >= now()))
                                             <button type="button" class="btn btn-light btn-sm"
                                                     onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
                                                     title="Elimina evento">
@@ -1164,7 +1174,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Update form with quick filter
             const form = document.getElementById('filterForm');
-            addHiddenInput(form, 'quick_filter', filterType);
+
+            // For 'past' filter, set the main filter parameter
+            if (filterType === 'past') {
+                addHiddenInput(form, 'filter', filterType);
+            } else {
+                addHiddenInput(form, 'quick_filter', filterType);
+            }
 
             // Submit form
             form.submit();

@@ -1037,5 +1037,51 @@ Route::prefix('api/follow')->middleware('auth')->group(function () {
     Route::get('/{user}/following', [App\Http\Controllers\FollowController::class, 'following'])->name('api.follow.following');
 });
 
+// ===== ROUTES PER GIGS =====
 
+// Routes principali per gigs
+Route::prefix('gigs')->name('gigs.')->group(function () {
+    Route::get('/', [App\Http\Controllers\GigController::class, 'index'])->name('index');
+    Route::get('/my-gigs', [App\Http\Controllers\GigController::class, 'myGigs'])->name('my-gigs');
+    Route::get('/my-applications', [App\Http\Controllers\GigController::class, 'myApplications'])->name('my-applications');
+
+    // CRUD per gigs (solo utenti autenticati non audience)
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', [App\Http\Controllers\GigController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\GigController::class, 'store'])->name('store');
+        Route::get('/{gig}', [App\Http\Controllers\GigController::class, 'show'])->name('show');
+        Route::get('/{gig}/edit', [App\Http\Controllers\GigController::class, 'edit'])->name('edit');
+        Route::put('/{gig}', [App\Http\Controllers\GigController::class, 'update'])->name('update');
+        Route::delete('/{gig}', [App\Http\Controllers\GigController::class, 'destroy'])->name('destroy');
+
+        // Gestione candidature
+        Route::get('/{gig}/applications', [App\Http\Controllers\GigController::class, 'manageApplications'])->name('manage-applications');
+        Route::post('/{gig}/apply', [App\Http\Controllers\GigController::class, 'apply'])->name('apply');
+
+        // Azioni sui gigs
+        Route::post('/{gig}/close', [App\Http\Controllers\GigController::class, 'close'])->name('close');
+        Route::post('/{gig}/reopen', [App\Http\Controllers\GigController::class, 'reopen'])->name('reopen');
+        Route::post('/{gig}/share', [App\Http\Controllers\GigController::class, 'share'])->name('share');
+
+        // Azioni sulle candidature
+        Route::post('/applications/{application}/accept', [App\Http\Controllers\GigController::class, 'acceptApplication'])->name('applications.accept');
+        Route::post('/applications/{application}/reject', [App\Http\Controllers\GigController::class, 'rejectApplication'])->name('applications.reject');
+        Route::post('/applications/{application}/withdraw', [App\Http\Controllers\GigController::class, 'withdrawApplication'])->name('applications.withdraw');
+
+        // Messaggio globale
+        Route::post('/{gig}/global-message', [App\Http\Controllers\GigController::class, 'sendGlobalMessage'])->name('global-message');
+    });
+});
+
+// ===== ROUTES PER ADMIN GIG POSITIONS =====
+Route::prefix('admin/gig-positions')->name('admin.gig-positions.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\GigPositionController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\Admin\GigPositionController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\Admin\GigPositionController::class, 'store'])->name('store');
+    Route::get('/{id}', [App\Http\Controllers\Admin\GigPositionController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [App\Http\Controllers\Admin\GigPositionController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [App\Http\Controllers\Admin\GigPositionController::class, 'update'])->name('update');
+    Route::delete('/{id}', [App\Http\Controllers\Admin\GigPositionController::class, 'destroy'])->name('destroy');
+    Route::post('/{id}/toggle-status', [App\Http\Controllers\Admin\GigPositionController::class, 'toggleStatus'])->name('toggle-status');
+});
 

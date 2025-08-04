@@ -82,7 +82,7 @@ trait HasComments
         // Controlla le impostazioni di sistema
         $commentableContent = \App\Models\SystemSetting::get('social_commentable_content', ['video', 'photo', 'poem', 'article', 'event']);
         $contentType = $this->getSocialContentType();
-        
+
         return in_array($contentType, $commentableContent);
     }
 
@@ -125,5 +125,16 @@ trait HasComments
         return $query->whereHas('comments', function ($q) use ($user) {
             $q->where('user_id', $user->id);
         });
+    }
+
+    /**
+     * Ottiene i commenti approvati con i dati dell'utente
+     */
+    public function getComments()
+    {
+        return $this->approvedComments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

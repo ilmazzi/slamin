@@ -63,19 +63,12 @@
                     <div class="card-body text-center">
                         <!-- Avatar -->
                         <div class="mb-3">
-                            @if($followedUser->profile_photo)
-                                <img src="{{ $followedUser->profile_photo_url }}"
-                                     alt="{{ $followedUser->getDisplayName() }}"
-                                     class="rounded-circle"
-                                     width="80"
-                                     height="80"
-                                     style="object-fit: cover;">
-                            @else
-                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center"
-                                     style="width: 80px; height: 80px;">
-                                    <span class="text-white fw-bold f-s-20">{{ substr($followedUser->getDisplayName(), 0, 2) }}</span>
-                                </div>
-                            @endif
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($followedUser) }}"
+                                 alt="{{ $followedUser->getDisplayName() }}"
+                                 class="rounded-circle"
+                                 width="80"
+                                 height="80"
+                                 style="object-fit: cover;">
                         </div>
 
                         <!-- Nome e Info -->

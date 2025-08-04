@@ -208,7 +208,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">
                             <i class="ph-duotone ph-user me-1"></i>
-                            {{ $group->creator->getDisplayName() }}
+                            <a href="{{ route('user.show', $group->creator) }}" class="text-decoration-none hover-effect">
+                                {{ $group->creator->getDisplayName() }}
+                            </a>
                         </small>
                         <small class="text-muted">
                             <i class="ph-duotone ph-calendar me-1"></i>

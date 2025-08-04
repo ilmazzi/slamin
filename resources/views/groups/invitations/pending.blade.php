@@ -49,10 +49,10 @@
                                                                  class="rounded-circle"
                                                                  width="32"
                                                                  height="32"
-                                                                 alt="{{ $invitation->user->name }}">
+                                                                 alt="{{ $invitation->user->getDisplayName() }}">
                                                         </div>
                                                         <div class="flex-grow-1">
-                                                            <div class="fw-medium">{{ $invitation->user->name }}</div>
+                                                            <div class="fw-medium">{{ $invitation->user->getDisplayName() }}</div>
                                                             <small class="text-muted">{{ $invitation->user->getPrivacySafeIdentifier() }}</small>
                                                         </div>
                                                     </div>
@@ -75,9 +75,9 @@
                                                                  class="rounded-circle"
                                                                  width="24"
                                                                  height="24"
-                                                                 alt="{{ $invitation->invitedBy->name }}">
+                                                                 alt="{{ $invitation->invitedBy->getDisplayName() }}">
                                                         </div>
-                                                        <span>{{ $invitation->invitedBy->name }}</span>
+                                                        <span>{{ $invitation->invitedBy->getDisplayName() }}</span>
                                                     </div>
                                                 @else
                                                     <span class="text-muted">Utente non trovato</span>

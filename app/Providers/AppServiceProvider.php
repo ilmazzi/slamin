@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Models\Video;
 use App\Models\Group;
+use App\Models\GigApplication;
+use App\Models\Event;
 use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
+use App\Observers\GigApplicationObserver;
+use App\Observers\EventObserver;
 use App\Services\LoggingService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
 
         // Registra l'observer per i gruppi
         Group::observe(GroupObserver::class);
+
+        // Registra l'observer per le candidature ai gig
+        GigApplication::observe(GigApplicationObserver::class);
+
+        // Registra l'observer per gli eventi
+        Event::observe(EventObserver::class);
 
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();

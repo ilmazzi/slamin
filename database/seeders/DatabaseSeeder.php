@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PoetrySlamSeeder::class,
             GroupsPermissionsSeeder::class, // Aggiunto per i gruppi
+            GigPositionSeeder::class, // Aggiunto per le posizioni d'ingaggio
             TestUsersSeeder::class,
             SystemSettingsSeeder::class,
             PhotoSeeder::class,

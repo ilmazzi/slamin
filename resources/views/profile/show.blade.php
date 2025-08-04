@@ -160,13 +160,10 @@
                                     @endif
                                     <div class="avatar-preview">
                                         <div id="imgPreviewMobile">
-                                            @if($user->profile_photo)
-                                                <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid">
-                                            @else
-                                                <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50">
-                                                    <span class="text-primary fw-bold f-s-24">{{ substr($user->getDisplayName(), 0, 2) }}</span>
-                                                </div>
-                                            @endif
+                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                                 alt="Profile Photo"
+                                                 class="img-fluid h-120 w-120 rounded-circle"
+                                                 style="object-fit: cover;">
                                         </div>
                                     </div>
                                 </div>
@@ -471,13 +468,10 @@
                     @forelse($following as $followedUser)
                     <div class="d-flex align-items-center {{ !$loop->last ? 'mb-3' : '' }}">
                         <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-light">
-                            @if($followedUser->profile_photo)
-                                <img src="{{ $followedUser->profile_photo_url }}" alt="{{ $followedUser->getDisplayName() }}" class="img-fluid">
-                            @else
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary">
-                                    <span class="text-white fw-bold f-s-14">{{ substr($followedUser->getDisplayName(), 0, 2) }}</span>
-                                </div>
-                            @endif
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($followedUser) }}"
+                                 alt="{{ $followedUser->getDisplayName() }}"
+                                 class="img-fluid h-40 w-40 rounded-circle"
+                                 style="object-fit: cover;">
                         </div>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium">{{ $followedUser->getDisplayName() }}</div>
@@ -543,15 +537,12 @@
                                                 </div>
                                                 @endif
                                                 <div class="avatar-preview">
-                                                    <div id="imgPreview">
-                                                        @if($user->profile_photo)
-                                                            <img src="{{ $user->profile_photo_url }}" alt="Profile Photo" class="img-fluid">
-                                                        @else
-                                                            <div class="bg-light-primary h-120 w-120 d-flex-center b-r-50">
-                                                                <span class="text-primary fw-bold f-s-24">{{ substr($user->getDisplayName(), 0, 2) }}</span>
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                                                                                            <div id="imgPreview">
+                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                                 alt="Profile Photo"
+                                                 class="img-fluid h-120 w-120 rounded-circle"
+                                                 style="object-fit: cover;">
+                                        </div>
                                                 </div>
                                             </div>
                                         </div>

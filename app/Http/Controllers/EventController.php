@@ -194,26 +194,38 @@ class EventController extends Controller
             }
         }
 
+        // Handle past events filter (show all public past events)
+        if ($request->filled('filter') && $request->filter === 'past') {
+            $query->where('start_datetime', '<', now());
+
+            if ($user) {
+                $userId = $user->id;
+                $query->where(function ($q) use ($userId) {
+                    // Public events
+                    $q->where('is_public', true)
+                      // OR private events organized by user
+                      ->orWhere('organizer_id', $userId)
+                      // OR private events where user has accepted invitation
+                      ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
+                          $inviteQuery->where('invited_user_id', $userId)
+                                      ->where('status', 'accepted');
+                      })
+                      // OR private events where user has accepted request
+                      ->orWhereHas('requests', function ($requestQuery) use ($userId) {
+                          $requestQuery->where('user_id', $userId)
+                                       ->where('status', 'accepted');
+                      });
+                });
+            } else {
+                // If no user, show only public events
+                $query->where('is_public', true);
+            }
+        }
         // New dashboard filters
-        if ($request->filled('filter') && $user) {
+        elseif ($request->filled('filter') && $user) {
             $userId = $user->id;
 
             switch ($request->filter) {
-                case 'past':
-                    // Past events (organized + participated)
-                    $query->where('start_datetime', '<', now())
-                          ->where(function ($q) use ($userId) {
-                              $q->where('organizer_id', $userId)
-                                ->orWhereHas('invitations', function ($inviteQuery) use ($userId) {
-                                    $inviteQuery->where('invited_user_id', $userId)
-                                                ->where('status', 'accepted');
-                                })
-                                ->orWhereHas('requests', function ($requestQuery) use ($userId) {
-                                    $requestQuery->where('user_id', $userId)
-                                                 ->where('status', 'accepted');
-                                });
-                          });
-                    break;
 
                 case 'future':
                     // Future events (organized + participated)
@@ -435,6 +447,21 @@ class EventController extends Controller
             $validated['group_id'] = null;
         }
 
+        // Handle registration deadline
+        $hasRegistrationDeadline = $request->input('has_registration_deadline') === '1';
+        if ($hasRegistrationDeadline) {
+            $deadlineDate = $request->input('registration_deadline_date');
+            $deadlineTime = $request->input('registration_deadline_time');
+
+            if ($deadlineDate && $deadlineTime) {
+                $validated['registration_deadline'] = $deadlineDate . ' ' . $deadlineTime;
+            } else {
+                $validated['registration_deadline'] = null;
+            }
+        } else {
+            $validated['registration_deadline'] = null;
+        }
+
         // Convert numeric recurrence fields
         if (isset($validated['recurrence_interval'])) {
             $validated['recurrence_interval'] = (int) $validated['recurrence_interval'];
@@ -525,6 +552,23 @@ class EventController extends Controller
                 Log::warning('Failed to parse artist invited users JSON: ' . $e->getMessage());
                 $artistInvitedUsers = [];
             }
+        }
+
+        // Process gig_positions if provided
+        if (!empty($validated['gig_positions'])) {
+            try {
+                $gigPositions = json_decode($validated['gig_positions'], true);
+                if (is_array($gigPositions)) {
+                    $validated['gig_positions'] = $gigPositions;
+                } else {
+                    $validated['gig_positions'] = [];
+                }
+            } catch (\Exception $e) {
+                Log::warning('Failed to parse gig_positions JSON: ' . $e->getMessage());
+                $validated['gig_positions'] = [];
+            }
+        } else {
+            $validated['gig_positions'] = [];
         }
 
         // Remove invitations and invited_users from validated data as they're not part of Event model

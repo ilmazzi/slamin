@@ -117,7 +117,16 @@ class PhotoController extends Controller
     public function show(Photo $photo)
     {
         $photo->incrementViewCount();
-        return view('photos.show', compact('photo'));
+
+        // Carica le foto correlate (stesso utente, escludendo la foto corrente)
+        $relatedPhotos = Photo::where('user_id', $photo->user_id)
+            ->where('id', '!=', $photo->id)
+            ->approved()
+            ->orderBy('created_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        return view('photos.show', compact('photo', 'relatedPhotos'));
     }
 
     /**

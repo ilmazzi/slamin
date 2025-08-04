@@ -816,4 +816,28 @@ class Event extends Model
 
         return false;
     }
+
+    /**
+     * Relazione con i gigs dell'evento
+     */
+    public function gigs()
+    {
+        return $this->hasMany(Gig::class);
+    }
+
+    /**
+     * Ottiene i gigs aperti dell'evento
+     */
+    public function openGigs()
+    {
+        return $this->gigs()->where('is_closed', false);
+    }
+
+    /**
+     * Ottiene i gigs chiusi dell'evento
+     */
+    public function closedGigs()
+    {
+        return $this->gigs()->where('is_closed', true);
+    }
 }

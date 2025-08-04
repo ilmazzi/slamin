@@ -67,17 +67,27 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     if (response.success) {
-                        toastr.success(response.message);
-                        // Ricarica la pagina per aggiornare il pulsante
-                        setTimeout(() => {
+                        Swal.fire(
+                            'Successo!',
+                            response.message,
+                            'success'
+                        ).then(() => {
                             location.reload();
-                        }, 1000);
+                        });
                     } else {
-                        toastr.error(response.message);
+                        Swal.fire(
+                            'Errore!',
+                            response.message,
+                            'error'
+                        );
                     }
                 },
                 error: function() {
-                    toastr.error('Errore durante la rimozione della segnalazione');
+                    Swal.fire(
+                        'Errore!',
+                        'Errore durante la rimozione della segnalazione',
+                        'error'
+                    );
                 }
             });
         }

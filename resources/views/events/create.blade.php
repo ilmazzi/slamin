@@ -813,6 +813,73 @@
                             </div>
                         </div>
 
+                        <!-- Registration Deadline -->
+                        <div class="mb-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-bottom">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="ph ph-clock me-2"></i>{{ __('events.registration_deadline') }}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="alert alert-info">
+                                                <div class="d-flex align-items-start">
+                                                    <i class="ph ph-info-circle me-2 mt-1"></i>
+                                                    <div>
+                                                        <strong>{{ __('events.registration_deadline_info') }}</strong>
+                                                        <p class="mb-0 mt-1">{{ __('events.registration_deadline_help') }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100">
+                                                <input type="radio" name="has_registration_deadline" id="no_deadline" value="0" class="form-check-input" checked>
+                                                <label for="no_deadline" class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-infinity me-2 text-success"></i>
+                                                        <span class="fw-bold">{{ __('events.no_registration_deadline') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.no_registration_deadline_help') }}</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check p-3 border rounded h-100">
+                                                <input type="radio" name="has_registration_deadline" id="has_deadline" value="1" class="form-check-input">
+                                                <label for="has_deadline" class="form-check-label h-100 d-flex flex-column justify-content-center">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-clock me-2 text-warning"></i>
+                                                        <span class="fw-bold">{{ __('events.set_registration_deadline') }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ __('events.set_registration_deadline_help') }}</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date/Time Picker per la scadenza -->
+                                    <div id="registrationDeadlinePicker" class="mt-3" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">{{ __('events.registration_deadline_date') }} *</label>
+                                                <input type="text" name="registration_deadline_date" id="registrationDeadlineDate" class="form-control" placeholder="{{ __('events.select_date') }}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-bold">{{ __('events.registration_deadline_time') }} *</label>
+                                                <input type="text" name="registration_deadline_time" id="registrationDeadlineTime" class="form-control" placeholder="{{ __('events.select_time') }}">
+                                            </div>
+                                        </div>
+                                        <small class="text-muted mt-2 d-block">
+                                            <i class="ph ph-info-circle me-1"></i>{{ __('events.registration_deadline_note') }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Event Status -->
                         <div class="mb-4">
                             <div class="card border-0 shadow-sm">
@@ -2067,6 +2134,43 @@ function validateCurrentStep() {
             isValid = false;
         }
 
+        // Validazione per scadenza iscrizioni
+        const hasDeadline = document.getElementById('has_deadline')?.checked || false;
+        if (hasDeadline) {
+            const deadlineDate = document.getElementById('registrationDeadlineDate').value;
+            const deadlineTime = document.getElementById('registrationDeadlineTime').value;
+
+            if (!deadlineDate) {
+                showError('registrationDeadlineDate', 'Seleziona la data di scadenza');
+                highlightError('registrationDeadlineDate');
+                isValid = false;
+            }
+
+            if (!deadlineTime) {
+                showError('registrationDeadlineTime', 'Seleziona l\'ora di scadenza');
+                highlightError('registrationDeadlineTime');
+                isValid = false;
+            }
+
+            // Verifica che la scadenza sia precedente all'inizio dell'evento
+            if (deadlineDate && deadlineTime) {
+                const startDateTime = document.getElementById('start_datetime').value;
+                const deadlineDateTime = deadlineDate + ' ' + deadlineTime;
+
+                if (startDateTime && deadlineDateTime) {
+                    const startDate = new Date(startDateTime);
+                    const deadlineDate = new Date(deadlineDateTime);
+
+                    if (deadlineDate >= startDate) {
+                        showError('registrationDeadlineDate', 'La scadenza deve essere precedente alla data di inizio dell\'evento');
+                        highlightError('registrationDeadlineDate');
+                        highlightError('registrationDeadlineTime');
+                        isValid = false;
+                    }
+                }
+            }
+        }
+
         console.log('Step 4 validation result:', isValid);
     }
 
@@ -2322,7 +2426,14 @@ function updatePreview() {
     // Date and time
     const startDateTime = document.getElementById('start_datetime')?.value || '';
     const endDateTime = document.getElementById('end_datetime')?.value || '';
-    const registrationDeadline = document.getElementById('registration_deadline')?.value || '';
+
+    // Registration deadline from new fields
+    const hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
+    const registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
+    const registrationDeadlineTime = document.getElementById('registrationDeadlineTime')?.value || '';
+    const registrationDeadline = hasRegistrationDeadline && registrationDeadlineDate && registrationDeadlineTime ?
+        registrationDeadlineDate + ' ' + registrationDeadlineTime : '';
+
     const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
 
     // Location
@@ -2844,7 +2955,14 @@ function updatePreviewWithImage(imageSrc) {
     // Date and time
     const startDateTime = document.getElementById('start_datetime')?.value || '';
     const endDateTime = document.getElementById('end_datetime')?.value || '';
-    const registrationDeadline = document.getElementById('registration_deadline')?.value || '';
+
+    // Registration deadline from new fields
+    const hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
+    const registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
+    const registrationDeadlineTime = document.getElementById('registrationDeadlineTime')?.value || '';
+    const registrationDeadline = hasRegistrationDeadline && registrationDeadlineDate && registrationDeadlineTime ?
+        registrationDeadlineDate + ' ' + registrationDeadlineTime : '';
+
     const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
 
     // Location
@@ -3757,6 +3875,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Registration deadline date picker
+    const registrationDeadlineDatePicker = flatpickr("#registrationDeadlineDate", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Update time picker minimum date
+            if (registrationDeadlineTimePicker) {
+                registrationDeadlineTimePicker.set('minDate', selectedDates[0]);
+            }
+        }
+    });
+
+    // Registration deadline time picker
+    const registrationDeadlineTimePicker = flatpickr("#registrationDeadlineTime", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        minTime: "00:00",
+        maxTime: "23:59"
+    });
+
+    // Setup registration deadline radio buttons
+    const hasDeadlineRadio = document.getElementById('has_deadline');
+    const noDeadlineRadio = document.getElementById('no_deadline');
+    const deadlinePicker = document.getElementById('registrationDeadlinePicker');
+
+    if (hasDeadlineRadio && noDeadlineRadio && deadlinePicker) {
+        hasDeadlineRadio.addEventListener('change', function() {
+            if (this.checked) {
+                deadlinePicker.style.display = 'block';
+            }
+        });
+
+        noDeadlineRadio.addEventListener('change', function() {
+            if (this.checked) {
+                deadlinePicker.style.display = 'none';
+                // Clear the date/time inputs
+                if (registrationDeadlineDatePicker) {
+                    registrationDeadlineDatePicker.clear();
+                }
+                if (registrationDeadlineTimePicker) {
+                    registrationDeadlineTimePicker.clear();
+                }
+            }
+        });
+    }
 
 });
 // Funzioni per gestione inviti eventi privati

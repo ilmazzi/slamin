@@ -76,6 +76,18 @@ class Notification extends Model
     const TYPE_GROUP_ROLE_CHANGED = 'group_role_changed';
 
     /**
+     * Type constants for gigs
+     */
+    const TYPE_GIG_APPLICATION = 'gig_application';
+    const TYPE_GIG_APPLICATION_ACCEPTED = 'gig_application_accepted';
+    const TYPE_GIG_APPLICATION_REJECTED = 'gig_application_rejected';
+    const TYPE_GIG_APPLICATION_WITHDRAWN = 'gig_application_withdrawn';
+    const TYPE_GIG_CLOSED = 'gig_closed';
+    const TYPE_GIG_REOPENED = 'gig_reopened';
+    const TYPE_GIG_SHARED = 'gig_shared';
+    const TYPE_GIG_GLOBAL_MESSAGE = 'gig_global_message';
+
+    /**
      * Type constants for social interactions
      */
     const TYPE_CONTENT_LIKED = 'content_liked';
@@ -748,6 +760,202 @@ class Notification extends Model
             self::TYPE_GROUP_MEMBER_JOINED => 'Nuovo Membro Gruppo',
             self::TYPE_GROUP_MEMBER_LEFT => 'Membro Lasciato Gruppo',
             self::TYPE_GROUP_ROLE_CHANGED => 'Ruolo Cambiato',
+            self::TYPE_GIG_APPLICATION => 'Nuova Candidatura',
+            self::TYPE_GIG_APPLICATION_ACCEPTED => 'Candidatura Accettata',
+            self::TYPE_GIG_APPLICATION_REJECTED => 'Candidatura Rifiutata',
+            self::TYPE_GIG_APPLICATION_WITHDRAWN => 'Candidatura Ritirata',
+            self::TYPE_GIG_CLOSED => 'Gig Chiuso',
+            self::TYPE_GIG_REOPENED => 'Gig Riaperto',
+            self::TYPE_GIG_SHARED => 'Gig Condiviso',
+            self::TYPE_GIG_GLOBAL_MESSAGE => 'Messaggio Globale Gig',
         ];
+    }
+
+    /**
+     * Create gig application notification
+     */
+    public static function createGigApplication(GigApplication $application): void
+    {
+        $gig = $application->gig;
+        $applicant = $application->user;
+
+        $notification = self::create([
+            'user_id' => $gig->user_id, // Notify the gig owner
+            'type' => self::TYPE_GIG_APPLICATION,
+            'title' => 'Nuova Candidatura',
+            'message' => "{$applicant->name} si è candidato per il gig \"{$gig->title}\"",
+            'data' => [
+                'gig_id' => $gig->id,
+                'application_id' => $application->id,
+                'applicant_id' => $applicant->id,
+                'message' => $application->message,
+            ],
+            'action_url' => route('gigs.manage-applications', $gig),
+            'action_text' => 'Gestisci Candidature',
+            'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create gig application response notification
+     */
+    public static function createGigApplicationResponse(GigApplication $application, string $response): void
+    {
+        $gig = $application->gig;
+        $applicant = $application->user;
+        $responseText = $response === 'accepted' ? 'accettata' : 'rifiutata';
+        $type = $response === 'accepted' ? self::TYPE_GIG_APPLICATION_ACCEPTED : self::TYPE_GIG_APPLICATION_REJECTED;
+        $title = $response === 'accepted' ? 'Candidatura Accettata' : 'Candidatura Rifiutata';
+
+        $notification = self::create([
+            'user_id' => $applicant->id, // Notify the applicant
+            'type' => $type,
+            'title' => $title,
+            'message' => "La tua candidatura per il gig \"{$gig->title}\" è stata {$responseText}",
+            'data' => [
+                'gig_id' => $gig->id,
+                'application_id' => $application->id,
+                'response' => $response,
+                'gig_owner_id' => $gig->user_id,
+            ],
+            'action_url' => route('gigs.show', $gig),
+            'action_text' => 'Vedi Gig',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create gig application withdrawn notification
+     */
+    public static function createGigApplicationWithdrawn(GigApplication $application): void
+    {
+        $gig = $application->gig;
+        $applicant = $application->user;
+
+        $notification = self::create([
+            'user_id' => $gig->user_id, // Notify the gig owner
+            'type' => self::TYPE_GIG_APPLICATION_WITHDRAWN,
+            'title' => 'Candidatura Ritirata',
+            'message' => "{$applicant->name} ha ritirato la candidatura per il gig \"{$gig->title}\"",
+            'data' => [
+                'gig_id' => $gig->id,
+                'application_id' => $application->id,
+                'applicant_id' => $applicant->id,
+            ],
+            'action_url' => route('gigs.manage-applications', $gig),
+            'action_text' => 'Gestisci Candidature',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create gig closed notification
+     */
+    public static function createGigClosed(Gig $gig): void
+    {
+        // Notify all applicants
+        $applications = $gig->applications()->where('status', 'pending')->get();
+
+        foreach ($applications as $application) {
+            $notification = self::create([
+                'user_id' => $application->user_id,
+                'type' => self::TYPE_GIG_CLOSED,
+                'title' => 'Gig Chiuso',
+                'message' => "Il gig \"{$gig->title}\" è stato chiuso",
+                'data' => [
+                    'gig_id' => $gig->id,
+                    'application_id' => $application->id,
+                ],
+                'action_url' => route('gigs.show', $gig),
+                'action_text' => 'Vedi Gig',
+                'priority' => self::PRIORITY_NORMAL,
+            ]);
+
+            // Broadcast real-time notification
+            self::broadcastNotification($notification);
+        }
+    }
+
+    /**
+     * Create gig reopened notification
+     */
+    public static function createGigReopened(Gig $gig): void
+    {
+        // Notify all users who previously applied (if any)
+        $previousApplicants = $gig->applications()->pluck('user_id')->unique();
+
+        foreach ($previousApplicants as $userId) {
+            $notification = self::create([
+                'user_id' => $userId,
+                'type' => self::TYPE_GIG_REOPENED,
+                'title' => 'Gig Riaperto',
+                'message' => "Il gig \"{$gig->title}\" è stato riaperto",
+                'data' => [
+                    'gig_id' => $gig->id,
+                ],
+                'action_url' => route('gigs.show', $gig),
+                'action_text' => 'Vedi Gig',
+                'priority' => self::PRIORITY_NORMAL,
+            ]);
+
+            // Broadcast real-time notification
+            self::broadcastNotification($notification);
+        }
+    }
+
+    /**
+     * Create gig shared notification
+     */
+    public static function createGigShared(Gig $gig, User $user): void
+    {
+        $notification = self::create([
+            'user_id' => $user->id,
+            'type' => self::TYPE_GIG_SHARED,
+            'title' => 'Nuovo Gig Condiviso',
+            'message' => "Un nuovo gig è stato condiviso: \"{$gig->title}\"",
+            'data' => [
+                'gig_id' => $gig->id,
+                'shared_by_id' => $gig->user_id,
+            ],
+            'action_url' => route('gigs.show', $gig),
+            'action_text' => 'Vedi Gig',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create gig global message notification
+     */
+    public static function createGigGlobalMessage(Gig $gig, string $message, User $user): void
+    {
+        $notification = self::create([
+            'user_id' => $user->id,
+            'type' => self::TYPE_GIG_GLOBAL_MESSAGE,
+            'title' => 'Messaggio dal Gig',
+            'message' => "Messaggio dal gig \"{$gig->title}\": {$message}",
+            'data' => [
+                'gig_id' => $gig->id,
+                'message' => $message,
+                'sent_by_id' => $gig->user_id,
+            ],
+            'action_url' => route('gigs.show', $gig),
+            'action_text' => 'Vedi Gig',
+            'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
     }
 }

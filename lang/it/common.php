@@ -17,6 +17,7 @@ return [
     'dashboard' => 'Dashboard',
     'view' => 'Visualizza',
     'view_all' => 'Visualizza Tutti',
+    'view_details' => 'Visualizza Dettagli',
     'all' => 'Tutti',
     'back_to_dashboard' => 'Back To Dashboard',
     'reset' => 'Reset',
@@ -26,6 +27,14 @@ return [
     'image_help_text' => 'Formati supportati: JPG, PNG, GIF. Dimensione massima: 2MB.',
     'current_image' => 'Immagine Attuale',
     'remove_image' => 'Rimuovi Immagine',
+    'free' => 'Gratuito',
+    'language_selector' => 'Selettore Lingua',
+    'video' => 'Video',
+    'snap' => 'Snap',
+    'snap_title' => 'Titolo Snap',
+    'snap_description' => 'Descrizione Snap',
+    'thumbnail' => 'Thumbnail',
+    'comments_section' => 'Sezione Commenti',
 
     // Sezioni della sidebar
     'gigs' => 'Gig',
@@ -34,5 +43,8 @@ return [
     'kanban_board' => 'Kanban Board',
     'popular' => 'Popolari',
     'new' => 'Nuovi',
-    'video' => 'Video',
+    'didactic' => 'Didattica',
+    'forum' => 'Forum',
+    'fan_support' => 'Supporto Fan',
+    'wiki' => 'Wiki',
 ];

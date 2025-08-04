@@ -228,7 +228,7 @@
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <h6 class="mb-1 fw-bold">
-                                                    Da {{ $request->user->name }}
+                                                    Da <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">{{ $request->user->getDisplayName() }}</a>
                                                     @if($request->user->username)
                                                         <span class="text-muted">({{ $request->user->username }})</span>
                                                     @endif
@@ -304,14 +304,19 @@
                             <div class="list-group-item">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden text-bg-warning">
-                                    {{ substr($invitation->invitedUser->name, 0, 2) }}
-                                </div>
+                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->invitedUser) }}"
+                                             alt="{{ $invitation->invitedUser->getDisplayName() }}"
+                                             class="h-45 w-45 rounded-circle"
+                                             style="object-fit: cover;">
                                     </div>
                                     <div class="col text-truncate">
                                         <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1">
-                                            <h6 class="mb-1">{{ $invitation->invitedUser->name }}</h6>
+                                            <h6 class="mb-1">
+                                                <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
+                                                    {{ $invitation->invitedUser->getDisplayName() }}
+                                                </a>
+                                            </h6>
                                                 <div class="mb-2">
                                                     <span class="badge bg-light-info">{{ ucfirst($invitation->role) }}</span>
                                             <small class="text-muted ms-2">
@@ -388,14 +393,19 @@
                                 <div class="list-group-item">
                                     <div class="row">
                                         <div class="col-auto">
-                                            <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden text-bg-success">
-                                                {{ substr($participant['user']->name, 0, 2) }}
-                                            </div>
+                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($participant['user']) }}"
+                                                 alt="{{ $participant['user']->getDisplayName() }}"
+                                                 class="h-45 w-45 rounded-circle"
+                                                 style="object-fit: cover;">
                                         </div>
                                         <div class="col">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
-                                                <h6 class="mb-1">{{ $participant['user']->name }}</h6>
+                                                <h6 class="mb-1">
+                                                    <a href="{{ route('user.show', $participant['user']) }}" class="text-decoration-none hover-effect">
+                                                        {{ $participant['user']->getDisplayName() }}
+                                                    </a>
+                                                </h6>
                                                     <div class="mb-1">
                                                         <span class="badge bg-light-primary">{{ ucfirst($participant['role']) }}</span>
                                                         <span class="badge bg-light-success ms-1">

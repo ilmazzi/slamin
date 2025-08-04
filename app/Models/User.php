@@ -440,6 +440,16 @@ class User extends Authenticatable
         return $this->belongsToMany(PoemComment::class, 'poem_comment_likes')->withTimestamps();
     }
 
+    public function gigs()
+    {
+        return $this->hasMany(Gig::class);
+    }
+
+    public function gigApplications()
+    {
+        return $this->hasMany(GigApplication::class);
+    }
+
     /**
      * Relazione con la wishlist
      */

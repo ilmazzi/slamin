@@ -30,12 +30,14 @@ class Photo extends Model
         'moderated_at',
         'like_count',
         'view_count',
+        'comment_count',
         'metadata',
     ];
 
     protected $casts = [
         'like_count' => 'integer',
         'view_count' => 'integer',
+        'comment_count' => 'integer',
         'metadata' => 'array',
         'moderated_at' => 'datetime',
     ];

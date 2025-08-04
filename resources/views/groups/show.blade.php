@@ -312,22 +312,17 @@
                     @forelse($group->members()->with('user')->latest()->take(6)->get() as $member)
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-shrink-0">
-                            @if($member->user->profile_photo)
-                                <img src="{{ $member->user->profile_photo_url }}"
-                                     alt="{{ $member->user->getDisplayName() }}"
-                                     class="rounded-circle"
-                                     style="width: 40px; height: 40px; object-fit: cover;">
-                            @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
-                                     style="width: 40px; height: 40px;">
-                                    <span class="text-primary fw-bold">
-                                        {{ substr($member->user->getDisplayName(), 0, 2) }}
-                                    </span>
-                                </div>
-                            @endif
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($member->user) }}"
+                                 alt="{{ $member->user->getDisplayName() }}"
+                                 class="rounded-circle"
+                                 style="width: 40px; height: 40px; object-fit: cover;">
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">{{ $member->user->getDisplayName() }}</h6>
+                            <h6 class="mb-1">
+                                <a href="{{ route('user.show', $member->user) }}" class="text-decoration-none hover-effect">
+                                    {{ $member->user->getDisplayName() }}
+                                </a>
+                            </h6>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-{{ $member->role == 'admin' ? 'success' : ($member->role == 'moderator' ? 'info' : 'secondary') }}">
                                     {{ __('groups.role_' . $member->role) }}
@@ -362,20 +357,13 @@
                     <div class="mb-3">
                         <strong>{{ __('groups.created_by') }}:</strong>
                         <div class="d-flex align-items-center mt-1">
-                            @if($group->creator->profile_photo)
-                                <img src="{{ $group->creator->profile_photo_url }}"
-                                     alt="{{ $group->creator->getDisplayName() }}"
-                                     class="rounded-circle me-2"
-                                     style="width: 30px; height: 30px; object-fit: cover;">
-                            @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center me-2"
-                                     style="width: 30px; height: 30px;">
-                                    <span class="text-primary fw-bold" style="font-size: 12px;">
-                                        {{ substr($group->creator->getDisplayName(), 0, 2) }}
-                                    </span>
-                                </div>
-                            @endif
-                            <span>{{ $group->creator->getDisplayName() }}</span>
+                                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($group->creator) }}"
+                             alt="{{ $group->creator->getDisplayName() }}"
+                             class="rounded-circle me-2"
+                             style="width: 30px; height: 30px; object-fit: cover;">
+                            <a href="{{ route('user.show', $group->creator) }}" class="text-decoration-none hover-effect">
+                                {{ $group->creator->getDisplayName() }}
+                            </a>
                         </div>
                     </div>
                     <div class="mb-3">

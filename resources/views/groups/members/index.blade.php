@@ -84,24 +84,19 @@
                     @forelse($members as $member)
                     <div class="d-flex align-items-center mb-3 p-3 border rounded">
                         <div class="flex-shrink-0">
-                            @if($member->user->profile_photo)
-                                <img src="{{ $member->user->profile_photo_url }}" 
-                                     alt="{{ $member->user->getDisplayName() }}" 
-                                     class="rounded-circle" 
-                                     style="width: 60px; height: 60px; object-fit: cover;">
-                            @else
-                                <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
-                                     style="width: 60px; height: 60px;">
-                                    <span class="text-primary fw-bold">
-                                        {{ substr($member->user->getDisplayName(), 0, 2) }}
-                                    </span>
-                                </div>
-                            @endif
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($member->user) }}"
+                                 alt="{{ $member->user->getDisplayName() }}"
+                                 class="rounded-circle"
+                                 style="width: 60px; height: 60px; object-fit: cover;">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <h6 class="mb-1">{{ $member->user->getDisplayName() }}</h6>
+                                    <h6 class="mb-1">
+                                        <a href="{{ route('user.show', $member->user) }}" class="text-decoration-none hover-effect">
+                                            {{ $member->user->getDisplayName() }}
+                                        </a>
+                                    </h6>
                                     <p class="text-muted mb-1">{{ $member->user->getPrivacySafeIdentifier() }}</p>
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="badge bg-{{ $member->role == 'admin' ? 'success' : ($member->role == 'moderator' ? 'info' : 'secondary') }}">
@@ -112,7 +107,10 @@
                                         </small>
                                         @if($member->invited_by)
                                             <small class="text-muted">
-                                                {{ __('groups.invited_by') }} {{ $member->invitedBy->getDisplayName() }}
+                                                {{ __('groups.invited_by') }}
+                                                <a href="{{ route('user.show', $member->invitedBy) }}" class="text-decoration-none hover-effect">
+                                                    {{ $member->invitedBy->getDisplayName() }}
+                                                </a>
                                             </small>
                                         @endif
                                     </div>
@@ -173,7 +171,7 @@
                                                 <li>
                                                     <form action="{{ route('groups.members.remove', [$group, $member]) }}" method="POST" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="dropdown-item text-danger" 
+                                                        <button type="submit" class="dropdown-item text-danger"
                                                                 onclick="return confirm('{{ __('groups.confirm_remove_member') }}')">
                                                             <i class="ph-duotone ph-trash me-2"></i>
                                                             {{ __('groups.remove') }}
@@ -221,4 +219,4 @@
     </div>
     @endif
 </div>
-@endsection 
+@endsection

@@ -64,11 +64,10 @@
                             </div>
                             <div class="col-md-4 text-end">
                                 <div class="bg-white-500 h-50 w-50 d-flex-center rounded-circle ms-auto">
-                                    @if($user->getProfilePhotoUrlAttribute())
-                                        <img src="{{ $user->getProfilePhotoUrlAttribute() }}" alt="{{ $user->name }}" class="rounded-circle" style="width: 90px; height: 90px; object-fit: cover;">
-                                    @else
-                                        <i class="ph ph-user f-s-24 text-primary"></i>
-                                    @endif
+                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                         alt="{{ $user->getDisplayName() }}"
+                                         class="rounded-circle"
+                                         style="width: 90px; height: 90px; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -391,13 +390,18 @@
                     <div class="card-body pa-20">
                         @foreach(auth()->user()->eventInvitations()->where('status', 'pending')->with('event')->take(3)->get() as $invitation)
                             <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
-                                <div class="flex-shrink-0">
-                                    <div class="bg-light-success h-35 w-35 d-flex-center rounded-circle">
-                                        <i class="ph ph-calendar text-success f-s-14"></i>
+                                                                    <div class="flex-shrink-0">
+                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->event->organizer) }}"
+                                             alt="{{ $invitation->event->organizer->getDisplayName() }}"
+                                             class="h-35 w-35 rounded-circle"
+                                             style="object-fit: cover;">
                                     </div>
-                                </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <p class="mb-1 fw-500 f-s-14">{{ $invitation->event->title }}</p>
+                                    <p class="mb-1 fw-500 f-s-14">
+                                        <a href="{{ route('events.show', $invitation->event) }}" class="text-decoration-none hover-effect">
+                                            {{ $invitation->event->title }}
+                                        </a>
+                                    </p>
                                     <small class="text-muted f-s-12">
                                         <i class="ph ph-calendar me-1"></i>{{ $invitation->event->start_datetime->format('d/m/Y H:i') }}
                                     </small>
@@ -448,14 +452,32 @@
                         @foreach(auth()->user()->groupInvitations()->where('status', 'pending')->with(['group', 'invitedBy'])->take(3)->get() as $invitation)
                             <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
                                 <div class="flex-shrink-0">
-                                    <div class="bg-light-primary h-35 w-35 d-flex-center rounded-circle">
-                                        <i class="ph ph-users text-primary f-s-14"></i>
-                                    </div>
+                                    @if($invitation->invitedBy)
+                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->invitedBy) }}"
+                                             alt="{{ $invitation->invitedBy->getDisplayName() }}"
+                                             class="h-35 w-35 rounded-circle"
+                                             style="object-fit: cover;">
+                                    @else
+                                        <div class="bg-light-primary h-35 w-35 d-flex-center rounded-circle">
+                                            <i class="ph ph-user text-primary f-s-14"></i>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <p class="mb-1 fw-500 f-s-14">{{ $invitation->group->name }}</p>
+                                    <p class="mb-1 fw-500 f-s-14">
+                                        <a href="{{ route('groups.show', $invitation->group) }}" class="text-decoration-none hover-effect">
+                                            {{ $invitation->group->name }}
+                                        </a>
+                                    </p>
                                     <small class="text-muted f-s-12">
-                                        <i class="ph ph-user me-1"></i>{{ $invitation->invitedBy->name ?? 'Utente non trovato' }}
+                                        <i class="ph ph-user me-1"></i>
+                                        @if($invitation->invitedBy)
+                                            <a href="{{ route('user.show', $invitation->invitedBy) }}" class="text-decoration-none hover-effect">
+                                                {{ $invitation->invitedBy->getDisplayName() }}
+                                            </a>
+                                        @else
+                                            Utente non trovato
+                                        @endif
                                     </small>
                                 </div>
                                 <div class="flex-shrink-0">

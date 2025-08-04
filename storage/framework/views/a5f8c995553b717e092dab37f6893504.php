@@ -1,0 +1,471 @@
+<?php $__env->startSection('title', $gig->title); ?>
+
+<?php $__env->startSection('main-content'); ?>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- Page Title -->
+        <div class="page-title-box">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0 small">
+                        <li class="breadcrumb-item">
+                            <a href="<?php echo e(route('home')); ?>" class="text-decoration-none">
+                                <i class="ph ph-house me-1"></i><?php echo e(__('common.home')); ?>
+
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="<?php echo e(route('gigs.index')); ?>" class="text-decoration-none">
+                                <i class="ph ph-briefcase me-1"></i><?php echo e(__('gigs.title')); ?>
+
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">
+                            <?php echo e($gig->title); ?>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Contenuto principale -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Header con badge di stato -->
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="flex-grow-1">
+                                <h2 class="card-title mb-2"><?php echo e($gig->title); ?></h2>
+                                <p class="text-muted mb-0">
+                                    <i class="ph ph-user me-1"></i>
+                                    <a href="<?php echo e(route('user.show', $gig->user)); ?>" class="text-decoration-none hover-effect">
+                                        <?php echo e($gig->user->getDisplayName()); ?>
+
+                                    </a>
+                                    <span class="mx-2">•</span>
+                                    <i class="ph ph-calendar me-1"></i>
+                                    <?php if($gig->created_at): ?>
+                                        <?php echo e($gig->created_at->format('d/m/Y')); ?>
+
+                                    <?php else: ?>
+                                        <span class="text-muted">Non disponibile</span>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <?php if($gig->is_urgent): ?>
+                                    <span class="badge bg-warning">
+                                        <i class="ph ph-warning me-1"></i><?php echo e(__('gigs.status.urgent')); ?>
+
+                                    </span>
+                                <?php elseif($gig->is_featured): ?>
+                                    <span class="badge bg-info">
+                                        <i class="ph ph-star me-1"></i><?php echo e(__('gigs.status.featured')); ?>
+
+                                    </span>
+                                <?php elseif($gig->is_closed): ?>
+                                    <span class="badge bg-secondary">
+                                        <i class="ph ph-lock me-1"></i><?php echo e(__('gigs.status.closed')); ?>
+
+                                    </span>
+                                <?php elseif($gig->is_expired): ?>
+                                    <span class="badge bg-danger">
+                                        <i class="ph ph-clock me-1"></i><?php echo e(__('gigs.status.expired')); ?>
+
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-success">
+                                        <i class="ph ph-check-circle me-1"></i><?php echo e(__('gigs.status.open')); ?>
+
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- Categorie e tipo -->
+                        <div class="mb-4">
+                            <span class="badge bg-light-primary me-1">
+                                <?php echo e(__('gigs.categories.' . $gig->category)); ?>
+
+                            </span>
+                            <span class="badge bg-light-primary me-1">
+                                <?php echo e(__('gigs.types.' . $gig->type)); ?>
+
+                            </span>
+                            <?php if($gig->is_remote): ?>
+                                <span class="badge bg-light-success">
+                                    <i class="ph ph-globe me-1"></i><?php echo e(__('gigs.fields.is_remote')); ?>
+
+                                </span>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Descrizione -->
+                        <div class="mb-4">
+                            <h5><?php echo e(__('gigs.fields.description')); ?></h5>
+                            <p class="text-muted"><?php echo e($gig->description); ?></p>
+                        </div>
+
+                        <!-- Requisiti -->
+                        <?php if($gig->requirements): ?>
+                            <div class="mb-4">
+                                <h5><?php echo e(__('gigs.fields.requirements')); ?></h5>
+                                <p class="text-muted"><?php echo e($gig->requirements); ?></p>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Informazioni aggiuntive -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-muted"><?php echo e(__('gigs.fields.compensation')); ?></h6>
+                                <p class="text-success">
+                                    <i class="ph ph-currency-eur me-1"></i>
+                                    <?php echo e($gig->compensation ?: __('common.free')); ?>
+
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted"><?php echo e(__('gigs.fields.deadline')); ?></h6>
+                                <p class="text-muted">
+                                    <i class="ph ph-calendar me-1"></i>
+                                    <?php if($gig->deadline): ?>
+                                        <?php echo e($gig->deadline->format('d/m/Y H:i')); ?>
+
+                                        <?php if($gig->days_until_deadline !== null): ?>
+                                            <?php if($gig->days_until_deadline > 0): ?>
+                                                <span class="badge bg-info ms-2"><?php echo e($gig->days_until_deadline); ?> giorni rimasti</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-danger ms-2">Scaduto</span>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <span class="text-muted">Non specificata</span>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                        </div>
+
+                        <?php if($gig->location): ?>
+                            <div class="mb-4">
+                                <h6 class="text-muted"><?php echo e(__('gigs.fields.location')); ?></h6>
+                                <p class="text-muted">
+                                    <i class="ph ph-map-pin me-1"></i><?php echo e($gig->location); ?>
+
+                                </p>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Statistiche -->
+                        <div class="row text-center mb-4">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <h4 class="mb-1"><?php echo e($gig->application_count); ?></h4>
+                                    <small class="text-muted"><?php echo e(__('gigs.stats.applications')); ?></small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="mb-1"><?php echo e($gig->max_applications); ?></h4>
+                                <small class="text-muted">Max candidature</small>
+                            </div>
+                        </div>
+
+                        <!-- Azioni -->
+                        <div class="d-flex gap-2">
+                            <?php if(auth()->guard()->check()): ?>
+                                <?php if (! (auth()->user()->hasRole('audience'))): ?>
+                                    <?php if($gig->can_apply && !$userApplication): ?>
+                                        <button class="btn btn-success" onclick="applyToGig(<?php echo e($gig->id); ?>)">
+                                            <i class="ph ph-user-plus me-2"></i><?php echo e(__('gigs.apply_gig')); ?>
+
+                                        </button>
+                                    <?php elseif($userApplication): ?>
+                                        <button class="btn btn-secondary" disabled>
+                                            <i class="ph ph-check me-2"></i>Candidatura inviata
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn btn-secondary" disabled>
+                                            <i class="ph ph-lock me-2"></i><?php echo e(__('gigs.status.closed')); ?>
+
+                                        </button>
+                                    <?php endif; ?>
+
+                                    <?php if($gig->canBeEditedBy(auth()->user())): ?>
+                                        <button class="btn btn-info" onclick="shareGig(<?php echo e($gig->id); ?>)">
+                                            <i class="ph ph-share me-2"></i><?php echo e(__('gigs.actions.share')); ?>
+
+                                        </button>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <a href="<?php echo e(route('login')); ?>" class="btn btn-outline-primary">
+                                    <i class="ph ph-sign-in me-2"></i><?php echo e(__('gigs.messages.login_to_interact')); ?>
+
+                                </a>
+                            <?php endif; ?>
+
+                            <?php if(auth()->guard()->check()): ?>
+                                <?php if($gig->canBeEditedBy(auth()->user())): ?>
+                                    <a href="<?php echo e(route('gigs.edit', $gig)); ?>" class="btn btn-outline-primary">
+                                        <i class="ph ph-pencil me-2"></i><?php echo e(__('common.edit')); ?>
+
+                                    </a>
+                                    <a href="<?php echo e(route('gigs.manage-applications', $gig)); ?>" class="btn btn-outline-info">
+                                        <i class="ph ph-users me-2"></i><?php echo e(__('gigs.applications.manage_applications')); ?>
+
+                                        <?php if($gig->application_count > 0): ?>
+                                            <span class="badge bg-primary ms-1"><?php echo e($gig->application_count); ?></span>
+                                        <?php endif; ?>
+                                    </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Informazioni evento/gruppo -->
+                <?php if($gig->event): ?>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="card-title"><?php echo e(__('gigs.fields.event')); ?></h6>
+                            <p class="mb-2">
+                                <a href="<?php echo e(route('events.show', $gig->event)); ?>" class="text-decoration-none hover-effect">
+                                    <?php echo e($gig->event->title); ?>
+
+                                </a>
+                            </p>
+                            <small class="text-muted">
+                                <i class="ph ph-calendar me-1"></i>
+                                <?php if($gig->event && $gig->event->start_datetime): ?>
+                                    <?php echo e($gig->event->start_datetime->format('d/m/Y')); ?>
+
+                                <?php else: ?>
+                                    <span class="text-muted">Data non disponibile</span>
+                                <?php endif; ?>
+                            </small>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if($gig->group): ?>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="card-title"><?php echo e(__('gigs.fields.group')); ?></h6>
+                            <p class="mb-2">
+                                <a href="<?php echo e(route('groups.show', $gig->group)); ?>" class="text-decoration-none hover-effect">
+                                    <?php echo e($gig->group->name); ?>
+
+                                </a>
+                            </p>
+                            <small class="text-muted">
+                                <i class="ph ph-users me-1"></i>
+                                <?php echo e($gig->group->members()->count()); ?> membri
+                            </small>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Informazioni autore -->
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title"><?php echo e(__('gigs.about_author')); ?></h6>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($gig->user)); ?>"
+                                 alt="<?php echo e($gig->user->getDisplayName()); ?>"
+                                 class="rounded-circle me-3"
+                                 style="width: 50px; height: 50px; object-fit: cover;">
+                            <div>
+                                <h6 class="mb-1">
+                                    <a href="<?php echo e(route('user.show', $gig->user)); ?>" class="text-decoration-none hover-effect">
+                                        <?php echo e($gig->user->getDisplayName()); ?>
+
+                                    </a>
+                                </h6>
+                                <small class="text-muted"><?php echo e($gig->user->getRoleDisplayNameAttribute()); ?></small>
+                            </div>
+                        </div>
+                        <?php if($gig->user->bio): ?>
+                            <p class="text-muted small"><?php echo e(Str::limit($gig->user->bio, 100)); ?></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal per candidatura -->
+<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="applyModalLabel"><?php echo e(__('gigs.applications.apply')); ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="applyForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="message" class="form-label"><?php echo e(__('gigs.applications.message')); ?> <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="message" name="message" rows="4"
+                                  placeholder="<?php echo e(__('gigs.applications.message_placeholder')); ?>" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="experience" class="form-label"><?php echo e(__('gigs.applications.experience')); ?></label>
+                        <textarea class="form-control" id="experience" name="experience" rows="3"
+                                  placeholder="<?php echo e(__('gigs.applications.experience_placeholder')); ?>"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="portfolio" class="form-label"><?php echo e(__('gigs.applications.portfolio')); ?></label>
+                        <input type="text" class="form-control" id="portfolio" name="portfolio"
+                               placeholder="<?php echo e(__('gigs.applications.portfolio_placeholder')); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="availability" class="form-label"><?php echo e(__('gigs.applications.availability')); ?></label>
+                        <textarea class="form-control" id="availability" name="availability" rows="2"
+                                  placeholder="<?php echo e(__('gigs.applications.availability_placeholder')); ?>"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="compensation_expectation" class="form-label"><?php echo e(__('gigs.applications.compensation_expectation')); ?></label>
+                        <input type="text" class="form-control" id="compensation_expectation" name="compensation_expectation"
+                               placeholder="<?php echo e(__('gigs.applications.compensation_expectation_placeholder')); ?>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo e(__('common.cancel')); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo e(__('gigs.applications.submit_application')); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+// Fallback per toastr se viene caricato da qualche parte
+if (typeof toastr === 'undefined') {
+    window.toastr = {
+        success: function(message) {
+            Swal.fire('Successo!', message, 'success');
+        },
+        error: function(message) {
+            Swal.fire('Errore!', message, 'error');
+        },
+        warning: function(message) {
+            Swal.fire('Attenzione!', message, 'warning');
+        },
+        info: function(message) {
+            Swal.fire('Info', message, 'info');
+        }
+    };
+}
+
+let currentGigId = <?php echo e($gig->id); ?>;
+
+function applyToGig(gigId) {
+    currentGigId = gigId;
+    $('#applyModal').modal('show');
+}
+
+function shareGig(gigId) {
+    Swal.fire({
+        title: 'Condividi Ingaggio',
+        text: 'Sei sicuro di voler condividere questo ingaggio con tutti gli utenti non-audience?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, condividi!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/gigs/${gigId}/share`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire(
+                        'Condiviso!',
+                        data.message,
+                        'success'
+                    );
+                } else {
+                    Swal.fire(
+                        'Errore!',
+                        data.error || 'Errore durante la condivisione',
+                        'error'
+                    );
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire(
+                    'Errore!',
+                    'Errore di connessione',
+                    'error'
+                );
+            });
+        }
+    });
+}
+
+$('#applyForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(`/gigs/${currentGigId}/apply`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            Swal.fire(
+                'Candidatura Inviata!',
+                data.message,
+                'success'
+            ).then(() => {
+                $('#applyModal').modal('hide');
+                $('#applyForm')[0].reset();
+                location.reload();
+            });
+        } else {
+            Swal.fire(
+                'Errore!',
+                data.error || 'Errore durante l\'invio della candidatura',
+                'error'
+            );
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire(
+            'Errore!',
+            'Errore di connessione o server non disponibile',
+            'error'
+        );
+    });
+});
+</script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/gigs/show.blade.php ENDPATH**/ ?>

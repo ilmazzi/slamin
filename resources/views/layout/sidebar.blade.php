@@ -15,14 +15,8 @@
         @auth
         <div class="d-flex align-items-center nav-profile p-3">
             <a href="{{ route('profile.show') }}" class="text-decoration-none d-flex align-items-center flex-grow-1" style="cursor: pointer;">
-                <span class="h-45 w-45 d-flex-center b-r-10 position-relative bg-primary m-auto">
-                    @if(auth()->user()->profile_photo)
-                        <img alt="avatar" class="img-fluid b-r-10" src="{{ auth()->user()->profile_photo_url }}">
-                    @else
-                        <span class="text-white fw-bold" style="font-size: 16px;">
-                            {{ substr(auth()->user()->getDisplayName(), 0, 2) }}
-                        </span>
-                    @endif
+                <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto">
+                    <img alt="avatar" class="img-fluid b-r-10" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}">
                     <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
                 </span>
                 <div class="flex-grow-1 ps-2">
@@ -150,22 +144,23 @@
                                 </li>
 
                                 @auth
-                                <!-- {{ __('common.gigs') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.gigs') }}</span>
+                                @unless(auth()->user()->hasRole('audience'))
+                                <!-- Gigs Section -->
+                                <li class="no-sub {{ request()->routeIs('gigs.*') ? 'active' : '' }}">
+                                    <a href="{{ route('gigs.index') }}">
+                                        <i class="ph-duotone ph-briefcase f-s-20 me-2"></i>
+                                        {{ __('gigs.title') }}
+                                        @if(auth()->user()->gigs()->open()->count() > 0)
+                                            <span class="badge bg-success badge-notification ms-2">
+                                                {{ auth()->user()->gigs()->open()->count() }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
+                                @endunless
                                 @endauth
 
-                                <!-- {{ __('common.news') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-                                        <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.news') }}</span>
-                                    </a>
-                                </li>
+
 
                                 <!-- {{ __('common.media_section') }} Section -->
                                 <li class="no-sub {{ request()->routeIs('media.*') ? 'active' : '' }}">
@@ -174,7 +169,13 @@
                                         {{ __('common.media_section') }}
                                     </a>
                                 </li>
-
+ <!-- {{ __('common.news') }} Section - DISABILITATO (non implementato) -->
+ <li class="no-sub nav-item disabled d-none d-sm-block">
+    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+        <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
+        <span class="text-muted">{{ __('common.news') }}</span>
+    </a>
+</li>
 
 
                                 <!-- Poesie Section -->
@@ -207,6 +208,46 @@
                                     </a>
                                 </li>
                                 @endif
+                                <li class="menu-title"><span>PROSSIMAMENTE</span></li>
+
+
+                                @auth
+                                <!-- {{ __('common.didactic') }} Section - DISABILITATO (non implementato) -->
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">{{ __('common.didactic') }}</span>
+                                    </a>
+                                </li>
+                                @endauth
+                                @auth
+                                <!-- {{ __('common.forum') }} Section - DISABILITATO (non implementato) -->
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">{{ __('common.forum') }}</span>
+                                    </a>
+                                </li>
+                                @endauth
+                                @auth
+                                <!-- {{ __('common.fan_support') }} Section - DISABILITATO (non implementato) -->
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">{{ __('common.fan_support') }}</span>
+                                    </a>
+                                </li>
+                                @endauth
+                                @auth
+                                <!-- {{ __('common.wiki') }} Section - DISABILITATO (non implementato) -->
+                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
+                                        <span class="text-muted">{{ __('common.wiki') }}</span>
+                                    </a>
+                                </li>
+                                @endauth
+
 
                                 @auth
                                 <!-- Chat Section - Solo per utenti autenticati -->
