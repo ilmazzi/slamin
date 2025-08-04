@@ -328,10 +328,52 @@ class PeerTubeService
         $username = $baseUsername;
         $counter = 1;
 
-        // Verifica se l'username esiste già
+        // Verifica se l'username esiste già nel nostro DB
         while (User::where('peertube_username', $username)->exists()) {
             $username = $baseUsername . '_' . $counter;
             $counter++;
+        }
+
+        // Verifica anche su PeerTube se possibile
+        if ($this->accessToken) {
+            $maxAttempts = 10; // Evita loop infiniti
+            $attempts = 0;
+
+            while ($attempts < $maxAttempts) {
+                try {
+                    $response = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $this->accessToken,
+                    ])->get($this->baseUrl . '/api/v1/users', [
+                        'search' => $username
+                    ]);
+
+                    if ($response->successful()) {
+                        $users = $response->json('data', []);
+                        $usernameExists = false;
+
+                        foreach ($users as $peerTubeUser) {
+                            if ($peerTubeUser['username'] === $username) {
+                                $usernameExists = true;
+                                break;
+                            }
+                        }
+
+                        if (!$usernameExists) {
+                            break; // Username disponibile
+                        }
+                    }
+                } catch (\Exception $e) {
+                    Log::warning('Errore verifica username su PeerTube', [
+                        'username' => $username,
+                        'error' => $e->getMessage()
+                    ]);
+                    break; // In caso di errore, usa l'username corrente
+                }
+
+                $username = $baseUsername . '_' . $counter;
+                $counter++;
+                $attempts++;
+            }
         }
 
         return $username;
