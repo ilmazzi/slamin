@@ -164,20 +164,54 @@ class PeerTubeService
             }
 
             // Prepara i dati per la creazione utente
-            $username = $user->peertube_username ?? $this->generatePeerTubeUsername($user);
+            // Sempre genera un username univoco per evitare conflitti
+            $username = $this->generatePeerTubeUsername($user);
 
-            // Genera un nome canale semplice e valido
+            // Genera un nome canale univoco
             $baseChannelName = 'channel_' . $user->id;
-
-            // Se il nome base è vuoto o troppo corto, usa un nome di default
-            if (strlen($baseChannelName) < 3) {
-                $baseChannelName = 'channel';
-            }
-
-            // Assicurati che il nome del canale sia diverso dall'username
             $channelName = $baseChannelName;
-            if (strtolower($channelName) === strtolower($username)) {
-                $channelName = $baseChannelName . 'ch';
+            $counter = 1;
+
+            // Verifica se il canale esiste già su PeerTube
+            if ($this->accessToken) {
+                $maxAttempts = 10;
+                $attempts = 0;
+
+                while ($attempts < $maxAttempts) {
+                    try {
+                        $response = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $this->accessToken,
+                        ])->get($this->baseUrl . '/api/v1/video-channels', [
+                            'search' => $channelName
+                        ]);
+
+                        if ($response->successful()) {
+                            $channels = $response->json('data', []);
+                            $channelExists = false;
+
+                            foreach ($channels as $channel) {
+                                if ($channel['name'] === $channelName) {
+                                    $channelExists = true;
+                                    break;
+                                }
+                            }
+
+                            if (!$channelExists) {
+                                break; // Nome canale disponibile
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning('Errore verifica canale su PeerTube', [
+                            'channel_name' => $channelName,
+                            'error' => $e->getMessage()
+                        ]);
+                        break; // In caso di errore, usa il nome corrente
+                    }
+
+                    $channelName = $baseChannelName . '_' . $counter;
+                    $counter++;
+                    $attempts++;
+                }
             }
 
             // Limita la lunghezza del nome del canale
