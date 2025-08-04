@@ -167,7 +167,7 @@ class PeerTubeService
             $username = $user->peertube_username ?? $this->generatePeerTubeUsername($user);
 
             // Genera un nome canale semplice e valido
-            $baseChannelName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $user->name ?? $user->nickname ?? 'channel'));
+            $baseChannelName = 'channel_' . $user->id;
 
             // Se il nome base è vuoto o troppo corto, usa un nome di default
             if (strlen($baseChannelName) < 3) {
@@ -981,7 +981,7 @@ class PeerTubeService
 
             // Elimina l'utente da PeerTube
             $deleted = $this->deleteUser($user->peertube_user_id);
-            
+
             if ($deleted) {
                 Log::info('PeerTubeService - Utente eliminato da PeerTube con successo', [
                     'local_user_id' => $localUserId,
