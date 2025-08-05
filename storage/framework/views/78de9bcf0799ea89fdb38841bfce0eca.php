@@ -760,7 +760,7 @@
                     <div class="row">
                         <?php $__currentLoopData = $gigPositions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $position): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-12 mb-3">
-                            <div class="card card-light-success">
+                            <div class="card ">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="mb-0">
@@ -819,14 +819,16 @@
                                     </div>
 
                                     <?php if(auth()->guard()->check()): ?>
-                                        <?php if($event->organizer_id !== auth()->id()): ?>
-                                        <div class="mt-3">
-                                            <button class="btn btn-sm btn-outline-success" onclick="contactOrganizer('<?php echo e($event->organizer->email); ?>', '<?php echo e(__('events.gig_type_' . $position['type'])); ?>')">
-                                                <i class="ph ph-envelope me-1"></i>
-                                                Contatta <?php echo e(__('events.organizer')); ?>
+                                        <?php if (! (auth()->user()->hasRole('audience'))): ?>
+                                            <?php if($event->organizer_id !== auth()->id()): ?>
+                                            <div class="mt-3">
+                                                <button class="btn btn-sm btn-success" onclick="applyToGig(<?php echo e($event->id); ?>)">
+                                                    <i class="ph ph-user-plus me-1"></i>
+                                                    <?php echo e(__('gigs.apply_gig')); ?>
 
-                                            </button>
-                                        </div>
+                                                </button>
+                                            </div>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -1442,6 +1444,55 @@
 </div>
 <?php endif; ?>
 <?php endif; ?>
+
+<!-- Modal per candidatura agli ingaggi -->
+<?php if(auth()->guard()->check()): ?>
+<?php if (! (auth()->user()->hasRole('audience'))): ?>
+<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="applyModalLabel"><?php echo e(__('gigs.applications.apply')); ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="applyForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="message" class="form-label"><?php echo e(__('gigs.applications.message')); ?> <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="message" name="message" rows="4"
+                                  placeholder="<?php echo e(__('gigs.applications.message_placeholder')); ?>" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="experience" class="form-label"><?php echo e(__('gigs.applications.experience')); ?></label>
+                        <textarea class="form-control" id="experience" name="experience" rows="3"
+                                  placeholder="<?php echo e(__('gigs.applications.experience_placeholder')); ?>"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="portfolio" class="form-label"><?php echo e(__('gigs.applications.portfolio')); ?></label>
+                        <input type="text" class="form-control" id="portfolio" name="portfolio"
+                               placeholder="<?php echo e(__('gigs.applications.portfolio_placeholder')); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="availability" class="form-label"><?php echo e(__('gigs.applications.availability')); ?></label>
+                        <textarea class="form-control" id="availability" name="availability" rows="2"
+                                  placeholder="<?php echo e(__('gigs.applications.availability_placeholder')); ?>"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="compensation_expectation" class="form-label"><?php echo e(__('gigs.applications.compensation_expectation')); ?></label>
+                        <input type="text" class="form-control" id="compensation_expectation" name="compensation_expectation"
+                               placeholder="<?php echo e(__('gigs.applications.compensation_expectation_placeholder')); ?>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo e(__('common.cancel')); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo e(__('gigs.applications.submit_application')); ?></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
@@ -1588,26 +1639,61 @@ function showNotification(message, type) {
 // <?php echo e(__('wishlist.wishlist')); ?> è gestita globalmente da WishlistManager
 // Non serve codice duplicato qui
 
-// Funzione per contattare l'organizzatore per posizioni d'ingaggio
-function contactOrganizer(email, positionType) {
-    const subject = encodeURIComponent(`Interesse per posizione: ${positionType} - <?php echo e(__('invitations.event')); ?>: <?php echo e($event->title); ?>`);
-    const body = encodeURIComponent(`Ciao!
+// Funzioni per candidatura agli ingaggi
+let currentEventId = <?php echo e($event->id); ?>;
 
-Sono interessato alla posizione di ${positionType} per il tuo evento "<?php echo e($event->title); ?>" che si terrà il <?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>.
-
-Potresti fornirmi maggiori dettagli su:
-- Requisiti specifici per la posizione
-- Modalità di selezione
-- Contratto e condizioni
-
-Grazie per l'attenzione!
-
-Cordiali saluti,
-<?php echo e(auth()->user()->name ?? 'Un utente'); ?>`);
-
-    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-    window.open(mailtoLink);
+function applyToGig(eventId) {
+    currentEventId = eventId;
+    $('#applyModal').modal('show');
 }
+
+$('#applyForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch(`/events/${currentEventId}/apply-gig`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            Swal.fire(
+                'Candidatura Inviata!',
+                data.message,
+                'success'
+            ).then(() => {
+                $('#applyModal').modal('hide');
+                $('#applyForm')[0].reset();
+                location.reload();
+            });
+        } else {
+            Swal.fire(
+                'Errore!',
+                data.error || 'Errore durante l\'invio della candidatura',
+                'error'
+            );
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire(
+            'Errore!',
+            'Errore di connessione o server non disponibile',
+            'error'
+        );
+    });
+});
 
 // Incrementa visualizzazioni evento
 document.addEventListener('DOMContentLoaded', function() {

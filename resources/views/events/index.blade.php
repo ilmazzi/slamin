@@ -84,6 +84,8 @@
         font-size: 0.875rem;
     }
 }
+
+
 </style>
 @endsection
 
@@ -187,39 +189,39 @@
                         </div>
 
                         <!-- Second Row: Quick Filters and Action Buttons -->
-                        <div class="row g-3">
+                        <div class="row g-3 mt-4 mb-2">
                             <div class="col-lg-9 col-md-12">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <span class="bg-light-primary rounded px-3 py-2" data-filter="today" style="cursor: pointer;">
+                                <div class="d-flex flex-wrap gap-2 align-items-center p-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-filter="today">
                                         <i class="ph ph-calendar me-1"></i> {{ __('events.today') }}
-                                    </span>
-                                    <span class="bg-light-info rounded px-3 py-2" data-filter="tomorrow" style="cursor: pointer;">
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info btn-sm" data-filter="tomorrow">
                                         <i class="ph ph-calendar-plus me-1"></i> {{ __('events.tomorrow') }}
-                                    </span>
-                                    <span class="bg-light-success rounded px-3 py-2" data-filter="weekend" style="cursor: pointer;">
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success btn-sm" data-filter="weekend">
                                         <i class="ph ph-calendar-check me-1"></i> {{ __('events.weekend') }}
-                                    </span>
-                                    <span class="bg-light-warning rounded px-3 py-2" data-filter="free" style="cursor: pointer;">
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning btn-sm" data-filter="free">
                                         <i class="ph ph-currency-circle-dollar me-1"></i> {{ __('events.free_events') }}
-                                    </span>
-                                    <span class="bg-light-secondary rounded px-3 py-2" data-filter="nearby" style="cursor: pointer;">
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-filter="nearby">
                                         <i class="ph ph-map-pin me-1"></i> {{ __('events.nearby') }}
-                                    </span>
+                                    </button>
                                     @auth
-                                        <span class="bg-light-primary rounded px-3 py-2" data-filter="my" style="cursor: pointer;">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-filter="my">
                                             <i class="ph ph-user me-1"></i> {{ __('events.my_events') }}
-                                        </span>
-                                        <span class="bg-light-warning rounded px-3 py-2" data-filter="private" style="cursor: pointer;">
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning btn-sm" data-filter="private">
                                             <i class="ph ph-lock me-1"></i> {{ __('events.my_private_events') }}
-                                        </span>
+                                        </button>
                                     @endauth
-                                    <span class="bg-light-danger rounded px-3 py-2" data-filter="past" style="cursor: pointer;">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" data-filter="past">
                                         <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('events.past_events') }}
-                                    </span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-12">
-                                <div class="d-flex gap-2 justify-content-end">
+                                <div class="d-flex gap-2 justify-content-end p-2">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
                                     </button>
