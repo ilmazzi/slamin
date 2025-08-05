@@ -199,6 +199,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
+            // Imposta l'utente come online al login
+            $user->setOnline();
+
             // Log successful login
             LoggingService::logAuth('login', [
                 'user_id' => $user->id,
@@ -230,6 +233,9 @@ class AuthController extends Controller
         
         // Log logout before destroying session
         if ($user) {
+            // Imposta l'utente come offline al logout
+            $user->setOffline();
+            
             LoggingService::logAuth('logout', [
                 'user_id' => $user->id,
                 'email' => $user->email,

@@ -73,6 +73,17 @@ Route::view('candlestick_chart', 'candlestick_chart')->name('candlestick_chart')
 Route::view('cards', 'cards')->name('cards');
 Route::view('cart', 'cart')->name('cart');
 Route::view('chart_js', 'chart_js')->name('chart_js');
+// Online Status Routes
+Route::prefix('online-status')->name('online-status.')->middleware('auth')->group(function () {
+    Route::post('/update-status', [App\Http\Controllers\OnlineStatusController::class, 'updateStatus'])->name('update-status');
+    Route::post('/update-last-seen', [App\Http\Controllers\OnlineStatusController::class, 'updateLastSeen'])->name('update-last-seen');
+    Route::get('/user/{user}/status', [App\Http\Controllers\OnlineStatusController::class, 'getUserStatus'])->name('user-status');
+    Route::post('/multiple-users-status', [App\Http\Controllers\OnlineStatusController::class, 'getMultipleUsersStatus'])->name('multiple-users-status');
+    Route::post('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'updatePrivacyPreferences'])->name('privacy-preferences');
+    Route::get('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'getPrivacyPreferences'])->name('get-privacy-preferences');
+    Route::get('/unread-messages-count', [App\Http\Controllers\OnlineStatusController::class, 'getUnreadMessagesCount'])->name('unread-messages-count');
+});
+
 // Chat Routes
 Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');

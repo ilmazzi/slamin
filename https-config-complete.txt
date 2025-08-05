@@ -1,0 +1,53 @@
+# CONFIGURAZIONE HTTPS COMPLETA PER SLAMIN.LOCAL
+
+# 1. Abilita SSL in C:\xampp\apache\conf\httpd.conf
+# Cerca la riga "#Include conf/extra/httpd-ssl.conf" e rimuovi il #
+
+# 2. Aggiungi questo al file C:\xampp\apache\conf\extra\httpd-ssl.conf
+# (alla fine del file, prima di </IfModule>)
+
+# VirtualHost HTTPS per slamin.local
+<VirtualHost *:443>
+    ServerName slamin.local
+    DocumentRoot "C:/xampp/htdocs/slamin/public"
+    
+    # Configurazione SSL
+    SSLEngine on
+    SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
+    SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
+    
+    # Configurazione directory
+    <Directory "C:/xampp/htdocs/slamin/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    # Log
+    ErrorLog "logs/slamin.local-error.log"
+    CustomLog "logs/slamin.local-access.log" combined
+</VirtualHost>
+
+# 3. Modifica il VirtualHost HTTP in C:\xampp\apache\conf\extra\httpd-vhosts.conf
+# Sostituisci il VirtualHost di slamin.local con:
+
+<VirtualHost *:80>
+    ServerName slamin.local
+    Redirect permanent / https://slamin.local/
+</VirtualHost>
+
+# 4. PASSI DA SEGUIRE:
+# - Apri C:\xampp\apache\conf\httpd.conf
+# - Cerca "#Include conf/extra/httpd-ssl.conf"
+# - Rimuovi il # per abilitare SSL
+# - Apri C:\xampp\apache\conf\extra\httpd-ssl.conf
+# - Aggiungi la configurazione VirtualHost HTTPS sopra
+# - Modifica il file httpd-vhosts.conf per il redirect
+# - Riavvia Apache da XAMPP Control Panel
+# - Accetta il certificato self-signed nel browser
+# - Usa https://slamin.local
+
+# 5. PER TESTARE WEBRTC:
+# - Accedi a https://slamin.local
+# - Il browser gestirà automaticamente i certificati self-signed
+# - WebRTC funzionerà perfettamente per chiamate audio/video 

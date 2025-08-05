@@ -41,6 +41,11 @@ class User extends Authenticatable
         'social_instagram',
         'social_youtube',
         'social_twitter',
+        // Online status fields
+        'is_online',
+        'last_seen_at',
+        'online_status',
+        'online_preferences',
         // PeerTube fields
         'peertube_user_id',
         'peertube_username',
@@ -80,6 +85,8 @@ class User extends Authenticatable
             'password' => 'hashed',
             'peertube_token_expires_at' => 'datetime',
             'peertube_created_at' => 'datetime',
+            'last_seen_at' => 'datetime',
+            'online_preferences' => 'array',
         ];
     }
 
@@ -975,5 +982,163 @@ class User extends Authenticatable
     public function getFollowingCountAttribute(): int
     {
         return $this->following()->count();
+    }
+
+    // Online Status Methods
+    public function setOnline(): void
+    {
+        $this->update([
+            'is_online' => true,
+            'online_status' => 'online',
+            'last_seen_at' => now(),
+        ]);
+    }
+
+    public function setOffline(): void
+    {
+        $this->update([
+            'is_online' => false,
+            'online_status' => 'offline',
+            'last_seen_at' => now(),
+        ]);
+    }
+
+    public function setAway(): void
+    {
+        $this->update([
+            'is_online' => true,
+            'online_status' => 'away',
+            'last_seen_at' => now(),
+        ]);
+    }
+
+    public function setBusy(): void
+    {
+        $this->update([
+            'is_online' => true,
+            'online_status' => 'busy',
+            'last_seen_at' => now(),
+        ]);
+    }
+
+    public function setInvisible(): void
+    {
+        $this->update([
+            'is_online' => false,
+            'online_status' => 'invisible',
+            'last_seen_at' => now(),
+        ]);
+    }
+
+    public function updateLastSeen(): void
+    {
+        $this->update(['last_seen_at' => now()]);
+    }
+
+    public function isCurrentlyOnline(): bool
+    {
+        if (!$this->is_online) {
+            return false;
+        }
+
+        // Se è impostato come online, considera online se l'ultima attività è stata negli ultimi 30 minuti
+        return $this->last_seen_at && $this->last_seen_at->diffInMinutes(now()) <= 30;
+    }
+
+    public function getOnlineStatusDisplay(): string
+    {
+        if ($this->online_status === 'invisible') {
+            return 'Offline';
+        }
+
+        if ($this->isCurrentlyOnline()) {
+            switch ($this->online_status) {
+                case 'online':
+                    return 'Online';
+                case 'away':
+                    return 'Assente';
+                case 'busy':
+                    return 'Occupato';
+                case 'invisible':
+                    return 'Offline';
+                default:
+                    return 'Offline';
+            }
+        }
+
+        return 'Offline';
+    }
+
+    public function getLastSeenDisplay(): string
+    {
+        if (!$this->last_seen_at) {
+            return 'Mai';
+        }
+
+        if ($this->isCurrentlyOnline()) {
+            return 'Online ora';
+        }
+
+        $diff = $this->last_seen_at->diffForHumans();
+        return "Ultima volta {$diff}";
+    }
+
+    public function canSeeOnlineStatus(User $otherUser): bool
+    {
+        // L'utente può sempre vedere il proprio stato
+        if ($this->id === $otherUser->id) {
+            return true;
+        }
+
+        // Se l'utente è invisibile, nessuno può vedere il suo stato
+        if ($otherUser->online_status === 'invisible') {
+            return false;
+        }
+
+        // Controlla le preferenze di privacy dell'altro utente
+        $preferences = $otherUser->online_preferences ?? [];
+        $visibility = $preferences['visibility'] ?? 'all'; // all, friends, none
+
+        switch ($visibility) {
+            case 'none':
+                return false;
+            case 'friends':
+                return $this->isFollowing($otherUser) || $otherUser->isFollowing($this);
+            case 'all':
+            default:
+                return true;
+        }
+    }
+
+    public function getOnlineStatusColor(): string
+    {
+        switch ($this->online_status) {
+            case 'online':
+                return 'success';
+            case 'away':
+                return 'warning';
+            case 'busy':
+                return 'danger';
+            case 'invisible':
+            case 'offline':
+            default:
+                return 'secondary';
+        }
+    }
+
+    public function getOnlineStatusIcon(): string
+    {
+        switch ($this->online_status) {
+            case 'online':
+                return 'ph-circle-fill';
+            case 'away':
+                return 'ph-clock';
+            case 'busy':
+                return 'ph-minus-circle';
+            case 'invisible':
+            case 'offline':
+            default:
+                return 'ph-circle';
+        }
     }
 }

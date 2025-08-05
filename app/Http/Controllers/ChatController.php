@@ -82,14 +82,27 @@ class ChatController extends Controller
 
         // Non può creare chat con se stesso
         if ($user->id === $otherUser->id) {
-            return back()->with('error', 'Non puoi creare una chat con te stesso.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Non puoi creare una chat con te stesso.'
+            ], 400);
         }
 
-        // Crea o trova la chat esistente
-        $chat = Chat::createPrivate($user, $otherUser);
+        try {
+            // Crea o trova la chat esistente
+            $chat = Chat::createPrivate($user, $otherUser);
 
-        return redirect()->route('chat.index')
-                        ->with('success', 'Chat privata creata con successo.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Chat privata creata con successo.',
+                'chat_id' => $chat->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore nella creazione della chat: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -98,23 +111,28 @@ class ChatController extends Controller
     public function createGroup(Request $request)
     {
         $request->validate([
-            'group_id' => 'required|exists:groups,id',
-            'name' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'user_ids' => 'required|array|min:1',
+            'user_ids.*' => 'exists:users,id',
         ]);
 
         $user = Auth::user();
-        $group = Group::findOrFail($request->group_id);
 
-        // Verifica che l'utente sia admin o moderatore del gruppo
-        if (!$user->isModeratorOf($group) && !$user->hasRole('admin')) {
-            abort(403, 'Non hai i permessi per creare chat in questo gruppo.');
+        try {
+            // Crea la chat di gruppo
+            $chat = Chat::createGroupChat($user, $request->name, $request->user_ids);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Chat di gruppo creata con successo.',
+                'chat_id' => $chat->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore nella creazione della chat: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Crea la chat di gruppo
-        $chat = Chat::createGroupChat($group, $user, $request->name);
-
-        return redirect()->route('chat.index')
-                        ->with('success', 'Chat di gruppo creata con successo.');
     }
 
     /**
@@ -171,7 +189,49 @@ class ChatController extends Controller
             $chat->unread_count = $chat->getUnreadCount($user);
         }
 
-        return response()->json($chats);
+        // Separa le chat private da quelle di gruppo
+        $privateChats = $chats->where('type', 'private')->map(function($chat) use ($user) {
+            $otherUser = $chat->participants->where('user_id', '!=', $user->id)->first()->user ?? null;
+            
+            return [
+                'id' => $chat->id,
+                'type' => $chat->type,
+                'unread_count' => $chat->unread_count,
+                'last_message' => $chat->lastMessage ? [
+                    'message' => $chat->lastMessage->message,
+                    'created_at' => $chat->lastMessage->created_at->diffForHumans()
+                ] : null,
+                'other_user' => $otherUser ? [
+                    'id' => $otherUser->id,
+                    'name' => $otherUser->name,
+                    'avatar_url' => \App\Helpers\AvatarHelper::getUserAvatarUrl($otherUser),
+                    'online_status_color' => $otherUser->getOnlineStatusColor(),
+                    'online_status_icon' => $otherUser->getOnlineStatusIcon(),
+                    'online_status_display' => $otherUser->getOnlineStatusDisplay(),
+                    'last_seen_display' => $otherUser->getLastSeenDisplay()
+                ] : null
+            ];
+        });
+
+        $groupChats = $chats->where('type', 'group')->map(function($chat) {
+            return [
+                'id' => $chat->id,
+                'type' => $chat->type,
+                'name' => $chat->name,
+                'unread_count' => $chat->unread_count,
+                'participants_count' => $chat->participants->count(),
+                'last_message' => $chat->lastMessage ? [
+                    'message' => $chat->lastMessage->message,
+                    'created_at' => $chat->lastMessage->created_at->diffForHumans()
+                ] : null
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'private_chats' => $privateChats,
+            'group_chats' => $groupChats
+        ]);
     }
 
     /**

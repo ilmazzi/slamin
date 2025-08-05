@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Microfono - Slamin</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-container { max-width: 600px; margin: 0 auto; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #audioLevel { width: 100%; height: 50px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Microfono WebRTC</h1>
+        
+        <div id="status" class="status warning">
+            Clicca "Test Microfono" per verificare l'accesso
+        </div>
+        
+        <button onclick="testMicrophone()">Test Microfono</button>
+        <button onclick="testCamera()">Test Camera</button>
+        <button onclick="testWebRTC()">Test WebRTC Completo</button>
+        <button onclick="resetPermissions()" style="background-color: #dc3545; color: white;">Reset Permessi</button>
+        
+        <div id="audioLevel"></div>
+        <video id="localVideo" autoplay muted style="width: 100%; max-width: 400px; margin-top: 20px;"></video>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let animationId;
+
+        function updateStatus(message, type = 'warning') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        async function testMicrophone() {
+            updateStatus('Test microfono in corso...', 'warning');
+            
+            try {
+                // Verifica supporto WebRTC
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error('WebRTC non supportato');
+                }
+
+                // Verifica permessi prima di richiedere il microfono
+                if (navigator.permissions) {
+                    try {
+                        const permission = await navigator.permissions.query({ name: 'microphone' });
+                        addResult(`🔍 Stato permesso microfono: ${permission.state}`, 'info');
+                        
+                        if (permission.state === 'denied') {
+                            throw new Error('Permesso microfono negato. Clicca sull\'icona del lucchetto nella barra degli indirizzi e consenti il microfono.');
+                        }
+                    } catch (permError) {
+                        addResult('⚠️ Impossibile verificare i permessi, continuo con il test...', 'warning');
+                    }
+                }
+
+                // Richiedi accesso al microfono con gestione errori migliorata
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }, 
+                    video: false 
+                });
+
+                updateStatus('Microfono accessibile!', 'success');
+                addResult('✓ Microfono funzionante', 'success');
+
+                // Analizza il livello audio
+                startAudioAnalysis(stream);
+
+            } catch (error) {
+                console.error('Errore test microfono:', error);
+                updateStatus(`Errore microfono: ${error.message}`, 'error');
+                addResult(`✗ Errore microfono: ${error.message}`, 'error');
+                
+                if (error.name === 'NotAllowedError') {
+                    addResult('💡 Soluzione: Verifica i permessi del browser per il microfono', 'warning');
+                    addResult('💡 Clicca sull\'icona del lucchetto nella barra degli indirizzi', 'warning');
+                } else if (error.name === 'NotFoundError') {
+                    addResult('💡 Soluzione: Verifica che il microfono sia collegato', 'warning');
+                } else if (error.name === 'NotReadableError') {
+                    addResult('💡 Soluzione: Il microfono è in uso da un\'altra applicazione', 'warning');
+                    addResult('💡 Chiudi altre app che usano il microfono (Zoom, Teams, Discord, etc.)', 'warning');
+                    addResult('💡 Verifica le impostazioni audio di Windows', 'warning');
+                } else if (error.name === 'NotSupportedError') {
+                    addResult('💡 Soluzione: WebRTC non è supportato in questo browser', 'warning');
+                }
+            }
+        }
+
+        async function testCamera() {
+            updateStatus('Test camera in corso...', 'warning');
+            
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: false, 
+                    video: true 
+                });
+
+                const video = document.getElementById('localVideo');
+                video.srcObject = stream;
+
+                updateStatus('Camera accessibile!', 'success');
+                addResult('✓ Camera funzionante', 'success');
+
+            } catch (error) {
+                console.error('Errore test camera:', error);
+                updateStatus(`Errore camera: ${error.message}`, 'error');
+                addResult(`✗ Errore camera: ${error.message}`, 'error');
+            }
+        }
+
+        async function testWebRTC() {
+            updateStatus('Test WebRTC completo in corso...', 'warning');
+            
+            try {
+                // Test microfono e camera insieme
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: true, 
+                    video: true 
+                });
+
+                const video = document.getElementById('localVideo');
+                video.srcObject = stream;
+
+                // Test RTCPeerConnection
+                const pc = new RTCPeerConnection({
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' }
+                    ]
+                });
+
+                stream.getTracks().forEach(track => {
+                    pc.addTrack(track, stream);
+                });
+
+                updateStatus('WebRTC completamente funzionante!', 'success');
+                addResult('✓ WebRTC supportato', 'success');
+                addResult('✓ STUN server configurato', 'success');
+
+                // Pulisci
+                pc.close();
+                stream.getTracks().forEach(track => track.stop());
+
+            } catch (error) {
+                console.error('Errore test WebRTC:', error);
+                updateStatus(`Errore WebRTC: ${error.message}`, 'error');
+                addResult(`✗ Errore WebRTC: ${error.message}`, 'error');
+            }
+        }
+
+        function startAudioAnalysis(stream) {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+                
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                updateAudioLevel();
+            } catch (error) {
+                console.error('Errore analisi audio:', error);
+            }
+        }
+
+        function updateAudioLevel() {
+            if (!analyser) return;
+            
+            analyser.getByteFrequencyData(dataArray);
+            
+            const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+            const level = (average / 255) * 100;
+            
+            const audioLevel = document.getElementById('audioLevel');
+            audioLevel.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${level}%, #f0f0f0 ${level}%, #f0f0f0 100%)`;
+            
+            if (level > 5) {
+                addResult(`🎤 Livello audio: ${Math.round(level)}%`, 'success');
+            }
+            
+            animationId = requestAnimationFrame(updateAudioLevel);
+        }
+
+        // Funzione per resettare i permessi
+        async function resetPermissions() {
+            updateStatus('Reset permessi in corso...', 'warning');
+            
+            try {
+                // Prova a revocare i permessi esistenti
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                
+                addResult('🔄 Permessi revocati. Ricarica la pagina per testare di nuovo.', 'warning');
+                updateStatus('Permessi resettati. Ricarica la pagina.', 'success');
+                
+            } catch (error) {
+                addResult('⚠️ Impossibile resettare i permessi automaticamente', 'warning');
+                addResult('💡 Ricarica manualmente la pagina (F5)', 'info');
+            }
+        }
+
+        // Test automatico al caricamento
+        window.addEventListener('load', () => {
+            addResult('🔍 Test automatico al caricamento...', 'info');
+            
+            if (!navigator.mediaDevices) {
+                addResult('✗ WebRTC non supportato', 'error');
+            } else {
+                addResult('✓ WebRTC supportato', 'success');
+            }
+            
+            if (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname.includes('local')) {
+                addResult('✓ HTTPS/HTTP locale rilevato (OK per WebRTC)', 'success');
+            } else {
+                addResult('⚠️ HTTPS richiesto per WebRTC in produzione', 'warning');
+            }
+        });
+    </script>
+</body>
+</html> 

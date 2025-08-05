@@ -93,4 +93,5 @@ return [
     'chat_created' => 'Chat creata',
     'chat_updated' => 'Chat aggiornata',
     'online' => 'Online',
+    'offline' => 'Offline',
 ];

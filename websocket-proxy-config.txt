@@ -1,0 +1,36 @@
+# Aggiungi questo al VirtualHost HTTPS di slamin.local in httpd-ssl.conf
+
+# Abilita i moduli necessari (verifica che siano già abilitati in httpd.conf)
+# LoadModule proxy_module modules/mod_proxy.so
+# LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+
+<VirtualHost *:443>
+    ServerName slamin.local
+    DocumentRoot "C:/xampp/htdocs/slamin/public"
+    
+    # Configurazione SSL
+    SSLEngine on
+    SSLCertificateFile "C:/xampp/apache/conf/ssl/server.crt"
+    SSLCertificateKeyFile "C:/xampp/apache/conf/ssl/server_no_pass.key"
+    
+    # Configurazione directory
+    <Directory "C:/xampp/htdocs/slamin/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    # Proxy WebSocket per WSS
+    ProxyPass /ws ws://127.0.0.1:8080
+    ProxyPassReverse /ws ws://127.0.0.1:8080
+    
+    # Log
+    ErrorLog "logs/slamin.local-error.log"
+    CustomLog "logs/slamin.local-access.log" combined
+</VirtualHost>
+
+# ISTRUZIONI:
+# 1. Verifica che i moduli proxy siano abilitati in httpd.conf
+# 2. Aggiungi le righe ProxyPass al VirtualHost HTTPS
+# 3. Riavvia Apache
+# 4. Il WebSocket sarà disponibile su wss://slamin.local/ws 

@@ -24,6 +24,17 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# WebSocket Proxy
+RewriteEngine On
+
+# Proxy per WebSocket su /ws
+RewriteCond %{HTTP:Upgrade} websocket [NC]
+RewriteCond %{HTTP:Connection} upgrade [NC]
+RewriteRule ^/ws(.*)$ ws://127.0.0.1:8080/$1 [P,L]
+
+# Proxy per HTTP su /ws
+RewriteRule ^/ws(.*)$ http://127.0.0.1:8080/$1 [P,L]
+
 # Enable Gzip compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain

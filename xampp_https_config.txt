@@ -1,0 +1,39 @@
+# Configurazione HTTPS per XAMPP
+# Aggiungi questo al file C:\xampp\apache\conf\extra\httpd-ssl.conf
+
+# Abilita SSL
+LoadModule ssl_module modules/mod_ssl.so
+
+# Configurazione Virtual Host HTTPS per slamin.local
+<VirtualHost *:443>
+    ServerName slamin.local
+    DocumentRoot "C:/xampp/htdocs/slamin/public"
+    
+    # Configurazione SSL
+    SSLEngine on
+    SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
+    SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
+    
+    # Configurazione directory
+    <Directory "C:/xampp/htdocs/slamin/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    # Log
+    ErrorLog "logs/slamin.local-error.log"
+    CustomLog "logs/slamin.local-access.log" combined
+</VirtualHost>
+
+# Redirect HTTP to HTTPS
+<VirtualHost *:80>
+    ServerName slamin.local
+    Redirect permanent / https://slamin.local/
+</VirtualHost>
+
+# ISTRUZIONI:
+# 1. Apri C:\xampp\apache\conf\httpd.conf
+# 2. Cerca la riga "#Include conf/extra/httpd-ssl.conf"
+# 3. Rimuovi il # per abilitare SSL
+# 4. Aggiungi la configurazione sopra al file httpd-ssl.conf
+# 5. Riavvia Apache da XAMPP Control Panel 

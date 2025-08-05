@@ -1,0 +1,20 @@
+# Modifica il VirtualHost HTTP esistente in C:\xampp\apache\conf\extra\httpd-vhosts.conf
+# Sostituisci il VirtualHost di slamin.local esistente con questo:
+
+<VirtualHost *:80>
+    ServerName slamin.local
+    Redirect permanent / https://slamin.local/
+</VirtualHost>
+
+# ISTRUZIONI COMPLETE:
+# 1. Apri C:\xampp\apache\conf\extra\httpd-ssl.conf
+# 2. Aggiungi il VirtualHost HTTPS PRIMA del <VirtualHost _default_:443>
+# 3. Apri C:\xampp\apache\conf\extra\httpd-vhosts.conf
+# 4. Sostituisci il VirtualHost di slamin.local con quello sopra
+# 5. Riavvia Apache da XAMPP Control Panel
+# 6. Usa https://slamin.local per testare WebRTC
+
+# RISULTATO:
+# - http://slamin.local → redirect automatico a https://slamin.local
+# - https://slamin.local → sito Slamin con WebRTC funzionante
+# - Il tuo sito athena rimane invariato su https://192.168.11.180 

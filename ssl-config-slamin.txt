@@ -1,0 +1,36 @@
+# Aggiungi questo VirtualHost PRIMA del <VirtualHost _default_:443> nel file httpd-ssl.conf
+
+<VirtualHost *:443>
+    ServerName slamin.local
+    DocumentRoot "C:/xampp/htdocs/slamin/public"
+    
+    # Configurazione SSL
+    SSLEngine on
+    SSLCertificateFile "C:/xampp/apache/conf/ssl/server.crt"
+    SSLCertificateKeyFile "C:/xampp/apache/conf/ssl/server_no_pass.key"
+    
+    # Configurazione directory
+    <Directory "C:/xampp/htdocs/slamin/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    # Log
+    ErrorLog "logs/slamin.local-error.log"
+    CustomLog "logs/slamin.local-access.log" combined
+</VirtualHost>
+
+# Il tuo VirtualHost esistente rimane invariato:
+# <VirtualHost _default_:443>
+#     DocumentRoot "C:/xampp/htdocs/new_athena/public"
+#     ServerName 192.168.11.180:443
+#     ...
+# </VirtualHost>
+
+# ISTRUZIONI:
+# 1. Apri C:\xampp\apache\conf\extra\httpd-ssl.conf
+# 2. Aggiungi il VirtualHost sopra PRIMA del <VirtualHost _default_:443>
+# 3. Salva il file
+# 4. Riavvia Apache da XAMPP Control Panel
+# 5. Usa https://slamin.local per testare WebRTC 
