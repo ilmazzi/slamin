@@ -84,6 +84,14 @@ Route::prefix('online-status')->name('online-status.')->middleware('auth')->grou
     Route::get('/unread-messages-count', [App\Http\Controllers\OnlineStatusController::class, 'getUnreadMessagesCount'])->name('unread-messages-count');
 });
 
+// Call Routes
+Route::prefix('calls')->name('calls.')->middleware('auth')->group(function () {
+    Route::post('/start', [App\Http\Controllers\CallController::class, 'startCall'])->name('start');
+    Route::post('/answer', [App\Http\Controllers\CallController::class, 'answerCall'])->name('answer');
+    Route::post('/signal', [App\Http\Controllers\CallController::class, 'sendSignal'])->name('signal');
+    Route::post('/end', [App\Http\Controllers\CallController::class, 'endCall'])->name('end');
+});
+
 // Chat Routes
 Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');
@@ -96,6 +104,11 @@ Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
     Route::post('/{chat}/mute', [App\Http\Controllers\ChatController::class, 'toggleMute'])->name('mute');
     Route::post('/{chat}/leave', [App\Http\Controllers\ChatController::class, 'leave'])->name('leave');
     Route::delete('/{chat}', [App\Http\Controllers\ChatController::class, 'destroy'])->name('destroy');
+
+    // Messaggi
+    Route::get('/{chat}/messages', [App\Http\Controllers\ChatMessageController::class, 'index'])->name('messages.index');
+    Route::post('/{chat}/messages', [App\Http\Controllers\ChatMessageController::class, 'store'])->name('messages.store');
+    Route::delete('/messages/{message}', [App\Http\Controllers\ChatMessageController::class, 'destroy'])->name('messages.destroy');
 
     // Gestione partecipanti
     Route::get('/{chat}/participants', [App\Http\Controllers\ChatController::class, 'participants'])->name('participants');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserStatusChanged;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,9 @@ class OnlineStatusController extends Controller
                 $user->setOffline();
                 break;
         }
+
+        // Broadcast del cambio di stato via Reverb
+        broadcast(new UserStatusChanged($user, $status))->toOthers();
 
         return response()->json([
             'success' => true,

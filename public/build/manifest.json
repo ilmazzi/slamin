@@ -7,10 +7,6 @@
     "file": "assets/06-BUZdJH04.jpg",
     "src": "public/assets/images/background/06.jpg"
   },
-  "public/assets/images/background/box-bg.jpg": {
-    "file": "assets/box-bg-CogJfHyy.jpg",
-    "src": "public/assets/images/background/box-bg.jpg"
-  },
   "public/assets/images/background/login-bg.png": {
     "file": "assets/login-bg-BzD9KQpW.png",
     "src": "public/assets/images/background/login-bg.png"
@@ -92,17 +88,17 @@
     "src": "public/assets/images/slick/30.jpg"
   },
   "public/assets/scss/style.scss": {
-    "file": "assets/style-v-rTORbT.css",
+    "file": "assets/style-3bbkut3_.css",
     "src": "public/assets/scss/style.scss",
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-De9EcrKS.css",
+    "file": "assets/app-DAWvoIEH.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-eMHK6VFw.js",
+    "file": "assets/app-BhHB14Sa.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

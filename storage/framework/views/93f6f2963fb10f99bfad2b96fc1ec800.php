@@ -1,7 +1,10 @@
 <?php $__env->startSection('main-content'); ?>
 
-<!-- WebSocket Client -->
-<script src="<?php echo e(asset('assets/js/websocket-client.js')); ?>"></script>
+<!-- Laravel Echo (compilato) -->
+<?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.js']); ?>
+
+<!-- Laravel Reverb Client -->
+<script src="<?php echo e(asset('assets/js/reverb-client.js')); ?>"></script>
 <div class="page-content">
     <div class="container-fluid">
         <!-- start page title -->
@@ -656,8 +659,8 @@ function loadChat(chatId) {
     updateChatHeader(chatId);
     
     // Entra nella chat via WebSocket
-    if (wsClient && wsClient.isConnected) {
-        wsClient.joinChat(chatId);
+    if (reverbClient && reverbClient.isConnected) {
+        reverbClient.joinChat(chatId);
     }
     
     // Aggiorna il badge dei messaggi non letti (i messaggi vengono marcati come letti)
@@ -832,9 +835,9 @@ function sendMessage() {
             console.error('Errore nell\'invio del messaggio');
         });
     } else {
-        // Per messaggi di testo, usa WebSocket per invio istantaneo
-        if (wsClient && wsClient.isConnected) {
-            wsClient.sendMessage(currentChatId, message, 'text');
+        // Per messaggi di testo, usa Reverb per invio istantaneo
+        if (reverbClient && reverbClient.isConnected) {
+            reverbClient.sendMessage(currentChatId, message, 'text');
             $('#messageInput').val('');
             
             // Aggiungi il messaggio immediatamente alla chat
@@ -1413,15 +1416,15 @@ function changeOnlineStatus(status) {
 
 
 
-// WebSocket Client globale
-let wsClient = null;
+// Laravel Reverb Client globale
+let reverbClient = null;
 
 // Inizializza quando il documento è pronto
 $(document).ready(function() {
     console.log('Inizializzazione sistema chat in tempo reale...');
     
-    // Inizializza WebSocket client
-    initWebSocketClient();
+    // Inizializza Reverb client
+    initReverbClient();
     
     // Inizializza sistema stato online
     initOnlineStatus();
@@ -1550,67 +1553,71 @@ $(document).ready(function() {
 // Variabile per l'intervallo dei messaggi non letti
 let unreadMessagesInterval;
 
-// Inizializza il WebSocket client
-function initWebSocketClient() {
-    console.log('Inizializzazione WebSocket client...');
+// Inizializza il Reverb client
+function initReverbClient() {
+    console.log('Inizializzazione Reverb client...');
     
-    // Crea istanza WebSocket client
-    wsClient = new WebSocketClient();
-    
-    // Configura callback per messaggi
-    wsClient.onMessage(function(data) {
-        console.log('Nuovo messaggio ricevuto:', data);
+    try {
+        // Crea istanza Reverb client
+        reverbClient = new ReverbClient();
         
-        // Se il messaggio è per la chat corrente, aggiungilo
-        if (data.chat_id == currentChatId) {
-            addMessageToChat(data.message);
-        }
-        
-        // Aggiorna la lista chat
-        updateChatList();
-        
-        // Aggiorna il badge dei messaggi non letti
-        updateUnreadMessagesBadge();
-    });
-    
-    // Configura callback per stato utente
-    wsClient.onUserStatus(function(data) {
-        console.log('Cambio stato utente:', data);
-        
-        // Aggiorna gli indicatori di stato
-        updateUserStatusIndicator(data.user_id, data.status, data.online_status);
-        
-        // Se l'utente è nella chat corrente, aggiorna l'header
-        if (currentChatId) {
-            const currentChatUserId = $('.chat-contactbox.active').data('user-id');
-            if (currentChatUserId == data.user_id) {
-                updateChatHeader(currentChatId);
+        // Configura callback per messaggi
+        reverbClient.onMessage(function(data) {
+            console.log('Nuovo messaggio ricevuto:', data);
+            
+            // Se il messaggio è per la chat corrente, aggiungilo
+            if (data.chat_id == currentChatId) {
+                addMessageToChat(data);
             }
-        }
-    });
-    
-    // Configura callback per richieste di chiamata
-    wsClient.onCallRequest(function(data) {
-        console.log('Richiesta chiamata ricevuta:', data);
-        handleIncomingCall(data);
-    });
-    
-    // Configura callback per risposte alle chiamate
-    wsClient.onCallResponse(function(data) {
-        console.log('Risposta chiamata ricevuta:', data);
-        handleCallResponse(data);
-    });
-    
-    // Configura callback per segnali WebRTC
-    wsClient.onWebRTCSignal(function(data) {
-        console.log('Segnale WebRTC ricevuto:', data);
-        handleWebRTCSignal(data);
-    });
-    
-    // Connette al WebSocket server
-    const userId = <?php echo e(auth()->id()); ?>;
-    const token = $('meta[name="csrf-token"]').attr('content');
-    wsClient.connect(userId, token);
+            
+            // Aggiorna la lista chat
+            updateChatList();
+            
+            // Aggiorna il badge dei messaggi non letti
+            updateUnreadMessagesBadge();
+        });
+        
+        // Configura callback per stato utente
+        reverbClient.onUserStatus(function(user, status) {
+            console.log('Cambio stato utente:', user, status);
+            
+            // Aggiorna gli indicatori di stato
+            updateUserStatusIndicator(user.id, status, user.online_status);
+            
+            // Se l'utente è nella chat corrente, aggiorna l'header
+            if (currentChatId) {
+                const currentChatUserId = $('.chat-contactbox.active').data('user-id');
+                if (currentChatUserId == user.id) {
+                    updateChatHeader(currentChatId);
+                }
+            }
+        });
+        
+        // Configura callback per richieste di chiamata
+        reverbClient.onCallRequest(function(data) {
+            console.log('Richiesta chiamata ricevuta:', data);
+            handleIncomingCall(data);
+        });
+        
+        // Configura callback per risposte alle chiamate
+        reverbClient.onCallResponse(function(data) {
+            console.log('Risposta chiamata ricevuta:', data);
+            handleCallResponse(data);
+        });
+        
+        // Configura callback per segnali WebRTC
+        reverbClient.onWebRTCSignal(function(data) {
+            console.log('Segnale WebRTC ricevuto:', data);
+            handleWebRTCSignal(data);
+        });
+        
+        // Connette a Reverb
+        reverbClient.connect();
+        
+    } catch (error) {
+        console.error('Errore nell\'inizializzazione di Reverb:', error);
+        showNotification('Errore nella connessione al sistema di chat in tempo reale', 'error');
+    }
 }
 
 // Inizializza l'aggiornamento del badge dei messaggi non letti
@@ -1678,15 +1685,15 @@ function startVoiceCall() {
     }
     
     // Verifica compatibilità WebRTC
-    if (!wsClient || !wsClient.isAudioCallSupported()) {
+    if (!reverbClient || !reverbClient.isAudioCallSupported()) {
         showNotification('Le chiamate audio non sono supportate in questo browser', 'error');
         return;
     }
     
     console.log(`Avvio chiamata vocale con ${chatName} (User ID: ${targetUserId})`);
     
-    // Avvia chiamata via WebSocket
-    if (wsClient && wsClient.isConnected) {
+    // Avvia chiamata via Reverb
+    if (reverbClient && reverbClient.isConnected) {
         // Mostra indicatore di caricamento
         Swal.fire({
             title: 'Avvio chiamata...',
@@ -1697,7 +1704,7 @@ function startVoiceCall() {
             }
         });
 
-        wsClient.startCall(targetUserId, 'audio')
+        reverbClient.startCall(targetUserId, 'audio')
             .then(success => {
                 Swal.close();
                 if (success) {
@@ -1723,7 +1730,7 @@ function startVoiceCall() {
                 }
             });
     } else {
-        showNotification('WebSocket non connesso', 'error');
+        showNotification('Reverb non connesso', 'error');
     }
 }
 
@@ -1742,15 +1749,15 @@ function startVideoCall() {
     }
     
     // Verifica compatibilità WebRTC
-    if (!wsClient || !wsClient.isVideoCallSupported()) {
+    if (!reverbClient || !reverbClient.isVideoCallSupported()) {
         showNotification('Le videochiamate non sono supportate in questo browser', 'error');
         return;
     }
     
     console.log(`Avvio videochiamata con ${chatName} (User ID: ${targetUserId})`);
     
-    // Avvia videochiamata via WebSocket
-    if (wsClient && wsClient.isConnected) {
+    // Avvia videochiamata via Reverb
+    if (reverbClient && reverbClient.isConnected) {
         // Mostra indicatore di caricamento
         Swal.fire({
             title: 'Avvio videochiamata...',
@@ -1761,7 +1768,7 @@ function startVideoCall() {
             }
         });
 
-        wsClient.startCall(targetUserId, 'video')
+        reverbClient.startCall(targetUserId, 'video')
             .then(success => {
                 Swal.close();
                 if (success) {
@@ -1787,7 +1794,7 @@ function startVideoCall() {
                 }
             });
     } else {
-        showNotification('WebSocket non connesso', 'error');
+        showNotification('Reverb non connesso', 'error');
     }
 }
 
@@ -1873,7 +1880,7 @@ function handleIncomingCall(data) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Rispondi alla chiamata
-            wsClient.answerCall(fromUserId, true, data.offer).then(success => {
+            reverbClient.answerCall(fromUserId, true, data.offer).then(success => {
                 if (success) {
                     showCallInterface(callType, false);
                 } else {
@@ -1882,10 +1889,10 @@ function handleIncomingCall(data) {
             });
         } else if (result.isDenied) {
             // Ignora la chiamata
-            wsClient.answerCall(fromUserId, false);
+            reverbClient.answerCall(fromUserId, false);
         } else {
             // Rifiuta la chiamata
-            wsClient.answerCall(fromUserId, false);
+            reverbClient.answerCall(fromUserId, false);
         }
     });
 }
@@ -1896,15 +1903,15 @@ function handleCallResponse(data) {
         showNotification('Chiamata accettata!', 'success');
         
         // Aggiorna l'interfaccia per mostrare che la chiamata è attiva
-        const callType = wsClient.currentCall ? wsClient.currentCall.callType : 'audio';
-        const isOutgoing = wsClient.currentCall ? wsClient.currentCall.isInitiator : false;
+        const callType = reverbClient.currentCall ? reverbClient.currentCall.callType : 'audio';
+        const isOutgoing = reverbClient.currentCall ? reverbClient.currentCall.isInitiator : false;
         
         // Mostra l'interfaccia della chiamata attiva
         showCallInterface(callType, isOutgoing);
         
         // Gestisci la connessione WebRTC
         if (data.answer) {
-            wsClient.handleWebRTCSignal({
+            reverbClient.handleWebRTCSignal({
                 signal: data.answer,
                 signal_type: 'answer'
             });
@@ -1920,15 +1927,15 @@ function handleCallResponse(data) {
         hideCallInterface();
         
         // Pulisci le risorse WebRTC
-        if (wsClient) {
-            wsClient.endCall();
+        if (reverbClient) {
+            reverbClient.endCall();
         }
     }
 }
 
 // Gestione segnali WebRTC
 function handleWebRTCSignal(data) {
-    wsClient.handleWebRTCSignal(data);
+    reverbClient.handleWebRTCSignal(data);
 }
 
 // Mostra interfaccia chiamata
@@ -1957,10 +1964,10 @@ function showCallInterface(callType, isOutgoing) {
     $('body').append(callHtml);
     
     // Mostra video locale se disponibile
-    if (callType === 'video' && wsClient && wsClient.localStream) {
+    if (callType === 'video' && reverbClient && reverbClient.localStream) {
         const video = document.getElementById('localVideo');
         if (video) {
-            video.srcObject = wsClient.localStream;
+            video.srcObject = reverbClient.localStream;
         }
     }
     
@@ -2035,8 +2042,8 @@ function endCurrentCall() {
     // Ferma il timer della chiamata
     stopCallTimer();
     
-    if (wsClient) {
-        wsClient.endCall();
+    if (reverbClient) {
+        reverbClient.endCall();
     }
     hideCallInterface();
     showNotification('Chiamata terminata', 'info');
@@ -2051,12 +2058,12 @@ function getUserName(userId) {
 
 // Verifica compatibilità WebRTC
 function checkWebRTCCompatibility() {
-    if (!wsClient) {
-        console.warn('WebSocket client non disponibile');
+    if (!reverbClient) {
+        console.warn('Reverb client non disponibile');
         return;
     }
     
-    if (!wsClient.isWebRTCSupported()) {
+    if (!reverbClient.isWebRTCSupported()) {
         console.warn('WebRTC non supportato - disabilitando pulsanti chiamate');
         
         // Disabilita pulsanti chiamate
