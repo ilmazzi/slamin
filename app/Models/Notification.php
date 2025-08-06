@@ -251,8 +251,7 @@ class Notification extends Model
         // Send email notification
         self::sendEmailNotification($notification, $invitation);
 
-        // Broadcast real-time notification
-        self::broadcastNotification($notification);
+
     }
 
     /**
@@ -382,20 +381,7 @@ class Notification extends Model
         }
     }
 
-    /**
-     * Broadcast real-time notification
-     */
-    protected static function broadcastNotification(self $notification): void
-    {
-        try {
-            broadcast(new \App\Events\NotificationSent($notification));
-        } catch (\Exception $e) {
-            \Log::error('Failed to broadcast notification', [
-                'notification_id' => $notification->id,
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
+
 
     /**
      * Format changes summary for display

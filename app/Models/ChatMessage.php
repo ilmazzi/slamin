@@ -14,197 +14,108 @@ class ChatMessage extends Model
         'chat_id',
         'user_id',
         'message',
+        'type',
         'file_path',
         'file_name',
-        'file_type',
         'file_size',
-        'is_system_message',
+        'mime_type',
+        'metadata',
         'is_edited',
         'edited_at',
+        'is_deleted',
+        'deleted_at',
     ];
 
     protected $casts = [
-        'is_system_message' => 'boolean',
+        'metadata' => 'array',
         'is_edited' => 'boolean',
         'edited_at' => 'datetime',
-        'file_size' => 'integer',
+        'is_deleted' => 'boolean',
+        'deleted_at' => 'datetime',
     ];
 
-    // Relazioni
+    /**
+     * Get the chat this message belongs to
+     */
     public function chat(): BelongsTo
     {
         return $this->belongsTo(Chat::class);
     }
 
+    /**
+     * Get the user who sent this message
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // Scopes
-    public function scopeSystem($query)
+    /**
+     * Scope for non-deleted messages
+     */
+    public function scopeNotDeleted($query)
     {
-        return $query->where('is_system_message', true);
+        return $query->where('is_deleted', false);
     }
 
-    public function scopeUser($query)
+    /**
+     * Scope for text messages only
+     */
+    public function scopeTextOnly($query)
     {
-        return $query->where('is_system_message', false);
+        return $query->where('type', 'text');
     }
 
-    public function scopeWithFile($query)
+    /**
+     * Scope for recent messages
+     */
+    public function scopeRecent($query, $limit = 50)
     {
-        return $query->whereNotNull('file_path');
+        return $query->orderBy('created_at', 'desc')->limit($limit);
     }
 
-    // Metodi
-    public function hasFile(): bool
+    /**
+     * Check if message is from a specific user
+     */
+    public function isFromUser(User $user): bool
     {
-        return !empty($this->file_path);
+        return $this->user_id === $user->id;
     }
 
-    public function isImage(): bool
-    {
-        if (!$this->hasFile()) {
-            return false;
-        }
-
-        $imageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        return in_array($this->file_type, $imageTypes);
-    }
-
-    public function isPdf(): bool
-    {
-        return $this->file_type === 'application/pdf';
-    }
-
-    public function isOfficeDocument(): bool
-    {
-        $officeTypes = [
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        ];
-
-        return in_array($this->file_type, $officeTypes);
-    }
-
-    public function getFileIcon(): string
-    {
-        if ($this->isImage()) {
-            return 'ph-duotone ph-image';
-        }
-
-        if ($this->isPdf()) {
-            return 'ph-duotone ph-file-pdf';
-        }
-
-        if ($this->isOfficeDocument()) {
-            if (str_contains($this->file_type, 'word')) {
-                return 'ph-duotone ph-file-doc';
-            }
-            if (str_contains($this->file_type, 'excel')) {
-                return 'ph-duotone ph-file-xls';
-            }
-            if (str_contains($this->file_type, 'powerpoint')) {
-                return 'ph-duotone ph-file-ppt';
-            }
-        }
-
-        return 'ph-duotone ph-file';
-    }
-
-    public function getFileSizeFormatted(): string
+    /**
+     * Get formatted file size
+     */
+    public function getFormattedFileSizeAttribute(): ?string
     {
         if (!$this->file_size) {
-            return '0 B';
+            return null;
         }
 
+        $bytes = (int) $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
-        $size = $this->file_size;
-        $unit = 0;
 
-        while ($size >= 1024 && $unit < count($units) - 1) {
-            $size /= 1024;
-            $unit++;
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
         }
 
-        return round($size, 2) . ' ' . $units[$unit];
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 
-    public function getFileUrl(): string
+    /**
+     * Check if message is editable (within time limit)
+     */
+    public function isEditable(): bool
     {
-        return asset('storage/' . $this->file_path);
+        return !$this->is_deleted &&
+               $this->created_at->diffInMinutes(now()) <= 15; // 15 minuti per modificare
     }
 
-    public function canBeEditedBy(User $user): bool
+    /**
+     * Check if message is deletable
+     */
+    public function isDeletable(): bool
     {
-        // Solo l'autore può modificare il messaggio entro 5 minuti
-        if ($this->user_id !== $user->id) {
-            return false;
-        }
-
-        return $this->created_at->diffInMinutes(now()) <= 5;
-    }
-
-    public function canBeDeletedBy(User $user): bool
-    {
-        // L'autore può eliminare il proprio messaggio
-        if ($this->user_id === $user->id) {
-            return true;
-        }
-
-        // Admin e moderatori possono eliminare qualsiasi messaggio
-        if ($this->chat->isParticipantModerator($user)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function edit(string $newMessage): bool
-    {
-        $this->update([
-            'message' => $newMessage,
-            'is_edited' => true,
-            'edited_at' => now(),
-        ]);
-
-        return true;
-    }
-
-    // Metodi statici per creare messaggi
-    public static function createSystemMessage(Chat $chat, string $message): ChatMessage
-    {
-        return self::create([
-            'chat_id' => $chat->id,
-            'user_id' => null,
-            'message' => $message,
-            'is_system_message' => true,
-        ]);
-    }
-
-    public static function createUserMessage(Chat $chat, User $user, string $message, array $fileData = null): ChatMessage
-    {
-        $messageData = [
-            'chat_id' => $chat->id,
-            'user_id' => $user->id,
-            'message' => $message,
-            'is_system_message' => false,
-        ];
-
-        if ($fileData) {
-            $messageData = array_merge($messageData, $fileData);
-        }
-
-        $chatMessage = self::create($messageData);
-
-        // Aggiorna l'ultimo messaggio della chat
-        $chat->updateLastMessage();
-
-        return $chatMessage;
+        return !$this->is_deleted &&
+               $this->created_at->diffInMinutes(now()) <= 60; // 1 ora per eliminare
     }
 }

@@ -210,6 +210,22 @@
                                 </li>
 
                                 <?php if(auth()->guard()->check()): ?>
+                                <!-- Chat Section -->
+                                <li class="no-sub <?php echo e(request()->routeIs('chat.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('chat.index')); ?>">
+                                        <i class="ph-duotone ph-chat-circle-text f-s-20 me-2"></i>
+                                        Chat
+                                        <?php if(auth()->user()->unread_chat_messages_count > 0): ?>
+                                            <span class="badge bg-danger badge-notification ms-2">
+                                                <?php echo e(auth()->user()->unread_chat_messages_count); ?>
+
+                                            </span>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
+
+                                <?php if(auth()->guard()->check()): ?>
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
                                 <?php if(auth()->user()->can('groups.create')): ?>
                                 <li class="no-sub <?php echo e(request()->routeIs('groups.*') ? 'active' : ''); ?>">
@@ -267,25 +283,7 @@
                                 <?php endif; ?>
 
 
-                                <?php if(auth()->guard()->check()): ?>
-                                <!-- Chat Section - Solo per utenti autenticati -->
-                                <li class="no-sub <?php echo e(request()->routeIs('chat.*') ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('chat.index')); ?>">
-                                        <i class="ph-duotone ph-chat-circle-text f-s-20 me-2"></i>
-                                        <?php echo e(__('sidebar.chat')); ?>
 
-                                        <?php
-                                            $unreadCount = auth()->user()->getUnreadChatMessagesCountAttribute();
-                                        ?>
-                                        <?php if($unreadCount > 0): ?>
-                                            <span class="badge bg-danger badge-notification ms-2">
-                                                <?php echo e($unreadCount); ?>
-
-                                            </span>
-                                        <?php endif; ?>
-                                    </a>
-                                </li>
-                                <?php endif; ?>
 
 
 

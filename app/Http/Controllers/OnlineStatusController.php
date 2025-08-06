@@ -40,8 +40,7 @@ class OnlineStatusController extends Controller
                 break;
         }
 
-        // Broadcast del cambio di stato via Reverb
-        broadcast(new UserStatusChanged($user, $status))->toOthers();
+
 
         return response()->json([
             'success' => true,
@@ -166,17 +165,5 @@ class OnlineStatusController extends Controller
         ]);
     }
 
-    /**
-     * Ottieni il conteggio dei messaggi non letti per la sidebar
-     */
-    public function getUnreadMessagesCount(): JsonResponse
-    {
-        $user = Auth::user();
-        $unreadCount = $user->unread_chat_messages_count;
-        
-        return response()->json([
-            'success' => true,
-            'unread_count' => $unreadCount,
-        ]);
-    }
+
 }

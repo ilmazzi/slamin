@@ -81,55 +81,24 @@ Route::prefix('online-status')->name('online-status.')->middleware('auth')->grou
     Route::post('/multiple-users-status', [App\Http\Controllers\OnlineStatusController::class, 'getMultipleUsersStatus'])->name('multiple-users-status');
     Route::post('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'updatePrivacyPreferences'])->name('privacy-preferences');
     Route::get('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'getPrivacyPreferences'])->name('get-privacy-preferences');
-    Route::get('/unread-messages-count', [App\Http\Controllers\OnlineStatusController::class, 'getUnreadMessagesCount'])->name('unread-messages-count');
-});
 
-// Call Routes
-Route::prefix('calls')->name('calls.')->middleware('auth')->group(function () {
-    Route::post('/start', [App\Http\Controllers\CallController::class, 'startCall'])->name('start');
-    Route::post('/answer', [App\Http\Controllers\CallController::class, 'answerCall'])->name('answer');
-    Route::post('/signal', [App\Http\Controllers\CallController::class, 'sendSignal'])->name('signal');
-    Route::post('/end', [App\Http\Controllers\CallController::class, 'endCall'])->name('end');
 });
 
 // Chat Routes
 Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
-    Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');
-
-    // Creazione chat
-    Route::post('/private', [App\Http\Controllers\ChatController::class, 'createPrivate'])->name('create.private');
-    Route::post('/group', [App\Http\Controllers\ChatController::class, 'createGroup'])->name('create.group');
-
-    // Gestione chat
-    Route::post('/{chat}/mute', [App\Http\Controllers\ChatController::class, 'toggleMute'])->name('mute');
-    Route::post('/{chat}/leave', [App\Http\Controllers\ChatController::class, 'leave'])->name('leave');
-    Route::delete('/{chat}', [App\Http\Controllers\ChatController::class, 'destroy'])->name('destroy');
-
-    // Messaggi
-    Route::get('/{chat}/messages', [App\Http\Controllers\ChatMessageController::class, 'index'])->name('messages.index');
-    Route::post('/{chat}/messages', [App\Http\Controllers\ChatMessageController::class, 'store'])->name('messages.store');
-    Route::delete('/messages/{message}', [App\Http\Controllers\ChatMessageController::class, 'destroy'])->name('messages.destroy');
-
-    // Gestione partecipanti
-    Route::get('/{chat}/participants', [App\Http\Controllers\ChatController::class, 'participants'])->name('participants');
-    Route::post('/{chat}/participants', [App\Http\Controllers\ChatController::class, 'addParticipant'])->name('participants.add');
-    Route::delete('/{chat}/participants', [App\Http\Controllers\ChatController::class, 'removeParticipant'])->name('participants.remove');
-    Route::put('/{chat}/participants/role', [App\Http\Controllers\ChatController::class, 'changeRole'])->name('participants.role');
-
-    // API per AJAX
-    Route::get('/{chat}/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('messages');
-    Route::get('/{chat}/messages/recent', [App\Http\Controllers\ChatMessageController::class, 'getRecentMessages'])->name('messages.recent');
-    Route::get('/chats/list', [App\Http\Controllers\ChatController::class, 'getChats'])->name('list');
+    Route::get('/', [App\Http\Controllers\ChatController::class, 'show'])->name('index');
+    Route::get('/chats', [App\Http\Controllers\ChatController::class, 'getChats'])->name('list');
     Route::get('/users/search', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('users.search');
-
-    // Messaggi
-    Route::post('/{chat}/messages', [App\Http\Controllers\ChatMessageController::class, 'store'])->name('messages.store');
-    Route::put('/{chat}/messages/{message}', [App\Http\Controllers\ChatMessageController::class, 'update'])->name('messages.update');
-    Route::delete('/{chat}/messages/{message}', [App\Http\Controllers\ChatMessageController::class, 'destroy'])->name('messages.destroy');
-    Route::get('/{chat}/messages/search', [App\Http\Controllers\ChatMessageController::class, 'search'])->name('messages.search');
-    Route::get('/{chat}/messages/{message}/download', [App\Http\Controllers\ChatMessageController::class, 'downloadFile'])->name('messages.download');
-    Route::post('/{chat}/messages/{message}/react', [App\Http\Controllers\ChatMessageController::class, 'react'])->name('messages.react');
+    Route::post('/private/create', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create.private');
+    Route::get('/{chatId}/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('messages');
+    Route::post('/{chatId}/messages', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('send');
+    Route::post('/{chatId}/typing', [App\Http\Controllers\ChatController::class, 'markTyping'])->name('typing');
+    Route::post('/{chatId}/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('read');
 });
+
+
+
+
 Route::view('cheatsheet', 'cheatsheet')->name('cheatsheet');
 Route::view('checkbox_radio', 'checkbox_radio')->name('checkbox_radio');
 Route::view('checkout', 'checkout')->name('checkout');

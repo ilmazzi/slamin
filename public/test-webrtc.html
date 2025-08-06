@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test WebRTC Compatibility</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        button { margin: 5px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-warning { background-color: #ffc107; color: black; }
+        .btn-danger { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Test Compatibilità WebRTC</h1>
+
+    <div id="results"></div>
+
+    <div style="margin-top: 20px;">
+        <button class="btn-primary" onclick="testWebRTC()">Testa WebRTC</button>
+        <button class="btn-success" onclick="testAudioPermissions()">Testa Permessi Audio</button>
+        <button class="btn-warning" onclick="testVideoPermissions()">Testa Permessi Video</button>
+    </div>
+
+    <script>
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+
+        function testWebRTC() {
+            document.getElementById('results').innerHTML = '';
+            addResult('<strong>Test Compatibilità WebRTC</strong>', 'info');
+
+            // Test 1: Verifica API WebRTC
+            const hasGetUserMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+            const hasRTCPeerConnection = !!(window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection);
+            const hasWebRTC = hasGetUserMedia && hasRTCPeerConnection;
+
+            addResult(`✅ getUserMedia: ${hasGetUserMedia ? 'Supportato' : 'Non supportato'}`, hasGetUserMedia ? 'success' : 'error');
+            addResult(`✅ RTCPeerConnection: ${hasRTCPeerConnection ? 'Supportato' : 'Non supportato'}`, hasRTCPeerConnection ? 'success' : 'error');
+            addResult(`✅ WebRTC: ${hasWebRTC ? 'Supportato' : 'Non supportato'}`, hasWebRTC ? 'success' : 'error');
+
+            // Test 2: Verifica HTTPS
+            const isSecure = window.location.protocol === 'https:' ||
+                            window.location.hostname === 'localhost' ||
+                            window.location.hostname === '127.0.0.1';
+
+            addResult(`✅ Connessione sicura: ${isSecure ? 'Sì' : 'No'}`, isSecure ? 'success' : 'warning');
+
+            // Test 3: Verifica browser
+            const userAgent = navigator.userAgent;
+            const isChrome = userAgent.includes('Chrome');
+            const isFirefox = userAgent.includes('Firefox');
+            const isSafari = userAgent.includes('Safari') && !userAgent.includes('Chrome');
+            const isEdge = userAgent.includes('Edge');
+
+            addResult(`🌐 Browser: ${userAgent}`, 'info');
+
+            if (isChrome) addResult('✅ Chrome - WebRTC supportato', 'success');
+            else if (isFirefox) addResult('✅ Firefox - WebRTC supportato', 'success');
+            else if (isSafari) addResult('⚠️ Safari - WebRTC supportato (limitato)', 'warning');
+            else if (isEdge) addResult('✅ Edge - WebRTC supportato', 'success');
+            else addResult('❓ Browser non riconosciuto', 'warning');
+
+            // Test 4: Risultato finale
+            const isFullySupported = hasWebRTC && isSecure;
+            addResult(`<strong>🎯 Risultato finale: ${isFullySupported ? 'WebRTC completamente supportato' : 'WebRTC non supportato'}</strong>`,
+                     isFullySupported ? 'success' : 'error');
+
+            if (!isFullySupported) {
+                if (!hasWebRTC) {
+                    addResult('💡 Suggerimento: Aggiorna il browser o usa Chrome/Firefox', 'warning');
+                }
+                if (!isSecure) {
+                    addResult('💡 Suggerimento: Usa HTTPS o localhost per le chiamate', 'warning');
+                }
+            }
+        }
+
+        async function testAudioPermissions() {
+            addResult('<strong>Test Permessi Audio</strong>', 'info');
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                addResult('✅ Permessi audio concessi', 'success');
+
+                // Ferma lo stream
+                stream.getTracks().forEach(track => track.stop());
+
+            } catch (error) {
+                addResult(`❌ Errore permessi audio: ${error.message}`, 'error');
+
+                if (error.name === 'NotAllowedError') {
+                    addResult('💡 Suggerimento: Consenti l\'accesso al microfono nelle impostazioni del browser', 'warning');
+                } else if (error.name === 'NotFoundError') {
+                    addResult('💡 Suggerimento: Nessun microfono trovato', 'warning');
+                }
+            }
+        }
+
+        async function testVideoPermissions() {
+            addResult('<strong>Test Permessi Video</strong>', 'info');
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+                addResult('✅ Permessi video concessi', 'success');
+
+                // Ferma lo stream
+                stream.getTracks().forEach(track => track.stop());
+
+            } catch (error) {
+                addResult(`❌ Errore permessi video: ${error.message}`, 'error');
+
+                if (error.name === 'NotAllowedError') {
+                    addResult('💡 Suggerimento: Consenti l\'accesso alla webcam nelle impostazioni del browser', 'warning');
+                } else if (error.name === 'NotFoundError') {
+                    addResult('💡 Suggerimento: Nessuna webcam trovata', 'warning');
+                }
+            }
+        }
+
+        // Test automatico al caricamento
+        window.addEventListener('load', function() {
+            addResult('<strong>Test automatico al caricamento</strong>', 'info');
+            testWebRTC();
+        });
+    </script>
+</body>
+</html>

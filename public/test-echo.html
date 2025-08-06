@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Laravel Echo</title>
+    <meta name="csrf-token" content="test-token">
+</head>
+<body>
+    <h1>Test Laravel Echo</h1>
+    <div id="status">Caricamento...</div>
+    <div id="logs"></div>
+
+    <!-- Laravel Echo -->
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+
+    <script>
+        // Variabili globali per test
+        window.currentUserId = 1; // ID di test
+
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const time = new Date().toLocaleTimeString();
+            logs.innerHTML += `<div>[${time}] ${message}</div>`;
+            console.log(message);
+        }
+
+        try {
+            log('Inizializzazione Echo...');
+
+            // Configurazione Echo
+            window.Echo = new Echo({
+                broadcaster: 'pusher',
+                key: 'slamin',
+                cluster: 'mt1', // Cluster richiesto da Pusher
+                wsHost: '127.0.0.1',
+                wsPort: 8080,
+                wssPort: 8080,
+                forceTLS: false,
+                enabledTransports: ['ws', 'wss'],
+                disableStats: true,
+                auth: {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                }
+            });
+
+            log('Echo configurato con successo');
+            document.getElementById('status').textContent = 'Echo configurato!';
+
+            // Test connessione
+            window.Echo.connector.pusher.connection.bind('connected', () => {
+                log('✅ Connesso a Reverb!');
+                document.getElementById('status').textContent = 'Connesso a Reverb!';
+            });
+
+            window.Echo.connector.pusher.connection.bind('error', (error) => {
+                log('❌ Errore connessione: ' + error.message);
+                document.getElementById('status').textContent = 'Errore connessione: ' + error.message;
+            });
+
+            window.Echo.connector.pusher.connection.bind('disconnected', () => {
+                log('⚠️ Disconnesso da Reverb');
+                document.getElementById('status').textContent = 'Disconnesso da Reverb';
+            });
+
+        } catch (error) {
+            log('❌ Errore nell\'inizializzazione: ' + error.message);
+            document.getElementById('status').textContent = 'Errore: ' + error.message;
+        }
+    </script>
+</body>
+</html>

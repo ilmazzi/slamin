@@ -94,7 +94,7 @@
                                                             <a href=""> team </a>
                                                         </li>
                                                         <li>
-                                                            <a href=""> Chat </a>
+                                                            <a href="#"> Chat </a>
                                                         </li>
                                                         <li>
                                                             <a href=""> {{ __('permissions.email') }} Page </a>
