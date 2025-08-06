@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- All meta and title start-->
+    @vite('resources/js/app.js') <!-- All meta and title start-->
 @include('layout.head')
 <!-- meta and title end-->
 
@@ -59,6 +59,44 @@
 <!-- scripts start-->
 @include('layout.script')
 <!-- scripts end-->
+    @if(auth()->check() && auth()->user()->hasRole('admin'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function waitForEcho(callback, retries = 20) {
+                if (typeof window.Echo !== 'undefined') {
+                    console.log('[Admin] Echo disponibile');
+                    callback();
+                } else if (retries > 0) {
+                    console.warn('[Admin] Echo non ancora disponibile, ritento...');
+                    setTimeout(() => waitForEcho(callback, retries - 1), 250);
+                } else {
+                    console.error('[Admin] Echo NON disponibile dopo vari tentativi');
+                }
+            }
+
+            waitForEcho(() => {
+                console.log('Admin connesso, ascolto eventi login utenti...');
+
+                window.Echo.private('admin.logged-users')
+                    .listen('.UserLoggedIn', (e) => {
+                        console.log('Evento ricevuto: utente loggato', e);
+
+                        Toastify({
+                            text: `🔐 Utente loggato: ${e.name} (${e.email})`,
+                            duration: 5000,
+                            gravity: 'top',
+                            position: 'right',
+                            backgroundColor: '#28a745',
+                            stopOnFocus: true,
+                            close: true,
+                        }).showToast();
+                    });
+            });
+        });
+    </script>
+    @endif
+
+
 </body>
 
 

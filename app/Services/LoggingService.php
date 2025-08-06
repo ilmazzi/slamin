@@ -530,6 +530,45 @@ class LoggingService
     }
 
     /**
+     * Log broadcast events
+     */
+    public static function logBroadcast(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog
+    {
+        $descriptions = [
+            'user_logged_in' => 'User logged in via broadcast',
+            'user_logged_out' => 'User logged out via broadcast',
+            'connection_established' => 'WebSocket connection established',
+            'connection_failed' => 'WebSocket connection failed',
+            'message_sent' => 'Broadcast message sent',
+            'message_received' => 'Broadcast message received',
+            'channel_subscribed' => 'Channel subscribed',
+            'channel_unsubscribed' => 'Channel unsubscribed',
+            'presence_joined' => 'User joined presence channel',
+            'presence_left' => 'User left presence channel',
+        ];
+
+        // Log to broadcast channel
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : $action;
+        Log::channel('broadcast')->info("Broadcast Event: [{$action}] {$description}", [
+            'action' => $action,
+            'user_id' => Auth::user()?->id,
+            'ip' => request()->ip(),
+            'details' => $details,
+        ]);
+
+        $description = isset($descriptions[$action]) ? $descriptions[$action] : "Broadcast: {$action}";
+        return self::log(
+            "broadcast.{$action}",
+            ActivityLog::CATEGORY_SYSTEM,
+            $description,
+            $details,
+            ActivityLog::LEVEL_INFO,
+            $relatedModel,
+            $relatedId
+        );
+    }
+
+    /**
      * Log critical errors that need immediate attention
      */
     public static function logCritical(string $action, array $details = [], ?string $relatedModel = null, ?int $relatedId = null): ActivityLog

@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ExceptionLoggingMiddleware::class,
             \App\Http\Middleware\LoggingMiddleware::class,
             \App\Http\Middleware\CustomErrorPages::class,
-            \App\Http\Middleware\UpdateUserActivity::class,
+            
         ]);
 
         // Register custom middleware aliases

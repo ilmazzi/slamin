@@ -1,0 +1,28 @@
+# Abilita i moduli proxy globalmente (all'inizio del file)
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
+<VirtualHost *:443>
+    ServerName slamin.local
+    DocumentRoot "C:/xampp/htdocs/slamin/public"
+    
+    SSLEngine on
+    # Usa i certificati di XAMPP (già configurati e funzionanti)
+    SSLCertificateFile "C:/xampp/apache/conf/ssl.crt/server.crt"
+    SSLCertificateKeyFile "C:/xampp/apache/conf/ssl.key/server.key"
+    
+    # Proxy per Reverb WebSocket SOLO
+    ProxyPass /app/ ws://127.0.0.1:8080/app/
+    ProxyPassReverse /app/ ws://127.0.0.1:8080/app/
+    
+    # NOTA: /broadcasting/ è gestito da Laravel, NON da Reverb
+    
+    <Directory "C:/xampp/htdocs/slamin/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    ErrorLog "logs/slamin.local-error.log"
+    CustomLog "logs/slamin.local-access.log" combined
+</VirtualHost> 

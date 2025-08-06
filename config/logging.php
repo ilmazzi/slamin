@@ -109,6 +109,15 @@ return [
             'replace_placeholders' => true,
         ],
 
+        // Canale per broadcast e WebSocket
+        'broadcast' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/broadcast.log'),
+            'level' => 'info',
+            'days' => 30,
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

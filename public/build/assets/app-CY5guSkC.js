@@ -1,1 +1,0 @@
-import s from"laravel-echo";import o from"pusher-js";window.Pusher=o;var e;window.Echo=new s({broadcaster:"pusher",key:"slamin",wsHost:"localhost",wsPort:"8080",wssPort:"8080",forceTLS:!1,enabledTransports:["ws","wss"],disableStats:!0,auth:{headers:{"X-CSRF-TOKEN":((e=document.querySelector('meta[name="csrf-token"]'))==null?void 0:e.content)||""}}});

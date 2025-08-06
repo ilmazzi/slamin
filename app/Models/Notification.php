@@ -477,7 +477,7 @@ class Notification extends Model
     {
         // Check if event and organizer exist
         if (!$invitation->event || !$invitation->event->organizer_id) {
-            \Log::warning('Cannot create invitation response notification: missing event or organizer', [
+            Log::warning('Cannot create invitation response notification: missing event or organizer', [
                 'invitation_id' => $invitation->id,
                 'event_id' => $invitation->event_id,
                 'organizer_id' => $invitation->event?->organizer_id

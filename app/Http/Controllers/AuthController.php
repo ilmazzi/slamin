@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use App\Services\PeerTubeService;
 use App\Services\LoggingService;
+use App\Events\UserLogged;
 
 class AuthController extends Controller
 {
@@ -199,8 +200,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            // Imposta l'utente come online al login
-            $user->setOnline();
+            
 
             // Log successful login
             LoggingService::logAuth('login', [
@@ -208,6 +208,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'ip' => $request->ip()
             ], 'App\Models\User', $user->id);
+            
 
             return redirect()->route('dashboard')
                 ->with('success', "Ti diamo il bentornato, {$user->name}!");
@@ -233,8 +234,7 @@ class AuthController extends Controller
         
         // Log logout before destroying session
         if ($user) {
-            // Imposta l'utente come offline al logout
-            $user->setOffline();
+          
             
             LoggingService::logAuth('logout', [
                 'user_id' => $user->id,

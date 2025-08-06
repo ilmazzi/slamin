@@ -1,3 +1,6 @@
+<!-- Laravel Echo -->
+
+
 <!-- SweetAlert2 js-->
 <script src="{{asset('assets/vendor/sweetalert/sweetalert.js')}}"></script>
 
@@ -82,6 +85,8 @@ $(document).ready(function() {
 
 <!-- {{ __('wishlist.wishlist') }} Management -->
 <script src="{{asset('assets/js/wishlist.js')}}"></script>
+
+<script src="{{asset('assets/vendor/toastify/toastify.js')}}"></script>    
 
 
 

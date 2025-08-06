@@ -1,0 +1,21 @@
+# Variabili d'ambiente per Reverb con HTTPS
+# Aggiungi queste al tuo file .env
+
+REVERB_APP_KEY=njnqap88vhli8yztqqmz
+REVERB_APP_SECRET=your_secret_here
+REVERB_APP_ID=your_app_id_here
+REVERB_HOST=slamin.local
+REVERB_PORT=443
+REVERB_SCHEME=https
+REVERB_SERVER_HOST=0.0.0.0
+REVERB_SERVER_PORT=8080
+
+VITE_REVERB_APP_KEY=njnqap88vhli8yztqqmz
+VITE_REVERB_HOST=slamin.local
+VITE_REVERB_PORT=443
+VITE_REVERB_SCHEME=https
+
+# Spiegazione:
+# - REVERB_SERVER_PORT=8080: Reverb gira su HTTP sulla porta 8080
+# - REVERB_PORT=443: I client si connettono via HTTPS sulla porta 443
+# - Apache fa proxy da HTTPS:443 a HTTP:8080 

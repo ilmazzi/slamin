@@ -193,20 +193,7 @@
                                     </a>
                                 </li>
 
-                                @auth
-                                <!-- Chat Section -->
-                                <li class="no-sub {{ request()->routeIs('chat.*') ? 'active' : '' }}">
-                                    <a href="{{ route('chat.index') }}">
-                                        <i class="ph-duotone ph-chat-circle-text f-s-20 me-2"></i>
-                                        Chat
-                                        @if(auth()->user()->unread_chat_messages_count > 0)
-                                            <span class="badge bg-danger badge-notification ms-2">
-                                                {{ auth()->user()->unread_chat_messages_count }}
-                                            </span>
-                                        @endif
-                                    </a>
-                                </li>
-                                @endauth
+                             
 
                                 @auth
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->

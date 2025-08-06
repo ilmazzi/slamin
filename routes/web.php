@@ -74,27 +74,18 @@ Route::view('cards', 'cards')->name('cards');
 Route::view('cart', 'cart')->name('cart');
 Route::view('chart_js', 'chart_js')->name('chart_js');
 // Online Status Routes
-Route::prefix('online-status')->name('online-status.')->middleware('auth')->group(function () {
-    Route::post('/update-status', [App\Http\Controllers\OnlineStatusController::class, 'updateStatus'])->name('update-status');
-    Route::post('/update-last-seen', [App\Http\Controllers\OnlineStatusController::class, 'updateLastSeen'])->name('update-last-seen');
-    Route::get('/user/{user}/status', [App\Http\Controllers\OnlineStatusController::class, 'getUserStatus'])->name('user-status');
-    Route::post('/multiple-users-status', [App\Http\Controllers\OnlineStatusController::class, 'getMultipleUsersStatus'])->name('multiple-users-status');
-    Route::post('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'updatePrivacyPreferences'])->name('privacy-preferences');
-    Route::get('/privacy-preferences', [App\Http\Controllers\OnlineStatusController::class, 'getPrivacyPreferences'])->name('get-privacy-preferences');
 
+
+use App\Events\TestEvent;
+
+Route::get('/broadcast-test', function () {
+    return view('broadcast-test');
+});
+Route::get('/api/send-broadcast', function () {
+    broadcast(new TestEvent('Ciao dal backend!'));
+    return response()->json(['sent' => true]);
 });
 
-// Chat Routes
-Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
-    Route::get('/', [App\Http\Controllers\ChatController::class, 'show'])->name('index');
-    Route::get('/chats', [App\Http\Controllers\ChatController::class, 'getChats'])->name('list');
-    Route::get('/users/search', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('users.search');
-    Route::post('/private/create', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create.private');
-    Route::get('/{chatId}/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('messages');
-    Route::post('/{chatId}/messages', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('send');
-    Route::post('/{chatId}/typing', [App\Http\Controllers\ChatController::class, 'markTyping'])->name('typing');
-    Route::post('/{chatId}/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('read');
-});
 
 
 
@@ -832,7 +823,7 @@ Route::get('/test-upload', function () {
 })->middleware('auth')->name('test.upload');
 
 Route::post('/test-upload', function (Request $request) {
-    \Log::info('Test upload chiamato', [
+    Log::info('Test upload chiamato', [
         'has_file' => $request->hasFile('profile_photo'),
         'all_data' => $request->all(),
         'files' => $request->allFiles()
@@ -840,7 +831,7 @@ Route::post('/test-upload', function (Request $request) {
 
     if ($request->hasFile('profile_photo')) {
         $file = $request->file('profile_photo');
-        \Log::info('File ricevuto', [
+        Log::info('File ricevuto', [
             'original_name' => $file->getClientOriginalName(),
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType()
@@ -848,7 +839,7 @@ Route::post('/test-upload', function (Request $request) {
 
         try {
             $path = $file->store('profile-photos', 'public');
-            \Log::info('File salvato', ['path' => $path]);
+            Log::info('File salvato', ['path' => $path]);
 
             return response()->json([
                 'success' => true,
@@ -857,7 +848,7 @@ Route::post('/test-upload', function (Request $request) {
                 'url' => asset('storage/' . $path)
             ]);
         } catch (\Exception $e) {
-            \Log::error('Errore salvataggio', ['error' => $e->getMessage()]);
+            Log::error('Errore salvataggio', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Errore: ' . $e->getMessage()

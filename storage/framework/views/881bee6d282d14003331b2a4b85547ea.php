@@ -895,6 +895,157 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Codice per Echo - Gestione sicura
+document.addEventListener('DOMContentLoaded', function() {
+    // Funzione per inizializzare Echo
+    function initializeEcho() {
+        console.log('=== DEBUG ECHO ===');
+        console.log('Tentativo di inizializzazione Echo...');
+        console.log('window.Echo:', window.Echo);
+        console.log('Toastify disponibile:', typeof Toastify !== 'undefined');
+        console.log('User agent:', navigator.userAgent);
+        console.log('URL corrente:', window.location.href);
+        
+        if (typeof window.Echo !== 'undefined' && window.Echo) {
+            console.log('Echo è disponibile, inizializzazione...');
+            
+            try {
+                console.log('=== CONNESSIONE AL CANALE ===');
+                console.log('Tentativo di connessione al canale: admin.logged-users');
+                
+                const channel = window.Echo.private('admin.logged-users');
+                console.log('Canale creato:', channel);
+                
+                channel.listen('.UserLoggedIn', (e) => {
+                    console.log('=== EVENTO RICEVUTO ===');
+                    console.log('Un utente si è appena loggato:', e);
+
+                    // Log dell'evento ricevuto
+                    console.log('Broadcast event received:', {
+                        event: 'UserLoggedIn',
+                        user: e.name,
+                        email: e.email,
+                        timestamp: e.logged_at,
+                        received_at: new Date().toISOString()
+                    });
+
+                    // Mostra notifica con Toastify
+                    if (typeof Toastify !== 'undefined') {
+                        try {
+                            const toast = Toastify({
+                                text: `Utente loggato: ${e.name} (${e.email})`,
+                                duration: 5000,
+                                position: "top-right",
+                                style: {
+                                    background: "linear-gradient(to right, #28a745, #20c997)",
+                                },
+                                close: true,
+                            });
+                            toast.showToast();
+                            console.log('Notifica utente loggato mostrata con successo');
+                        } catch (error) {
+                            console.error('Errore nel mostrare notifica utente:', error);
+                        }
+                    } else {
+                        console.log('Toastify non disponibile, notifica non mostrata');
+                    }
+                });
+                
+                console.log('Echo inizializzato con successo');
+                
+                // Log della connessione stabilita
+                console.log('WebSocket connection established:', {
+                    channel: 'admin.logged-users',
+                    timestamp: new Date().toISOString(),
+                    user: '<?php echo e(auth()->user()->name ?? "Unknown"); ?>',
+                    user_id: '<?php echo e(auth()->user()->id ?? "Unknown"); ?>',
+                    is_admin: <?php echo e(auth()->user()->hasRole('admin') ? 'true' : 'false'); ?>,
+                    roles: <?php echo json_encode(auth()->user()->getRoleNames() ?? [], 15, 512) ?>
+                });
+            } catch (error) {
+                console.error('Errore durante l\'inizializzazione di Echo:', error);
+            }
+        } else {
+            console.warn('Echo non è disponibile. Riprovo tra 1 secondo...');
+            // Riprova dopo 1 secondo
+            setTimeout(initializeEcho, 1000);
+        }
+    }
+    
+    // Test manuale di Toastify
+    setTimeout(() => {
+        if (typeof Toastify !== 'undefined') {
+            console.log('Test Toastify...');
+            try {
+                const toast = Toastify({
+                    text: "Test notifica - Echo funziona!",
+                    duration: 10000,
+                    position: "top-right",
+                    style: {
+                        background: "#ff0000",
+                        color: "#ffffff",
+                        fontSize: "16px",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+                    },
+                    close: true,
+                });
+                toast.showToast();
+                console.log('Toastify.showToast() chiamato con successo');
+                
+                // Test aggiuntivo dopo 1 secondo
+                setTimeout(() => {
+                    console.log('Test Toastify aggiuntivo...');
+                    Toastify({
+                        text: "SECONDO TEST - Dovrebbe essere visibile!",
+                        duration: 8000,
+                        position: "bottom-right",
+                        style: {
+                            background: "#28a745",
+                            color: "#ffffff",
+                            fontSize: "18px",
+                            padding: "20px",
+                            borderRadius: "8px",
+                        },
+                    }).showToast();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Errore nel mostrare Toastify:', error);
+            }
+        } else {
+            console.error('Toastify non è disponibile!');
+        }
+    }, 2000);
+
+    // Test manuale che puoi eseguire dalla console
+    window.testToastify = function() {
+        console.log('Test manuale Toastify...');
+        Toastify({
+            text: "TEST MANUALE - Clicca qui per testare!",
+            duration: 5000,
+            position: "center",
+            style: {
+                background: "#007bff",
+                color: "#ffffff",
+                fontSize: "20px",
+                padding: "25px",
+                borderRadius: "10px",
+                boxShadow: "0 6px 12px rgba(0,0,0,0.4)",
+            },
+            onClick: function() {
+                console.log('Toastify cliccato!');
+            }
+        }).showToast();
+    };
+    
+    console.log('Per testare Toastify manualmente, esegui: testToastify()');
+
+    // Avvia l'inizializzazione
+    initializeEcho();
+});
 </script>
 <?php $__env->stopPush(); ?>
 

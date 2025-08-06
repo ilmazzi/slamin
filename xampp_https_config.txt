@@ -1,8 +1,11 @@
 # Configurazione HTTPS per XAMPP
 # Aggiungi questo al file C:\xampp\apache\conf\extra\httpd-ssl.conf
 
-# Abilita SSL
+# Abilita SSL e moduli necessari
 LoadModule ssl_module modules/mod_ssl.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
 
 # Configurazione Virtual Host HTTPS per slamin.local
 <VirtualHost *:443>
@@ -19,6 +22,33 @@ LoadModule ssl_module modules/mod_ssl.so
         AllowOverride All
         Require all granted
     </Directory>
+    
+    # Proxy WebSocket per Reverb
+    ProxyPreserveHost On
+    ProxyRequests Off
+    
+    # Proxy per WebSocket Reverb
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} websocket [NC]
+    RewriteCond %{HTTP:Connection} upgrade [NC]
+    RewriteRule ^/app/(.*)$ ws://localhost:8080/app/$1 [P,L]
+    
+    # Proxy per HTTP normale (fallback)
+    ProxyPass /app/ http://localhost:8080/app/
+    ProxyPassReverse /app/ http://localhost:8080/app/
+    
+    # Proxy per WebSocket WSS -> WS
+    LoadModule proxy_module modules/mod_proxy.so
+    LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
+    LoadModule proxy_http_module modules/mod_proxy_http.so
+    
+    # Proxy per Reverb WebSocket
+    ProxyPass /app/ ws://localhost:8080/app/
+    ProxyPassReverse /app/ ws://localhost:8080/app/
+    
+    # Proxy per broadcasting auth
+    ProxyPass /broadcasting/ http://localhost:8080/broadcasting/
+    ProxyPassReverse /broadcasting/ http://localhost:8080/broadcasting/
     
     # Log
     ErrorLog "logs/slamin.local-error.log"

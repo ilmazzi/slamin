@@ -40,6 +40,9 @@
 <!-- Sidebar scrollbar css-->
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sidebar-scrollbar.css')); ?>">
 
+<!-- Toastify css-->
+<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/toastify/toastify.css')); ?>">
+
 <?php echo $__env->yieldContent('css'); ?>
 
 <?php echo app('Illuminate\Foundation\Vite')(['public/assets/scss/style.scss']); ?>
