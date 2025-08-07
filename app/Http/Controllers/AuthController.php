@@ -202,7 +202,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Invia evento broadcast per utenti non admin
-            //broadcast(new UserLoggedIn($user))->toOthers();
+            broadcast(new UserLoggedIn($user))->toOthers();
 
 
 
