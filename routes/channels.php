@@ -7,6 +7,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('admin.logged-users', function ($user) {
-    return $user->hasRole('admin'); // oppure un controllo booleano sul ruolo admin
+Broadcast::channel('user-logins', function ($user) {
+
+    return true;
 });

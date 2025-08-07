@@ -2,26 +2,25 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class UserLoggedIn implements ShouldBroadcast
+class UserLoggedIn implements ShouldBroadcastNow
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $name;
-    public $email;
+    public $user;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($name, $email)
+    public function __construct($user)
     {
-        $this->name = $name;
-        $this->email = $email;
+        $this->user = $user;
     }
 
     /**
@@ -29,11 +28,24 @@ class UserLoggedIn implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('admin.logged-users'); // PUBBLICO temporaneamente
+        return new PrivateChannel('user-logins');
     }
 
-    public function broadcastAs()
+    /**
+     * Get the name the event should broadcast as.
+     */
+    public function broadcastAs(): string
     {
-        return 'UserLoggedIn';
+        return 'user-login';
+    }
+
+    /**
+     * Get the data to broadcast.
+     */
+    public function broadcastWith(): array
+    {
+        return [
+            'user' => $this->user,
+        ];
     }
 }

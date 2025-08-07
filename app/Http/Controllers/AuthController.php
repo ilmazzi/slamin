@@ -14,6 +14,7 @@ use Exception;
 use App\Services\PeerTubeService;
 use App\Services\LoggingService;
 use App\Events\UserLogged;
+use App\Events\UserLoggedIn;
 
 class AuthController extends Controller
 {
@@ -200,15 +201,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            
+            // Invia evento broadcast per utenti non admin
+            //broadcast(new UserLoggedIn($user))->toOthers();
 
-            // Log successful login
-            LoggingService::logAuth('login', [
-                'user_id' => $user->id,
-                'email' => $request->email,
-                'ip' => $request->ip()
-            ], 'App\Models\User', $user->id);
-            
+
 
             return redirect()->route('dashboard')
                 ->with('success', "Ti diamo il bentornato, {$user->name}!");
@@ -231,11 +227,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        
+
         // Log logout before destroying session
         if ($user) {
-          
-            
+
+
             LoggingService::logAuth('logout', [
                 'user_id' => $user->id,
                 'email' => $user->email,

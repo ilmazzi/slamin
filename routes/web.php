@@ -1069,3 +1069,8 @@ Route::prefix('admin/gig-positions')->name('admin.gig-positions.')->middleware([
     Route::post('/{id}/toggle-status', [App\Http\Controllers\Admin\GigPositionController::class, 'toggleStatus'])->name('toggle-status');
 });
 
+// Test route per broadcasting
+Route::post('/test-broadcast', function () {
+    broadcast(new \App\Events\UserLoggedIn('Test Frontend', 'test@frontend.com'));
+    return response()->json(['success' => true, 'message' => 'Event sent']);
+});
