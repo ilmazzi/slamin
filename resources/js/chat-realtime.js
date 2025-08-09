@@ -2,7 +2,7 @@
 // Requisiti: window.Echo inizializzato (resources/js/bootstrap.js)
 
 (function () {
-    function init() {
+    function initMessaging() {
       const chatContainer = document.querySelector('[data-chat-room]');
       if (!chatContainer) return;
 
@@ -132,9 +132,114 @@
       try { messagesBox.scrollTop = messagesBox.scrollHeight; } catch (_) {}
     }
 
+    // --- Nuova Chat: ricerca utenti + creazione privata ---
+    function initNewChat() {
+      const input = document.getElementById('userSearch');
+      const results = document.getElementById('searchResults');
+      const spinner = document.getElementById('loadingSpinner');
+      const emptyBox = document.getElementById('noResults');
+
+      if (!input || !results) return;
+
+      let debounceId = null;
+      let lastQuery = '';
+
+      function setLoading(isLoading) {
+        if (spinner) spinner.classList.toggle('d-none', !isLoading);
+      }
+
+      function clearResults(showEmpty = false) {
+        results.innerHTML = '';
+        if (emptyBox) emptyBox.classList.toggle('d-none', !showEmpty);
+      }
+
+      async function search(q) {
+        try {
+          setLoading(true);
+          const resp = await fetch(`/chat/search-users?q=${encodeURIComponent(q)}`, {
+            headers: { 'Accept': 'application/json' }
+          });
+          if (!resp.ok) throw new Error(`search ${resp.status}`);
+          const data = await resp.json();
+          const users = Array.isArray(data.users) ? data.users : [];
+
+          if (users.length === 0) {
+            clearResults(true);
+            return;
+          }
+
+          if (emptyBox) emptyBox.classList.add('d-none');
+
+          const html = users.map(u => `
+            <div class="d-flex align-items-center py-2 border-bottom">
+              <div class="me-2">${u.avatar_html || ''}</div>
+              <div class="flex-grow-1">
+                <div class="f-w-500">${(u.name || '').replace(/</g,'&lt;')}</div>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-primary" data-start-chat data-user-id="${u.id}">
+                  <i class="ti ti-brand-hipchat"></i> Avvia
+                </button>
+              </div>
+            </div>`).join('');
+
+          results.innerHTML = html;
+        } catch (err) {
+          console.error('[chat-new] search error', err);
+          clearResults(true);
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      async function createChat(userId, button) {
+        try {
+          if (button) button.disabled = true;
+          const resp = await fetch(`/chat/create-private/${encodeURIComponent(userId)}`, {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              'Accept': 'application/json',
+            },
+          });
+          if (!resp.ok) throw new Error(`create ${resp.status}`);
+          const data = await resp.json();
+          if (data && data.success && data.chat_id) {
+            const base = (data.redirect && String(data.redirect)) || '/chat';
+            window.location.href = `${base}?room=${encodeURIComponent(data.chat_id)}`;
+          }
+        } catch (err) {
+          console.error('[chat-new] create error', err);
+        } finally {
+          if (button) button.disabled = false;
+        }
+      }
+
+      input.addEventListener('input', () => {
+        const q = (input.value || '').trim();
+        if (q.length < 2) {
+          clearResults(false);
+          return;
+        }
+        if (q === lastQuery) return;
+        lastQuery = q;
+        if (debounceId) clearTimeout(debounceId);
+        debounceId = setTimeout(() => search(q), 300);
+      }, { passive: true });
+
+      results.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('[data-start-chat]');
+        if (!btn) return;
+        const userId = btn.getAttribute('data-user-id');
+        if (!userId) return;
+        createChat(userId, btn);
+      });
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init, { once: true });
+      document.addEventListener('DOMContentLoaded', () => { initMessaging(); initNewChat(); }, { once: true });
     } else {
-      init();
+      initMessaging();
+      initNewChat();
     }
   })();
