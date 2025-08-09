@@ -69,7 +69,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (!window.Echo) {
     console.warn('[presence] Echo non inizializzato');
-    return;
+    // Prova lazy-init se presente window.initEcho (vite resources/js/echo.js)
+    if (window.initEcho && typeof window.initEcho === 'function') {
+      try { window.initEcho(); } catch (_) {}
+    }
   }
 
   const LABELS = {
@@ -138,6 +141,64 @@ document.addEventListener('DOMContentLoaded', () => {
           }).showToast();
         }
       });
+
+    // 🔹 Notifica chat per-utente: mostra toast se non siamo nella pagina chat
+    try {
+      const currentUserIdMeta = document.querySelector('meta[name="current-user-id"]');
+      const currentUserId = currentUserIdMeta ? parseInt(currentUserIdMeta.content, 10) : (window.currentUser && (window.currentUser.id || window.currentUser.user_id));
+      if (currentUserId && Number.isFinite(currentUserId)) {
+        window.Echo.private(`App.Models.User.${currentUserId}`)
+          .subscribed(() => console.log('[chat-toast] subscribed App.Models.User.' + currentUserId))
+          .error((err) => console.warn('[chat-toast] private channel auth error', err))
+          .listen('.chat.message.notify', (e) => {
+            const inChatPage = !!document.querySelector('[data-chat-room]') || (location.pathname || '').startsWith('/chat');
+            const isOwn = String(e.senderId) === String(currentUserId);
+            if (inChatPage || isOwn) return;
+
+            const container = document.createElement('div');
+            container.className = 'd-flex align-items-center gap-2';
+
+            if (e.avatarUrl) {
+              const img = document.createElement('img');
+              img.src = e.avatarUrl;
+              img.alt = e.senderName || 'avatar';
+              img.className = 'rounded-circle flex-shrink-0';
+              img.style.width = '32px';
+              img.style.height = '32px';
+              img.style.objectFit = 'cover';
+              container.appendChild(img);
+            }
+
+            const textWrap = document.createElement('div');
+            const title = document.createElement('div');
+            title.innerHTML = `<strong>${(e.senderName || 'Qualcuno')}</strong> ti ha mandato un messaggio`;
+            const preview = document.createElement('div');
+            preview.className = 'text-white-50 small';
+            preview.textContent = e.preview || 'Nuovo messaggio';
+            textWrap.appendChild(title);
+            textWrap.appendChild(preview);
+            container.appendChild(textWrap);
+
+            if (typeof Toastify !== 'undefined') {
+              Toastify({
+                node: container,
+                duration: 6000,
+                gravity: 'top',
+                position: 'right',
+                backgroundColor: 'var(--bs-primary)',
+                className: 'shadow-lg',
+                stopOnFocus: true,
+                close: true,
+                onClick: () => { window.location.href = `/chat?room=${encodeURIComponent(e.roomId)}`; },
+              }).showToast();
+            } else {
+              console.log('[chat-toast]', `${e.senderName}: ${e.preview}`);
+            }
+          });
+      }
+    } catch (err) {
+      console.warn('[chat-toast] init error', err);
+    }
   }
 });
 

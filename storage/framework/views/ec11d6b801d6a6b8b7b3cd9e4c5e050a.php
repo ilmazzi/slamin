@@ -7,6 +7,9 @@
       name="keywords">
 <meta content="la-themes" name="author">
 <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+<?php if(auth()->guard()->check()): ?>
+<meta name="current-user-id" content="<?php echo e(auth()->id()); ?>">
+<?php endif; ?>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">

@@ -10,6 +10,7 @@ use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Events\ChatMessageSent;
+use App\Events\ChatMessageNotification;
 use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Auth;
 
@@ -261,6 +262,26 @@ class ChatController extends Controller
          ];
 
          event(new ChatMessageSent($payload));
+
+         // Notifica per-utente: invia al destinatario quando non è nella pagina chat
+         // Trova l'altro partecipante della chat privata
+         $roomModel = ChatRoom::with('participants')->find($room);
+         if ($roomModel) {
+             $recipient = $roomModel->participants
+                 ->firstWhere('user_id', '!=', $user->id);
+             if ($recipient) {
+                 $recipientId = (int) $recipient->user_id;
+                 $preview = mb_strimwidth($message->content ?? '', 0, 80, '…');
+                 event(new ChatMessageNotification(
+                     recipientId: $recipientId,
+                     roomId: (int) $room,
+                     senderId: (int) $user->id,
+                     senderName: (string) ($user->getDisplayName() ?? $user->name ?? 'User'),
+                     avatarUrl: (string) \App\Helpers\AvatarHelper::getUserAvatarUrl($user),
+                     preview: $preview,
+                 ));
+             }
+         }
 
          return response()->json(['ok' => true]);
      }
