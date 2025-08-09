@@ -13,7 +13,10 @@ return [
         [
             'id' => env('REVERB_APP_ID', 'app'),
             'name' => env('APP_NAME', 'Laravel'),
-            'key' => 'z7t8odewa0rs7h1aq6pd',
+
+            // ⬇️ CHIAVE DI TEST HARD-CODED per verificare che il processo legga questo file
+            'key' => 'probe-verify-1',
+
             'secret' => env('REVERB_APP_SECRET'),
             'path' => env('REVERB_APP_PATH', ''),
             'capacity' => env('REVERB_APP_CAPACITY', null),
