@@ -17,7 +17,10 @@
             <a href="<?php echo e(route('profile.show')); ?>" class="text-decoration-none d-flex align-items-center flex-grow-1" style="cursor: pointer;">
                 <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto">
                     <img alt="avatar" class="img-fluid b-r-10" src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user())); ?>">
-                    <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                    <span
+                    class="position-absolute top-0 end-0 p-1 <?php echo e(auth()->user()->presence_class); ?> border border-light rounded-circle"
+                    title="<?php echo e(auth()->user()->presence_label); ?>">
+                </span>
                 </span>
                 <div class="flex-grow-1 ps-2">
                     <h6 class="text-primary mb-0 text-truncate" style="max-width: 150px;"><?php echo e(auth()->user()->getDisplayName()); ?></h6>
@@ -209,7 +212,7 @@
                                     </a>
                                 </li>
 
-                             
+
 
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
@@ -225,6 +228,17 @@
 
                                             </span>
                                         <?php endif; ?>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
+
+                                <!-- Chat Section -->
+                                <?php if(auth()->guard()->check()): ?>
+                                <li class="no-sub <?php echo e(request()->routeIs('chat.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('chat.index')); ?>">
+                                        <i class="ph-duotone ph-chat f-s-20 me-2"></i>
+                                        <?php echo e(__('chat.title')); ?>
+
                                     </a>
                                 </li>
                                 <?php endif; ?>

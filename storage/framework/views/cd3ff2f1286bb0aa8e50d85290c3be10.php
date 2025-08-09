@@ -40,29 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
         element.removeAttribute('data-bs-placement');
     });
 
-    // Override delle funzioni Bootstrap Tooltip
-    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-        // Salva le funzioni originali
-        const originalGetOrCreateInstance = bootstrap.Tooltip.getOrCreateInstance;
-        const originalGetInstance = bootstrap.Tooltip.getInstance;
-
-        // Override per impedire l'inizializzazione
-        bootstrap.Tooltip.getOrCreateInstance = function(element, config) {
-            return null;
-        };
-
-        bootstrap.Tooltip.getInstance = function(element) {
-            return null;
-        };
-
-        // Disabilita anche la funzione enable
-        if (bootstrap.Tooltip.enable) {
-            bootstrap.Tooltip.enable = function() {
-                return null;
-            };
-        }
-    }
-
     // Rimuovi eventuali tooltip già creati
     const existingTooltips = document.querySelectorAll('.tooltip');
     existingTooltips.forEach(function(tooltip) {
@@ -86,7 +63,7 @@ $(document).ready(function() {
 <!-- <?php echo e(__('wishlist.wishlist')); ?> Management -->
 <script src="<?php echo e(asset('assets/js/wishlist.js')); ?>"></script>
 
-<script src="<?php echo e(asset('assets/vendor/toastify/toastify.js')); ?>"></script>    
+<script src="<?php echo e(asset('assets/vendor/toastify/toastify.js')); ?>"></script>
 
 
 

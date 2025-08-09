@@ -223,3 +223,32 @@ $('.lazy').slick({
   dots: true,
   rtl:true
 });
+
+// Events Slider - Center Mode
+$('.center-mode').slick({
+  centerMode: true,
+  slidesToShow: 2,
+  autoplay: true,
+  autoplaySpeed: 3000,
+  arrows: true,
+  dots: false,
+  infinite: true,
+  speed: 500,
+  responsive: [
+    {
+      breakpoint: 768,
+      settings: {
+        centerMode: true,
+        slidesToShow: 2
+      }
+    },
+    {
+      breakpoint: 576,
+      settings: {
+        arrows: false,
+        centerMode: true,
+        slidesToShow: 1
+      }
+    }
+  ]
+});

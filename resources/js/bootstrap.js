@@ -26,4 +26,3 @@ console.log('[DEBUG] Configurazione:', {
     forceTLS: import.meta.env.VITE_PUSHER_FORCE_TLS
 });
 
-

@@ -73,7 +73,7 @@ Route::view('candlestick_chart', 'candlestick_chart')->name('candlestick_chart')
 Route::view('cards', 'cards')->name('cards');
 Route::view('cart', 'cart')->name('cart');
 Route::view('chart_js', 'chart_js')->name('chart_js');
-// Online Status Routes
+
 
 
 use App\Events\TestEvent;
@@ -574,8 +574,8 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/carousels/test-search', function(\Illuminate\Http\Request $request) {
             return response()->json([
                 'message' => 'Test route working',
-                'user' => auth()->user() ? auth()->user()->name : 'Not authenticated',
-                'is_admin' => auth()->user() ? auth()->user()->is_admin : false,
+                'user' => Auth::check() ? Auth::user()->name : 'Not authenticated',
+                'is_admin' => Auth::check() ? Auth::user()->is_admin : false,
                 'params' => $request->all()
             ]);
         })->name('carousels.test-search');
@@ -820,7 +820,7 @@ Route::get('/debug-simulate-create', function () {
 // Test route per upload
 Route::get('/test-upload', function () {
     return view('test.upload');
-})->middleware('auth')->name('test.upload');
+})->middleware('auth')->name('test-upload');
 
 Route::post('/test-upload', function (Request $request) {
     Log::info('Test upload chiamato', [
@@ -1074,3 +1074,13 @@ Route::post('/test-broadcast', function () {
     broadcast(new \App\Events\UserLoggedIn('Test Frontend', 'test@frontend.com'));
     return response()->json(['success' => true, 'message' => 'Event sent']);
 });
+
+
+// ===== ROUTES PER CHAT =====
+Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');
+    Route::get('/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('search-users');
+    Route::post('/create-private/{userId}', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create-private');
+});
+
+Route::post('/chat/{room}/messages', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');

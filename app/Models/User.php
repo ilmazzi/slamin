@@ -13,6 +13,7 @@ use App\Models\VideoSnap;
 use App\Models\VideoLike;
 use App\Models\Video;
 use App\Models\SystemSetting;
+use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
@@ -893,4 +894,70 @@ class User extends Authenticatable
         return $this->following()->count();
     }
 
+/**
+     * Accessor: stato presenza ('online'|'recent'|'idle'|'offline')
+     */
+    public function getPresenceStateAttribute(): string
+    {
+        return app(OnlineStatusService::class)->getPresenceState($this);
+    }
+
+    /**
+     * Accessor: boolean "online" (deriva da presence_state)
+     */
+    public function getIsOnlineAttribute(): bool
+    {
+        return $this->presence_state === 'online';
+    }
+
+    /**
+     * Accessor: classe CSS per la presence (config/online.php -> ui.classes)
+     */
+    public function getPresenceClassAttribute(): string
+    {
+        return app(OnlineStatusService::class)->classFor($this->presence_state);
+    }
+
+    /**
+     * Accessor: icona FontAwesome (o quello che usi)
+     */
+    public function getPresenceIconAttribute(): string
+    {
+        return app(OnlineStatusService::class)->iconFor($this->presence_state);
+    }
+
+    /**
+     * Accessor: label localizzata
+     */
+    public function getPresenceLabelAttribute(): string
+    {
+        return app(OnlineStatusService::class)->labelFor($this->presence_state);
+    }
+
+    /**
+     * Accessor: "Ultimo accesso" in forma umana (fallback quando non online).
+     */
+    public function getLastSeenHumanAttribute(): string
+    {
+        return $this->last_seen_at ? $this->last_seen_at->diffForHumans() : 'Mai';
+    }
+
+    /**
+     * Relazione con le partecipazioni alle chat
+     */
+    public function chatParticipants()
+    {
+        return $this->hasMany(ChatParticipant::class);
+    }
+
+    /**
+     * Relazione con le chat rooms dell'utente
+     */
+    public function chatRooms()
+    {
+        return $this->belongsToMany(ChatRoom::class, 'chat_participants');
+    }
 }
+
+
+

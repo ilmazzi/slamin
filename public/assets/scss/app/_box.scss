@@ -1,7 +1,7 @@
 // >>-- 92 Box css start --<<
 
 .box-layout {
-  background-image: url("../images/background/box-bg.jpg");
+  background-image: url("/assets/images/background/box-bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -34,7 +34,7 @@
   .app-content {
     background-color: var(--bodybg-color);
   }
-  
+
   .code-container{
     left: 0;
     right: 0;
@@ -88,7 +88,7 @@
     h6{
       font-size: 15px !important;
     }
-  } 
+  }
   .order-list-header{
     .nav-pills-box{
       .nav-link{

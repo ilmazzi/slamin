@@ -230,7 +230,20 @@ class AuthController extends Controller
 
         // Log logout before destroying session
         if ($user) {
-
+            // Rimuovi lo stato online da Redis direttamente
+            try {
+                $key = 'online:user:' . $user->id;
+                \Illuminate\Support\Facades\Redis::connection('default')->del($key);
+                \Illuminate\Support\Facades\Log::info('Stato online rimosso al logout', [
+                    'user_id' => $user->id,
+                    'key' => $key
+                ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Errore nel rimuovere stato online al logout', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
 
             LoggingService::logAuth('logout', [
                 'user_id' => $user->id,

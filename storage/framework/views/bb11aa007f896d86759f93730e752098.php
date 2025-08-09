@@ -5,12 +5,12 @@
             <div class="card">
                 <div class="card-body text-center py-5">
                     <div class="mb-4">
-                        <i class="ph ph-shield-x f-s-48 text-danger mb-3"></i>
-                        <h1 class="display-4 text-danger fw-bold">403</h1>
-                        <h2 class="h3 text-dark mb-3">Accesso Negato</h2>
+                        <i class="ph ph-warning-circle f-s-48 text-danger mb-3"></i>
+                        <h1 class="display-4 text-danger fw-bold">500</h1>
+                        <h2 class="h3 text-dark mb-3">Errore del Server</h2>
                         <p class="text-muted mb-4">
-                            Non hai i permessi per accedere a questa risorsa. 
-                            Se ritieni che questo sia un errore, contatta l'amministratore.
+                            Si è verificato un errore interno del server. 
+                            Il nostro team è stato notificato e sta lavorando per risolvere il problema.
                         </p>
                     </div>
                     
@@ -29,4 +29,4 @@
 </div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/errors/error_403.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/errors/error_500.blade.php ENDPATH**/ ?>

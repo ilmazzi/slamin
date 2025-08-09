@@ -30,7 +30,7 @@ class HomeController extends Controller
             })
             ->first();
 
-        // Eventi più recenti
+        // Eventi più recenti con conteggio partecipanti
         $recentEvents = Event::where('status', 'published')
             ->where('start_datetime', '>=', now())
             ->orderBy('start_datetime', 'asc')
