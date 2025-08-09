@@ -34,10 +34,7 @@ return [
             'path' => env('VITE_REVERB_PATH', ''),
             'hostname' => env('VITE_REVERB_HOST'),
             'options' => [
-                'tls' => [
-                    'cert' => base_path('certs/slamin-local.cert'),
-                    'key' => base_path('certs/slamin-local.key'),
-                ],
+
             ],
             'max_request_size' => env('REVERB_MAX_REQUEST_SIZE', 10_000),
             'scaling' => [
@@ -76,19 +73,19 @@ return [
 
         'apps' => [
             [
-                'key' => env('REVERB_APP_KEY'),
-                'secret' => env('REVERB_APP_SECRET'),
-                'app_id' => env('REVERB_APP_ID'),
+                'key' => env('VITE_REVERB_APP_KEY'),
+                'secret' => env('VITE_REVERB_APP_SECRET'),
+                'app_id' => env('VITE_REVERB_APP_ID'),
                 'options' => [
-                    'host' => env('REVERB_HOST'),
-                    'port' => env('REVERB_PORT', 443),
-                    'scheme' => env('REVERB_SCHEME', 'https'),
-                    'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
+                    'host' => env('VITE_REVERB_HOST'),
+                    'port' => env('VITE_REVERB_PORT', 443),
+                    'scheme' => env('VITE_REVERB_SCHEME', 'https'),
+                    'useTLS' => env('VITE_REVERB_SCHEME', 'https') === 'https',
                 ],
                 'allowed_origins' => ['*'],
-                'ping_interval' => env('REVERB_APP_PING_INTERVAL', 60),
-                'activity_timeout' => env('REVERB_APP_ACTIVITY_TIMEOUT', 30),
-                'max_message_size' => env('REVERB_APP_MAX_MESSAGE_SIZE', 10_000),
+                'ping_interval' => env('VITE_REVERB_APP_PING_INTERVAL', 60),
+                'activity_timeout' => env('VITE_REVERB_APP_ACTIVITY_TIMEOUT', 30),
+                'max_message_size' => env('VITE_REVERB_APP_MAX_MESSAGE_SIZE', 10_000),
             ],
         ],
 
