@@ -29,10 +29,10 @@ return [
     'servers' => [
 
         'reverb' => [
-            'host' => env('REVERB_SERVER_HOST', '0.0.0.0'),
-            'port' => env('REVERB_SERVER_PORT', 8080),
-            'path' => env('REVERB_SERVER_PATH', ''),
-            'hostname' => env('REVERB_HOST'),
+            'host' => env('VITE_REVERB_HOST', '0.0.0.0'),
+            'port' => env('VITE_REVERB_PORT', 8080),
+            'path' => env('VITE_REVERB_PATH', ''),
+            'hostname' => env('VITE_REVERB_HOST'),
             'options' => [
                 'tls' => [
                     'cert' => base_path('certs/slamin-local.cert'),
