@@ -36,8 +36,8 @@ return [
     'servers' => [
         'reverb' => [
             // <<< QUI forziamo bind locale >>>
-            'host' => env('REVERB_SERVER_HOST', '127.0.0.1'),
-            'port' => (int) env('REVERB_SERVER_PORT', 8080),
+            'host' => env('REVERB_HOST', '127.0.0.1'),
+            'port' => (int) env('REVERB_PORT', 8080),
 
             // Opzionali/compat: non impattano il bind TCP
             'path' => env('REVERB_SERVER_PATH', ''),
