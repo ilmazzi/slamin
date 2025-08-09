@@ -571,7 +571,8 @@ function loadComments() {
 function deleteComment(commentId) {
     if (!confirm('Sei sicuro di voler eliminare questo commento?')) return;
 
-    fetch(`{{ route('videos.delete-comment', '') }}/${commentId}`, {
+    const deleteCommentBase = '{{ url('/videos/comments') }}';
+    fetch(`${deleteCommentBase}/${commentId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -655,7 +656,8 @@ function createSnap() {
 function deleteSnap(snapId) {
     if (!confirm('Sei sicuro di voler eliminare questo snap?')) return;
 
-    fetch(`{{ route('videos.delete-snap', '') }}/${snapId}`, {
+    const deleteSnapBase = '{{ url('/videos/snaps') }}';
+    fetch(`${deleteSnapBase}/${snapId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
