@@ -15,7 +15,8 @@ return [
     |
     */
 
-    'default' => env('BROADCAST_CONNECTION', 'reverb'),
+    // Reverb rimosso: usa 'log' come default sicuro (nessun realtime)
+    'default' => env('BROADCAST_CONNECTION', 'log'),
 
     /*
     |--------------------------------------------------------------------------
