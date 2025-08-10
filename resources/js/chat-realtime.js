@@ -39,14 +39,14 @@
         const isOwn = Number(sender_id) === me;
 
         if (isOwn) {
-          // PROPRI: a destra
+          // PROPRI: a destra - usando le stesse classi template del Blade
           return `
-  <div class="d-flex position-relative mb-3">
-    <div class="chat-box-right ms-auto text-end">
-      <div>
-        <p class="chat-text mb-1">${escapeHtml(content)}</p>
-        <p class="text-muted mb-0"><i class="ti ti-checks text-primary"></i> ${escapeHtml(time)}</p>
+  <div class="position-relative">
+    <div class="chat-box-right d-flex flex-column align-items-end" style="margin-right: 60px;">
+      <div class="chat-text bg-primary text-white p-3 rounded-3 mb-2 shadow-sm" style="max-width: 85%;">
+        ${escapeHtml(content)}
       </div>
+      <p class="text-muted f-s-12"><i class="ti ti-checks text-primary"></i> ${escapeHtml(time)}</p>
     </div>
     <div class="chatdp h-45 w-45 b-r-50 position-absolute end-0 top-0 bg-danger">
       <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto" data-user-id="${sender_id}">
@@ -57,20 +57,20 @@
   </div>`;
         }
 
-        // ALTRUI: a sinistra
+        // ALTRUI: a sinistra - usando le stesse classi template del Blade
         return `
-  <div class="d-flex position-relative mb-3">
+  <div class="position-relative">
     <div class="chatdp h-45 w-45 b-r-50 position-absolute start-0 bg-light">
       <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto" data-user-id="${sender_id}">
         <img alt="avatar" class="img-fluid b-r-10" src="${escapeAttr(avatar_url)}">
         <span class="position-absolute top-0 end-0 p-1 border border-light rounded-circle bg-secondary" data-presence-dot></span>
       </span>
     </div>
-    <div class="chat-box">
-      <div>
-        <p class="chat-text mb-1">${escapeHtml(content)}</p>
-        <p class="text-muted mb-0"><i class="ti ti-checks text-primary"></i> ${escapeHtml(time)}</p>
+    <div class="chat-box d-flex flex-column align-items-start" style="margin-left: 60px;">
+      <div class="chat-text bg-light text-dark p-3 rounded-3 mb-2 shadow-sm border" style="max-width: 85%;">
+        ${escapeHtml(content)}
       </div>
+      <p class="text-muted f-s-12"><i class="ti ti-checks text-primary"></i> ${escapeHtml(time)}</p>
     </div>
   </div>`;
       }

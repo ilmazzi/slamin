@@ -48,7 +48,9 @@
 
                         </div>
                         <div class="close-togglebtn">
-                            <a class="ms-2 close-toggle" role="button"><i class="ti ti-align-justified fs-5"></i></a>
+                            <a class="ms-2 toggle-btn" role="button">
+                                <i class="ti ti-align-justified fs-5"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -105,6 +107,12 @@
                                                             <i class="ti ti-checks"></i> <?php echo e($contact['last_message'] ?: 'Nessun messaggio'); ?>
 
                                                         </p>
+                                                        <!-- Typing indicator -->
+                                                        <div class="typing-indicator-contact d-none" data-room-id="<?php echo e($contact['chat_room_id']); ?>">
+                                                            <small class="text-info">
+                                                                <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                                            </small>
+                                                        </div>
                                                     </div>
                                                     <div>
                                                         <p class="f-s-12 chat-time"><?php echo e($contact['last_message_time'] ?: '--'); ?></p>
@@ -583,7 +591,9 @@
             <div class="card-header">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
-                        <a class="me-3 toggle-btn" role="button"><i class="ti ti-align-justified"></i></a>
+                        <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
+                            <i class="ti ti-align-justified"></i>
+                        </a>
                     </div>
                     <?php if($selectedContact): ?>
                         <?php $user = \App\Models\User::find($selectedContact['id']); ?>
@@ -595,7 +605,7 @@
                                   data-presence-dot></span>
                         </span>
                     <?php else: ?>
-                <span class="profileimg h-45 w-45 d-flex-center b-r-50 position-relative bg-light">
+                <span class="profileimg h-45 w-45 d-flex-center b-r-50 position-relative">
                             <i class="ti ti-user f-s-20 text-muted"></i>
                 </span>
                     <?php endif; ?>
@@ -605,6 +615,12 @@
                             <div class="text-muted f-s-12" data-presence-label data-user-id="<?php echo e($selectedContact['id']); ?>">
                                 <?php echo e(ucfirst($selectedContact['status'])); ?>
 
+                            </div>
+                            <!-- Typing indicator in header -->
+                            <div class="typing-indicator-header d-none" data-room-id="<?php echo e($selectedRoom?->id); ?>">
+                                <small class="text-info">
+                                    <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                </small>
                             </div>
                         <?php else: ?>
                             <div class="fs-6">Seleziona una chat</div>
@@ -705,11 +721,12 @@
 
                             <?php if($message['is_own']): ?>
                     <div class="position-relative">
-                        <div class="chat-box-right">
-                            <div>
-                                <p class="chat-text"><?php echo e($message['content']); ?></p>
-                                <p class="text-muted"><i class="ti ti-checks text-primary"></i> <?php echo e($message['time']); ?></p>
+                        <div class="chat-box-right d-flex flex-column align-items-end" style="margin-right: 60px;">
+                            <div class="chat-text bg-primary text-white p-3 rounded-3 mb-2 shadow-sm" style="max-width: 85%;">
+                                <?php echo e($message['content']); ?>
+
                             </div>
+                            <p class="text-muted f-s-12"><i class="ti ti-checks text-primary"></i> <?php echo e($message['time']); ?></p>
                         </div>
                         <div class="chatdp h-45 w-45 b-r-50 position-absolute end-0 top-0 bg-danger">
                             <?php $user = \App\Models\User::find($message['sender_id']); ?>
@@ -732,13 +749,14 @@
                                      src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($user)); ?>">
                                 <span class="position-absolute top-0 end-0 p-1 border border-light rounded-circle bg-secondary"
                                       data-presence-dot></span>
-                </span>
+                            </span>
+                        </div>
+                        <div class="chat-box d-flex flex-column align-items-start" style="margin-left: 60px;">
+                            <div class="chat-text bg-light text-dark p-3 rounded-3 mb-2 shadow-sm border" style="max-width: 85%;">
+                                <?php echo e($message['content']); ?>
+
                             </div>
-                        <div class="chat-box">
-                            <div>
-                                <p class="chat-text"><?php echo e($message['content']); ?></p>
-                                <p class="text-muted"><i class="ti ti-checks text-primary"></i> <?php echo e($message['time']); ?></p>
-                            </div>
+                            <p class="text-muted f-s-12"><i class="ti ti-checks text-primary"></i> <?php echo e($message['time']); ?></p>
                         </div>
                     </div>
                         <?php endif; ?>
@@ -755,6 +773,18 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <!-- Typing Indicator -->
+            <div class="typing-indicator d-none" data-typing-indicator>
+                <div class="d-flex align-items-center p-2 bg-light border-top">
+                    <div class="typing-dots me-2">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                    <span class="text-muted f-s-12" data-typing-text>Qualcuno sta scrivendo...</span>
+                </div>
+            </div>
+
             <div class="card-footer">
                 <form class="chat-footer d-flex" data-chat-form action="<?php echo e($selectedRoom ? route('chat.store', $selectedRoom->id) : '#'); ?>" method="POST">
                     <?php echo csrf_field(); ?>
@@ -844,7 +874,447 @@
     </div>
 </div>
 
+<!-- Offcanvas per la lista delle chat su mobile -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="chatListOffcanvas" aria-labelledby="chatListOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="chatListOffcanvasLabel">
+            <i class="ti ti-message-circle me-2"></i>
+            Chat
+        </h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <!-- Lista semplificata dei contatti -->
+        <div class="p-3">
+            <h6 class="mb-3">
+                <i class="ph-fill ph-chat-circle-text me-2"></i>
+                Contatti
+            </h6>
+
+            <div class="chat-contact">
+                <?php $__empty_1 = true; $__currentLoopData = $contacts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contact): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="chat-contactbox p-2 border-bottom contact-item"
+                     data-contact-id="<?php echo e($contact['id']); ?>"
+                     data-chat-room="<?php echo e($contact['chat_room_id']); ?>"
+                     data-contact-name="<?php echo e($contact['name']); ?>"
+                     style="cursor: pointer;">
+                    <div class="d-flex align-items-center">
+                        <div class="position-relative me-3">
+                            <?php $user = \App\Models\User::find($contact['id']); ?>
+                            <span class="h-40 w-40 d-flex-center b-r-10 position-relative" data-user-id="<?php echo e($user->id); ?>">
+                                <img alt="avatar" class="img-fluid b-r-10" src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($user)); ?>">
+                                <span class="position-absolute top-0 end-0 p-1 border border-light rounded-circle bg-secondary" data-presence-dot></span>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="mb-1 f-w-500 text-dark"><?php echo e($contact['name']); ?></p>
+                            <p class="text-secondary mb-0 f-s-12">
+                                <i class="ti ti-checks"></i> <?php echo e($contact['last_message'] ?: 'Nessun messaggio'); ?>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <div class="text-center py-4">
+                    <i class="ti ti-message-circle fs-1 text-muted"></i>
+                    <p class="text-muted mt-2">Nessun contatto disponibile</p>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php $__env->stopSection(); ?>
 
+<style>
+/* Typing indicator animation */
+.typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typing-bounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+
+
+
+
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+console.log('Chat script loaded!');
+
+// Typing indicator management
+class TypingManager {
+    constructor() {
+        this.typingTimeout = null;
+        this.typingDelay = 1000; // 1 secondo di delay
+        this.typingDuration = 5000; // 5 secondi di durata
+        this.currentRoom = null;
+        this.isTyping = false;
+
+        this.typingIndicator = document.querySelector('[data-typing-indicator]');
+        this.typingText = document.querySelector('[data-typing-text]');
+        this.chatInput = document.querySelector('[data-chat-input]');
+
+        this.init();
+    }
+
+    init() {
+        console.log('TypingManager.init() - Starting initialization...');
+
+        if (!this.chatInput) {
+            console.error('TypingManager.init() - Chat input not found!');
+            return;
+        }
+
+        console.log('TypingManager.init() - Chat input found:', this.chatInput);
+
+        // Event listeners per input
+        this.chatInput.addEventListener('input', () => this.handleInput());
+        this.chatInput.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        this.chatInput.addEventListener('blur', () => this.stopTyping());
+
+        // Ottieni room ID corrente
+        this.currentRoom = this.getCurrentRoomId();
+        console.log('TypingManager.init() - Current room ID:', this.currentRoom);
+
+        if (!this.currentRoom) {
+            console.error('TypingManager.init() - No room ID found! Typing indicator will not work.');
+            return;
+        }
+
+        // Ascolta eventi typing da altri utenti
+        this.listenToTypingEvents();
+
+        console.log('TypingManager.init() - Initialization completed successfully');
+    }
+
+    getCurrentRoomId() {
+        // Prova prima dai parametri URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let roomId = urlParams.get('room');
+
+        // Se non trovato nei parametri, prova dall'URL path
+        if (!roomId) {
+            const pathParts = window.location.pathname.split('/');
+            const roomIndex = pathParts.indexOf('chat');
+            if (roomIndex !== -1 && pathParts[roomIndex + 1]) {
+                roomId = pathParts[roomIndex + 1];
+            }
+        }
+
+        console.log('getCurrentRoomId - URL params:', window.location.search);
+        console.log('getCurrentRoomId - Path:', window.location.pathname);
+        console.log('getCurrentRoomId - Found room ID:', roomId);
+
+        return roomId;
+    }
+
+    handleInput() {
+        console.log('TypingManager.handleInput() - Input event triggered');
+        console.log('TypingManager.handleInput() - Current room:', this.currentRoom);
+
+        if (!this.currentRoom) {
+            console.warn('TypingManager.handleInput() - No room ID, ignoring input');
+            return;
+        }
+
+        if (!this.isTyping) {
+            console.log('TypingManager.handleInput() - Starting typing...');
+            this.startTyping();
+        } else {
+            console.log('TypingManager.handleInput() - Already typing, resetting timeout...');
+        }
+
+        // Reset timeout
+        this.resetTypingTimeout();
+    }
+
+    handleKeyDown(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            this.stopTyping();
+        }
+    }
+
+    startTyping() {
+        if (this.isTyping) return;
+
+        this.isTyping = true;
+        this.sendTypingEvent('start');
+    }
+
+    stopTyping() {
+        if (!this.isTyping) return;
+
+        this.isTyping = false;
+        this.sendTypingEvent('stop');
+
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+            this.typingTimeout = null;
+        }
+    }
+
+    resetTypingTimeout() {
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+        }
+
+        this.typingTimeout = setTimeout(() => {
+            this.stopTyping();
+        }, this.typingDuration);
+    }
+
+    async sendTypingEvent(action) {
+        console.log(`TypingManager.sendTypingEvent(${action}) - Starting...`);
+        console.log(`TypingManager.sendTypingEvent(${action}) - Room ID:`, this.currentRoom);
+
+        if (!this.currentRoom) {
+            console.error(`TypingManager.sendTypingEvent(${action}) - No room ID, cannot send event`);
+            return;
+        }
+
+        try {
+            const url = `/chat/${this.currentRoom}/typing/${action}`;
+            console.log(`TypingManager.sendTypingEvent(${action}) - Sending request to:`, url);
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            });
+
+            console.log(`TypingManager.sendTypingEvent(${action}) - Response status:`, response.status);
+
+            if (!response.ok) {
+                console.error(`TypingManager.sendTypingEvent(${action}) - Error:`, response.status);
+            } else {
+                console.log(`TypingManager.sendTypingEvent(${action}) - Success!`);
+            }
+        } catch (error) {
+            console.error(`TypingManager.sendTypingEvent(${action}) - Exception:`, error);
+        }
+    }
+
+    listenToTypingEvents() {
+        console.log('TypingManager.listenToTypingEvents() - Starting...');
+        console.log('TypingManager.listenToTypingEvents() - Echo available:', !!window.Echo);
+        console.log('TypingManager.listenToTypingEvents() - Current room:', this.currentRoom);
+
+        if (!window.Echo || !this.currentRoom) {
+            console.error('TypingManager.listenToTypingEvents() - Echo or room ID missing');
+            if (!window.Echo) console.error('TypingManager.listenToTypingEvents() - Echo not available');
+            if (!this.currentRoom) console.error('TypingManager.listenToTypingEvents() - Room ID missing');
+            return;
+        }
+
+        console.log('TypingManager.listenToTypingEvents() - Setting up typing listeners for room:', this.currentRoom);
+
+        // Ascolta canale privato per la room
+        const channelName = `chat.room.${this.currentRoom}`;
+        console.log('TypingManager.listenToTypingEvents() - Channel name:', channelName);
+
+        const channel = window.Echo.private(channelName);
+        console.log('TypingManager.listenToTypingEvents() - Channel created:', channel);
+
+        channel
+            .subscribed(() => {
+                console.log('TypingManager.listenToTypingEvents() - Successfully subscribed to channel:', channelName);
+            })
+            .error((err) => {
+                console.error('TypingManager.listenToTypingEvents() - Channel authorization error:', err);
+            })
+            .listen('.typing.started', (e) => {
+                console.log('TypingManager.listenToTypingEvents() - Received .typing.started event:', e);
+                this.handleTypingStarted(e);
+            })
+            .listen('.typing.stopped', (e) => {
+                console.log('TypingManager.listenToTypingEvents() - Received .typing.stopped event:', e);
+                this.handleTypingStopped(e);
+            });
+
+        console.log('TypingManager.listenToTypingEvents() - Typing listeners set up successfully');
+    }
+
+    handleTypingStarted(event) {
+        console.log('Handling typing started event:', event);
+        console.log('Current user ID:', <?php echo e(auth()->id()); ?>);
+        console.log('Event user ID:', event.user_id);
+
+        if (event.user_id === <?php echo e(auth()->id()); ?>) {
+            console.log('Ignoring own typing event');
+            return; // Ignora i propri eventi
+        }
+
+        const typingUsers = event.typing_users;
+        const currentUserNames = Object.values(typingUsers);
+
+        console.log('Typing users:', typingUsers);
+        console.log('User names:', currentUserNames);
+
+        if (currentUserNames.length > 0) {
+            this.showTypingIndicator(currentUserNames);
+        }
+    }
+
+    handleTypingStopped(event) {
+        if (event.user_id === <?php echo e(auth()->id()); ?>) return; // Ignora i propri eventi
+
+        const typingUsers = event.typing_users;
+
+        if (Object.keys(typingUsers).length === 0) {
+            this.hideTypingIndicator();
+        } else {
+            const currentUserNames = Object.values(typingUsers);
+            this.showTypingIndicator(currentUserNames);
+        }
+    }
+
+    showTypingIndicator(userNames) {
+        console.log('Showing typing indicator for:', userNames);
+
+        // Mostra indicatori nella chat principale
+        if (this.typingIndicator) {
+            let text = '';
+            if (userNames.length === 1) {
+                text = `${userNames[0]} sta scrivendo...`;
+            } else if (userNames.length === 2) {
+                text = `${userNames[0]} e ${userNames[1]} stanno scrivendo...`;
+            } else {
+                text = `${userNames[0]} e altri stanno scrivendo...`;
+            }
+
+            console.log('Setting typing text:', text);
+            this.typingText.textContent = text;
+            this.typingIndicator.classList.remove('d-none');
+            console.log('Typing indicator shown');
+        }
+
+        // Mostra indicatori nella lista dei contatti
+        const contactIndicators = document.querySelectorAll(`.typing-indicator-contact[data-room-id="${this.currentRoom}"]`);
+        contactIndicators.forEach(indicator => {
+            indicator.classList.remove('d-none');
+        });
+
+        // Mostra indicatori nell'header della chat
+        const headerIndicators = document.querySelectorAll(`.typing-indicator-header[data-room-id="${this.currentRoom}"]`);
+        headerIndicators.forEach(indicator => {
+            indicator.classList.remove('d-none');
+        });
+    }
+
+    hideTypingIndicator() {
+        // Nasconde indicatori nella chat principale
+        if (this.typingIndicator) {
+            this.typingIndicator.classList.add('d-none');
+        }
+
+        // Nasconde indicatori nella lista dei contatti
+        const contactIndicators = document.querySelectorAll(`.typing-indicator-contact[data-room-id="${this.currentRoom}"]`);
+        contactIndicators.forEach(indicator => {
+            indicator.classList.add('d-none');
+        });
+
+        // Nasconde indicatori nell'header della chat
+        const headerIndicators = document.querySelectorAll(`.typing-indicator-header[data-room-id="${this.currentRoom}"]`);
+        headerIndicators.forEach(indicator => {
+            indicator.classList.add('d-none');
+        });
+    }
+}
+
+// Inizializza typing manager quando la pagina è caricata
+let typingManager = null;
+
+// Inizializza l'offcanvas della chat
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing chat offcanvas...');
+
+    // Inizializza typing manager
+    const chatInput = document.querySelector('[data-chat-input]');
+    console.log('DOMContentLoaded - Chat input found:', chatInput);
+
+    if (chatInput) {
+        console.log('DOMContentLoaded - Creating TypingManager...');
+        typingManager = new TypingManager();
+        console.log('DOMContentLoaded - TypingManager created:', typingManager);
+    } else {
+        console.error('DOMContentLoaded - Chat input not found, TypingManager not created');
+    }
+
+    // Verifica che l'offcanvas sia presente
+    const offcanvas = document.getElementById('chatListOffcanvas');
+    if (offcanvas) {
+        console.log('Chat offcanvas found:', offcanvas);
+    } else {
+        console.error('Chat offcanvas not found!');
+    }
+
+    // Verifica che il toggle button sia presente
+    const toggleBtn = document.querySelector('.toggle-btn');
+    if (toggleBtn) {
+        console.log('Toggle button found:', toggleBtn);
+        console.log('Toggle button attributes:', {
+            'data-bs-toggle': toggleBtn.getAttribute('data-bs-toggle'),
+            'data-bs-target': toggleBtn.getAttribute('data-bs-target')
+        });
+    } else {
+        console.error('Toggle button not found!');
+    }
+
+        // Gestione click sui contatti nell'offcanvas
+    const contactItems = document.querySelectorAll('#chatListOffcanvas .contact-item');
+    contactItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const contactId = this.getAttribute('data-contact-id');
+            const chatRoom = this.getAttribute('data-chat-room');
+            const contactName = this.getAttribute('data-contact-name');
+
+            console.log('Contact clicked:', { contactId, chatRoom, contactName });
+
+            // Chiudi l'offcanvas
+            const offcanvasInstance = bootstrap.Offcanvas.getInstance(document.getElementById('chatListOffcanvas'));
+            if (offcanvasInstance) {
+                offcanvasInstance.hide();
+            }
+
+            // Replica esattamente il comportamento desktop: redirect completo
+            const chatUrl = `<?php echo e(route('chat.index')); ?>?room=${chatRoom}`;
+            console.log('Redirecting to:', chatUrl);
+            window.location.href = chatUrl;
+        });
+    });
+});
+
+
+</script>
+<?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/chat/index.blade.php ENDPATH**/ ?>

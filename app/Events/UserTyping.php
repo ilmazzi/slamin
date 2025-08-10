@@ -2,65 +2,51 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserTyping implements ShouldBroadcast
+/**
+ * Questo Event resta qui solo per eventuali fallback server-driven.
+ * Non viene usato nel flusso "whisper", ma lo lasciamo pronto:
+ * - canale: presence-chat.room.{roomId}
+ * - evento: user.typing
+ */
+class UserTyping implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $chatId;
-    public $userId;
-    public $userName;
-    public $isTyping;
+    public int $roomId;
+    public int $sender_id;
+    public string $sender_name;
+    public bool $is_typing;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(int $chatId, int $userId, string $userName, bool $isTyping = true)
+    public function __construct(int $roomId, int $senderId, string $senderName, bool $isTyping)
     {
-        $this->chatId = $chatId;
-        $this->userId = $userId;
-        $this->userName = $userName;
-        $this->isTyping = $isTyping;
+        $this->roomId = $roomId;
+        $this->sender_id = $senderId;
+        $this->sender_name = $senderName;
+        $this->is_typing = $isTyping;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
-        return [
-            new PrivateChannel('chat.' . $this->chatId),
-        ];
+        return [new PresenceChannel("chat.room.{$this->roomId}")];
     }
 
-    /**
-     * The event's broadcast name.
-     */
     public function broadcastAs(): string
     {
-        return 'user-typing';
+        return 'user.typing';
     }
 
-    /**
-     * Get the data to broadcast.
-     */
     public function broadcastWith(): array
     {
         return [
-            'chat_id' => $this->chatId,
-            'user_id' => $this->userId,
-            'user_name' => $this->userName,
-            'is_typing' => $this->isTyping,
-            'timestamp' => now()->toISOString(),
+            'sender_id'   => $this->sender_id,
+            'sender_name' => $this->sender_name,
+            'is_typing'   => $this->is_typing,
         ];
     }
 }

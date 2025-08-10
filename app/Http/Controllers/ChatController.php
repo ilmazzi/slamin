@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Events\ChatMessageSent;
 use App\Events\ChatMessageNotification;
 use App\Models\ChatMessage;
+use App\Services\TypingService;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -317,5 +318,97 @@ class ChatController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Start typing indicator for a user in a chat room
+     */
+    public function startTyping(Request $request, int $room)
+    {
+        $user = Auth::user();
+        $typingService = app(TypingService::class);
+
+        try {
+            $typingUsers = $typingService->startTyping(
+                $room,
+                $user->id,
+                $user->getDisplayName()
+            );
+
+            return response()->json([
+                'success' => true,
+                'typing_users' => $typingUsers
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error starting typing', [
+                'room' => $room,
+                'user' => $user->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error starting typing indicator'
+            ], 500);
+        }
+    }
+
+    /**
+     * Stop typing indicator for a user in a chat room
+     */
+    public function stopTyping(Request $request, int $room)
+    {
+        $user = Auth::user();
+        $typingService = app(TypingService::class);
+
+        try {
+            $typingUsers = $typingService->stopTyping(
+                $room,
+                $user->id,
+                $user->getDisplayName()
+            );
+
+            return response()->json([
+                'success' => true,
+                'typing_users' => $typingUsers
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error stopping typing', [
+                'room' => $room,
+                'user' => $user->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error stopping typing indicator'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get current typing users in a chat room
+     */
+    public function getTypingUsers(Request $request, int $room)
+    {
+        try {
+            $typingService = app(TypingService::class);
+            $typingUsers = $typingService->getTypingUsers($room);
+
+            return response()->json([
+                'success' => true,
+                'typing_users' => $typingUsers
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error getting typing users', [
+                'room' => $room,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error getting typing users'
+            ], 500);
+        }
     }
 }

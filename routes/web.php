@@ -1081,6 +1081,11 @@ Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');
     Route::get('/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('search-users');
     Route::post('/create-private/{userId}', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create-private');
+
+    // Typing indicators
+    Route::post('/{room}/typing/start', [App\Http\Controllers\ChatController::class, 'startTyping'])->name('typing.start');
+    Route::post('/{room}/typing/stop', [App\Http\Controllers\ChatController::class, 'stopTyping'])->name('typing.stop');
+    Route::get('/{room}/typing/users', [App\Http\Controllers\ChatController::class, 'getTypingUsers'])->name('typing.users');
 });
 
 Route::post('/chat/{room}/messages', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
