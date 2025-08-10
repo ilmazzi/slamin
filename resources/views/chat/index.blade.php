@@ -911,6 +911,12 @@
                             <p class="text-secondary mb-0 f-s-12">
                                 <i class="ti ti-checks"></i> {{ $contact['last_message'] ?: 'Nessun messaggio' }}
                             </p>
+                            <!-- Typing indicator mobile -->
+                            <div class="typing-indicator-contact d-none" data-room-id="{{ $contact['chat_room_id'] }}">
+                                <small class="text-info">
+                                    <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1247,6 +1253,22 @@ class TypingManager {
             indicator.classList.add('d-none');
         });
     }
+
+    // Metodo per aggiornare la stanza corrente (utile per mobile)
+    updateCurrentRoom(newRoomId) {
+        console.log('TypingManager.updateCurrentRoom() - Updating from', this.currentRoom, 'to', newRoomId);
+
+        // Nasconde tutti gli indicatori precedenti
+        this.hideTypingIndicator();
+
+        // Aggiorna la stanza corrente
+        this.currentRoom = newRoomId;
+
+        // Reinizializza i listener per la nuova stanza
+        if (this.currentRoom) {
+            this.listenToTypingEvents();
+        }
+    }
 }
 
 // Inizializza typing manager quando la pagina è caricata
@@ -1310,6 +1332,28 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = chatUrl;
         });
     });
+
+    // Listener per cambiamenti di URL (utile per mobile)
+    if (typingManager) {
+        // Controlla se l'URL è cambiato e aggiorna la stanza corrente
+        const checkUrlChange = () => {
+            const currentRoomId = typingManager.getCurrentRoomId();
+            if (currentRoomId && currentRoomId !== typingManager.currentRoom) {
+                console.log('URL changed, updating room from', typingManager.currentRoom, 'to', currentRoomId);
+                typingManager.updateCurrentRoom(currentRoomId);
+            }
+        };
+
+        // Controlla ogni 500ms per cambiamenti di URL
+        setInterval(checkUrlChange, 500);
+
+        // Listener per navigazione browser (avanti/indietro)
+        window.addEventListener('popstate', () => {
+            setTimeout(() => {
+                checkUrlChange();
+            }, 100);
+        });
+    }
 });
 
 
