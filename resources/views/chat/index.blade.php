@@ -590,8 +590,8 @@
         </div>
     </div>
     <div class="col-lg-8 col-xxl-9 box-col-7">
-        <div class="card chat-container-content-box mobile-chat-wrapper" data-chat-room="{{ $selectedRoom?->id }}">
-            <div class="card-header chat-header-sticky bg-white border-bottom" style="z-index: 1020;">
+        <div class="card chat-container-content-box" data-chat-room="{{ $selectedRoom?->id }}">
+            <div class="card-header bg-white border-bottom" style="z-index: 1020;">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
                         <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
@@ -785,7 +785,7 @@
                 </div>
             </div>
 
-            <div class="card-footer chat-footer-sticky bg-white border-top" style="z-index: 1010;">
+            <div class="card-footer bg-white border-top" style="z-index: 1010;">
                 <form class="chat-footer d-flex" data-chat-form action="{{ $selectedRoom ? route('chat.store', $selectedRoom->id) : '#' }}" method="POST">
                     @csrf
                     <div class="app-form flex-grow-1">
@@ -934,83 +934,30 @@
 @endsection
 
 <style>
-/* Typing indicator animation */
-.typing-dots {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-
-.typing-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #6c757d;
-    animation: typing-bounce 1.4s infinite ease-in-out;
-}
-
-.typing-dot:nth-child(1) { animation-delay: -0.32s; }
-.typing-dot:nth-child(2) { animation-delay: -0.16s; }
-.typing-dot:nth-child(3) { animation-delay: 0s; }
-
-@keyframes typing-bounce {
-    0%, 80%, 100% {
-        transform: scale(0.8);
-        opacity: 0.5;
-    }
-    40% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Mobile chat layout improvements */
+/* CSS minimo per header e footer fissi su mobile */
 @media (max-width: 991.98px) {
-    .mobile-chat-wrapper {
-        margin-top: 0;
-        padding-top: 0;
-    }
-
-    .chat-container-content-box {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-
-    .chat-header-sticky {
-        position: sticky !important;
-        top: 0;
+    .card-header {
+        position: fixed !important;
+        top: 60px;
+        left: 0;
+        right: 0;
         z-index: 1020;
-        background: white !important;
-        border-bottom: 1px solid #dee2e6;
     }
 
-    .chat-footer-sticky {
-        position: sticky !important;
+    .card-footer {
+        position: fixed !important;
         bottom: 0;
+        left: 0;
+        right: 0;
         z-index: 1010;
-        background: white !important;
-        border-top: 1px solid #dee2e6;
     }
 
     .chat-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0;
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .chat-container {
-        padding: 20px 15px 20px 15px !important;
+        margin-top: 120px;
+        margin-bottom: 80px;
     }
 }
 </style>
-
-
-
-
 
 @push('scripts')
 <script>
