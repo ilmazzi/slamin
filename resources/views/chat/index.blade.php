@@ -942,6 +942,9 @@
         left: 0;
         right: 0;
         z-index: 1020;
+        background: white;
+        border-bottom: 1px solid #dee2e6;
+        padding: 15px;
     }
 
     .card-footer {
@@ -950,11 +953,37 @@
         left: 0;
         right: 0;
         z-index: 1010;
+        background: white;
+        border-top: 1px solid #dee2e6;
+        padding: 15px;
     }
 
-    .chat-body {
-        margin-top: 120px;
-        margin-bottom: 80px;
+
+
+    /* Prevenire zoom su input focus */
+    input, textarea {
+        font-size: 16px !important;
+        transform: scale(1) !important;
+        transform-origin: left top !important;
+    }
+
+    /* Layout mobile ottimizzato */
+    .chat-container-content-box {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Prevenire spostamenti durante la digitazione */
+    .chat-footer form {
+        position: relative;
+        z-index: 1011;
+    }
+
+    .chat-footer input {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 20px;
+        padding: 10px 15px;
     }
 }
 </style>
