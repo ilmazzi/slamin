@@ -591,7 +591,7 @@
     </div>
     <div class="col-lg-8 col-xxl-9 box-col-7">
         <div class="card chat-container-content-box" data-chat-room="{{ $selectedRoom?->id }}">
-            <div class="card-header">
+            <div class="card-header sticky-top bg-white border-bottom" style="z-index: 1020;">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
                         <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
@@ -710,7 +710,7 @@
                 </div>
             </div>
             <div class="card-body chat-body" >
-                <div class="chat-container " data-chat-messages>
+                <div class="chat-container" data-chat-messages style="padding-top: 20px; padding-bottom: 80px;">
                     @if($selectedRoom && count($messages) > 0)
                         @php $currentDate = ''; @endphp
                         @foreach($messages as $message)
@@ -785,7 +785,7 @@
                 </div>
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer sticky-bottom bg-white border-top" style="z-index: 1010;">
                 <form class="chat-footer d-flex" data-chat-form action="{{ $selectedRoom ? route('chat.store', $selectedRoom->id) : '#' }}" method="POST">
                     @csrf
                     <div class="app-form flex-grow-1">
@@ -961,6 +961,37 @@
     40% {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+/* Mobile chat layout improvements */
+@media (max-width: 991.98px) {
+    .chat-container-content-box {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .chat-container {
+        padding: 20px 15px 80px 15px !important;
+    }
+
+    .card-header.sticky-top {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+    }
+
+    .card-footer.sticky-bottom {
+        position: sticky;
+        bottom: 0;
+        z-index: 1010;
     }
 }
 </style>
