@@ -587,8 +587,8 @@
         </div>
     </div>
     <div class="col-lg-8 col-xxl-9 box-col-7">
-        <div class="card chat-container-content-box" data-chat-room="<?php echo e($selectedRoom?->id); ?>">
-            <div class="card-header">
+        <div class="card chat-container-content-box mobile-chat-wrapper" data-chat-room="<?php echo e($selectedRoom?->id); ?>">
+            <div class="card-header chat-header-fixed bg-white border-bottom" style="z-index: 1020;">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
                         <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
@@ -708,7 +708,7 @@
                 </div>
             </div>
             <div class="card-body chat-body" >
-                <div class="chat-container " data-chat-messages>
+                <div class="chat-container" data-chat-messages>
                     <?php if($selectedRoom && count($messages) > 0): ?>
                         <?php $currentDate = ''; ?>
                         <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -785,7 +785,7 @@
                 </div>
             </div>
 
-            <div class="card-footer">
+            <div class="card-footer chat-footer-fixed bg-white border-top" style="z-index: 1010;">
                 <form class="chat-footer d-flex" data-chat-form action="<?php echo e($selectedRoom ? route('chat.store', $selectedRoom->id) : '#'); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <div class="app-form flex-grow-1">
@@ -912,6 +912,12 @@
                                 <i class="ti ti-checks"></i> <?php echo e($contact['last_message'] ?: 'Nessun messaggio'); ?>
 
                             </p>
+                            <!-- Typing indicator mobile -->
+                            <div class="typing-indicator-contact d-none" data-room-id="<?php echo e($contact['chat_room_id']); ?>">
+                                <small class="text-info">
+                                    <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -956,6 +962,53 @@
     40% {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+/* Mobile chat layout improvements */
+@media (max-width: 991.98px) {
+    .mobile-chat-wrapper {
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .chat-container-content-box {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .chat-header-fixed {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1020;
+        border-radius: 0 !important;
+    }
+
+    .chat-footer-fixed {
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1010;
+        border-radius: 0 !important;
+    }
+
+    .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+        margin-top: 80px; /* Altezza header */
+        margin-bottom: 80px; /* Altezza footer */
+    }
+
+    .chat-container {
+        padding: 20px 15px 20px 15px !important;
     }
 }
 </style>
@@ -1248,6 +1301,22 @@ class TypingManager {
             indicator.classList.add('d-none');
         });
     }
+
+    // Metodo per aggiornare la stanza corrente (utile per mobile)
+    updateCurrentRoom(newRoomId) {
+        console.log('TypingManager.updateCurrentRoom() - Updating from', this.currentRoom, 'to', newRoomId);
+
+        // Nasconde tutti gli indicatori precedenti
+        this.hideTypingIndicator();
+
+        // Aggiorna la stanza corrente
+        this.currentRoom = newRoomId;
+
+        // Reinizializza i listener per la nuova stanza
+        if (this.currentRoom) {
+            this.listenToTypingEvents();
+        }
+    }
 }
 
 // Inizializza typing manager quando la pagina è caricata
@@ -1311,6 +1380,28 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = chatUrl;
         });
     });
+
+    // Listener per cambiamenti di URL (utile per mobile)
+    if (typingManager) {
+        // Controlla se l'URL è cambiato e aggiorna la stanza corrente
+        const checkUrlChange = () => {
+            const currentRoomId = typingManager.getCurrentRoomId();
+            if (currentRoomId && currentRoomId !== typingManager.currentRoom) {
+                console.log('URL changed, updating room from', typingManager.currentRoom, 'to', currentRoomId);
+                typingManager.updateCurrentRoom(currentRoomId);
+            }
+        };
+
+        // Controlla ogni 500ms per cambiamenti di URL
+        setInterval(checkUrlChange, 500);
+
+        // Listener per navigazione browser (avanti/indietro)
+        window.addEventListener('popstate', () => {
+            setTimeout(() => {
+                checkUrlChange();
+            }, 100);
+        });
+    }
 });
 
 
