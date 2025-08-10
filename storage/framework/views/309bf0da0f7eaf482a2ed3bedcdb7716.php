@@ -588,7 +588,7 @@
     </div>
     <div class="col-lg-8 col-xxl-9 box-col-7">
         <div class="card chat-container-content-box mobile-chat-wrapper" data-chat-room="<?php echo e($selectedRoom?->id); ?>">
-            <div class="card-header chat-header-fixed bg-white border-bottom" style="z-index: 1020;">
+            <div class="card-header chat-header-sticky bg-white border-bottom" style="z-index: 1020;">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
                         <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
@@ -785,7 +785,7 @@
                 </div>
             </div>
 
-            <div class="card-footer chat-footer-fixed bg-white border-top" style="z-index: 1010;">
+            <div class="card-footer chat-footer-sticky bg-white border-top" style="z-index: 1010;">
                 <form class="chat-footer d-flex" data-chat-form action="<?php echo e($selectedRoom ? route('chat.store', $selectedRoom->id) : '#'); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <div class="app-form flex-grow-1">
@@ -979,32 +979,28 @@
         position: relative;
     }
 
-    .chat-header-fixed {
-        position: fixed !important;
+    .chat-header-sticky {
+        position: sticky !important;
         top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
         z-index: 1020;
-        border-radius: 0 !important;
+        background: white !important;
+        border-bottom: 1px solid #dee2e6;
     }
 
-    .chat-footer-fixed {
-        position: fixed !important;
+    .chat-footer-sticky {
+        position: sticky !important;
         bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
         z-index: 1010;
-        border-radius: 0 !important;
+        background: white !important;
+        border-top: 1px solid #dee2e6;
     }
 
     .chat-body {
         flex: 1;
         overflow-y: auto;
         padding: 0;
-        margin-top: 80px; /* Altezza header */
-        margin-bottom: 80px; /* Altezza footer */
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     .chat-container {
