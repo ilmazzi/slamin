@@ -17,7 +17,7 @@ if (editor) {
             ],
         });
 
-        console.log('Trumbowyg editor initialized successfully');
+        
     } catch (error) {
         console.error('Error initializing Trumbowyg editor:', error);
     }

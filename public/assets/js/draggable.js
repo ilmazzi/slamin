@@ -115,7 +115,7 @@ $(document).ready(function () {
 
 const someElement = document.querySelector('#someElement');
 const eventHandler = function () {
-    console.log('Event triggered!');
+    
 };
 
 try {

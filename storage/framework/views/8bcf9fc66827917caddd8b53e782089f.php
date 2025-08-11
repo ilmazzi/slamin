@@ -112,11 +112,11 @@
 
             // Debug: verifica se lo slider esiste
             const $slider = $('.events-slider');
-            console.log('Slider found:', $slider.length);
+            
 
             // Verifica se il carousel esiste
             const $carousel = $('#heroCarousel');
-            console.log('Carousel found:', $carousel.length);
+            
 
             if ($slider.length > 0) {
                 // Inizializza lo slider degli eventi
@@ -144,7 +144,7 @@
                     ]
                 });
 
-                console.log('Slider initialized successfully');
+                
             } else {
                 console.error('Slider not found!');
             }
@@ -1174,7 +1174,7 @@
             // Inizializza il carosello Bootstrap
             const carousel = document.getElementById('heroCarousel');
             if (carousel) {
-                console.log('Carousel trovato, inizializzazione...');
+                
 
                 // Prova prima con l'approccio standard
                 try {
@@ -1185,25 +1185,25 @@
                         keyboard: true, // Controlli da tastiera
                         pause: 'hover' // Pausa al hover
                     });
-                    console.log('Carousel inizializzato con successo!');
+                    
                 } catch (error) {
-                    console.log('Errore inizializzazione Bootstrap:', error);
+                    
 
                     // Fallback: carosello manuale
-                    console.log('Tentativo con fallback manuale...');
+                    
                     initManualCarousel();
                 }
 
                 // Debug: mostra informazioni sul carosello
                 const slides = carousel.querySelectorAll('.carousel-item');
-                console.log('Numero di slide trovate:', slides.length);
+                
 
                 slides.forEach((slide, index) => {
-                    console.log(`Slide ${index + 1}:`, slide.classList.contains('active') ? 'ATTIVA' :
+                     ? 'ATTIVA' :
                         'inattiva');
                 });
             } else {
-                console.log('Carousel non trovato nella pagina');
+                
             }
 
             // Funzione fallback per carosello manuale
@@ -1262,7 +1262,7 @@
                     interval = setInterval(nextSlide, 5000);
                 });
 
-                console.log('Carousel manuale inizializzato!');
+                
             }
 
             // Toggle functions for Poetry and Articles sections
@@ -1469,8 +1469,8 @@
 
         // Funzione per aprire il modal video
         window.openVideoModal = function(videoId) {
-            console.log('🎬 Apertura modal video per ID:', videoId);
-            console.log('🔍 Debug: Funzione openVideoModal chiamata');
+            
+            
 
             // Controlla se l'ID del video è valido
             if (!videoId || videoId === 0) {
@@ -1480,7 +1480,7 @@
 
             // Mostra il modal personalizzato
             const modal = document.getElementById('videoPlayerModal');
-            console.log('🔍 Debug: Modal trovato:', !!modal);
+            
 
             if (!modal) {
                 console.error('❌ Modal video non trovato nel DOM');
@@ -1525,10 +1525,10 @@
             containerDiv.style.display = 'none';
 
             try {
-                console.log('🎬 Caricamento video nel modal per ID:', videoId);
+                
 
                 // Prima ottieni i dati del video
-                console.log('🔍 Debug: Richiesta API per video ID:', videoId);
+                
                 const videoResponse = await fetch(`/api/videos/${videoId}`, {
                     method: 'GET',
                     headers: {
@@ -1539,12 +1539,12 @@
                     credentials: 'same-origin'
                 });
 
-                console.log('🔍 Debug: Status risposta:', videoResponse.status);
-                console.log('🔍 Debug: Headers risposta:', Object.fromEntries(videoResponse.headers.entries()));
+                
+                ));
 
                 // Controlla se la risposta è JSON
                 const contentType = videoResponse.headers.get('content-type');
-                console.log('🔍 Debug: Content-Type:', contentType);
+                
 
                 if (!contentType || !contentType.includes('application/json')) {
                     // Debug: leggi il contenuto della risposta
@@ -1554,7 +1554,7 @@
                 }
 
                 const videoData = await videoResponse.json();
-                console.log('🔍 Debug: Dati video ricevuti:', videoData);
+                
 
                 if (!videoData.success) {
                     throw new Error(videoData.message || 'Errore nel caricamento del video');
@@ -1568,7 +1568,7 @@
                 // Usa sempre il player HTML5 nativo
                 videoPlayer.style.display = 'block';
 
-                console.log('🔗 Richiesta URL diretto per video ID:', videoId);
+                
 
                 // Ottieni l'URL diretto del video da PeerTube
                 const urlResponse = await fetch(`/videos/${videoId}/peertube-url`, {
@@ -1589,7 +1589,7 @@
                 if (urlData.success && urlData.files && urlData.files.length > 0) {
                     // Usa il primo file disponibile (migliore qualità)
                     const videoFile = urlData.files[0];
-                    console.log('✅ URL video ottenuto:', videoFile.url);
+                    
 
                     // Crea l'elemento source
                     const source = document.createElement('source');
@@ -1642,7 +1642,7 @@
 
         // Funzione per caricare gli snap nel modal
         window.loadSnapsForModal = function(videoId) {
-            console.log('🎯 Caricamento snap per video ID:', videoId);
+            
 
             fetch(`/api/videos/${videoId}/snaps`)
                 .then(response => {
@@ -1654,10 +1654,10 @@
                 .then(data => {
                     if (data.success) {
                         modalSnaps = data.snaps || [];
-                        console.log('✅ Snap caricati nel modal:', modalSnaps.length);
+                        
                         updateModalSnapMarkers();
                     } else {
-                        console.log('⚠️ Nessun snap trovato per il video');
+                        
                         modalSnaps = [];
                         updateModalSnapMarkers();
                     }
@@ -1677,7 +1677,7 @@
 
             // Event listeners per il player HTML5
             videoPlayer.addEventListener('loadedmetadata', function() {
-                console.log('🎬 Video caricato nel modal - Durata:', videoPlayer.duration);
+                
                 modalVideoDuration = videoPlayer.duration || modalVideoDuration;
                 updateModalSnapMarkers();
             });
@@ -1687,13 +1687,13 @@
             });
 
             videoPlayer.addEventListener('durationchange', function() {
-                console.log('🔄 Durata video cambiata nel modal:', videoPlayer.duration);
+                
                 modalVideoDuration = videoPlayer.duration;
                 updateModalSnapMarkers();
             });
 
             videoPlayer.addEventListener('canplay', function() {
-                console.log('▶️ Video nel modal pronto per la riproduzione');
+                
             });
 
             videoPlayer.addEventListener('error', function() {
@@ -1772,7 +1772,7 @@
                 markersContainer.appendChild(marker);
             });
 
-            console.log('✅ Snap markers aggiornati nel modal - Posizionati sulla barra di progressione');
+            
 
             // Aggiungi event listeners per i tooltip
             const snapMarkers = markersContainer.querySelectorAll('.snap-marker');
@@ -1810,7 +1810,7 @@
                 // Aggiorna il tempo corrente
                 updateInlineSnapTime();
 
-                console.log('🎯 Form snap aperto');
+                
             } else {
                 // Nascondi il form
                 snapForm.style.display = 'none';
@@ -1820,7 +1820,7 @@
                 document.getElementById('inlineSnapTitle').value = '';
                 document.getElementById('inlineSnapDescription').value = '';
 
-                console.log('🎯 Form snap chiuso');
+                
             }
         }
 
@@ -1851,10 +1851,10 @@
             const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
             const videoId = document.getElementById('inlineSnapVideoId').value;
 
-            console.log('🎯 Creazione snap inline - title:', title, 'timestamp:', timestamp, 'videoId:', videoId);
+            
 
             if (timestamp < 0 || !videoId) {
-                console.log('❌ Validazione fallita - timestamp:', timestamp, 'videoId:', videoId);
+                
                 return;
             }
 
@@ -1884,7 +1884,7 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        console.log('✅ Snap creato con successo:', data.snap);
+                        
 
                         // Chiudi il form
                         toggleSnapForm();
@@ -1895,7 +1895,7 @@
                         // Mostra un messaggio di successo
                         showSuccessMessage('Snap creato con successo!');
                     } else {
-                        console.log('❌ Errore nella creazione dello snap:', data);
+                        
                         showErrorMessage(data.message || 'Errore nella creazione dello snap. Riprova.');
                     }
                 })
@@ -1921,7 +1921,7 @@
 
         // Funzione per caricare gli snap di un video
         window.loadVideoSnaps = function(videoId) {
-            console.log('🎯 Ricaricamento snap per video ID:', videoId);
+            
 
             fetch(`/api/videos/${videoId}/snaps`)
                 .then(response => {
@@ -1933,10 +1933,10 @@
                 .then(data => {
                     if (data.success) {
                         modalSnaps = data.snaps || [];
-                        console.log('✅ Snap ricaricati nel modal:', modalSnaps.length);
+                        
                         updateModalSnapMarkers();
                     } else {
-                        console.log('⚠️ Nessun snap trovato per il video');
+                        
                         modalSnaps = [];
                         updateModalSnapMarkers();
                     }

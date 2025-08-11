@@ -1100,7 +1100,7 @@
 <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
 <script>
 // Test di base per verificare se il JavaScript si carica
-console.log('=== JAVASCRIPT LOADED ===');
+
 
 let currentStep = 1;
 let map = null;
@@ -1129,31 +1129,31 @@ window.addEventListener('error', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Starting initialization');
+    
 
     // Aspetta un momento per essere sicuri che tutto il DOM sia pronto
     setTimeout(() => {
         try {
-            console.log('Initializing form...');
+            
             initializeForm();
-            console.log('Setting up event listeners...');
+            
             setupEventListeners();
 
             // ========================================
             // INIZIALIZZAZIONE EVENTI RICORRENTI
             // ========================================
-            console.log('=== INIZIALIZZAZIONE RICORRENZA ===');
+            
 
             const isRecurringCheckbox = document.getElementById('is_recurring');
             const recurrenceSettings = document.getElementById('recurrence-settings');
 
-            console.log('Checkbox found:', isRecurringCheckbox);
-            console.log('Settings found:', recurrenceSettings);
+            
+            
 
             if (isRecurringCheckbox && recurrenceSettings) {
-                console.log('Setting up recurrence checkbox listener');
+                
                 isRecurringCheckbox.addEventListener('change', function() {
-                    console.log('Checkbox changed:', this.checked);
+                    
                     if (this.checked) {
                         recurrenceSettings.style.display = 'block';
                         updateRecurrencePreview();
@@ -1163,47 +1163,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             } else {
                 console.error('Recurrence elements not found!');
-                console.log('Available elements with "recurrence" in ID:');
+                
                 document.querySelectorAll('[id*="recurrence"]').forEach(el => {
-                    console.log('-', el.id, el.tagName);
+                    
                 });
             }
 
             // ========================================
             // INIZIALIZZAZIONE EVENTI ONLINE
             // ========================================
-            console.log('=== INIZIALIZZAZIONE EVENTI ONLINE ===');
+            
 
             const isOnlineCheckbox = document.getElementById('is_online');
             const onlineEventSettings = document.getElementById('online-event-settings');
 
-            console.log('Online checkbox found:', isOnlineCheckbox);
-            console.log('Online settings found:', onlineEventSettings);
+            
+            
 
             if (isOnlineCheckbox && onlineEventSettings) {
-                console.log('Setting up online event checkbox listener');
+                
 
                 // Controlla lo stato iniziale della checkbox
-                console.log('Initial checkbox state:', isOnlineCheckbox.checked);
+                
                 if (isOnlineCheckbox.checked) {
-                    console.log('Checkbox is checked, hiding location fields...');
+                    
                     onlineEventSettings.style.display = 'block';
                     makeLocationFieldsOptional();
                 } else {
-                    console.log('Checkbox is not checked, showing location fields...');
+                    
                     onlineEventSettings.style.display = 'none';
                     makeLocationFieldsRequired();
                 }
 
                 isOnlineCheckbox.addEventListener('change', function() {
-                    console.log('Online checkbox changed:', this.checked);
+                    
                     if (this.checked) {
-                        console.log('Checkbox checked, hiding location fields...');
+                        
                         onlineEventSettings.style.display = 'block';
                         // Rendi i campi del luogo opzionali per eventi online
                         makeLocationFieldsOptional();
                     } else {
-                        console.log('Checkbox unchecked, showing location fields...');
+                        
                         onlineEventSettings.style.display = 'none';
                         // Rendi i campi del luogo obbligatori per eventi fisici
                         makeLocationFieldsRequired();
@@ -1211,16 +1211,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             } else {
                 console.error('Online event elements not found!');
-                console.log('Available elements with "online" in ID:');
+                
                 document.querySelectorAll('[id*="online"]').forEach(el => {
-                    console.log('-', el.id, el.tagName);
+                    
                 });
             }
 
             // Assicurati che la mappa sia visibile di default per eventi fisici
             const mapContainer = document.getElementById('locationMap');
             if (mapContainer && !isOnlineCheckbox?.checked) {
-                console.log('Making map visible for physical events');
+                
                 mapContainer.style.display = 'block';
                 // Assicurati che anche il container della mappa sia visibile
                 const mapSection = mapContainer.closest('.col-12');
@@ -1228,20 +1228,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // ========================================
             // INIZIALIZZAZIONE TOGGLE SOTTOTITOLO
             // ========================================
-            console.log('=== INIZIALIZZAZIONE TOGGLE SOTTOTITOLO ===');
+            
 
             const subtitleToggle = document.getElementById('subtitle-toggle');
             const subtitleField = document.getElementById('subtitle-field');
             const subtitleInput = document.getElementById('subtitle');
 
-            console.log('Subtitle toggle found:', subtitleToggle);
-            console.log('Subtitle field found:', subtitleField);
+            
+            
 
             if (subtitleToggle && subtitleField) {
-                console.log('Setting up subtitle toggle listener');
+                
 
                 subtitleToggle.addEventListener('change', function() {
-                    console.log('Subtitle toggle changed:', this.checked);
+                    
                     if (this.checked) {
                         subtitleField.style.display = 'block';
                         subtitleInput.focus();
@@ -1260,14 +1260,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Inizializza la mappa se siamo già al passo 2
             if (currentStep === 2) {
-                console.log('Already on step 2, initializing map immediately');
+                
                 setTimeout(initializeMap, 200);
             }
 
             // ========================================
             // INIZIALIZZAZIONE FESTIVAL
             // ========================================
-            console.log('=== INIZIALIZZAZIONE FESTIVAL ===');
+            
             // Inizializza la sezione festival basandosi sulla categoria selezionata
             const initialCategory = document.getElementById('category').value;
             if (initialCategory) {
@@ -1276,17 +1276,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Controllo aggiuntivo per assicurarsi che il JavaScript venga eseguito
             setTimeout(() => {
-                console.log('=== CONTROLLO AGGIUNTIVO DOPO 500ms ===');
+                
                 const isOnlineCheckbox = document.getElementById('is_online');
                 if (isOnlineCheckbox && isOnlineCheckbox.checked) {
-                    console.log('Checkbox still checked after 500ms, forcing hide...');
+                    
                     makeLocationFieldsOptional();
                 }
             }, 500);
 
             // Funzione per rendere i campi del luogo opzionali
             function makeLocationFieldsOptional() {
-                console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA ===');
+                
 
                 // Lista degli ID degli elementi da nascondere
                 const elementsToHide = [
@@ -1313,9 +1313,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const element = document.getElementById(elementId);
                     if (element) {
                         element.style.display = 'none';
-                        console.log('Nascosto elemento:', elementId);
+                        
                     } else {
-                        console.log('Elemento non trovato:', elementId);
+                        
                     }
                 });
 
@@ -1324,7 +1324,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = false;
-                        console.log('Campo reso opzionale:', fieldId);
+                        
 
                         // Rimuovi l'asterisco dal label
                         const label = field.parentElement.querySelector('label');
@@ -1338,7 +1338,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'none';
-                    console.log('Nascosta mappa');
+                    
                 }
 
                 // Nascondi il container della mappa
@@ -1347,12 +1347,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     mapSection.style.display = 'none';
                 }
 
-                console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA ===');
+                
             }
 
             // Funzione per rendere i campi del luogo obbligatori
             function makeLocationFieldsRequired() {
-                console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA ===');
+                
 
                 // Lista degli ID degli elementi da mostrare
                 const elementsToShow = [
@@ -1379,9 +1379,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const element = document.getElementById(elementId);
                     if (element) {
                         element.style.display = 'block';
-                        console.log('Mostrato elemento:', elementId);
+                        
                     } else {
-                        console.log('Elemento non trovato:', elementId);
+                        
                     }
                 });
 
@@ -1390,7 +1390,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = true;
-                        console.log('Campo reso obbligatorio:', fieldId);
+                        
 
                         // Aggiungi l'asterisco al label se non c'è già
                         const label = field.parentElement.querySelector('label');
@@ -1404,7 +1404,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mapContainer = document.getElementById('locationMap');
                 if (mapContainer) {
                     mapContainer.style.display = 'block';
-                    console.log('Mostrata mappa');
+                    
                 }
 
                 // Mostra il container della mappa
@@ -1413,10 +1413,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     mapSection.style.display = 'block';
                 }
 
-                console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA ===');
+                
             }
 
-            console.log('Initialization completed successfully');
+            
         } catch (error) {
             console.error('Errore durante l\'inizializzazione:', error);
             console.error('Stack trace:', error.stack);
@@ -1438,12 +1438,12 @@ function initializeForm() {
 }
 
 function initializeMap() {
-    console.log('=== INITIALIZING MAP ===');
+    
 
     // Controlla se l'elemento mappa esiste e se la mappa non è già inizializzata
     const mapContainer = document.getElementById('locationMap');
-    console.log('Map container found:', mapContainer);
-    console.log('Map already initialized:', map !== null);
+    
+    
 
     if (!mapContainer) {
         console.error('Map container not found!');
@@ -1451,11 +1451,11 @@ function initializeMap() {
     }
 
     if (map !== null) {
-        console.log('Map already initialized, skipping');
+        
         return;
     }
 
-    console.log('Creating new map...');
+    
     map = L.map('locationMap').setView([41.9028, 12.4964], 10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1469,12 +1469,12 @@ function initializeMap() {
     // Force map to resize after initialization
     setTimeout(() => {
         if (map) {
-            console.log('Invalidating map size...');
+            
             map.invalidateSize();
         }
     }, 200);
 
-    console.log('Map initialization completed');
+    
 }
 
 function setupEventListeners() {
@@ -1483,13 +1483,13 @@ function setupEventListeners() {
     const prevStepBtn = document.getElementById('prevStep');
 
     if (nextStepBtn) {
-        console.log('Next step button found, adding event listener');
-        console.log('Button text:', nextStepBtn.textContent);
-        console.log('Button disabled:', nextStepBtn.disabled);
-        console.log('Button style:', nextStepBtn.style.display);
+        
+        
+        
+        
 
         nextStepBtn.addEventListener('click', function(e) {
-            console.log('Next step button clicked!');
+            
             e.preventDefault();
             nextStep();
         });
@@ -1497,11 +1497,11 @@ function setupEventListeners() {
         console.error('Next step button not found!');
         console.error('Available buttons:', document.querySelectorAll('button').length);
         document.querySelectorAll('button').forEach((btn, index) => {
-            console.log(`Button ${index}:`, btn.id, btn.textContent);
+            
         });
     }
     if (prevStepBtn) {
-        console.log('Prev step button found, adding event listener');
+        
         prevStepBtn.addEventListener('click', prevStep);
     } else {
         console.error('Prev step button not found!');
@@ -1537,17 +1537,17 @@ function setupEventListeners() {
     // ========================================
     // GESTIONE EVENTI RICORRENTI
     // ========================================
-    console.log('=== SETTING UP RECURRENCE EVENT LISTENERS ===');
+    
 
     const isRecurringCheckbox = document.getElementById('is_recurring');
     const recurrenceSettings = document.getElementById('recurrence-settings');
 
-    console.log('Checkbox found:', isRecurringCheckbox);
-    console.log('Settings found:', recurrenceSettings);
+    
+    
 
     if (isRecurringCheckbox && recurrenceSettings) {
         isRecurringCheckbox.addEventListener('change', function() {
-            console.log('Checkbox changed:', this.checked);
+            
             if (this.checked) {
                 recurrenceSettings.style.display = 'block';
                 updateRecurrencePreview();
@@ -1750,7 +1750,7 @@ function setupEventListeners() {
                 const selectedGroupIds = Array.from(groupCheckboxes)
                     .filter(cb => cb.checked)
                     .map(cb => cb.value);
-                console.log('Gruppi selezionati:', selectedGroupIds);
+                
                 // Aggiorna l'anteprima se siamo nello step 5
                 if (typeof currentStep !== 'undefined' && currentStep === 5 && typeof updatePreview === 'function') {
                     updatePreview();
@@ -1768,7 +1768,7 @@ function setupEventListeners() {
     if (categorySelect) {
         categorySelect.addEventListener('change', function() {
             const selectedCategory = this.value;
-            console.log('Categoria selezionata:', selectedCategory);
+            
 
             // Aggiorna la visualizzazione della sezione festival nel quarto step
             updateFestivalSectionDisplay(selectedCategory);
@@ -1786,26 +1786,26 @@ function setupEventListeners() {
 }
 
 function nextStep() {
-    console.log('nextStep called, currentStep:', currentStep);
+    
 
     const validationResult = validateCurrentStep();
-    console.log('Validation result:', validationResult);
+    
 
     if (validationResult) {
-        console.log('Validation passed, proceeding to next step');
+        
         if (currentStep < 5) {
             currentStep++;
-            console.log('Moving to step:', currentStep);
+            
             showStep(currentStep);
             updateProgress();
             if (currentStep === 5) {
                 updatePreview();
             }
         } else {
-            console.log('Already at last step');
+            
         }
     } else {
-        console.log('Validation failed, cannot proceed');
+        
     }
 }
 
@@ -1895,7 +1895,7 @@ function validateCurrentStep() {
     const step = currentStep;
     let isValid = true;
 
-    console.log('Validating step:', step);
+    
 
     // Clear previous errors and highlighting
     document.querySelectorAll('.error-feedback').forEach(el => el.textContent = '');
@@ -1909,15 +1909,15 @@ function validateCurrentStep() {
         const description = document.getElementById('description').value.trim();
         const category = document.getElementById('category').value;
 
-        console.log('Step 1 validation - title:', title, 'description:', description, 'category:', category);
+        
 
         if (!title) {
-            console.log('Title is empty');
+            
             showError('title', 'Il titolo è obbligatorio');
             highlightError('title');
             isValid = false;
         } else if (title.length < 5) {
-            console.log('Title too short:', title.length);
+            
             showError('title', 'Il titolo deve essere di almeno 5 caratteri');
             highlightError('title');
             isValid = false;
@@ -1925,14 +1925,14 @@ function validateCurrentStep() {
 
         // Description is optional - no minimum length requirement
         // if (description && description.length < 20) {
-        //     console.log('Description too short:', description.length);
+        //     
         //     showError('description', 'La descrizione deve essere di almeno 20 caratteri');
         //     highlightError('description');
         //     isValid = false;
         // }
 
         if (!category) {
-            console.log('Category is empty');
+            
             showError('category', 'La categoria è obbligatoria');
             highlightError('category');
             isValid = false;
@@ -1941,7 +1941,7 @@ function validateCurrentStep() {
         // Validazione per selezione categoria (opzionale nel primo step)
         const selectedCategory = document.getElementById('category').value;
         if (selectedCategory && selectedCategory !== '') {
-            console.log('Categoria selezionata nel primo step:', selectedCategory);
+            
             // La selezione della categoria è obbligatoria, ma non serve validazione aggiuntiva qui
         }
     }
@@ -1951,7 +1951,7 @@ function validateCurrentStep() {
         const endDateTime = document.getElementById('end_datetime').value;
         const isOnline = document.getElementById('is_online')?.checked || false;
 
-        console.log('Step 2 validation - isOnline:', isOnline);
+        
 
         if (!startDateTime) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
@@ -1994,7 +1994,7 @@ function validateCurrentStep() {
                 isValid = false;
             }
         } else {
-            console.log('Evento online - saltata validazione campi di localizzazione');
+            
         }
 
         // Validate recurrence settings if enabled
@@ -2044,7 +2044,7 @@ function validateCurrentStep() {
     }
 
             if (step === 3) {
-        console.log('Validating step 3...');
+        
 
         // Validazione per evento a pagamento
         const isPaidEvent = document.getElementById('is_paid_event');
@@ -2072,7 +2072,7 @@ function validateCurrentStep() {
                 if (selectedCategory === 'festival') {
             // Categoria "Festival" selezionata: gli eventi sono opzionali
             const selectedFestivalEvents = JSON.parse(document.getElementById('selectedFestivalEventsData').value || '[]');
-            console.log('Festival events selected:', selectedFestivalEvents);
+            
 
             // Rimuovi eventuali messaggi di errore precedenti
             const errorDiv = document.querySelector('.festival-error-message');
@@ -2096,11 +2096,11 @@ function validateCurrentStep() {
             }
         }
 
-        console.log('Step 3 validation result:', isValid);
+        
     }
 
     if (step === 4) {
-        console.log('Validating step 4...');
+        
 
         // Validazione per selezione pubblico/privato
         const isPublic = document.querySelector('input[name="is_public"]:checked');
@@ -2171,10 +2171,10 @@ function validateCurrentStep() {
             }
         }
 
-        console.log('Step 4 validation result:', isValid);
+        
     }
 
-    console.log('Validation result:', isValid);
+    
     return isValid;
 }
 
@@ -3763,7 +3763,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
     // Clear localStorage draft since we're submitting
     localStorage.removeItem('eventDraft');
-    console.log('Submitting form - draft cleared from localStorage');
+    
 
     // Show loading state
     submitBtn.disabled = true;
@@ -3823,7 +3823,7 @@ window.addEventListener('load', function() {
     // Clear localStorage if we're on a success page (via URL parameter or session)
     @if(session('success'))
         localStorage.removeItem('eventDraft');
-        console.log('Event created successfully - draft cleared from localStorage');
+        
     @endif
 });
 
@@ -4161,11 +4161,11 @@ function displayArtistSearchResults(users) {
 
 // Invita utente per eventi privati
 function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
-    console.log('Inviting private user:', userId, userName, userEmail, userAvatarUrl);
+    
 
     // Controlla se l'utente è già stato invitato
     if (privateInvitedUsers.some(user => user.id === userId)) {
-        console.log('User already invited');
+        
         return;
     }
 
@@ -4177,7 +4177,7 @@ function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
     };
 
     privateInvitedUsers.push(user);
-    console.log('Current private invited users:', privateInvitedUsers);
+    
 
     updatePrivateInvitedUsersDisplay();
     updatePrivateInvitedUsersData();
@@ -4202,11 +4202,11 @@ function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
 
 // Invita artista
 function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
-    console.log('Inviting artist user:', userId, userName, userEmail, userAvatarUrl);
+    
 
     // Controlla se l'utente è già stato invitato
     if (artistInvitedUsers.some(user => user.id === userId)) {
-        console.log('Artist already invited');
+        
         return;
     }
 
@@ -4218,7 +4218,7 @@ function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
     };
 
     artistInvitedUsers.push(user);
-    console.log('Current artist invited users:', artistInvitedUsers);
+    
 
     updateArtistInvitedUsersDisplay();
     updateArtistInvitedUsersData();
@@ -4243,10 +4243,10 @@ function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
 
 // Rimuovi invito privato
 function removePrivateInvite(userId) {
-    console.log('Removing private invite for user:', userId);
+    
 
     privateInvitedUsers = privateInvitedUsers.filter(user => user.id !== userId);
-    console.log('Remaining private invited users:', privateInvitedUsers);
+    
 
     updatePrivateInvitedUsersDisplay();
     updatePrivateInvitedUsersData();
@@ -4254,10 +4254,10 @@ function removePrivateInvite(userId) {
 
 // Rimuovi invito artista
 function removeArtistInvite(userId) {
-    console.log('Removing artist invite for user:', userId);
+    
 
     artistInvitedUsers = artistInvitedUsers.filter(user => user.id !== userId);
-    console.log('Remaining artist invited users:', artistInvitedUsers);
+    
 
     updateArtistInvitedUsersDisplay();
     updateArtistInvitedUsersData();
@@ -4265,7 +4265,7 @@ function removeArtistInvite(userId) {
 
 // Aggiorna visualizzazione utenti invitati per eventi privati
 function updatePrivateInvitedUsersDisplay() {
-    console.log('Updating private invited users display, count:', privateInvitedUsers.length);
+    
 
     const container = document.getElementById('privateInvitedUsersList');
     const countElement = document.getElementById('privateInviteCount');
@@ -4312,12 +4312,12 @@ function updatePrivateInvitedUsersDisplay() {
     }
 
     countElement.textContent = privateInvitedUsers.length;
-    console.log('Private display updated, count element shows:', countElement.textContent);
+    
 }
 
 // Aggiorna visualizzazione artisti invitati
 function updateArtistInvitedUsersDisplay() {
-    console.log('Updating artist invited users display, count:', artistInvitedUsers.length);
+    
 
     const container = document.getElementById('artistInvitedUsersList');
     const countElement = document.getElementById('artistInviteCount');
@@ -4365,7 +4365,7 @@ function updateArtistInvitedUsersDisplay() {
     }
 
     countElement.textContent = artistInvitedUsers.length;
-    console.log('Artist display updated, count element shows:', countElement.textContent);
+    
 }
 
 // Aggiorna dati nascosti per inviti privati
@@ -4411,7 +4411,7 @@ function searchUsers() {
         return;
     }
 
-    console.log('Searching users for:', searchTerm);
+    
 
     // Simula una ricerca (in produzione dovrebbe essere una chiamata AJAX)
     fetch(`/api/users/search?q=${encodeURIComponent(searchTerm)}`, {
@@ -4423,7 +4423,7 @@ function searchUsers() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Search results:', data);
+        
 
         if (data.users && data.users.length > 0) {
             resultsList.innerHTML = data.users.map(user => `
@@ -4453,7 +4453,7 @@ function searchUsers() {
 
 // Seleziona utente per invito
 function selectUserForInvitation(userId, userName, userEmail) {
-    console.log('Selecting user for invitation:', userId, userName, userEmail);
+    
 
     // Controlla se l'utente è già stato invitato
     if (invitedUsers.some(user => user.id === userId)) {
@@ -4485,7 +4485,7 @@ function confirmInvitation() {
         return;
     }
 
-    console.log('Confirming invitation:', selectedUser, role, message);
+    
 
     // Aggiungi l'utente alla lista degli invitati
     const invitation = {
@@ -4497,7 +4497,7 @@ function confirmInvitation() {
     };
 
     invitedUsers.push(invitation);
-    console.log('Current invited users:', invitedUsers);
+    
 
     // Aggiorna la visualizzazione
     updateArtistInvitedUsersDisplay();
@@ -4726,7 +4726,7 @@ function loadFestivals() {
         return response.json();
     })
     .then(data => {
-        console.log('Festival caricati:', data);
+        
         if (data.festivals && data.festivals.length > 0) {
             data.festivals.forEach(festival => {
                 const option = document.createElement('option');
@@ -4782,7 +4782,7 @@ function updateFestivalSectionDisplay(selectedCategory) {
 
 // Carica gli eventi disponibili per il festival selezionato
 function loadFestivalEvents(festivalId) {
-    console.log('Caricamento eventi per festival:', festivalId);
+    
 
     // Simula caricamento eventi (in produzione dovrebbe essere una chiamata AJAX)
     fetch(`/api/festivals/${festivalId}/events`, {
@@ -4795,7 +4795,7 @@ function loadFestivalEvents(festivalId) {
     .then(response => response.json())
     .then(data => {
         if (data.events && data.events.length > 0) {
-            console.log('Eventi caricati:', data.events);
+            
             // Qui puoi popolare una lista di eventi suggeriti
         }
     })
@@ -4807,7 +4807,7 @@ function loadFestivalEvents(festivalId) {
             { id: 2, title: 'Poetry Workshop', date: '2024-03-16', venue: 'Biblioteca Civica' },
             { id: 3, title: 'Open Mic Night', date: '2024-03-17', venue: 'Caffè Letterario' }
         ];
-        console.log('Eventi di esempio caricati:', sampleEvents);
+        
     });
 }
 
@@ -4829,7 +4829,7 @@ function searchEventsForFestival() {
         return;
     }
 
-    console.log('Ricerca eventi per festival:', searchTerm);
+    
 
     // Mostra indicatore di caricamento
     const resultsSection = document.getElementById('searchResultsEvents');
@@ -4854,7 +4854,7 @@ function searchEventsForFestival() {
         return response.json();
     })
     .then(data => {
-        console.log('Risultati API:', data);
+        
         displayEventSearchResults(data.events || []);
     })
     .catch(error => {

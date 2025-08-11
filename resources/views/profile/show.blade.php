@@ -1341,7 +1341,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ]
         });
 
-        console.log('Profile photos slider initialized successfully');
+        
     }
 });
 </script>

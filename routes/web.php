@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
@@ -11,6 +12,9 @@ use App\Http\Controllers\MediaController;
 
 
 use Illuminate\Http\Request;
+
+// Broadcasting routes per l'autenticazione dei canali privati
+Broadcast::routes(['middleware' => ['web', 'auth']]);
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -1082,10 +1086,29 @@ Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
     Route::get('/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('search-users');
     Route::post('/create-private/{userId}', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create-private');
 
+    // Chat notifications routes
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::post('/mark-read', [App\Http\Controllers\ChatNotificationController::class, 'markChatAsRead'])->name('mark-read');
+        Route::get('/unread-count', [App\Http\Controllers\ChatNotificationController::class, 'getUnreadCount'])->name('unread-count');
+        Route::get('/room/{chatRoomId}', [App\Http\Controllers\ChatNotificationController::class, 'getChatNotifications'])->name('room');
+        Route::post('/mark-all-read', [App\Http\Controllers\ChatNotificationController::class, 'markAllChatAsRead'])->name('mark-all-read');
+    });
+
     // Typing indicators
     Route::post('/{room}/typing/start', [App\Http\Controllers\ChatController::class, 'startTyping'])->name('typing.start');
     Route::post('/{room}/typing/stop', [App\Http\Controllers\ChatController::class, 'stopTyping'])->name('typing.stop');
     Route::get('/{room}/typing/users', [App\Http\Controllers\ChatController::class, 'getTypingUsers'])->name('typing.users');
-});
 
-Route::post('/chat/{room}/messages', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    // Messages
+    Route::post('/{room}/messages', [App\Http\Controllers\ChatController::class, 'store'])->name('store');
+
+            // Message reactions
+        Route::post('/{room}/messages/{message}/reactions', [App\Http\Controllers\ChatReactionController::class, 'addReaction'])->name('reactions.add');
+        Route::delete('/{room}/messages/{message}/reactions', [App\Http\Controllers\ChatReactionController::class, 'removeReaction'])->name('reactions.remove');
+        Route::get('/{room}/messages/{message}/reactions', [App\Http\Controllers\ChatReactionController::class, 'getReactions'])->name('reactions.get');
+        Route::post('/{room}/messages/reactions/batch', [App\Http\Controllers\ChatReactionController::class, 'getReactionsBatch'])->name('reactions.batch');
+
+// Route semplici per le reazioni (compatibili con il JavaScript frontend)
+Route::post('/reactions/add', [App\Http\Controllers\ChatReactionController::class, 'addReactionSimple'])->name('reactions.add-simple');
+Route::post('/reactions/toggle', [App\Http\Controllers\ChatReactionController::class, 'toggleReactionSimple'])->name('reactions.toggle-simple');
+});

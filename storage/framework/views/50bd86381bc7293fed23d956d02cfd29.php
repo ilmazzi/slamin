@@ -9,6 +9,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
+    <?php if(auth()->guard()->check()): ?>
+    <!-- Current User ID -->
+    <meta name="current-user-id" content="<?php echo e(auth()->id()); ?>">
+    <?php endif; ?>
+
     <!-- css start !-->
     <?php echo $__env->make('layout.css', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- css end !-->
@@ -60,16 +65,45 @@
     <?php echo $__env->make('layout.script', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- scripts end-->
     <script>
- // Aggiorna stato utente (dot + label) quando arriva l'evento broadcast.
+// Aggiorna stato utente (dot + label) quando arriva l'evento broadcast.
 // Requisito markup:
 //  - wrapper con data-user-id="<id>"
 //  - dot:   [data-presence-dot]
 //  - label: [data-presence-label] (con stesso data-user-id)
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Definisci currentUser globalmente per i badge delle notifiche
+  const currentUserIdMeta = document.querySelector('meta[name="current-user-id"]');
+
+  if (currentUserIdMeta) {
+    window.currentUser = {
+      id: parseInt(currentUserIdMeta.content, 10)
+    };
+  } else {
+    // No current user meta tag found
+  }
+
+    // Inizializza il sistema badge globale dopo che è stato definito
+  if (window.currentUser?.id) {
+    // Inizializza subito per avere il badge visibile
+    if (!window.globalBadgeInitialized) {
+      if (typeof initGlobalChatBadge === 'function') {
+        try {
+          initGlobalChatBadge();
+          window.globalBadgeInitialized = true;
+        } catch (error) {
+          // Error initializing global badge system
+        }
+      } else {
+        // initGlobalChatBadge function not found
+      }
+    }
+  } else {
+    // No current user, cannot initialize global badge system
+  }
+
   if (!window.Echo) {
-    console.warn('[presence] Echo non inizializzato');
-    // Prova lazy-init se presente window.initEcho (vite resources/js/echo.js)
+    // Echo not initialized, try lazy-init if available
     if (window.initEcho && typeof window.initEcho === 'function') {
       try { window.initEcho(); } catch (_) {}
     }
@@ -116,11 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // 🔹 Stato online (canale pubblico rinominato: presence.online)
   window.Echo
     .channel('user-presence')
-    .subscribed(() => console.log('[presence] Subscribed user-presence'))
+    .subscribed(() => {})
     .listen('.user-presence', (e) => {
       // e: { userId, state, ttl }
       const state = e.state || 'offline';
-      console.log('[presence] user-presence', e);
       applyStateToAll(e.userId, state);
     });
 
@@ -128,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.Echo.private) {
     window.Echo.private('user-logins')
       .listen('.user-login', (e) => {
-        console.log('[LOGIN]', e);
         if (typeof Toastify !== 'undefined') {
           Toastify({
             text: `🔐 Utente loggato: ${e.user.name} (${e.user.email})`,
@@ -142,18 +174,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-    // 🔹 Notifica chat per-utente: mostra toast se non siamo nella pagina chat
-    try {
-      const currentUserIdMeta = document.querySelector('meta[name="current-user-id"]');
-      const currentUserId = currentUserIdMeta ? parseInt(currentUserIdMeta.content, 10) : (window.currentUser && (window.currentUser.id || window.currentUser.user_id));
-      if (currentUserId && Number.isFinite(currentUserId)) {
-        window.Echo.private(`App.Models.User.${currentUserId}`)
-          .subscribed(() => console.log('[chat-toast] subscribed App.Models.User.' + currentUserId))
-          .error((err) => console.warn('[chat-toast] private channel auth error', err))
-          .listen('.chat.message.notify', (e) => {
-            const inChatPage = !!document.querySelector('[data-chat-room]') || (location.pathname || '').startsWith('/chat');
-            const isOwn = String(e.senderId) === String(currentUserId);
-            if (inChatPage || isOwn) return;
+            // 🔹 Notifica chat per-utente: mostra toast se non siamo nella pagina chat
+        try {
+          const currentUserIdMeta = document.querySelector('meta[name="current-user-id"]');
+          const currentUserId = currentUserIdMeta ? parseInt(currentUserIdMeta.content, 10) : (window.currentUser && (window.currentUser.id || window.currentUser.user_id));
+          if (currentUserId && Number.isFinite(currentUserId)) {
+
+            window.Echo.private(`App.Models.User.${currentUserId}`)
+              .subscribed(() => {})
+              .error((err) => {})
+              // Debug: ascolta tutti gli eventi per vedere cosa arriva
+              .listen('*', (e) => {
+
+              })
+              .listen('.chat.message.notify', (e) => {
+                const inChatPage = !!document.querySelector('[data-chat-room]') || (location.pathname || '').startsWith('/chat');
+                const isOwn = String(e.senderId) === String(currentUserId);
+                if (inChatPage || isOwn) return;
 
             const container = document.createElement('div');
             container.className = 'd-flex align-items-center gap-2';
@@ -192,15 +229,300 @@ document.addEventListener('DOMContentLoaded', () => {
                 onClick: () => { window.location.href = `/chat?room=${encodeURIComponent(e.roomId)}`; },
               }).showToast();
             } else {
-              console.log('[chat-toast]', `${e.senderName}: ${e.preview}`);
+
             }
           });
       }
     } catch (err) {
-      console.warn('[chat-toast] init error', err);
+      // Chat toast init error
     }
   }
 });
+
+// Sistema Badge Globale per Chat
+function initGlobalChatBadge() {
+  // Controlla se è già stato inizializzato
+  if (window.globalBadgeInitialized) {
+    return;
+  }
+
+  if (!window.currentUser?.id) {
+    return;
+  }
+
+        // Sistema di storage temporaneo per badge individuali
+  if (!window.individualBadgeStorage) {
+    window.individualBadgeStorage = new Map();
+  } else {
+    // Reset dello storage per evitare conteggi errati
+    window.individualBadgeStorage.clear();
+  }
+
+  // Verifica se ci sono chiamate API che potrebbero popolare lo storage
+  if (!window.notificationAPICalls) {
+    window.notificationAPICalls = new Set();
+  }
+
+    // Cerca il badge generale nella sidebar
+  const badgeContainer = document.querySelector('[data-chat-badge-container]');
+
+  const badgeElement = badgeContainer?.querySelector('#chat-notification-badge');
+
+  let currentCount = 0;
+  if (badgeElement) {
+    currentCount = parseInt(badgeElement.textContent) || 0;
+  }
+
+    // Funzione per aggiornare il badge
+  function updateBadge(count) {
+    currentCount = Math.max(0, count);
+
+    if (badgeElement) {
+      if (currentCount > 0) {
+        badgeElement.textContent = currentCount;
+        badgeElement.style.display = 'inline-block';
+      } else {
+        badgeElement.style.display = 'none';
+      }
+    } else if (badgeContainer && currentCount > 0) {
+      // Controlla se esiste già un badge
+      const existingBadge = badgeContainer.querySelector('#chat-notification-badge');
+      if (existingBadge) {
+        existingBadge.textContent = currentCount;
+        existingBadge.style.display = 'inline-block';
+        return;
+      }
+
+      // Crea il badge se non esiste
+      const newBadge = document.createElement('span');
+      newBadge.id = 'chat-notification-badge';
+      newBadge.className = 'badge bg-danger badge-notification ms-2';
+      newBadge.textContent = currentCount;
+      badgeContainer.appendChild(newBadge);
+    }
+
+    // Emetti evento per i sistemi locali
+    document.dispatchEvent(new CustomEvent('globalBadgeUpdated', {
+      detail: { count: currentCount }
+    }));
+  }
+
+  // Funzione per incrementare il badge
+  function incrementBadge() {
+    updateBadge(currentCount + 1);
+  }
+
+  // Funzione per decrementare il badge
+  function decrementBadge() {
+    updateBadge(currentCount - 1);
+  }
+
+      // Funzione per configurare i listener Echo
+  function setupEchoListeners() {
+    if (!window.Echo) {
+      return false;
+    }
+
+                try {
+        // Ascolta sullo stesso canale del toast (App.Models.User.{id})
+        const channelName = `App.Models.User.${window.currentUser.id}`;
+
+        window.Echo.private(channelName)
+          .subscribed(() => {})
+          .error((err) => {})
+          // Listener per tutti gli eventi per debug
+          .listen('*', (e) => {})
+                    .listen('.notification.created', (e) => {
+            if (e.notification.type === 'chat_message') {
+              incrementBadge();
+
+              // Emetti evento per i badge individuali
+              document.dispatchEvent(new CustomEvent('globalBadgeUpdated', {
+                detail: {
+                  type: 'chat_message',
+                  data: e.notification.data,
+                  action: 'created'
+                }
+              }));
+            }
+          })
+          // Listener per eventi senza punto (fallback)
+          .listen('notification.created', (e) => {})
+          // Listener per eventi chat generici
+          .listen('.chat.message', (e) => {})
+          .listen('chat.message', (e) => {})
+                              // Listener per l'evento che funziona nel toast
+          .listen('.chat.message.notify', (e) => {
+            // Controlla se questo evento è già stato processato (evita duplicati)
+            const eventId = `${e.roomId || 'unknown'}-${e.senderId || 'unknown'}-${Date.now()}`;
+            if (window.processedEvents && window.processedEvents.has(eventId)) {
+              return;
+            }
+
+            // Marca evento come processato
+            if (!window.processedEvents) window.processedEvents = new Set();
+            window.processedEvents.add(eventId);
+
+            // Rimuovi eventi vecchi (più di 5 secondi)
+            setTimeout(() => {
+              if (window.processedEvents) window.processedEvents.delete(eventId);
+            }, 5000);
+
+                        // Aggiorna badge individuale in background PRIMA di incrementare il badge generale
+            // Prova diverse possibili chiavi per il roomId
+            const roomId = e.roomId || e.room_id || e.chat_room_id || e.data?.room_id || e.data?.chat_room_id;
+
+            if (roomId) {
+              // Verifica se il sistema è disponibile
+              let newCount = 1; // Default count
+
+              if (window.GlobalChatBadge && window.GlobalChatBadge.getIndividualBadgeCount) {
+                // Aggiorna il conteggio in background
+                const currentCount = window.GlobalChatBadge.getIndividualBadgeCount(roomId);
+                newCount = currentCount + 1;
+
+                window.GlobalChatBadge.updateIndividualBadge(roomId, newCount);
+              }
+
+              // Emetti evento per i badge individuali (NON per il badge generale)
+              document.dispatchEvent(new CustomEvent('individualBadgeUpdated', {
+                detail: { roomId, count: newCount }
+              }));
+            }
+
+            // Incrementa il badge generale DOPO aver aggiornato quelli individuali
+            incrementBadge();
+          })
+        .listen('.notification.updated', (e) => {
+          if (e.notification.type === 'chat_message') {
+            updateBadge(e.notification.data?.unread_count || currentCount);
+          }
+        })
+        .listen('.notification.deleted', (e) => {
+          if (e.notification.type === 'chat_message') {
+            decrementBadge();
+          }
+        });
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  // Ascolta le notifiche chat in tempo reale
+  if (window.Echo) {
+    setupEchoListeners();
+  } else {
+    // Retry più aggressivo quando Echo diventa disponibile
+    let retryCount = 0;
+    const maxRetries = 20; // 10 secondi totali
+
+    const checkEcho = setInterval(() => {
+      retryCount++;
+
+      if (window.Echo) {
+        clearInterval(checkEcho);
+
+        if (setupEchoListeners()) {
+          // Echo listeners setup successful
+        } else {
+          // Failed to setup Echo listeners
+        }
+      } else if (retryCount >= maxRetries) {
+        clearInterval(checkEcho);
+      }
+    }, 500);
+  }
+
+  // Gestisce il click sul pulsante chat per nascondere il badge
+  if (badgeContainer) {
+    badgeContainer.addEventListener('click', () => {
+      updateBadge(0);
+
+      // Marka le notifiche chat come lette via API
+      markChatNotificationsAsRead();
+    });
+  }
+
+  // Funzione per markare le notifiche come lette
+  async function markChatNotificationsAsRead() {
+    try {
+      const response = await fetch('/chat/notifications/mark-all-read', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (response.ok) {
+        // Chat notifications marked as read
+      } else {
+        // Failed to mark notifications as read
+      }
+    } catch (error) {
+      // Error marking notifications as read
+    }
+  }
+
+  // Funzioni per gestire badge individuali in background
+  function updateIndividualBadgeInBackground(roomId, count) {
+    if (!window.individualBadgeStorage) return;
+
+    window.individualBadgeStorage.set(roomId, count);
+
+    // Emetti evento per aggiornare badge individuali se sono visibili
+    document.dispatchEvent(new CustomEvent('individualBadgeUpdated', {
+      detail: { roomId, count }
+    }));
+  }
+
+  function getIndividualBadgeCount(roomId) {
+    if (!window.individualBadgeStorage) return 0;
+    const count = window.individualBadgeStorage.get(roomId) || 0;
+    return count;
+  }
+
+  function getAllIndividualBadgeCounts() {
+    if (!window.individualBadgeStorage) return {};
+    const counts = {};
+    window.individualBadgeStorage.forEach((count, roomId) => {
+      counts[roomId] = count;
+    });
+    return counts;
+  }
+
+    // Esporta le funzioni per uso esterno
+  window.GlobalChatBadge = {
+    updateBadge,
+    incrementBadge,
+    decrementBadge,
+    getCurrentCount: () => currentCount,
+    updateIndividualBadge: updateIndividualBadgeInBackground,
+    getIndividualBadgeCount,
+    getAllIndividualBadgeCounts
+  };
+
+  // Global chat badge system initialized
+
+  // Marca come inizializzato
+  window.globalBadgeInitialized = true;
+
+  // Se currentUser è già definito, inizializza subito
+  if (window.currentUser?.id) {
+    // La funzione è già stata chiamata implicitamente
+  }
+
+    // Listener globale per quando Echo diventa disponibile
+  document.addEventListener('echoReady', () => {
+    if (window.currentUser?.id) {
+      // Non reinizializzare tutto, solo setup Echo listeners
+      setupEchoListeners();
+    }
+  });
+}
 
 
     </script>

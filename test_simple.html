@@ -19,16 +19,16 @@
     <div id="result"></div>
 
     <script>
-        console.log('Test script loaded');
+        
         alert('Test script loaded!');
 
         document.getElementById('testSelect').addEventListener('change', function() {
-            console.log('Select changed to:', this.value);
+            
             document.getElementById('result').innerHTML = 'Selezionato: ' + this.value;
         });
 
         document.getElementById('testButton').addEventListener('click', function() {
-            console.log('Button clicked');
+            
             alert('Button clicked!');
         });
     </script>

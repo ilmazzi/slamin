@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initMap() {
-    console.log('Initializing map...');
+    
 
     // Inizializza la mappa
     map = L.map('eventsMap').setView([41.9028, 12.4964], 10);
@@ -657,17 +657,17 @@ function loadEventsWithCurrentFilters() {
                 params.latitude = position.coords.latitude;
                 params.longitude = position.coords.longitude;
                 params.radius = urlParams.get('radius') || '10';
-                console.log('Loading events with nearby filter:', params);
+                
                 loadEventsOnMapWithFilter(params);
             }, function(error) {
-                console.log('Geolocation not available, loading without location filter');
+                
                 loadEventsOnMapWithFilter(params);
             });
             return;
         }
     }
 
-    console.log('Loading events with current filters:', params);
+    
     loadEventsOnMapWithFilter(params);
 }
 
@@ -679,7 +679,7 @@ function loadEventsOnMap(lat = 45.59614070, lng = 8.91219860) {
 }
 
 function loadEventsOnMapWithFilter(params) {
-    console.log('loadEventsOnMapWithFilter called with params:', params);
+    
 
     // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
@@ -701,25 +701,25 @@ function loadEventsOnMapWithFilter(params) {
         }
     });
 
-    console.log('Fetching from URL:', url.toString());
+    );
 
     fetch(url)
         .then(response => {
-            console.log('Response status:', response.status);
+            
         return response.json();
     })
     .then(events => {
-            console.log('Events received:', events);
-            console.log('Number of events:', events.length);
+            
+            
 
             if (events.length === 0) {
-                console.log('No events found with current filters');
+                
                 showNotification('Nessun evento trovato con i filtri applicati.', 'info');
                 return;
             }
 
             events.forEach((event, index) => {
-                console.log(`Adding marker ${index + 1}:`, event);
+                
 
             if (event.latitude && event.longitude) {
                     // Determina il colore del marker basato sulla categoria
@@ -743,7 +743,7 @@ function loadEventsOnMapWithFilter(params) {
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
                     }
 
-                    console.log(`Marker color for event ${event.id} (${event.category}): ${markerColor}`);
+                    : ${markerColor}`);
 
                     // Gestione marker sovrapposti - sposta leggermente i marker alla stessa posizione
                     let lat = parseFloat(event.latitude);
@@ -761,7 +761,7 @@ function loadEventsOnMapWithFilter(params) {
                         const offset = 0.0002; // Circa 20 metri
                         lat += (existingMarkersAtPosition.length * offset);
                         lng += (existingMarkersAtPosition.length * offset);
-                        console.log(`Marker ${event.id} offset to [${lat}, ${lng}] due to overlap`);
+                        
                     }
 
                     // Crea icona personalizzata con colore ma stile standard
@@ -776,7 +776,7 @@ function loadEventsOnMapWithFilter(params) {
                         icon: customIcon
                     }).addTo(map);
 
-                    console.log(`Marker added to map at [${lat}, ${lng}]`);
+                    
 
                     // Add click handler to open modal instead of popup
                     marker.on('click', function() {
@@ -785,11 +785,11 @@ function loadEventsOnMapWithFilter(params) {
 
                 markers.push(marker);
                 } else {
-                    console.log(`Event ${event.id} has no coordinates:`, event);
+                    
                 }
             });
 
-            console.log(`Total markers added: ${markers.length}`);
+            
 
             // Fit map to show all markers
             if (markers.length > 0) {
@@ -1000,7 +1000,7 @@ function applyFilterToList(filterType) {
     // Aggiorna solo la mappa con i nuovi filtri (senza posizione automatica)
     const mapParams = { ...params };
 
-    console.log('Applying filter to map only:', filterType, mapParams);
+    
     loadEventsOnMapWithFilter(mapParams);
 
     // Aggiorna anche la lista ricaricando la pagina
@@ -1020,7 +1020,7 @@ function applyFilterToMap(filterType) {
         case 'today':
             params.date_from = now.toISOString().split('T')[0];
             params.date_to = now.toISOString().split('T')[0];
-            console.log('Today filter applied:', params.date_from);
+            
             break;
 
         case 'tomorrow':
@@ -1028,7 +1028,7 @@ function applyFilterToMap(filterType) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             params.date_from = tomorrow.toISOString().split('T')[0];
             params.date_to = tomorrow.toISOString().split('T')[0];
-            console.log('Tomorrow filter applied:', params.date_from);
+            
             break;
 
         case 'weekend':
@@ -1039,32 +1039,32 @@ function applyFilterToMap(filterType) {
             sunday.setDate(saturday.getDate() + 1);
             params.date_from = saturday.toISOString().split('T')[0];
             params.date_to = sunday.toISOString().split('T')[0];
-            console.log('Weekend filter applied:', params.date_from, 'to', params.date_to);
+            
             break;
 
         case 'free':
             params.free_only = '1';
-            console.log('Free filter applied');
+            
             break;
 
         case 'nearby':
             params.filter = 'nearby';
             params.radius = '10';
-            console.log('Nearby filter applied');
+            
             break;
 
         case 'my':
             params.filter = 'my';
-            console.log('My events filter applied');
+            
             break;
 
         case 'private':
             params.filter = 'my_private';
-            console.log('My private events filter applied');
+            
             break;
     }
 
-    console.log('Applying filter to map:', filterType, params);
+    
     loadEventsOnMapWithFilter(params);
 }
 
@@ -1172,7 +1172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         filter.addEventListener('click', function(e) {
             e.preventDefault();
             const filterType = this.getAttribute('data-filter');
-            console.log('Quick filter clicked:', filterType);
+            
 
             // Update form with quick filter
             const form = document.getElementById('filterForm');

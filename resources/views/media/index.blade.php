@@ -889,7 +889,7 @@ function toggleVideoContent() {
 
 // Funzione per aprire il modal video
 function openVideoModal(videoId) {
-    console.log('🎬 Apertura modal video per ID:', videoId);
+    
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('videoPlayerModal');
@@ -932,7 +932,7 @@ async function loadVideoInModal(videoId) {
     containerDiv.style.display = 'none';
 
     try {
-        console.log('🎬 Caricamento video nel modal per ID:', videoId);
+        
 
         // Prima ottieni i dati del video
         const videoResponse = await fetch(`/api/videos/${videoId}`);
@@ -950,7 +950,7 @@ async function loadVideoInModal(videoId) {
         // Usa sempre il player HTML5 nativo
         videoPlayer.style.display = 'block';
 
-        console.log('🔗 Richiesta URL diretto per video ID:', videoId);
+        
 
         // Ottieni l'URL diretto del video da PeerTube
         const urlResponse = await fetch(`/videos/${videoId}/peertube-url`);
@@ -964,7 +964,7 @@ async function loadVideoInModal(videoId) {
         if (urlData.success && urlData.files && urlData.files.length > 0) {
             // Usa il primo file disponibile (migliore qualità)
             const videoFile = urlData.files[0];
-            console.log('✅ URL video ottenuto:', videoFile.url);
+            
 
             // Crea l'elemento source
             const source = document.createElement('source');
@@ -1004,7 +1004,7 @@ async function loadVideoInModal(videoId) {
 
 // Funzione per caricare gli snap nel modal
 function loadSnapsForModal(videoId) {
-    console.log('🎯 Caricamento snap per video ID:', videoId);
+    
 
     fetch(`/api/videos/${videoId}/snaps`)
         .then(response => {
@@ -1016,10 +1016,10 @@ function loadSnapsForModal(videoId) {
         .then(data => {
             if (data.success) {
                 modalSnaps = data.snaps || [];
-                console.log('✅ Snap caricati nel modal:', modalSnaps.length);
+                
                 updateModalSnapMarkers();
             } else {
-                console.log('⚠️ Nessun snap trovato per il video');
+                
                 modalSnaps = [];
                 updateModalSnapMarkers();
             }
@@ -1039,7 +1039,7 @@ function initializeModalVideoPlayer(video) {
 
     // Event listeners per il player HTML5
     videoPlayer.addEventListener('loadedmetadata', function() {
-        console.log('🎬 Video caricato nel modal - Durata:', videoPlayer.duration);
+        
         modalVideoDuration = videoPlayer.duration || modalVideoDuration;
         updateModalSnapMarkers();
     });
@@ -1049,13 +1049,13 @@ function initializeModalVideoPlayer(video) {
     });
 
     videoPlayer.addEventListener('durationchange', function() {
-        console.log('🔄 Durata video cambiata nel modal:', videoPlayer.duration);
+        
         modalVideoDuration = videoPlayer.duration;
         updateModalSnapMarkers();
     });
 
     videoPlayer.addEventListener('canplay', function() {
-        console.log('▶️ Video nel modal pronto per la riproduzione');
+        
     });
 
     videoPlayer.addEventListener('error', function() {
@@ -1083,7 +1083,7 @@ function updateModalSnapMarkers() {
 
     if (!modalSnaps || modalSnaps.length === 0) return;
 
-    console.log('🎯 Aggiornamento snap markers nel modal - Snap:', modalSnaps.length, 'Durata:', modalVideoDuration);
+    
 
     // Raggruppa gli snap per timestamp
     const snapsByTimestamp = {};
@@ -1131,7 +1131,7 @@ function updateModalSnapMarkers() {
         markersContainer.appendChild(marker);
     });
 
-    console.log('✅ Snap markers aggiornati nel modal - Posizionati sulla barra di progressione');
+    
 
     // Aggiungi event listeners per i tooltip come nella pagina video
     const snapMarkers = markersContainer.querySelectorAll('.snap-marker');
@@ -1177,7 +1177,7 @@ function toggleSnapForm() {
         // Aggiorna il tempo corrente
         updateInlineSnapTime();
 
-        console.log('🎯 Form snap aperto');
+        
     } else {
         // Nascondi il form
         snapForm.style.display = 'none';
@@ -1187,7 +1187,7 @@ function toggleSnapForm() {
         document.getElementById('inlineSnapTitle').value = '';
         document.getElementById('inlineSnapDescription').value = '';
 
-        console.log('🎯 Form snap chiuso');
+        
     }
 }
 
@@ -1226,10 +1226,10 @@ function createInlineSnap() {
     const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
     const videoId = document.getElementById('inlineSnapVideoId').value;
 
-    console.log('🎯 Creazione snap inline - title:', title, 'timestamp:', timestamp, 'videoId:', videoId);
+    
 
     if (timestamp < 0 || !videoId) {
-        console.log('❌ Validazione fallita - timestamp:', timestamp, 'videoId:', videoId);
+        
         return;
     }
 
@@ -1256,7 +1256,7 @@ function createInlineSnap() {
     })
     .then(data => {
         if (data.success) {
-            console.log('✅ Snap creato con successo:', data.snap);
+            
 
             // Chiudi il form
             toggleSnapForm();
@@ -1267,7 +1267,7 @@ function createInlineSnap() {
             // Mostra un messaggio di successo
             showSuccessMessage('Snap creato con successo!');
         } else {
-            console.log('❌ Errore nella creazione dello snap:', data);
+            
             showErrorMessage(data.message || 'Errore nella creazione dello snap. Riprova.');
         }
     })
@@ -1292,7 +1292,7 @@ function showSuccessMessage(message) {
 
 // Funzione per caricare gli snap di un video
 function loadVideoSnaps(videoId) {
-    console.log('🎯 Ricaricamento snap per video ID:', videoId);
+    
 
     fetch(`/api/videos/${videoId}/snaps`)
         .then(response => {
@@ -1304,10 +1304,10 @@ function loadVideoSnaps(videoId) {
         .then(data => {
             if (data.success) {
                 modalSnaps = data.snaps || [];
-                console.log('✅ Snap ricaricati nel modal:', modalSnaps.length);
+                
                 updateModalSnapMarkers();
             } else {
-                console.log('⚠️ Nessun snap trovato per il video');
+                
                 modalSnaps = [];
                 updateModalSnapMarkers();
             }
@@ -1363,7 +1363,7 @@ function togglePhotoContent() {
 
 // Funzione per aprire il modal foto
 function openPhotoModal(photoId) {
-    console.log('📸 Apertura modal foto per ID:', photoId);
+    
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('photoViewerModal');
@@ -1396,7 +1396,7 @@ async function loadPhotoInModal(photoId) {
     containerDiv.style.display = 'none';
 
     try {
-        console.log('📸 Caricamento foto nel modal per ID:', photoId);
+        
 
         // Ottieni i dati della foto
         const photoResponse = await fetch(`/api/photos/${photoId}`);
@@ -1423,7 +1423,7 @@ async function loadPhotoInModal(photoId) {
             loadingDiv.style.display = 'none';
             containerDiv.style.display = 'block';
 
-            console.log('✅ Foto caricata nel modal:', photo.title);
+            
         } else {
             throw new Error('Nessuna immagine disponibile');
         }

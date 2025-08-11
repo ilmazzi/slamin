@@ -96,6 +96,11 @@ class Notification extends Model
     const TYPE_VIDEO_SNAPPED = 'video_snapped';
 
     /**
+     * Type constants for chat
+     */
+    const TYPE_CHAT_MESSAGE = 'chat_message';
+
+    /**
      * Get the user this notification belongs to
      */
     public function user(): BelongsTo
@@ -456,6 +461,17 @@ class Notification extends Model
     public static function getUnreadCountForUser(User $user): int
     {
         return self::where('user_id', $user->id)
+                   ->where('is_read', false)
+                   ->count();
+    }
+
+    /**
+     * Get user's unread chat notifications count
+     */
+    public static function getUnreadChatCountForUser(User $user): int
+    {
+        return self::where('user_id', $user->id)
+                   ->where('type', self::TYPE_CHAT_MESSAGE)
                    ->where('is_read', false)
                    ->count();
     }
@@ -930,7 +946,7 @@ class Notification extends Model
             'user_id' => $user->id,
             'type' => self::TYPE_GIG_GLOBAL_MESSAGE,
             'title' => 'Messaggio dal Gig',
-            'message' => "Messaggio dal gig \"{$gig->title}\": {$message}",
+            'message' => "Messaggio dal gig \"{$gig->id}\": {$message}",
             'data' => [
                 'gig_id' => $gig->id,
                 'message' => $message,
@@ -943,5 +959,86 @@ class Notification extends Model
 
         // Broadcast real-time notification
         self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create chat message notification
+     */
+    public static function createChatMessageNotification(ChatMessage $message, User $recipient): void
+    {
+        // Non inviare notifica se il mittente è il destinatario
+        if ($message->sender_id === $recipient->id) {
+            return;
+        }
+
+        // Verifica se esiste già una notifica non letta per questa chat
+        $existingNotification = self::where('user_id', $recipient->id)
+            ->where('type', self::TYPE_CHAT_MESSAGE)
+            ->whereJsonContains('data->chat_room_id', $message->chat_room_id)
+            ->where('is_read', false)
+            ->first();
+
+        if ($existingNotification) {
+            // Aggiorna la notifica esistente
+            $existingNotification->update([
+                'message' => "Nuovo messaggio da {$message->sender->name}",
+                'data' => array_merge($existingNotification->data ?? [], [
+                    'last_message_id' => $message->id,
+                    'last_message_preview' => substr($message->content, 0, 100),
+                    'unread_count' => ($existingNotification->data['unread_count'] ?? 0) + 1,
+                ]),
+                'updated_at' => now(),
+            ]);
+
+            // Broadcast update event
+            \Log::info('Broadcasting notification update event', [
+                'notification_id' => $existingNotification->id,
+                'user_id' => $recipient->id,
+                'channel' => 'App.Models.User.' . $recipient->id
+            ]);
+            event(new \App\Events\ChatNotificationEvent($existingNotification, 'updated'));
+        } else {
+            // Crea una nuova notifica
+            $notification = self::create([
+                'user_id' => $recipient->id,
+                'type' => self::TYPE_CHAT_MESSAGE,
+                'title' => "Nuovo messaggio da {$message->sender->name}",
+                'message' => "Nuovo messaggio da {$message->sender->name}",
+                'data' => [
+                    'chat_room_id' => $message->chat_room_id,
+                    'sender_id' => $message->sender_id,
+                    'sender_name' => $message->sender->name,
+                    'last_message_id' => $message->id,
+                    'last_message_preview' => substr($message->content, 0, 100),
+                    'unread_count' => 1,
+                ],
+                'action_url' => route('chat.index', ['room' => $message->chat_room_id]),
+                'action_text' => 'Apri Chat',
+                'priority' => self::PRIORITY_NORMAL,
+            ]);
+
+            // Broadcast real-time notification
+            \Log::info('Broadcasting notification created event', [
+                'notification_id' => $notification->id,
+                'user_id' => $recipient->id,
+                'channel' => 'App.Models.User.' . $recipient->id
+            ]);
+            event(new \App\Events\ChatNotificationEvent($notification, 'created'));
+        }
+    }
+
+    /**
+     * Broadcast notification to user
+     */
+    protected static function broadcastNotification(Notification $notification): void
+    {
+        try {
+            event(new \App\Events\ChatNotificationEvent($notification, 'created'));
+        } catch (\Exception $e) {
+            \Log::error('Failed to broadcast notification', [
+                'notification_id' => $notification->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

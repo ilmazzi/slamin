@@ -7,6 +7,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
+// Canale per le notifiche utente (usato dal sistema badge globale)
+Broadcast::channel('user.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
 Broadcast::channel('user-logins', fn($user) => true);
 
 Broadcast::channel('user-presence', fn () => true);

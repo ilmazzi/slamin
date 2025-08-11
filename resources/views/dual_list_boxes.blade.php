@@ -99,10 +99,10 @@
                             searchPlaceholder: 'search numbers'
                         });
                         dlb2.addEventListener('added', function(event){
-                            console.log(event);
+                            
                         });
                         dlb2.addEventListener('removed', function(event){
-                            console.log(event);
+                            
                         });
                     &lt;/script&gt;
                     </code>

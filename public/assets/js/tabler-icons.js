@@ -20,7 +20,7 @@ function search(evt) {
 
 function tabler_icons(element) {
   copyTextToClipboard(`<i class="${element.children[0].className}"></i>`);
-  console.log(element.children[0].children[0])
+  
   Toastify({
     text: "Copied to the clipboard successfully",
     duration: 3000,

@@ -295,9 +295,9 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
     if (this.files && this.files[0]) {
         const file = this.files[0];
 
-        console.log('File selezionato:', file);
-        console.log('Dimensione file:', file.size, 'bytes');
-        console.log('Tipo file:', file.type);
+        
+        
+        
 
         // Verifica dimensione file (dinamica dalle impostazioni)
         const maxSize = {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) }} * 1024; // Converti KB in bytes
@@ -339,11 +339,11 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
                 }
             });
         } else {
-            console.log('SweetAlert2 non disponibile, mostro alert normale');
+            
             alert('Caricamento foto profilo...');
         }
 
-        console.log('Invio richiesta a:', '{{ route("profile.update") }}');
+         }}');
 
         fetch('{{ route("profile.update") }}', {
             method: 'POST',
@@ -354,8 +354,8 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
             body: formData
         })
         .then(response => {
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
+            
+            
 
             // Check if response is JSON
             const contentType = response.headers.get('content-type');
@@ -370,7 +370,7 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
             }
         })
         .then(data => {
-            console.log('Response data:', data);
+            
             if (data.success) {
                 // Aggiorna l'immagine nella sidebar se esiste
                 const sidebarAvatar = document.querySelector('.nav-profile img');

@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Funzione per rendere i campi del luogo opzionali
     function makeLocationFieldsOptional() {
-        console.log('=== NASCONDO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
+         ===');
 
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
@@ -569,7 +569,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
                 if (fieldContainer) {
                     fieldContainer.style.display = 'none';
-                    console.log('Nascosto campo:', fieldId);
+                    
                 }
                 // Rimuovi l'asterisco dal label
                 const label = field.parentElement.querySelector('label');
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Nascondi la mappa per eventi online
         if (mapContainer) {
             mapContainer.style.display = 'none';
-            console.log('Nascosta mappa');
+            
         }
 
         // Nascondi anche il container della mappa
@@ -591,12 +591,12 @@ document.addEventListener('DOMContentLoaded', function() {
             mapSection.style.display = 'none';
         }
 
-        console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE NASCOSTA (EDIT) ===');
+         ===');
     }
 
     // Funzione per rendere i campi del luogo obbligatori
     function makeLocationFieldsRequired() {
-        console.log('=== MOSTRO TUTTA LA LOCALIZZAZIONE FISICA (EDIT) ===');
+         ===');
 
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
                 if (fieldContainer) {
                     fieldContainer.style.display = 'block';
-                    console.log('Mostrato campo:', fieldId);
+                    
                 }
                 // Aggiungi l'asterisco al label
                 const label = field.parentElement.querySelector('label');
@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mostra la mappa per eventi fisici
         if (mapContainer) {
             mapContainer.style.display = 'block';
-            console.log('Mostrata mappa');
+            
         }
 
         // Mostra anche il container della mappa
@@ -628,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mapSection.style.display = 'block';
         }
 
-        console.log('=== LOCALIZZAZIONE FISICA COMPLETAMENTE MOSTRATA (EDIT) ===');
+         ===');
     }
 
     // Gestione evento legato a gruppo
@@ -786,7 +786,7 @@ function searchEventsForFestivalEdit() {
         return;
     }
 
-    console.log('Ricerca eventi per festival (edit):', searchTerm);
+    :', searchTerm);
 
     // Mostra indicatore di caricamento
     const resultsSection = document.getElementById('searchResultsEventsEdit');
@@ -811,7 +811,7 @@ function searchEventsForFestivalEdit() {
         return response.json();
     })
     .then(data => {
-        console.log('Risultati API (edit):', data);
+        :', data);
         displayEventSearchResultsEdit(data.events || []);
     })
     .catch(error => {
@@ -902,7 +902,7 @@ function addEventToFestivalEdit(eventId, title, date, venue) {
     // Hide search results
     document.getElementById('searchResultsEventsEdit').style.display = 'none';
 
-    console.log('Evento aggiunto al festival (edit):', eventData);
+    :', eventData);
 }
 
 // Remove event from festival (edit mode)
@@ -932,7 +932,7 @@ function removeEventFromFestival(eventId) {
         `;
     }
 
-    console.log('Evento rimosso dal festival (edit):', eventId);
+    :', eventId);
 }
 
 // Add event to current list (edit mode)
@@ -980,7 +980,7 @@ function updateSelectedFestivalEventsInputEdit() {
     const hiddenInput = document.getElementById('selectedFestivalEventsDataEdit');
     if (hiddenInput) {
         hiddenInput.value = JSON.stringify(selectedFestivalEventsEdit);
-        console.log('Festival events data updated (edit):', selectedFestivalEventsEdit);
+        :', selectedFestivalEventsEdit);
     }
 }
 </script>

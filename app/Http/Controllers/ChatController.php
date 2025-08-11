@@ -78,10 +78,29 @@ class ChatController extends Controller
                         $selectedRoom = $room;
                         $selectedContact = $contact;
                         $messages = $room->messages()
-                            ->with('sender')
+                            ->with(['sender', 'reactions.user:id,name'])
                             ->orderBy('created_at', 'asc')
                             ->get()
                             ->map(function($message) {
+                                // Raggruppa le reazioni per emoji
+                                $reactions = [];
+                                if ($message->reactions) {
+                                    $reactionGroups = $message->reactions->groupBy('reaction');
+                                    foreach ($reactionGroups as $emoji => $emojiReactions) {
+                                                                                     $reactions[] = [
+                                                 'emoji' => $emoji,
+                                                 'count' => $emojiReactions->count(),
+                                                 'users' => $emojiReactions->map(function($reaction) {
+                                                     return [
+                                                         'id' => $reaction->user->id,
+                                                         'name' => $reaction->user->name,
+                                                         'avatar' => \App\Helpers\AvatarHelper::getUserAvatarUrl($reaction->user)
+                                                     ];
+                                                 })->toArray()
+                                             ];
+                                    }
+                                }
+
                                 return [
                                     'id' => $message->id,
                                     'sender_id' => $message->sender_id,
@@ -90,7 +109,8 @@ class ChatController extends Controller
                                     'sender_avatar' => getUserAvatarHtml($message->sender, 'h-45 w-45', 'b-r-50'),
                                     'is_own' => $message->sender_id === auth()->id(),
                                     'time' => $message->created_at->format('g:iA'),
-                                    'date' => $message->created_at->format('M j')
+                                    'date' => $message->created_at->format('M j'),
+                                    'reactions' => $reactions
                                 ];
                             });
                     }

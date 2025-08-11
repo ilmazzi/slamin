@@ -6,10 +6,12 @@ use App\Models\Video;
 use App\Models\Group;
 use App\Models\GigApplication;
 use App\Models\Event;
+use App\Models\ChatMessage;
 use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
 use App\Observers\GigApplicationObserver;
 use App\Observers\EventObserver;
+use App\Observers\ChatMessageObserver;
 use App\Services\LoggingService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
@@ -40,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Registra l'observer per gli eventi
         Event::observe(EventObserver::class);
+
+        // Registra l'observer per i messaggi chat
+        ChatMessage::observe(ChatMessageObserver::class);
 
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();

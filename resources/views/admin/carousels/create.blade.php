@@ -363,7 +363,7 @@
 
 @push('scripts')
 <script>
-console.log('=== CAROUSEL CREATE SCRIPT LOADED ===');
+
 
 // Variabili globali
 let searchTimeout;
@@ -384,7 +384,6 @@ function safeBootstrapInit() {
 
 // Ripristina stato del form se ci sono errori di validazione
 if (document.getElementById('content_type').value && document.getElementById('content_id').value) {
-    console.log('🔄 Ripristino stato form da errori di validazione');
     document.getElementById('selectedContentPreview').style.display = 'block';
     document.getElementById('overrideFields').style.display = 'block';
     document.getElementById('createExistingBtn').disabled = false;
@@ -408,7 +407,6 @@ function toggleSearchSection(show) {
 
     if (searchSection) {
         searchSection.style.display = show ? 'block' : 'none';
-        console.log('Search section display:', searchSection.style.display);
     }
 
     if (contentResults) {
@@ -434,7 +432,6 @@ function clearSearchField() {
 
 // Content type selection - Versione semplificata e robusta
 function handleContentTypeChange() {
-    console.log('🎯 handleContentTypeChange called');
 
     const contentTypeSelect = document.getElementById('content_type_select');
     if (!contentTypeSelect) {
@@ -443,21 +440,20 @@ function handleContentTypeChange() {
     }
 
     const selectedValue = contentTypeSelect.value;
-    console.log('🎯 Content type changed to:', selectedValue);
 
     if (selectedValue) {
-        console.log('✅ Showing search section');
+
         toggleSearchSection(true);
         clearResults();
         clearSearchField();
 
         // Esegui ricerca automatica
         setTimeout(() => {
-            console.log('🔍 Performing automatic search for:', selectedValue);
+
             performSearch();
         }, 200);
     } else {
-        console.log('❌ Hiding search section');
+
         toggleSearchSection(false);
         clearResults();
     }
@@ -465,7 +461,6 @@ function handleContentTypeChange() {
 
 // Attach event listener in multiple ways for maximum compatibility
 function setupEventListeners() {
-    console.log('🔧 Setting up event listeners...');
 
     // Inizializza Bootstrap in modo sicuro
     safeBootstrapInit();
@@ -481,21 +476,18 @@ function setupEventListeners() {
 
     // Add new listener
     contentTypeSelect.addEventListener('change', handleContentTypeChange);
-    console.log('✅ Event listener attached successfully');
 
     return true;
 }
 
 // Try to setup listeners when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 DOM Content Loaded');
     setupEventListeners();
     setupTestButton();
 
     // Retry if needed
     if (!document.getElementById('content_type_select')) {
         setTimeout(() => {
-            console.log('🔄 Retrying event listener setup...');
             setupEventListeners();
             setupTestButton();
         }, 500);
@@ -504,29 +496,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Also try immediately (in case DOM is already loaded)
 if (document.readyState === 'loading') {
-    console.log('📄 DOM still loading, waiting...');
+    // DOM still loading, waiting...
 } else {
-    console.log('📄 DOM already loaded, setting up immediately');
     setupEventListeners();
     setupTestButton();
 }
 
 // Debug: mostra tutti gli elementi trovati
-console.log('🔍 Debug - Elements found:');
-console.log('- content_type_select:', document.getElementById('content_type_select'));
-console.log('- searchSection:', document.getElementById('searchSection'));
-console.log('- contentResults:', document.getElementById('contentResults'));
-console.log('- contentList:', document.getElementById('contentList'));
-console.log('- content_search:', document.getElementById('content_search'));
 
 // Test manuale - puoi eseguire questo nella console del browser
 window.testCarouselSearch = function() {
-    console.log('🧪 Manual test started');
+    
     const select = document.getElementById('content_type_select');
     if (select) {
         select.value = 'video';
         select.dispatchEvent(new Event('change'));
-        console.log('✅ Manual change event dispatched');
+        
     } else {
         console.error('❌ Select element not found');
     }
@@ -534,7 +519,6 @@ window.testCarouselSearch = function() {
 
 // Test del metodo searchContent
 window.testSearchContent = function() {
-    console.log('🧪 Testing searchContent method...');
     fetch(`{{ route('admin.carousels.test-search-content') }}?type=video&query=test`, {
         method: 'GET',
         headers: {
@@ -545,11 +529,9 @@ window.testSearchContent = function() {
         credentials: 'same-origin'
     })
     .then(response => {
-        console.log('SearchContent response status:', response.status);
         return response.json();
     })
     .then(data => {
-        console.log('SearchContent response:', data);
         alert(`SearchContent Test:\nStatus: Success\nResults: ${data.length || 0} items found`);
     })
     .catch(error => {
@@ -560,7 +542,7 @@ window.testSearchContent = function() {
 
 // Test rotta di debug
 window.testDebugRoute = function() {
-    console.log('🧪 Testing debug route...');
+
     fetch(`{{ route('admin.carousels.test-search') }}?test=1`, {
         method: 'GET',
         headers: {
@@ -571,11 +553,11 @@ window.testDebugRoute = function() {
         credentials: 'same-origin'
     })
     .then(response => {
-        console.log('Debug route response status:', response.status);
+
         return response.json();
     })
     .then(data => {
-        console.log('Debug route response:', data);
+
         alert(`Debug Route Test:\nUser: ${data.user}\nIs Admin: ${data.is_admin}\nMessage: ${data.message}`);
     })
     .catch(error => {
@@ -586,11 +568,8 @@ window.testDebugRoute = function() {
 
 // Test manuale API
 window.testManualSearch = function() {
-    console.log('🧪 Manual API test started');
     const contentType = document.getElementById('content_type_select').value || 'video';
     const query = document.getElementById('content_search').value || '';
-
-    console.log('Testing with:', { contentType, query });
 
     // Test con dati mock per verificare che l'interfaccia funzioni
     const mockData = [
@@ -615,7 +594,6 @@ window.testManualSearch = function() {
     ];
 
     displaySearchResults(mockData, contentType);
-    console.log('✅ Mock data displayed');
 };
 
 // Funzione per mostrare i risultati
@@ -640,7 +618,7 @@ function displaySearchResults(data, contentType) {
                         <p class="text-muted mb-0 f-s-12">${item.description}</p>
                         ${getContentTypeSpecificInfo(item, contentType)}
                     </div>
-                    <button type="button" class="btn btn-sm btn-primary select-content-btn" onclick="console.log('🖱️ Direct onclick triggered')">
+                    <button type="button" class="btn btn-sm btn-primary select-content-btn" onclick="">
                         <i class="ph-duotone ph-check f-s-14"></i>
                     </button>
                 </div>
@@ -649,13 +627,13 @@ function displaySearchResults(data, contentType) {
     `).join('');
 
     // Add click handlers
-    console.log('🔍 Adding click handlers to', document.querySelectorAll('.select-content-btn').length, 'buttons');
+    .length, 'buttons');
     document.querySelectorAll('.select-content-btn').forEach((btn, index) => {
-        console.log(`🔗 Adding listener to button ${index + 1}`);
+        
         btn.addEventListener('click', function(e) {
-            console.log('✅ Button clicked!', e);
+            
             const item = this.closest('.content-item');
-            console.log('📋 Selected item:', item);
+            
             if (item) {
                 selectContent(item);
             } else {
@@ -670,19 +648,19 @@ function setupTestButton() {
     const testButton = document.getElementById('testButton');
     if (testButton) {
         testButton.addEventListener('click', function() {
-            console.log('🧪 Test button clicked');
+            
             testCarouselSearch();
         });
-        console.log('✅ Test button listener attached');
+        
     } else {
-        console.log('⚠️ Test button not found');
+        
     }
 }
 
 // Global click handler as backup
 document.addEventListener('click', function(e) {
     if (e.target.closest('.select-content-btn')) {
-        console.log('🌐 Global click handler caught button click');
+        
         const btn = e.target.closest('.select-content-btn');
         const item = btn.closest('.content-item');
         if (item) {
@@ -696,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalCreateBtn = document.getElementById('modalCreateBtn');
     if (modalCreateBtn) {
         modalCreateBtn.addEventListener('click', function() {
-            console.log('🎯 Modal create button clicked');
+            
             submitModalForm();
         });
     }
@@ -710,16 +688,16 @@ document.getElementById('content_search').addEventListener('input', function() {
 });
 
 function performSearch() {
-    console.log('performSearch called');
+    
     const contentType = document.getElementById('content_type_select').value;
     const query = document.getElementById('content_search').value;
     const contentList = document.getElementById('contentList');
     const contentResults = document.getElementById('contentResults');
 
-    console.log('Content type:', contentType, 'Query:', query);
+    
 
     if (!contentType) {
-        console.log('No content type selected, returning');
+
         return;
     }
 
@@ -737,14 +715,12 @@ function performSearch() {
         credentials: 'same-origin'
     })
         .then(response => {
-            console.log('Response status:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
-                .then(data => {
-            console.log('✅ Search results received:', data);
+        .then(data => {
             displaySearchResults(data, contentType);
         })
         .catch(error => {
@@ -785,8 +761,6 @@ function getContentTypeSpecificInfo(item, contentType) {
 }
 
 function selectContent(item) {
-    console.log('🎯 selectContent called with item:', item);
-    console.log('📊 Item dataset:', item.dataset);
 
     // Rimuovi l'alert per debug
     // alert('🎯 Contenuto selezionato: ' + item.dataset.title);
@@ -798,14 +772,7 @@ function selectContent(item) {
     const contentImage = item.dataset.image;
     const contentUrl = item.dataset.url;
 
-    console.log('📋 Content data:', {
-        contentType,
-        contentId,
-        contentTitle,
-        contentDescription,
-        contentImage,
-        contentUrl
-    });
+
 
     // Update hidden fields
     const contentTypeField = document.getElementById('content_type');
@@ -814,7 +781,6 @@ function selectContent(item) {
     if (contentTypeField && contentIdField) {
         contentTypeField.value = contentType;
         contentIdField.value = contentId;
-        console.log('✅ Hidden fields updated');
     } else {
         console.error('❌ Hidden fields not found');
     }
@@ -830,7 +796,7 @@ function selectContent(item) {
         selectedTitle.textContent = contentTitle;
         selectedDescription.textContent = contentDescription;
                 selectedContentPreview.style.display = 'block';
-        console.log('✅ Preview updated');
+        
     } else {
         console.error('❌ Preview elements not found');
     }
@@ -839,7 +805,7 @@ function selectContent(item) {
     const overrideFields = document.getElementById('overrideFields');
     if (overrideFields) {
                 overrideFields.style.display = 'block';
-        console.log('✅ Override fields shown');
+
     } else {
         console.error('❌ Override fields not found');
     }
@@ -848,7 +814,7 @@ function selectContent(item) {
     const createExistingBtn = document.getElementById('createExistingBtn');
     if (createExistingBtn) {
         createExistingBtn.disabled = false;
-        console.log('✅ Create button enabled');
+
     } else {
         console.error('❌ Create button not found');
     }
@@ -857,7 +823,7 @@ function selectContent(item) {
     const existingContentForm = document.getElementById('existingContentForm');
     if (existingContentForm) {
         existingContentForm.action = '{{ route("admin.carousels.store") }}';
-        console.log('✅ Form action updated');
+
     } else {
         console.error('❌ Form not found');
     }
@@ -868,7 +834,6 @@ function selectContent(item) {
 
 // Funzione per aprire il modal di selezione contenuto
 function openContentSelectionModal(item) {
-    console.log('🎭 Opening content selection modal');
 
     const contentType = document.getElementById('content_type_select').value;
     const contentId = item.dataset.id;
@@ -914,12 +879,11 @@ function openContentSelectionModal(item) {
     const modal = new bootstrap.Modal(document.getElementById('contentSelectionModal'));
     modal.show();
 
-    console.log('✅ Modal opened successfully');
+
 }
 
 // Funzione per inviare il form dal modal
 function submitModalForm() {
-    console.log('📤 Submitting modal form');
 
     // Raccogli i dati dal modal
     const formData = new FormData();
@@ -939,7 +903,7 @@ function submitModalForm() {
     // CSRF token
     formData.append('_token', '{{ csrf_token() }}');
 
-    console.log('📋 Form data:', Object.fromEntries(formData));
+
 
     // Mostra loading state
     const submitBtn = document.getElementById('modalCreateBtn');
@@ -958,8 +922,6 @@ function submitModalForm() {
         }
     })
         .then(response => {
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', response.headers);
 
         // Controlla se la risposta è JSON
         const contentType = response.headers.get('content-type');
@@ -974,7 +936,7 @@ function submitModalForm() {
         }
     })
     .then(data => {
-        console.log('✅ Carousel created successfully:', data);
+
 
         if (data.success) {
             // Chiudi il modal
@@ -1014,17 +976,6 @@ function submitModalForm() {
 
 // Form submit handling
 document.getElementById('existingContentForm').addEventListener('submit', function(e) {
-    console.log('🎯 Form submit triggered');
-    console.log('Form data:', {
-        content_type: document.getElementById('content_type').value,
-        content_id: document.getElementById('content_id').value,
-        title: document.getElementById('override_title').value,
-        description: document.getElementById('override_description').value,
-        link_url: document.getElementById('override_link_url').value,
-        link_text: document.getElementById('override_link_text').value,
-        order: document.getElementById('existing_order').value,
-        is_active: document.getElementById('existing_is_active').checked
-    });
 
     // Show loading state
     const submitBtn = document.getElementById('createExistingBtn');

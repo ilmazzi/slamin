@@ -425,7 +425,7 @@ let isFullscreen = false;
 
 // Funzione globale per incrementare le visualizzazioni
 function incrementVideoViews() {
-    console.log('Incrementando visualizzazioni per video {{ $video->id }}');
+    
 
     fetch('{{ route("videos.increment-views", $video) }}', {
         method: 'POST',
@@ -435,15 +435,15 @@ function incrementVideoViews() {
         }
     })
     .then(response => {
-        console.log('Response status:', response.status);
+        
         return response.json();
     })
     .then(data => {
-        console.log('Response data:', data);
+        
         if (data.success) {
             document.getElementById('viewCount').textContent = data.view_count;
             document.getElementById('viewCountStats').textContent = data.view_count;
-            console.log('Views updated to:', data.view_count);
+            
         }
     })
     .catch(error => {
@@ -523,7 +523,7 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
 
     // Ottieni il token CSRF dal meta tag
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    console.log('CSRF Token:', csrfToken);
+    
 
     fetch('{{ route("videos.add-comment", $video) }}', {
         method: 'POST',
@@ -535,7 +535,7 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
         body: JSON.stringify({ content: content })
     })
     .then(response => {
-        console.log('Response status:', response.status);
+        
         if (response.status === 419) {
             // CSRF token mismatch - ricarica la pagina per ottenere un nuovo token
             alert('Sessione scaduta. La pagina verrà ricaricata.');
@@ -548,7 +548,7 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
         return response.json();
     })
     .then(data => {
-        console.log('Response data:', data);
+        
         if (data && data.success) {
             document.getElementById('commentContent').value = '';
             document.getElementById('charCount').textContent = '0';
@@ -589,12 +589,12 @@ function deleteComment(commentId) {
 
 // Funzioni per snap
 function showSnapModal() {
-    console.log('🎯 Apertura modal snap - tempo corrente:', currentVideoTime);
+    
 
     // Ferma il video se è in riproduzione
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-        console.log('⏸️ {{ __('common.video') }} fermato per creazione snap');
+         }} fermato per creazione snap');
     }
 
     // Aggiorna il tempo nel modal prima di mostrarlo
@@ -608,10 +608,10 @@ function createSnap() {
     const title = document.getElementById('snapTitle').value.trim();
     const timestamp = parseInt(document.getElementById('snapTimestamp').value);
 
-    console.log('🎯 Creazione snap - title:', title, 'timestamp:', timestamp);
+    
 
     if (!title || timestamp < 0) {
-        console.log('❌ Validazione fallita - title:', title, 'timestamp:', timestamp);
+        
         return;
     }
 
@@ -633,7 +633,7 @@ function createSnap() {
     })
     .then(data => {
         if (data && data.success) {
-            console.log('✅ {{ __('common.snap') }} creato con successo:', data.snap);
+             }} creato con successo:', data.snap);
 
             document.getElementById('snapTitle').value = '';
             document.getElementById('snapTimestamp').value = '0';
@@ -645,7 +645,7 @@ function createSnap() {
             // Ricarica la pagina per aggiornare la timeline
             location.reload();
         } else {
-            console.log('❌ Errore nella creazione dello snap:', data);
+            
         }
     })
     .catch(error => {
@@ -680,7 +680,7 @@ document.getElementById('commentContent').addEventListener('input', function() {
 
 // Inizializzazione
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Inizializzazione...');
+    
 
     // Inizializza lo stile dei bottoni like
     @if($userLike)
@@ -691,18 +691,18 @@ document.addEventListener('DOMContentLoaded', function() {
     incrementVideoViews();
 
     // Sistema per rilevare interazioni con la timeline
-    console.log('Inizializzazione event listeners...');
+    
 
     // Rileva click sui snap markers
 document.addEventListener('click', function(event) {
     if (event.target.closest('.snap-marker')) {
-        console.log('🔥 Click su snap marker rilevato!');
+        
 
         // Ottieni il timestamp dal marker
         const marker = event.target.closest('.snap-marker');
         const timestamp = parseInt(marker.getAttribute('data-timestamp'));
 
-        console.log('🎯 Timestamp del snap:', timestamp);
+        
 
         // Salta al timestamp del snap
         seekToTime(timestamp);
@@ -722,7 +722,7 @@ setInterval(function() {
 // Debug: mostra lo stato del video ogni 30 secondi se in riproduzione
 setInterval(function() {
     if (isVideoPlaying) {
-        console.log('📊 {{ __('invitations.status') }} video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
+         }} video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
     }
 }, 30000);
 });
@@ -731,14 +731,14 @@ setInterval(function() {
 
 // Funzioni per la timeline
 function seekToTime(timestamp) {
-    console.log('seekToTime chiamata con timestamp:', timestamp);
+    
 
     if (videoPlayer) {
         // Imposta il tempo del video
         videoPlayer.currentTime = timestamp;
         currentVideoTime = timestamp;
 
-        console.log('🎯 Seek a:', formatTimestamp(timestamp));
+        );
     }
 }
 
@@ -752,11 +752,11 @@ function formatTimestamp(timestamp) {
 
 // Sistema per Player HTML5 con URL Diretto PeerTube
 async function initializeVideoPlayer() {
-    console.log('🎬 Inizializzazione player HTML5 con URL diretto PeerTube');
+    
 
     videoPlayer = document.getElementById('videoPlayer');
     if (!videoPlayer) {
-        console.log('❌ Player video non trovato');
+        
         return;
     }
 
@@ -771,7 +771,7 @@ async function initializeVideoPlayer() {
     if (error) error.style.display = 'none';
 
     try {
-        console.log('🔗 Richiesta URL diretto per video ID:', videoId);
+        
 
         // Ottieni l'URL diretto del video da PeerTube
         const response = await fetch(`/videos/${videoId}/peertube-url`);
@@ -779,7 +779,7 @@ async function initializeVideoPlayer() {
 
         // Gestisci il caso in cui il video è ancora in elaborazione
         if (data.status === 'processing') {
-            console.log('⏳ {{ __('common.video') }} ancora in elaborazione su PeerTube');
+             }} ancora in elaborazione su PeerTube');
 
             // Nascondi loading e mostra messaggio di elaborazione
             if (loading) loading.style.display = 'none';
@@ -794,13 +794,13 @@ async function initializeVideoPlayer() {
         if (data.success && data.files && data.files.length > 0) {
             // Usa il primo file disponibile (migliore qualità)
             const videoFile = data.files[0];
-            console.log('✅ URL video ottenuto:', videoFile.url);
+            
 
             // Test se l'URL è accessibile
-            console.log('🔍 Test accessibilità URL video...');
+            
             fetch(videoFile.url, { method: 'HEAD' })
                 .then(response => {
-                    console.log('✅ URL video accessibile - Status:', response.status);
+                    
                 })
                 .catch(error => {
                     console.error('❌ URL video non accessibile:', error);
@@ -811,7 +811,7 @@ async function initializeVideoPlayer() {
             source.src = videoFile.url;
             source.type = 'video/mp4';
 
-            console.log('🎬 Impostazione source video:', videoFile.url);
+            
 
             // Rimuovi eventuali source esistenti e aggiungi quello nuovo
             videoPlayer.innerHTML = '';
@@ -835,7 +835,7 @@ async function initializeVideoPlayer() {
             // Nascondi loading indicator
             if (loading) loading.style.display = 'none';
 
-            console.log('🎬 Player HTML5 inizializzato con successo - Durata:', videoDuration);
+            
         } else {
             throw new Error(data.error || 'Nessun file video disponibile');
         }
@@ -855,40 +855,40 @@ async function initializeVideoPlayer() {
 function setupVideoEventListeners() {
     // Event listener per quando il video è caricato
     videoPlayer.addEventListener('loadedmetadata', function() {
-        console.log('🎬 {{ __('common.video') }} caricato - Durata:', videoPlayer.duration);
+         }} caricato - Durata:', videoPlayer.duration);
         videoDuration = videoPlayer.duration || videoDuration;
     });
 
     // Event listener per quando il video inizia a caricare
     videoPlayer.addEventListener('loadstart', function() {
-        console.log('🔄 Inizio caricamento video');
+        
     });
 
     // Event listener per quando i dati del video sono disponibili
     videoPlayer.addEventListener('loadeddata', function() {
-        console.log('✅ Dati video caricati');
+        
     });
 
     // Event listener per quando il video può essere riprodotto
     videoPlayer.addEventListener('canplay', function() {
-        console.log('▶️ {{ __('common.video') }} pronto per la riproduzione');
+         }} pronto per la riproduzione');
     });
 
     // Event listener per quando il video può essere riprodotto senza interruzioni
     videoPlayer.addEventListener('canplaythrough', function() {
-        console.log('🎯 {{ __('common.video') }} può essere riprodotto completamente');
+         }} può essere riprodotto completamente');
     });
 
     // Event listener per play
     videoPlayer.addEventListener('play', function() {
-        console.log('▶️ {{ __('common.video') }} in riproduzione');
+         }} in riproduzione');
         isVideoPlaying = true;
         incrementVideoViews();
     });
 
     // Event listener per pause
     videoPlayer.addEventListener('pause', function() {
-        console.log('⏸️ {{ __('common.video') }} in pausa');
+         }} in pausa');
         isVideoPlaying = false;
     });
 
@@ -899,7 +899,7 @@ function setupVideoEventListeners() {
 
     // Event listener per fine video
     videoPlayer.addEventListener('ended', function() {
-        console.log('🏁 {{ __('common.video') }} terminato');
+         }} terminato');
         isVideoPlaying = false;
         updatePlayPauseButton();
     });
@@ -919,12 +919,12 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video non può essere riprodotto
     videoPlayer.addEventListener('stalled', function() {
-        console.log('⚠️ {{ __('common.video') }} in stallo - potrebbe non essere accessibile');
+         }} in stallo - potrebbe non essere accessibile');
     });
 
     // Event listener per quando il video non ha dati
     videoPlayer.addEventListener('waiting', function() {
-        console.log('⏳ {{ __('common.video') }} in attesa di dati');
+         }} in attesa di dati');
     });
 
             // Event listener per l'icona snap
@@ -952,12 +952,12 @@ function setupVideoEventListeners() {
 
 // Funzione per creare snap al tempo corrente
 function createSnapAtCurrentTime() {
-    console.log('🎯 Creazione snap al tempo corrente:', currentVideoTime);
+    
 
     // Ferma il video
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-        console.log('⏸️ {{ __('common.video') }} fermato per creazione snap');
+         }} fermato per creazione snap');
     }
 
     // Mostra il modal con il tempo corrente
@@ -966,7 +966,7 @@ function createSnapAtCurrentTime() {
 
 // Funzione per aggiornare le posizioni degli snap
 function updateSnapPositions(realDuration) {
-    console.log('🔄 Aggiornamento posizioni snap con durata reale:', realDuration);
+    
 
     const snapMarkers = document.querySelectorAll('.snap-marker');
     snapMarkers.forEach(marker => {

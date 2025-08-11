@@ -65,6 +65,11 @@ $(document).ready(function() {
 
 <script src="<?php echo e(asset('assets/vendor/toastify/toastify.js')); ?>"></script>
 
+<!-- Chat Notification Badge -->
+<script src="<?php echo e(asset('js/chat-notification-badge.js')); ?>"></script>
+
+
+
 
 
 <?php echo $__env->yieldPushContent('scripts'); ?>

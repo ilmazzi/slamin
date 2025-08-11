@@ -184,7 +184,7 @@
 <script>
 // Funzione globale per incrementare le visualizzazioni
 function incrementVideoViews() {
-    console.log('{{ __('videos.incrementing_views') }} {{ $video->id }}');
+     }} {{ $video->id }}');
 
     fetch('{{ route("videos.increment-views", $video) }}', {
         method: 'POST',
@@ -194,15 +194,15 @@ function incrementVideoViews() {
         }
     })
     .then(response => {
-        console.log('Response status:', response.status);
+        
         return response.json();
     })
     .then(data => {
-        console.log('Response data:', data);
+        
         if (data.success) {
             document.getElementById('viewCount').textContent = data.view_count;
             document.getElementById('viewCountStats').textContent = data.view_count;
-            console.log('Views updated to:', data.view_count);
+            
         }
     })
     .catch(error => {

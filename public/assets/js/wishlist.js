@@ -10,7 +10,7 @@ window.WishlistManager = {
     },
     // Inizializza tutti i pulsanti wishlist nella pagina
     init: function() {
-        console.log('🎯 Initializing wishlist buttons...');
+        
 
         if (!this.checkDependencies()) {
             return;
@@ -38,7 +38,7 @@ window.WishlistManager = {
                 return;
             }
 
-            console.log('🖱️ Wishlist button clicked for event:', eventId);
+            
             WishlistManager.toggleWishlist(eventId, button);
         });
     },
@@ -71,7 +71,7 @@ window.WishlistManager = {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                console.log('✅ Wishlist toggle response:', response);
+                
 
                 if (response.success) {
                     WishlistManager.updateButtonState(button, response.in_wishlist);
@@ -170,7 +170,7 @@ window.WishlistManager = {
 
     // Inizializza wishlist per contenuto caricato dinamicamente
     initForDynamicContent: function(container) {
-        console.log('🔄 Initializing wishlist for dynamic content');
+        
         const buttons = $(container).find('.wishlist-toggle');
 
         buttons.each(function() {
@@ -186,7 +186,7 @@ window.WishlistManager = {
 
 // Inizializza automaticamente quando il documento è pronto
 $(document).ready(function() {
-    console.log('🎯 Document ready - initializing WishlistManager');
+    
     WishlistManager.init();
 });
 

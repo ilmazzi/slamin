@@ -65,6 +65,11 @@ $(document).ready(function() {
 
 <script src="{{asset('assets/vendor/toastify/toastify.js')}}"></script>
 
+<!-- Chat Notification Badge -->
+<script src="{{asset('js/chat-notification-badge.js')}}"></script>
+
+
+
 
 
 @stack('scripts')

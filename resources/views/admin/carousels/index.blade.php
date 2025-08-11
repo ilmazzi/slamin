@@ -227,8 +227,6 @@ new Sortable(document.getElementById('sortableCarousel'), {
 });
 
 function deleteCarousel(carouselId) {
-    console.log('🗑️ Delete carousel called with ID:', carouselId);
-
     const modalElement = document.getElementById('deleteCarouselModal');
     const form = document.getElementById('deleteCarouselForm');
 
@@ -245,9 +243,7 @@ function deleteCarousel(carouselId) {
     try {
         const modal = new bootstrap.Modal(modalElement);
         form.action = `/admin/carousels/${carouselId}`;
-        console.log('✅ Modal action set to:', form.action);
         modal.show();
-        console.log('✅ Modal shown successfully');
     } catch (error) {
         console.error('❌ Error showing modal:', error);
     }
@@ -256,11 +252,10 @@ function deleteCarousel(carouselId) {
 // Debug: Add event listeners to delete buttons
 document.addEventListener('DOMContentLoaded', function() {
     const deleteButtons = document.querySelectorAll('button[onclick*="deleteCarousel"]');
-    console.log('🔍 Found', deleteButtons.length, 'delete buttons');
 
     deleteButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            console.log('🖱️ Delete button clicked:', this.dataset.carouselId);
+            // Event listener added
         });
     });
 });

@@ -333,15 +333,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Verifica che le funzioni siano definite
-    if (typeof window.selectFile === 'function') {
-        console.log('selectFile function is available');
-    } else {
+    if (typeof window.selectFile !== 'function') {
         console.error('selectFile function is not available');
     }
 
-    if (typeof window.autoTranslateLanguage === 'function') {
-        console.log('autoTranslateLanguage function is available');
-    } else {
+    if (typeof window.autoTranslateLanguage !== 'function') {
         console.error('autoTranslateLanguage function is not available');
     }
 });
@@ -413,7 +409,6 @@ function deleteLanguage(languageCode, languageName) {
 }
 
 function selectFile(language, file) {
-    console.log('selectFile called with:', language, file);
 
     const fileInfo = document.getElementById(`file-info-${language}`);
     const selectedFile = document.getElementById(`selected-file-${language}`);
@@ -755,7 +750,6 @@ function testTranslationService() {
 }
 
 function autoTranslateLanguage(language) {
-    console.log('autoTranslateLanguage called with:', language);
 
     if (!language) {
         console.error('Language parameter is required');

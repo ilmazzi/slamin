@@ -522,7 +522,7 @@ setInterval(() => {
         }
     }).then(response => {
         if (response.ok) {
-            console.log('Salvataggio automatico completato');
+    
         }
     }).catch(error => {
         console.error('Errore nel salvataggio automatico:', error);

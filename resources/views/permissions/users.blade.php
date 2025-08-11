@@ -628,16 +628,16 @@ $('#userRolesForm').on('submit', function(e) {
     const userId = $('#userRolesUserId').val();
 
     // Debug: log dei dati del form
-    console.log('Form data:');
+    
     for (let [key, value] of formData.entries()) {
-        console.log(key + ': ' + value);
+        
     }
-    console.log('User ID:', userId);
+    
 
     // Debug: controlla i checkbox selezionati
-    console.log('Selected checkboxes:');
+    
     $('input[name="roles[]"]:checked').each(function() {
-        console.log('Checked:', $(this).val());
+        .val());
     });
 
     fetch(`{{ route('permissions.users.roles', ['user' => ':userId']) }}`.replace(':userId', userId), {
@@ -649,11 +649,11 @@ $('#userRolesForm').on('submit', function(e) {
         body: formData
     })
     .then(response => {
-        console.log('Response status:', response.status);
+        
         return response.json();
     })
     .then(data => {
-        console.log('Response data:', data);
+        
         if (data.success) {
             Swal.fire('Successo!', data.message, 'success').then(() => {
                 location.reload();

@@ -217,9 +217,14 @@
                                 <!-- Chat Section -->
                                 @auth
                                 <li class="no-sub {{ request()->routeIs('chat.*') ? 'active' : '' }}">
-                                    <a href="{{ route('chat.index') }}">
+                                    <a href="{{ route('chat.index') }}" data-chat-badge-container>
                                         <i class="ph-duotone ph-chat f-s-20 me-2"></i>
                                         {{ __('chat.title') }}
+                                        @if(auth()->user()->unreadChatNotifications()->count() > 0)
+                                            <span class="badge bg-danger badge-notification ms-2" id="chat-notification-badge">
+                                                {{ auth()->user()->unreadChatNotifications()->count() }}
+                                            </span>
+                                        @endif
                                     </a>
                                 </li>
                                 @endauth

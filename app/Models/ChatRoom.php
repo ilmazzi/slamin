@@ -82,4 +82,28 @@ class ChatRoom extends Model
             ->where('user_id', '!=', $currentUserId)
             ->first();
     }
+
+    /**
+     * Ottieni il nome dell'altro partecipante in una chat privata
+     */
+    public function getOtherParticipantName(User $currentUser): string
+    {
+        $otherParticipant = $this->getOtherParticipant($currentUser->id);
+        if ($otherParticipant && $otherParticipant->user) {
+            return $otherParticipant->user->getDisplayName();
+        }
+        return 'Utente';
+    }
+
+    /**
+     * Ottieni il conteggio dei messaggi non letti per un utente specifico
+     */
+    public function getUnreadCountForUser(User $user): int
+    {
+        return \App\Models\Notification::where('user_id', $user->id)
+            ->where('type', \App\Models\Notification::TYPE_CHAT_MESSAGE)
+            ->whereJsonContains('data->chat_room_id', $this->id)
+            ->where('is_read', false)
+            ->count();
+    }
 }

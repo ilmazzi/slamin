@@ -250,6 +250,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Unread chat notifications for this user
+     */
+    public function unreadChatNotifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id')
+                    ->where('type', \App\Models\Notification::TYPE_CHAT_MESSAGE)
+                    ->where('is_read', false);
+    }
+
+    /**
      * Get events where user is participating (accepted invitations or requests)
      */
     public function participatingEvents()
@@ -956,6 +966,19 @@ class User extends Authenticatable
     public function chatRooms()
     {
         return $this->belongsToMany(ChatRoom::class, 'chat_participants');
+    }
+
+    /**
+     * Ottieni le chat private attive dell'utente
+     */
+    public function activeChatRooms()
+    {
+        return $this->belongsToMany(ChatRoom::class, 'chat_participants')
+            ->where('type', 'private')
+            ->where('is_active', true)
+            ->whereHas('messages') // Solo chat con messaggi
+            ->orderBy('last_message_at', 'desc')
+            ->withTimestamps();
     }
 }
 

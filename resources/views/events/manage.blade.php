@@ -1023,7 +1023,7 @@ function updateStats() {
         .then(response => response.json())
         .then(data => {
             // Update stats displays
-            console.log('Stats updated:', data);
+            
         });
 }
 
@@ -1033,7 +1033,7 @@ function refreshPendingItems() {
         .then(response => response.text())
         .then(html => {
             // In a real implementation, you'd update only the changed parts
-            console.log('Auto-refresh completed');
+            
         });
 }
 

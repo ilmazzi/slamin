@@ -11,7 +11,7 @@
 <script>
     document.getElementById('broadcast-btn').addEventListener('click', function () {
         fetch('/api/send-broadcast').then(() => {
-            console.log("Evento inviato!");
+            
         });
     });
 </script>

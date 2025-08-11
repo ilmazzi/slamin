@@ -26,7 +26,7 @@ function copyText(element) {
 }
 
 function notify_copy_2() {
-    console.log("this");
+    
 }
 
 const input = document.querySelector('div.search-bar input');

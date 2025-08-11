@@ -1411,7 +1411,7 @@
 // Clear event draft from localStorage if coming from successful creation
 @if(session('success') && strpos(session('success'), 'creato') !== false)
     localStorage.removeItem('eventDraft');
-    console.log('Event creation draft cleared from localStorage');
+    
 @endif
 </script>
 <script>

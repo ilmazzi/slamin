@@ -71,7 +71,7 @@ class ChatMessage extends Model
      */
     public function reactions()
     {
-        return $this->hasMany(ChatMessageReaction::class);
+        return $this->hasMany(MessageReaction::class, 'message_id');
     }
 
     /**

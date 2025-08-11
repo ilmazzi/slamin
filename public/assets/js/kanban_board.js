@@ -224,7 +224,7 @@ function updateTaskStatus(taskId, newStatus) {
     })
     .then(data => {
         if (data.success) {
-            console.log(`Task ${taskId} status updated to ${newStatus}`);
+            
 
             // Update the task count badges
             updateColumnCounts();

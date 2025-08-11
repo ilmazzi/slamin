@@ -235,10 +235,16 @@
                                 <!-- Chat Section -->
                                 <?php if(auth()->guard()->check()): ?>
                                 <li class="no-sub <?php echo e(request()->routeIs('chat.*') ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('chat.index')); ?>">
+                                    <a href="<?php echo e(route('chat.index')); ?>" data-chat-badge-container>
                                         <i class="ph-duotone ph-chat f-s-20 me-2"></i>
                                         <?php echo e(__('chat.title')); ?>
 
+                                        <?php if(auth()->user()->unreadChatNotifications()->count() > 0): ?>
+                                            <span class="badge bg-danger badge-notification ms-2" id="chat-notification-badge">
+                                                <?php echo e(auth()->user()->unreadChatNotifications()->count()); ?>
+
+                                            </span>
+                                        <?php endif; ?>
                                     </a>
                                 </li>
                                 <?php endif; ?>

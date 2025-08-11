@@ -137,7 +137,7 @@ class NotificationManager {
                 eventId = data.event_id;
                 invitationId = data.invitation_id;
             } catch (e) {
-                console.log('Could not parse notification data');
+                
             }
         }
 

@@ -3,6 +3,90 @@
 <?php $__env->startSection('main-content'); ?>
 <meta name="current-user-id" content="<?php echo e(auth()->id()); ?>">
 
+<?php $__env->startPush('scripts'); ?>
+<script>
+
+
+// Gestione dinamica del form chat
+document.addEventListener('DOMContentLoaded', function() {
+    // Funzione per aggiornare il form quando si seleziona una chat
+    function updateChatForm(roomId) {
+        const form = document.querySelector('[data-chat-form]');
+        const input = document.querySelector('[data-chat-input]');
+        const submitBtn = form?.querySelector('button[type="submit"]');
+
+        if (form && roomId) {
+            form.action = `/chat/${roomId}/messages`;
+            if (input) input.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
+        } else if (form) {
+            form.action = 'javascript:void(0)';
+            if (input) input.disabled = true;
+            if (submitBtn) submitBtn.disabled = true;
+        }
+    }
+
+    // Aggiorna il form quando la pagina si carica
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('room');
+    if (roomId) {
+        updateChatForm(roomId);
+    }
+});
+</script>
+        <?php $__env->stopPush(); ?>
+
+        <style>
+        .emoji-picker-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 320px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1050;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+        }
+
+        .emoji-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .emoji-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .emoji-categories button {
+            font-size: 16px;
+            padding: 4px 8px;
+        }
+
+        .emoji-picker-search input {
+            border-radius: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .emoji-picker-header {
+            background-color: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+        </style>
+
 <div class="row position-relative chat-container-box">
     <div class="col-lg-4 col-xxl-3  box-col-5">
         <div class="chat-div">
@@ -87,10 +171,11 @@
                                         <!-- Private Chat -->
                                         <div class="tab-pane fade show active" id="private-tab-pane" role="tabpanel"
                                              aria-labelledby="private-tab" tabindex="0">
+
                                             <div class="chat-contact">
                                                 <?php $__empty_1 = true; $__currentLoopData = $contacts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contact): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <a href="<?php echo e(route('chat.index', ['room' => $contact['chat_room_id']])); ?>" class="text-decoration-none">
-                                                <div class="chat-contactbox">
+                                                <div class="chat-contactbox" data-chat-room="<?php echo e($contact['chat_room_id']); ?>">
                                                     <div class="position-absolute">
                                                         <?php $user = \App\Models\User::find($contact['id']); ?>
                                                         <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto"
@@ -114,8 +199,23 @@
                                                             </small>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <p class="f-s-12 chat-time"><?php echo e($contact['last_message_time'] ?: '--'); ?></p>
+                                                    <div class="d-flex align-items-center">
+                                                        <p class="f-s-12 chat-time me-2"><?php echo e($contact['last_message_time'] ?: '--'); ?></p>
+                                                        <!-- Badge individuale per questa chat -->
+                                                        <?php
+                                                            $unreadCount = \App\Models\Notification::where('user_id', auth()->id())
+                                                                ->where('type', \App\Models\Notification::TYPE_CHAT_MESSAGE)
+                                                                ->whereJsonContains('data->chat_room_id', $contact['chat_room_id'])
+                                                                ->where('is_read', false)
+                                                                ->count();
+                                                        ?>
+                                                                                                                <?php if($unreadCount > 0): ?>
+                                                            <span class="chat-individual-badge badge bg-danger badge-sm"
+                                                                  style="font-size: 10px; padding: 2px 6px; border-radius: 10px; display: inline-block !important; position: relative; z-index: 10;">
+                                                                <?php echo e($unreadCount); ?>
+
+                                                            </span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 </a>
@@ -786,16 +886,55 @@
             </div>
 
             <div class="card-footer bg-white border-top" style="z-index: 1010;">
-                <form class="chat-footer d-flex" data-chat-form action="<?php echo e($selectedRoom ? route('chat.store', $selectedRoom->id) : '#'); ?>" method="POST">
+                <?php if(!$selectedRoom): ?>
+                    <div class="text-center text-muted py-3">
+                        <i class="ti ti-message-circle f-s-18 me-2"></i>
+                        Seleziona una chat per iniziare a scrivere
+                    </div>
+                <?php else: ?>
+                <form class="chat-footer d-flex" data-chat-form action="<?php echo e(route('chat.store', $selectedRoom->id)); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <div class="app-form flex-grow-1">
                         <div class="input-group">
-                            <span class="input-group-text bg-secondary ms-2 me-2 b-r-10 ">
-                                <a class="emoji-btn d-flex-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Emoji" role="button">
-                                    <i class="ti ti-mood-smile f-s-18"></i>
+                            <span class="input-group-text bg-secondary ms-2 me-2 b-r-10 position-relative">
+                                <a class="emoji-btn d-flex-center" id="chat-emoji-btn" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Emoji" role="button">
+                                  <i class="ti ti-mood-smile f-s-18"></i>
                                 </a>
+
+                                <!-- Emoji Picker Dropdown -->
+                                <div class="emoji-picker-dropdown d-none" id="emoji-picker-chat-emoji-btn">
+                                    <div class="emoji-picker-header d-flex justify-content-between align-items-center p-2 border-bottom">
+                                        <span class="f-s-14 f-w-500">Emoji</span>
+                                        <button type="button" class="btn-close btn-close-sm" onclick="closeEmojiPicker('chat-emoji-btn')"></button>
+                                    </div>
+
+                                    <div class="emoji-picker-search p-2">
+                                        <input type="text" class="form-control form-control-sm" placeholder="Cerca emoji..." onkeyup="searchEmojis(this.value, 'chat-emoji-btn')">
+                                    </div>
+
+                                    <div class="emoji-picker-content p-2" style="max-height: 300px; overflow-y: auto;">
+                                        <div class="emoji-categories mb-2">
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('smileys', 'chat-emoji-btn')">😊</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('animals', 'chat-emoji-btn')">🐶</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('food', 'chat-emoji-btn')">🍕</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('activities', 'chat-emoji-btn')">⚽</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('travel', 'chat-emoji-btn')">✈️</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('objects', 'chat-emoji-btn')">💡</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('symbols', 'chat-emoji-btn')">❤️</button>
+                                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showEmojiCategory('flags', 'chat-emoji-btn')">🏁</button>
+                                        </div>
+
+                                        <div class="emoji-grid" id="emoji-grid-chat-emoji-btn">
+                                            <!-- Le emoji verranno caricate qui dinamicamente -->
+                                        </div>
+                                    </div>
+                                </div>
                             </span>
-                            <input type="text" class="form-control b-r-6" placeholder="Type a message" aria-label="message" data-chat-input name="content">
+                            <input type="text" class="form-control b-r-6" placeholder="Type a message" aria-label="message" data-chat-input name="content" maxlength="1000" oninput="updateCharCount(this)">
+                            <small class="text-muted char-count" style="position: absolute; bottom: -20px; right: 0; font-size: 11px;">0/1000</small>
+
+
+
                             <button class="btn btn-sm btn-primary ms-2 me-2 b-r-4" type="submit"><i class="ti ti-send"></i> <span>Send</span></button>
                         </div>
                     </div>
@@ -827,6 +966,7 @@
                         </div>
                     </div>
                 </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -959,10 +1099,7 @@
         padding: 15px;
     }
 
-    .chat-body {
-        margin-top: 120px;
-        margin-bottom: 80px;
-    }
+
 
     /* Prevenire zoom su input focus */
     input, textarea {
@@ -994,7 +1131,7 @@
 
 <?php $__env->startPush('scripts'); ?>
 <script>
-console.log('Chat script loaded!');
+
 
 // Typing indicator management
 class TypingManager {
@@ -1013,14 +1150,14 @@ class TypingManager {
     }
 
     init() {
-        console.log('TypingManager.init() - Starting initialization...');
+         - Starting initialization...');
 
         if (!this.chatInput) {
             console.error('TypingManager.init() - Chat input not found!');
             return;
         }
 
-        console.log('TypingManager.init() - Chat input found:', this.chatInput);
+         - Chat input found:', this.chatInput);
 
         // Event listeners per input
         this.chatInput.addEventListener('input', () => this.handleInput());
@@ -1029,7 +1166,7 @@ class TypingManager {
 
         // Ottieni room ID corrente
         this.currentRoom = this.getCurrentRoomId();
-        console.log('TypingManager.init() - Current room ID:', this.currentRoom);
+         - Current room ID:', this.currentRoom);
 
         if (!this.currentRoom) {
             console.error('TypingManager.init() - No room ID found! Typing indicator will not work.');
@@ -1039,7 +1176,7 @@ class TypingManager {
         // Ascolta eventi typing da altri utenti
         this.listenToTypingEvents();
 
-        console.log('TypingManager.init() - Initialization completed successfully');
+         - Initialization completed successfully');
     }
 
     getCurrentRoomId() {
@@ -1056,16 +1193,16 @@ class TypingManager {
             }
         }
 
-        console.log('getCurrentRoomId - URL params:', window.location.search);
-        console.log('getCurrentRoomId - Path:', window.location.pathname);
-        console.log('getCurrentRoomId - Found room ID:', roomId);
+
+
+
 
         return roomId;
     }
 
     handleInput() {
-        console.log('TypingManager.handleInput() - Input event triggered');
-        console.log('TypingManager.handleInput() - Current room:', this.currentRoom);
+         - Input event triggered');
+         - Current room:', this.currentRoom);
 
         if (!this.currentRoom) {
             console.warn('TypingManager.handleInput() - No room ID, ignoring input');
@@ -1073,10 +1210,10 @@ class TypingManager {
         }
 
         if (!this.isTyping) {
-            console.log('TypingManager.handleInput() - Starting typing...');
+             - Starting typing...');
             this.startTyping();
         } else {
-            console.log('TypingManager.handleInput() - Already typing, resetting timeout...');
+             - Already typing, resetting timeout...');
         }
 
         // Reset timeout
@@ -1119,8 +1256,8 @@ class TypingManager {
     }
 
     async sendTypingEvent(action) {
-        console.log(`TypingManager.sendTypingEvent(${action}) - Starting...`);
-        console.log(`TypingManager.sendTypingEvent(${action}) - Room ID:`, this.currentRoom);
+         - Starting...`);
+         - Room ID:`, this.currentRoom);
 
         if (!this.currentRoom) {
             console.error(`TypingManager.sendTypingEvent(${action}) - No room ID, cannot send event`);
@@ -1129,7 +1266,7 @@ class TypingManager {
 
         try {
             const url = `/chat/${this.currentRoom}/typing/${action}`;
-            console.log(`TypingManager.sendTypingEvent(${action}) - Sending request to:`, url);
+             - Sending request to:`, url);
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -1139,12 +1276,12 @@ class TypingManager {
                 }
             });
 
-            console.log(`TypingManager.sendTypingEvent(${action}) - Response status:`, response.status);
+             - Response status:`, response.status);
 
             if (!response.ok) {
                 console.error(`TypingManager.sendTypingEvent(${action}) - Error:`, response.status);
             } else {
-                console.log(`TypingManager.sendTypingEvent(${action}) - Success!`);
+                 - Success!`);
             }
         } catch (error) {
             console.error(`TypingManager.sendTypingEvent(${action}) - Exception:`, error);
@@ -1152,9 +1289,9 @@ class TypingManager {
     }
 
     listenToTypingEvents() {
-        console.log('TypingManager.listenToTypingEvents() - Starting...');
-        console.log('TypingManager.listenToTypingEvents() - Echo available:', !!window.Echo);
-        console.log('TypingManager.listenToTypingEvents() - Current room:', this.currentRoom);
+         - Starting...');
+         - Echo available:', !!window.Echo);
+         - Current room:', this.currentRoom);
 
         if (!window.Echo || !this.currentRoom) {
             console.error('TypingManager.listenToTypingEvents() - Echo or room ID missing');
@@ -1163,49 +1300,49 @@ class TypingManager {
             return;
         }
 
-        console.log('TypingManager.listenToTypingEvents() - Setting up typing listeners for room:', this.currentRoom);
+         - Setting up typing listeners for room:', this.currentRoom);
 
         // Ascolta canale privato per la room
         const channelName = `chat.room.${this.currentRoom}`;
-        console.log('TypingManager.listenToTypingEvents() - Channel name:', channelName);
+         - Channel name:', channelName);
 
         const channel = window.Echo.private(channelName);
-        console.log('TypingManager.listenToTypingEvents() - Channel created:', channel);
+         - Channel created:', channel);
 
         channel
             .subscribed(() => {
-                console.log('TypingManager.listenToTypingEvents() - Successfully subscribed to channel:', channelName);
+                 - Successfully subscribed to channel:', channelName);
             })
             .error((err) => {
                 console.error('TypingManager.listenToTypingEvents() - Channel authorization error:', err);
             })
             .listen('.typing.started', (e) => {
-                console.log('TypingManager.listenToTypingEvents() - Received .typing.started event:', e);
+                 - Received .typing.started event:', e);
                 this.handleTypingStarted(e);
             })
             .listen('.typing.stopped', (e) => {
-                console.log('TypingManager.listenToTypingEvents() - Received .typing.stopped event:', e);
+                 - Received .typing.stopped event:', e);
                 this.handleTypingStopped(e);
             });
 
-        console.log('TypingManager.listenToTypingEvents() - Typing listeners set up successfully');
+         - Typing listeners set up successfully');
     }
 
     handleTypingStarted(event) {
-        console.log('Handling typing started event:', event);
-        console.log('Current user ID:', <?php echo e(auth()->id()); ?>);
-        console.log('Event user ID:', event.user_id);
+
+        ->id() }});
+
 
         if (event.user_id === <?php echo e(auth()->id()); ?>) {
-            console.log('Ignoring own typing event');
+
             return; // Ignora i propri eventi
         }
 
         const typingUsers = event.typing_users;
         const currentUserNames = Object.values(typingUsers);
 
-        console.log('Typing users:', typingUsers);
-        console.log('User names:', currentUserNames);
+
+
 
         if (currentUserNames.length > 0) {
             this.showTypingIndicator(currentUserNames);
@@ -1226,7 +1363,7 @@ class TypingManager {
     }
 
     showTypingIndicator(userNames) {
-        console.log('Showing typing indicator for:', userNames);
+
 
         // Mostra indicatori nella chat principale
         if (this.typingIndicator) {
@@ -1239,10 +1376,10 @@ class TypingManager {
                 text = `${userNames[0]} e altri stanno scrivendo...`;
             }
 
-            console.log('Setting typing text:', text);
+
             this.typingText.textContent = text;
             this.typingIndicator.classList.remove('d-none');
-            console.log('Typing indicator shown');
+
         }
 
         // Mostra indicatori nella lista dei contatti
@@ -1279,7 +1416,7 @@ class TypingManager {
 
     // Metodo per aggiornare la stanza corrente (utile per mobile)
     updateCurrentRoom(newRoomId) {
-        console.log('TypingManager.updateCurrentRoom() - Updating from', this.currentRoom, 'to', newRoomId);
+         - Updating from', this.currentRoom, 'to', newRoomId);
 
         // Nasconde tutti gli indicatori precedenti
         this.hideTypingIndicator();
@@ -1299,16 +1436,16 @@ let typingManager = null;
 
 // Inizializza l'offcanvas della chat
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing chat offcanvas...');
+
 
     // Inizializza typing manager
     const chatInput = document.querySelector('[data-chat-input]');
-    console.log('DOMContentLoaded - Chat input found:', chatInput);
+
 
     if (chatInput) {
-        console.log('DOMContentLoaded - Creating TypingManager...');
+
         typingManager = new TypingManager();
-        console.log('DOMContentLoaded - TypingManager created:', typingManager);
+
     } else {
         console.error('DOMContentLoaded - Chat input not found, TypingManager not created');
     }
@@ -1316,7 +1453,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verifica che l'offcanvas sia presente
     const offcanvas = document.getElementById('chatListOffcanvas');
     if (offcanvas) {
-        console.log('Chat offcanvas found:', offcanvas);
+
     } else {
         console.error('Chat offcanvas not found!');
     }
@@ -1324,8 +1461,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verifica che il toggle button sia presente
     const toggleBtn = document.querySelector('.toggle-btn');
     if (toggleBtn) {
-        console.log('Toggle button found:', toggleBtn);
-        console.log('Toggle button attributes:', {
+
+
             'data-bs-toggle': toggleBtn.getAttribute('data-bs-toggle'),
             'data-bs-target': toggleBtn.getAttribute('data-bs-target')
         });
@@ -1341,7 +1478,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const chatRoom = this.getAttribute('data-chat-room');
             const contactName = this.getAttribute('data-contact-name');
 
-            console.log('Contact clicked:', { contactId, chatRoom, contactName });
+
 
             // Chiudi l'offcanvas
             const offcanvasInstance = bootstrap.Offcanvas.getInstance(document.getElementById('chatListOffcanvas'));
@@ -1351,7 +1488,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Replica esattamente il comportamento desktop: redirect completo
             const chatUrl = `<?php echo e(route('chat.index')); ?>?room=${chatRoom}`;
-            console.log('Redirecting to:', chatUrl);
+
             window.location.href = chatUrl;
         });
     });
@@ -1362,7 +1499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const checkUrlChange = () => {
             const currentRoomId = typingManager.getCurrentRoomId();
             if (currentRoomId && currentRoomId !== typingManager.currentRoom) {
-                console.log('URL changed, updating room from', typingManager.currentRoom, 'to', currentRoomId);
+
                 typingManager.updateCurrentRoom(currentRoomId);
             }
         };
@@ -1379,8 +1516,105 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Funzioni globali per le reazioni ai messaggi
+function toggleReaction(messageId, emoji) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`/chat/reactions/toggle`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            message_id: messageId,
+            reaction: emoji
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Aggiorna la visualizzazione delle reazioni
+            updateReactionsDisplay(messageId, data.reactions);
+        }
+    })
+    .catch(error => {
+        console.error('Errore durante il toggle della reazione:', error);
+    });
+}
+
+function addReaction(messageId, emoji) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`/chat/reactions/add`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            message_id: messageId,
+            reaction: emoji
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Aggiorna la visualizzazione delle reazioni
+            updateReactionsDisplay(messageId, data.reactions);
+            // Nasconde l'emoji picker
+            hideReactionPicker(messageId);
+        }
+    })
+    .catch(error => {
+        console.error('Errore durante l\'aggiunta della reazione:', error);
+    });
+}
+
+function updateReactionsDisplay(messageId, reactions) {
+    const reactionsDisplay = document.querySelector(`[data-reactions-display="${messageId}"]`);
+    if (!reactionsDisplay) return;
+
+    reactionsDisplay.innerHTML = '';
+
+    if (reactions && reactions.length > 0) {
+        reactions.forEach(reaction => {
+            const reactionElement = document.createElement('div');
+            reactionElement.className = 'reaction-item';
+            reactionElement.onclick = () => toggleReaction(messageId, reaction.emoji);
+            reactionElement.title = reaction.users.map(user => user.name).join(', ');
+
+            reactionElement.innerHTML = `
+                <span class="reaction-emoji">${reaction.emoji}</span>
+                <span class="reaction-count">${reaction.count}</span>
+            `;
+
+            reactionsDisplay.appendChild(reactionElement);
+        });
+    }
+}
+
+function toggleReactionPicker(messageId) {
+    const picker = document.getElementById(`emoji-picker-${messageId}`);
+    if (picker) {
+        picker.classList.toggle('d-none');
+    }
+}
+
+function hideReactionPicker(messageId) {
+    const picker = document.getElementById(`emoji-picker-${messageId}`);
+    if (picker) {
+        picker.classList.add('d-none');
+    }
+}
+
 
 </script>
+
+<style>
+
+</style>
+
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/chat/index.blade.php ENDPATH**/ ?>

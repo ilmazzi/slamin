@@ -24,7 +24,7 @@ $(document).on("click", ".sidebar-option > li", function () {
 
         setUpHorizontalHeader();
     }catch (e) {
-        console.log("Fail to change sidebar option");
+        
     }
 });
 
@@ -41,7 +41,7 @@ $(document).on("click", ".layout-option > li", function () {
 
         setLocalStorageItem("layout-option", layoutClassName);
     } catch (e) {
-        console.log("Fail to change layout option");
+        
     }
 
 });
@@ -75,7 +75,7 @@ $(document).on("click", ".color-hint > li", function () {
 
         setLocalStorageItem("color-option", colorClassName);
     } catch (e) {
-        console.log("Fail to change color option");
+        
     }
     window.location.reload();
 });
