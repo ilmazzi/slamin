@@ -129,13 +129,13 @@
                 <div class="card-body p-0">
                     <div id="eventsMap" style="height: 300px; border-radius: 10px; overflow: hidden; position: relative;">
                         <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1000;">
-                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="centerOnUser()" title="Centra sulla mia posizione (richiede HTTPS)">
+                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}">
                                 <i class="ph ph-crosshairs f-s-14"></i>
                             </button>
-                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="refreshEvents()" title="Aggiorna eventi">
+                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}">
                                 <i class="ph ph-arrow-clockwise f-s-14"></i>
                             </button>
-                            <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="Mostra tutti gli eventi">
+                            <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}">
                                 <i class="ph ph-globe f-s-14"></i>
                             </button>
                         </div>
@@ -398,7 +398,7 @@
                                         @if(Auth::user()->hasRole(['admin', 'moderator']) || ($event->organizer_id === Auth::id() && $event->start_datetime >= now()))
                                             <button type="button" class="btn btn-light btn-sm"
                                                     onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
-                                                    title="Elimina evento">
+                                                    title="{{ __('events.delete_event') }}">
                                                 <i class="ti ti-trash"></i>
                                             </button>
                                         @endif
@@ -491,15 +491,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                    <h5 class="modal-title" id="eventDetailsModalLabel">Dettagli Evento</h5>
+                    <h5 class="modal-title" id="eventDetailsModalLabel">{{ __('events.event_details') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body" id="eventDetailsModalBody">
                     <!-- Content will be loaded here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <a href="#" class="btn btn-primary" id="eventDetailsModalLink">Vedi Dettagli Completi</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.close') }}</button>
+                    <a href="#" class="btn btn-primary" id="eventDetailsModalLink">{{ __('events.view_complete_details') }}</a>
                 </div>
         </div>
     </div>
@@ -511,30 +511,30 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-danger" id="deleteEventModalLabel">
-                    <i class="ph ph-warning me-2"></i>Elimina Evento
+                    <i class="ph ph-warning me-2"></i>{{ __('events.delete_event_title') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Sei sicuro di voler eliminare l'evento "<strong id="deleteEventTitle"></strong>"?</p>
+                <p>{{ __('events.confirm_delete_event', ['title' => '<strong id="deleteEventTitle"></strong>']) }}</p>
                 <div class="alert alert-warning">
                     <i class="ph ph-warning me-2"></i>
-                    <strong>Attenzione:</strong> Questa azione non può essere annullata e:
+                    <strong>{{ __('events.warning') }}</strong> {{ __('events.delete_action_warning') }}
                     <ul class="mb-0 mt-2">
-                        <li>Tutti i partecipanti riceveranno una notifica di cancellazione</li>
-                        <li>Tutti gli inviti e le richieste verranno eliminati</li>
-                        <li>L'evento verrà rimosso dai preferiti di tutti gli utenti</li>
-                        <li>Se l'evento fa parte di un festival, verrà rimosso dal festival</li>
+                        <li>{{ __('events.delete_warning_participants') }}</li>
+                        <li>{{ __('events.delete_warning_invitations') }}</li>
+                        <li>{{ __('events.delete_warning_favorites') }}</li>
+                        <li>{{ __('events.delete_warning_festival') }}</li>
                     </ul>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.cancel') }}</button>
                 <form id="deleteEventForm" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="ph ph-trash me-2"></i>Elimina Definitivamente
+                        <i class="ph ph-trash me-2"></i>{{ __('events.delete_permanently') }}
                     </button>
                 </form>
             </div>
@@ -714,7 +714,7 @@ function loadEventsOnMapWithFilter(params) {
 
             if (events.length === 0) {
                 
-                showNotification('Nessun evento trovato con i filtri applicati.', 'info');
+                showNotification('{{ __('events.no_events_with_filters') }}', 'info');
                 return;
             }
 
@@ -799,7 +799,7 @@ function loadEventsOnMapWithFilter(params) {
     })
     .catch(error => {
             console.error('Error loading events:', error);
-            showNotification('Errore nel caricamento degli eventi.', 'error');
+            showNotification('{{ __('events.error_loading_events') }}', 'error');
     });
 }
 
@@ -812,12 +812,12 @@ function centerOnUser() {
                 const userLng = position.coords.longitude;
                 map.setView([userLat, userLng], 12);
                 loadEventsOnMap(userLat, userLng);
-                showNotification('Mappa centrata sulla tua posizione', 'success');
+                showNotification('{{ __('events.map_centered_on_position') }}', 'success');
             },
             function(error) {
                 let message = error.code === 1 ?
-                    'Geolocalizzazione richiede HTTPS. Usa il bottone refresh per eventi nell\'area corrente.' :
-                    'Impossibile ottenere la tua posizione';
+                    '{{ __('events.geolocation_https_required') }}' :
+                    '{{ __('events.cannot_get_position') }}';
                 showNotification(message, 'warning');
             }
         );
@@ -828,7 +828,7 @@ function centerOnUser() {
 function refreshEvents() {
     const center = map.getCenter();
     loadEventsOnMap(center.lat, center.lng);
-    showNotification('Eventi aggiornati', 'success');
+    showNotification('{{ __('events.events_updated') }}', 'success');
 }
 
 // Funzione per mostrare tutti gli eventi (senza filtro geografico)
@@ -850,7 +850,7 @@ function showAllEvents() {
                                 <div class="p-2">
                                     <h6>${event.title}</h6>
                                     ${event.is_online ?
-                                        `<p class="mb-2"><i class="ph ph-globe me-1"></i>Evento Online</p>` :
+                                        `<p class="mb-2"><i class="ph ph-globe me-1"></i>{{ __('events.online_event_label') }}</p>` :
                                         `<p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>`
                                     }
                                     <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
@@ -858,7 +858,7 @@ function showAllEvents() {
                             `);
                     }
                                         });
-                        showNotification(`Mostrati ${data.events.length} eventi`, 'success');
+                        showNotification('{{ __('events.events_shown', ['count' => '']) }}'.replace(':count', data.events.length), 'success');
 
                         // Centra la mappa se ci sono eventi
                         if (data.events.length > 0) {
@@ -1101,7 +1101,7 @@ function openEventDetailsModal(event) {
             <div class="col-md-8">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <h4 class="mb-0">${event.title}</h4>
-                    <span class="badge ${event.category_color_class} fs-6">${event.category_name || 'N/A'}</span>
+                    <span class="badge ${event.category_color_class} fs-6">${event.category_name || '{{ __('events.not_available') }}'}</span>
                 </div>
 
                 <div class="row mb-3">
@@ -1117,7 +1117,7 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-globe text-success me-2"></i>
-                        <strong class="text-success">Evento Online</strong>
+                        <strong class="text-success">{{ __('events.online_event_label') }}</strong>
                         ${event.timezone ? `<br><small class="text-muted">Fuso orario: ${event.timezone}</small>` : ''}
                     </div>
                 </div>
@@ -1127,7 +1127,7 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                        <strong>Luogo:</strong> ${event.venue_name || 'N/A'}
+                        <strong>{{ __('events.location_label') }}</strong> ${event.venue_name || '{{ __('events.not_available') }}'}
                         ${event.city ? `<br><small class="text-muted">${event.city}</small>` : ''}
                     </div>
                 </div>
@@ -1138,18 +1138,18 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-user text-info me-2"></i>
-                        <strong>Organizzatore:</strong> ${event.organizer}
+                        <strong>{{ __('events.organizer_label') }}</strong> ${event.organizer}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-6">
                         <i class="fas fa-users text-warning me-2"></i>
-                        <strong>Partecipanti:</strong> ${event.max_participants || 'Illimitato'}
+                        <strong>{{ __('events.participants_label') }}</strong> ${event.max_participants || '{{ __('events.unlimited') }}'}
                     </div>
                     <div class="col-6">
                         <i class="fas fa-euro-sign text-success me-2"></i>
-                        <strong>Prezzo:</strong> ${event.entry_fee ? event.entry_fee + '€' : 'Gratuito'}
+                        <strong>{{ __('events.price_label') }}</strong> ${event.entry_fee ? event.entry_fee + '€' : '{{ __('events.free_label') }}'}
                     </div>
                 </div>
             </div>

@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-md-4">
                                 <h4 class="text-info">{{ $user->videos_count + $user->photos_count + $user->poems_count }}</h4>
-                                <p class="text-muted">Contenuti</p>
+                                <p class="text-muted">{{ __('profile.content') }}</p>
                             </div>
                         </div>
                     </div>
@@ -85,15 +85,15 @@
                         <!-- Statistiche -->
                         <div class="row text-center mb-3">
                             <div class="col-4">
-                                <div class="f-s-12 text-muted">Video</div>
+                                <div class="f-s-12 text-muted">{{ __('profile.videos_label') }}</div>
                                 <div class="fw-bold">{{ $follower->videos_count }}</div>
                             </div>
                             <div class="col-4">
-                                <div class="f-s-12 text-muted">Foto</div>
+                                <div class="f-s-12 text-muted">{{ __('profile.photos_label') }}</div>
                                 <div class="fw-bold">{{ $follower->photos_count }}</div>
                             </div>
                             <div class="col-4">
-                                <div class="f-s-12 text-muted">Poesie</div>
+                                <div class="f-s-12 text-muted">{{ __('profile.poems_label') }}</div>
                                 <div class="fw-bold">{{ $follower->poems_count }}</div>
                             </div>
                         </div>
@@ -111,13 +111,13 @@
                                     id="followBtn{{ $follower->id }}">
                                 <i class="ti {{ $follower->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }} me-1"></i>
                                 <span id="followText{{ $follower->id }}">
-                                    {{ $follower->is_followed_by_current_user ?? false ? 'Following' : 'Follow' }}
+                                    {{ $follower->is_followed_by_current_user ?? false ? __('profile.following_label') : __('profile.follow_label') }}
                                 </span>
                             </button>
                             @else
                             <div class="btn btn-outline-secondary btn-sm" style="opacity: 0.6;">
                                 <i class="ti ti-user me-1"></i>
-                                Follow
+                                {{ __('profile.follow_label') }}
                             </div>
                             @endauth
                         </div>
@@ -130,7 +130,7 @@
                     <div class="card-body text-center py-5">
                         <i class="ph-duotone ph-users f-s-48 text-muted mb-3"></i>
                         <h5 class="text-muted">{{ __('profile.no_followers') }}</h5>
-                        <p class="text-muted">Questo utente non ha ancora followers.</p>
+                        <p class="text-muted">{{ __('profile.no_followers_message') }}</p>
                         @auth
                         @if(!$isOwnProfile)
                         <button type="button" class="btn btn-primary" onclick="followUser({{ $user->id }})">
@@ -196,11 +196,11 @@ function followUser(userId) {
         if (data.success) {
             // Aggiorna il pulsante
             if (data.following) {
-                button.innerHTML = '<i class="ti ti-user-check me-1"></i><span id="followText' + userId + '">Following</span>';
+                button.innerHTML = '<i class="ti ti-user-check me-1"></i><span id="followText' + userId + '">{{ __("profile.following_label") }}</span>';
                 button.classList.remove('btn-outline-primary');
                 button.classList.add('btn-success');
             } else {
-                button.innerHTML = '<i class="ti ti-user me-1"></i><span id="followText' + userId + '">Follow</span>';
+                button.innerHTML = '<i class="ti ti-user me-1"></i><span id="followText' + userId + '">{{ __("profile.follow_label") }}</span>';
                 button.classList.remove('btn-success');
                 button.classList.add('btn-outline-primary');
             }
@@ -208,18 +208,18 @@ function followUser(userId) {
             // Mostra notifica
             Swal.fire({
                 icon: 'success',
-                title: 'Successo!',
+                title: '{{ __("profile.success") }}',
                 text: data.message,
                 timer: 2000,
                 showConfirmButton: false
             });
         } else {
-            Swal.fire('Errore', data.message, 'error');
+            Swal.fire('{{ __("profile.error") }}', data.message, 'error');
         }
     })
     .catch(error => {
         console.error('Errore connessione follow:', error);
-        Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
+        Swal.fire('{{ __("profile.error") }}', '{{ __("profile.operation_error") }}', 'error');
     })
     .finally(() => {
         button.disabled = false;

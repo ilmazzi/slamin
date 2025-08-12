@@ -33,16 +33,16 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 f-w-600">Timeline delle Attività</h4>
+                <h4 class="mb-0 f-w-600">{{ __('profile.activity_timeline') }}</h4>
                 <div class="d-flex gap-2">
                     <select class="form-select form-select-sm" id="activityFilter">
-                        <option value="">Tutte le attività</option>
-                        <option value="event_organized">Eventi organizzati</option>
-                        <option value="event_participation">Partecipazioni</option>
-                        <option value="video_upload">{{ __('common.video') }} caricati</option>
+                        <option value="">{{ __('profile.all_activities') }}</option>
+                        <option value="event_organized">{{ __('profile.organized_events_filter') }}</option>
+                        <option value="event_participation">{{ __('profile.participations_filter') }}</option>
+                        <option value="video_upload">{{ __('profile.videos_uploaded_filter') }}</option>
                     </select>
                     <button class="btn btn-outline-primary hover-effect" onclick="exportActivity()">
-                        <i class="ph ph-download me-2"></i>Esporta
+                        <i class="ph ph-download me-2"></i>{{ __('profile.export') }}
                     </button>
                 </div>
             </div>
@@ -105,11 +105,11 @@
                         <div class="bg-light-info h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                             <i class="ph ph-activity-slash f-s-48 text-info"></i>
                         </div>
-                        <h4 class="text-info f-w-600 mb-2">Nessuna Attività</h4>
-                        <p class="text-muted f-s-16 mb-4">Non hai ancora registrato nessuna attività. Inizia a partecipare agli eventi!</p>
+                                            <h4 class="text-info f-w-600 mb-2">{{ __('profile.no_activity') }}</h4>
+                    <p class="text-muted f-s-16 mb-4">{{ __('profile.no_activity_message') }}</p>
                         <div class="d-flex gap-2 justify-content-center">
                             <a href="{{ route('events.index') }}" class="btn btn-primary hover-effect">
-                                <i class="ph ph-calendar me-2"></i>Vedi Eventi
+                                <i class="ph ph-calendar me-2"></i>{{ __('profile.view_events') }}
                             </a>
                             <a href="{{ route('peertube.upload-video') }}" class="btn btn-success hover-effect">
                                 <i class="ph ph-video-camera me-2"></i>{{ __('common.upload_video') }}

@@ -33,24 +33,16 @@ return [
     
     // Azioni rapide
     'quick_actions' => 'Azioni Rapide',
-    'organize_event' => 'Organizza Evento',
-    'organize_event_desc' => 'Crea un nuovo evento',
-    'find_events' => 'Trova Eventi',
-    'find_events_desc' => 'Cerca eventi disponibili',
-    'view_wishlist' => 'Wishlist',
-    'view_wishlist_desc' => 'I tuoi eventi salvati',
-    'view_poems' => 'Poesie',
-    'view_poems_desc' => 'Leggi le poesie',
-    'create_post' => 'Crea Post',
-    'create_post_desc' => 'Pubblica un post',
+    
+    // Azioni rapide dinamiche (generate dal controller)
     'write_poem' => 'Scrivi Poesia',
-    'write_poem_desc' => 'Componi una poesia',
+    'write_poem_desc' => 'Esprimi la tua arte',
+    'organize_event' => 'Organizza Evento',
+    'organize_event_desc' => 'Crea nuovi eventi',
+    'upload_performance' => 'Carica Video',
+    'upload_performance_desc' => 'Condividi il tuo talento',
     'write_article' => 'Scrivi Articolo',
     'write_article_desc' => 'Pubblica un articolo',
-    'upload_performance' => 'Carica Video',
-    'upload_performance_desc' => 'Condividi un video',
-    'manage_venue' => 'Gestisci Venue',
-    'manage_venue_desc' => 'Amministra la tua venue',
     
     // Wishlist
     'my_wishlist' => 'La Mia Wishlist',
@@ -65,4 +57,20 @@ return [
     'organizer_section' => 'Sezione Organizzatore',
     'organizer_section_description' => 'Organizza eventi e gestisci partecipanti',
     'access_section' => 'Accedi alla Sezione',
+
+    // Chiavi aggiuntive per la dashboard
+    'group_invitations' => 'Inviti ai Gruppi',
+    'groups' => 'Gruppi',
+    'view_all_group_invitations' => 'Vedi Tutti gli Inviti',
+    'accept' => 'Accetta',
+    'decline' => 'Rifiuta',
+    'user_not_found' => 'Utente non trovato',
+
+    // Chiavi per JavaScript e notifiche
+    'added_to_wishlist' => 'Aggiunto alla wishlist',
+    'removed_from_wishlist' => 'Rimosso dalla wishlist',
+    'error' => 'Errore',
+    'error_message' => 'Si è verificato un errore. Riprova.',
+    'success' => 'Successo',
+    'ok' => 'OK',
 ];

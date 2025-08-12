@@ -47,4 +47,20 @@ return [
     'forum' => 'Forum',
     'fan_support' => 'Supporto Fan',
     'wiki' => 'Wiki',
+
+    // Chiavi aggiuntive comuni (utilizzate in altre pagine)
+    'author' => 'Autore',
+    'follow' => 'Follow',
+    'following' => 'Following',
+    'followers' => 'Followers',
+    'location' => 'Località',
+    'not_specified' => 'Non specificato',
+    'editorial' => 'Redazione',
+    'loading' => 'Caricamento...',
+    'error' => 'Errore',
+    'preview' => 'Anteprima',
+    'not_available' => 'Non disponibile',
+    'timestamp' => 'Timestamp',
+    'title' => 'Titolo',
+    'description' => 'Descrizione',
 ];

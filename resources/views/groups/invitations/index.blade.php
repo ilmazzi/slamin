@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', 'I Miei Inviti ai Gruppi')
+@section('title', __('groups.my_group_invitations'))
 
 @section('main-content')
 <div class="container-fluid">
@@ -11,7 +11,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-envelope me-2 text-primary"></i>
-                        I Miei Inviti ai Gruppi
+                        {{ __('groups.my_group_invitations') }}
                     </h4>
                     <div class="d-flex gap-2">
                         <a href="{{ route('group-invitations.sent') }}" class="btn btn-outline-primary">
@@ -26,13 +26,13 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Gruppo</th>
-                                        <th>Inviato da</th>
-                                        <th>Messaggio</th>
-                                        <th>Data Invito</th>
-                                        <th>Scade il</th>
-                                        <th>Stato</th>
-                                        <th>Azioni</th>
+                                                                <th>{{ __('groups.group_column') }}</th>
+                        <th>{{ __('groups.sent_by_column') }}</th>
+                        <th>{{ __('groups.message_column') }}</th>
+                        <th>{{ __('groups.invite_date_column') }}</th>
+                        <th>{{ __('groups.expires_column') }}</th>
+                        <th>{{ __('groups.status_column') }}</th>
+                        <th>{{ __('groups.actions_column') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,7 +56,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <div class="fw-medium">{{ $invitation->group->name }}</div>
-                                                        <small class="text-muted">{{ $invitation->group->description ? Str::limit($invitation->group->description, 30) : 'Nessuna descrizione' }}</small>
+                                                        <small class="text-muted">{{ $invitation->group->description ? Str::limit($invitation->group->description, 30) : __('groups.no_description') }}</small>
                                                     </div>
                                                 </div>
                                             </td>
@@ -73,14 +73,14 @@
                                                         <span>{{ $invitation->invitedBy->name }}</span>
                                                     </div>
                                                 @else
-                                                    <span class="text-muted">Utente non trovato</span>
+                                                    <span class="text-muted">{{ __('groups.user_not_found') }}</span>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($invitation->message)
                                                     <span class="text-muted">{{ Str::limit($invitation->message, 50) }}</span>
                                                 @else
-                                                    <span class="text-muted">Nessun messaggio</span>
+                                                    <span class="text-muted">{{ __('groups.no_message') }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -90,15 +90,15 @@
                                                 @if($invitation->expires_at)
                                                     <small class="text-muted">{{ $invitation->expires_at->format('d/m/Y H:i') }}</small>
                                                 @else
-                                                    <small class="text-muted">Non scade</small>
+                                                    <small class="text-muted">{{ __('groups.never_expires') }}</small>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($invitation->isPending())
                                                     @if($invitation->isExpired())
-                                                        <span class="badge bg-danger">Scaduto</span>
+                                                        <span class="badge bg-danger">{{ __('groups.expired') }}</span>
                                                     @else
-                                                        <span class="badge bg-warning">In attesa</span>
+                                                        <span class="badge bg-warning">{{ __('groups.pending') }}</span>
                                                     @endif
                                                 @elseif($invitation->isAccepted())
                                                     <span class="badge bg-success">{{ __('groups.status_accepted') }}</span>
@@ -125,7 +125,7 @@
                                                         </button>
                                                     </div>
                                                 @elseif($invitation->isPending() && $invitation->isExpired())
-                                                    <span class="text-muted small">Invito scaduto</span>
+                                                    <span class="text-muted small">{{ __('groups.invitation_expired') }}</span>
                                                 @else
                                                     <a href="{{ route('group-invitations.show', $invitation) }}"
                                                        class="btn btn-sm btn-outline-primary">
@@ -149,8 +149,8 @@
                             <div class="mb-3">
                                 <i class="ph-duotone ph-envelope text-muted" style="font-size: 3rem;"></i>
                             </div>
-                            <h5 class="text-muted">Nessun invito ricevuto</h5>
-                            <p class="text-muted">Non hai ricevuto ancora inviti ai gruppi.</p>
+                                                <h5 class="text-muted">{{ __('groups.no_invitations_received') }}</h5>
+                    <p class="text-muted">{{ __('groups.no_invitations_received_description') }}</p>
                             <a href="{{ route('groups.index') }}" class="btn btn-primary">
                                 <i class="ph-duotone ph-users me-2"></i>
                                 Esplora i Gruppi

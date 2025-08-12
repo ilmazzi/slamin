@@ -254,7 +254,7 @@
                             <div class="card-header">
                                 <h5 class="mb-0">
                                     <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                    Prossimi Eventi
+                                    {{ __('home.upcoming_events') }}
                                 </h5>
                             </div>
                             <div class="card-body">
@@ -319,7 +319,7 @@
 
                                                             <a href="{{ route('events.show', $event) }}" role="button"
                                                                 class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
-                                                                <i class="ph-duotone ph-info f-s-12 me-1"></i>Dettagli
+                                                                <i class="ph-duotone ph-info f-s-12 me-1"></i>{{ __('home.details') }}
                                                             </a>
 
                                                             <x-report-button :content="$event" type="event"
@@ -366,8 +366,7 @@
                                                                 <div class="text-center">
                                                                     <i
                                                                         class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
-                                                                    <p class="text-muted f-s-14 mb-0">Anteprima non
-                                                                        disponibile</p>
+                                                                    <p class="text-muted f-s-14 mb-0">{{ __('home.preview_not_available') }}</p>
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -386,7 +385,7 @@
                                                         <span
                                                             class="badge bg-warning text-dark f-s-11 fw-bold px-2 px-md-3 py-1 py-md-2 rounded-pill shadow-sm">
                                                             <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
-                                                            Più Popolare
+                                                            {{ __('home.most_popular') }}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -427,8 +426,7 @@
                                                                 <div>
                                                                     <h6 class="mb-0 f-w-600 f-s-14 text-dark">
                                                                         {{ $mostPopularVideo->user->name }}</h6>
-                                                                    <small class="text-muted f-s-11">Autore del
-                                                                        video</small>
+                                                                    <small class="text-muted f-s-11">{{ __('home.video_author') }}</small>
                                                                 </div>
                                                                 <div class="ms-auto">
                                                                     <i
@@ -443,7 +441,7 @@
                                                             <a href="{{ route('videos.show', $mostPopularVideo) }}"
                                                                 class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
                                                                 <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                                Guarda {{ __('common.video') }}
+                                                                {{ __('home.watch_video') }}
                                                             </a>
                                                             <x-report-button :content="$mostPopularVideo" type="video"
                                                                 size="sm" />
@@ -460,7 +458,7 @@
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
                                                                     {{ number_format($mostPopularVideo->view_count) }}</h6>
-                                                                <small class="text-muted f-s-10">Visualizzazioni</small>
+                                                                <small class="text-muted f-s-10">{{ __('home.views') }}</small>
                                                             </div>
                                                         </div>
                                                         <div class="col-6 col-md-3">
@@ -471,7 +469,7 @@
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
                                                                     {{ number_format($mostPopularVideo->like_count) }}</h6>
-                                                                <small class="text-muted f-s-10">Mi Piace</small>
+                                                                <small class="text-muted f-s-10">{{ __('home.likes') }}</small>
                                                             </div>
                                                         </div>
                                                         <div class="col-6 col-md-3">
@@ -576,7 +574,7 @@
                     <div class="col-12">
                         <h5 class="text-primary mb-3">
                             <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                            Nuovi Utenti
+                            {{ __('home.new_users') }}
                         </h5>
                     </div>
                     @foreach ($newUsers->take(3) as $user)
@@ -619,7 +617,7 @@
                                                         class="w-20 h-20" alt="instagram-check-mark">
                                                 @endif
                                             </h5>
-                                            <p>{{ $user->city ?? 'Località non specificata' }}</p>
+                                            <p>{{ $user->city ?? __('home.location_not_specified') }}</p>
                                             <div class="details">
                                                 <div>
                                                     <h4 class="text-primary">{{ $user->videos_count }}</h4>
@@ -627,11 +625,11 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="text-primary">{{ $user->followers_count ?? 0 }}</h4>
-                                                    <p class="text-secondary">Follower</p>
+                                                    <p class="text-secondary">{{ __('home.follower') }}</p>
                                                 </div>
                                                 <div>
                                                     <h4 class="text-primary">{{ $user->following_count ?? 0 }}</h4>
-                                                    <p class="text-secondary">Following</p>
+                                                    <p class="text-secondary">{{ __('home.following') }}</p>
                                                 </div>
                                             </div>
                                             <div class="my-2">
@@ -674,17 +672,17 @@
                                 <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                                     <i class="ph-duotone ph-video-camera-slash f-s-48 text-primary"></i>
                                 </div>
-                                <h4 class="text-dark f-w-600 mb-2">Nessun video disponibile</h4>
-                                <p class="text-muted mb-3">Al momento non ci sono video popolari da mostrare.</p>
+                                <h4 class="text-dark f-w-600 mb-2">{{ __('home.no_videos_available') }}</h4>
+                                <p class="text-muted mb-3">{{ __('home.no_videos_description') }}</p>
                                 @auth
                                     <a href="{{ route('videos.upload') }}" class="btn btn-primary">
                                         <i class="ph-duotone ph-upload me-2"></i>
-                                        Carica il primo video
+                                        {{ __('home.upload_first_video') }}
                                     </a>
                                 @else
                                     <a href="{{ route('login') }}" class="btn btn-primary">
                                         <i class="ph-duotone ph-sign-in me-2"></i>
-                                        Accedi per caricare video
+                                        {{ __('home.login_to_upload') }}
                                     </a>
                                 @endauth
                             </div>
@@ -702,7 +700,7 @@
                             class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
-                                Poesia
+                                {{ __('home.poetry_section') }}
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="poetryToggleLabelLeft"
@@ -858,18 +856,18 @@
                                     @auth
                                         <a href="{{ route('poems.create') }}" class="btn btn-info btn-sm">
                                             <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            Crea poesia
+                                            {{ __('home.create_poetry') }}
                                         </a>
                                     @else
                                         <a href="{{ route('login') }}" class="btn btn-info btn-sm"
                                             title="{{ __('auth.login_required') }}">
                                             <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            Crea poesia
+                                            {{ __('home.create_poetry') }}
                                         </a>
                                     @endauth
                                     <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
                                         <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                        Vedi tutte le poesie
+                                        {{ __('home.view_all_poems') }}
                                     </a>
                                 </div>
                             </div>
@@ -884,7 +882,7 @@
                             class="card-header bg-gradient-warning text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
-                                Articoli
+                                {{ __('home.articles_section') }}
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="articlesToggleLabelLeft"
@@ -926,7 +924,7 @@
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 {{ Str::limit($article->title, 40) }}</h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? 'Redazione' }}</p>
+                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -980,7 +978,7 @@
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 {{ Str::limit($article->title, 40) }}</h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? 'Redazione' }}</p>
+                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -1020,7 +1018,7 @@
             style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
             <div class="modal-header"
                 style="background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <h5 class="modal-title text-white" id="videoPlayerModalLabel">Video Player</h5>
+                <h5 class="modal-title text-white" id="videoPlayerModalLabel">{{ __('home.video_player') }}</h5>
                 <button type="button" class="btn-close btn-close-white" onclick="closeVideoModal()"
                     aria-label="Close"></button>
             </div>
@@ -1028,16 +1026,16 @@
                 <!-- Loading indicator -->
                 <div class="text-center position-absolute top-50 start-50 translate-middle" id="modalVideoLoading">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Caricamento video...</span>
+                        <span class="visually-hidden">{{ __('home.loading_video') }}</span>
                     </div>
-                    <p class="mt-2 text-white">Caricamento video...</p>
+                    <p class="mt-2 text-white">{{ __('home.loading_video') }}</p>
                 </div>
 
                 <!-- Error message -->
                 <div class="alert alert-danger position-absolute top-50 start-50 translate-middle" id="modalVideoError"
                     style="display: none; z-index: 1000;">
                     <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                    <span id="modalErrorMessage">Errore nel caricamento del video</span>
+                    <span id="modalErrorMessage">{{ __('home.video_loading_error') }}</span>
                 </div>
 
                 <!-- Video Container -->
@@ -1071,7 +1069,7 @@
                             </button>
                             <div class="snap-label"
                                 style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
-                                Crea snap
+                                {{ __('home.create_snap') }}
                             </div>
                         </div>
                     @endauth
@@ -1081,33 +1079,32 @@
                         <div class="position-absolute" id="modalSnapForm"
                             style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-white mb-0">Crea Snap</h6>
+                                <h6 class="text-white mb-0">{{ __('home.create_snap_button') }}</h6>
                                 <button type="button" class="btn-close btn-close-white" onclick="toggleSnapForm()"></button>
                             </div>
                             <form id="inlineSnapForm">
                                 <div class="mb-3">
                                     <label for="inlineSnapTitle" class="form-label text-white"
-                                        style="font-size: 12px;">Titolo (opzionale)</label>
+                                        style="font-size: 12px;">{{ __('home.snap_title_optional') }}</label>
                                     <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"
                                         style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
                                 </div>
                                 <div class="mb-3">
                                     <label for="inlineSnapDescription" class="form-label text-white"
-                                        style="font-size: 12px;">Descrizione (opzionale)</label>
+                                        style="font-size: 12px;">{{ __('home.snap_description_optional') }}</label>
                                     <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"
                                         style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-white" style="font-size: 12px;">Timestamp: <span
+                                    <label class="form-label text-white" style="font-size: 12px;">{{ __('home.timestamp') }} <span
                                             id="inlineCurrentTime" class="text-warning">00:00</span></label>
                                     <input type="hidden" id="inlineSnapTimestamp" value="0">
                                     <input type="hidden" id="inlineSnapVideoId" value="">
                                 </div>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-sm btn-secondary"
-                                        onclick="toggleSnapForm()">Annulla</button>
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">Crea
-                                        Snap</button>
+                                        onclick="toggleSnapForm()">{{ __('home.cancel') }}</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">{{ __('home.create_snap_button') }}</button>
                                 </div>
                             </form>
                         </div>

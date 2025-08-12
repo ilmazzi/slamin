@@ -159,12 +159,12 @@
                                     </div>
                                     @endif
                                     <div class="avatar-preview">
-                                        <div id="imgPreviewMobile">
-                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                                 alt="Profile Photo"
-                                                 class="img-fluid h-120 w-120 rounded-circle"
-                                                 style="object-fit: cover;">
-                                        </div>
+                                                        <div id="imgPreviewMobile">
+                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                         alt="{{ __('profile.profile_photo_alt') }}"
+                         class="img-fluid h-120 w-120 rounded-circle"
+                         style="object-fit: cover;">
+                </div>
                                     </div>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                         <div class="person-details">
                             <h5 class="f-w-600">{{ $user->getDisplayName() }}
                                 @if($user->verified_at)
-                                <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="verified-check-mark">
+                                <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="{{ __('profile.verified_check_mark') }}">
                                 @endif
                             </h5>
                             @if($user->nickname && $user->nickname !== $user->name)
@@ -537,12 +537,12 @@
                                                 </div>
                                                 @endif
                                                 <div class="avatar-preview">
-                                                                                            <div id="imgPreview">
-                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                                 alt="Profile Photo"
-                                                 class="img-fluid h-120 w-120 rounded-circle"
-                                                 style="object-fit: cover;">
-                                        </div>
+                                                                                                            <div id="imgPreview">
+                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                         alt="{{ __('profile.profile_photo_alt') }}"
+                         class="img-fluid h-120 w-120 rounded-circle"
+                         style="object-fit: cover;">
+                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -550,7 +550,7 @@
                                     <div class="person-details">
                                         <h5 class="f-w-600">{{ $user->getDisplayName() }}
                                             @if($user->verified_at)
-                                            <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="verified-check-mark">
+                                            <img src="{{ asset('assets/images/profile-app/01.png') }}" class="w-20 h-20" alt="{{ __('profile.verified_check_mark') }}">
                                             @endif
                                         </h5>
                                         @if($user->nickname && $user->nickname !== $user->name)

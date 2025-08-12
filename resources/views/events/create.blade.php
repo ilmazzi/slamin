@@ -5029,7 +5029,7 @@ function addGigPosition() {
             <div class="card-header bg-light-success">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">
-                        <i class="ph ph-briefcase me-2"></i>Posizione d'Ingaggio #${gigPositionCounter}
+                        <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_position', ['number' => '']) }}`.replace(':number', gigPositionCounter)
                     </h6>
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeGigPosition('${positionId}')">
                         <i class="ph ph-trash"></i>
@@ -5040,34 +5040,34 @@ function addGigPosition() {
                 <div class="row">
                     <!-- Tipologia -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Tipologia *</label>
+                        <label class="form-label">{{ __('events.gig_type') }}</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][type]" required>
-                             <option value="">Seleziona tipologia</option>
-                             <option value="poeta">Artista/Poeta</option>
-                              <option value="mc">MC/Ospite</option>
-                            <option value="tecnico">Supporto Tecnico</option>
-                           <option value="volontario">Volontaria/Volontario</option>
+                             <option value="">{{ __('events.select_type') }}</option>
+                             <option value="poeta">{{ __('events.artist_poet') }}</option>
+                              <option value="mc">{{ __('events.mc_host') }}</option>
+                            <option value="tecnico">{{ __('events.technical_support') }}</option>
+                           <option value="volontario">{{ __('events.volunteer') }}</option>
                         </select>
                     </div>
 
                     <!-- Quantità -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Quantità *</label>
+                        <label class="form-label">{{ __('events.quantity') }}</label>
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][quantity]" min="1" value="1" required>
                     </div>
 
                     <!-- {{ __('common.language_selector') }} richiesta -->
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">{{ __('common.language_selector') }} richiesta (opzionale)</label>
+                        <label class="form-label">{{ __('events.language_required') }}</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][language]">
-                            <option value="">Nessuna preferenza</option>
-                            <option value="italiano">Italiano</option>
-                            <option value="inglese">Inglese</option>
-                            <option value="francese">Francese</option>
-                            <option value="tedesco">Tedesco</option>
-                            <option value="spagnolo">Spagnolo</option>
-                            <option value="portoghese">Portoghese</option>
-                            <option value="altro">Altro</option>
+                            <option value="">{{ __('events.no_preference') }}</option>
+                            <option value="italiano">{{ __('events.italian') }}</option>
+                            <option value="inglese">{{ __('events.english') }}</option>
+                            <option value="francese">{{ __('events.french') }}</option>
+                            <option value="tedesco">{{ __('events.german') }}</option>
+                            <option value="spagnolo">{{ __('events.spanish') }}</option>
+                            <option value="portoghese">{{ __('events.portuguese') }}</option>
+                            <option value="altro">{{ __('events.other') }}</option>
                         </select>
                     </div>
                 </div>
@@ -5078,16 +5078,16 @@ function addGigPosition() {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="cachet-${gigPositionCounter}" onchange="toggleCachetFields(${gigPositionCounter})">
                             <label class="form-check-label" for="cachet-${gigPositionCounter}">
-                                <strong>Cachet</strong>
+                                <strong>{{ __('events.cachet') }}</strong>
                             </label>
                         </div>
                     </div>
                     <div class="col-md-6" id="cachet-amount-${gigPositionCounter}" style="display: none;">
-                        <label class="form-label">Ammontare</label>
+                        <label class="form-label">{{ __('events.amount') }}</label>
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][cachet_amount]" min="0" step="0.01" placeholder="0.00">
                     </div>
                     <div class="col-md-6" id="cachet-currency-${gigPositionCounter}" style="display: none;">
-                        <label class="form-label">Valuta</label>
+                        <label class="form-label">{{ __('events.currency') }}</label>
                         <select class="form-select" name="gig_positions[${gigPositionCounter}][cachet_currency]">
                             <option value="EUR">EUR (€)</option>
                             <option value="USD">USD ($)</option>
@@ -5102,12 +5102,12 @@ function addGigPosition() {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="travel-${gigPositionCounter}" onchange="toggleTravelFields(${gigPositionCounter})">
                             <label class="form-check-label" for="travel-${gigPositionCounter}">
-                                <strong>Spese di viaggio</strong>
+                                <strong>{{ __('events.travel_expenses') }}</strong>
                             </label>
                         </div>
                     </div>
                     <div class="col-md-6" id="travel-max-${gigPositionCounter}" style="display: none;">
-                        <label class="form-label">Tetto massimo copertura biglietti</label>
+                        <label class="form-label">{{ __('events.max_travel_coverage') }}</label>
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][travel_max]" min="0" step="0.01" placeholder="0.00">
                     </div>
                 </div>
@@ -5118,13 +5118,13 @@ function addGigPosition() {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="accommodation-${gigPositionCounter}" onchange="toggleAccommodationFields(${gigPositionCounter})">
                             <label class="form-check-label" for="accommodation-${gigPositionCounter}">
-                                <strong>Vitto e alloggio</strong>
+                                <strong>{{ __('events.accommodation') }}</strong>
                             </label>
                         </div>
                     </div>
                     <div class="col-12" id="accommodation-details-${gigPositionCounter}" style="display: none;">
-                        <label class="form-label">Dettagli vitto e alloggio</label>
-                        <textarea class="form-control" name="gig_positions[${gigPositionCounter}][accommodation_details]" rows="3" placeholder="Descrivi le condizioni di vitto e alloggio offerte..."></textarea>
+                        <label class="form-label">{{ __('events.accommodation_details') }}</label>
+                        <textarea class="form-control" name="gig_positions[${gigPositionCounter}][accommodation_details]" rows="3" placeholder="{{ __('events.accommodation_placeholder') }}"></textarea>
                     </div>
                 </div>
             </div>
@@ -5235,21 +5235,21 @@ function loadRecentVenue(venueId) {
                     // Mostra notifica di successo
                     showNotification('{{ __("events.venue_loaded_success") }}', 'success');
                 } else {
-                    showNotification('Luogo non trovato', 'warning');
+                    showNotification('{{ __("events.venue_not_found") }}', 'warning');
                 }
             } else {
-                showNotification(data.message || 'Errore nel caricamento del luogo', 'error');
+                showNotification(data.message || '{{ __("events.venue_load_error") }}', 'error');
             }
         })
         .catch(error => {
             console.error('Error loading recent venue:', error);
 
             if (error.message === 'Authentication required') {
-                showNotification('Devi essere autenticato per caricare i luoghi recenti', 'warning');
+                showNotification('{{ __("events.authentication_required") }}', 'warning');
             } else if (error.message === 'API endpoint not found') {
-                showNotification('Errore del server: endpoint non trovato', 'error');
+                showNotification('{{ __("events.server_error_endpoint") }}', 'error');
             } else if (error.message.includes('Expected JSON response')) {
-                showNotification('Errore del server: risposta non valida', 'error');
+                showNotification('{{ __("events.server_error_response") }}', 'error');
             } else {
                 showNotification('{{ __("events.venue_load_error") }}', 'error');
             }
@@ -5285,7 +5285,7 @@ function loadRecentVenueFromDropdown(venueId) {
 
         } catch (error) {
             console.error('Error parsing venue data:', error);
-            showNotification('Errore nel caricamento dei dati del luogo', 'error');
+            showNotification('{{ __("events.venue_data_error") }}', 'error');
         }
     } else {
         // Fallback: usa la funzione originale se i dati non sono nel dataset

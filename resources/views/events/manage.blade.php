@@ -121,11 +121,11 @@
                                     <h3 class="text-{{ $isPast ? 'secondary' : 'primary' }} mb-0">
                                         {{ abs(ceil($daysToEvent)) }}
                                     </h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">
-                                        {{ $isPast ? 'Giorni Fa' : 'Giorni Rimasti' }}
-                                    </p>
+                                                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">
+                                    {{ $isPast ? __('events.days_ago') : __('events.days_remaining') }}
+                                </p>
                                     <span class="badge bg-light-{{ $isPast ? 'secondary' : 'primary' }}">
-                                        {{ $isPast ? '🕒 Passato' : '⏰ Imminente' }}
+                                        {{ $isPast ? '🕒 ' . __('events.past') : '⏰ ' . __('events.imminent') }}
                                     </span>
                                 </div>
                             </div>
@@ -409,7 +409,7 @@
                                                     <div class="mb-1">
                                                         <span class="badge bg-light-primary">{{ ucfirst($participant['role']) }}</span>
                                                         <span class="badge bg-light-success ms-1">
-                                                            {{ $participant['type'] === 'invited' ? '📨 Invitato' : '🙋 Richiesta' }}
+                                                            {{ $participant['type'] === 'invited' ? __('events.invited_badge') : __('events.request_badge') }}
                                                     </span>
                                                 </div>
                                                 <small class="text-muted">

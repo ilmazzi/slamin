@@ -21,14 +21,14 @@
                         @endforeach
                     @endif
                 </div>
-                <button class="btn btn-sm reaction-btn" onclick="toggleReactionPicker({{ $message['id'] }})" title="Aggiungi reazione">
+                <button class="btn btn-sm reaction-btn" onclick="toggleReactionPicker({{ $message['id'] }})" title="{{ __('chat.add_reaction') }}">
                     <i class="ti ti-dots-vertical"></i>
                 </button>
 
                 <!-- Emoji Picker -->
                 <div class="emoji-picker d-none" id="emoji-picker-{{ $message['id'] }}">
                     <div class="emoji-picker-header">
-                        <span>Reagisci</span>
+                        <span>{{ __('chat.react') }}</span>
                         <button type="button" class="btn-close btn-close-sm" onclick="hideReactionPicker({{ $message['id'] }})"></button>
                     </div>
                     <div class="emoji-grid">
@@ -90,14 +90,14 @@
                         @endforeach
                     @endif
                 </div>
-                <button class="btn btn-sm reaction-btn" onclick="toggleReactionPicker({{ $message['id'] }})" title="Aggiungi reazione">
+                <button class="btn btn-sm reaction-btn" onclick="toggleReactionPicker({{ $message['id'] }})" title="{{ __('chat.add_reaction') }}">
                     <i class="ti ti-dots-vertical"></i>
                 </button>
 
                 <!-- Emoji Picker -->
                 <div class="emoji-picker d-none" id="emoji-picker-{{ $message['id'] }}">
                     <div class="emoji-picker-header">
-                        <span>Reagisci</span>
+                        <span>{{ __('chat.react') }}</span>
                         <button type="button" class="btn-close btn-close-sm" onclick="hideReactionPicker({{ $message['id'] }})"></button>
                     </div>
                     <div class="emoji-grid">

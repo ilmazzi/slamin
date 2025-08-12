@@ -65,7 +65,7 @@
                                     <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                                             style="width: 70px; height: 70px;"
                                             onclick="createSnapAtCurrentTime()"
-                                            title="Crea snap al tempo corrente">
+                                            title="{{ __('videos.create_snap_at_current_time') }}">
                                         <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
                                     </button>
                                 </div>
@@ -132,9 +132,9 @@
                             <!-- Loading indicator -->
                             <div class="text-center mt-3" id="videoLoading">
                                 <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Caricamento video...</span>
+                                    <span class="visually-hidden">{{ __('videos.loading_video') }}</span>
                                 </div>
-                                <p class="mt-2 text-muted">Caricamento video...</p>
+                                <p class="mt-2 text-muted">{{ __('videos.loading_video') }}</p>
                             </div>
 
                             <!-- Error message -->
@@ -154,10 +154,10 @@
                                 <div class="text-center">
                                     <i class="ph-duotone ph-video-camera-slash f-s-48 text-muted mb-3"></i>
                                     <h5 class="text-muted">{{ __('videos.video_unavailable') }}</h5>
-                                    <p class="text-muted">Il video potrebbe essere in fase di elaborazione o non essere più disponibile.</p>
+                                    <p class="text-muted">{{ __('videos.video_processing_message') }}</p>
                                     @if($video->peertube_url)
                                         <a href="{{ $video->peertube_url }}" target="_blank" class="btn btn-primary">
-                                            <i class="ph-duotone ph-external-link me-1"></i>Apri su PeerTube
+                                            <i class="ph-duotone ph-external-link me-1"></i>{{ __('videos.open_on_peertube') }}
                                         </a>
                                     @endif
                                 </div>

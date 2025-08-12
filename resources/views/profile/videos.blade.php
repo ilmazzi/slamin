@@ -174,9 +174,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 f-w-600">Gestione {{ __('common.video') }}</h4>
+                <h4 class="mb-0 f-w-600">{{ __('profile.video_management') }}</h4>
                 <a href="{{ route('videos.upload') }}" class="btn btn-primary hover-effect">
-                    <i class="ph ph-plus me-2"></i>Carica Nuovo {{ __('common.video') }}
+                    <i class="ph ph-plus me-2"></i>{{ __('profile.upload_new_video') }}
                 </a>
             </div>
         </div>
@@ -317,7 +317,7 @@
             <div class="modal-header card-light-primary">
                 <h5 class="modal-title f-w-600">
                     <i class="ph ph-video-camera me-2"></i>
-                    Carica Nuovo {{ __('common.video') }}
+                    {{ __('profile.upload_new_video') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>

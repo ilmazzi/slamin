@@ -3,7 +3,7 @@
 
 
 
-@section('title', 'Slam in - Chat')
+@section('title', __('chat.page_title'))
 
 @section('main-content')
 <meta name="current-user-id" content="{{ auth()->id() }}">
@@ -120,15 +120,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </a>
                                 <ul class="dropdown-menu" data-popper-placement="bottom-start">
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                        class="f-s-13">Chat Settings</span></a>
+                                        class="f-s-13">{{ __('chat.chat_settings') }}</span></a>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                class="f-s-13">Chat Settings</span></a>
+                                                class="f-s-13">{{ __('chat.chat_settings') }}</span></a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                class="f-s-13">Contact Settings</span></a>
+                                                class="f-s-13">{{ __('chat.contact_settings') }}</span></a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                                class="f-s-13">Settings</span></a>
+                                                class="f-s-13">{{ __('chat.settings') }}</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-body">
                     <div class="chat-tab-wrapper">
                         <ul class="tabs chat-tabs">
-                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>Chat</li>
-                            <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i>Updates</li>
-                            <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i>Contact</li>
+                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>{{ __('chat.title') }}</li>
+                            <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i>{{ __('chat.updates') }}</li>
+                            <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i>{{ __('chat.contact') }}</li>
                         </ul>
                     </div>
                     <div class="content-wrapper">
@@ -163,12 +163,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <button class="nav-link active" id="private-tab" data-bs-toggle="tab"
                                                     data-bs-target="#private-tab-pane" type="button" role="tab"
                                                     aria-controls="private-tab-pane" aria-selected="false"
-                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>Private</button>
+                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>{{ __('chat.private') }}</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="groups-tab" data-bs-toggle="tab"
                                                     data-bs-target="#groups-tab-pane" type="button" role="tab"
-                                                    aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i>Group </button>
+                                                    aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i>{{ __('chat.group') }}</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="BasicContent">
@@ -193,12 +193,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     <div class="flex-grow-1 text-start mg-s-50">
                                                         <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $contact['name'] }}</p>
                                                         <p class="text-secondary mb-0 f-s-12 mb-0 chat-message">
-                                                            <i class="ti ti-checks"></i> {{ $contact['last_message'] ?: 'Nessun messaggio' }}
+                                                            <i class="ti ti-checks"></i> {{ $contact['last_message'] ?: __('chat.no_message') }}
                                                         </p>
                                                         <!-- Typing indicator -->
                                                         <div class="typing-indicator-contact d-none" data-room-id="{{ $contact['chat_room_id'] }}">
                                                             <small class="text-info">
-                                                                <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                                                <i class="ti ti-pencil me-1"></i>{{ __('chat.typing') }}
                                                             </small>
                                                         </div>
                                                     </div>
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 </a>
                                                 @empty
                                                 <div class="text-center py-4">
-                                                    <p class="text-muted">Nessun contatto trovato</p>
+                                                    <p class="text-muted">{{ __('chat.no_contacts_found') }}</p>
                                                     </div>
                                                 @endforelse
                                             </div>
@@ -1148,14 +1148,13 @@ class TypingManager {
     }
 
     init() {
-         - Starting initialization...');
+      
 
         if (!this.chatInput) {
             console.error('TypingManager.init() - Chat input not found!');
             return;
         }
 
-         - Chat input found:', this.chatInput);
 
         // Event listeners per input
         this.chatInput.addEventListener('input', () => this.handleInput());
@@ -1164,7 +1163,7 @@ class TypingManager {
 
         // Ottieni room ID corrente
         this.currentRoom = this.getCurrentRoomId();
-         - Current room ID:', this.currentRoom);
+    
 
         if (!this.currentRoom) {
             console.error('TypingManager.init() - No room ID found! Typing indicator will not work.');
@@ -1174,7 +1173,7 @@ class TypingManager {
         // Ascolta eventi typing da altri utenti
         this.listenToTypingEvents();
 
-         - Initialization completed successfully');
+        console.log('TypingManager.init() - Initialization completed successfully');
     }
 
     getCurrentRoomId() {
@@ -1199,19 +1198,18 @@ class TypingManager {
     }
 
     handleInput() {
-         - Input event triggered');
-         - Current room:', this.currentRoom);
+        
 
         if (!this.currentRoom) {
-            console.warn('TypingManager.handleInput() - No room ID, ignoring input');
+            
             return;
         }
 
         if (!this.isTyping) {
-             - Starting typing...');
+            
             this.startTyping();
         } else {
-             - Already typing, resetting timeout...');
+            
         }
 
         // Reset timeout
@@ -1254,17 +1252,16 @@ class TypingManager {
     }
 
     async sendTypingEvent(action) {
-         - Starting...`);
-         - Room ID:`, this.currentRoom);
+        
 
         if (!this.currentRoom) {
-            console.error(`TypingManager.sendTypingEvent(${action}) - No room ID, cannot send event`);
+            
             return;
         }
 
         try {
             const url = `/chat/${this.currentRoom}/typing/${action}`;
-             - Sending request to:`, url);
+            
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -1274,22 +1271,21 @@ class TypingManager {
                 }
             });
 
-             - Response status:`, response.status);
+            
 
             if (!response.ok) {
-                console.error(`TypingManager.sendTypingEvent(${action}) - Error:`, response.status);
+                
             } else {
-                 - Success!`);
+                
             }
         } catch (error) {
-            console.error(`TypingManager.sendTypingEvent(${action}) - Exception:`, error);
+            
         }
     }
 
     listenToTypingEvents() {
-         - Starting...');
-         - Echo available:', !!window.Echo);
-         - Current room:', this.currentRoom);
+
+        
 
         if (!window.Echo || !this.currentRoom) {
             console.error('TypingManager.listenToTypingEvents() - Echo or room ID missing');
@@ -1298,41 +1294,39 @@ class TypingManager {
             return;
         }
 
-         - Setting up typing listeners for room:', this.currentRoom);
+        
 
         // Ascolta canale privato per la room
         const channelName = `chat.room.${this.currentRoom}`;
-         - Channel name:', channelName);
+        
 
         const channel = window.Echo.private(channelName);
-         - Channel created:', channel);
+        
 
         channel
             .subscribed(() => {
-                 - Successfully subscribed to channel:', channelName);
+                
             })
             .error((err) => {
-                console.error('TypingManager.listenToTypingEvents() - Channel authorization error:', err);
+                
             })
             .listen('.typing.started', (e) => {
-                 - Received .typing.started event:', e);
+                
                 this.handleTypingStarted(e);
             })
             .listen('.typing.stopped', (e) => {
-                 - Received .typing.stopped event:', e);
+                
                 this.handleTypingStopped(e);
             });
 
-         - Typing listeners set up successfully');
+        
     }
 
     handleTypingStarted(event) {
-
-        ->id() }});
-
+        
 
         if (event.user_id === {{ auth()->id() }}) {
-
+            
             return; // Ignora i propri eventi
         }
 
@@ -1348,7 +1342,12 @@ class TypingManager {
     }
 
     handleTypingStopped(event) {
-        if (event.user_id === {{ auth()->id() }}) return; // Ignora i propri eventi
+        
+        
+        if (event.user_id === {{ auth()->id() }}) {
+            
+            return; // Ignora i propri eventi
+        }
 
         const typingUsers = event.typing_users;
 
@@ -1414,7 +1413,7 @@ class TypingManager {
 
     // Metodo per aggiornare la stanza corrente (utile per mobile)
     updateCurrentRoom(newRoomId) {
-         - Updating from', this.currentRoom, 'to', newRoomId);
+
 
         // Nasconde tutti gli indicatori precedenti
         this.hideTypingIndicator();
@@ -1445,7 +1444,7 @@ document.addEventListener('DOMContentLoaded', function() {
         typingManager = new TypingManager();
 
     } else {
-        console.error('DOMContentLoaded - Chat input not found, TypingManager not created');
+        
     }
 
     // Verifica che l'offcanvas sia presente
@@ -1453,20 +1452,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (offcanvas) {
 
     } else {
-        console.error('Chat offcanvas not found!');
+        
     }
 
-    // Verifica che il toggle button sia presente
-    const toggleBtn = document.querySelector('.toggle-btn');
-    if (toggleBtn) {
-
-
-            'data-bs-toggle': toggleBtn.getAttribute('data-bs-toggle'),
-            'data-bs-target': toggleBtn.getAttribute('data-bs-target')
-        });
-    } else {
-        console.error('Toggle button not found!');
-    }
+    
 
         // Gestione click sui contatti nell'offcanvas
     const contactItems = document.querySelectorAll('#chatListOffcanvas .contact-item');
@@ -1606,11 +1595,91 @@ function hideReactionPicker(messageId) {
     }
 }
 
+// Funzioni per l'emoji picker
+function closeEmojiPicker(buttonId) {
+    const picker = document.getElementById(`emoji-picker-${buttonId}`);
+    if (picker) {
+        picker.classList.add('d-none');
+    }
+}
+
+function searchEmojis(query, buttonId) {
+    // Implementazione della ricerca emoji
+    
+}
+
+function showEmojiCategory(category, buttonId) {
+    // Implementazione della visualizzazione categoria emoji
+    
+}
+
+function updateCharCount(input) {
+    const maxLength = 1000;
+    const currentLength = input.value.length;
+    const charCount = input.parentNode.querySelector('.char-count');
+    if (charCount) {
+        charCount.textContent = `${currentLength}/${maxLength}`;
+    }
+}
 
 </script>
 
 <style>
+/* Stili per le reazioni ai messaggi */
+.reaction-item {
+    display: inline-flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 2px 6px;
+    margin: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
 
+.reaction-item:hover {
+    background: #e9ecef;
+}
+
+.reaction-emoji {
+    margin-right: 4px;
+}
+
+.reaction-count {
+    font-weight: 500;
+    color: #6c757d;
+}
+
+/* Stili per l'indicatore di digitazione */
+.typing-dots {
+    display: flex;
+    align-items: center;
+}
+
+.typing-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    margin: 0 1px;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 </style>
 
 @endpush

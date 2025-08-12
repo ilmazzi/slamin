@@ -86,4 +86,40 @@ return [
     'view_all_followers' => 'Vedi tutti i followers',
     'posts' => 'Post',
 
+    // Chiavi per testi hardcoded
+    'profile_photo_alt' => 'Foto Profilo',
+    'verified_check_mark' => 'Verificato',
+
+    // Chiavi per la pagina videos
+    'video_management' => 'Gestione Video',
+    'upload_new_video' => 'Carica Nuovo Video',
+
+    // Chiavi per la pagina followers
+    'content' => 'Contenuti',
+    'videos_label' => 'Video',
+    'photos_label' => 'Foto',
+    'poems_label' => 'Poesie',
+    'following_label' => 'Following',
+    'follow_label' => 'Follow',
+    'no_followers_message' => 'Questo utente non ha ancora followers.',
+
+    // Chiavi per la pagina following
+    'no_following_message' => 'Questo utente non sta seguendo nessuno al momento.',
+
+    // Chiavi per JavaScript
+    'explore_platform' => 'Esplora la piattaforma',
+    'success' => 'Successo!',
+    'error' => 'Errore',
+    'operation_error' => 'Errore durante l\'operazione',
+
+    // Chiavi per la pagina activity
+    'activity_timeline' => 'Timeline delle Attività',
+    'all_activities' => 'Tutte le attività',
+    'organized_events_filter' => 'Eventi organizzati',
+    'participations_filter' => 'Partecipazioni',
+    'videos_uploaded_filter' => 'Video caricati',
+    'export' => 'Esporta',
+    'no_activity' => 'Nessuna Attività',
+    'no_activity_message' => 'Non hai ancora registrato nessuna attività. Inizia a partecipare agli eventi!',
+    'view_events' => 'Vedi Eventi',
 ];

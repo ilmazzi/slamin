@@ -73,7 +73,7 @@
                                         <div class="form-check form-switch">
                                             <input type="checkbox" class="form-check-input" id="subtitle-toggle" {{ old('subtitle', $event->subtitle) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="subtitle-toggle">
-                                                <i class="ph ph-plus-circle me-2"></i>Aggiungi sottotitolo
+                                                <i class="ph ph-plus-circle me-2"></i>{{ __('events.add_subtitle') }}
                                             </label>
                                         </div>
                                         <small class="text-muted">Opzionale</small>
@@ -82,10 +82,10 @@
 
                                 <!-- Campo Sottotitolo -->
                                 <div class="mb-3" id="subtitle-field" style="display: {{ old('subtitle', $event->subtitle) ? 'block' : 'none' }};">
-                                    <label for="subtitle" class="form-label">Sottotitolo evento</label>
+                                    <label for="subtitle" class="form-label">{{ __('events.event_subtitle') }}</label>
                                     <input type="text" class="form-control @error('subtitle') is-invalid @enderror"
-                                           id="subtitle" name="subtitle" value="{{ old('subtitle', $event->subtitle) }}" placeholder="Inserisci un sottotitolo per l'evento...">
-                                    <small class="text-muted">Un sottotitolo può aiutare a descrivere meglio il tuo evento</small>
+                                                                                        id="subtitle" name="subtitle" value="{{ old('subtitle', $event->subtitle) }}" placeholder="{{ __('events.subtitle_placeholder') }}">
+                                    <small class="text-muted">{{ __('events.subtitle_help') }}</small>
                                     @error('subtitle')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

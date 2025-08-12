@@ -72,7 +72,7 @@
                             <ul class="mb-0 small">
                                 <li>{{ __('videos.supported_formats') }}</li>
                                 <li>{{ __('videos.max_size') }}</li>
-                                <li>Tempo di elaborazione: 2-5 minuti (dipende dalla dimensione)</li>
+                                <li>{{ __('videos.processing_time') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                                             <p class="text-muted f-s-12">{{ __('videos.max_size') }}: 100MB</p>
                                             <input type="file" name="video_file" id="videoFile" accept="video/*" class="d-none" required>
                                             <button type="button" class="btn btn-outline-success" onclick="document.getElementById('videoFile').click()">
-                                                <i class="ph-duotone ph-folder-open me-2"></i>Seleziona File
+                                                <i class="ph-duotone ph-folder-open me-2"></i>{{ __('videos.select_file') }}
                                             </button>
                                         </div>
 
@@ -115,9 +115,9 @@
                                         <div id="progressState" style="display: none;">
                                             <div class="d-flex align-items-center justify-content-center mb-3">
                                                 <div class="spinner-border spinner-border-sm text-success me-3" role="status">
-                                                    <span class="visually-hidden">Caricamento...</span>
+                                                    <span class="visually-hidden">{{ __('videos.loading') }}</span>
                                                 </div>
-                                                <h6 class="mb-0" id="progressTitle">Preparazione upload...</h6>
+                                                <h6 class="mb-0" id="progressTitle">{{ __('videos.preparing_upload') }}</h6>
                                             </div>
                                             <div class="progress mb-3" style="height: 12px;">
                                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar" style="width: 0%"></div>
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadState.style.display = 'none';
         progressState.style.display = 'block';
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-1"></i>Caricamento...';
+                        submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-1"></i>{{ __("videos.loading") }}';
 
         // Initialize progress tracking
         const startTime = Date.now();
@@ -492,12 +492,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Errore durante il caricamento',
+                    title: '{{ __("videos.upload_error") }}',
                     text: error.message,
                     confirmButtonText: 'OK'
                 });
             } else {
-                alert('Errore durante il caricamento: ' + error.message);
+                alert('{{ __("videos.upload_error_message") }}' + error.message);
             }
         });
     });

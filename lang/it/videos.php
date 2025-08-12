@@ -58,4 +58,25 @@ return [
     'expires' => 'Scade il',
     'video_limit' => 'Limite Video',
     'upgrade_now' => 'Aggiorna Ora',
+
+    // Chiavi per la pagina show
+    'create_snap_at_current_time' => 'Crea snap al tempo corrente',
+    'loading_video' => 'Caricamento video...',
+    'video_processing_message' => 'Il video potrebbe essere in fase di elaborazione o non essere più disponibile.',
+    'open_on_peertube' => 'Apri su PeerTube',
+
+    // Chiavi per la pagina upload
+    'processing_time' => 'Tempo di elaborazione: 2-5 minuti (dipende dalla dimensione)',
+    'select_file' => 'Seleziona File',
+    'loading' => 'Caricamento...',
+    'preparing_upload' => 'Preparazione upload...',
+    'upload_error' => 'Errore durante il caricamento',
+    'upload_error_message' => 'Errore durante il caricamento: ',
+
+    // Chiavi per la pagina play
+    'public_badge' => 'Pubblico',
+    'private_badge' => 'Privato',
+    'approved_badge' => 'Approvato',
+    'pending_badge' => 'In attesa',
+    'rejected_badge' => 'Rifiutato',
 ];

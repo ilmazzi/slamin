@@ -205,4 +205,23 @@ return [
     'delete_confirmation_invitations' => 'Tutte le invitazioni e richieste pendenti verranno eliminate',
     'invite_first_member' => 'Invita il primo membro per iniziare a costruire la tua community.',
     'you' => 'Tu',
+
+    // Chiavi per la pagina invitations/index
+    'my_group_invitations' => 'I Miei Inviti ai Gruppi',
+    'group_column' => 'Gruppo',
+    'sent_by_column' => 'Inviato da',
+    'message_column' => 'Messaggio',
+    'invite_date_column' => 'Data Invito',
+    'expires_column' => 'Scade il',
+    'status_column' => 'Stato',
+    'actions_column' => 'Azioni',
+    'no_description' => 'Nessuna descrizione',
+    'user_not_found' => 'Utente non trovato',
+    'no_message' => 'Nessun messaggio',
+    'never_expires' => 'Non scade',
+    'expired' => 'Scaduto',
+    'pending' => 'In attesa',
+    'invitation_expired' => 'Invito scaduto',
+    'no_invitations_received' => 'Nessun invito ricevuto',
+    'no_invitations_received_description' => 'Non hai ricevuto ancora inviti ai gruppi.',
 ];

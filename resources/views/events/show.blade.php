@@ -123,7 +123,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item"><a href="{{ route('events.index') }}">Eventi</a></li>
+<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events.events') }}</a></li>
 <li class="breadcrumb-item active">{{ $event->title }}</li>
 @endsection
 

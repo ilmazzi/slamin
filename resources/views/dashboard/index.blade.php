@@ -225,8 +225,8 @@
                                             <span class="ripple-effect"></span>
                                             <div class="overflow-hidden">
                                                 <h4 class="text-primary mb-1 f-w-600">{{ $stats['pending_group_invitations'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">Inviti ai Gruppi</p>
-                                                <span class="badge bg-light-primary f-s-10">Gruppi</span>
+                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.group_invitations') }}</p>
+                                                <span class="badge bg-light-primary f-s-10">{{ __('dashboard.groups') }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -444,9 +444,9 @@
                         <i class="ph ph-users f-s-12"></i>
                     </div>
                     <div class="card-header">
-                        <h6 class="card-title mb-0 f-w-600">
-                            <i class="ph ph-users me-2 text-primary"></i>Inviti ai Gruppi
-                        </h6>
+                                                    <h6 class="card-title mb-0 f-w-600">
+                                <i class="ph ph-users me-2 text-primary"></i>{{ __('dashboard.group_invitations') }}
+                            </h6>
                     </div>
                     <div class="card-body pa-20">
                         @foreach(auth()->user()->groupInvitations()->where('status', 'pending')->with(['group', 'invitedBy'])->take(3)->get() as $invitation)
@@ -476,7 +476,7 @@
                                                 {{ $invitation->invitedBy->getDisplayName() }}
                                             </a>
                                         @else
-                                            Utente non trovato
+                                            {{ __('dashboard.user_not_found') }}
                                         @endif
                                     </small>
                                 </div>
@@ -484,13 +484,13 @@
                                     <div class="d-flex gap-1">
                                         <form action="{{ route('group-invitations.accept', $invitation) }}" method="POST" class="d-inline group-invitation-form" data-invitation-id="{{ $invitation->id }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-success btn-sm" title="Accetta">
+                                            <button type="submit" class="btn btn-success btn-sm" title="{{ __('dashboard.accept') }}">
                                                 <i class="ph ph-check f-s-12"></i>
                                             </button>
                                         </form>
                                         <form action="{{ route('group-invitations.decline', $invitation) }}" method="POST" class="d-inline group-invitation-form" data-invitation-id="{{ $invitation->id }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
+                                            <button type="submit" class="btn btn-danger btn-sm" title="{{ __('dashboard.decline') }}">
                                                 <i class="ph ph-x f-s-12"></i>
                                             </button>
                                         </form>
@@ -500,7 +500,7 @@
                         @endforeach
                         <div class="text-center mt-3">
                             <a href="{{ route('group-invitations.index') }}" class="btn btn-light-primary btn-sm">
-                                <i class="ph ph-eye me-1"></i>Vedi Tutti gli Inviti
+                                <i class="ph ph-eye me-1"></i>{{ __('dashboard.view_all_group_invitations') }}
                             </a>
                         </div>
                     </div>
@@ -744,7 +744,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             icon: data.in_wishlist ? 'success' : 'info',
-                            title: data.in_wishlist ? 'Aggiunto alla wishlist' : 'Rimosso dalla wishlist',
+                            title: data.in_wishlist ? '{{ __('dashboard.added_to_wishlist') }}' : '{{ __('dashboard.removed_from_wishlist') }}',
                             text: data.message,
                             timer: 1500,
                             showConfirmButton: false
@@ -757,9 +757,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Errore',
-                        text: 'Si è verificato un errore. Riprova.',
-                        confirmButtonText: 'OK'
+                        title: '{{ __('dashboard.error') }}',
+                        text: '{{ __('dashboard.error_message') }}',
+                        confirmButtonText: '{{ __('dashboard.ok') }}'
                     });
                 }
             });
@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Successo',
+                            title: '{{ __('dashboard.success') }}',
                             text: data.message,
                             timer: 1500,
                             showConfirmButton: false
@@ -844,9 +844,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Errore',
-                            text: data.message || 'Si è verificato un errore. Riprova.',
-                            confirmButtonText: 'OK'
+                            title: '{{ __('dashboard.error') }}',
+                            text: data.message || '{{ __('dashboard.error_message') }}',
+                            confirmButtonText: '{{ __('dashboard.ok') }}'
                         });
                     }
                 }
@@ -864,9 +864,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Errore',
-                        text: 'Si è verificato un errore. Riprova.',
-                        confirmButtonText: 'OK'
+                        title: '{{ __('dashboard.error') }}',
+                        text: '{{ __('dashboard.error_message') }}',
+                        confirmButtonText: '{{ __('dashboard.ok') }}'
                     });
                 }
             });

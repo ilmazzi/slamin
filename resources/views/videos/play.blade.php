@@ -57,25 +57,25 @@
                             <div class="d-flex gap-2">
                                 @if($video->is_public)
                                     <span class="badge bg-success">
-                                        <i class="ph-duotone ph-globe f-s-12 me-1"></i>Pubblico
+                                        <i class="ph-duotone ph-globe f-s-12 me-1"></i>{{ __('videos.public_badge') }}
                                     </span>
                                 @else
                                     <span class="badge bg-warning">
-                                        <i class="ph-duotone ph-lock f-s-12 me-1"></i>Privato
+                                        <i class="ph-duotone ph-lock f-s-12 me-1"></i>{{ __('videos.private_badge') }}
                                     </span>
                                 @endif
 
                                 @if($video->moderation_status === 'approved')
                                     <span class="badge bg-success">
-                                        <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Approvato
+                                        <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>{{ __('videos.approved_badge') }}
                                     </span>
                                 @elseif($video->moderation_status === 'pending')
                                     <span class="badge bg-warning">
-                                        <i class="ph-duotone ph-clock f-s-12 me-1"></i>In attesa
+                                        <i class="ph-duotone ph-clock f-s-12 me-1"></i>{{ __('videos.pending_badge') }}
                                     </span>
                                 @else
                                     <span class="badge bg-danger">
-                                        <i class="ph-duotone ph-x-circle f-s-12 me-1"></i>Rifiutato
+                                        <i class="ph-duotone ph-x-circle f-s-12 me-1"></i>{{ __('videos.rejected_badge') }}
                                     </span>
                                 @endif
                             </div>
