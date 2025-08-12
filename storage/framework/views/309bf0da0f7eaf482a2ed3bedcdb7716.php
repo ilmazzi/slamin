@@ -1,4 +1,4 @@
-<?php $__env->startSection('title', 'Slam in - Chat'); ?>
+<?php $__env->startSection('title', __('chat.page_title')); ?>
 
 <?php $__env->startSection('main-content'); ?>
 <meta name="current-user-id" content="<?php echo e(auth()->id()); ?>">
@@ -32,7 +32,39 @@ document.addEventListener('DOMContentLoaded', function() {
     if (roomId) {
         updateChatForm(roomId);
     }
+
+    // Marca le notifiche della chat come lette quando si carica la pagina
+    markChatNotificationsAsRead(roomId);
 });
+
+// Funzione per marcare le notifiche della chat come lette
+async function markChatNotificationsAsRead(chatRoomId = null) {
+    try {
+        const response = await fetch('/chat/notifications/mark-notifications-read', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_room_id: chatRoomId
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Notifiche chat marcate come lette:', data);
+            
+            // Aggiorna il badge delle notifiche se esiste
+            if (typeof notificationManager !== 'undefined') {
+                notificationManager.loadNotifications(true);
+            }
+        }
+    } catch (error) {
+        console.error('Errore nel marcare le notifiche come lette:', error);
+    }
+}
 </script>
         <?php $__env->stopPush(); ?>
 
@@ -116,15 +148,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </a>
                                 <ul class="dropdown-menu" data-popper-placement="bottom-start">
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                        class="f-s-13">Chat Settings</span></a>
+                                        class="f-s-13"><?php echo e(__('chat.chat_settings')); ?></span></a>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                class="f-s-13">Chat Settings</span></a>
+                                                class="f-s-13"><?php echo e(__('chat.chat_settings')); ?></span></a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                class="f-s-13">Contact Settings</span></a>
+                                                class="f-s-13"><?php echo e(__('chat.contact_settings')); ?></span></a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                                class="f-s-13">Settings</span></a>
+                                                class="f-s-13"><?php echo e(__('chat.settings')); ?></span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -141,9 +173,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-body">
                     <div class="chat-tab-wrapper">
                         <ul class="tabs chat-tabs">
-                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>Chat</li>
-                            <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i>Updates</li>
-                            <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i>Contact</li>
+                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i><?php echo e(__('chat.title')); ?></li>
+                            <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i><?php echo e(__('chat.updates')); ?></li>
+                            <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i><?php echo e(__('chat.contact')); ?></li>
                         </ul>
                     </div>
                     <div class="content-wrapper">
@@ -159,12 +191,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <button class="nav-link active" id="private-tab" data-bs-toggle="tab"
                                                     data-bs-target="#private-tab-pane" type="button" role="tab"
                                                     aria-controls="private-tab-pane" aria-selected="false"
-                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>Private</button>
+                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i><?php echo e(__('chat.private')); ?></button>
                                         </li>
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="groups-tab" data-bs-toggle="tab"
                                                     data-bs-target="#groups-tab-pane" type="button" role="tab"
-                                                    aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i>Group </button>
+                                                    aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i><?php echo e(__('chat.group')); ?></button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="BasicContent">
@@ -173,9 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                              aria-labelledby="private-tab" tabindex="0">
 
                                             <div class="chat-contact">
-                                                <?php $__empty_1 = true; $__currentLoopData = $contacts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contact): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                                <a href="<?php echo e(route('chat.index', ['room' => $contact['chat_room_id']])); ?>" class="text-decoration-none">
-                                                <div class="chat-contactbox" data-chat-room="<?php echo e($contact['chat_room_id']); ?>">
+                                                                <?php $__empty_1 = true; $__currentLoopData = $contacts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contact): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <a href="<?php echo e(route('chat.index', ['room' => $contact['chat_room_id']])); ?>" class="text-decoration-none" onclick="markChatNotificationsAsRead(<?php echo e($contact['chat_room_id']); ?>)">
+                <div class="chat-contactbox" data-chat-room="<?php echo e($contact['chat_room_id']); ?>">
                                                     <div class="position-absolute">
                                                         <?php $user = \App\Models\User::find($contact['id']); ?>
                                                         <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto"
@@ -189,13 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     <div class="flex-grow-1 text-start mg-s-50">
                                                         <p class="mb-0 f-w-500 text-dark txt-ellipsis-1"><?php echo e($contact['name']); ?></p>
                                                         <p class="text-secondary mb-0 f-s-12 mb-0 chat-message">
-                                                            <i class="ti ti-checks"></i> <?php echo e($contact['last_message'] ?: 'Nessun messaggio'); ?>
+                                                            <i class="ti ti-checks"></i> <?php echo e($contact['last_message'] ?: __('chat.no_message')); ?>
 
                                                         </p>
                                                         <!-- Typing indicator -->
                                                         <div class="typing-indicator-contact d-none" data-room-id="<?php echo e($contact['chat_room_id']); ?>">
                                                             <small class="text-info">
-                                                                <i class="ti ti-pencil me-1"></i>sta scrivendo...
+                                                                <i class="ti ti-pencil me-1"></i><?php echo e(__('chat.typing')); ?>
+
                                                             </small>
                                                         </div>
                                                     </div>
@@ -221,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 </a>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                 <div class="text-center py-4">
-                                                    <p class="text-muted">Nessun contatto trovato</p>
+                                                    <p class="text-muted"><?php echo e(__('chat.no_contacts_found')); ?></p>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>

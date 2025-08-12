@@ -14,6 +14,7 @@ use App\Events\ChatMessageNotification;
 use App\Models\ChatMessage;
 use App\Services\TypingService;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 
 
 class ChatController extends Controller
@@ -28,6 +29,11 @@ class ChatController extends Controller
         $selectedRoom = null;
         $messages = [];
         $selectedContact = null;
+
+        // Se non c'è una chat specifica selezionata, marca tutte le notifiche della chat come lette
+        if (!$request->get('room')) {
+            Notification::markAllChatNotificationsAsRead($currentUser);
+        }
 
         // Ottieni tutte le chat private dell'utente
         $chatRooms = ChatRoom::where('type', 'private')
@@ -77,6 +83,10 @@ class ChatController extends Controller
                     if ($request->get('room') == $room->id) {
                         $selectedRoom = $room;
                         $selectedContact = $contact;
+                        
+                        // Marca come lette le notifiche per questa chat
+                        Notification::markChatNotificationsAsRead($currentUser, $room->id);
+                        
                         $messages = $room->messages()
                             ->with(['sender', 'reactions.user:id,name'])
                             ->orderBy('created_at', 'asc')
@@ -132,6 +142,29 @@ class ChatController extends Controller
         });
 
         return view('chat.index', compact('contacts', 'selectedRoom', 'messages', 'selectedContact'));
+    }
+
+    /**
+     * Mark chat notifications as read via API
+     */
+    public function markNotificationsAsRead(Request $request)
+    {
+        $currentUser = auth()->user();
+        $chatRoomId = $request->get('chat_room_id');
+
+        if ($chatRoomId) {
+            // Marca come lette le notifiche per una chat specifica
+            $count = Notification::markChatNotificationsAsRead($currentUser, $chatRoomId);
+        } else {
+            // Marca come lette tutte le notifiche della chat
+            $count = Notification::markAllChatNotificationsAsRead($currentUser);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Notifiche marcate come lette",
+            'count' => $count
+        ]);
     }
 
     /**

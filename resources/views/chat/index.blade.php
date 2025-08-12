@@ -37,7 +37,39 @@ document.addEventListener('DOMContentLoaded', function() {
     if (roomId) {
         updateChatForm(roomId);
     }
+
+    // Marca le notifiche della chat come lette quando si carica la pagina
+    markChatNotificationsAsRead(roomId);
 });
+
+// Funzione per marcare le notifiche della chat come lette
+async function markChatNotificationsAsRead(chatRoomId = null) {
+    try {
+        const response = await fetch('/chat/notifications/mark-notifications-read', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_room_id: chatRoomId
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Notifiche chat marcate come lette:', data);
+            
+            // Aggiorna il badge delle notifiche se esiste
+            if (typeof notificationManager !== 'undefined') {
+                notificationManager.loadNotifications(true);
+            }
+        }
+    } catch (error) {
+        console.error('Errore nel marcare le notifiche come lette:', error);
+    }
+}
 </script>
         @endpush
 
@@ -177,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                              aria-labelledby="private-tab" tabindex="0">
 
                                             <div class="chat-contact">
-                                                @forelse($contacts as $contact)
-                                                <a href="{{ route('chat.index', ['room' => $contact['chat_room_id']]) }}" class="text-decoration-none">
-                                                <div class="chat-contactbox" data-chat-room="{{ $contact['chat_room_id'] }}">
+                                                                @forelse($contacts as $contact)
+                <a href="{{ route('chat.index', ['room' => $contact['chat_room_id']]) }}" class="text-decoration-none" onclick="markChatNotificationsAsRead({{ $contact['chat_room_id'] }})">
+                <div class="chat-contactbox" data-chat-room="{{ $contact['chat_room_id'] }}">
                                                     <div class="position-absolute">
                                                         @php $user = \App\Models\User::find($contact['id']); @endphp
                                                         <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto"

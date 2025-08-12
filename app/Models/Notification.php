@@ -1041,4 +1041,33 @@ class Notification extends Model
             ]);
         }
     }
+
+    /**
+     * Mark chat notifications as read for a specific chat room
+     */
+    public static function markChatNotificationsAsRead(User $user, int $chatRoomId): int
+    {
+        return self::where('user_id', $user->id)
+            ->where('type', self::TYPE_CHAT_MESSAGE)
+            ->whereJsonContains('data->chat_room_id', $chatRoomId)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+    }
+
+    /**
+     * Mark all chat notifications as read for a user
+     */
+    public static function markAllChatNotificationsAsRead(User $user): int
+    {
+        return self::where('user_id', $user->id)
+            ->where('type', self::TYPE_CHAT_MESSAGE)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+    }
 }

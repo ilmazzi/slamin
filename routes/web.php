@@ -1092,6 +1092,7 @@ Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
         Route::get('/unread-count', [App\Http\Controllers\ChatNotificationController::class, 'getUnreadCount'])->name('unread-count');
         Route::get('/room/{chatRoomId}', [App\Http\Controllers\ChatNotificationController::class, 'getChatNotifications'])->name('room');
         Route::post('/mark-all-read', [App\Http\Controllers\ChatNotificationController::class, 'markAllChatAsRead'])->name('mark-all-read');
+        Route::post('/mark-notifications-read', [App\Http\Controllers\ChatController::class, 'markNotificationsAsRead'])->name('mark-notifications-read');
     });
 
     // Typing indicators
