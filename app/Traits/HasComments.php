@@ -2,139 +2,66 @@
 
 namespace App\Traits;
 
-use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\ArticleComment;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasComments
 {
     /**
-     * Relazione con i commenti
+     * Get all comments for this model
      */
-    public function comments(): MorphMany
+    public function comments(): HasMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->hasMany(ArticleComment::class, 'article_id');
     }
 
     /**
-     * Relazione con i commenti approvati
+     * Get approved comments for this model
      */
-    public function approvedComments(): MorphMany
+    public function approvedComments(): HasMany
     {
-        return $this->morphMany(Comment::class, 'commentable')->approved();
+        return $this->comments()->where('status', 'approved');
     }
 
     /**
-     * Relazione con i commenti in attesa
+     * Get top-level comments (not replies)
      */
-    public function pendingComments(): MorphMany
+    public function topLevelComments(): HasMany
     {
-        return $this->morphMany(Comment::class, 'commentable')->pending();
+        return $this->comments()->whereNull('parent_id')->where('status', 'approved');
     }
 
     /**
-     * Aggiunge un commento
+     * Add a comment to this model
      */
-    public function addComment($content, $user = null, $parentId = null): ?Comment
+    public function addComment(User $user, string $content, $parentId = null): ArticleComment
     {
-        if (!$user) {
-            $user = auth()->user();
-        }
-
-        if (!$user || !$user->id) {
-            return null;
-        }
-
-        // Verifica se i commenti sono abilitati per questo tipo di contenuto
-        if (!$this->isCommentable()) {
-            return null;
-        }
-
-        return $this->comments()->create([
+        $comment = $this->comments()->create([
             'user_id' => $user->id,
             'content' => $content,
             'parent_id' => $parentId,
-            'status' => $this->getCommentStatus(),
+            'status' => 'approved', // Auto-approve for now
         ]);
+
+        $this->increment('comments_count');
+        
+        return $comment;
     }
 
     /**
-     * Ottiene il numero di commenti approvati
+     * Get the number of comments
      */
-    public function getCommentCountAttribute(): int
+    public function getCommentsCountAttribute(): int
     {
-        return $this->approvedComments()->count();
+        return $this->comments()->where('status', 'approved')->count();
     }
 
     /**
-     * Ottiene il numero di commenti in attesa
+     * Get pending comments count
      */
-    public function getPendingCommentCountAttribute(): int
+    public function getPendingCommentsCountAttribute(): int
     {
-        return $this->pendingComments()->count();
-    }
-
-    /**
-     * Verifica se il contenuto può essere commentato
-     */
-    public function isCommentable(): bool
-    {
-        // Controlla le impostazioni di sistema
-        $commentableContent = \App\Models\SystemSetting::get('social_commentable_content', ['video', 'photo', 'poem', 'article', 'event']);
-        $contentType = $this->getSocialContentType();
-
-        return in_array($contentType, $commentableContent);
-    }
-
-    /**
-     * Ottiene il tipo di contenuto per le impostazioni
-     */
-    protected function getSocialContentType(): string
-    {
-        $className = class_basename($this);
-        return strtolower($className);
-    }
-
-    /**
-     * Ottiene lo status di default per i nuovi commenti
-     */
-    protected function getCommentStatus(): string
-    {
-        // Controlla se la moderazione automatica è abilitata
-        $autoApprove = \App\Models\SystemSetting::get('social_auto_approve_comments', true);
-        return $autoApprove ? 'approved' : 'pending';
-    }
-
-    /**
-     * Scope per contenuti con commenti
-     */
-    public function scopeWithComments($query)
-    {
-        return $query->with(['comments.user', 'comments.replies.user']);
-    }
-
-    /**
-     * Scope per contenuti commentati da un utente
-     */
-    public function scopeCommentedBy($query, $user)
-    {
-        if (!$user || !$user->id) {
-            return $query;
-        }
-
-        return $query->whereHas('comments', function ($q) use ($user) {
-            $q->where('user_id', $user->id);
-        });
-    }
-
-    /**
-     * Ottiene i commenti approvati con i dati dell'utente
-     */
-    public function getComments()
-    {
-        return $this->approvedComments()
-            ->with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        return $this->comments()->where('status', 'pending')->count();
     }
 }

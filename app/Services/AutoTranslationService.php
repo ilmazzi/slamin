@@ -5,251 +5,274 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
-use Exception;
 
 class AutoTranslationService
 {
     protected $apiKey;
     protected $baseUrl;
-    protected $provider;
 
     public function __construct()
     {
-        $this->provider = config('services.translation.provider', 'google');
-        $this->apiKey = config('services.translation.api_key');
-        $this->baseUrl = config('services.translation.base_url');
+        $this->apiKey = config('services.google.translate_api_key');
+        $this->baseUrl = 'https://translation.googleapis.com/language/translate/v2';
     }
 
     /**
-     * Traduce un testo da una lingua all'altra
+     * Translate text from source language to target language
      */
-    public function translate(string $text, string $from, string $to): ?string
+    public function translate($text, $sourceLang = 'it', $targetLang = 'en')
     {
-        if (empty($text) || $from === $to) {
+        if (empty($text)) {
             return $text;
         }
 
-        // Cache per evitare traduzioni duplicate
-        $cacheKey = "translation_{$from}_{$to}_" . md5($text);
-        
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+        // Check cache first
+        $cacheKey = "translation_{$sourceLang}_{$targetLang}_" . md5($text);
+        $cached = Cache::get($cacheKey);
+        if ($cached) {
+            return $cached;
         }
 
         try {
-            $translation = match($this->provider) {
-                'google' => $this->translateWithGoogle($text, $from, $to),
-                'deepl' => $this->translateWithDeepL($text, $from, $to),
-                'openai' => $this->translateWithOpenAI($text, $from, $to),
-                default => throw new Exception("Provider di traduzione non supportato: {$this->provider}")
-            };
-
-            // Cache per 30 giorni
-            Cache::put($cacheKey, $translation, now()->addDays(30));
-
-            Log::info("Traduzione automatica completata", [
-                'from' => $from,
-                'to' => $to,
-                'text_length' => strlen($text),
-                'provider' => $this->provider
+            $response = Http::post($this->baseUrl, [
+                'q' => $text,
+                'source' => $sourceLang,
+                'target' => $targetLang,
+                'key' => $this->apiKey,
+                'format' => 'html'
             ]);
 
-            return $translation;
+            if ($response->successful()) {
+                $data = $response->json();
+                $translatedText = $data['data']['translations'][0]['translatedText'] ?? $text;
 
-        } catch (Exception $e) {
-            Log::error("Errore traduzione automatica: " . $e->getMessage(), [
-                'from' => $from,
-                'to' => $to,
-                'text' => substr($text, 0, 100) . '...',
-                'provider' => $this->provider
+                // Cache the result for 24 hours
+                Cache::put($cacheKey, $translatedText, now()->addHours(24));
+
+                return $translatedText;
+            } else {
+                Log::error('Translation API error', [
+                    'response' => $response->body(),
+                    'status' => $response->status()
+                ]);
+                return $text;
+            }
+        } catch (\Exception $e) {
+            Log::error('Translation service error', [
+                'message' => $e->getMessage(),
+                'text' => $text,
+                'source' => $sourceLang,
+                'target' => $targetLang
             ]);
+            return $text;
+        }
+    }
 
+    /**
+     * Translate article content
+     */
+    public function translateArticle($article, $targetLang = 'en')
+    {
+        $sourceLang = config('app.locale', 'it');
+        
+        if ($sourceLang === $targetLang) {
+            return $article;
+        }
+
+        $translated = [];
+
+        // Translate title
+        if (!empty($article['title'])) {
+            $translated['title'] = $this->translate($article['title'], $sourceLang, $targetLang);
+        }
+
+        // Translate content
+        if (!empty($article['content'])) {
+            $translated['content'] = $this->translate($article['content'], $sourceLang, $targetLang);
+        }
+
+        // Translate excerpt
+        if (!empty($article['excerpt'])) {
+            $translated['excerpt'] = $this->translate($article['excerpt'], $sourceLang, $targetLang);
+        }
+
+        // Translate meta title
+        if (!empty($article['meta_title'])) {
+            $translated['meta_title'] = $this->translate($article['meta_title'], $sourceLang, $targetLang);
+        }
+
+        // Translate meta description
+        if (!empty($article['meta_description'])) {
+            $translated['meta_description'] = $this->translate($article['meta_description'], $sourceLang, $targetLang);
+        }
+
+        return $translated;
+    }
+
+    /**
+     * Translate multiple articles
+     */
+    public function translateArticles($articles, $targetLang = 'en')
+    {
+        $translated = [];
+        
+        foreach ($articles as $article) {
+            $translated[] = $this->translateArticle($article, $targetLang);
+        }
+
+        return $translated;
+    }
+
+    /**
+     * Detect language of text
+     */
+    public function detectLanguage($text)
+    {
+        if (empty($text)) {
             return null;
         }
-    }
 
-    /**
-     * Traduce un array di chiavi
-     */
-    public function translateArray(array $translations, string $from, string $to): array
-    {
-        $results = [];
-        $totalKeys = count($translations);
-        $translatedKeys = 0;
-
-        foreach ($translations as $key => $value) {
-            if (is_array($value)) {
-                // Gestisci array annidati ricorsivamente
-                $results[$key] = $this->translateArray($value, $from, $to);
-            } else {
-                if (!empty($value)) {
-                    $translated = $this->translate($value, $from, $to);
-                    if ($translated) {
-                        $results[$key] = $translated;
-                        $translatedKeys++;
-                    } else {
-                        $results[$key] = $value; // Mantieni originale se traduzione fallisce
-                    }
-                } else {
-                    $results[$key] = $value;
-                }
-            }
-        }
-
-        Log::info("Traduzione array completata", [
-            'from' => $from,
-            'to' => $to,
-            'total_keys' => $totalKeys,
-            'translated_keys' => $translatedKeys,
-            'success_rate' => $totalKeys > 0 ? round(($translatedKeys / $totalKeys) * 100, 2) : 0
-        ]);
-
-        return $results;
-    }
-
-    /**
-     * Traduzione con Google Translate API
-     */
-    protected function translateWithGoogle(string $text, string $from, string $to): string
-    {
-        $response = Http::timeout(30)
-            ->post("https://translation.googleapis.com/language/translate/v2", [
+        try {
+            $response = Http::post('https://translation.googleapis.com/language/translate/v2/detect', [
                 'q' => $text,
-                'source' => $from,
-                'target' => $to,
-                'key' => $this->apiKey,
-                'format' => 'text'
+                'key' => $this->apiKey
             ]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            return $data['data']['translations'][0]['translatedText'] ?? $text;
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['data']['detections'][0][0]['language'] ?? null;
+            }
+        } catch (\Exception $e) {
+            Log::error('Language detection error', [
+                'message' => $e->getMessage(),
+                'text' => $text
+            ]);
         }
 
-        throw new Exception("Google Translate API error: " . $response->body());
+        return null;
     }
 
     /**
-     * Traduzione con DeepL API
+     * Get supported languages
      */
-    protected function translateWithDeepL(string $text, string $from, string $to): string
+    public function getSupportedLanguages($targetLang = 'it')
     {
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'Authorization' => 'DeepL-Auth-Key ' . $this->apiKey,
-                'Content-Type' => 'application/x-www-form-urlencoded'
-            ])
-            ->post('https://api-free.deepl.com/v2/translate', [
-                'text' => $text,
-                'source_lang' => strtoupper($from),
-                'target_lang' => strtoupper($to)
+        $cacheKey = "supported_languages_{$targetLang}";
+        $cached = Cache::get($cacheKey);
+        
+        if ($cached) {
+            return $cached;
+        }
+
+        try {
+            $response = Http::get('https://translation.googleapis.com/language/translate/v2/languages', [
+                'target' => $targetLang,
+                'key' => $this->apiKey
             ]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            return $data['translations'][0]['text'] ?? $text;
-        }
+            if ($response->successful()) {
+                $data = $response->json();
+                $languages = $data['data']['languages'] ?? [];
 
-        throw new Exception("DeepL API error: " . $response->body());
-    }
+                // Cache for 24 hours
+                Cache::put($cacheKey, $languages, now()->addHours(24));
 
-    /**
-     * Traduzione con OpenAI GPT
-     */
-    protected function translateWithOpenAI(string $text, string $from, string $to): string
-    {
-        $fromLanguage = $this->getLanguageName($from);
-        $toLanguage = $this->getLanguageName($to);
-
-        $prompt = "Traduci il seguente testo da {$fromLanguage} a {$toLanguage}. " .
-                  "Mantieni il tono e lo stile originale. Restituisci solo la traduzione senza spiegazioni:\n\n" .
-                  $text;
-
-        $response = Http::timeout(60)
-            ->withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json'
-            ])
-            ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-3.5-turbo',
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => 'Sei un traduttore professionale. Traduci accuratamente mantenendo il significato e lo stile.'
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => $prompt
-                    ]
-                ],
-                'max_tokens' => 1000,
-                'temperature' => 0.3
+                return $languages;
+            }
+        } catch (\Exception $e) {
+            Log::error('Get supported languages error', [
+                'message' => $e->getMessage()
             ]);
-
-        if ($response->successful()) {
-            $data = $response->json();
-            return trim($data['choices'][0]['message']['content'] ?? $text);
         }
 
-        throw new Exception("OpenAI API error: " . $response->body());
+        return [];
     }
 
     /**
-     * Ottieni il nome completo della lingua
+     * Check if translation service is available
      */
-    protected function getLanguageName(string $code): string
-    {
-        $languages = [
-            'it' => 'italiano',
-            'en' => 'inglese',
-            'es' => 'spagnolo',
-            'fr' => 'francese',
-            'de' => 'tedesco'
-        ];
-
-        return $languages[$code] ?? $code;
-    }
-
-    /**
-     * Verifica se il servizio è configurato
-     */
-    public function isConfigured(): bool
+    public function isAvailable()
     {
         return !empty($this->apiKey);
     }
 
     /**
-     * Testa la connessione al servizio di traduzione
+     * Get translation quota usage
      */
-    public function testConnection(): bool
+    public function getQuotaUsage()
     {
-        if (!$this->isConfigured()) {
-            return false;
-        }
-
-        try {
-            $testText = 'Hello world';
-            $translation = $this->translate($testText, 'en', 'it');
-            return !empty($translation) && $translation !== $testText;
-        } catch (Exception $e) {
-            Log::error("Test connessione traduzione fallito: " . $e->getMessage());
-            return false;
-        }
+        // This would require additional API calls to Google Cloud Console
+        // For now, return basic info
+        return [
+            'available' => $this->isAvailable(),
+            'api_key_configured' => !empty($this->apiKey)
+        ];
     }
 
     /**
-     * Ottieni statistiche di utilizzo
+     * Clear translation cache
      */
-    public function getUsageStats(): array
+    public function clearCache()
     {
-        $cacheKeys = Cache::get('translation_cache_keys', []);
-        $totalTranslations = count($cacheKeys);
+        $keys = Cache::get('translation_cache_keys', []);
         
-        return [
-            'total_translations' => $totalTranslations,
-            'provider' => $this->provider,
-            'configured' => $this->isConfigured(),
-            'connection_ok' => $this->testConnection()
-        ];
+        foreach ($keys as $key) {
+            Cache::forget($key);
+        }
+        
+        Cache::forget('translation_cache_keys');
+        Cache::forget('supported_languages_*');
+    }
+
+    /**
+     * Batch translate multiple texts
+     */
+    public function batchTranslate($texts, $sourceLang = 'it', $targetLang = 'en')
+    {
+        if (empty($texts)) {
+            return [];
+        }
+
+        $results = [];
+        $batchSize = 10; // Google Translate API limit
+        $batches = array_chunk($texts, $batchSize);
+
+        foreach ($batches as $batch) {
+            try {
+                $response = Http::post($this->baseUrl, [
+                    'q' => $batch,
+                    'source' => $sourceLang,
+                    'target' => $targetLang,
+                    'key' => $this->apiKey,
+                    'format' => 'html'
+                ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $translations = $data['data']['translations'] ?? [];
+                    
+                    foreach ($translations as $index => $translation) {
+                        $results[] = $translation['translatedText'] ?? $batch[$index];
+                    }
+                } else {
+                    // If batch fails, translate individually
+                    foreach ($batch as $text) {
+                        $results[] = $this->translate($text, $sourceLang, $targetLang);
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Batch translation error', [
+                    'message' => $e->getMessage(),
+                    'batch' => $batch
+                ]);
+                
+                // Fallback to individual translation
+                foreach ($batch as $text) {
+                    $results[] = $this->translate($text, $sourceLang, $targetLang);
+                }
+            }
+        }
+
+        return $results;
     }
 } 

@@ -2,132 +2,87 @@
 
 namespace App\Traits;
 
-use App\Models\Like;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use App\Models\ArticleLike;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait HasLikes
 {
     /**
-     * Relazione con i like
+     * Get all likes for this model
      */
-    public function likes(): MorphMany
+    public function likes(): HasMany
     {
-        return $this->morphMany(Like::class, 'likeable');
+        return $this->hasMany(ArticleLike::class, 'article_id');
     }
 
     /**
-     * Relazione con gli utenti che hanno messo like
+     * Get users who liked this model
      */
-    public function likedBy(): MorphToMany
+    public function likedBy(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'unified_likes', 'likeable_id', 'user_id')
-            ->where('likeable_type', static::class)
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'article_likes', 'article_id', 'user_id')
+                    ->withTimestamps();
     }
 
     /**
-     * Verifica se il contenuto è stato likato dall'utente
+     * Check if a user has liked this model
      */
-    public function isLikedBy($user = null): bool
+    public function isLikedBy(User $user): bool
     {
-        if (!$user) {
-            $user = auth()->user();
-        }
-
-        if (!$user || !$user->id) {
-            return false;
-        }
-
         return $this->likes()->where('user_id', $user->id)->exists();
     }
 
     /**
-     * Aggiunge un like dell'utente
+     * Like this model by a user
      */
-    public function addLike($user = null): bool
+    public function like(User $user): bool
     {
-        if (!$user) {
-            $user = auth()->user();
-        }
-
-        if (!$user || !$user->id) {
-            return false;
-        }
-
         if ($this->isLikedBy($user)) {
-            return false; // Già likato
-        }
-
-        return $this->likes()->create([
-            'user_id' => $user->id,
-        ]) !== null;
-    }
-
-    /**
-     * Rimuove un like dell'utente
-     */
-    public function removeLike($user = null): bool
-    {
-        if (!$user) {
-            $user = auth()->user();
-        }
-
-        if (!$user || !$user->id) {
             return false;
         }
 
-        return $this->likes()->where('user_id', $user->id)->delete() > 0;
+        $this->likes()->create(['user_id' => $user->id]);
+        $this->increment('likes_count');
+        
+        return true;
     }
 
     /**
-     * Toggle del like (aggiunge se non presente, rimuove se presente)
+     * Unlike this model by a user
      */
-    public function toggleLike($user = null): bool
+    public function unlike(User $user): bool
     {
-        if (!$user) {
-            $user = auth()->user();
-        }
-
-        if (!$user || !$user->id) {
+        $like = $this->likes()->where('user_id', $user->id)->first();
+        
+        if (!$like) {
             return false;
         }
 
+        $like->delete();
+        $this->decrement('likes_count');
+        
+        return true;
+    }
+
+    /**
+     * Toggle like status for a user
+     */
+    public function toggleLike(User $user): bool
+    {
         if ($this->isLikedBy($user)) {
-            return $this->removeLike($user);
-        } else {
-            return $this->addLike($user);
+            return $this->unlike($user);
         }
+
+        return $this->like($user);
     }
 
     /**
-     * Ottiene il numero di like
+     * Get the number of likes
      */
-    public function getLikeCountAttribute(): int
+    public function getLikesCountAttribute(): int
     {
         return $this->likes()->count();
-    }
-
-    /**
-     * Scope per contenuti likati da un utente
-     */
-    public function scopeLikedBy($query, $user)
-    {
-        if (!$user || !$user->id) {
-            return $query;
-        }
-
-        return $query->whereHas('likes', function ($q) use ($user) {
-            $q->where('user_id', $user->id);
-        });
-    }
-
-    /**
-     * Scope per contenuti più popolari (ordinati per like)
-     */
-    public function scopePopular($query)
-    {
-        return $query->withCount('likes')->orderBy('likes_count', 'desc');
     }
 }

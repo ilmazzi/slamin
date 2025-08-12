@@ -1113,3 +1113,107 @@ Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
 Route::post('/reactions/add', [App\Http\Controllers\ChatReactionController::class, 'addReactionSimple'])->name('reactions.add-simple');
 Route::post('/reactions/toggle', [App\Http\Controllers\ChatReactionController::class, 'toggleReactionSimple'])->name('reactions.toggle-simple');
 });
+
+// ===== ROUTES PER ARTICOLI/NOTIZIE =====
+
+// Routes pubbliche per articoli
+Route::prefix('articles')->name('articles.')->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('index');
+    Route::get('/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
+    Route::get('/{article:slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
+    
+    // Routes per utenti autenticati
+    Route::middleware('auth')->group(function () {
+        Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
+        Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit');
+        Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update');
+        Route::delete('/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('destroy');
+        
+        // Azioni sugli articoli
+        Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish');
+        Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish');
+        Route::post('/{article}/toggle-featured', [App\Http\Controllers\ArticleController::class, 'toggleFeatured'])->name('toggle-featured');
+        
+        // Like degli articoli
+        Route::prefix('{article}/likes')->name('likes.')->group(function () {
+            Route::post('/toggle', [App\Http\Controllers\ArticleLikeController::class, 'toggle'])->name('toggle');
+            Route::post('/', [App\Http\Controllers\ArticleLikeController::class, 'like'])->name('like');
+            Route::delete('/', [App\Http\Controllers\ArticleLikeController::class, 'unlike'])->name('unlike');
+            Route::get('/likers', [App\Http\Controllers\ArticleLikeController::class, 'getLikers'])->name('likers');
+            Route::get('/status', [App\Http\Controllers\ArticleLikeController::class, 'getStatus'])->name('status');
+        });
+        
+        // Commenti degli articoli
+        Route::prefix('{article}/comments')->name('comments.')->group(function () {
+            Route::get('/', [App\Http\Controllers\ArticleCommentController::class, 'index'])->name('index');
+            Route::post('/', [App\Http\Controllers\ArticleCommentController::class, 'store'])->name('store');
+            Route::put('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'update'])->name('update');
+            Route::delete('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'destroy'])->name('destroy');
+            Route::get('/{comment}/replies', [App\Http\Controllers\ArticleCommentController::class, 'getReplies'])->name('replies');
+            
+            // Like dei commenti
+            Route::post('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'like'])->name('like');
+            Route::delete('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'unlike'])->name('unlike');
+            
+            // Moderazione commenti (admin/editor)
+            Route::post('/{comment}/approve', [App\Http\Controllers\ArticleCommentController::class, 'approve'])->name('approve');
+            Route::post('/{comment}/reject', [App\Http\Controllers\ArticleCommentController::class, 'reject'])->name('reject');
+        });
+        
+        // Segnalazioni articoli
+        Route::prefix('{article}/reports')->name('reports.')->group(function () {
+            Route::post('/', [App\Http\Controllers\ArticleReportController::class, 'store'])->name('store');
+            Route::get('/check', [App\Http\Controllers\ArticleReportController::class, 'checkReport'])->name('check');
+        });
+    });
+});
+
+// Routes per layout articoli (admin/editor)
+Route::prefix('articles/layout')->name('articles.layout.')->middleware(['auth', 'permission:articles.manage_layout'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleLayoutController::class, 'index'])->name('index');
+    Route::post('/update', [App\Http\Controllers\ArticleLayoutController::class, 'update'])->name('update');
+    Route::post('/clear', [App\Http\Controllers\ArticleLayoutController::class, 'clear'])->name('clear');
+    Route::post('/bulk-update', [App\Http\Controllers\ArticleLayoutController::class, 'bulkUpdate'])->name('bulk-update');
+    Route::get('/preview', [App\Http\Controllers\ArticleLayoutController::class, 'preview'])->name('preview');
+    Route::get('/articles', [App\Http\Controllers\ArticleLayoutController::class, 'getArticles'])->name('articles');
+    Route::get('/current', [App\Http\Controllers\ArticleLayoutController::class, 'getLayout'])->name('current');
+});
+
+// Routes per categorie articoli (admin/editor)
+Route::prefix('admin/article-categories')->name('admin.article-categories.')->middleware(['auth', 'permission:articles.manage_categories'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleCategoryController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\ArticleCategoryController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\ArticleCategoryController::class, 'store'])->name('store');
+    Route::get('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'show'])->name('show');
+    Route::get('/{category}/edit', [App\Http\Controllers\ArticleCategoryController::class, 'edit'])->name('edit');
+    Route::put('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'update'])->name('update');
+    Route::delete('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'destroy'])->name('destroy');
+});
+
+// Routes per tag articoli (admin/editor)
+Route::prefix('admin/article-tags')->name('admin.article-tags.')->middleware(['auth', 'permission:articles.manage_tags'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleTagController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\ArticleTagController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\ArticleTagController::class, 'store'])->name('store');
+    Route::get('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'show'])->name('show');
+    Route::get('/{tag}/edit', [App\Http\Controllers\ArticleTagController::class, 'edit'])->name('edit');
+    Route::put('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'update'])->name('update');
+    Route::delete('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'destroy'])->name('destroy');
+});
+
+// Routes per gestione segnalazioni (admin/editor)
+Route::prefix('admin/article-reports')->name('admin.article-reports.')->middleware(['auth', 'permission:articles.view_reports'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleReportController::class, 'index'])->name('index');
+    Route::get('/{report}', [App\Http\Controllers\ArticleReportController::class, 'show'])->name('show');
+    Route::post('/{report}/review', [App\Http\Controllers\ArticleReportController::class, 'review'])->name('review');
+    Route::post('/bulk-review', [App\Http\Controllers\ArticleReportController::class, 'bulkReview'])->name('bulk-review');
+    Route::get('/stats', [App\Http\Controllers\ArticleReportController::class, 'getStats'])->name('stats');
+    Route::get('/pending-count', [App\Http\Controllers\ArticleReportController::class, 'getPendingCount'])->name('pending-count');
+});
+
+// API routes per articoli
+Route::prefix('api/articles')->middleware('auth')->group(function () {
+    Route::post('/likes/multiple-status', [App\Http\Controllers\ArticleLikeController::class, 'getMultipleStatus'])->name('api.articles.likes.multiple-status');
+    Route::get('/reports/reasons', [App\Http\Controllers\ArticleReportController::class, 'getReasons'])->name('api.articles.reports.reasons');
+});

@@ -5,6 +5,8 @@ namespace App\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
 use App\Services\LoggingService;
+use App\Models\ArticleReport;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasModeration
 {
@@ -196,5 +198,96 @@ trait HasModeration
     public function getContentType(): string
     {
         return $this->getTable();
+    }
+
+    /**
+     * Get all reports for this model
+     */
+    public function articleReports(): HasMany
+    {
+        return $this->hasMany(ArticleReport::class, 'article_id');
+    }
+
+    /**
+     * Get pending reports for this model
+     */
+    public function pendingArticleReports(): HasMany
+    {
+        return $this->articleReports()->where('status', 'pending');
+    }
+
+    /**
+     * Get reviewed reports for this model
+     */
+    public function reviewedArticleReports(): HasMany
+    {
+        return $this->articleReports()->where('status', 'reviewed');
+    }
+
+    /**
+     * Get resolved reports for this model
+     */
+    public function resolvedArticleReports(): HasMany
+    {
+        return $this->articleReports()->where('status', 'resolved');
+    }
+
+    /**
+     * Report this model by a user
+     */
+    public function reportArticle(User $user, string $reason, string $description = null): ArticleReport
+    {
+        return $this->articleReports()->create([
+            'user_id' => $user->id,
+            'reason' => $reason,
+            'description' => $description,
+            'status' => 'pending',
+        ]);
+    }
+
+    /**
+     * Check if a user has reported this model
+     */
+    public function isArticleReportedByUser(User $user): bool
+    {
+        return $this->articleReports()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Get the number of pending reports
+     */
+    public function getPendingArticleReportsCountAttribute(): int
+    {
+        return $this->pendingArticleReports()->count();
+    }
+
+    /**
+     * Get the number of total reports
+     */
+    public function getTotalArticleReportsCountAttribute(): int
+    {
+        return $this->articleReports()->count();
+    }
+
+    /**
+     * Check if this model has any pending reports
+     */
+    public function hasPendingArticleReports(): bool
+    {
+        return $this->pendingArticleReports()->exists();
+    }
+
+    /**
+     * Get the most common report reason
+     */
+    public function getMostCommonArticleReportReasonAttribute(): ?string
+    {
+        $reason = $this->articleReports()
+            ->selectRaw('reason, COUNT(*) as count')
+            ->groupBy('reason')
+            ->orderBy('count', 'desc')
+            ->first();
+
+        return $reason ? $reason->reason : null;
     }
 }
