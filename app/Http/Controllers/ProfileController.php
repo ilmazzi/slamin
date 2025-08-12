@@ -30,6 +30,7 @@ class ProfileController extends Controller
             'participated_events' => $user->eventRequests()->where('status', 'accepted')->count(),
             'pending_requests' => $user->eventRequests()->where('status', 'pending')->count(),
             'total_videos' => $user->videos()->count(),
+            'total_articles' => $user->articles()->count(),
         ];
 
         // Eventi recenti dell'utente
@@ -49,6 +50,14 @@ class ProfileController extends Controller
 
         // Video dell'utente
         $videos = $user->videos()
+            ->latest()
+            ->take(6)
+            ->get();
+
+        // Articoli dell'utente
+        $articles = $user->articles()
+            ->with(['category', 'tags'])
+            ->withCount(['likes', 'comments', 'views'])
             ->latest()
             ->take(6)
             ->get();
@@ -76,6 +85,7 @@ class ProfileController extends Controller
             'recentEvents',
             'participatedEvents',
             'videos',
+            'articles',
             'recentActivity',
             'following'
         ));

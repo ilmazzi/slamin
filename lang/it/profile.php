@@ -98,6 +98,11 @@ return [
     'content' => 'Contenuti',
     'videos_label' => 'Video',
     'photos_label' => 'Foto',
+
+    // Chiavi per gli articoli nel profilo
+    'my_articles' => 'I Miei Articoli',
+    'no_articles_written' => 'Nessun articolo scritto',
+    'articles_written' => 'Articoli Scritti',
     'poems_label' => 'Poesie',
     'following_label' => 'Following',
     'follow_label' => 'Follow',

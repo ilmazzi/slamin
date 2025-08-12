@@ -980,6 +980,22 @@ class User extends Authenticatable
             ->orderBy('last_message_at', 'desc')
             ->withTimestamps();
     }
+
+    /**
+     * Get user's articles
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+    /**
+     * Get user's published articles
+     */
+    public function publishedArticles()
+    {
+        return $this->hasMany(Article::class)->published();
+    }
 }
 
 
