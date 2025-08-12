@@ -28,7 +28,6 @@ class ProfileController extends Controller
         $stats = [
             'total_events' => $user->events()->count(),
             'participated_events' => $user->eventRequests()->where('status', 'accepted')->count(),
-            'pending_requests' => $user->eventRequests()->where('status', 'pending')->count(),
             'total_videos' => $user->videos()->count(),
             'total_articles' => $user->articles()->count(),
         ];
@@ -57,10 +56,9 @@ class ProfileController extends Controller
         // Articoli dell'utente
         $articles = $user->articles()
             ->with(['category', 'tags'])
-            ->withCount(['likes', 'comments', 'views'])
+            ->withCount(['likes', 'comments'])
             ->latest()
-            ->take(6)
-            ->get();
+            ->paginate(4);
 
         // Attività recenti
         $recentActivity = $this->getUserActivity($user);
@@ -672,10 +670,28 @@ class ProfileController extends Controller
                 ];
             });
 
+        // Articoli scritti
+        $articleWrites = $user->articles()
+            ->latest()
+            ->take($limit)
+            ->get()
+            ->map(function ($article) {
+                return [
+                    'type' => 'article_written',
+                    'title' => 'Hai scritto l\'articolo "' . $article->title . '"',
+                    'description' => $article->excerpt,
+                    'date' => $article->created_at,
+                    'icon' => 'ph-newspaper',
+                    'color' => 'info',
+                    'url' => route('articles.show', $article)
+                ];
+            });
+
         // Combina e ordina per data
         $activities = $organizedEvents
             ->concat($participations)
             ->concat($videoUploads)
+            ->concat($articleWrites)
             ->sortByDesc('date')
             ->take($limit);
 
@@ -846,5 +862,30 @@ class ProfileController extends Controller
                 'message' => 'Errore durante il salvataggio: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Restituisce gli articoli paginati per richieste AJAX
+     */
+    public function getArticles($userId, Request $request)
+    {
+        $user = User::findOrFail($userId);
+        $page = $request->get('page', 1);
+
+        $articles = $user->articles()
+            ->with(['category', 'tags'])
+            ->withCount(['likes', 'comments'])
+            ->latest()
+            ->paginate(4, ['*'], 'page', $page);
+
+        // Controlla se è una richiesta AJAX controllando l'header
+        if ($request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return view('profile.partials.articles-list', compact('articles', 'user'))->render();
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Richiesta non valida'
+        ], 400);
     }
 }

@@ -283,4 +283,4 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-left: 20px;
 }
 </style>
-@endsection
+@endpush

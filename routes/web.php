@@ -28,6 +28,11 @@ Route::prefix('reports')->name('reports.')->middleware('auth')->group(function (
     Route::post('/remove', [App\Http\Controllers\ReportController::class, 'remove'])->name('remove');
 });
 
+// API Routes per paginazione profilo
+Route::prefix('api/profile')->name('api.profile.')->middleware('auth')->group(function () {
+    Route::get('/{user}/articles', [App\Http\Controllers\ProfileController::class, 'getArticles'])->name('articles');
+});
+
 
 
 // Authentication Routes (pubbliche)

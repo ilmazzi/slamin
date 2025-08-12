@@ -116,11 +116,9 @@
 
             // Debug: verifica se lo slider esiste
             const $slider = $('.events-slider');
-            
 
             // Verifica se il carousel esiste
             const $carousel = $('#heroCarousel');
-            
 
             if ($slider.length > 0) {
                 // Inizializza lo slider degli eventi
@@ -147,16 +145,257 @@
                         }
                     ]
                 });
-
-                
             } else {
                 console.error('Slider not found!');
             }
 
-            // {{ __('wishlist.wishlist') }} è gestita globalmente da WishlistManager
-            // Non serve codice duplicato qui
+            // Inizializza il carosello Bootstrap
+            if ($carousel.length > 0) {
+                try {
+                    const bsCarousel = new bootstrap.Carousel($carousel[0], {
+                        interval: 5000, // 5 secondi
+                        ride: 'carousel', // Avvia automaticamente
+                        wrap: true, // Loop infinito
+                        keyboard: true, // Controlli da tastiera
+                        pause: 'hover' // Pausa al hover
+                    });
+                } catch (error) {
+                    console.warn('Bootstrap Carousel non disponibile, usando fallback manuale');
+                    initManualCarousel();
+                }
+            }
 
+            // Funzione fallback per carosello manuale
+            function initManualCarousel() {
+                const carousel = document.getElementById('heroCarousel');
+                if (!carousel) return;
 
+                const slides = carousel.querySelectorAll('.carousel-item');
+                const indicators = carousel.querySelectorAll('.carousel-indicators button');
+                const prevBtn = carousel.querySelector('.carousel-control-prev');
+                const nextBtn = carousel.querySelector('.carousel-control-next');
+
+                let currentSlide = 0;
+                let interval;
+
+                function showSlide(index) {
+                    // Nascondi tutte le slide
+                    slides.forEach(slide => slide.classList.remove('active'));
+                    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+                    // Mostra la slide corrente
+                    slides[index].classList.add('active');
+                    if (indicators[index]) {
+                        indicators[index].classList.add('active');
+                    }
+
+                    currentSlide = index;
+                }
+
+                function nextSlide() {
+                    const next = (currentSlide + 1) % slides.length;
+                    showSlide(next);
+                }
+
+                function prevSlide() {
+                    const prev = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(prev);
+                }
+
+                // Event listeners
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', nextSlide);
+                }
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', prevSlide);
+                }
+
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => showSlide(index));
+                });
+
+                // Auto-scroll
+                interval = setInterval(nextSlide, 5000);
+
+                // Pausa al hover
+                carousel.addEventListener('mouseenter', () => clearInterval(interval));
+                carousel.addEventListener('mouseleave', () => {
+                    interval = setInterval(nextSlide, 5000);
+                });
+            }
+        });
+
+        // Toggle functions for Poetry and Articles sections
+        window.togglePoetryContent = function(type) {
+            const newContent = document.getElementById('newPoetryContent');
+            const popularContent = document.getElementById('popularPoetryContent');
+            const toggle = document.getElementById('poetryToggle');
+            const labelLeft = document.getElementById('poetryToggleLabelLeft');
+            const labelRight = document.getElementById('poetryToggleLabelRight');
+
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = true;
+                // Evidenzia "New" e disattiva "Popolari"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = false;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            }
+        };
+
+        window.toggleArticlesContent = function(type) {
+            const newContent = document.getElementById('newArticlesContent');
+            const popularContent = document.getElementById('popularArticlesContent');
+            const toggle = document.getElementById('articlesToggle');
+            const labelLeft = document.getElementById('articlesToggleLabelLeft');
+            const labelRight = document.getElementById('articlesToggleLabelRight');
+
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = true;
+                // Evidenzia "New" e disattiva "Popolari"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = false;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            }
+        };
+
+        // Funzione per seguire un utente
+        window.followUser = function(userId) {
+            // Verifica se l'utente è autenticato
+            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+            if (!isAuthenticated) {
+                window.location.href = '{{ route('login') }}';
+                return;
+            }
+
+            const button = document.getElementById('followBtn' + userId);
+            const text = document.getElementById('followText' + userId);
+
+            // Disabilita il pulsante durante la richiesta
+            button.disabled = true;
+
+            fetch('/api/follow/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        user_id: userId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Aggiorna il pulsante
+                        if (data.following) {
+                            button.innerHTML = '<i class="ti ti-user-check"></i><span id="followText' +
+                                userId + '">Following</span>';
+                            button.classList.remove('btn-primary');
+                            button.classList.add('btn-success');
+                        } else {
+                            button.innerHTML = '<i class="ti ti-user"></i><span id="followText' +
+                                userId + '">Follow</span>';
+                            button.classList.remove('btn-success');
+                            button.classList.add('btn-primary');
+                        }
+
+                        // Mostra notifica
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Successo!',
+                            text: data.message,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire('Errore', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore connessione follow:', error);
+                    Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
+                })
+                .finally(() => {
+                    // Riabilita il pulsante
+                    button.disabled = false;
+                });
+        };
+
+        // Funzione per mostrare messaggio di successo
+        window.showSuccessMessage = function(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'position-fixed';
+            successDiv.style.cssText =
+                'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        };
+
+        // Funzione per mostrare messaggio di errore
+        window.showErrorMessage = function(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'position-fixed';
+            errorDiv.style.cssText =
+                'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
+        };
+
+        // Event listeners per il modal video (da eseguire quando il DOM è pronto)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestione chiusura modal video con ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const videoModal = document.getElementById('videoPlayerModal');
+                    if (videoModal && videoModal.style.display === 'block') {
+                        closeVideoModal();
+                    }
+                }
+            });
+
+            // Gestione click fuori dal modal per chiudere
+            const videoModal = document.getElementById('videoPlayerModal');
+            if (videoModal) {
+                videoModal.addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        closeVideoModal();
+                    }
+                });
+            }
         });
     </script>
 @endpush
@@ -1114,822 +1353,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inizializza il carosello Bootstrap
-            const carousel = document.getElementById('heroCarousel');
-            if (carousel) {
-                
-
-                // Prova prima con l'approccio standard
-                try {
-                    const bsCarousel = new bootstrap.Carousel(carousel, {
-                        interval: 5000, // 5 secondi
-                        ride: 'carousel', // Avvia automaticamente
-                        wrap: true, // Loop infinito
-                        keyboard: true, // Controlli da tastiera
-                        pause: 'hover' // Pausa al hover
-                    });
-                    
-                } catch (error) {
-                    
-
-                    // Fallback: carosello manuale
-                    
-                    initManualCarousel();
-                }
-
-                // Debug: mostra informazioni sul carosello
-                const slides = carousel.querySelectorAll('.carousel-item');
-                
-
-                slides.forEach((slide, index) => {
-                     ? 'ATTIVA' :
-                        'inattiva');
-                });
-            } else {
-                
-            }
-
-            // Funzione fallback per carosello manuale
-            function initManualCarousel() {
-                const carousel = document.getElementById('heroCarousel');
-                const slides = carousel.querySelectorAll('.carousel-item');
-                const indicators = carousel.querySelectorAll('.carousel-indicators button');
-                const prevBtn = carousel.querySelector('.carousel-control-prev');
-                const nextBtn = carousel.querySelector('.carousel-control-next');
-
-                let currentSlide = 0;
-                let interval;
-
-                function showSlide(index) {
-                    // Nascondi tutte le slide
-                    slides.forEach(slide => slide.classList.remove('active'));
-                    indicators.forEach(indicator => indicator.classList.remove('active'));
-
-                    // Mostra la slide corrente
-                    slides[index].classList.add('active');
-                    if (indicators[index]) {
-                        indicators[index].classList.add('active');
-                    }
-
-                    currentSlide = index;
-                }
-
-                function nextSlide() {
-                    const next = (currentSlide + 1) % slides.length;
-                    showSlide(next);
-                }
-
-                function prevSlide() {
-                    const prev = (currentSlide - 1 + slides.length) % slides.length;
-                    showSlide(prev);
-                }
-
-                // Event listeners
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', nextSlide);
-                }
-                if (prevBtn) {
-                    prevBtn.addEventListener('click', prevSlide);
-                }
-
-                indicators.forEach((indicator, index) => {
-                    indicator.addEventListener('click', () => showSlide(index));
-                });
-
-                // Auto-scroll
-                interval = setInterval(nextSlide, 5000);
-
-                // Pausa al hover
-                carousel.addEventListener('mouseenter', () => clearInterval(interval));
-                carousel.addEventListener('mouseleave', () => {
-                    interval = setInterval(nextSlide, 5000);
-                });
-
-                
-            }
-
-            // Toggle functions for Poetry and Articles sections
-            window.togglePoetryContent = function(type) {
-                const newContent = document.getElementById('newPoetryContent');
-                const popularContent = document.getElementById('popularPoetryContent');
-                const toggle = document.getElementById('poetryToggle');
-                const labelLeft = document.getElementById('poetryToggleLabelLeft');
-                const labelRight = document.getElementById('poetryToggleLabelRight');
-
-                if (type === 'new') {
-                    newContent.style.display = 'block';
-                    popularContent.style.display = 'none';
-                    toggle.checked = true;
-                    // Evidenzia "New" e disattiva "Popolari"
-                    labelLeft.classList.remove('text-primary');
-                    labelLeft.classList.add('text-muted');
-                    labelRight.classList.remove('text-muted');
-                    labelRight.classList.add('text-primary');
-                } else {
-                    newContent.style.display = 'none';
-                    popularContent.style.display = 'block';
-                    toggle.checked = false;
-                    // Evidenzia "Popolari" e disattiva "New"
-                    labelLeft.classList.remove('text-muted');
-                    labelLeft.classList.add('text-primary');
-                    labelRight.classList.remove('text-primary');
-                    labelRight.classList.add('text-muted');
-                }
-            };
-
-            window.toggleArticlesContent = function(type) {
-                const newContent = document.getElementById('newArticlesContent');
-                const popularContent = document.getElementById('popularArticlesContent');
-                const toggle = document.getElementById('articlesToggle');
-                const labelLeft = document.getElementById('articlesToggleLabelLeft');
-                const labelRight = document.getElementById('articlesToggleLabelRight');
-
-                if (type === 'new') {
-                    newContent.style.display = 'block';
-                    popularContent.style.display = 'none';
-                    toggle.checked = true;
-                    // Evidenzia "New" e disattiva "Popolari"
-                    labelLeft.classList.remove('text-primary');
-                    labelLeft.classList.add('text-muted');
-                    labelRight.classList.remove('text-muted');
-                    labelRight.classList.add('text-primary');
-                } else {
-                    newContent.style.display = 'none';
-                    popularContent.style.display = 'block';
-                    toggle.checked = false;
-                    // Evidenzia "Popolari" e disattiva "New"
-                    labelLeft.classList.remove('text-muted');
-                    labelLeft.classList.add('text-primary');
-                    labelRight.classList.remove('text-primary');
-                    labelRight.classList.add('text-muted');
-                }
-            };
-
-            // Funzione per seguire un utente
-            window.followUser = function(userId) {
-                // Verifica se l'utente è autenticato
-                const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-
-                if (!isAuthenticated) {
-                    window.location.href = '{{ route('login') }}';
-                    return;
-                }
-
-                const button = document.getElementById('followBtn' + userId);
-                const text = document.getElementById('followText' + userId);
-
-                // Disabilita il pulsante durante la richiesta
-                button.disabled = true;
-
-                fetch('/api/follow/toggle', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({
-                            user_id: userId
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Aggiorna il pulsante
-                            if (data.following) {
-                                button.innerHTML = '<i class="ti ti-user-check"></i><span id="followText' +
-                                    userId + '">Following</span>';
-                                button.classList.remove('btn-primary');
-                                button.classList.add('btn-success');
-                            } else {
-                                button.innerHTML = '<i class="ti ti-user"></i><span id="followText' +
-                                    userId + '">Follow</span>';
-                                button.classList.remove('btn-success');
-                                button.classList.add('btn-primary');
-                            }
-
-                            // Aggiorna i contatori se presenti
-                            const followersElement = document.querySelector(
-                                `[data-user-id="${userId}"] .followers-count`);
-                            if (followersElement && data.followers_count !== undefined) {
-                                followersElement.textContent = data.followers_count;
-                            }
-                        } else {
-                            console.error('Errore follow:', data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Errore connessione follow:', error);
-                    })
-                    .finally(() => {
-                        button.disabled = false;
-                    });
-            };
-
-            // Stili personalizzati per gli switch
-            document.addEventListener('DOMContentLoaded', function() {
-                // Aggiungi stili CSS personalizzati
-                const style = document.createElement('style');
-                style.textContent = `
-            .form-check-input:checked {
-                background-color: #fff;
-                border-color: #fff;
-            }
-            .form-check-input:focus {
-                border-color: #fff;
-                box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-            }
-            .form-check-label {
-                cursor: pointer;
-                user-select: none;
-            }
-            #articlesToggleLabelLeft, #articlesToggleLabelRight, #poetryToggleLabelLeft, #poetryToggleLabelRight {
-                cursor: pointer;
-                user-select: none;
-                transition: opacity 0.2s ease;
-            }
-            #articlesToggleLabelLeft:hover, #articlesToggleLabelRight:hover, #poetryToggleLabelLeft:hover, #poetryToggleLabelRight:hover {
-                opacity: 0.8;
-            }
-        `;
-                document.head.appendChild(style);
-
-                // Inizializza lo stato del toggle degli articoli
-                const articlesToggle = document.getElementById('articlesToggle');
-                const articlesLabelLeft = document.getElementById('articlesToggleLabelLeft');
-                const articlesLabelRight = document.getElementById('articlesToggleLabelRight');
-
-                if (articlesToggle && articlesLabelLeft && articlesLabelRight) {
-                    // Imposta lo stato iniziale: "Popolari" attivo, "New" inattivo
-                    articlesToggle.checked = false;
-                    articlesLabelLeft.classList.add('text-primary');
-                    articlesLabelRight.classList.add('text-muted');
-
-                    // Aggiungi event listener per i click sulle etichette
-                    articlesLabelLeft.addEventListener('click', function() {
-                        articlesToggle.checked = false;
-                        toggleArticlesContent('popular');
-                    });
-
-                    articlesLabelRight.addEventListener('click', function() {
-                        articlesToggle.checked = true;
-                        toggleArticlesContent('new');
-                    });
-                }
-
-                // Inizializza lo stato del toggle della poesia
-                const poetryToggle = document.getElementById('poetryToggle');
-                const poetryLabelLeft = document.getElementById('poetryToggleLabelLeft');
-                const poetryLabelRight = document.getElementById('poetryToggleLabelRight');
-
-                if (poetryToggle && poetryLabelLeft && poetryLabelRight) {
-                    // Imposta lo stato iniziale: "Popolari" attivo, "New" inattivo
-                    poetryToggle.checked = false;
-                    poetryLabelLeft.classList.add('text-primary');
-                    poetryLabelRight.classList.add('text-muted');
-
-                    // Aggiungi event listener per i click sulle etichette
-                    poetryLabelLeft.addEventListener('click', function() {
-                        poetryToggle.checked = false;
-                        togglePoetryContent('popular');
-                    });
-
-                    poetryLabelRight.addEventListener('click', function() {
-                        poetryToggle.checked = true;
-                        togglePoetryContent('new');
-                    });
-                }
-            });
-        });
-
-        // ===== FUNZIONI GLOBALI PER IL MODAL VIDEO =====
-
-        // Variabili globali per il modal
-        let modalVideoPlayer = null;
-        let modalCurrentVideoTime = 0;
-        let modalVideoDuration = 0;
-        let modalSnaps = [];
-
-        // Funzione per aprire il modal video
-        window.openVideoModal = function(videoId) {
-            
-            
-
-            // Controlla se l'ID del video è valido
-            if (!videoId || videoId === 0) {
-                console.error('❌ ID video non valido:', videoId);
-                return;
-            }
-
-            // Mostra il modal personalizzato
-            const modal = document.getElementById('videoPlayerModal');
-            
-
-            if (!modal) {
-                console.error('❌ Modal video non trovato nel DOM');
-                return;
-            }
-
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Previene lo scroll
-
-            // Carica il video
-            loadVideoInModal(videoId);
-        }
-
-        // Funzione per chiudere il modal video
-        window.closeVideoModal = function() {
-            const modal = document.getElementById('videoPlayerModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Ripristina lo scroll
-
-            // Ferma il video se in riproduzione
-            const videoPlayer = document.getElementById('modalVideoPlayer');
-            if (videoPlayer && !videoPlayer.paused) {
-                videoPlayer.pause();
-            }
-
-            // Reset variabili
-            modalCurrentVideoTime = 0;
-            modalVideoDuration = 0;
-            modalSnaps = [];
-        }
-
-        // Funzione per caricare il video nel modal
-        window.loadVideoInModal = async function(videoId) {
-            const loadingDiv = document.getElementById('modalVideoLoading');
-            const errorDiv = document.getElementById('modalVideoError');
-            const containerDiv = document.getElementById('modalVideoContainer');
-            const videoPlayer = document.getElementById('modalVideoPlayer');
-
-            // Mostra loading
-            loadingDiv.style.display = 'block';
-            errorDiv.style.display = 'none';
-            containerDiv.style.display = 'none';
-
-            try {
-                
-
-                // Prima ottieni i dati del video
-                
-                const videoResponse = await fetch(`/api/videos/${videoId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'same-origin'
-                });
-
-                
-                ));
-
-                // Controlla se la risposta è JSON
-                const contentType = videoResponse.headers.get('content-type');
-                
-
-                if (!contentType || !contentType.includes('application/json')) {
-                    // Debug: leggi il contenuto della risposta
-                    const responseText = await videoResponse.text();
-                    console.error('🔍 Debug: Risposta non-JSON ricevuta:', responseText.substring(0, 500));
-                    throw new Error('Video non trovato o non disponibile');
-                }
-
-                const videoData = await videoResponse.json();
-                
-
-                if (!videoData.success) {
-                    throw new Error(videoData.message || 'Errore nel caricamento del video');
-                }
-
-                const video = videoData.video;
-
-                // Imposta il titolo del modal
-                document.getElementById('videoPlayerModalLabel').textContent = video.title;
-
-                // Usa sempre il player HTML5 nativo
-                videoPlayer.style.display = 'block';
-
-                
-
-                // Ottieni l'URL diretto del video da PeerTube
-                const urlResponse = await fetch(`/videos/${videoId}/peertube-url`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    credentials: 'same-origin'
-                });
-                const urlData = await urlResponse.json();
-
-                // Gestisci il caso in cui il video è ancora in elaborazione
-                if (urlData.status === 'processing') {
-                    throw new Error('Il video è ancora in elaborazione su PeerTube. Riprova tra qualche minuto.');
-                }
-
-                if (urlData.success && urlData.files && urlData.files.length > 0) {
-                    // Usa il primo file disponibile (migliore qualità)
-                    const videoFile = urlData.files[0];
-                    
-
-                    // Crea l'elemento source
-                    const source = document.createElement('source');
-                    source.src = videoFile.url;
-                    source.type = 'video/mp4';
-
-                    // Rimuovi eventuali source esistenti e aggiungi quello nuovo
-                    videoPlayer.innerHTML = '';
-                    videoPlayer.appendChild(source);
-
-                    // Forza il caricamento del video
-                    videoPlayer.load();
-                } else {
-                    throw new Error('Nessuna sorgente video disponibile');
-                }
-
-                // Imposta l'ID del video per le funzioni snap
-                videoPlayer.setAttribute('data-video-id', video.id);
-
-                // Carica gli snap
-                loadSnapsForModal(videoId);
-
-                // Nascondi loading e mostra video
-                loadingDiv.style.display = 'none';
-                containerDiv.style.display = 'block';
-
-                // Inizializza il player
-                initializeModalVideoPlayer(video);
-
-            } catch (error) {
-                console.error('❌ Errore caricamento video nel modal:', error);
-                loadingDiv.style.display = 'none';
-                errorDiv.style.display = 'block';
-
-                // Messaggi di errore più specifici
-                let errorMessage = 'Errore nel caricamento del video';
-                if (error.message.includes('Video non trovato')) {
-                    errorMessage = 'Video non trovato o non disponibile';
-                } else if (error.message.includes('elaborazione')) {
-                    errorMessage = 'Il video è ancora in elaborazione. Riprova tra qualche minuto.';
-                } else if (error.message.includes('JSON')) {
-                    errorMessage = 'Errore di comunicazione con il server';
-                } else {
-                    errorMessage = error.message;
-                }
-
-                document.getElementById('modalErrorMessage').textContent = errorMessage;
-            }
-        }
-
-        // Funzione per caricare gli snap nel modal
-        window.loadSnapsForModal = function(videoId) {
-            
-
-            fetch(`/api/videos/${videoId}/snaps`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        modalSnaps = data.snaps || [];
-                        
-                        updateModalSnapMarkers();
-                    } else {
-                        
-                        modalSnaps = [];
-                        updateModalSnapMarkers();
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ Errore caricamento snap:', error);
-                    modalSnaps = [];
-                    updateModalSnapMarkers();
-                });
-        }
-
-        // Funzione per inizializzare il player del modal
-        window.initializeModalVideoPlayer = function(video) {
-            const videoPlayer = document.getElementById('modalVideoPlayer');
-            modalVideoDuration = video.duration || 60;
-            modalVideoPlayer = videoPlayer;
-
-            // Event listeners per il player HTML5
-            videoPlayer.addEventListener('loadedmetadata', function() {
-                
-                modalVideoDuration = videoPlayer.duration || modalVideoDuration;
-                updateModalSnapMarkers();
-            });
-
-            videoPlayer.addEventListener('timeupdate', function() {
-                modalCurrentVideoTime = videoPlayer.currentTime;
-            });
-
-            videoPlayer.addEventListener('durationchange', function() {
-                
-                modalVideoDuration = videoPlayer.duration;
-                updateModalSnapMarkers();
-            });
-
-            videoPlayer.addEventListener('canplay', function() {
-                
-            });
-
-            videoPlayer.addEventListener('error', function() {
-                console.error('❌ Errore nel video del modal:', videoPlayer.error);
-                const errorDiv = document.getElementById('modalVideoError');
-                if (errorDiv) {
-                    errorDiv.style.display = 'block';
-                    document.getElementById('modalErrorMessage').textContent =
-                        'Errore nella riproduzione del video. Riprova più tardi.';
-                }
-            });
-
-            // Pulsante snap sempre visibile
-            const snapButton = document.getElementById('modalFloatingSnapButton');
-            if (snapButton) {
-                snapButton.style.opacity = '1';
-            }
-        }
-
-        // Funzione per aggiornare i marker degli snap nel modal
-        window.updateModalSnapMarkers = function() {
-            const markersContainer = document.getElementById('modalSnapMarkers');
-            if (!markersContainer) return;
-
-            markersContainer.innerHTML = '';
-
-            if (!modalSnaps || modalSnaps.length === 0) return;
-
-
-                modalVideoDuration);
-
-            // Raggruppa gli snap per timestamp
-            const snapsByTimestamp = {};
-            modalSnaps.forEach(snap => {
-                if (!snapsByTimestamp[snap.timestamp]) {
-                    snapsByTimestamp[snap.timestamp] = [];
-                }
-                snapsByTimestamp[snap.timestamp].push(snap);
-            });
-
-            // Crea i marker
-            Object.keys(snapsByTimestamp).forEach(timestamp => {
-                const snapsAtTime = snapsByTimestamp[timestamp];
-                const snapCount = snapsAtTime.length;
-                const firstSnap = snapsAtTime[0];
-
-                const percentage = (timestamp / modalVideoDuration) * 100;
-                const leftPosition = percentage + '%';
-
-                const marker = document.createElement('div');
-                marker.className = 'snap-marker position-absolute';
-                marker.style.cssText =
-                    `left: ${leftPosition}; transform: translateX(-50%); pointer-events: auto; cursor: pointer;`;
-                marker.setAttribute('data-timestamp', timestamp);
-                marker.onclick = () => seekToTimeInModal(timestamp);
-                marker.title = `${firstSnap.title || 'Snap'} (${snapCount} snap)`;
-
-                marker.innerHTML = `
-            <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
-                 style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
-                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
-            </div>
-            ${snapCount > 1 ? `
-                    <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
-                         style="width: 24px; height: 24px; font-size: 12px; font-weight: bold; transform: translate(30%, -30%);">
-                        ${snapCount}
-                    </div>
-                ` : ''}
-            <div class="snap-tooltip position-absolute bottom-100 start-50 translate-middle-x mb-1 bg-dark text-white rounded p-2"
-                 style="font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; pointer-events: none;">
-                <strong>${firstSnap.title || 'Snap'}</strong>
-                ${snapCount > 1 ? `<br><small>+${snapCount - 1} altri</small>` : ''}
-            </div>
-        `;
-
-                markersContainer.appendChild(marker);
-            });
-
-            
-
-            // Aggiungi event listeners per i tooltip
-            const snapMarkers = markersContainer.querySelectorAll('.snap-marker');
-            snapMarkers.forEach(marker => {
-                const tooltip = marker.querySelector('.snap-tooltip');
-                if (tooltip) {
-                    marker.addEventListener('mouseenter', function() {
-                        tooltip.style.opacity = '1';
-                    });
-                    marker.addEventListener('mouseleave', function() {
-                        tooltip.style.opacity = '0';
-                    });
-                }
-            });
-        }
-
-        // Funzione per saltare al tempo specifico nel modal
-        window.seekToTimeInModal = function(timestamp) {
-            if (modalVideoPlayer) {
-                modalVideoPlayer.currentTime = timestamp;
-                modalVideoPlayer.play();
-            }
-        }
-
-        // Funzione per mostrare/nascondere il form inline degli snap
-        window.toggleSnapForm = function() {
-            const snapForm = document.getElementById('modalSnapForm');
-            const snapButton = document.getElementById('modalFloatingSnapButton');
-
-            if (snapForm.style.display === 'none') {
-                // Mostra il form
-                snapForm.style.display = 'block';
-                snapButton.style.display = 'none';
-
-                // Aggiorna il tempo corrente
-                updateInlineSnapTime();
-
-                
-            } else {
-                // Nascondi il form
-                snapForm.style.display = 'none';
-                snapButton.style.display = 'flex';
-
-                // Pulisci i campi
-                document.getElementById('inlineSnapTitle').value = '';
-                document.getElementById('inlineSnapDescription').value = '';
-
-                
-            }
-        }
-
-        // Funzione per aggiornare il tempo nel form inline
-        window.updateInlineSnapTime = function() {
-            const currentTimeElement = document.getElementById('inlineCurrentTime');
-            const timestampElement = document.getElementById('inlineSnapTimestamp');
-            const videoIdElement = document.getElementById('inlineSnapVideoId');
-
-            if (currentTimeElement && timestampElement && videoIdElement && modalVideoPlayer) {
-                const currentTime = Math.floor(modalVideoPlayer.currentTime);
-                currentTimeElement.textContent = formatTimestamp(currentTime);
-                timestampElement.value = currentTime;
-                videoIdElement.value = modalVideoPlayer.getAttribute('data-video-id');
-            }
-        }
-
-        // Funzione per formattare il timestamp
-        window.formatTimestamp = function(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        // Funzione per creare lo snap dal form inline
-        window.createInlineSnap = function() {
-            const title = document.getElementById('inlineSnapTitle').value.trim();
-            const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
-            const videoId = document.getElementById('inlineSnapVideoId').value;
-
-            
-
-            if (timestamp < 0 || !videoId) {
-                
-                return;
-            }
-
-            fetch(`/api/videos/${videoId}/snaps`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        title: title,
-                        timestamp: timestamp
-                    })
-                })
-                .then(response => {
-                    if (response.status === 401) {
-                        // Utente non autenticato
-                        return response.json().then(data => {
-                            if (data.redirect) {
-                                window.location.href = data.redirect;
-                            } else {
-                                showErrorMessage('Devi essere autenticato per creare uno snap');
-                            }
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        
-
-                        // Chiudi il form
-                        toggleSnapForm();
-
-                        // Ricarica gli snap nel modal video
-                        loadVideoSnaps(videoId);
-
-                        // Mostra un messaggio di successo
-                        showSuccessMessage('Snap creato con successo!');
-                    } else {
-                        
-                        showErrorMessage(data.message || 'Errore nella creazione dello snap. Riprova.');
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ Errore nella creazione dello snap:', error);
-                    showErrorMessage('Errore nella creazione dello snap. Riprova.');
-                });
-        }
-
-        // Funzione per mostrare messaggio di successo
-        window.showSuccessMessage = function(message) {
-            const successDiv = document.createElement('div');
-            successDiv.className = 'position-fixed';
-            successDiv.style.cssText =
-                'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
-            successDiv.textContent = message;
-            document.body.appendChild(successDiv);
-
-            setTimeout(() => {
-                successDiv.remove();
-            }, 3000);
-        }
-
-        // Funzione per caricare gli snap di un video
-        window.loadVideoSnaps = function(videoId) {
-            
-
-            fetch(`/api/videos/${videoId}/snaps`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        modalSnaps = data.snaps || [];
-                        
-                        updateModalSnapMarkers();
-                    } else {
-                        
-                        modalSnaps = [];
-                        updateModalSnapMarkers();
-                    }
-                })
-                .catch(error => {
-                    console.error('❌ Errore ricaricamento snap:', error);
-                    modalSnaps = [];
-                    updateModalSnapMarkers();
-                });
-        }
-
-        // Funzione per mostrare messaggio di errore
-        window.showErrorMessage = function(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'position-fixed';
-            errorDiv.style.cssText =
-                'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
-            errorDiv.textContent = message;
-            document.body.appendChild(errorDiv);
-
-            setTimeout(() => {
-                errorDiv.remove();
-            }, 3000);
-        }
-
-        // Event listeners per il modal video (da eseguire quando il DOM è pronto)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gestione chiusura modal video con ESC
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    const videoModal = document.getElementById('videoPlayerModal');
-                    if (videoModal && videoModal.style.display === 'block') {
-                        closeVideoModal();
-                    }
-                }
-            });
-
-            // Gestione click fuori dal modal per chiudere
-            const videoModal = document.getElementById('videoPlayerModal');
-            if (videoModal) {
-                videoModal.addEventListener('click', function(event) {
-                    if (event.target === this) {
-                        closeVideoModal();
-                    }
-                });
-            }
-        });
-    </script>
-@endpush
