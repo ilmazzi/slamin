@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', 'Gestione Utenti - Slamin'); ?>
 
-@section('title', 'Gestione Utenti - Slamin')
-
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
 #breadcrumb-nav {
     position: relative !important;
@@ -12,27 +10,28 @@
     height: auto !important;
 }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row m-1">
         <div class="col-12">
-            <h4 class="main-title">{{ __('permissions.users') }}</h4>
+            <h4 class="main-title"><?php echo e(__('permissions.users')); ?></h4>
             <ul class="app-line-breadcrumbs mb-3">
                 <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
+                    <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
                         <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                            <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                         </span>
                     </a>
                 </li>
                 <li class="">
-                    <a href="{{ route('permissions.index') }}" class="f-s-14 f-w-500">{{ __('permissions.permissions') }}</a>
+                    <a href="<?php echo e(route('permissions.index')); ?>" class="f-s-14 f-w-500"><?php echo e(__('permissions.permissions')); ?></a>
                 </li>
                 <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">{{ __('permissions.users') }}</a>
+                    <a href="#" class="f-s-14 f-w-500"><?php echo e(__('permissions.users')); ?></a>
                 </li>
             </ul>
         </div>
@@ -46,24 +45,27 @@
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <h5 class="mb-0 f-w-600 text-primary">
-                                <i class="ph ph-users me-2"></i>{{ __('permissions.users') ?? 'Gestione Utenti' }}
-                                <span class="badge bg-primary ms-2">{{ $users->total() }} totali</span>
+                                <i class="ph ph-users me-2"></i><?php echo e(__('permissions.users') ?? 'Gestione Utenti'); ?>
+
+                                <span class="badge bg-primary ms-2"><?php echo e($users->total()); ?> totali</span>
                             </h5>
                             <p class="text-muted mb-0 f-s-14">
-                                {{ __('permissions.users_description') ?? 'Gestisci utenti e permessi' }} -
-                                Mostrando {{ $users->firstItem() ?? 0 }}-{{ $users->lastItem() ?? 0 }} di {{ $users->total() }} utenti
+                                <?php echo e(__('permissions.users_description') ?? 'Gestisci utenti e permessi'); ?> -
+                                Mostrando <?php echo e($users->firstItem() ?? 0); ?>-<?php echo e($users->lastItem() ?? 0); ?> di <?php echo e($users->total()); ?> utenti
                             </p>
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex flex-column flex-md-row gap-2">
                                 <button class="btn btn-success" onclick="exportUsers()">
-                                    <i class="ph ph-download me-2"></i>{{ __('permissions.export') }}
+                                    <i class="ph ph-download me-2"></i><?php echo e(__('permissions.export')); ?>
+
                                 </button>
                                 <button class="btn btn-info" onclick="exportAllUsers()">
                                     <i class="ph ph-download-simple me-2"></i>Esporta Tutti
                                 </button>
                                 <button class="btn btn-primary" onclick="showBulkAssignModal()">
-                                    <i class="ph ph-users-plus me-2"></i>{{ __('permissions.bulk_assign') }}
+                                    <i class="ph ph-users-plus me-2"></i><?php echo e(__('permissions.bulk_assign')); ?>
+
                                 </button>
                             </div>
                         </div>
@@ -81,39 +83,39 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="form-label f-s-14 f-w-500">{{ __('permissions.search_users') }}</label>
+                                <label class="form-label f-s-14 f-w-500"><?php echo e(__('permissions.search_users')); ?></label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light-primary">
                                         <i class="ph ph-magnifying-glass"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="searchUsers" placeholder="{{ __('permissions.search_placeholder') }}">
+                                    <input type="text" class="form-control" id="searchUsers" placeholder="<?php echo e(__('permissions.search_placeholder')); ?>">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label f-s-14 f-w-500">{{ __('permissions.filter_by_role') }}</label>
+                                <label class="form-label f-s-14 f-w-500"><?php echo e(__('permissions.filter_by_role')); ?></label>
                                 <select class="form-select" id="filterRole">
-                                    <option value="">{{ __('permissions.all_roles') }}</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->name }}">{{ $role->display_name ?? $role->name }}</option>
-                                    @endforeach
+                                    <option value=""><?php echo e(__('permissions.all_roles')); ?></option>
+                                    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->name); ?>"><?php echo e($role->display_name ?? $role->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label f-s-14 f-w-500">{{ __('permissions.filter_by_status') }}</label>
+                                <label class="form-label f-s-14 f-w-500"><?php echo e(__('permissions.filter_by_status')); ?></label>
                                 <select class="form-select" id="filterStatus">
-                                    <option value="">{{ __('permissions.all_status') }}</option>
-                                    <option value="active">{{ __('permissions.status_active') }}</option>
-                                    <option value="inactive">{{ __('permissions.status_inactive') }}</option>
+                                    <option value=""><?php echo e(__('permissions.all_status')); ?></option>
+                                    <option value="active"><?php echo e(__('permissions.status_active')); ?></option>
+                                    <option value="inactive"><?php echo e(__('permissions.status_inactive')); ?></option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="form-label f-s-14 f-w-500">{{ __('permissions.items_per_page') }}</label>
+                                <label class="form-label f-s-14 f-w-500"><?php echo e(__('permissions.items_per_page')); ?></label>
                                 <select class="form-select" id="itemsPerPage">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
@@ -136,7 +138,8 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-users me-2 text-primary"></i>
-                        {{ __('permissions.system_users') }}
+                        <?php echo e(__('permissions.system_users')); ?>
+
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -146,104 +149,112 @@
                                 <tr>
                                     <th class="border-0">
                                         <div class="d-flex align-items-center">
-                                            <i class="ph ph-user me-2"></i>{{ __('permissions.name') }}
+                                            <i class="ph ph-user me-2"></i><?php echo e(__('permissions.name')); ?>
+
                                         </div>
                                     </th>
                                     <th class="border-0">
-                                        <i class="ph ph-envelope me-2"></i>{{ __('permissions.email') }}
+                                        <i class="ph ph-envelope me-2"></i><?php echo e(__('permissions.email')); ?>
+
                                     </th>
                                     <th class="border-0">
-                                        <i class="ph ph-at me-2"></i>{{ __('permissions.nickname') }}
+                                        <i class="ph ph-at me-2"></i><?php echo e(__('permissions.nickname')); ?>
+
                                     </th>
                                     <th class="border-0">
-                                        <i class="ph ph-users-three me-2"></i>{{ __('permissions.roles') }}
+                                        <i class="ph ph-users-three me-2"></i><?php echo e(__('permissions.roles')); ?>
+
                                     </th>
                                     <th class="border-0">
-                                        <i class="ph ph-shield me-2"></i>{{ __('permissions.permissions') }}
+                                        <i class="ph ph-shield me-2"></i><?php echo e(__('permissions.permissions')); ?>
+
                                     </th>
                                     <th class="border-0">
-                                        <i class="ph ph-circle me-2"></i>{{ __('permissions.status') }}
+                                        <i class="ph ph-circle me-2"></i><?php echo e(__('permissions.status')); ?>
+
                                     </th>
                                     <th class="border-0 text-center">
-                                        <i class="ph ph-gear me-2"></i>{{ __('permissions.actions') }}
+                                        <i class="ph ph-gear me-2"></i><?php echo e(__('permissions.actions')); ?>
+
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
-                                <tr data-user-id="{{ $user->id }}" class="user-row">
+                                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr data-user-id="<?php echo e($user->id); ?>" class="user-row">
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="bg-light-primary h-40 w-40 d-flex-center b-r-50 position-relative overflow-hidden me-3">
-                                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="{{ __('common.avatar') }}" class="img-fluid b-r-50">
+                                                <img src="<?php echo e(asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png')); ?>" alt="<?php echo e(__('common.avatar')); ?>" class="img-fluid b-r-50">
                                             </div>
                                             <div>
-                                                <h6 class="mb-0 f-w-600">{{ $user->name }}</h6>
-                                                <small class="text-muted f-s-12">ID: {{ $user->id }}</small>
+                                                <h6 class="mb-0 f-w-600"><?php echo e($user->name); ?></h6>
+                                                <small class="text-muted f-s-12">ID: <?php echo e($user->id); ?></small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
+                                        <span class="text-muted"><?php echo e($user->getPrivacySafeIdentifier()); ?></span>
                                     </td>
                                     <td>
-                                        @if($user->nickname)
-                                            <span class="badge bg-light-danger text-danger">{{ $user->nickname }}</span>
-                                        @else
-                                            <span class="text-muted f-s-12">{{ __('permissions.no_nickname') }}</span>
-                                        @endif
+                                        <?php if($user->nickname): ?>
+                                            <span class="badge bg-light-danger text-danger"><?php echo e($user->nickname); ?></span>
+                                        <?php else: ?>
+                                            <span class="text-muted f-s-12"><?php echo e(__('permissions.no_nickname')); ?></span>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
-                                            @forelse($user->roles as $role)
-                                                <span class="f-s-12 text-primary">{{ $role->display_name ?? $role->name }}</span>
-                                                @if(!$loop->last), @endif
-                                            @empty
-                                                <span class="text-muted f-s-12">{{ __('permissions.no_roles') }}</span>
-                                            @endforelse
+                                            <?php $__empty_1 = true; $__currentLoopData = $user->roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                <span class="f-s-12 text-primary"><?php echo e($role->display_name ?? $role->name); ?></span>
+                                                <?php if(!$loop->last): ?>, <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                <span class="text-muted f-s-12"><?php echo e(__('permissions.no_roles')); ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
-                                            @forelse($user->permissions as $permission)
-                                                <span class="f-s-12 text-success">{{ $permission->display_name ?? $permission->name }}</span>
-                                                @if(!$loop->last), @endif
-                                            @empty
-                                                <span class="text-muted f-s-12">{{ __('permissions.no_direct_permissions') }}</span>
-                                            @endforelse
+                                            <?php $__empty_1 = true; $__currentLoopData = $user->permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                                <span class="f-s-12 text-success"><?php echo e($permission->display_name ?? $permission->name); ?></span>
+                                                <?php if(!$loop->last): ?>, <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                                <span class="text-muted f-s-12"><?php echo e(__('permissions.no_direct_permissions')); ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }} f-s-12">
-                                            {{ __('permissions.status_' . $user->status) }}
+                                        <span class="badge <?php echo e($user->status === 'active' ? 'bg-success' : 'bg-danger'); ?> f-s-12">
+                                            <?php echo e(__('permissions.status_' . $user->status)); ?>
+
                                         </span>
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-light-primary icon-btn b-r-4" onclick="viewUserDetails({{ $user->id }})" title="{{ __('permissions.view_details') }}">
+                                            <button class="btn btn-light-primary icon-btn b-r-4" onclick="viewUserDetails(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.view_details')); ?>">
                                                 <i class="ph ph-eye"></i>
                                             </button>
-                                            <button class="btn btn-light-secondary icon-btn b-r-4" onclick="editUserRoles({{ $user->id }})" title="{{ __('permissions.edit_roles') }}">
+                                            <button class="btn btn-light-secondary icon-btn b-r-4" onclick="editUserRoles(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.edit_roles')); ?>">
                                                 <i class="ph ph-user-gear"></i>
                                             </button>
-                                            <button class="btn btn-light-info icon-btn b-r-4" onclick="editUserPermissions({{ $user->id }})" title="{{ __('permissions.edit_permissions') }}">
+                                            <button class="btn btn-light-info icon-btn b-r-4" onclick="editUserPermissions(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.edit_permissions')); ?>">
                                                 <i class="ph ph-shield-check"></i>
                                             </button>
-                                            @php
+                                            <?php
                                                 $currentUser = auth()->user();
                                                 $isSuperAdmin = $currentUser->hasRole('super-admin');
                                                 $isOwnAccount = $currentUser->id === $user->id;
                                                 $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
-                                            @endphp
-                                            @if($canDelete)
-                                            <button class="btn btn-light-danger icon-btn b-r-4" onclick="deleteUser({{ $user->id }})" title="{{ __('permissions.delete_user') }}">
+                                            ?>
+                                            <?php if($canDelete): ?>
+                                            <button class="btn btn-light-danger icon-btn b-r-4" onclick="deleteUser(<?php echo e($user->id); ?>)" title="<?php echo e(__('permissions.delete_user')); ?>">
                                                 <i class="ph ph-trash"></i>
                                             </button>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -256,21 +267,22 @@
     <div class="row d-lg-none">
         <div class="col-12">
             <h5 class="mb-3 f-w-600 text-primary">
-                <i class="ph ph-user me-2"></i>{{ __('permissions.system_users') }}
+                <i class="ph ph-user me-2"></i><?php echo e(__('permissions.system_users')); ?>
+
             </h5>
         </div>
-        @foreach($users as $user)
+        <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="col-12 col-md-6 mb-3">
             <div class="card hover-effect">
                 <div class="card-header position-relative overflow-hidden bg-light-primary">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="bg-light-primary h-40 w-40 d-flex-center b-r-50 position-relative overflow-hidden me-3">
-                                <img src="{{ asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png') }}" alt="{{ __('common.avatar') }}" class="img-fluid b-r-50">
+                                <img src="<?php echo e(asset('assets/images/avatar/' . ($user->id % 16 + 1) . '.png')); ?>" alt="<?php echo e(__('common.avatar')); ?>" class="img-fluid b-r-50">
                             </div>
                             <div>
-                                <h6 class="mb-0 f-w-600 text-primary">{{ $user->name }}</h6>
-                                <small class="text-muted f-s-12">ID: {{ $user->id }}</small>
+                                <h6 class="mb-0 f-w-600 text-primary"><?php echo e($user->name); ?></h6>
+                                <small class="text-muted f-s-12">ID: <?php echo e($user->id); ?></small>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -278,27 +290,31 @@
                                 <i class="ph ph-dots-three-outline"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="viewUserDetails({{ $user->id }})">
-                                    <i class="ph ph-eye me-2"></i>{{ __('permissions.view_details') }}
+                                <li><a class="dropdown-item" href="#" onclick="viewUserDetails(<?php echo e($user->id); ?>)">
+                                    <i class="ph ph-eye me-2"></i><?php echo e(__('permissions.view_details')); ?>
+
                                 </a></li>
-                                <li><a class="dropdown-item" href="#" onclick="editUserRoles({{ $user->id }})">
-                                    <i class="ph ph-user-gear me-2"></i>{{ __('permissions.edit_roles') }}
+                                <li><a class="dropdown-item" href="#" onclick="editUserRoles(<?php echo e($user->id); ?>)">
+                                    <i class="ph ph-user-gear me-2"></i><?php echo e(__('permissions.edit_roles')); ?>
+
                                 </a></li>
-                                <li><a class="dropdown-item" href="#" onclick="editUserPermissions({{ $user->id }})">
-                                    <i class="ph ph-shield-check me-2"></i>{{ __('permissions.edit_permissions') }}
+                                <li><a class="dropdown-item" href="#" onclick="editUserPermissions(<?php echo e($user->id); ?>)">
+                                    <i class="ph ph-shield-check me-2"></i><?php echo e(__('permissions.edit_permissions')); ?>
+
                                 </a></li>
-                                @php
+                                <?php
                                     $currentUser = auth()->user();
                                     $isSuperAdmin = $currentUser->hasRole('super-admin');
                                     $isOwnAccount = $currentUser->id === $user->id;
                                     $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
-                                @endphp
-                                @if($canDelete)
+                                ?>
+                                <?php if($canDelete): ?>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser({{ $user->id }})">
-                                    <i class="ph ph-trash me-2"></i>{{ __('permissions.delete_user') }}
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser(<?php echo e($user->id); ?>)">
+                                    <i class="ph ph-trash me-2"></i><?php echo e(__('permissions.delete_user')); ?>
+
                                 </a></li>
-                                @endif
+                                <?php endif; ?>
                             </ul>
                         </div>
                     </div>
@@ -306,40 +322,44 @@
                 <div class="card-body">
                     <div class="mb-2">
                         <i class="ph ph-at me-2 text-muted"></i>
-                        <span class="f-s-14 text-muted">{{ $user->getPrivacySafeIdentifier() }}</span>
+                        <span class="f-s-14 text-muted"><?php echo e($user->getPrivacySafeIdentifier()); ?></span>
                     </div>
                     <div class="mb-2">
                         <i class="ph ph-at me-2 text-muted"></i>
-                        @if($user->nickname)
-                            <span class="badge bg-light-danger text-danger f-s-12">{{ $user->nickname }}</span>
-                        @else
-                            <span class="text-muted f-s-12">{{ __('permissions.no_nickname') }}</span>
-                        @endif
+                        <?php if($user->nickname): ?>
+                            <span class="badge bg-light-danger text-danger f-s-12"><?php echo e($user->nickname); ?></span>
+                        <?php else: ?>
+                            <span class="text-muted f-s-12"><?php echo e(__('permissions.no_nickname')); ?></span>
+                        <?php endif; ?>
                     </div>
                     <div class="mb-2">
-                        <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }} f-s-12">
-                            {{ __('permissions.status_' . $user->status) }}
+                        <span class="badge <?php echo e($user->status === 'active' ? 'bg-success' : 'bg-danger'); ?> f-s-12">
+                            <?php echo e(__('permissions.status_' . $user->status)); ?>
+
                         </span>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-light-primary btn-sm flex-fill" onclick="viewUserDetails({{ $user->id }})">
-                            <i class="ph ph-eye me-1"></i>{{ __('permissions.view') }}
+                        <button class="btn btn-light-primary btn-sm flex-fill" onclick="viewUserDetails(<?php echo e($user->id); ?>)">
+                            <i class="ph ph-eye me-1"></i><?php echo e(__('permissions.view')); ?>
+
                         </button>
-                        <button class="btn btn-light-secondary btn-sm flex-fill" onclick="editUserRoles({{ $user->id }})">
-                            <i class="ph ph-user-gear me-1"></i>{{ __('permissions.roles') }}
+                        <button class="btn btn-light-secondary btn-sm flex-fill" onclick="editUserRoles(<?php echo e($user->id); ?>)">
+                            <i class="ph ph-user-gear me-1"></i><?php echo e(__('permissions.roles')); ?>
+
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
     <!-- Pagination -->
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-center mt-4">
-                {{ $users->links() }}
+                <?php echo e($users->links()); ?>
+
             </div>
         </div>
     </div>
@@ -352,34 +372,35 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users me-2"></i>
-                    Gestione {{ __('permissions.roles') }} {{ __('permissions.user') }}
+                    Gestione <?php echo e(__('permissions.roles')); ?> <?php echo e(__('permissions.user')); ?>
+
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="userRolesForm">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="user_id" id="userRolesUserId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('permissions.user') }}</label>
+                        <label class="form-label"><?php echo e(__('permissions.user')); ?></label>
                         <input type="text" class="form-control" id="userRolesUserName" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('permissions.roles') }} Disponibili</label>
+                        <label class="form-label"><?php echo e(__('permissions.roles')); ?> Disponibili</label>
                         <div class="row">
-                            @foreach($roles as $role)
+                            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-6 mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="roles[]"
-                                           value="{{ $role->name }}" id="role_{{ $role->id }}">
-                                    <label class="form-check-label" for="role_{{ $role->id }}">
-                                        <strong>{{ $role->display_name ?? $role->name }}</strong>
+                                           value="<?php echo e($role->name); ?>" id="role_<?php echo e($role->id); ?>">
+                                    <label class="form-check-label" for="role_<?php echo e($role->id); ?>">
+                                        <strong><?php echo e($role->display_name ?? $role->name); ?></strong>
                                         <br>
-                                        <small class="text-muted">{{ $role->description ?? 'Nessuna descrizione' }}</small>
+                                        <small class="text-muted"><?php echo e($role->description ?? 'Nessuna descrizione'); ?></small>
                                     </label>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
@@ -387,7 +408,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="ph ph-check me-2"></i>
-                        Salva {{ __('permissions.roles') }}
+                        Salva <?php echo e(__('permissions.roles')); ?>
+
                     </button>
                 </div>
             </form>
@@ -402,16 +424,17 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-shield-check me-2"></i>
-                    Gestione Permessi Diretti {{ __('permissions.user') }}
+                    Gestione Permessi Diretti <?php echo e(__('permissions.user')); ?>
+
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="userPermissionsForm">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="user_id" id="userPermissionsUserId">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('permissions.user') }}</label>
+                        <label class="form-label"><?php echo e(__('permissions.user')); ?></label>
                         <input type="text" class="form-control" id="userPermissionsUserName" readonly>
                     </div>
                     <div class="mb-3">
@@ -421,28 +444,28 @@
                             I permessi diretti hanno precedenza sui permessi dei ruoli. Usa con cautela.
                         </div>
                         <div class="row">
-                            @foreach($permissions->groupBy('group') as $group => $groupPermissions)
+                            <?php $__currentLoopData = $permissions->groupBy('group'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group => $groupPermissions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="mb-0">{{ $group ?? 'Generale' }}</h6>
+                                        <h6 class="mb-0"><?php echo e($group ?? 'Generale'); ?></h6>
                                     </div>
                                     <div class="card-body">
-                                        @foreach($groupPermissions as $permission)
+                                        <?php $__currentLoopData = $groupPermissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" name="permissions[]"
-                                                   value="{{ $permission->name }}" id="perm_{{ $permission->id }}">
-                                            <label class="form-check-label" for="perm_{{ $permission->id }}">
-                                                <strong>{{ $permission->display_name ?? $permission->name }}</strong>
+                                                   value="<?php echo e($permission->name); ?>" id="perm_<?php echo e($permission->id); ?>">
+                                            <label class="form-check-label" for="perm_<?php echo e($permission->id); ?>">
+                                                <strong><?php echo e($permission->display_name ?? $permission->name); ?></strong>
                                                 <br>
-                                                <small class="text-muted">{{ $permission->description ?? 'Nessuna descrizione' }}</small>
+                                                <small class="text-muted"><?php echo e($permission->description ?? 'Nessuna descrizione'); ?></small>
                                             </label>
                                         </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
@@ -465,7 +488,8 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-eye me-2"></i>
-                    Dettagli {{ __('permissions.user') }}
+                    Dettagli <?php echo e(__('permissions.user')); ?>
+
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -483,7 +507,8 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph ph-users-plus me-2"></i>
-                    Assegnazione Massiva {{ __('permissions.roles') }}
+                    Assegnazione Massiva <?php echo e(__('permissions.roles')); ?>
+
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -492,27 +517,27 @@
                     <div class="mb-3">
                         <label class="form-label">Seleziona Utenti</label>
                         <select class="form-select" name="user_ids[]" multiple id="bulkUserSelect">
-                            @foreach($users as $user)
-                                                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->getPrivacySafeIdentifier() }})</option>
-                            @endforeach
+                            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($user->id); ?>"><?php echo e($user->name); ?> (<?php echo e($user->getPrivacySafeIdentifier()); ?>)</option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ __('permissions.roles') }} da Assegnare</label>
+                        <label class="form-label"><?php echo e(__('permissions.roles')); ?> da Assegnare</label>
                         <div class="row">
-                            @foreach($roles as $role)
+                            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="bulk_roles[]"
-                                           value="{{ $role->name }}" id="bulk_role_{{ $role->id }}">
-                                    <label class="form-check-label" for="bulk_role_{{ $role->id }}">
-                                        <strong>{{ $role->display_name ?? $role->name }}</strong>
+                                           value="<?php echo e($role->name); ?>" id="bulk_role_<?php echo e($role->id); ?>">
+                                    <label class="form-check-label" for="bulk_role_<?php echo e($role->id); ?>">
+                                        <strong><?php echo e($role->display_name ?? $role->name); ?></strong>
                                         <br>
-                                        <small class="text-muted">{{ $role->description ?? 'Nessuna descrizione' }}</small>
+                                        <small class="text-muted"><?php echo e($role->description ?? 'Nessuna descrizione'); ?></small>
                                     </label>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
@@ -520,7 +545,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="ph ph-check me-2"></i>
-                        Assegna {{ __('permissions.roles') }}
+                        Assegna <?php echo e(__('permissions.roles')); ?>
+
                     </button>
                 </div>
             </form>
@@ -528,12 +554,12 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 function editUserRoles(userId) {
-    fetch(`{{ route('permissions.users.show', ['user' => ':userId']) }}`.replace(':userId', userId))
+    fetch(`<?php echo e(route('permissions.users.show', ['user' => ':userId'])); ?>`.replace(':userId', userId))
         .then(response => response.json())
         .then(data => {
             if (data.user) {
@@ -549,7 +575,7 @@ function editUserRoles(userId) {
 }
 
 function editUserPermissions(userId) {
-    fetch(`{{ route('permissions.users.show', ['user' => ':userId']) }}`.replace(':userId', userId))
+    fetch(`<?php echo e(route('permissions.users.show', ['user' => ':userId'])); ?>`.replace(':userId', userId))
         .then(response => response.json())
         .then(data => {
             if (data.user) {
@@ -565,24 +591,24 @@ function editUserPermissions(userId) {
 }
 
 function viewUserDetails(userId) {
-    fetch(`{{ route('permissions.users.show', ['user' => ':userId']) }}`.replace(':userId', userId))
+    fetch(`<?php echo e(route('permissions.users.show', ['user' => ':userId'])); ?>`.replace(':userId', userId))
         .then(response => response.json())
         .then(data => {
             if (data.user) {
                 let content = `
                     <div class="row">
                         <div class="col-md-6">
-                            <h6>Informazioni {{ __('permissions.user') }}</h6>
+                            <h6>Informazioni <?php echo e(__('permissions.user')); ?></h6>
                             <table class="table table-sm">
                                 <tr><td><strong>Nome:</strong></td><td>${data.user.name}</td></tr>
-                                <tr><td><strong>{{ __('permissions.email') }}:</strong></td><td>${data.user.email}</td></tr>
+                                <tr><td><strong><?php echo e(__('permissions.email')); ?>:</strong></td><td>${data.user.email}</td></tr>
                                 <tr><td><strong>Nickname:</strong></td><td>${data.user.nickname || 'N/A'}</td></tr>
-                                <tr><td><strong>{{ __('invitations.status') }}:</strong></td><td>${data.user.status || 'N/A'}</td></tr>
+                                <tr><td><strong><?php echo e(__('invitations.status')); ?>:</strong></td><td>${data.user.status || 'N/A'}</td></tr>
                                 <tr><td><strong>Registrato:</strong></td><td>${data.user.created_at}</td></tr>
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <h6>{{ __('permissions.roles') }} Assegnati</h6>
+                            <h6><?php echo e(__('permissions.roles')); ?> Assegnati</h6>
                             <div class="mb-3">
                                 ${data.user.roles.map(role => `<span class="badge bg-primary me-1">${role.display_name || role.name}</span>`).join('')}
                             </div>
@@ -615,11 +641,11 @@ function showBulkAssignModal() {
 }
 
 function exportUsers() {
-    window.location.href = '{{ route("permissions.users") }}?export=1';
+    window.location.href = '<?php echo e(route("permissions.users")); ?>?export=1';
 }
 
 function exportAllUsers() {
-    window.location.href = '{{ route("permissions.users") }}?export_all=1';
+    window.location.href = '<?php echo e(route("permissions.users")); ?>?export_all=1';
 }
 
 $('#userRolesForm').on('submit', function(e) {
@@ -638,10 +664,10 @@ $('#userRolesForm').on('submit', function(e) {
     
   
 
-    fetch(`{{ route('permissions.users.roles', ['user' => ':userId']) }}`.replace(':userId', userId), {
+    fetch(`<?php echo e(route('permissions.users.roles', ['user' => ':userId'])); ?>`.replace(':userId', userId), {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
             'Accept': 'application/json',
         },
         body: formData
@@ -671,10 +697,10 @@ $('#userPermissionsForm').on('submit', function(e) {
     const formData = new FormData(this);
     const userId = $('#userPermissionsUserId').val();
 
-    fetch(`{{ route('permissions.users.permissions', ['user' => ':userId']) }}`.replace(':userId', userId), {
+    fetch(`<?php echo e(route('permissions.users.permissions', ['user' => ':userId'])); ?>`.replace(':userId', userId), {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
             'Accept': 'application/json',
         },
         body: formData
@@ -720,7 +746,7 @@ $(document).ready(function() {
     // Gestione cambio items per page
     $('#itemsPerPage').on('change', function() {
         const perPage = $(this).val();
-        let url = '{{ route("permissions.users") }}';
+        let url = '<?php echo e(route("permissions.users")); ?>';
         if (perPage === 'all') {
             url += '?per_page=all';
         } else {
@@ -906,7 +932,7 @@ function deleteUser(userId) {
             });
 
             // Chiamata AJAX per eliminare l'utente
-            fetch(`{{ route('permissions.users.delete', ['user' => ':userId']) }}`.replace(':userId', userId), {
+            fetch(`<?php echo e(route('permissions.users.delete', ['user' => ':userId'])); ?>`.replace(':userId', userId), {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -941,4 +967,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/permissions/users.blade.php ENDPATH**/ ?>
