@@ -15,13 +15,13 @@
                 <div class="card-body">
                     <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data" id="articleForm">
                         @csrf
-                        
+
                         <div class="row">
                             <div class="col-lg-8">
                                 <!-- Titolo -->
                                 <div class="mb-3">
                                     <label for="title" class="form-label">{{ __('articles.title') }} *</label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
                                            id="title" name="title" value="{{ old('title') }}" required>
                                     @error('title')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -31,7 +31,7 @@
                                 <!-- Excerpt -->
                                 <div class="mb-3">
                                     <label for="excerpt" class="form-label">{{ __('articles.excerpt') }}</label>
-                                    <textarea class="form-control @error('excerpt') is-invalid @enderror" 
+                                    <textarea class="form-control @error('excerpt') is-invalid @enderror"
                                               id="excerpt" name="excerpt" rows="3">{{ old('excerpt') }}</textarea>
                                     <div class="form-text">{{ __('articles.excerpt_help') }}</div>
                                     @error('excerpt')
@@ -42,7 +42,7 @@
                                 <!-- Contenuto -->
                                 <div class="mb-3">
                                     <label for="content" class="form-label">{{ __('articles.content') }} *</label>
-                                    <textarea class="form-control @error('content') is-invalid @enderror" 
+                                    <textarea class="form-control @error('content') is-invalid @enderror"
                                               id="content" name="content" rows="15">{{ old('content') }}</textarea>
                                     @error('content')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -54,7 +54,7 @@
                                 <!-- Categoria -->
                                 <div class="mb-3">
                                     <label for="category_id" class="form-label">{{ __('articles.category') }}</label>
-                                    <select class="form-select @error('category_id') is-invalid @enderror" 
+                                    <select class="form-select @error('category_id') is-invalid @enderror"
                                             id="category_id" name="category_id">
                                         <option value="">{{ __('articles.select_category') }}</option>
                                         @foreach($categories as $category)
@@ -71,8 +71,8 @@
                                 <!-- Tag -->
                                 <div class="mb-3">
                                     <label for="tags" class="form-label">{{ __('articles.tags') }}</label>
-                                    <input type="text" class="form-control @error('tags') is-invalid @enderror" 
-                                           id="tags" name="tags" value="{{ old('tags') }}" 
+                                    <input type="text" class="form-control @error('tags') is-invalid @enderror"
+                                           id="tags" name="tags" value="{{ old('tags') }}"
                                            placeholder="{{ __('articles.tags_placeholder') }}">
                                     <div class="form-text">{{ __('articles.tags_help') }}</div>
                                     @error('tags')
@@ -83,7 +83,7 @@
                                 <!-- Immagine in evidenza -->
                                 <div class="mb-3">
                                     <label for="featured_image" class="form-label">{{ __('articles.featured_image') }}</label>
-                                    <input type="file" class="form-control @error('featured_image') is-invalid @enderror" 
+                                    <input type="file" class="form-control @error('featured_image') is-invalid @enderror"
                                            id="featured_image" name="featured_image" accept="image/*">
                                     <div class="form-text">
                                         {{ __('articles.image_help') }}<br>
@@ -109,7 +109,7 @@
                                         <!-- Stato -->
                                         <div class="mb-3">
                                             <label for="status" class="form-label">{{ __('articles.status') }}</label>
-                                            <select class="form-select @error('status') is-invalid @enderror" 
+                                            <select class="form-select @error('status') is-invalid @enderror"
                                                     id="status" name="status">
                                                 <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
                                                     {{ __('articles.draft') }}
@@ -131,7 +131,7 @@
                                         <!-- Data di pubblicazione -->
                                         <div class="mb-3">
                                             <label for="published_at" class="form-label">{{ __('articles.publish_date') }}</label>
-                                            <input type="datetime-local" class="form-control @error('published_at') is-invalid @enderror" 
+                                            <input type="datetime-local" class="form-control @error('published_at') is-invalid @enderror"
                                                    id="published_at" name="published_at" value="{{ old('published_at') }}">
                                             @error('published_at')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -141,7 +141,7 @@
                                         <!-- SEO -->
                                         <div class="mb-3">
                                             <label for="meta_title" class="form-label">{{ __('articles.meta_title') }}</label>
-                                            <input type="text" class="form-control @error('meta_title') is-invalid @enderror" 
+                                            <input type="text" class="form-control @error('meta_title') is-invalid @enderror"
                                                    id="meta_title" name="meta_title" value="{{ old('meta_title') }}">
                                             @error('meta_title')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -150,7 +150,7 @@
 
                                         <div class="mb-3">
                                             <label for="meta_description" class="form-label">{{ __('articles.meta_description') }}</label>
-                                            <textarea class="form-control @error('meta_description') is-invalid @enderror" 
+                                            <textarea class="form-control @error('meta_description') is-invalid @enderror"
                                                       id="meta_description" name="meta_description" rows="3">{{ old('meta_description') }}</textarea>
                                             @error('meta_description')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -159,7 +159,7 @@
 
                                         <!-- Opzioni avanzate -->
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="allow_comments" 
+                                            <input class="form-check-input" type="checkbox" id="allow_comments"
                                                    name="allow_comments" value="1" {{ old('allow_comments') ? 'checked' : '' }}>
                                             <label class="form-check-label" for="allow_comments">
                                                 {{ __('articles.allow_comments') }}
@@ -167,7 +167,7 @@
                                         </div>
 
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="featured" 
+                                            <input class="form-check-input" type="checkbox" id="featured"
                                                    name="featured" value="1" {{ old('featured') ? 'checked' : '' }}>
                                             <label class="form-check-label" for="featured">
                                                 {{ __('articles.mark_as_featured') }}
@@ -215,11 +215,11 @@
 @endsection
 
 @push('scripts')
-<!-- TinyMCE -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- TinyMCE (versione gratuita senza API key) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.2/tinymce.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inizializza TinyMCE
+    // Inizializza TinyMCE (versione gratuita)
     tinymce.init({
         selector: '#content',
         height: 500,
@@ -230,6 +230,14 @@ document.addEventListener('DOMContentLoaded', function() {
         ],
         toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
         content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }',
+        // Configurazioni per versione gratuita
+        branding: false,
+        promotion: false,
+        menubar: false,
+        statusbar: false,
+        // Rimuove warning e usa solo funzionalità gratuite
+        elementpath: false,
+        resize: false,
         setup: function(editor) {
             editor.on('change', function() {
                 editor.save();
@@ -277,7 +285,7 @@ function previewArticle() {
     const title = document.getElementById('title').value;
     const content = tinymce.get('content').getContent();
     const excerpt = document.getElementById('excerpt').value;
-    
+
     if (!title || !content) {
         showNotification('{{ __("articles.fill_required_fields") }}', 'warning');
         return;

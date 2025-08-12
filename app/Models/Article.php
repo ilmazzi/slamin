@@ -13,10 +13,11 @@ use Carbon\Carbon;
 use App\Traits\HasLikes;
 use App\Traits\HasComments;
 use App\Traits\HasModeration;
+use App\Traits\Reportable;
 
 class Article extends Model
 {
-    use HasFactory, HasLikes, HasComments, HasModeration;
+    use HasFactory, HasLikes, HasComments, HasModeration, Reportable;
 
     protected $fillable = [
         'user_id',
@@ -26,6 +27,11 @@ class Article extends Model
         'excerpt',
         'featured_image',
         'status',
+        'moderation_status',
+        'is_public',
+        'moderation_notes',
+        'moderated_by',
+        'moderated_at',
         'featured',
         'views_count',
         'likes_count',
@@ -45,7 +51,9 @@ class Article extends Model
         'meta_description' => 'array',
         'meta_keywords' => 'array',
         'featured' => 'boolean',
+        'is_public' => 'boolean',
         'published_at' => 'datetime',
+        'moderated_at' => 'datetime',
     ];
 
     protected $dates = [
@@ -56,6 +64,11 @@ class Article extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function moderator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'moderated_by');
     }
 
     public function category(): BelongsTo
@@ -109,6 +122,11 @@ class Article extends Model
     public function scopeFeatured(Builder $query): void
     {
         $query->where('featured', true);
+    }
+
+    public function scopeNotFeatured(Builder $query): void
+    {
+        $query->where('featured', false);
     }
 
     public function scopeByCategory(Builder $query, $categoryId): void
@@ -216,22 +234,22 @@ class Article extends Model
 
     public function getCanEditAttribute()
     {
+        if (!auth()->check()) return false;
         $user = auth()->user();
-        if (!$user) return false;
-        
-        return $user->id === $this->user_id || 
+
+        return $user->id === $this->user_id ||
                $user->hasRole(['admin', 'editor']) ||
-               $user->hasPermissionTo('articles.edit');
+               $user->can('articles.edit');
     }
 
     public function getCanDeleteAttribute()
     {
+        if (!auth()->check()) return false;
         $user = auth()->user();
-        if (!$user) return false;
-        
-        return $user->id === $this->user_id || 
+
+        return $user->id === $this->user_id ||
                $user->hasRole(['admin', 'editor']) ||
-               $user->hasPermissionTo('articles.delete');
+               $user->can('articles.delete');
     }
 
     // Mutators

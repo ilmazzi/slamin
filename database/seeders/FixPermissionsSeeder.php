@@ -13,7 +13,7 @@ class FixPermissionsSeeder extends Seeder
         // Rimuovi permissions ridondanti/duplicate
         $permissionsToDelete = [
             'create events',
-            'manage events', 
+            'manage events',
             'edit events',
             'delete events',
             'view events',
@@ -47,14 +47,25 @@ class FixPermissionsSeeder extends Seeder
             'poems.edit.own' => ['display_name' => 'Modifica Poesie Proprie', 'group' => 'content'],
             'poems.delete.own' => ['display_name' => 'Elimina Poesie Proprie', 'group' => 'content'],
             'poems.moderate' => ['display_name' => 'Modera Poesie', 'group' => 'moderation'],
+            'articles.view' => ['display_name' => 'Visualizza Articoli', 'group' => 'content'],
             'articles.create' => ['display_name' => 'Crea Articoli', 'group' => 'content'],
+            'articles.edit' => ['display_name' => 'Modifica Articoli', 'group' => 'content'],
             'articles.edit.own' => ['display_name' => 'Modifica Articoli Propri', 'group' => 'content'],
+            'articles.delete' => ['display_name' => 'Elimina Articoli', 'group' => 'content'],
             'articles.delete.own' => ['display_name' => 'Elimina Articoli Propri', 'group' => 'content'],
+            'articles.publish' => ['display_name' => 'Pubblica Articoli', 'group' => 'content'],
+            'articles.unpublish' => ['display_name' => 'Rimetti in Bozza Articoli', 'group' => 'content'],
+            'articles.feature' => ['display_name' => 'Gestisce Featured Articoli', 'group' => 'content'],
+            'articles.toggle_featured' => ['display_name' => 'Cambia Featured Articoli', 'group' => 'content'],
+            'articles.manage_layout' => ['display_name' => 'Gestisce Layout Articoli', 'group' => 'content'],
             'articles.moderate' => ['display_name' => 'Modera Articoli', 'group' => 'moderation'],
+            'articles.manage_categories' => ['display_name' => 'Gestisce Categorie Articoli', 'group' => 'content'],
+            'articles.manage_tags' => ['display_name' => 'Gestisce Tag Articoli', 'group' => 'content'],
+            'articles.view_reports' => ['display_name' => 'Visualizza Segnalazioni Articoli', 'group' => 'moderation'],
             'videos.upload' => ['display_name' => 'Carica Video', 'group' => 'content'],
             'videos.edit.own' => ['display_name' => 'Modifica Video Propri', 'group' => 'content'],
             'videos.delete.own' => ['display_name' => 'Elimina Video Propri', 'group' => 'content'],
-            'videos.moderate' => ['display_name' => 'Modera Video', 'group' => 'moderation'],
+            'videos.moderate' => ['display_name' => 'Modera Video', 'group' => 'content'],
         ];
 
         foreach ($newPermissions as $permissionName => $data) {
@@ -122,12 +133,12 @@ class FixPermissionsSeeder extends Seeder
         // Sistema i ruoli duplicati
         $venueOwnerRole = Role::where('name', 'venue-owner')->first();
         $venueOwnerRole2 = Role::where('name', 'venue_owner')->first();
-        
+
         if ($venueOwnerRole && $venueOwnerRole2) {
             // Sposta le permissions dal secondo al primo
             $permissions = $venueOwnerRole2->permissions;
             $venueOwnerRole->syncPermissions($permissions);
-            
+
             // Elimina il secondo ruolo
             $venueOwnerRole2->delete();
             echo "Unificati i ruoli venue-owner e venue_owner\n";
@@ -153,6 +164,7 @@ class FixPermissionsSeeder extends Seeder
             $moderatorPermissions = [
                 'profile.manage.own', 'content.publish.own', 'content.edit.own', 'content.delete.own',
                 'content.moderate', 'content.delete.any', 'profile.suspend',
+                'articles.view', 'articles.create', 'articles.edit', 'articles.delete', 'articles.publish', 'articles.unpublish', 'articles.feature', 'articles.toggle_featured', 'articles.manage_layout', 'articles.manage_categories', 'articles.manage_tags', 'articles.view_reports',
                 'events.view.public', 'events.view.private', 'votes.cast', 'comments.create', 'comments.moderate',
                 'follows.manage', 'poems.moderate', 'articles.moderate', 'videos.moderate',
                 'stats.view.own', 'stats.view.public'
@@ -168,6 +180,7 @@ class FixPermissionsSeeder extends Seeder
                 'profile.manage.own', 'content.publish.own', 'content.edit.own', 'content.delete.own',
                 'poems.create', 'poems.edit.own', 'poems.delete.own',
                 'videos.upload', 'videos.edit.own', 'videos.delete.own',
+                'articles.view', 'articles.create', 'articles.edit.own', 'articles.delete.own', 'articles.publish', 'articles.unpublish', 'articles.feature',
                 'events.view.public', 'events.participate', 'votes.cast', 'comments.create',
                 'follows.manage', 'gigs.apply', 'stats.view.own'
             ];
@@ -180,7 +193,7 @@ class FixPermissionsSeeder extends Seeder
         if ($organizerRole) {
             $organizerPermissions = [
                 'profile.manage.own', 'content.publish.own', 'content.edit.own', 'content.delete.own',
-                'articles.create', 'articles.edit.own', 'articles.delete.own',
+                'articles.view', 'articles.create', 'articles.edit', 'articles.edit.own', 'articles.delete', 'articles.delete.own', 'articles.publish', 'articles.unpublish', 'articles.feature', 'articles.toggle_featured', 'articles.manage_layout', 'articles.manage_categories', 'articles.manage_tags',
                 'events.create.public', 'events.create.private', 'events.manage.own', 'events.view.public',
                 'events.view.private', 'events.invite', 'events.participate',
                 'votes.cast', 'comments.create', 'follows.manage',
@@ -196,7 +209,7 @@ class FixPermissionsSeeder extends Seeder
         if ($venueOwnerRole) {
             $venueOwnerPermissions = [
                 'profile.manage.own', 'content.publish.own', 'content.edit.own', 'content.delete.own',
-                'articles.create', 'articles.edit.own', 'articles.delete.own',
+                'articles.view', 'articles.create', 'articles.edit', 'articles.edit.own', 'articles.delete', 'articles.delete.own', 'articles.publish', 'articles.unpublish', 'articles.feature', 'articles.toggle_featured',
                 'events.view.public', 'votes.cast', 'comments.create', 'follows.manage',
                 'venues.create', 'venues.manage.own', 'venues.approve.bookings',
                 'stats.view.own'
@@ -205,4 +218,4 @@ class FixPermissionsSeeder extends Seeder
             echo "Aggiornate permissions per venue-owner\n";
         }
     }
-} 
+}

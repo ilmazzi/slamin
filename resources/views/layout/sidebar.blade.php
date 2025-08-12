@@ -172,13 +172,7 @@
                                         {{ __('common.media_section') }}
                                     </a>
                                 </li>
- <!-- {{ __('common.news') }} Section - DISABILITATO (non implementato) -->
- <li class="no-sub nav-item disabled d-none d-sm-block">
-    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-        <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
-        <span class="text-muted">{{ __('common.news') }}</span>
-    </a>
-</li>
+
 
 
                                 <!-- Poesie Section -->
@@ -196,7 +190,25 @@
                                     </a>
                                 </li>
 
-
+                                <!-- Articoli Section -->
+                                <li class="no-sub {{ request()->routeIs('articles.*') ? 'active' : '' }}">
+                                    <a href="{{ route('articles.index') }}">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        {{ __('articles.articles') }}
+                                        @auth
+                                        @if(auth()->user()->can('articles.view'))
+                                            @php
+                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
+                                            @endphp
+                                            @if($draftArticlesCount > 0)
+                                                <span class="badge bg-warning badge-notification ms-2">
+                                                    {{ $draftArticlesCount }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                        @endauth
+                                    </a>
+                                </li>
 
                                 @auth
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
@@ -298,6 +310,7 @@
                                                           \App\Models\Event::pending()->count() +
                                                           \App\Models\Photo::pending()->count() +
                                                           \App\Models\Carousel::pending()->count() +
+                                                          \App\Models\Article::pending()->count() +
                                                           \App\Models\Report::active()->count();
                                         @endphp
                                         @if($pendingCount > 0)
@@ -329,6 +342,14 @@
                                     <a href="{{ route('admin.kanban.index') }}">
                                         <i class="ph-duotone ph-kanban f-s-20 me-2"></i>
                                         {{ __('common.kanban_board') }}
+                                    </a>
+                                </li>
+
+                                <!-- Articles Management - Solo per admin/moderator -->
+                                <li class="no-sub {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.articles.index') }}">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        {{ __('articles.articles_management') }}
                                     </a>
                                 </li>
 

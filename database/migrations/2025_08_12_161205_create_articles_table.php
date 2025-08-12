@@ -30,7 +30,7 @@ return new class extends Migration
             $table->json('meta_keywords')->nullable(); // Per SEO
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
-            
+
             // Indici per performance
             $table->index(['status', 'published_at']);
             $table->index(['featured', 'published_at']);

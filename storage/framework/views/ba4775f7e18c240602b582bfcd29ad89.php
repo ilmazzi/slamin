@@ -186,13 +186,7 @@
 
                                     </a>
                                 </li>
- <!-- <?php echo e(__('common.news')); ?> Section - DISABILITATO (non implementato) -->
- <li class="no-sub nav-item disabled d-none d-sm-block">
-    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-        <i class="ph-duotone ph-newspaper text-muted f-s-20 me-2"></i>
-        <span class="text-muted"><?php echo e(__('common.news')); ?></span>
-    </a>
-</li>
+
 
 
                                 <!-- Poesie Section -->
@@ -212,7 +206,27 @@
                                     </a>
                                 </li>
 
+                                <!-- Articoli Section -->
+                                <li class="no-sub <?php echo e(request()->routeIs('articles.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('articles.index')); ?>">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        <?php echo e(__('articles.articles')); ?>
 
+                                        <?php if(auth()->guard()->check()): ?>
+                                        <?php if(auth()->user()->can('articles.view')): ?>
+                                            <?php
+                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
+                                            ?>
+                                            <?php if($draftArticlesCount > 0): ?>
+                                                <span class="badge bg-warning badge-notification ms-2">
+                                                    <?php echo e($draftArticlesCount); ?>
+
+                                                </span>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
 
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
@@ -320,6 +334,7 @@
                                                           \App\Models\Event::pending()->count() +
                                                           \App\Models\Photo::pending()->count() +
                                                           \App\Models\Carousel::pending()->count() +
+                                                          \App\Models\Article::pending()->count() +
                                                           \App\Models\Report::active()->count();
                                         ?>
                                         <?php if($pendingCount > 0): ?>
@@ -353,6 +368,15 @@
                                     <a href="<?php echo e(route('admin.kanban.index')); ?>">
                                         <i class="ph-duotone ph-kanban f-s-20 me-2"></i>
                                         <?php echo e(__('common.kanban_board')); ?>
+
+                                    </a>
+                                </li>
+
+                                <!-- Articles Management - Solo per admin/moderator -->
+                                <li class="no-sub <?php echo e(request()->routeIs('admin.articles.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('admin.articles.index')); ?>">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        <?php echo e(__('articles.articles_management')); ?>
 
                                     </a>
                                 </li>

@@ -20,11 +20,6 @@ class ArticleController extends Controller
     public function __construct(AutoTranslationService $translationService)
     {
         $this->translationService = $translationService;
-        $this->middleware('auth')->except(['index', 'show', 'search']);
-        $this->middleware('permission:articles.create')->only(['create', 'store']);
-        $this->middleware('permission:articles.edit')->only(['edit', 'update']);
-        $this->middleware('permission:articles.delete')->only(['destroy']);
-        $this->middleware('permission:articles.publish')->only(['publish', 'unpublish']);
     }
 
     /**
@@ -32,56 +27,86 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Article::with(['user', 'category', 'tags'])
+        // Get featured articles for horizontal display (max 3)
+        $featuredArticles = Article::with(['user', 'category', 'tags'])
+            ->published()
+            ->featured()
+            ->withCount(['likes', 'comments'])
+            ->orderBy('published_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        // Get articles for the main content area
+        $mainQuery = Article::with(['user', 'category', 'tags'])
             ->published()
             ->withCount(['likes', 'comments']);
 
         // Search
         if ($request->filled('search')) {
-            $query->search($request->search);
+            $mainQuery->where(function($q) use ($request) {
+                $q->where('title', 'like', "%{$request->search}%")
+                  ->orWhere('excerpt', 'like', "%{$request->search}%")
+                  ->orWhere('content', 'like', "%{$request->search}%");
+            });
         }
 
         // Filter by category
         if ($request->filled('category')) {
-            $query->byCategory($request->category);
+            $mainQuery->whereHas('category', function($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
         }
 
         // Filter by tag
         if ($request->filled('tag')) {
-            $query->byTag($request->tag);
+            $mainQuery->whereHas('tags', function($q) use ($request) {
+                $q->where('slug', $request->tag);
+            });
         }
 
         // Sort
-        $sort = $request->get('sort', 'recent');
+        $sort = $request->get('sort', 'newest');
         switch ($sort) {
-            case 'popular':
-                $query->popular();
-                break;
             case 'oldest':
-                $query->orderBy('published_at', 'asc');
+                $mainQuery->orderBy('published_at', 'asc');
+                break;
+            case 'popular':
+                $mainQuery->orderBy('likes_count', 'desc');
+                break;
+            case 'title':
+                $mainQuery->orderBy('title', 'asc');
                 break;
             default:
-                $query->recent();
+                $mainQuery->orderBy('published_at', 'desc');
         }
 
-        $articles = $query->paginate(12);
+        // If no filters applied, show featured + recent layout
+        if (!$request->filled('search') && !$request->filled('category') && !$request->filled('tag')) {
+            // Get recent articles for the 2-column layout (excluding featured)
+            $recentQuery = Article::with(['user', 'category', 'tags'])
+                ->published()
+                ->notFeatured()
+                ->withCount(['likes', 'comments'])
+                ->orderBy('published_at', 'desc');
 
-        // Get layout articles for the page
-        $layoutArticles = $this->getLayoutArticles();
-
-        // Get sidebar articles
-        $sidebarArticles = $this->getSidebarArticles($request->get('sidebar_sort', 'new'));
+            $recentArticles = $recentQuery->paginate(12);
+            $showAllArticles = false;
+        } else {
+            // Show all articles when filters are applied
+            $recentArticles = $mainQuery->paginate(12);
+            $showAllArticles = true;
+        }
 
         // Get categories and tags for filters
         $categories = ArticleCategory::active()->ordered()->get();
         $tags = ArticleTag::active()->popular()->limit(20)->get();
 
         return view('articles.index', compact(
-            'articles',
-            'layoutArticles',
-            'sidebarArticles',
+            'featuredArticles',
+            'recentArticles',
             'categories',
-            'tags'
+            'tags',
+            'showAllArticles'
         ));
     }
 
@@ -267,7 +292,7 @@ class ArticleController extends Controller
         // Sync tags
         $oldTags = $article->tags->pluck('id')->toArray();
         $newTags = $request->tags ?? [];
-        
+
         $article->tags()->sync($newTags);
 
         // Update tag usage counts
@@ -395,6 +420,68 @@ class ArticleController extends Controller
     }
 
     /**
+     * Feature article
+     */
+    public function feature(Request $request, $id)
+    {
+        if (!Auth::user()->hasPermissionTo('articles.feature')) {
+            abort(403);
+        }
+
+        try {
+            $article = Article::findOrFail($id);
+            $article->update(['featured' => true]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('articles.article_featured'),
+                'featured' => true
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Articolo non trovato'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'operazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Unfeature article
+     */
+    public function unfeature(Request $request, $id)
+    {
+        if (!Auth::user()->hasPermissionTo('articles.feature')) {
+            abort(403);
+        }
+
+        try {
+            $article = Article::findOrFail($id);
+            $article->update(['featured' => false]);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('articles.article_unfeatured'),
+                'featured' => false
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Articolo non trovato'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'operazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Show user's articles
      */
     public function myArticles(Request $request)
@@ -425,6 +512,148 @@ class ArticleController extends Controller
         $categories = ArticleCategory::all();
 
         return view('articles.my-articles', compact('articles', 'categories'));
+    }
+
+    /**
+     * Browse all published articles
+     */
+    public function browse(Request $request)
+    {
+        $query = Article::with(['user', 'category', 'tags'])
+            ->published()
+            ->withCount(['likes', 'comments']);
+
+        // Filtri
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', function($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
+
+        if ($request->filled('tag')) {
+            $query->whereHas('tags', function($q) use ($request) {
+                $q->where('slug', $request->tag);
+            });
+        }
+
+        // Ordinamento
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('published_at', 'asc');
+                break;
+            case 'popular':
+                $query->orderBy('likes_count', 'desc');
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->orderBy('published_at', 'desc');
+        }
+
+        $articles = $query->paginate(12);
+        $categories = ArticleCategory::active()->ordered()->get();
+        $tags = ArticleTag::active()->ordered()->get();
+
+        return view('articles.browse', compact('articles', 'categories', 'tags'));
+    }
+
+    /**
+     * Browse articles by category
+     */
+    public function browseByCategory(ArticleCategory $category, Request $request)
+    {
+        $query = Article::with(['user', 'category', 'tags'])
+            ->published()
+            ->where('category_id', $category->id)
+            ->withCount(['likes', 'comments']);
+
+        // Filtri
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Ordinamento
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('published_at', 'asc');
+                break;
+            case 'popular':
+                $query->orderBy('likes_count', 'desc');
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->orderBy('published_at', 'desc');
+        }
+
+        $articles = $query->paginate(12);
+        $categories = ArticleCategory::active()->ordered()->get();
+        $tags = ArticleTag::active()->ordered()->get();
+
+        return view('articles.browse', compact('articles', 'categories', 'tags', 'category'));
+    }
+
+    /**
+     * Browse articles by tag
+     */
+    public function browseByTag(ArticleTag $tag, Request $request)
+    {
+        $query = Article::with(['user', 'category', 'tags'])
+            ->published()
+            ->whereHas('tags', function($q) use ($tag) {
+                $q->where('id', $tag->id);
+            })
+            ->withCount(['likes', 'comments']);
+
+        // Filtri
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('excerpt', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Ordinamento
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('published_at', 'asc');
+                break;
+            case 'popular':
+                $query->orderBy('likes_count', 'desc');
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            default:
+                $query->orderBy('published_at', 'desc');
+        }
+
+        $articles = $query->paginate(12);
+        $categories = ArticleCategory::active()->ordered()->get();
+        $tags = ArticleTag::active()->ordered()->get();
+
+        return view('articles.browse', compact('articles', 'categories', 'tags', 'tag'));
     }
 
     /**
@@ -552,7 +781,7 @@ class ArticleController extends Controller
         $user = Auth::user();
         if (!$user) return false;
 
-        return $user->id === $article->user_id || 
+        return $user->id === $article->user_id ||
                $user->hasRole(['admin', 'editor']) ||
                $user->hasPermissionTo('articles.view');
     }
@@ -565,7 +794,7 @@ class ArticleController extends Controller
         $user = Auth::user();
         if (!$user) return false;
 
-        return $user->id === $article->user_id || 
+        return $user->id === $article->user_id ||
                $user->hasRole(['admin', 'editor']) ||
                $user->hasPermissionTo('articles.edit');
     }
@@ -578,7 +807,7 @@ class ArticleController extends Controller
         $user = Auth::user();
         if (!$user) return false;
 
-        return $user->id === $article->user_id || 
+        return $user->id === $article->user_id ||
                $user->hasRole(['admin', 'editor']) ||
                $user->hasPermissionTo('articles.delete');
     }

@@ -43,6 +43,11 @@ class ArticleTag extends Model
         $query->orderBy('usage_count', 'desc');
     }
 
+    public function scopeOrdered(Builder $query): void
+    {
+        $query->orderBy('name', 'asc');
+    }
+
     // Accessors
     public function getNameAttribute($value)
     {

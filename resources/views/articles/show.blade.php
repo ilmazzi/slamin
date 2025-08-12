@@ -5,20 +5,21 @@
     <div class="row">
         <!-- Contenuto principale -->
         <div class="col-lg-8">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('articles.home') }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('articles.index') }}">{{ __('articles.news') }}</a></li>
-                    <li class="breadcrumb-item active">{{ $article->title }}</li>
-                </ol>
-            </nav>
+            @section('breadcrumb-title')
+<h3>{{ $article->title }}</h3>
+@endsection
+
+@section('breadcrumb-items')
+<li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('articles.home') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('articles.index') }}">{{ __('articles.news') }}</a></li>
+<li class="breadcrumb-item active">{{ $article->title }}</li>
+@endsection
 
             <!-- Articolo principale -->
             <div class="card mb-4">
                 @if($article->featured_image)
-                    <img src="{{ Storage::url($article->featured_image) }}" 
-                         class="card-img-top" style="height: 400px; object-fit: cover;" 
+                    <img src="{{ Storage::url($article->featured_image) }}"
+                         class="card-img-top" style="height: 400px; object-fit: cover;"
                          alt="{{ $article->title }}">
                 @endif
                 <div class="card-body">
@@ -72,13 +73,17 @@
 
                     <!-- Titolo e meta -->
                     <h1 class="card-title mb-3">{{ $article->title }}</h1>
-                    
+
                     <div class="d-flex align-items-center text-muted mb-4">
                         <div class="d-flex align-items-center me-3">
-                            <img src="{{ $article->user->profile->avatar_url ?? asset('assets/images/avatar/default.png') }}" 
-                                 class="rounded-circle me-2" style="width: 32px; height: 32px;" 
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}"
+                                 class="rounded-circle me-2" style="width: 32px; height: 32px;"
                                  alt="{{ $article->user->name }}">
-                            <span>{{ __('articles.by') }} {{ $article->user->name }}</span>
+                            <span>{{ __('articles.by') }}
+                                <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
+                                    {{ $article->user->name }}
+                                </a>
+                            </span>
                         </div>
                         <span class="mx-2">•</span>
                         <span>{{ $article->published_at->format('d/m/Y H:i') }}</span>
@@ -101,7 +106,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="d-flex gap-2">
                             <!-- Like -->
-                            <button class="btn btn-outline-primary like-btn" 
+                            <button class="btn btn-outline-primary like-btn"
                                     data-article-id="{{ $article->id }}"
                                     data-liked="{{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
                                 <i class="ti ti-heart {{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'text-danger' : '' }}"></i>
@@ -122,7 +127,7 @@
 
                             <!-- Segnala -->
                             @if(auth()->check())
-                                <button class="btn btn-outline-warning report-btn" 
+                                <button class="btn btn-outline-warning report-btn"
                                         data-article-id="{{ $article->id }}"
                                         data-reported="{{ auth()->check() && $article->isReportedByUser(auth()->user()) ? 'true' : 'false' }}">
                                     <i class="ti ti-flag"></i> {{ __('articles.report') }}
@@ -145,8 +150,8 @@
                     <div class="card bg-light">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <img src="{{ $article->user->profile->avatar_url ?? asset('assets/images/avatar/default.png') }}" 
-                                     class="rounded-circle me-3" style="width: 64px; height: 64px;" 
+                                <img src="{{ $article->user->profile->avatar_url ?? asset('assets/images/avatar/default.png') }}"
+                                     class="rounded-circle me-3" style="width: 64px; height: 64px;"
                                      alt="{{ $article->user->name }}">
                                 <div>
                                     <h6 class="mb-1">{{ __('articles.by') }} {{ $article->user->name }}</h6>
@@ -169,7 +174,7 @@
                         <div class="mb-4">
                             <form id="commentForm">
                                 <div class="mb-3">
-                                    <textarea name="content" class="form-control" rows="3" 
+                                    <textarea name="content" class="form-control" rows="3"
                                               placeholder="{{ __('articles.write_comment') }}" required></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">
@@ -254,15 +259,15 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" 
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
                            target="_blank" class="btn btn-outline-primary">
                             <i class="ti ti-brand-facebook"></i> {{ __('articles.share_on_facebook') }}
                         </a>
-                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->url()) }}&text={{ urlencode($article->title) }}" 
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->url()) }}&text={{ urlencode($article->title) }}"
                            target="_blank" class="btn btn-outline-info">
                             <i class="ti ti-brand-twitter"></i> {{ __('articles.share_on_twitter') }}
                         </a>
-                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->url()) }}" 
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->url()) }}"
                            target="_blank" class="btn btn-outline-primary">
                             <i class="ti ti-brand-linkedin"></i> {{ __('articles.share_on_linkedin') }}
                         </a>
@@ -300,7 +305,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">{{ __('articles.report_description') }}</label>
-                            <textarea name="description" class="form-control" rows="3" 
+                            <textarea name="description" class="form-control" rows="3"
                                       placeholder="{{ __('articles.report_description_placeholder') }}"></textarea>
                         </div>
                     </form>
@@ -344,13 +349,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.dataset.liked = data.liked;
                     const icon = this.querySelector('i');
                     const count = this.querySelector('.likes-count');
-                    
+
                     if (data.liked) {
                         icon.classList.add('text-danger');
                     } else {
                         icon.classList.remove('text-danger');
                     }
-                    
+
                     count.textContent = data.likes_count;
                     showNotification(data.message, 'success');
                 }
@@ -367,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('{{ __('articles.already_reported') }}', 'warning');
                 return;
             }
-            
+
             const modal = new bootstrap.Modal(document.getElementById('reportModal'));
             modal.show();
         });
@@ -378,9 +383,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (commentForm) {
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
-            
+
             fetch('{{ route('articles.comments.store', $article) }}', {
                 method: 'POST',
                 headers: {
@@ -396,12 +401,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     // Reset form
                     this.reset();
-                    
+
                     // Add new comment to list
                     if (data.status === 'approved') {
                         addCommentToList(data.comment);
                     }
-                    
+
                     showNotification(data.message, 'success');
                 } else {
                     showNotification(data.message, 'error');
@@ -416,8 +421,8 @@ function addCommentToList(comment) {
     const commentHtml = `
         <div class="comment mb-3" data-comment-id="${comment.id}">
             <div class="d-flex">
-                <img src="${comment.user.avatar_url || '/assets/images/avatar/default.png'}" 
-                     class="rounded-circle me-3" style="width: 40px; height: 40px;" 
+                <img src="${comment.user.avatar_url || '/assets/images/avatar/default.png'}"
+                     class="rounded-circle me-3" style="width: 40px; height: 40px;"
                      alt="${comment.user.name}">
                 <div class="flex-grow-1">
                     <div class="d-flex justify-content-between align-items-start">
@@ -439,7 +444,7 @@ function addCommentToList(comment) {
             </div>
         </div>
     `;
-    
+
     commentsList.insertAdjacentHTML('afterbegin', commentHtml);
 }
 
@@ -488,10 +493,10 @@ function submitReport() {
             if (reportBtn) {
                 reportBtn.dataset.reported = 'true';
             }
-            
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
             modal.hide();
-            
+
             showNotification(data.message, 'success');
         } else {
             showNotification(data.message, 'error');
