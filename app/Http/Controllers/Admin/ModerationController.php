@@ -132,6 +132,8 @@ class ModerationController extends Controller
         $notes = $request->input('notes');
         $success = $content->reject(Auth::user(), $notes);
 
+
+
         if ($success) {
             // Aggiorna anche le segnalazioni relative a questo contenuto
             $reports = Report::where('reportable_type', get_class($content))

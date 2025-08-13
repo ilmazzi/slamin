@@ -174,6 +174,9 @@
                                                         <button class="btn btn-sm btn-primary" onclick="viewReportedContent({{ $report->id }})" title="Visualizza contenuto">
                                                             <i class="ph ph-eye f-s-16"></i>
                                                         </button>
+                                                        <a href="{{ route('moderation.conversation', $report->id) }}" class="btn btn-sm btn-info" title="Conversazione">
+                                                            <i class="ph ph-chat-circle f-s-16"></i>
+                                                        </a>
                                                         <button class="btn btn-sm btn-success" onclick="approveReportedContent('{{ $report->api_content_type }}', {{ $report->reportable_id }})" title="Approva contenuto">
                                                             <i class="ph ph-check me-1 f-s-16"></i>
                                                             Approva

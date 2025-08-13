@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use App\Services\LoggingService;
 
@@ -87,6 +88,14 @@ class Report extends Model
     public function resolver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'resolved_by');
+    }
+
+    /**
+     * Relazione con la conversazione di moderazione
+     */
+    public function conversation(): HasOne
+    {
+        return $this->hasOne(ModerationConversation::class, 'report_id');
     }
 
     /**

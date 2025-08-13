@@ -96,6 +96,13 @@ class Notification extends Model
     const TYPE_VIDEO_SNAPPED = 'video_snapped';
 
     /**
+     * Type constants for moderation
+     */
+    const TYPE_CONTENT_REPORTED = 'content_reported';
+    const TYPE_MODERATION_RESPONSE = 'moderation_response';
+    const TYPE_MODERATION_UPDATE = 'moderation_update';
+
+    /**
      * Type constants for chat
      */
     const TYPE_CHAT_MESSAGE = 'chat_message';
@@ -770,6 +777,14 @@ class Notification extends Model
             self::TYPE_GIG_REOPENED => 'Gig Riaperto',
             self::TYPE_GIG_SHARED => 'Gig Condiviso',
             self::TYPE_GIG_GLOBAL_MESSAGE => 'Messaggio Globale Gig',
+            self::TYPE_CONTENT_LIKED => 'Contenuto Piaciuto',
+            self::TYPE_CONTENT_COMMENTED => 'Contenuto Commentato',
+            self::TYPE_COMMENT_LIKED => 'Commento Piaciuto',
+            self::TYPE_VIDEO_SNAPPED => 'Video Snappato',
+            self::TYPE_CHAT_MESSAGE => 'Messaggio Chat',
+            self::TYPE_CONTENT_REPORTED => 'Contenuto Segnalato',
+            self::TYPE_MODERATION_RESPONSE => 'Risposta Moderazione',
+            self::TYPE_MODERATION_UPDATE => 'Aggiornamento Moderazione',
         ];
     }
 
@@ -1069,5 +1084,121 @@ class Notification extends Model
                 'is_read' => true,
                 'read_at' => now(),
             ]);
+    }
+
+    /**
+     * Create content reported notification for content author
+     */
+    public static function createContentReportedNotification(Report $report): void
+    {
+        $contentAuthor = $report->reportable->user ?? null;
+        
+        if (!$contentAuthor) {
+            return;
+        }
+
+        $contentTitle = $report->reportable_title;
+        $contentType = $report->content_type;
+
+        $notification = self::create([
+            'user_id' => $contentAuthor->id,
+            'type' => self::TYPE_CONTENT_REPORTED,
+            'title' => 'Contenuto Segnalato',
+            'message' => "Il tuo {$contentType} \"{$contentTitle}\" è stato segnalato per {$report->reason_text}",
+            'data' => [
+                'report_id' => $report->id,
+                'content_type' => $report->reportable_type,
+                'content_id' => $report->reportable_id,
+                'content_title' => $contentTitle,
+                'reason' => $report->reason,
+                'reason_text' => $report->reason_text,
+                'reporter_id' => $report->user_id,
+            ],
+            'action_url' => route('moderation.conversation', $report->id),
+            'action_text' => 'Rispondi alla Segnalazione',
+            'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create moderation response notification
+     */
+    public static function createModerationResponseNotification(
+        ModerationMessage $message,
+        User $recipient
+    ): void {
+        $conversation = $message->conversation;
+        $report = $conversation->report;
+        $contentTitle = $report->reportable_title;
+        $senderName = $message->user->name;
+
+        $notification = self::create([
+            'user_id' => $recipient->id,
+            'type' => self::TYPE_MODERATION_RESPONSE,
+            'title' => 'Nuova Risposta alla Segnalazione',
+            'message' => "{$senderName} ha risposto alla segnalazione del contenuto \"{$contentTitle}\"",
+            'data' => [
+                'message_id' => $message->id,
+                'conversation_id' => $conversation->id,
+                'report_id' => $report->id,
+                'content_title' => $contentTitle,
+                'sender_id' => $message->user_id,
+                'sender_name' => $senderName,
+                'message_preview' => substr($message->message, 0, 100),
+            ],
+            'action_url' => route('moderation.conversation', $report->id),
+            'action_text' => 'Vedi Risposta',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create moderation update notification
+     */
+    public static function createModerationUpdateNotification(
+        Report $report,
+        string $action,
+        string $message
+    ): void {
+        $contentAuthor = $report->reportable->user ?? null;
+        
+        if (!$contentAuthor) {
+            return;
+        }
+
+        $contentTitle = $report->reportable_title;
+        $actionText = match ($action) {
+            'investigate' => 'in investigazione',
+            'resolve' => 'risolta',
+            'dismiss' => 'respinta',
+            default => 'aggiornata'
+        };
+
+        $notification = self::create([
+            'user_id' => $contentAuthor->id,
+            'type' => self::TYPE_MODERATION_UPDATE,
+            'title' => 'Aggiornamento Segnalazione',
+            'message' => "La segnalazione del tuo contenuto \"{$contentTitle}\" è stata {$actionText}",
+            'data' => [
+                'report_id' => $report->id,
+                'content_title' => $contentTitle,
+                'action' => $action,
+                'message' => $message,
+                'moderator_id' => auth()->id(),
+                'moderator_name' => auth()->user()->name,
+            ],
+            'action_url' => route('moderation.conversation', $report->id),
+            'action_text' => 'Vedi Dettagli',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
     }
 }

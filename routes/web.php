@@ -771,9 +771,17 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 
     // Report Routes
     Route::prefix('reports')->name('reports.')->middleware('auth')->group(function () {
-        Route::post('/store', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
-        Route::post('/remove', [App\Http\Controllers\ReportController::class, 'remove'])->name('remove');
-    });
+    Route::post('/store', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+    Route::post('/remove', [App\Http\Controllers\ReportController::class, 'remove'])->name('remove');
+});
+
+// Route per le conversazioni di moderazione
+Route::prefix('moderation')->name('moderation.')->middleware('auth')->group(function () {
+    Route::get('/conversation/{report}', [App\Http\Controllers\ModerationConversationController::class, 'show'])->name('conversation');
+    Route::post('/conversation/{report}/message', [App\Http\Controllers\ModerationConversationController::class, 'sendMessage'])->name('conversation.message');
+    Route::get('/conversation/{report}/messages', [App\Http\Controllers\ModerationConversationController::class, 'getMessages'])->name('conversation.messages');
+    Route::post('/conversation/{report}/read', [App\Http\Controllers\ModerationConversationController::class, 'markAsRead'])->name('conversation.read');
+});
 
 
 

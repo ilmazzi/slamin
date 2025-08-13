@@ -84,6 +84,18 @@ class ReportController extends Controller
                 'status' => Report::STATUS_PENDING
             ]);
 
+            // Crea la conversazione di moderazione
+            $conversation = \App\Models\ModerationConversation::createForReport($report);
+            
+            // Crea il messaggio di sistema iniziale
+            \App\Models\ModerationMessage::createSystemMessage(
+                $conversation,
+                "Conversazione aperta per la segnalazione del contenuto \"{$report->reportable_title}\""
+            );
+
+            // Invia notifica all'autore del contenuto
+            \App\Models\Notification::createContentReportedNotification($report);
+
             // Per le richieste AJAX, restituisci sempre JSON
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([

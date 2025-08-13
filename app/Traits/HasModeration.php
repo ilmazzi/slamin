@@ -18,7 +18,31 @@ trait HasModeration
         static::creating(function ($model) {
             if (empty($model->moderation_status)) {
                 $autoApprove = self::getModerationConfig($model->getTable(), 'auto_approve', false);
-                $model->moderation_status = $autoApprove ? 'approved' : 'pending';
+                
+                if ($autoApprove) {
+                    $model->moderation_status = 'approved';
+                    
+                    // Gestione specifica per tipo di contenuto (auto-approval)
+                    $contentType = get_class($model);
+                    switch ($contentType) {
+                        case 'App\Models\Article':
+                            // Per gli articoli, imposta status a 'published' e is_public a true
+                            $model->status = 'published';
+                            $model->is_public = true;
+                            break;
+                        case 'App\Models\Video':
+                        case 'App\Models\Poem':
+                        case 'App\Models\Event':
+                        case 'App\Models\Photo':
+                            // Per altri contenuti, imposta is_public a true se esiste
+                            if (property_exists($model, 'is_public')) {
+                                $model->is_public = true;
+                            }
+                            break;
+                    }
+                } else {
+                    $model->moderation_status = 'pending';
+                }
             }
         });
     }
@@ -113,6 +137,25 @@ trait HasModeration
             $this->moderation_notes = $notes;
         }
 
+        // Gestione specifica per tipo di contenuto
+        $contentType = get_class($this);
+        switch ($contentType) {
+            case 'App\Models\Article':
+                // Per gli articoli, imposta status a 'published' e is_public a true
+                $this->status = 'published';
+                $this->is_public = true;
+                break;
+            case 'App\Models\Video':
+            case 'App\Models\Poem':
+            case 'App\Models\Event':
+            case 'App\Models\Photo':
+                // Per altri contenuti, imposta is_public a true se esiste
+                if (property_exists($this, 'is_public')) {
+                    $this->is_public = true;
+                }
+                break;
+        }
+
         $result = $this->save();
 
         if ($result && $moderator) {
@@ -140,6 +183,25 @@ trait HasModeration
 
         if ($notes) {
             $this->moderation_notes = $notes;
+        }
+
+        // Gestione specifica per tipo di contenuto
+        $contentType = get_class($this);
+        switch ($contentType) {
+            case 'App\Models\Article':
+                // Per gli articoli, imposta status a 'draft' e is_public a false
+                $this->status = 'draft';
+                $this->is_public = false;
+                break;
+            case 'App\Models\Video':
+            case 'App\Models\Poem':
+            case 'App\Models\Event':
+            case 'App\Models\Photo':
+                // Per altri contenuti, imposta is_public a false se esiste
+                if (property_exists($this, 'is_public')) {
+                    $this->is_public = false;
+                }
+                break;
         }
 
         $result = $this->save();
