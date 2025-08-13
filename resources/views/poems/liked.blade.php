@@ -183,9 +183,9 @@
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="card hover-effect">
                     <!-- {{ __('common.thumbnail') }} -->
-                    @if($poem->thumbnail_path)
+                    @if($poem->thumbnail)
                         <div class="card-img-top">
-                            <img src="{{ $poem->thumbnail_url }}" class="img-fluid" alt="{{ $poem->title }}">
+                            <img src="{{ $poem->thumbnail }}" class="img-fluid" alt="{{ $poem->title }}">
                         </div>
                     @endif
 

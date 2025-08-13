@@ -303,4 +303,6 @@ class Poem extends Model
     {
         return $this->translated_from === null;
     }
+
+
 }

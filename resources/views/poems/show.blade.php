@@ -106,9 +106,9 @@
                 </div>
 
                 <!-- {{ __('common.thumbnail') }} -->
-                @if($poem->thumbnail_path)
+                @if($poem->thumbnail)
                 <div class="card-img-top">
-                    <img src="{{ $poem->thumbnail_url }}" class="img-fluid w-100" alt="{{ $poem->title }}">
+                    <img src="{{ $poem->thumbnail }}" class="img-fluid w-100" alt="{{ $poem->title }}">
                 </div>
                 @endif
 
@@ -354,8 +354,8 @@
                 <div class="card-body">
                     @foreach($relatedPoems as $relatedPoem)
                         <div class="d-flex mb-3">
-                            @if($relatedPoem->thumbnail_path)
-                                <img src="{{ $relatedPoem->thumbnail_url }}" class="rounded me-3"
+                            @if($relatedPoem->thumbnail)
+                                <img src="{{ $relatedPoem->thumbnail }}" class="rounded me-3"
                                      width="60" height="60" alt="{{ $relatedPoem->title }}">
                             @endif
                             <div class="flex-grow-1">
