@@ -166,7 +166,7 @@ class LikeController extends Controller
             'video' => \App\Models\Video::class,
             'photo' => \App\Models\Photo::class,
             'poem' => \App\Models\Poem::class,
-            'article' => \App\Models\Carousel::class, // Per ora usiamo Carousel come articoli
+            'article' => \App\Models\Article::class,
             'event' => \App\Models\Event::class,
             'comment' => \App\Models\Comment::class,
         ];
@@ -183,7 +183,7 @@ class LikeController extends Controller
             \App\Models\Video::class => 'video',
             \App\Models\Photo::class => 'photo',
             \App\Models\Poem::class => 'poem',
-            \App\Models\Carousel::class => 'article',
+            \App\Models\Article::class => 'article',
             \App\Models\Event::class => 'event',
             \App\Models\Comment::class => 'comment',
         ];
@@ -200,7 +200,7 @@ class LikeController extends Controller
             \App\Models\Video::class => 'video',
             \App\Models\Photo::class => 'foto',
             \App\Models\Poem::class => 'poesia',
-            \App\Models\Carousel::class => 'articolo',
+            \App\Models\Article::class => 'articolo',
             \App\Models\Event::class => 'evento',
             \App\Models\Comment::class => 'commento',
         ];
@@ -315,7 +315,7 @@ class LikeController extends Controller
             case 'poem':
                 return route('poems.show', $content);
             case 'article':
-                return route('home') . '#article-' . $content->id;
+                return route('articles.show', $content);
             case 'event':
                 return route('events.show', $content);
             case 'comment':

@@ -80,7 +80,7 @@ class CommentController extends Controller
         }
 
         try {
-            $comment = $content->addComment($request->content, $user, $request->parent_id);
+            $comment = $content->addComment($user, $request->content, $request->parent_id);
 
             \Log::info('Commento creato', [
                 'comment_id' => $comment ? $comment->id : 'null',
@@ -297,7 +297,7 @@ class CommentController extends Controller
             'video' => \App\Models\Video::class,
             'photo' => \App\Models\Photo::class,
             'poem' => \App\Models\Poem::class,
-            'article' => \App\Models\Carousel::class, // Per ora usiamo Carousel come articoli
+            'article' => \App\Models\Article::class,
             'event' => \App\Models\Event::class,
         ];
 
@@ -313,7 +313,7 @@ class CommentController extends Controller
             \App\Models\Video::class => 'video',
             \App\Models\Photo::class => 'photo',
             \App\Models\Poem::class => 'poem',
-            \App\Models\Carousel::class => 'article',
+            \App\Models\Article::class => 'article',
             \App\Models\Event::class => 'event',
         ];
 
@@ -365,7 +365,7 @@ class CommentController extends Controller
             \App\Models\Video::class => 'video',
             \App\Models\Photo::class => 'foto',
             \App\Models\Poem::class => 'poesia',
-            \App\Models\Carousel::class => 'articolo',
+            \App\Models\Article::class => 'articolo',
             \App\Models\Event::class => 'evento',
         ];
 
@@ -403,7 +403,7 @@ class CommentController extends Controller
             case 'poem':
                 return route('poems.show', $content);
             case 'article':
-                return route('home') . '#article-' . $content->id;
+                return route('articles.show', $content);
             case 'event':
                 return route('events.show', $content);
             default:

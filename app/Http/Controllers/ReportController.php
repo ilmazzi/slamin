@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Report;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -41,6 +42,14 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
+        // Debug log
+        Log::info('Report store request received', [
+            'request_data' => $request->all(),
+            'is_ajax' => $request->ajax(),
+            'wants_json' => $request->wantsJson(),
+            'content_type' => $request->header('Content-Type')
+        ]);
+
         $request->validate([
             'type' => 'required|string',
             'id' => 'required|integer',
@@ -55,6 +64,7 @@ class ReportController extends Controller
         $content = $this->getContent($type, $id);
 
         if (!$content) {
+            Log::warning('Content not found for report', ['type' => $type, 'id' => $id]);
             return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
         }
 
@@ -63,24 +73,47 @@ class ReportController extends Controller
             return response()->json(['success' => false, 'message' => 'Hai già segnalato questo contenuto']);
         }
 
-        // Crea la segnalazione
-        $report = Report::create([
-            'user_id' => Auth::id(),
-            'reportable_type' => $this->getModelClass($type),
-            'reportable_id' => $id,
-            'reason' => $request->reason,
-            'description' => $request->description,
-            'status' => Report::STATUS_PENDING
-        ]);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Segnalazione inviata con successo. Grazie per il tuo contributo!'
+        try {
+            // Crea la segnalazione
+            $report = Report::create([
+                'user_id' => Auth::id(),
+                'reportable_type' => $this->getModelClass($type),
+                'reportable_id' => $id,
+                'reason' => $request->reason,
+                'description' => $request->description,
+                'status' => Report::STATUS_PENDING
             ]);
-        }
 
-        return redirect()->back()->with('success', 'Segnalazione inviata con successo. Grazie per il tuo contributo!');
+            // Per le richieste AJAX, restituisci sempre JSON
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Segnalazione inviata con successo. Grazie per il tuo contributo!',
+                    'type' => $type,
+                    'id' => $id
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Segnalazione inviata con successo. Grazie per il tuo contributo!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Gestisce l'errore di duplicazione
+            if ($e->getCode() == 23000 && strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                return response()->json(['success' => false, 'message' => 'Hai già segnalato questo contenuto']);
+            }
+            
+            // Altri errori di database
+            return response()->json(['success' => false, 'message' => 'Errore durante il salvataggio della segnalazione']);
+        } catch (\Exception $e) {
+            // Gestisce altri errori
+            Log::error('Report creation error: ' . $e->getMessage(), [
+                'type' => $type,
+                'id' => $id,
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['success' => false, 'message' => 'Errore durante il salvataggio della segnalazione']);
+        }
     }
 
     /**
@@ -115,7 +148,9 @@ class ReportController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Segnalazione rimossa con successo'
+            'message' => 'Segnalazione rimossa con successo',
+            'type' => $type,
+            'id' => $id
         ]);
     }
 
@@ -143,6 +178,7 @@ class ReportController extends Controller
             'poem' => \App\Models\Poem::class,
             'event' => \App\Models\Event::class,
             'photo' => \App\Models\Photo::class,
+            'article' => \App\Models\Article::class,
             'carousel' => \App\Models\Carousel::class,
             'video_comment' => \App\Models\VideoComment::class,
             'poem_comment' => \App\Models\PoemComment::class,

@@ -30,9 +30,16 @@
                         
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div class="d-flex align-items-center">
-                                <img src="{{ $article->user->profile->avatar_url ?? asset('assets/images/avatar/default.png') }}" 
-                                     class="rounded-circle me-2" style="width: 25px; height: 25px;">
-                                <small class="text-muted">{{ $article->user->name }}</small>
+                                <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
+                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}" 
+                                         class="rounded-circle me-2" style="width: 25px; height: 25px;"
+                                         alt="{{ $article->user->name }}">
+                                </a>
+                                <small class="text-muted">
+                                    <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none hover-effect">
+                                        {{ $article->user->name }}
+                                    </a>
+                                </small>
                             </div>
                             <small class="text-muted">
                                 <i class="ti ti-calendar"></i> {{ $article->published_at->format('d/m/Y') }}

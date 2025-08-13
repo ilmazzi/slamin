@@ -105,34 +105,19 @@
                     <!-- Azioni social -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="d-flex gap-2">
-                            <!-- Like -->
-                            <button class="btn btn-outline-primary like-btn"
-                                    data-article-id="{{ $article->id }}"
-                                    data-liked="{{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
-                                <i class="ti ti-heart {{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'text-danger' : '' }}"></i>
-                                <span class="likes-count">{{ $article->likes_count }}</span>
-                                {{ __('articles.likes') }}
-                            </button>
+                            <!-- Like Button (Sistema Unificato) -->
+                            <x-social-like-button :content="$article" type="article" />
 
-                            <!-- Commenti -->
-                            <a href="#comments" class="btn btn-outline-secondary">
-                                <i class="ti ti-message-circle"></i>
-                                {{ $article->comments_count }} {{ __('articles.comments') }}
-                            </a>
+                            <!-- View Counter (Sistema Unificato) -->
+                            <x-social-view-counter :content="$article" type="article" />
 
                             <!-- Condividi -->
                             <button class="btn btn-outline-info" onclick="shareArticle()">
                                 <i class="ti ti-share"></i> {{ __('articles.share_article') }}
                             </button>
 
-                            <!-- Segnala -->
-                            @if(auth()->check())
-                                <button class="btn btn-outline-warning report-btn"
-                                        data-article-id="{{ $article->id }}"
-                                        data-reported="{{ auth()->check() && $article->isReportedByUser(auth()->user()) ? 'true' : 'false' }}">
-                                    <i class="ti ti-flag"></i> {{ __('articles.report') }}
-                                </button>
-                            @endif
+                            <!-- Report Button (Sistema Unificato) -->
+                            <x-report-button :content="$article" type="article" />
                         </div>
 
                         <!-- Stampa -->
@@ -150,11 +135,17 @@
                     <div class="card bg-light">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <img src="{{ $article->user->profile->avatar_url ?? asset('assets/images/avatar/default.png') }}"
-                                     class="rounded-circle me-3" style="width: 64px; height: 64px;"
-                                     alt="{{ $article->user->name }}">
+                                <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
+                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}"
+                                         class="rounded-circle me-3" style="width: 64px; height: 64px;"
+                                         alt="{{ $article->user->name }}">
+                                </a>
                                 <div>
-                                    <h6 class="mb-1">{{ __('articles.by') }} {{ $article->user->name }}</h6>
+                                    <h6 class="mb-1">{{ __('articles.by') }} 
+                                        <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none hover-effect">
+                                            {{ $article->user->name }}
+                                        </a>
+                                    </h6>
                                     <p class="text-muted mb-0">{{ $article->user->profile->bio ?? __('articles.no_bio') }}</p>
                                 </div>
                             </div>
@@ -163,43 +154,8 @@
                 </div>
             </div>
 
-            <!-- Sezione commenti -->
-            <div id="comments" class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">{{ __('articles.comments') }} ({{ $article->comments_count }})</h5>
-                </div>
-                <div class="card-body">
-                    @if(auth()->check())
-                        <!-- Form nuovo commento -->
-                        <div class="mb-4">
-                            <form id="commentForm">
-                                <div class="mb-3">
-                                    <textarea name="content" class="form-control" rows="3"
-                                              placeholder="{{ __('articles.write_comment') }}" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('articles.post_comment') }}
-                                </button>
-                            </form>
-                        </div>
-                    @else
-                        <div class="alert alert-info">
-                            <a href="{{ route('login') }}">{{ __('articles.login_to_comment') }}</a>
-                        </div>
-                    @endif
-
-                    <!-- Lista commenti -->
-                    <div id="commentsList">
-                        @foreach($article->comments as $comment)
-                            @include('articles.partials.comment', ['comment' => $comment])
-                        @endforeach
-                    </div>
-
-                    @if($article->comments->count() == 0)
-                        <p class="text-muted text-center py-4">{{ __('articles.no_comments') }}</p>
-                    @endif
-                </div>
-            </div>
+            <!-- Comments Section (Sistema Unificato) -->
+            <x-social-comments-section :content="$article" type="article" />
         </div>
 
         <!-- Sidebar -->
@@ -281,172 +237,12 @@
     </div>
 </div>
 
-<!-- Modal per segnalazione -->
-@if(auth()->check())
-    <div class="modal fade" id="reportModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('articles.report_article') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="reportForm">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('articles.report_reason') }}</label>
-                            <select name="reason" class="form-select" required>
-                                <option value="">{{ __('articles.select_reason') }}</option>
-                                <option value="spam">{{ __('articles.spam') }}</option>
-                                <option value="inappropriate">{{ __('articles.inappropriate') }}</option>
-                                <option value="copyright">{{ __('articles.copyright') }}</option>
-                                <option value="fake_news">{{ __('articles.fake_news') }}</option>
-                                <option value="other">{{ __('articles.other') }}</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('articles.report_description') }}</label>
-                            <textarea name="description" class="form-control" rows="3"
-                                      placeholder="{{ __('articles.report_description_placeholder') }}"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('articles.cancel') }}</button>
-                    <button type="button" class="btn btn-warning" onclick="submitReport()">{{ __('articles.report') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
+<!-- Modal per segnalazione rimosso perché ora gestito dal componente report-button -->
 
 @endsection
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Like functionality
-    const likeBtn = document.querySelector('.like-btn');
-    if (likeBtn) {
-        likeBtn.addEventListener('click', function() {
-            if (!{{ auth()->check() ? 'true' : 'false' }}) {
-                window.location.href = '{{ route('login') }}';
-                return;
-            }
-
-            const articleId = this.dataset.articleId;
-            const isLiked = this.dataset.liked === 'true';
-
-            fetch(`/articles/${articleId}/likes/toggle`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.dataset.liked = data.liked;
-                    const icon = this.querySelector('i');
-                    const count = this.querySelector('.likes-count');
-
-                    if (data.liked) {
-                        icon.classList.add('text-danger');
-                    } else {
-                        icon.classList.remove('text-danger');
-                    }
-
-                    count.textContent = data.likes_count;
-                    showNotification(data.message, 'success');
-                }
-            });
-        });
-    }
-
-    // Report functionality
-    const reportBtn = document.querySelector('.report-btn');
-    if (reportBtn) {
-        reportBtn.addEventListener('click', function() {
-            const isReported = this.dataset.reported === 'true';
-            if (isReported) {
-                showNotification('{{ __('articles.already_reported') }}', 'warning');
-                return;
-            }
-
-            const modal = new bootstrap.Modal(document.getElementById('reportModal'));
-            modal.show();
-        });
-    }
-
-    // Comment form
-    const commentForm = document.getElementById('commentForm');
-    if (commentForm) {
-        commentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-
-            fetch('{{ route('articles.comments.store', $article) }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    content: formData.get('content')
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Reset form
-                    this.reset();
-
-                    // Add new comment to list
-                    if (data.status === 'approved') {
-                        addCommentToList(data.comment);
-                    }
-
-                    showNotification(data.message, 'success');
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            });
-        });
-    }
-});
-
-function addCommentToList(comment) {
-    const commentsList = document.getElementById('commentsList');
-    const commentHtml = `
-        <div class="comment mb-3" data-comment-id="${comment.id}">
-            <div class="d-flex">
-                <img src="${comment.user.avatar_url || '/assets/images/avatar/default.png'}"
-                     class="rounded-circle me-3" style="width: 40px; height: 40px;"
-                     alt="${comment.user.name}">
-                <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <strong>${comment.user.name}</strong>
-                            <small class="text-muted ms-2">${comment.created_at}</small>
-                        </div>
-                    </div>
-                    <p class="mb-2">${comment.content}</p>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-primary" onclick="likeComment(${comment.id})">
-                            <i class="ti ti-heart"></i> 0
-                        </button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="replyToComment(${comment.id})">
-                            <i class="ti ti-message-circle"></i> {{ __('articles.reply') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    commentsList.insertAdjacentHTML('afterbegin', commentHtml);
-}
 
 function shareArticle() {
     if (navigator.share) {
@@ -466,43 +262,9 @@ function copyLink() {
     });
 }
 
-function showReportModal() {
-    const modal = new bootstrap.Modal(document.getElementById('reportModal'));
-    modal.show();
-}
+// Funzione showReportModal rimossa perché ora gestita dal componente report-button
 
-function submitReport() {
-    const form = document.getElementById('reportForm');
-    const formData = new FormData(form);
-
-    fetch('{{ route('articles.reports.store', $article) }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({
-            reason: formData.get('reason'),
-            description: formData.get('description')
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const reportBtn = document.querySelector('.report-btn');
-            if (reportBtn) {
-                reportBtn.dataset.reported = 'true';
-            }
-
-            const modal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
-            modal.hide();
-
-            showNotification(data.message, 'success');
-        } else {
-            showNotification(data.message, 'error');
-        }
-    });
-}
+// Funzione submitReport rimossa perché ora gestita dal componente report-button
 
 function publishArticle(articleId) {
     if (confirm('{{ __('articles.confirm_publish_article') }}')) {

@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Models\User;
-use App\Models\ArticleComment;
+use App\Models\UnifiedComment;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasComments
@@ -13,7 +13,7 @@ trait HasComments
      */
     public function comments(): HasMany
     {
-        return $this->hasMany(ArticleComment::class, 'article_id');
+        return $this->hasMany(UnifiedComment::class, 'commentable_id')->where('commentable_type', get_class($this));
     }
 
     /**
@@ -35,16 +35,16 @@ trait HasComments
     /**
      * Add a comment to this model
      */
-    public function addComment(User $user, string $content, $parentId = null): ArticleComment
+    public function addComment(User $user, string $content, $parentId = null): UnifiedComment
     {
         $comment = $this->comments()->create([
             'user_id' => $user->id,
             'content' => $content,
             'parent_id' => $parentId,
+            'commentable_type' => get_class($this),
+            'commentable_id' => $this->id,
             'status' => 'approved', // Auto-approve for now
         ]);
-
-        $this->increment('comments_count');
         
         return $comment;
     }
@@ -55,6 +55,14 @@ trait HasComments
     public function getCommentsCountAttribute(): int
     {
         return $this->comments()->where('status', 'approved')->count();
+    }
+
+    /**
+     * Get the number of comments (alias for compatibility)
+     */
+    public function getCommentCountAttribute(): int
+    {
+        return $this->getCommentsCountAttribute();
     }
 
     /**

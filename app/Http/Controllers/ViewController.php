@@ -160,7 +160,7 @@ class ViewController extends Controller
             'video' => \App\Models\Video::class,
             'photo' => \App\Models\Photo::class,
             'poem' => \App\Models\Poem::class,
-            'article' => \App\Models\Carousel::class, // Per ora usiamo Carousel come articoli
+            'article' => \App\Models\Article::class,
             'event' => \App\Models\Event::class,
         ];
 
@@ -176,7 +176,7 @@ class ViewController extends Controller
             \App\Models\Video::class => 'video',
             \App\Models\Photo::class => 'photo',
             \App\Models\Poem::class => 'poem',
-            \App\Models\Carousel::class => 'article',
+            \App\Models\Article::class => 'article',
             \App\Models\Event::class => 'event',
         ];
 

@@ -761,12 +761,18 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
     Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
 });
 
-// Media Routes (pubbliche - fuori dal gruppo auth)
-Route::prefix('media')->name('media.')->group(function () {
-    Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
-    Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
-    Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
-});
+    // Media Routes (pubbliche - fuori dal gruppo auth)
+    Route::prefix('media')->name('media.')->group(function () {
+        Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
+        Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
+        Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
+    });
+
+    // Report Routes
+    Route::prefix('reports')->name('reports.')->middleware('auth')->group(function () {
+        Route::post('/store', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+        Route::post('/remove', [App\Http\Controllers\ReportController::class, 'remove'])->name('remove');
+    });
 
 
 
@@ -1008,8 +1014,8 @@ Route::get('/api/media/search', [App\Http\Controllers\MediaController::class, 's
 Route::get('/api/videos/{video}/comments', [App\Http\Controllers\VideoController::class, 'getComments'])->name('api.videos.comments');
 Route::get('/api/photos/{photo}/comments', [App\Http\Controllers\PhotoController::class, 'getComments'])->name('api.photos.comments');
 
-// API routes per sistema commenti unificato
-Route::prefix('api/social')->group(function () {
+// API routes per sistema commenti unificato (senza CSRF)
+Route::prefix('api/social')->middleware('web')->group(function () {
     Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('api.social.comments.store');
     Route::put('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'update'])->name('api.social.comments.update');
     Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('api.social.comments.destroy');
@@ -1017,6 +1023,11 @@ Route::prefix('api/social')->group(function () {
     Route::post('/comments/{comment}/reject', [App\Http\Controllers\CommentController::class, 'reject'])->name('api.social.comments.reject');
     Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('api.social.comments.list');
     Route::get('/comments/{comment}/replies', [App\Http\Controllers\CommentController::class, 'getReplies'])->name('api.social.comments.replies');
+
+    // Route per like unificato
+    Route::post('/likes/toggle', [App\Http\Controllers\LikeController::class, 'toggle'])->name('api.social.likes.toggle');
+    Route::get('/likes/check', [App\Http\Controllers\LikeController::class, 'check'])->name('api.social.likes.check');
+    Route::get('/likes/stats', [App\Http\Controllers\LikeController::class, 'getLikeStats'])->name('api.social.likes.stats');
 
     // Route per incremento visualizzazioni (pubblica)
     Route::post('/views/increment', [App\Http\Controllers\ViewController::class, 'increment'])->name('api.social.views.increment');

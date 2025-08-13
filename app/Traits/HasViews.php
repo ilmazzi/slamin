@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\View;
+use App\Models\UnifiedView;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -14,7 +14,7 @@ trait HasViews
      */
     public function views(): MorphMany
     {
-        return $this->morphMany(View::class, 'viewable');
+        return $this->morphMany(UnifiedView::class, 'viewable');
     }
 
     /**
@@ -67,6 +67,8 @@ trait HasViews
             // Crea record con user_id
             return $this->views()->create([
                 'user_id' => $user->id,
+                'viewable_type' => get_class($this),
+                'viewable_id' => $this->id,
             ]) !== null;
         } else {
             // Per utenti non autenticati, incrementa solo il contatore
@@ -82,6 +84,14 @@ trait HasViews
     public function getViewCountAttribute(): int
     {
         return $this->views()->count();
+    }
+
+    /**
+     * Ottiene il numero di visualizzazioni uniche (alias for compatibility)
+     */
+    public function getViewsCountAttribute(): int
+    {
+        return $this->getViewCountAttribute();
     }
 
     /**

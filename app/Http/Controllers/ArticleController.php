@@ -210,7 +210,7 @@ class ArticleController extends Controller
             'category',
             'tags',
             'comments' => function ($query) {
-                $query->approved()->topLevel()->with(['user', 'replies.user']);
+                $query->approved()->whereNull('parent_id')->with(['user', 'replies.user']);
             }
         ]);
 

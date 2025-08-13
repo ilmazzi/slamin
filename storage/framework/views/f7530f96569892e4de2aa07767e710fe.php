@@ -1,16 +1,44 @@
-@props(['content', 'type', 'size' => 'sm'])
+<?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
-@php
+$__newAttributes = [];
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type', 'size' => 'sm']));
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (in_array($__key, $__propNames)) {
+        $$__key = $$__key ?? $__value;
+    } else {
+        $__newAttributes[$__key] = $__value;
+    }
+}
+
+$attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
+
+unset($__propNames);
+unset($__newAttributes);
+
+foreach (array_filter((['content', 'type', 'size' => 'sm']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+    $$__key = $$__key ?? $__value;
+}
+
+$__defined_vars = get_defined_vars();
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (array_key_exists($__key, $__defined_vars)) unset($$__key);
+}
+
+unset($__defined_vars); ?>
+
+<?php
     $isReported = $content->isReportedByUser();
     $reportCount = $content->active_reports_count;
-@endphp
+?>
 
 <div class="report-button-container">
-    @if($isReported)
+    <?php if($isReported): ?>
         <!-- Pulsante per rimuovere la segnalazione -->
         <div class="report-remove-btn"
-             data-type="{{ $type }}"
-             data-id="{{ $content->id }}"
+             data-type="<?php echo e($type); ?>"
+             data-id="<?php echo e($content->id); ?>"
              title="Rimuovi segnalazione"
              style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
              onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
@@ -18,11 +46,11 @@
             <i class="ti ti-flag f-s-24 text-warning"></i>
             <span class="text-secondary f-s-12">Segnalato</span>
         </div>
-    @else
+    <?php else: ?>
         <!-- Pulsante per segnalare -->
         <div class="report-btn"
-             data-type="{{ $type }}"
-             data-id="{{ $content->id }}"
+             data-type="<?php echo e($type); ?>"
+             data-id="<?php echo e($content->id); ?>"
              title="Segnala contenuto"
              style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
              onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
@@ -30,17 +58,18 @@
             <i class="ti ti-flag f-s-24 text-muted"></i>
             <span class="text-secondary f-s-12">Segnala</span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if($reportCount > 0)
-        <span class="badge bg-warning ms-1" title="{{ $reportCount }} segnalazioni attive">
-            {{ $reportCount }}
+    <?php if($reportCount > 0): ?>
+        <span class="badge bg-warning ms-1" title="<?php echo e($reportCount); ?> segnalazioni attive">
+            <?php echo e($reportCount); ?>
+
         </span>
-    @endif
+    <?php endif; ?>
 </div>
 
-@once
-@push('scripts')
+<?php if (! $__env->hasRenderedOnce('0f755e5d-0400-42f7-a70c-4e483e6ed0b6')): $__env->markAsRenderedOnce('0f755e5d-0400-42f7-a70c-4e483e6ed0b6'); ?>
+<?php $__env->startPush('scripts'); ?>
 <script>
 // Variabile globale per tracciare se il modal è già aperto
 window.reportModalOpen = false;
@@ -202,7 +231,7 @@ function submitReport() {
     btnLoader.classList.remove('d-none');
     
     // Ottieni il token CSRF
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '<?php echo e(csrf_token()); ?>';
     
     fetch('/reports/store', {
         method: 'POST',
@@ -256,7 +285,7 @@ function submitReport() {
 
 function removeReport(type, id) {
     // Ottieni il token CSRF
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '<?php echo e(csrf_token()); ?>';
     
     fetch('/reports/remove', {
         method: 'POST',
@@ -352,5 +381,6 @@ function showNotification(message, type) {
     }
 }
 </script>
-@endpush
-@endonce
+<?php $__env->stopPush(); ?>
+<?php endif; ?>
+<?php /**PATH C:\xampp\htdocs\slamin\resources\views/components/report-button.blade.php ENDPATH**/ ?>

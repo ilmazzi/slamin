@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('dashboard.dashboard') . ' Moderazione'); ?>
 
-@section('title', __('dashboard.dashboard') . ' Moderazione')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Header -->
     <div class="row mb-4">
@@ -11,16 +9,16 @@
                 <div>
                     <h4 class="mb-0 f-w-600">
                         <i class="ph-duotone ph-shield-check me-2"></i>
-                        {{ __('dashboard.dashboard') }} Moderazione
+                        <?php echo e(__('dashboard.dashboard')); ?> Moderazione
                     </h4>
                     <p class="text-muted mb-0">Gestisci la moderazione di tutti i contenuti</p>
                 </div>
                 <div>
-                    <a href="{{ route('admin.moderation.settings') }}" class="btn btn-outline-primary me-2">
+                    <a href="<?php echo e(route('admin.moderation.settings')); ?>" class="btn btn-outline-primary me-2">
                         <i class="ph-duotone ph-gear me-2"></i>
                         Impostazioni
                     </a>
-                    <a href="{{ route('admin.moderation.pending') }}" class="btn btn-primary">
+                    <a href="<?php echo e(route('admin.moderation.pending')); ?>" class="btn btn-primary">
                         <i class="ph-duotone ph-list-checks me-2"></i>
                         Contenuti in Attesa
                     </a>
@@ -41,9 +39,9 @@
                     </div>
                     <h6 class="mb-1">Video</h6>
                     <div class="d-flex gap-2 justify-content-center">
-                        <span class="badge bg-warning">{{ $stats['videos']['pending'] }} in attesa</span>
-                        <span class="badge bg-success">{{ $stats['videos']['approved'] }} approvati</span>
-                        <span class="badge bg-danger">{{ $stats['videos']['rejected'] }} rifiutati</span>
+                        <span class="badge bg-warning"><?php echo e($stats['videos']['pending']); ?> in attesa</span>
+                        <span class="badge bg-success"><?php echo e($stats['videos']['approved']); ?> approvati</span>
+                        <span class="badge bg-danger"><?php echo e($stats['videos']['rejected']); ?> rifiutati</span>
                     </div>
                 </div>
             </div>
@@ -59,9 +57,9 @@
                     </div>
                     <h6 class="mb-1">Poesie</h6>
                     <div class="d-flex gap-2 justify-content-center">
-                        <span class="badge bg-warning">{{ $stats['poems']['pending'] }} in attesa</span>
-                        <span class="badge bg-success">{{ $stats['poems']['approved'] }} approvate</span>
-                        <span class="badge bg-danger">{{ $stats['poems']['rejected'] }} rifiutate</span>
+                        <span class="badge bg-warning"><?php echo e($stats['poems']['pending']); ?> in attesa</span>
+                        <span class="badge bg-success"><?php echo e($stats['poems']['approved']); ?> approvate</span>
+                        <span class="badge bg-danger"><?php echo e($stats['poems']['rejected']); ?> rifiutate</span>
                     </div>
                 </div>
             </div>
@@ -77,9 +75,9 @@
                     </div>
                     <h6 class="mb-1">Eventi</h6>
                     <div class="d-flex gap-2 justify-content-center">
-                        <span class="badge bg-warning">{{ $stats['events']['pending'] }} in attesa</span>
-                        <span class="badge bg-success">{{ $stats['events']['approved'] }} approvati</span>
-                        <span class="badge bg-danger">{{ $stats['events']['rejected'] }} rifiutati</span>
+                        <span class="badge bg-warning"><?php echo e($stats['events']['pending']); ?> in attesa</span>
+                        <span class="badge bg-success"><?php echo e($stats['events']['approved']); ?> approvati</span>
+                        <span class="badge bg-danger"><?php echo e($stats['events']['rejected']); ?> rifiutati</span>
                     </div>
                 </div>
             </div>
@@ -95,9 +93,9 @@
                     </div>
                     <h6 class="mb-1">Foto</h6>
                     <div class="d-flex gap-2 justify-content-center">
-                        <span class="badge bg-warning">{{ $stats['photos']['pending'] }} in attesa</span>
-                        <span class="badge bg-success">{{ $stats['photos']['approved'] }} approvate</span>
-                        <span class="badge bg-danger">{{ $stats['photos']['rejected'] }} rifiutate</span>
+                        <span class="badge bg-warning"><?php echo e($stats['photos']['pending']); ?> in attesa</span>
+                        <span class="badge bg-success"><?php echo e($stats['photos']['approved']); ?> approvate</span>
+                        <span class="badge bg-danger"><?php echo e($stats['photos']['rejected']); ?> rifiutate</span>
                     </div>
                 </div>
             </div>
@@ -113,9 +111,9 @@
                     </div>
                     <h6 class="mb-1">Articoli</h6>
                     <div class="d-flex gap-2 justify-content-center">
-                        <span class="badge bg-warning">{{ $stats['articles']['pending'] }} in attesa</span>
-                        <span class="badge bg-success">{{ $stats['articles']['approved'] }} approvati</span>
-                        <span class="badge bg-danger">{{ $stats['articles']['rejected'] }} rifiutati</span>
+                        <span class="badge bg-warning"><?php echo e($stats['articles']['pending']); ?> in attesa</span>
+                        <span class="badge bg-success"><?php echo e($stats['articles']['approved']); ?> approvati</span>
+                        <span class="badge bg-danger"><?php echo e($stats['articles']['rejected']); ?> rifiutati</span>
                     </div>
                 </div>
             </div>
@@ -124,48 +122,48 @@
 
     <!-- Contenuti in Attesa e Segnalazioni -->
     <div class="row">
-        <!-- {{ __('common.video') }} in Attesa -->
-        @if($pendingContent['videos']->count() > 0)
+        <!-- <?php echo e(__('common.video')); ?> in Attesa -->
+        <?php if($pendingContent['videos']->count() > 0): ?>
         <div class="col-lg-6 mb-4">
             <div class="card hover-effect">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">
                             <i class="ph-duotone ph-video-camera me-2"></i>
-                            {{ __('common.video') }} in Attesa
+                            <?php echo e(__('common.video')); ?> in Attesa
                         </h5>
-                        <a href="{{ route('admin.moderation.pending', ['type' => 'videos']) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="<?php echo e(route('admin.moderation.pending', ['type' => 'videos'])); ?>" class="btn btn-sm btn-outline-primary">
                             Vedi tutti
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    @foreach($pendingContent['videos'] as $video)
+                    <?php $__currentLoopData = $pendingContent['videos']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="d-flex align-items-center mb-3 p-2 border rounded">
                         <div class="flex-shrink-0">
-                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
+                            <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e($video->title); ?>" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1">{{ Str::limit($video->title, 30) }}</h6>
-                            <small class="text-muted">{{ $video->user->name ?? 'N/A' }}</small>
+                            <h6 class="mb-1"><?php echo e(Str::limit($video->title, 30)); ?></h6>
+                            <small class="text-muted"><?php echo e($video->user->name ?? 'N/A'); ?></small>
                         </div>
                         <div class="flex-shrink-0">
-                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('videos', {{ $video->id }})">
+                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('videos', <?php echo e($video->id); ?>)">
                                 <i class="ph-duotone ph-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="rejectContent('videos', {{ $video->id }})">
+                            <button class="btn btn-sm btn-danger" onclick="rejectContent('videos', <?php echo e($video->id); ?>)">
                                 <i class="ph-duotone ph-x"></i>
                             </button>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Poesie in Attesa -->
-        @if($pendingContent['poems']->count() > 0)
+        <?php if($pendingContent['poems']->count() > 0): ?>
         <div class="col-lg-6 mb-4">
             <div class="card hover-effect">
                 <div class="card-header">
@@ -174,35 +172,35 @@
                             <i class="ph-duotone ph-book-open me-2"></i>
                             Poesie in Attesa
                         </h5>
-                        <a href="{{ route('admin.moderation.pending', ['type' => 'poems']) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="<?php echo e(route('admin.moderation.pending', ['type' => 'poems'])); ?>" class="btn btn-sm btn-outline-primary">
                             Vedi tutti
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    @foreach($pendingContent['poems'] as $poem)
+                    <?php $__currentLoopData = $pendingContent['poems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="d-flex align-items-center mb-3 p-2 border rounded">
                         <div class="flex-grow-1">
-                            <h6 class="mb-1">{{ Str::limit($poem->title, 30) }}</h6>
-                            <small class="text-muted">{{ $poem->user->name ?? 'N/A' }}</small>
+                            <h6 class="mb-1"><?php echo e(Str::limit($poem->title, 30)); ?></h6>
+                            <small class="text-muted"><?php echo e($poem->user->name ?? 'N/A'); ?></small>
                         </div>
                         <div class="flex-shrink-0">
-                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('poems', {{ $poem->id }})">
+                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('poems', <?php echo e($poem->id); ?>)">
                                 <i class="ph-duotone ph-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="rejectContent('poems', {{ $poem->id }})">
+                            <button class="btn btn-sm btn-danger" onclick="rejectContent('poems', <?php echo e($poem->id); ?>)">
                                 <i class="ph-duotone ph-x"></i>
                             </button>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Articoli in Attesa -->
-        @if($pendingContent['articles']->count() > 0)
+        <?php if($pendingContent['articles']->count() > 0): ?>
         <div class="col-lg-6 mb-4">
             <div class="card hover-effect">
                 <div class="card-header">
@@ -211,35 +209,35 @@
                             <i class="ph-duotone ph-newspaper me-2"></i>
                             Articoli in Attesa
                         </h5>
-                        <a href="{{ route('admin.moderation.pending', ['type' => 'articles']) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="<?php echo e(route('admin.moderation.pending', ['type' => 'articles'])); ?>" class="btn btn-sm btn-outline-primary">
                             Vedi tutti
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    @foreach($pendingContent['articles'] as $article)
+                    <?php $__currentLoopData = $pendingContent['articles']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="d-flex align-items-center mb-3 p-2 border rounded">
                         <div class="flex-grow-1">
-                            <h6 class="mb-1">{{ Str::limit($article->title, 30) }}</h6>
-                            <small class="text-muted">{{ $article->user->name ?? 'N/A' }}</small>
+                            <h6 class="mb-1"><?php echo e(Str::limit($article->title, 30)); ?></h6>
+                            <small class="text-muted"><?php echo e($article->user->name ?? 'N/A'); ?></small>
                         </div>
                         <div class="flex-shrink-0">
-                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('articles', {{ $article->id }})">
+                            <button class="btn btn-sm btn-success me-1" onclick="approveContent('articles', <?php echo e($article->id); ?>)">
                                 <i class="ph-duotone ph-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="rejectContent('articles', {{ $article->id }})">
+                            <button class="btn btn-sm btn-danger" onclick="rejectContent('articles', <?php echo e($article->id); ?>)">
                                 <i class="ph-duotone ph-x"></i>
                             </button>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Segnalazioni Recenti -->
-        @if($reports->count() > 0)
+        <?php if($reports->count() > 0): ?>
         <div class="col-lg-6 mb-4">
             <div class="card hover-effect">
                 <div class="card-header">
@@ -248,13 +246,13 @@
                             <i class="ph-duotone ph-flag me-2 text-warning"></i>
                             Segnalazioni Recenti
                         </h5>
-                        <a href="{{ route('admin.moderation.pending', ['filter' => 'reports']) }}" class="btn btn-sm btn-outline-warning">
+                        <a href="<?php echo e(route('admin.moderation.pending', ['filter' => 'reports'])); ?>" class="btn btn-sm btn-outline-warning">
                             Vedi tutte
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    @foreach($reports->take(5) as $report)
+                    <?php $__currentLoopData = $reports->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="d-flex align-items-start mb-3 p-3 border rounded hover-effect">
                         <div class="flex-shrink-0">
                             <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -263,52 +261,56 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="mb-1 f-w-600">{{ Str::limit($report->reportable_title, 40) }}</h6>
-                                <span class="badge bg-{{ $report->status_class }}">{{ $report->status_text }}</span>
+                                <h6 class="mb-1 f-w-600"><?php echo e(Str::limit($report->reportable_title, 40)); ?></h6>
+                                <span class="badge bg-<?php echo e($report->status_class); ?>"><?php echo e($report->status_text); ?></span>
                             </div>
                             <p class="text-muted mb-2 f-s-14">
                                 <i class="ph ph-warning-triangle me-2 f-s-16 text-warning"></i>
-                                {{ $report->reason_text }}
+                                <?php echo e($report->reason_text); ?>
+
                             </p>
                             <p class="text-muted mb-2 f-s-14">
                                 <i class="ph ph-user me-2 f-s-16 text-primary"></i>
-                                {{ $report->user->name ?? 'N/A' }}
+                                <?php echo e($report->user->name ?? 'N/A'); ?>
+
                             </p>
-                            @if($report->description)
+                            <?php if($report->description): ?>
                             <p class="text-muted mb-2 f-s-14">
                                 <i class="ph ph-chat-circle me-2 f-s-16 text-info"></i>
-                                {{ Str::limit($report->description, 80) }}
+                                <?php echo e(Str::limit($report->description, 80)); ?>
+
                             </p>
-                            @endif
+                            <?php endif; ?>
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted">
                                     <i class="ph ph-calendar me-2 f-s-16 text-secondary"></i>
-                                    {{ $report->created_at->diffForHumans() }}
+                                    <?php echo e($report->created_at->diffForHumans()); ?>
+
                                 </small>
                                 
                                 <!-- Pulsanti di azione -->
                                 <div class="d-flex gap-1">
-                                    <button class="btn btn-sm btn-success" onclick="approveReportedContent('{{ $report->reportable_type }}', {{ $report->reportable_id }})" title="Approva contenuto">
+                                    <button class="btn btn-sm btn-success" onclick="approveReportedContent('<?php echo e($report->reportable_type); ?>', <?php echo e($report->reportable_id); ?>)" title="Approva contenuto">
                                         <i class="ph ph-check f-s-16"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="rejectReportedContent('{{ $report->reportable_type }}', {{ $report->reportable_id }})" title="Rifiuta contenuto">
+                                    <button class="btn btn-sm btn-danger" onclick="rejectReportedContent('<?php echo e($report->reportable_type); ?>', <?php echo e($report->reportable_id); ?>)" title="Rifiuta contenuto">
                                         <i class="ph ph-x f-s-16"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-primary" onclick="viewReportDetails({{ $report->id }})" title="Visualizza dettagli">
+                                    <button class="btn btn-sm btn-primary" onclick="viewReportDetails(<?php echo e($report->id); ?>)" title="Visualizza dettagli">
                                         <i class="ph ph-magnifying-glass f-s-16"></i>
                                     </button>
-                                                                                            <button class="btn btn-sm btn-warning" onclick="handleReport({{ $report->id }}, 'investigate')" title="Metti in investigazione">
+                                                                                            <button class="btn btn-sm btn-warning" onclick="handleReport(<?php echo e($report->id); ?>, 'investigate')" title="Metti in investigazione">
                                                             <i class="ph ph-magnifying-glass-plus f-s-16"></i>
                                                         </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
 
@@ -379,9 +381,9 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 let currentAction = null;
 let currentType = null;
@@ -448,12 +450,12 @@ $('#confirmReportAction').click(function() {
     const notes = $('#reportActionNotes').val();
 
     $.ajax({
-        url: '{{ route("admin.moderation.reports.handle", ["report" => ":report"]) }}'.replace(':report', currentReportId),
+        url: '<?php echo e(route("admin.moderation.reports.handle", ["report" => ":report"])); ?>'.replace(':report', currentReportId),
         method: 'POST',
         data: {
             action: action,
             notes: notes,
-            _token: '{{ csrf_token() }}'
+            _token: '<?php echo e(csrf_token()); ?>'
         },
         success: function(response) {
             if (response.success) {
@@ -492,11 +494,11 @@ $('#confirmModeration').click(function() {
     let url;
 
     if (currentAction === 'approve') {
-        url = '{{ route("admin.moderation.approve", ["type" => ":type", "id" => ":id"]) }}'
+        url = '<?php echo e(route("admin.moderation.approve", ["type" => ":type", "id" => ":id"])); ?>'
             .replace(':type', currentType)
             .replace(':id', currentId);
     } else if (currentAction === 'reject') {
-        url = '{{ route("admin.moderation.reject", ["type" => ":type", "id" => ":id"]) }}'
+        url = '<?php echo e(route("admin.moderation.reject", ["type" => ":type", "id" => ":id"])); ?>'
             .replace(':type', currentType)
             .replace(':id', currentId);
     }
@@ -506,7 +508,7 @@ $('#confirmModeration').click(function() {
         method: 'POST',
         data: {
             notes: notes,
-            _token: '{{ csrf_token() }}'
+            _token: '<?php echo e(csrf_token()); ?>'
         },
         success: function(response) {
             if (response.success) {
@@ -539,9 +541,11 @@ $('#confirmModeration').click(function() {
     $('#moderationModal').modal('hide');
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-<!-- {{ __('common.kanban_board') }} JS -->
-<script src="{{ asset('assets/js/kanban_board.js') }}?v={{ time() }}"></script>
+<!-- <?php echo e(__('common.kanban_board')); ?> JS -->
+<script src="<?php echo e(asset('assets/js/kanban_board.js')); ?>?v=<?php echo e(time()); ?>"></script>
 
 
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/moderation/index.blade.php ENDPATH**/ ?>

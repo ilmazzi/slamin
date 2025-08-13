@@ -38,7 +38,14 @@
                 @endif
                 
                 <div class="d-flex align-items-center text-muted mb-3">
-                    <small>{{ __('articles.by') }} {{ $article->user->name }}</small>
+                    <small>{{ __('articles.by') }}
+                        <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}"
+                                 class="rounded-circle me-1" style="width: 16px; height: 16px;"
+                                 alt="{{ $article->user->name }}">
+                            {{ $article->user->name }}
+                        </a>
+                    </small>
                     <span class="mx-2">•</span>
                     <small>{{ $article->published_at->format('d/m/Y') }}</small>
                     <span class="mx-2">•</span>
@@ -74,13 +81,8 @@
                 <!-- Azioni social -->
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex gap-2">
-                        <!-- Like -->
-                        <button class="btn btn-sm btn-outline-primary like-btn" 
-                                data-article-id="{{ $article->id }}"
-                                data-liked="{{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
-                            <i class="ti ti-heart {{ auth()->check() && $article->isLikedBy(auth()->user()) ? 'text-danger' : '' }}"></i>
-                            <span class="likes-count">{{ $article->likes_count }}</span>
-                        </button>
+                        <!-- Like Button (Sistema Unificato) -->
+                        <x-social-like-button :content="$article" type="article" />
 
                         <!-- Commenti -->
                         <a href="{{ route('articles.show', $article) }}#comments" class="btn btn-sm btn-outline-secondary">
@@ -88,14 +90,8 @@
                             {{ $article->comments_count }}
                         </a>
 
-                        <!-- Segnala -->
-                        @if(auth()->check())
-                            <button class="btn btn-sm btn-outline-warning report-btn" 
-                                    data-article-id="{{ $article->id }}"
-                                    data-reported="{{ auth()->check() && $article->isReportedByUser(auth()->user()) ? 'true' : 'false' }}">
-                                <i class="ti ti-flag"></i>
-                            </button>
-                        @endif
+                        <!-- Report Button (Sistema Unificato) -->
+                        <x-report-button :content="$article" type="article" />
                     </div>
 
                     <a href="{{ route('articles.show', $article) }}" class="btn btn-primary">

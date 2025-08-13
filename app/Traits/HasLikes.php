@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Models\User;
-use App\Models\ArticleLike;
+use App\Models\UnifiedLike;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -14,7 +14,7 @@ trait HasLikes
      */
     public function likes(): HasMany
     {
-        return $this->hasMany(ArticleLike::class, 'article_id');
+        return $this->hasMany(UnifiedLike::class, 'likeable_id')->where('likeable_type', get_class($this));
     }
 
     /**
@@ -22,16 +22,29 @@ trait HasLikes
      */
     public function likedBy(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'article_likes', 'article_id', 'user_id')
+        return $this->belongsToMany(User::class, 'unified_likes', 'likeable_id', 'user_id')
+                    ->where('likeable_type', get_class($this))
                     ->withTimestamps();
     }
 
     /**
      * Check if a user has liked this model
      */
-    public function isLikedBy(User $user): bool
+    public function isLikedBy(?User $user): bool
     {
+        if (!$user) {
+            return false;
+        }
         return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Check if the current authenticated user has liked this model
+     */
+    public function isLikedByCurrentUser(): bool
+    {
+        $user = auth()->user();
+        return $this->isLikedBy($user);
     }
 
     /**
@@ -43,8 +56,11 @@ trait HasLikes
             return false;
         }
 
-        $this->likes()->create(['user_id' => $user->id]);
-        $this->increment('likes_count');
+        $this->likes()->create([
+            'user_id' => $user->id,
+            'likeable_type' => get_class($this),
+            'likeable_id' => $this->id
+        ]);
         
         return true;
     }
@@ -61,7 +77,6 @@ trait HasLikes
         }
 
         $like->delete();
-        $this->decrement('likes_count');
         
         return true;
     }
@@ -84,5 +99,13 @@ trait HasLikes
     public function getLikesCountAttribute(): int
     {
         return $this->likes()->count();
+    }
+
+    /**
+     * Get the number of likes (alias for compatibility)
+     */
+    public function getLikeCountAttribute(): int
+    {
+        return $this->getLikesCountAttribute();
     }
 }

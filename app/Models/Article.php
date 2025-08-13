@@ -10,14 +10,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+
 use App\Traits\HasLikes;
 use App\Traits\HasComments;
+use App\Traits\HasViews;
 use App\Traits\HasModeration;
 use App\Traits\Reportable;
 
 class Article extends Model
 {
-    use HasFactory, HasLikes, HasComments, HasModeration, Reportable;
+    use HasFactory, HasLikes, HasComments, HasViews, HasModeration, Reportable;
 
     protected $fillable = [
         'user_id',
@@ -82,15 +84,7 @@ class Article extends Model
                     ->withTimestamps();
     }
 
-    public function likes(): HasMany
-    {
-        return $this->hasMany(ArticleLike::class);
-    }
 
-    public function comments(): HasMany
-    {
-        return $this->hasMany(ArticleComment::class);
-    }
 
     public function reports(): HasMany
     {
@@ -334,6 +328,39 @@ class Article extends Model
     {
         return 'slug';
     }
+
+    public function getContentUrl(): string
+    {
+        return route('articles.show', $this);
+    }
+
+    /**
+     * Verifica se l'articolo è stato segnalato dall'utente
+     */
+    public function isReportedByUser(?User $user = null): bool
+    {
+        if (!$user) {
+            $user = auth()->user();
+        }
+        
+        if (!$user) {
+            return false;
+        }
+
+        return $this->reports()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Ottiene il numero di segnalazioni attive
+     */
+    public function getActiveReportsCountAttribute(): int
+    {
+        return $this->reports()->where('status', 'active')->count();
+    }
+
+
+
+
 
     // Boot method per eventi
     protected static function boot()

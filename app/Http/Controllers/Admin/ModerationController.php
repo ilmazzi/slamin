@@ -8,6 +8,7 @@ use App\Models\Video;
 use App\Models\Poem;
 use App\Models\Event;
 use App\Models\Photo;
+use App\Models\Article;
 use App\Models\Carousel;
 use App\Models\VideoComment;
 use App\Models\PoemComment;
@@ -46,6 +47,7 @@ class ModerationController extends Controller
                 'poems' => $this->getContentByType('poems', $status)->with('user')->latest()->get(),
                 'events' => $this->getContentByType('events', $status)->with('organizer')->latest()->get(),
                 'photos' => $this->getContentByType('photos', $status)->with('user')->latest()->get(),
+                'articles' => $this->getContentByType('articles', $status)->with('user')->latest()->get(),
                 'carousels' => $this->getContentByType('carousels', $status)->latest()->get(),
                 'video_comments' => $this->getContentByType('video_comments', $status)->with(['user', 'video'])->latest()->get(),
                 'poem_comments' => $this->getContentByType('poem_comments', $status)->with(['user', 'poem'])->latest()->get(),
@@ -202,6 +204,11 @@ class ModerationController extends Controller
                 'approved' => Photo::approved()->count(),
                 'rejected' => Photo::rejected()->count(),
             ],
+            'articles' => [
+                'pending' => Article::pending()->count(),
+                'approved' => Article::approved()->count(),
+                'rejected' => Article::rejected()->count(),
+            ],
             'carousels' => [
                 'pending' => Carousel::pending()->count(),
                 'approved' => Carousel::approved()->count(),
@@ -230,6 +237,7 @@ class ModerationController extends Controller
             'poems' => Poem::pending()->with('user')->latest()->limit(5)->get(),
             'events' => Event::pending()->with('organizer')->latest()->limit(5)->get(),
             'photos' => Photo::pending()->with('user')->latest()->limit(5)->get(),
+            'articles' => Article::pending()->with('user')->latest()->limit(5)->get(),
             'carousels' => Carousel::pending()->latest()->limit(5)->get(),
             'video_comments' => VideoComment::pending()->with(['user', 'video'])->latest()->limit(5)->get(),
             'poem_comments' => PoemComment::pending()->with(['user', 'poem'])->latest()->limit(5)->get(),
@@ -340,6 +348,9 @@ class ModerationController extends Controller
             case 'photos':
                 return $status === 'pending' ? Photo::pending() :
                        ($status === 'approved' ? Photo::approved() : Photo::rejected());
+            case 'articles':
+                return $status === 'pending' ? Article::pending() :
+                       ($status === 'approved' ? Article::approved() : Article::rejected());
             case 'carousels':
                 return $status === 'pending' ? Carousel::pending() :
                        ($status === 'approved' ? Carousel::approved() : Carousel::rejected());
@@ -368,6 +379,8 @@ class ModerationController extends Controller
                 return ['organizer'];
             case 'photos':
                 return ['user'];
+            case 'articles':
+                return ['user'];
             case 'carousels':
                 return [];
             case 'video_comments':
@@ -393,6 +406,8 @@ class ModerationController extends Controller
                 return Event::find($id);
             case 'photos':
                 return Photo::find($id);
+            case 'articles':
+                return Article::find($id);
             case 'carousels':
                 return Carousel::find($id);
             case 'video_comments':
@@ -420,6 +435,7 @@ class ModerationController extends Controller
             'moderation.poems.auto_approve' => 'poems_auto_approve',
             'moderation.events.auto_approve' => 'events_auto_approve',
             'moderation.photos.auto_approve' => 'photos_auto_approve',
+            'moderation.articles.auto_approve' => 'articles_auto_approve',
             'moderation.carousels.auto_approve' => 'carousels_auto_approve',
             'moderation.video_comments.auto_approve' => 'comments_auto_approve',
             'moderation.general.notify_on_pending' => 'email_notifications',
@@ -446,6 +462,7 @@ class ModerationController extends Controller
             'poems_auto_approve' => 'nullable|boolean',
             'events_auto_approve' => 'nullable|boolean',
             'photos_auto_approve' => 'nullable|boolean',
+            'articles_auto_approve' => 'nullable|boolean',
             'carousels_auto_approve' => 'nullable|boolean',
             'comments_auto_approve' => 'nullable|boolean',
             'email_notifications' => 'nullable|boolean',
@@ -462,6 +479,7 @@ class ModerationController extends Controller
             'poems_auto_approve' => 'moderation.poems.auto_approve',
             'events_auto_approve' => 'moderation.events.auto_approve',
             'photos_auto_approve' => 'moderation.photos.auto_approve',
+            'articles_auto_approve' => 'moderation.articles.auto_approve',
             'carousels_auto_approve' => 'moderation.carousels.auto_approve',
             'comments_auto_approve' => 'moderation.video_comments.auto_approve', // Per i commenti video
             'email_notifications' => 'moderation.general.notify_on_pending',

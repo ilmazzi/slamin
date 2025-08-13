@@ -1,30 +1,58 @@
-@props(['content', 'type' => 'content'])
+<?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
-@php
+$__newAttributes = [];
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content']));
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (in_array($__key, $__propNames)) {
+        $$__key = $$__key ?? $__value;
+    } else {
+        $__newAttributes[$__key] = $__value;
+    }
+}
+
+$attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
+
+unset($__propNames);
+unset($__newAttributes);
+
+foreach (array_filter((['content', 'type' => 'content']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+    $$__key = $$__key ?? $__value;
+}
+
+$__defined_vars = get_defined_vars();
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (array_key_exists($__key, $__defined_vars)) unset($$__key);
+}
+
+unset($__defined_vars); ?>
+
+<?php
     $isLiked = auth()->check() ? $content->isLikedBy(auth()->user()) : false;
     $likeCount = $content->like_count ?? 0;
     $contentType = strtolower(class_basename($content));
-@endphp
+?>
 
-@if(auth()->check())
+<?php if(auth()->check()): ?>
 <div class="social-like-btn"
-     data-content-type="{{ $contentType }}"
-     data-content-id="{{ $content->id }}"
+     data-content-type="<?php echo e($contentType); ?>"
+     data-content-id="<?php echo e($content->id); ?>"
      onclick="toggleSocialLike(this)"
-     title="{{ $isLiked ? 'Rimuovi like' : 'Metti like' }}"
+     title="<?php echo e($isLiked ? 'Rimuovi like' : 'Metti like'); ?>"
      style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
      onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
      onmouseout="this.style.backgroundColor='transparent'">
-    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; {{ $isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
-    <span class="text-secondary like-count f-s-12">{{ number_format($likeCount) }}</span>
+    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 24px; height: 24px; <?php echo e($isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'); ?>">
+    <span class="text-secondary like-count f-s-12"><?php echo e(number_format($likeCount)); ?></span>
 </div>
-@else
+<?php else: ?>
 <div class="social-like-counter"
      style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-    <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
-    <span class="text-secondary like-count f-s-12">{{ number_format($likeCount) }}</span>
+    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+    <span class="text-secondary like-count f-s-12"><?php echo e(number_format($likeCount)); ?></span>
 </div>
-@endif
+<?php endif; ?>
 
 <script>
 function toggleSocialLike(button) {
@@ -34,11 +62,11 @@ function toggleSocialLike(button) {
     const heartIcon = button.querySelector('img');
 
     // Verifica se l'utente è autenticato
-    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    const isAuthenticated = <?php echo e(auth()->check() ? 'true' : 'false'); ?>;
 
     if (!isAuthenticated) {
         // Reindirizza al login
-        window.location.href = '{{ route("login") }}';
+        window.location.href = '<?php echo e(route("login")); ?>';
         return;
     }
 
@@ -46,7 +74,7 @@ function toggleSocialLike(button) {
     button.style.pointerEvents = 'none';
 
     // Ottieni il token CSRF
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '<?php echo e(csrf_token()); ?>';
     
     fetch('/api/social/likes/toggle', {
         method: 'POST',
@@ -89,3 +117,4 @@ function toggleSocialLike(button) {
 
 
 </script>
+<?php /**PATH C:\xampp\htdocs\slamin\resources\views/components/social-like-button.blade.php ENDPATH**/ ?>
