@@ -156,6 +156,12 @@ MAIL_FROM_NAME="Poetry Slam"
 
 ## 🚨 Troubleshooting
 
+### Errore: "Errore durante il salvataggio della segnalazione"
+```bash
+# Fix per problemi di produzione (utente sistema mancante)
+php artisan fix:production-moderation
+```
+
 ### Errore: "Conversazione non trovata"
 ```bash
 # Ricrea conversazioni mancanti
@@ -175,6 +181,12 @@ $user->roles->pluck('name');
 # Pulisci cache route
 php artisan route:clear
 php artisan config:clear
+```
+
+### Errore: "Foreign key constraint fails"
+```bash
+# Fix per problemi di integrità database
+php artisan fix:production-moderation
 ```
 
 ## 📞 Supporto
