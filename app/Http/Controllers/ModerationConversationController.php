@@ -32,16 +32,7 @@ class ModerationConversationController extends Controller
             $isAuthor = $conversation->content_author_id === $user->id;
             $isModerator = $user->hasAnyRole(['admin', 'moderator']);
             
-            // Debug temporaneo
-            Log::info('Conversation access check', [
-                'report_id' => $reportId,
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'content_author_id' => $conversation->content_author_id,
-                'is_author' => $isAuthor,
-                'is_moderator' => $isModerator,
-                'user_roles' => $user->roles->pluck('name')->toArray()
-            ]);
+
             
             if (!$isAuthor && !$isModerator) {
                 abort(403, 'Non hai i permessi per visualizzare questa conversazione');

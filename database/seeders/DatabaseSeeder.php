@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PhotoSeeder::class,
             TaskSeeder::class,
             PoemSeeder::class,
+            ProductionModerationSeeder::class, // Aggiunto per il sistema di moderazione
         ]);
 
         $this->command->info('✅ Database seeded successfully!');
