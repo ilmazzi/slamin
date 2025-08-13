@@ -91,7 +91,7 @@ return [
     'tags' => 'Tag',
     'tags_placeholder' => 'Inserisci i tag separati da virgole',
     'tags_help' => 'I tag aiutano a categorizzare e trovare l\'articolo',
-    'image_help' => 'Scegli un\'immagine rappresentativa per l\'articolo',
+    'image_help' => 'Scegli un\'immagine rappresentativa per l\'articolo. Formati supportati: JPEG, PNG, JPG, GIF, WebP. Dimensione massima: 2MB',
     'max_size' => 'Dimensione massima',
     'formats' => 'Formati supportati',
 

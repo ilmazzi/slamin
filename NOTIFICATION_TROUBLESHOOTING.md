@@ -10,13 +10,16 @@ Esegui questi comandi in produzione per diagnosticare il problema:
 
 ```bash
 # Test generale del sistema di notifiche
-php artisan test:notifications
+php artisan test:like-notifications
 
-# Test specifico delle notifiche delle segnalazioni
-php artisan test:report-notifications
+# Test del sistema di broadcasting
+php artisan test:broadcasting
 
-# Test con creazione di una nuova segnalazione
-php artisan test:report-notifications --create-report
+# Test del sistema di logging
+php artisan test:logging
+
+# Controlla le notifiche nel database
+php artisan tinker --execute="echo 'Notifiche totali: ' . \App\Models\Notification::count() . PHP_EOL; echo 'Notifiche non lette: ' . \App\Models\Notification::unread()->count() . PHP_EOL;"
 ```
 
 ### 2. Controllo Configurazione Broadcasting
@@ -53,6 +56,25 @@ tail -f storage/logs/laravel.log
 
 # Controlla i log di broadcasting
 tail -f storage/logs/broadcast.log
+```
+
+### 5. Test Manuale Notifiche Segnalazioni
+Per testare manualmente le notifiche delle segnalazioni:
+
+```bash
+# Controlla le segnalazioni esistenti
+php artisan tinker --execute="echo 'Segnalazioni totali: ' . \App\Models\Report::count() . PHP_EOL; echo 'Segnalazioni in attesa: ' . \App\Models\Report::pending()->count() . PHP_EOL;"
+
+# Test creazione notifica per una segnalazione esistente
+php artisan tinker --execute="
+\$report = \App\Models\Report::with(['reportable', 'user'])->first();
+if (\$report && \$report->reportable && \$report->reportable->user) {
+    \App\Models\Notification::createContentReportedNotification(\$report);
+    echo 'Notifica creata per segnalazione ID: ' . \$report->id . PHP_EOL;
+} else {
+    echo 'Nessuna segnalazione valida trovata' . PHP_EOL;
+}
+"
 ```
 
 ## 🛠️ Soluzioni Comuni
@@ -156,8 +178,10 @@ Assicurati che il frontend sia configurato per ricevere le notifiche:
 
 ## 📋 Checklist di Verifica
 
-- [ ] `php artisan test:notifications` passa tutti i test
-- [ ] `php artisan test:report-notifications` crea notifiche correttamente
+- [ ] `php artisan test:like-notifications` passa tutti i test
+- [ ] `php artisan test:broadcasting` funziona correttamente
+- [ ] `php artisan test:logging` non mostra errori
+- [ ] Le notifiche vengono create nel database
 - [ ] Le variabili d'ambiente sono configurate correttamente
 - [ ] Le code sono in esecuzione (`php artisan queue:work`)
 - [ ] Non ci sono job falliti (`php artisan queue:failed`)
@@ -171,6 +195,20 @@ Assicurati che il frontend sia configurato per ricevere le notifiche:
 2. **Usa il driver 'log'** per broadcasting (soluzione 2 sopra)
 3. **Controlla i log** per vedere se le notifiche vengono create
 4. **Verifica manualmente** che le notifiche appaiano nel database
+
+## ⚡ Soluzione Rapida
+
+Se hai bisogno di una soluzione immediata, esegui questo comando per disabilitare temporaneamente il broadcasting:
+
+```bash
+# Backup del file originale
+cp app/Models/Notification.php app/Models/Notification.php.backup
+
+# Modifica temporanea per disabilitare broadcasting
+sed -i 's/event(new \\App\\Events\\ChatNotificationEvent($notification, '\''created'\''));/\/\/ event(new \\App\\Events\\ChatNotificationEvent($notification, '\''created'\''));/' app/Models/Notification.php
+```
+
+Questo disabiliterà il broadcasting e le notifiche verranno solo salvate nel database e nei log.
 
 ## 📞 Supporto
 

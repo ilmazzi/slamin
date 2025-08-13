@@ -83,8 +83,8 @@
                                 <!-- Immagine in evidenza -->
                                 <div class="mb-3">
                                     <label for="featured_image" class="form-label">{{ __('articles.featured_image') }}</label>
-                                    <input type="file" class="form-control @error('featured_image') is-invalid @enderror"
-                                           id="featured_image" name="featured_image" accept="image/*">
+                                                <input type="file" class="form-control @error('featured_image') is-invalid @enderror"
+                id="featured_image" name="featured_image" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
                                     <div class="form-text">
                                         {{ __('articles.image_help') }}<br>
                                         {{ __('articles.max_size') }}: {{ config('app.max_upload_size', '2MB') }}<br>

@@ -112,7 +112,7 @@ class ArticleController extends Controller
             'excerpt' => 'nullable|array',
             'excerpt.it' => 'nullable|string|max:500',
             'category_id' => 'nullable|exists:article_categories,id',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:draft,published,archived',
             'featured' => 'boolean',
             'meta_title' => 'nullable|array',
