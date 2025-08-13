@@ -410,82 +410,209 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function approveContent(type, id) {
-    if (confirm('Sei sicuro di voler approvare questo contenuto?')) {
-        fetch(`/admin/moderation/${type}/${id}/approve`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Errore durante l\'approvazione: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Errore di connessione');
-        });
-    }
+    Swal.fire({
+        title: 'Conferma Approvazione',
+        text: 'Sei sicuro di voler approvare questo contenuto?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Approva',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Approvazione in corso...',
+                text: 'Attendi mentre approvo il contenuto',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`/admin/moderation/approve/${type}/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Approvato!',
+                        text: data.message || 'Contenuto approvato con successo',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore!',
+                        text: data.message || 'Errore durante l\'approvazione'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errore di Connessione',
+                    text: 'Impossibile connettersi al server. Riprova più tardi.'
+                });
+            });
+        }
+    });
 }
 
 function rejectContent(type, id) {
-    const reason = prompt('Motivo del rifiuto:');
-    if (reason) {
-        fetch(`/admin/moderation/${type}/${id}/reject`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ reason: reason })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Errore durante il rifiuto: ' + data.message);
+    Swal.fire({
+        title: 'Motivo del Rifiuto',
+        input: 'textarea',
+        inputLabel: 'Inserisci il motivo del rifiuto',
+        inputPlaceholder: 'Spiega perché questo contenuto è stato rifiutato...',
+        inputAttributes: {
+            'aria-label': 'Motivo del rifiuto'
+        },
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Rifiuta',
+        cancelButtonText: 'Annulla',
+        inputValidator: (value) => {
+            if (!value || value.trim().length < 10) {
+                return 'Il motivo deve essere di almeno 10 caratteri';
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Errore di connessione');
-        });
-    }
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Rifiuto in corso...',
+                text: 'Attendi mentre rifiuto il contenuto',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`/admin/moderation/reject/${type}/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ reason: result.value.trim() })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Rifiutato!',
+                        text: data.message || 'Contenuto rifiutato con successo',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore!',
+                        text: data.message || 'Errore durante il rifiuto'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errore di Connessione',
+                    text: 'Impossibile connettersi al server. Riprova più tardi.'
+                });
+            });
+        }
+    });
 }
 
 function viewReport(reportId) {
-    // Implementation for viewing report details
-    console.log('Viewing report:', reportId);
+    Swal.fire({
+        title: 'Dettagli Segnalazione',
+        text: 'Funzionalità in sviluppo. I dettagli completi saranno disponibili presto.',
+        icon: 'info',
+        confirmButtonColor: '#007bff'
+    });
 }
 
 function resolveReport(reportId) {
-    if (confirm('Sei sicuro di voler risolvere questa segnalazione?')) {
-        fetch(`/admin/moderation/reports/${reportId}/resolve`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Errore durante la risoluzione: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Errore di connessione');
-        });
-    }
+    Swal.fire({
+        title: 'Conferma Risoluzione',
+        text: 'Sei sicuro di voler risolvere questa segnalazione?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sì, Risolvi',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Risoluzione in corso...',
+                text: 'Attendi mentre risolvo la segnalazione',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`/admin/moderation/reports/${reportId}/handle`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    action: 'resolve',
+                    notes: 'Segnalazione risolta dall\'amministratore'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Risolto!',
+                        text: data.message || 'Segnalazione risolta con successo',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore!',
+                        text: data.message || 'Errore durante la risoluzione'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errore di Connessione',
+                    text: 'Impossibile connettersi al server. Riprova più tardi.'
+                });
+            });
+        }
+    });
 }
 </script>
 @endpush
