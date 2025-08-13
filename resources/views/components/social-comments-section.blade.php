@@ -78,11 +78,6 @@
                                 @endif
                             </div>
                             <div class="comment-content">{{ $comment->content }}</div>
-
-                            <!-- Like del commento -->
-                            <div class="mt-2">
-                                <x-social-like-button :content="$comment" type="comment" />
-                            </div>
                         </div>
                     </div>
                 </div>
