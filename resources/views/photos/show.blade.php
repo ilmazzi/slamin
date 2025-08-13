@@ -567,7 +567,7 @@ function createCommentElement(comment) {
 function deleteComment(commentId) {
     if (!confirm('{{ __("media.confirm_delete_comment") }}')) return;
 
-    fetch(`/api/social/comments/${commentId}`, {
+            fetch(`/api/social/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content

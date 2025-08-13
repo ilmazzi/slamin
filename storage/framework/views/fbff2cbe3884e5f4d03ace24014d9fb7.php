@@ -26,7 +26,7 @@ foreach ($attributes->all() as $__key => $__value) {
     if (array_key_exists($__key, $__defined_vars)) unset($$__key);
 }
 
-unset($__defined_vars); ?>
+unset($__defined_vars, $__key, $__value); ?>
 
 <?php
     $isLiked = auth()->check() ? $content->isLikedBy(auth()->user()) : false;
@@ -75,7 +75,7 @@ function toggleSocialLike(button) {
 
     // Ottieni il token CSRF
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '<?php echo e(csrf_token()); ?>';
-    
+
     fetch('/api/social/likes/toggle', {
         method: 'POST',
         headers: {

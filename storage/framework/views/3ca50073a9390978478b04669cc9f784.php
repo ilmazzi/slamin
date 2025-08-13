@@ -1,23 +1,51 @@
-@props(['content', 'type' => 'content'])
+<?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
-@php
+$__newAttributes = [];
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content']));
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (in_array($__key, $__propNames)) {
+        $$__key = $$__key ?? $__value;
+    } else {
+        $__newAttributes[$__key] = $__value;
+    }
+}
+
+$attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
+
+unset($__propNames);
+unset($__newAttributes);
+
+foreach (array_filter((['content', 'type' => 'content']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+    $$__key = $$__key ?? $__value;
+}
+
+$__defined_vars = get_defined_vars();
+
+foreach ($attributes->all() as $__key => $__value) {
+    if (array_key_exists($__key, $__defined_vars)) unset($$__key);
+}
+
+unset($__defined_vars, $__key, $__value); ?>
+
+<?php
     $commentCount = $content->comment_count ?? 0;
     $contentType = strtolower(class_basename($content));
     $comments = $content->approvedComments ?? collect();
-@endphp
+?>
 
 <div class="card hover-effect mt-3 social-comments-section"
-     data-content-type="{{ $contentType }}"
-     data-content-id="{{ $content->id }}">
+     data-content-type="<?php echo e($contentType); ?>"
+     data-content-id="<?php echo e($content->id); ?>">
     <div class="card-header">
         <h6 class="card-title mb-0">
             <i class="ti ti-brand-hipchat f-s-16 me-2"></i>
-            Commenti (<span class="comment-count">{{ number_format($commentCount) }}</span>)
+            Commenti (<span class="comment-count"><?php echo e(number_format($commentCount)); ?></span>)
         </h6>
     </div>
     <div class="card-body">
         <!-- Form per aggiungere commento -->
-        @if(auth()->check())
+        <?php if(auth()->check()): ?>
         <div class="mb-4">
             <form class="comment-form">
                 <div class="mb-3">
@@ -37,51 +65,52 @@
                 </button>
             </form>
         </div>
-        @else
+        <?php else: ?>
         <div class="alert alert-info">
             <i class="ti ti-info-circle f-s-16 me-2"></i>
-            <a href="{{ route('login') }}" class="text-decoration-none">Accedi</a> per lasciare un commento e interagire con il contenuto.
+            <a href="<?php echo e(route('login')); ?>" class="text-decoration-none">Accedi</a> per lasciare un commento e interagire con il contenuto.
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Lista commenti -->
         <div class="comments-list">
-            @foreach($comments as $comment)
-                <div class="comment-box mb-3" data-comment-id="{{ $comment->id }}">
+            <?php $__currentLoopData = $comments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="comment-box mb-3" data-comment-id="<?php echo e($comment->id); ?>">
                     <div class="d-flex align-items-start">
-                        <a href="{{ route('user.show', $comment->user) }}" class="text-decoration-none">
+                        <a href="<?php echo e(route('user.show', $comment->user)); ?>" class="text-decoration-none">
                             <div class="h-45 w-45 d-flex-center b-r-50 overflow-hidden bg-primary me-3">
-                                <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user) }}" alt="{{ $comment->user->name }}" class="img-fluid">
+                                <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user)); ?>" alt="<?php echo e($comment->user->name); ?>" class="img-fluid">
                             </div>
                         </a>
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
                                     <div class="fw-bold">
-                                        <a href="{{ route('user.show', $comment->user) }}" class="text-decoration-none hover-effect">
-                                            {{ $comment->user->getDisplayName() }}
+                                        <a href="<?php echo e(route('user.show', $comment->user)); ?>" class="text-decoration-none hover-effect">
+                                            <?php echo e($comment->user->getDisplayName()); ?>
+
                                         </a>
                                     </div>
-                                    <div class="text-muted f-s-12">{{ $comment->created_at->diffForHumans() }}</div>
+                                    <div class="text-muted f-s-12"><?php echo e($comment->created_at->diffForHumans()); ?></div>
                                 </div>
-                                @if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->hasRole('admin')))
+                                <?php if(auth()->check() && (auth()->id() === $comment->user_id || auth()->user()->hasRole('admin'))): ?>
                                 <div class="dropdown">
                                     <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown">
                                         <i class="ti ti-dots-vertical f-s-16"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteComment({{ $comment->id }})">
+                                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteComment(<?php echo e($comment->id); ?>)">
                                             <i class="ti ti-trash f-s-14 me-2"></i>Elimina
                                         </a></li>
                                     </ul>
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
-                            <div class="comment-content">{{ $comment->content }}</div>
+                            <div class="comment-content"><?php echo e($comment->content); ?></div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
 </div>
@@ -116,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
 
             // Ottieni il token CSRF
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '<?php echo e(csrf_token()); ?>';
 
             fetch('/api/social/comments', {
                 method: 'POST',
@@ -260,3 +289,4 @@ function showToast(message, type = 'info') {
     }
 }
 </script>
+<?php /**PATH C:\xampp\htdocs\slamin\resources\views/components/social-comments-section.blade.php ENDPATH**/ ?>

@@ -26,7 +26,7 @@ foreach ($attributes->all() as $__key => $__value) {
     if (array_key_exists($__key, $__defined_vars)) unset($$__key);
 }
 
-unset($__defined_vars); ?>
+unset($__defined_vars, $__key, $__value); ?>
 
 <?php
     $isReported = $content->isReportedByUser();
@@ -68,7 +68,7 @@ unset($__defined_vars); ?>
     <?php endif; ?>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('57874538-0021-4331-a80c-4ca7e327ab0c')): $__env->markAsRenderedOnce('57874538-0021-4331-a80c-4ca7e327ab0c'); ?>
+<?php if (! $__env->hasRenderedOnce('b5d84e0f-89d2-4891-b080-54fe13dfa412')): $__env->markAsRenderedOnce('b5d84e0f-89d2-4891-b080-54fe13dfa412'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 // Variabile globale per tracciare se il modal è già aperto

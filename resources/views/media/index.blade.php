@@ -889,7 +889,7 @@ function toggleVideoContent() {
 
 // Funzione per aprire il modal video
 function openVideoModal(videoId) {
-    
+
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('videoPlayerModal');
@@ -932,7 +932,7 @@ async function loadVideoInModal(videoId) {
     containerDiv.style.display = 'none';
 
     try {
-        
+
 
         // Prima ottieni i dati del video
         const videoResponse = await fetch(`/api/videos/${videoId}`);
@@ -950,7 +950,7 @@ async function loadVideoInModal(videoId) {
         // Usa sempre il player HTML5 nativo
         videoPlayer.style.display = 'block';
 
-        
+
 
         // Ottieni l'URL diretto del video da PeerTube
         const urlResponse = await fetch(`/videos/${videoId}/peertube-url`);
@@ -964,7 +964,7 @@ async function loadVideoInModal(videoId) {
         if (urlData.success && urlData.files && urlData.files.length > 0) {
             // Usa il primo file disponibile (migliore qualità)
             const videoFile = urlData.files[0];
-            
+
 
             // Crea l'elemento source
             const source = document.createElement('source');
@@ -1004,7 +1004,7 @@ async function loadVideoInModal(videoId) {
 
 // Funzione per caricare gli snap nel modal
 function loadSnapsForModal(videoId) {
-    
+
 
     fetch(`/api/videos/${videoId}/snaps`)
         .then(response => {
@@ -1016,10 +1016,10 @@ function loadSnapsForModal(videoId) {
         .then(data => {
             if (data.success) {
                 modalSnaps = data.snaps || [];
-                
+
                 updateModalSnapMarkers();
             } else {
-                
+
                 modalSnaps = [];
                 updateModalSnapMarkers();
             }
@@ -1039,7 +1039,7 @@ function initializeModalVideoPlayer(video) {
 
     // Event listeners per il player HTML5
     videoPlayer.addEventListener('loadedmetadata', function() {
-        
+
         modalVideoDuration = videoPlayer.duration || modalVideoDuration;
         updateModalSnapMarkers();
     });
@@ -1049,13 +1049,13 @@ function initializeModalVideoPlayer(video) {
     });
 
     videoPlayer.addEventListener('durationchange', function() {
-        
+
         modalVideoDuration = videoPlayer.duration;
         updateModalSnapMarkers();
     });
 
     videoPlayer.addEventListener('canplay', function() {
-        
+
     });
 
     videoPlayer.addEventListener('error', function() {
@@ -1083,7 +1083,7 @@ function updateModalSnapMarkers() {
 
     if (!modalSnaps || modalSnaps.length === 0) return;
 
-    
+
 
     // Raggruppa gli snap per timestamp
     const snapsByTimestamp = {};
@@ -1131,7 +1131,7 @@ function updateModalSnapMarkers() {
         markersContainer.appendChild(marker);
     });
 
-    
+
 
     // Aggiungi event listeners per i tooltip come nella pagina video
     const snapMarkers = markersContainer.querySelectorAll('.snap-marker');
@@ -1177,7 +1177,7 @@ function toggleSnapForm() {
         // Aggiorna il tempo corrente
         updateInlineSnapTime();
 
-        
+
     } else {
         // Nascondi il form
         snapForm.style.display = 'none';
@@ -1187,7 +1187,7 @@ function toggleSnapForm() {
         document.getElementById('inlineSnapTitle').value = '';
         document.getElementById('inlineSnapDescription').value = '';
 
-        
+
     }
 }
 
@@ -1226,10 +1226,10 @@ function createInlineSnap() {
     const timestamp = parseInt(document.getElementById('inlineSnapTimestamp').value);
     const videoId = document.getElementById('inlineSnapVideoId').value;
 
-    
+
 
     if (timestamp < 0 || !videoId) {
-        
+
         return;
     }
 
@@ -1256,7 +1256,7 @@ function createInlineSnap() {
     })
     .then(data => {
         if (data.success) {
-            
+
 
             // Chiudi il form
             toggleSnapForm();
@@ -1267,7 +1267,7 @@ function createInlineSnap() {
             // Mostra un messaggio di successo
             showSuccessMessage('Snap creato con successo!');
         } else {
-            
+
             showErrorMessage(data.message || 'Errore nella creazione dello snap. Riprova.');
         }
     })
@@ -1292,7 +1292,7 @@ function showSuccessMessage(message) {
 
 // Funzione per caricare gli snap di un video
 function loadVideoSnaps(videoId) {
-    
+
 
     fetch(`/api/videos/${videoId}/snaps`)
         .then(response => {
@@ -1304,10 +1304,10 @@ function loadVideoSnaps(videoId) {
         .then(data => {
             if (data.success) {
                 modalSnaps = data.snaps || [];
-                
+
                 updateModalSnapMarkers();
             } else {
-                
+
                 modalSnaps = [];
                 updateModalSnapMarkers();
             }
@@ -1363,7 +1363,7 @@ function togglePhotoContent() {
 
 // Funzione per aprire il modal foto
 function openPhotoModal(photoId) {
-    
+
 
     // Mostra il modal personalizzato
     const modal = document.getElementById('photoViewerModal');
@@ -1396,7 +1396,7 @@ async function loadPhotoInModal(photoId) {
     containerDiv.style.display = 'none';
 
     try {
-        
+
 
         // Ottieni i dati della foto
         const photoResponse = await fetch(`/api/photos/${photoId}`);
@@ -1423,7 +1423,7 @@ async function loadPhotoInModal(photoId) {
             loadingDiv.style.display = 'none';
             containerDiv.style.display = 'block';
 
-            
+
         } else {
             throw new Error('Nessuna immagine disponibile');
         }
@@ -1521,18 +1521,24 @@ function initializeSearchViewCounters() {
         const viewCountSpan = counter.querySelector('.view-count');
 
         // Incrementa le visualizzazioni
-        fetch('/api/social/views/increment', {
+        fetch('/views/increment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
                 viewable_type: contentType,
                 viewable_id: contentId
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 // Aggiorna il contatore
@@ -1844,7 +1850,7 @@ function toggleSocialLike(button) {
     // Disabilita il pulsante durante la richiesta
     button.style.pointerEvents = 'none';
 
-    fetch('/api/social/likes/toggle', {
+            fetch('/api/social/likes/toggle', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

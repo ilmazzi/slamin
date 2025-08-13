@@ -47,7 +47,7 @@ function toggleSocialLike(button) {
 
     // Ottieni il token CSRF
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
-    
+
     fetch('/api/social/likes/toggle', {
         method: 'POST',
         headers: {
