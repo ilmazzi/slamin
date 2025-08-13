@@ -165,12 +165,12 @@
                             <!-- Content Preview -->
                             @if($content->type === 'videos' && $content->thumbnail_url)
                             <div class="text-center">
-                                <img src="{{ $content->thumbnail_url }}" alt="{{ $content->title }}" 
+                                <img src="{{ $content->thumbnail_url }}" alt="{{ $content->title }}"
                                      class="img-fluid rounded" style="max-height: 150px;">
                             </div>
                             @elseif($content->type === 'photos' && $content->image_url)
                             <div class="text-center">
-                                <img src="{{ $content->image_url }}" alt="{{ $content->title }}" 
+                                <img src="{{ $content->image_url }}" alt="{{ $content->title }}"
                                      class="img-fluid rounded" style="max-height: 150px;">
                             </div>
                             @elseif($content->type === 'poems' && $content->content)
@@ -186,27 +186,27 @@
                             <!-- Mobile-First Action Buttons -->
                             <div class="d-flex flex-column flex-sm-row gap-2">
                                 <div class="d-flex gap-1 flex-grow-1">
-                                    <button class="btn btn-success btn-sm flex-fill" 
-                                            onclick="approveContent('{{ $content->type }}', {{ $content->id }})" 
+                                    <button class="btn btn-success btn-sm flex-fill"
+                                            onclick="approveContent('{{ $content->type }}', {{ $content->id }})"
                                             title="Approva">
                                         <i class="ph-duotone ph-check f-s-14 me-1"></i>
                                         <span class="d-none d-sm-inline">Approva</span>
                                     </button>
-                                    <button class="btn btn-danger btn-sm flex-fill" 
-                                            onclick="rejectContent('{{ $content->type }}', {{ $content->id }})" 
+                                    <button class="btn btn-danger btn-sm flex-fill"
+                                            onclick="rejectContent('{{ $content->type }}', {{ $content->id }})"
                                             title="Rifiuta">
                                         <i class="ph-duotone ph-x f-s-14 me-1"></i>
                                         <span class="d-none d-sm-inline">Rifiuta</span>
                                     </button>
                                 </div>
                                 <div class="d-flex gap-1">
-                                    <button class="btn btn-outline-primary btn-sm" 
-                                            onclick="viewContent('{{ $content->type }}', {{ $content->id }})" 
+                                    <button class="btn btn-outline-primary btn-sm"
+                                            onclick="viewContent('{{ $content->type }}', {{ $content->id }})"
                                             title="Visualizza">
                                         <i class="ph-duotone ph-eye f-s-14"></i>
                                     </button>
-                                    <button class="btn btn-outline-info btn-sm" 
-                                            onclick="editContent('{{ $content->type }}', {{ $content->id }})" 
+                                    <button class="btn btn-outline-info btn-sm"
+                                            onclick="editContent('{{ $content->type }}', {{ $content->id }})"
                                             title="Modifica">
                                         <i class="ph-duotone ph-pencil f-s-14"></i>
                                     </button>
@@ -260,7 +260,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile-specific adjustments
     const isMobile = window.innerWidth < 768;
-    
+
     if (isMobile) {
         // Make buttons more touch-friendly on mobile
         const buttons = document.querySelectorAll('.btn-sm');
@@ -268,19 +268,19 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.style.minHeight = '44px';
             btn.style.minWidth = '44px';
         });
-        
+
         // Adjust card spacing for mobile
         const cards = document.querySelectorAll('.card.hover-effect');
         cards.forEach(card => {
             card.classList.add('mb-3');
         });
     }
-    
+
     // Responsive adjustments
     function adjustMobileLayout() {
         const isMobile = window.innerWidth < 768;
         const contentCards = document.querySelectorAll('.card.hover-effect');
-        
+
         if (isMobile) {
             contentCards.forEach(card => {
                 card.classList.add('mb-3');
@@ -291,10 +291,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    
+
     // Initial adjustment
     adjustMobileLayout();
-    
+
     // Adjust on resize
     window.addEventListener('resize', adjustMobileLayout);
 });
