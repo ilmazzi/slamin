@@ -701,8 +701,6 @@ function loadEventsOnMapWithFilter(params) {
         }
     });
 
-    );
-
     fetch(url)
         .then(response => {
             
@@ -743,7 +741,7 @@ function loadEventsOnMapWithFilter(params) {
                         markerColor = colorMap[event.category_color_class] || '#6c757d';
                     }
 
-                    : ${markerColor}`);
+                    console.log(`Marker color for ${event.title}: ${markerColor}`);
 
                     // Gestione marker sovrapposti - sposta leggermente i marker alla stessa posizione
                     let lat = parseFloat(event.latitude);
@@ -761,7 +759,7 @@ function loadEventsOnMapWithFilter(params) {
                         const offset = 0.0002; // Circa 20 metri
                         lat += (existingMarkersAtPosition.length * offset);
                         lng += (existingMarkersAtPosition.length * offset);
-                        
+                        console.log(`Offset applied to marker: ${existingMarkersAtPosition.length}`);
                     }
 
                     // Crea icona personalizzata con colore ma stile standard
@@ -776,7 +774,7 @@ function loadEventsOnMapWithFilter(params) {
                         icon: customIcon
                     }).addTo(map);
 
-                    
+                    console.log(`Marker created for event: ${event.title}`);
 
                     // Add click handler to open modal instead of popup
                     marker.on('click', function() {
@@ -785,11 +783,11 @@ function loadEventsOnMapWithFilter(params) {
 
                 markers.push(marker);
                 } else {
-                    
+                    console.log(`Event ${event.title} has no coordinates`);
                 }
             });
 
-            
+            console.log(`Total markers added: ${markers.length}`);
 
             // Fit map to show all markers
             if (markers.length > 0) {
@@ -1000,7 +998,7 @@ function applyFilterToList(filterType) {
     // Aggiorna solo la mappa con i nuovi filtri (senza posizione automatica)
     const mapParams = { ...params };
 
-    
+    console.log('Applying filter to map:', mapParams);
     loadEventsOnMapWithFilter(mapParams);
 
     // Aggiorna anche la lista ricaricando la pagina
@@ -1020,7 +1018,7 @@ function applyFilterToMap(filterType) {
         case 'today':
             params.date_from = now.toISOString().split('T')[0];
             params.date_to = now.toISOString().split('T')[0];
-            
+            console.log('Filter: Today');
             break;
 
         case 'tomorrow':
@@ -1028,7 +1026,7 @@ function applyFilterToMap(filterType) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             params.date_from = tomorrow.toISOString().split('T')[0];
             params.date_to = tomorrow.toISOString().split('T')[0];
-            
+            console.log('Filter: Tomorrow');
             break;
 
         case 'weekend':
@@ -1039,32 +1037,32 @@ function applyFilterToMap(filterType) {
             sunday.setDate(saturday.getDate() + 1);
             params.date_from = saturday.toISOString().split('T')[0];
             params.date_to = sunday.toISOString().split('T')[0];
-            
+            console.log('Filter: Weekend');
             break;
 
         case 'free':
             params.free_only = '1';
-            
+            console.log('Filter: Free only');
             break;
 
         case 'nearby':
             params.filter = 'nearby';
             params.radius = '10';
-            
+            console.log('Filter: Nearby');
             break;
 
         case 'my':
             params.filter = 'my';
-            
+            console.log('Filter: My events');
             break;
 
         case 'private':
             params.filter = 'my_private';
-            
+            console.log('Filter: My private events');
             break;
     }
 
-    
+    console.log('Applying filter to map with params:', params);
     loadEventsOnMapWithFilter(params);
 }
 
@@ -1172,7 +1170,7 @@ document.addEventListener('DOMContentLoaded', function() {
         filter.addEventListener('click', function(e) {
             e.preventDefault();
             const filterType = this.getAttribute('data-filter');
-            
+            console.log('Quick filter clicked:', filterType);
 
             // Update form with quick filter
             const form = document.getElementById('filterForm');
