@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 
 class ModerationMessage extends Model
 {
@@ -234,9 +235,16 @@ class ModerationMessage extends Model
         string $message,
         array $data = []
     ): self {
+        // Trova l'utente sistema
+        $systemUser = User::where('email', 'sistema@slamin.local')->first();
+        
+        if (!$systemUser) {
+            throw new \Exception('System user not found. Run fix:production-moderation first.');
+        }
+        
         return self::create([
             'conversation_id' => $conversation->id,
-            'user_id' => 1, // Sistema user ID
+            'user_id' => $systemUser->id,
             'type' => self::TYPE_SYSTEM,
             'message' => $message,
             'data' => $data,

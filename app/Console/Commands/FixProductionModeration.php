@@ -12,6 +12,8 @@ class FixProductionModeration extends Command
 {
     protected $signature = 'fix:production-moderation';
     protected $description = 'Fix production moderation system issues';
+    
+    private $systemUserId;
 
     public function handle()
     {
@@ -39,23 +41,40 @@ class FixProductionModeration extends Command
      */
     private function fixSystemUser(): void
     {
-        $systemUser = User::find(1);
+        // Prima cerca un utente sistema esistente
+        $systemUser = User::where('email', 'sistema@slamin.local')->first();
         
         if (!$systemUser) {
             $this->info('📝 Creating system user...');
             
-            $systemUser = User::create([
-                'name' => 'Sistema',
-                'email' => 'sistema@slamin.local',
-                'password' => bcrypt('system_password_' . time()),
-                'email_verified_at' => now(),
-                'is_active' => false,
-            ]);
+            // Prova a creare con ID 1, se non funziona usa auto-increment
+            try {
+                $systemUser = User::create([
+                    'id' => 1,
+                    'name' => 'Sistema',
+                    'email' => 'sistema@slamin.local',
+                    'password' => bcrypt('system_password_' . time()),
+                    'email_verified_at' => now(),
+                    'is_active' => false,
+                ]);
+            } catch (\Exception $e) {
+                // Se ID 1 esiste già, crea con auto-increment
+                $systemUser = User::create([
+                    'name' => 'Sistema',
+                    'email' => 'sistema@slamin.local',
+                    'password' => bcrypt('system_password_' . time()),
+                    'email_verified_at' => now(),
+                    'is_active' => false,
+                ]);
+            }
             
             $this->info("✅ System user created with ID: {$systemUser->id}");
         } else {
             $this->info("✅ System user already exists with ID: {$systemUser->id}");
         }
+        
+        // Salva l'ID dell'utente sistema per usarlo nei messaggi
+        $this->systemUserId = $systemUser->id;
     }
 
     /**

@@ -160,6 +160,10 @@ MAIL_FROM_NAME="Poetry Slam"
 ```bash
 # Fix per problemi di produzione (utente sistema mancante)
 php artisan fix:production-moderation
+
+# Se il comando non esiste, crealo prima:
+php artisan make:command FixProductionModeration
+# Poi copia il codice e eseguilo
 ```
 
 ### Errore: "Conversazione non trovata"
