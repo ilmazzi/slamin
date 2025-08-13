@@ -514,78 +514,7 @@ function updateLikeButtons(userLike) {
     }
 }
 
-// Funzioni per commenti
-document.getElementById('commentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const content = document.getElementById('commentContent').value.trim();
-    if (!content) return;
-
-    // Ottieni il token CSRF dal meta tag
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
-
-    fetch('{{ route("videos.add-comment", $video) }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ content: content })
-    })
-    .then(response => {
-        
-        if (response.status === 419) {
-            // CSRF token mismatch - ricarica la pagina per ottenere un nuovo token
-            alert('Sessione scaduta. La pagina verrà ricaricata.');
-            location.reload();
-            return;
-        }
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        
-        if (data && data.success) {
-            document.getElementById('commentContent').value = '';
-            document.getElementById('charCount').textContent = '0';
-            loadComments();
-        } else if (data && data.error) {
-            alert('Errore: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Errore:', error);
-        alert('Errore durante l\'invio del commento. Riprova.');
-    });
-});
-
-function loadComments() {
-    // I commenti sono già caricati nel DOM, non serve ricaricarli
-    // Questa funzione è mantenuta per compatibilità
-}
-
-function deleteComment(commentId) {
-    if (!confirm('Sei sicuro di voler eliminare questo commento?')) return;
-
-    const deleteCommentBase = '{{ url('/videos/comments') }}';
-    fetch(`${deleteCommentBase}/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            loadComments();
-        }
-    })
-    .catch(error => console.error('Errore:', error));
-}
+// Funzioni per commenti - RIMOSSO: ora gestito dal componente social-comments-section
 
 // Funzioni per snap
 function showSnapModal() {
@@ -672,11 +601,7 @@ function deleteSnap(snapId) {
     .catch(error => console.error('Errore:', error));
 }
 
-// Contatore caratteri per commenti
-document.getElementById('commentContent').addEventListener('input', function() {
-    const charCount = this.value.length;
-    document.getElementById('charCount').textContent = charCount;
-});
+// Contatore caratteri per commenti - RIMOSSO: ora gestito dal componente social-comments-section
 
 // Inizializzazione
 document.addEventListener('DOMContentLoaded', function() {
