@@ -97,6 +97,8 @@ class Report extends Model
         return $query->where('status', self::STATUS_PENDING);
     }
 
+
+
     /**
      * Scope per segnalazioni in investigazione
      */
@@ -191,12 +193,32 @@ class Report extends Model
             'App\Models\Poem' => 'Poesia',
             'App\Models\Event' => 'Evento',
             'App\Models\Photo' => 'Foto',
+            'App\Models\Article' => 'Articolo',
             'App\Models\Carousel' => 'Carousel',
             'App\Models\VideoComment' => 'Commento Video',
             'App\Models\PoemComment' => 'Commento Poesia',
         ];
 
         return $types[$this->reportable_type] ?? 'Contenuto';
+    }
+
+    /**
+     * Ottiene il tipo di contenuto per l'API (formato semplice)
+     */
+    public function getApiContentTypeAttribute(): string
+    {
+        $typeMap = [
+            'App\Models\Video' => 'videos',
+            'App\Models\Poem' => 'poems',
+            'App\Models\Event' => 'events',
+            'App\Models\Photo' => 'photos',
+            'App\Models\Article' => 'articles',
+            'App\Models\Carousel' => 'carousels',
+            'App\Models\VideoComment' => 'video_comments',
+            'App\Models\PoemComment' => 'poem_comments',
+        ];
+
+        return $typeMap[$this->reportable_type] ?? 'unknown';
     }
 
     /**
@@ -215,6 +237,69 @@ class Report extends Model
         ];
 
         return $reasons[$this->reason] ?? $this->reason;
+    }
+
+    /**
+     * Ottiene il contenuto completo per la visualizzazione
+     */
+    public function getReportableContentAttribute(): ?string
+    {
+        if (!$this->reportable) {
+            return null;
+        }
+
+        // Metodi comuni per ottenere il contenuto
+        $methods = ['content', 'description', 'body', 'text'];
+        foreach ($methods as $method) {
+            if (method_exists($this->reportable, $method)) {
+                return $this->reportable->$method;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Ottiene l'URL del contenuto per la visualizzazione
+     */
+    public function getReportableUrlAttribute(): ?string
+    {
+        if (!$this->reportable) {
+            return null;
+        }
+
+        // Metodi comuni per ottenere l'URL
+        $methods = ['getContentUrl', 'getUrl', 'url'];
+        foreach ($methods as $method) {
+            if (method_exists($this->reportable, $method)) {
+                return $this->reportable->$method();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Ottiene l'immagine/thumbnail del contenuto
+     */
+    public function getReportableThumbnailAttribute(): ?string
+    {
+        if (!$this->reportable) {
+            return null;
+        }
+
+        // Metodi comuni per ottenere l'immagine
+        $methods = ['thumbnail', 'image', 'cover', 'thumbnail_url', 'image_url'];
+        foreach ($methods as $method) {
+            if (method_exists($this->reportable, $method)) {
+                $value = $this->reportable->$method;
+                if (is_string($value) && !empty($value)) {
+                    return $value;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

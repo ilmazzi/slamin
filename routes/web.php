@@ -679,6 +679,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
             Route::post('/reject/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'reject'])->name('reject');
             Route::post('/approve-all/{type}', [App\Http\Controllers\Admin\ModerationController::class, 'approveAll'])->name('approve-all');
             Route::post('/reports/{report}/handle', [App\Http\Controllers\Admin\ModerationController::class, 'handleReport'])->name('reports.handle');
+            Route::get('/reports/{report}/details', [App\Http\Controllers\Admin\ModerationController::class, 'getReportedContentDetails'])->name('reports.details');
             Route::get('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'settings'])->name('settings');
             Route::post('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'updateSettings'])->name('settings.update');
         });

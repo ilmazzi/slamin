@@ -16,6 +16,7 @@ use App\Models\Report;
 use App\Models\SystemSetting;
 use App\Services\LoggingService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ModerationController extends Controller
@@ -132,18 +133,34 @@ class ModerationController extends Controller
         $success = $content->reject(Auth::user(), $notes);
 
         if ($success) {
+            // Aggiorna anche le segnalazioni relative a questo contenuto
+            $reports = Report::where('reportable_type', get_class($content))
+                           ->where('reportable_id', $id)
+                           ->where('status', Report::STATUS_PENDING)
+                           ->get();
+            
+            foreach ($reports as $report) {
+                $report->update([
+                    'status' => Report::STATUS_RESOLVED,
+                    'resolved_by' => Auth::id(),
+                    'resolved_at' => now(),
+                    'resolution_notes' => 'Contenuto rifiutato: ' . $notes
+                ]);
+            }
+
             LoggingService::logAdmin('content_rejected', [
                 'content_type' => $type,
                 'content_id' => $id,
                 'content_title' => $content->title ?? $content->content ?? 'N/A',
                 'moderator_id' => Auth::id(),
                 'moderator_name' => Auth::user()->name,
-                'notes' => $notes
+                'notes' => $notes,
+                'reports_updated' => $reports->count()
             ], get_class($content), $id);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Contenuto rifiutato con successo'
+                'message' => 'Contenuto rifiutato con successo' . ($reports->count() > 0 ? ' e ' . $reports->count() . ' segnalazioni risolte' : '')
             ]);
         }
 
@@ -249,10 +266,30 @@ class ModerationController extends Controller
      */
     private function getActiveReports()
     {
-        return Report::active()
+        $reports = Report::active()
             ->with(['user', 'reportable', 'resolver'])
             ->latest()
             ->get();
+        
+        // Aggiungi i titoli corretti ai report
+        foreach ($reports as $report) {
+            if ($report->reportable) {
+                $content = $report->reportable;
+                if (isset($content->title)) {
+                    $report->content_title = $content->title;
+                } elseif (isset($content->name)) {
+                    $report->content_title = $content->name;
+                } elseif (isset($content->content)) {
+                    $report->content_title = substr($content->content, 0, 50) . '...';
+                } else {
+                    $report->content_title = 'Contenuto #' . $report->reportable_id;
+                }
+            } else {
+                $report->content_title = 'Contenuto non trovato';
+            }
+        }
+        
+        return $reports;
     }
 
     /**
@@ -287,7 +324,13 @@ class ModerationController extends Controller
                     'resolved_at' => now(),
                     'resolution_notes' => $notes
                 ]);
-                $message = 'Segnalazione risolta';
+                
+                // Rifiuta anche il contenuto segnalato
+                if ($report->reportable) {
+                    $report->reportable->reject(Auth::user(), $notes);
+                }
+                
+                $message = 'Segnalazione risolta e contenuto rifiutato';
                 break;
 
             case 'dismiss':
@@ -516,6 +559,132 @@ class ModerationController extends Controller
 
         return redirect()->route('admin.moderation.settings')
             ->with('success', "Impostazioni aggiornate con successo ({$updated} modificate)");
+    }
+
+    /**
+     * Ottiene i dettagli del contenuto segnalato per il modal
+     */
+    public function getReportedContentDetails(Request $request, $reportId)
+    {
+        $report = Report::with('reportable', 'user')->findOrFail($reportId);
+        
+        if (!$report->reportable) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Contenuto non trovato'
+            ]);
+        }
+
+        $content = $report->reportable;
+        $contentType = $report->content_type;
+        
+        // Ottieni il titolo direttamente dal contenuto
+        $contentTitle = null;
+        if ($content) {
+            if (isset($content->title)) {
+                $contentTitle = $content->title;
+            } elseif (isset($content->name)) {
+                $contentTitle = $content->name;
+            } elseif (isset($content->content)) {
+                $contentTitle = substr($content->content, 0, 50) . '...';
+            } else {
+                $contentTitle = 'Contenuto #' . $report->reportable_id;
+            }
+        } else {
+            $contentTitle = 'Contenuto non trovato';
+        }
+        
+        // Ottieni il contenuto direttamente dal modello
+        $contentBody = null;
+        $contentUrl = null;
+        $contentThumbnail = null;
+        
+        if ($content) {
+            // Contenuto
+            $contentMethods = ['content', 'description', 'body', 'text'];
+            foreach ($contentMethods as $method) {
+                if (isset($content->$method)) {
+                    $contentBody = $content->$method;
+                    break;
+                }
+            }
+            
+            // URL
+            $urlMethods = ['getContentUrl', 'getUrl', 'url'];
+            foreach ($urlMethods as $method) {
+                if (method_exists($content, $method)) {
+                    $contentUrl = $content->$method();
+                    break;
+                }
+            }
+            
+            // Thumbnail
+            $thumbnailMethods = ['thumbnail', 'image', 'cover', 'thumbnail_url', 'image_url'];
+            foreach ($thumbnailMethods as $method) {
+                if (method_exists($content, $method)) {
+                    $value = $content->$method;
+                    if (is_string($value) && !empty($value)) {
+                        $contentThumbnail = $value;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
+        // Prepara i dati per il modal
+        $modalData = [
+            'report_id' => $report->id,
+            'content_type' => $contentType,
+            'content_title' => $contentTitle,
+            'content_body' => $contentBody,
+            'content_url' => $contentUrl,
+            'content_thumbnail' => $contentThumbnail,
+            'report_reason' => $report->reason_text,
+            'report_description' => $report->description,
+            'reporter_name' => $report->user->name ?? 'Utente sconosciuto',
+            'reported_at' => $report->created_at->format('d/m/Y H:i'),
+            'status' => $report->status_text,
+        ];
+
+
+
+        // Aggiungi dati specifici per tipo di contenuto
+        switch ($report->reportable_type) {
+            case 'App\Models\Video':
+                $modalData['video_url'] = $content->video_url ?? null;
+                $modalData['duration'] = $content->duration ?? null;
+                $modalData['author'] = $content->user->name ?? null;
+                break;
+            case 'App\Models\Photo':
+                $modalData['image_url'] = $content->image_url ?? $content->image ?? null;
+                $modalData['author'] = $content->user->name ?? null;
+                break;
+            case 'App\Models\Article':
+                $modalData['excerpt'] = $content->excerpt ?? null;
+                $modalData['author'] = $content->user->name ?? null;
+                break;
+            case 'App\Models\Poem':
+                $modalData['author'] = $content->user->name ?? null;
+                $modalData['category'] = $content->category ?? null;
+                break;
+            case 'App\Models\Event':
+                $modalData['start_date'] = $content->start_date ?? null;
+                $modalData['location'] = $content->location ?? null;
+                $modalData['author'] = $content->organizer->name ?? null;
+                break;
+            case 'App\Models\VideoComment':
+            case 'App\Models\PoemComment':
+                $modalData['author'] = $content->user->name ?? null;
+                $modalData['parent_content'] = $content->video->title ?? $content->poem->title ?? null;
+                break;
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $modalData
+        ]);
     }
 
     /**

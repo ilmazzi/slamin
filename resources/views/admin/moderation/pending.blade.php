@@ -146,7 +146,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-1 f-w-600">{{ Str::limit($report->reportable_title, 50) }}</h6>
+                                                    <h6 class="mb-1 f-w-600">{{ Str::limit($report->content_title, 50) }}</h6>
                                                     <p class="text-muted mb-2 f-s-14">
                                                         <i class="ph ph-user me-2 f-s-16 text-primary"></i>
                                                         {{ $report->user->name ?? 'N/A' }}
@@ -171,15 +171,18 @@
                                                     
                                                     <!-- Pulsanti di azione -->
                                                     <div class="d-flex gap-2 mt-3">
-                                                        <button class="btn btn-sm btn-success" onclick="approveReportedContent('{{ $report->reportable_type }}', {{ $report->reportable_id }})" title="Approva contenuto">
+                                                        <button class="btn btn-sm btn-primary" onclick="viewReportedContent({{ $report->id }})" title="Visualizza contenuto">
+                                                            <i class="ph ph-eye f-s-16"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-success" onclick="approveReportedContent('{{ $report->api_content_type }}', {{ $report->reportable_id }})" title="Approva contenuto">
                                                             <i class="ph ph-check me-1 f-s-16"></i>
                                                             Approva
                                                         </button>
-                                                        <button class="btn btn-sm btn-danger" onclick="rejectReportedContent('{{ $report->reportable_type }}', {{ $report->reportable_id }})" title="Rifiuta contenuto">
+                                                        <button class="btn btn-sm btn-danger" onclick="rejectReportedContent('{{ $report->api_content_type }}', {{ $report->reportable_id }})" title="Rifiuta contenuto">
                                                             <i class="ph ph-x me-1 f-s-16"></i>
                                                             Rifiuta
                                                         </button>
-                                                        <button class="btn btn-sm btn-primary" onclick="viewReportDetails({{ $report->id }})" title="Visualizza dettagli">
+                                                        <button class="btn btn-sm btn-info" onclick="viewReportDetails({{ $report->id }})" title="Dettagli segnalazione">
                                                             <i class="ph ph-magnifying-glass f-s-16"></i>
                                                         </button>
                                                         <button class="btn btn-sm btn-warning" onclick="handleReport({{ $report->id }}, 'investigate')" title="Metti in investigazione">
@@ -398,6 +401,38 @@
     </div>
 </div>
 
+<!-- Modal per visualizzare contenuto segnalato -->
+<div class="modal fade" id="reportedContentModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="ph ph-eye me-2"></i>
+                    <span id="contentModalTitle">Visualizza Contenuto Segnalato</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="reportedContentBody">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                    </div>
+                    <p class="mt-2">Caricamento contenuto...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-success" id="approveFromModal" style="display: none;">
+                    <i class="ph ph-check me-1"></i>Approva
+                </button>
+                <button type="button" class="btn btn-danger" id="rejectFromModal" style="display: none;">
+                    <i class="ph ph-x me-1"></i>Rifiuta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -439,6 +474,203 @@ function rejectReportedContent(type, id) {
     currentId = id;
     $('#moderationNotes').val('');
     $('#moderationModal').modal('show');
+}
+
+// Visualizza contenuto segnalato
+function viewReportedContent(reportId) {
+    $('#reportedContentModal').modal('show');
+    
+    // Reset modal content
+    $('#contentModalTitle').text('Caricamento...');
+    $('#reportedContentBody').html(`
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="mt-2">Caricamento contenuto...</p>
+        </div>
+    `);
+    $('#approveFromModal, #rejectFromModal').hide();
+    
+    // Carica i dettagli del contenuto
+    $.ajax({
+        url: '{{ route("admin.moderation.reports.details", ["report" => ":report"]) }}'.replace(':report', reportId),
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                const data = response.data;
+                $('#contentModalTitle').text(data.content_title);
+                
+                let contentHtml = `
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="ph ph-${getContentIcon(data.content_type)} me-2"></i>
+                                        ${data.content_title}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                `;
+                
+                // Contenuto specifico per tipo
+                if (data.content_type === 'Video' && data.video_url) {
+                    contentHtml += `
+                        <div class="ratio ratio-16x9 mb-3">
+                            <video controls class="w-100">
+                                <source src="${data.video_url}" type="video/mp4">
+                                Il tuo browser non supporta il tag video.
+                            </video>
+                        </div>
+                    `;
+                } else if (data.content_type === 'Foto' && data.image_url) {
+                    contentHtml += `
+                        <div class="text-center mb-3">
+                            <img src="${data.image_url}" class="img-fluid rounded" style="max-height: 400px;" alt="${data.content_title}">
+                        </div>
+                    `;
+                } else if (data.content_thumbnail) {
+                    contentHtml += `
+                        <div class="text-center mb-3">
+                            <img src="${data.content_thumbnail}" class="img-fluid rounded" style="max-height: 300px;" alt="${data.content_title}">
+                        </div>
+                    `;
+                }
+                
+                if (data.content_body && data.content_body.trim() !== '') {
+                    contentHtml += `
+                        <div class="content-body">
+                            ${formatContent(data.content_body, data.content_type)}
+                        </div>
+                    `;
+                } else {
+                    contentHtml += `
+                        <div class="content-body">
+                            <div class="alert alert-info">
+                                <i class="ph ph-info me-2"></i>
+                                <strong>Contenuto non disponibile</strong>
+                                <p class="mb-0 mt-2">Il contenuto di questo elemento non è visualizzabile in questo formato.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                contentHtml += `
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="ph ph-flag me-2 text-warning"></i>
+                                        Dettagli Segnalazione
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <strong>Motivo:</strong>
+                                        <span class="badge bg-warning">${data.report_reason}</span>
+                                    </div>
+                                    ${data.report_description ? `
+                                        <div class="mb-3">
+                                            <strong>Descrizione:</strong>
+                                            <p class="text-muted small">${data.report_description}</p>
+                                        </div>
+                                    ` : ''}
+                                    <div class="mb-3">
+                                        <strong>Segnalato da:</strong>
+                                        <p class="text-muted small mb-1">${data.reporter_name}</p>
+                                        <small class="text-muted">${data.reported_at}</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <strong>Status:</strong>
+                                        <span class="badge bg-${getStatusColor(data.status)}">${data.status}</span>
+                                    </div>
+                                    ${data.author ? `
+                                        <div class="mb-3">
+                                            <strong>Autore:</strong>
+                                            <p class="text-muted small">${data.author}</p>
+                                        </div>
+                                    ` : ''}
+                                    ${data.content_url ? `
+                                        <div class="mb-3">
+                                            <a href="${data.content_url}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                                <i class="ph ph-external-link me-1"></i>Vedi originale
+                                            </a>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                $('#reportedContentBody').html(contentHtml);
+                
+                // Mostra i pulsanti di azione
+                $('#approveFromModal, #rejectFromModal').show();
+                
+                // Salva i dati per i pulsanti
+                $('#approveFromModal').data('type', data.content_type.toLowerCase() + 's');
+                $('#approveFromModal').data('id', data.report_id);
+                $('#rejectFromModal').data('type', data.content_type.toLowerCase() + 's');
+                $('#rejectFromModal').data('id', data.report_id);
+                
+            } else {
+                $('#reportedContentBody').html(`
+                    <div class="text-center text-danger">
+                        <i class="ph ph-warning f-s-48 mb-3"></i>
+                        <h5>Errore</h5>
+                        <p>${response.message}</p>
+                    </div>
+                `);
+            }
+        },
+        error: function() {
+            $('#reportedContentBody').html(`
+                <div class="text-center text-danger">
+                    <i class="ph ph-warning f-s-48 mb-3"></i>
+                    <h5>Errore</h5>
+                    <p>Errore durante il caricamento del contenuto</p>
+                </div>
+            `);
+        }
+    });
+}
+
+// Funzioni helper
+function getContentIcon(contentType) {
+    const icons = {
+        'Video': 'video-camera',
+        'Foto': 'image',
+        'Articolo': 'article',
+        'Poesia': 'book-open',
+        'Evento': 'calendar',
+        'Commento': 'chat-circle'
+    };
+    return icons[contentType] || 'file-text';
+}
+
+function getStatusColor(status) {
+    const colors = {
+        'In attesa': 'warning',
+        'In investigazione': 'info',
+        'Risolta': 'success',
+        'Archiviata': 'secondary'
+    };
+    return colors[status] || 'secondary';
+}
+
+function formatContent(content, contentType) {
+    if (contentType === 'Poesia') {
+        return `<pre class="poem-content">${content}</pre>`;
+    } else if (contentType === 'Articolo') {
+        return `<div class="article-content">${content}</div>`;
+    } else {
+        return `<p>${content}</p>`;
+    }
 }
 
 // Visualizza dettagli segnalazione
@@ -504,6 +736,21 @@ $('#confirmReportAction').click(function() {
     });
 
     $('#reportActionModal').modal('hide');
+});
+
+// Event listener per i pulsanti del modal contenuto
+$('#approveFromModal').click(function() {
+    const type = $(this).data('type');
+    const id = $(this).data('id');
+    approveReportedContent(type, id);
+    $('#reportedContentModal').modal('hide');
+});
+
+$('#rejectFromModal').click(function() {
+    const type = $(this).data('type');
+    const id = $(this).data('id');
+    rejectReportedContent(type, id);
+    $('#reportedContentModal').modal('hide');
 });
 
 // Conferma moderazione contenuto
