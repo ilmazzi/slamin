@@ -42,6 +42,8 @@ class ModerationController extends Controller
         $status = $request->get('status', 'pending');
         $filter = $request->get('filter', 'all'); // all, pending, reports
 
+
+
         if ($type === 'all') {
             $content = [
                 'videos' => $this->getContentByType('videos', $status)->with('user')->latest()->get(),
@@ -58,6 +60,8 @@ class ModerationController extends Controller
                 $type => $this->getContentByType($type, $status)->with($this->getRelationships($type))->latest()->get()
             ];
         }
+
+
 
         // Filtra i report se necessario
         $reports = collect();
@@ -84,8 +88,27 @@ class ModerationController extends Controller
             return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
         }
 
+        // Debug: log dello status prima dell'approvazione
+        Log::info('Approval debug - Before', [
+            'content_id' => $content->id,
+            'content_type' => $type,
+            'moderation_status' => $content->moderation_status,
+            'status' => $content->status ?? 'N/A',
+            'is_public' => $content->is_public ?? 'N/A'
+        ]);
+
         $notes = $request->input('notes');
         $success = $content->approve(Auth::user(), $notes);
+
+        // Debug: log dello status dopo l'approvazione
+        Log::info('Approval debug - After', [
+            'content_id' => $content->id,
+            'content_type' => $type,
+            'moderation_status' => $content->moderation_status,
+            'status' => $content->status ?? 'N/A',
+            'is_public' => $content->is_public ?? 'N/A',
+            'success' => $success
+        ]);
 
         if ($success) {
             LoggingService::logAdmin('content_approved', [
