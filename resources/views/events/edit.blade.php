@@ -559,8 +559,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Funzione per rendere i campi del luogo opzionali
     function makeLocationFieldsOptional() {
-         ===');
-
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field) {
@@ -569,7 +567,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
                 if (fieldContainer) {
                     fieldContainer.style.display = 'none';
-                    
                 }
                 // Rimuovi l'asterisco dal label
                 const label = field.parentElement.querySelector('label');
@@ -582,7 +579,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Nascondi la mappa per eventi online
         if (mapContainer) {
             mapContainer.style.display = 'none';
-            
         }
 
         // Nascondi anche il container della mappa
@@ -590,14 +586,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (mapSection) {
             mapSection.style.display = 'none';
         }
-
-         ===');
     }
 
     // Funzione per rendere i campi del luogo obbligatori
     function makeLocationFieldsRequired() {
-         ===');
-
         locationFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field) {
@@ -606,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const fieldContainer = field.closest('.col-12, .col-md-6, .col-md-3, .col-md-4');
                 if (fieldContainer) {
                     fieldContainer.style.display = 'block';
-                    
                 }
                 // Aggiungi l'asterisco al label
                 const label = field.parentElement.querySelector('label');
@@ -619,7 +610,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mostra la mappa per eventi fisici
         if (mapContainer) {
             mapContainer.style.display = 'block';
-            
         }
 
         // Mostra anche il container della mappa
@@ -627,8 +617,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (mapSection) {
             mapSection.style.display = 'block';
         }
-
-         ===');
     }
 
     // Gestione evento legato a gruppo
@@ -637,6 +625,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isLinkedToGroup && groupFields) {
         isLinkedToGroup.addEventListener('change', function() {
             groupFields.style.display = this.checked ? 'block' : 'none';
+        });
+    }
 
     // ========================================
     // GESTIONE TOGGLE SOTTOTITOLO
@@ -654,8 +644,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 subtitleField.style.display = 'none';
                 subtitleInput.value = ''; // Pulisce il campo quando si disattiva
             }
-        });
-    }
         });
     }
 

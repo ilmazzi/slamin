@@ -462,4 +462,212 @@ return [
     'address_found' => 'Indirizzo trovato',
     'address_not_found' => 'Indirizzo non trovato',
     'reverse_geocoding_error' => 'Errore nel reverse geocoding',
+
+    // Chiavi mancanti per la ricerca utenti
+    'search_users_help' => 'Cerca utenti per nome, email o ruolo per invitarli al tuo evento',
+    'search_users_placeholder' => 'Cerca utenti...',
+    'search_users_min_chars' => 'Inserisci almeno 2 caratteri per la ricerca',
+    'search_users_no_results' => 'Nessun utente trovato',
+    'search_users_error' => 'Errore nella ricerca utenti',
+
+    // Chiavi mancanti per la scadenza iscrizioni
+    'registration_deadline_info' => 'Imposta una scadenza per le iscrizioni all\'evento',
+    'registration_deadline_help' => 'Dopo questa data non sarà più possibile iscriversi all\'evento',
+    'no_registration_deadline' => 'Nessuna Scadenza',
+    'no_registration_deadline_help' => 'Le iscrizioni rimangono aperte fino all\'evento',
+    'set_registration_deadline' => 'Imposta Scadenza',
+    'set_registration_deadline_help' => 'Definisci una data limite per le iscrizioni',
+    'has_deadline' => 'Imposta scadenza iscrizioni',
+    'registration_deadline_date' => 'Data scadenza',
+    'registration_deadline_time' => 'Ora scadenza',
+
+    // Chiavi mancanti per lo stato evento
+    'event_status_info' => 'Scegli se pubblicare immediatamente l\'evento o salvarlo come bozza',
+    'event_status_help' => 'Le bozze sono visibili solo a te e possono essere modificate prima della pubblicazione',
+    'status_published' => 'Pubblicato',
+    'status_draft' => 'Bozza',
+    'status_pending' => 'In Attesa',
+    'status_cancelled' => 'Cancellato',
+
+    // Chiavi mancanti per i gruppi
+    'group_association' => 'Associazione Gruppo',
+    'group_association_help' => 'Associa questo evento a uno o più gruppi per organizzazione e visibilità',
+    'no_groups_selected' => 'Nessun gruppo selezionato',
+    'select_groups' => 'Seleziona gruppi...',
+
+    // Chiavi mancanti per le posizioni d'ingaggio
+    'gig_positions' => 'Posizioni d\'Ingaggio',
+    'gig_positions_help' => 'Definisci le posizioni disponibili per questo evento',
+    'add_gig_position' => 'Aggiungi Posizione',
+    'remove_gig_position' => 'Rimuovi Posizione',
+    'gig_position_details' => 'Dettagli Posizione',
+    'gig_position_requirements' => 'Requisiti Posizione',
+    'gig_position_compensation' => 'Compenso',
+    'gig_position_travel' => 'Spese di Viaggio',
+    'gig_position_accommodation' => 'Vitto e Alloggio',
+
+    // Chiavi mancanti per le notifiche
+    'notification_sent' => 'Notifica inviata',
+    'notification_error' => 'Errore nell\'invio della notifica',
+    'invitation_sent' => 'Invito inviato con successo',
+    'invitation_error' => 'Errore nell\'invio dell\'invito',
+    'user_already_invited' => 'Utente già invitato',
+    'user_not_found' => 'Utente non trovato',
+
+    // Chiavi mancanti per la validazione
+    'validation_required' => 'Questo campo è obbligatorio',
+    'validation_email' => 'Inserisci un indirizzo email valido',
+    'validation_date' => 'Inserisci una data valida',
+    'validation_time' => 'Inserisci un orario valido',
+    'validation_future_date' => 'La data deve essere nel futuro',
+    'validation_end_after_start' => 'La data di fine deve essere successiva alla data di inizio',
+
+    // Chiavi mancanti per i messaggi di successo/errore
+    'event_created_success' => 'Evento creato con successo!',
+    'event_updated_success' => 'Evento aggiornato con successo!',
+    'event_deleted_success' => 'Evento eliminato con successo!',
+    'event_save_error' => 'Errore nel salvataggio dell\'evento',
+    'event_load_error' => 'Errore nel caricamento dell\'evento',
+    'event_not_found' => 'Evento non trovato',
+
+    // Chiavi mancanti per l'anteprima
+    'preview_title' => 'Anteprima Evento',
+    'preview_description' => 'Questa è come apparirà il tuo evento agli altri utenti',
+    'preview_loading' => 'Caricamento anteprima...',
+    'preview_error' => 'Errore nel caricamento dell\'anteprima',
+
+    // Chiavi mancanti per la mappa
+    'map_loading' => 'Caricamento mappa...',
+    'map_error' => 'Errore nel caricamento della mappa',
+    'map_location_set' => 'Posizione impostata',
+    'map_location_clear' => 'Posizione rimossa',
+    'map_location_invalid' => 'Posizione non valida',
+
+    // Chiavi mancanti per i filtri
+    'filter_all' => 'Tutti',
+    'filter_my_events' => 'I Miei Eventi',
+    'filter_public' => 'Pubblici',
+    'filter_private' => 'Privati',
+    'filter_online' => 'Online',
+    'filter_offline' => 'Fisici',
+    'filter_free' => 'Gratuiti',
+    'filter_paid' => 'A Pagamento',
+    'filter_today' => 'Oggi',
+    'filter_tomorrow' => 'Domani',
+    'filter_this_week' => 'Questa Settimana',
+    'filter_this_month' => 'Questo Mese',
+
+    // Chiavi mancanti per i ruoli
+    'role_poet' => 'Poeta',
+    'role_judge' => 'Giudice',
+    'role_organizer' => 'Organizzatore',
+    'role_technician' => 'Tecnico',
+    'role_audience' => 'Pubblico',
+    'role_performer' => 'Performer',
+    'role_mc' => 'MC',
+    'role_host' => 'Ospite',
+    'role_volunteer' => 'Volontario',
+
+    // Chiavi mancanti per le azioni
+    'action_invite' => 'Invita',
+    'action_remove' => 'Rimuovi',
+    'action_edit' => 'Modifica',
+    'action_delete' => 'Elimina',
+    'action_view' => 'Visualizza',
+    'action_approve' => 'Approva',
+    'action_reject' => 'Rifiuta',
+    'action_accept' => 'Accetta',
+    'action_cancel' => 'Annulla',
+    'action_save' => 'Salva',
+    'action_publish' => 'Pubblica',
+    'action_draft' => 'Bozza',
+
+    // Chiavi mancanti per i messaggi informativi
+    'info_no_data' => 'Nessun dato disponibile',
+    'info_loading' => 'Caricamento...',
+    'info_no_results' => 'Nessun risultato trovato',
+    'info_select_option' => 'Seleziona un\'opzione',
+    'info_optional' => '(Opzionale)',
+    'info_required' => '(Obbligatorio)',
+    'info_help' => 'Aiuto',
+    'info_more' => 'Altro',
+    'info_less' => 'Meno',
+
+    // Chiavi mancanti per i form
+    'form_save' => 'Salva',
+    'form_save_draft' => 'Salva Bozza',
+    'form_publish' => 'Pubblica',
+    'form_cancel' => 'Annulla',
+    'form_reset' => 'Ripristina',
+    'form_submit' => 'Invia',
+    'form_loading' => 'Caricamento...',
+    'form_success' => 'Operazione completata con successo',
+    'form_error' => 'Si è verificato un errore',
+    'form_validation_error' => 'Correggi gli errori nel form',
+
+    // Chiavi mancanti per le date
+    'date_today' => 'Oggi',
+    'date_tomorrow' => 'Domani',
+    'date_yesterday' => 'Ieri',
+    'date_this_week' => 'Questa Settimana',
+    'date_next_week' => 'Prossima Settimana',
+    'date_this_month' => 'Questo Mese',
+    'date_next_month' => 'Prossimo Mese',
+    'date_custom' => 'Data Personalizzata',
+
+    // Chiavi mancanti per i messaggi di conferma
+    'confirm_delete' => 'Sei sicuro di voler eliminare questo elemento?',
+    'confirm_cancel' => 'Sei sicuro di voler annullare? Le modifiche non salvate andranno perse.',
+    'confirm_publish' => 'Sei sicuro di voler pubblicare questo evento?',
+    'confirm_save_draft' => 'Salvare come bozza?',
+
+    // Chiavi mancanti per i tooltip
+    'tooltip_help' => 'Clicca per l\'aiuto',
+    'tooltip_required' => 'Campo obbligatorio',
+    'tooltip_optional' => 'Campo opzionale',
+    'tooltip_edit' => 'Modifica',
+    'tooltip_delete' => 'Elimina',
+    'tooltip_view' => 'Visualizza',
+    'tooltip_invite' => 'Invita',
+    'tooltip_remove' => 'Rimuovi',
+
+    // Chiavi mancanti per le statistiche
+    'stats_total' => 'Totale',
+    'stats_confirmed' => 'Confermati',
+    'stats_pending' => 'In Attesa',
+    'stats_cancelled' => 'Cancellati',
+    'stats_online' => 'Online',
+    'stats_offline' => 'Fisici',
+    'stats_public' => 'Pubblici',
+    'stats_private' => 'Privati',
+
+    // Chiavi mancanti per le notifiche toast
+    'toast_success' => 'Operazione completata con successo',
+    'toast_error' => 'Si è verificato un errore',
+    'toast_warning' => 'Attenzione',
+    'toast_info' => 'Informazione',
+    'toast_loading' => 'Caricamento...',
+
+    // Chiavi mancanti per i messaggi di errore specifici
+    'error_network' => 'Errore di rete. Verifica la tua connessione.',
+    'error_server' => 'Errore del server. Riprova più tardi.',
+    'error_permission' => 'Non hai i permessi per eseguire questa azione.',
+    'error_validation' => 'Dati non validi. Controlla i campi evidenziati.',
+    'error_not_found' => 'Elemento non trovato.',
+    'error_unauthorized' => 'Accesso non autorizzato.',
+    'error_forbidden' => 'Accesso negato.',
+    'error_timeout' => 'Timeout della richiesta. Riprova.',
+    'error_unknown' => 'Errore sconosciuto. Contatta il supporto.',
+
+    // Chiavi mancanti per i messaggi di successo specifici
+    'success_saved' => 'Salvato con successo',
+    'success_updated' => 'Aggiornato con successo',
+    'success_deleted' => 'Eliminato con successo',
+    'success_published' => 'Pubblicato con successo',
+    'success_invited' => 'Invito inviato con successo',
+    'success_removed' => 'Rimosso con successo',
+    'success_created' => 'Creato con successo',
+    'success_uploaded' => 'Caricato con successo',
+    'success_downloaded' => 'Scaricato con successo',
+    'success_copied' => 'Copiato negli appunti',
 ];

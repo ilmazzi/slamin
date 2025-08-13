@@ -1162,11 +1162,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } else {
-                console.error('Recurrence elements not found!');
-                
-                document.querySelectorAll('[id*="recurrence"]').forEach(el => {
-                    
-                });
+                // Gli elementi di ricorrenza potrebbero non esistere in tutte le pagine
+                // Non è un errore critico, quindi rimuoviamo il console.error
+                // console.error('Recurrence elements not found!');
             }
 
             // ========================================
@@ -1210,11 +1208,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } else {
-                console.error('Online event elements not found!');
-                
-                document.querySelectorAll('[id*="online"]').forEach(el => {
-                    
-                });
+                // Gli elementi di eventi online potrebbero non esistere in tutte le pagine
+                // Non è un errore critico, quindi rimuoviamo il console.error
+                // console.error('Online event elements not found!');
             }
 
             // Assicurati che la mappa sia visibile di default per eventi fisici
@@ -1251,7 +1247,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } else {
-                console.error('Subtitle toggle elements not found!');
+                // Gli elementi del sottotitolo potrebbero non esistere in tutte le pagine
+                // Non è un errore critico, quindi rimuoviamo il console.error
+                // console.error('Subtitle toggle elements not found!');
             }
                 if (mapSection) {
                     mapSection.style.display = 'block';
@@ -1446,7 +1444,9 @@ function initializeMap() {
     
 
     if (!mapContainer) {
-        console.error('Map container not found!');
+        // Il container della mappa potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Map container not found!');
         return;
     }
 
@@ -1494,17 +1494,17 @@ function setupEventListeners() {
             nextStep();
         });
     } else {
-        console.error('Next step button not found!');
-        console.error('Available buttons:', document.querySelectorAll('button').length);
-        document.querySelectorAll('button').forEach((btn, index) => {
-            
-        });
+        // Il pulsante next step potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Next step button not found!');
     }
     if (prevStepBtn) {
         
         prevStepBtn.addEventListener('click', prevStep);
     } else {
-        console.error('Prev step button not found!');
+        // Il pulsante prev step potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Prev step button not found!');
     }
 
     // Direct step navigation (clicking on wizard steps)
@@ -2937,7 +2937,9 @@ function updatePreview() {
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
     } else {
-        console.error('eventPreview element not found');
+        // L'elemento eventPreview potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('eventPreview element not found');
     }
 }
 
@@ -3448,7 +3450,9 @@ function updatePreviewWithImage(imageSrc) {
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
     } else {
-        console.error('eventPreview element not found');
+        // L'elemento eventPreview potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('eventPreview element not found');
     }
 }
 
@@ -3525,7 +3529,7 @@ function displaySearchResults(users) {
                         ${user.roles.map(role => `<span class="badge bg-secondary me-1">${getRoleDisplayName(role)}</span>`).join('')}
                     </div>
                 </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addInvitation(${user.id}, '${user.name}', '${user.email}', ['${user.roles.join("','")}'])">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addInvitation(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', ['${user.roles.join("','")}'])">
                     <i class="ph ph-plus"></i> Invita
                 </button>
             </div>
@@ -3989,7 +3993,7 @@ function displayPrivateSuggestedUsers() {
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
+                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -4028,7 +4032,7 @@ function displayArtistSuggestedUsers() {
                             <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')"
+                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -4108,7 +4112,7 @@ function displayPrivateSearchResults(users) {
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="invitePrivateUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
+                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -4147,7 +4151,7 @@ function displayArtistSearchResults(users) {
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="inviteArtistUser(${user.id}, '${user.name}', '${user.email}', '${user.avatar_url}')">
+                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -4271,12 +4275,16 @@ function updatePrivateInvitedUsersDisplay() {
     const countElement = document.getElementById('privateInviteCount');
 
     if (!container) {
-        console.error('Container privateInvitedUsersList not found');
+        // Il container privateInvitedUsersList potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Container privateInvitedUsersList not found');
         return;
     }
 
     if (!countElement) {
-        console.error('Element privateInviteCount not found');
+        // L'elemento privateInviteCount potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Element privateInviteCount not found');
         return;
     }
 
@@ -4323,12 +4331,16 @@ function updateArtistInvitedUsersDisplay() {
     const countElement = document.getElementById('artistInviteCount');
 
     if (!container) {
-        console.error('Container artistInvitedUsersList not found');
+        // Il container artistInvitedUsersList potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Container artistInvitedUsersList not found');
         return;
     }
 
     if (!countElement) {
-        console.error('Element artistInviteCount not found');
+        // L'elemento artistInviteCount potrebbe non esistere in tutte le pagine
+        // Non è un errore critico, quindi rimuoviamo il console.error
+        // console.error('Element artistInviteCount not found');
         return;
     }
 
@@ -4433,7 +4445,7 @@ function searchUsers() {
                         <small class="text-muted">${user.email}</small>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-primary"
-                            onclick="selectUserForInvitation(${user.id}, '${user.name}', '${user.email}')">
+                            onclick="selectUserForInvitation(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}')">
                         <i class="ph ph-plus me-1"></i>Seleziona
                     </button>
                 </div>
@@ -5024,12 +5036,13 @@ function addGigPosition() {
     gigPositionCounter++;
     const positionId = `gig-position-${gigPositionCounter}`;
 
+    const positionTitle = '{{ __('events.gig_position', ['number' => ':number']) }}'.replace(':number', gigPositionCounter);
     const positionHtml = `
         <div class="card mb-3" id="${positionId}">
             <div class="card-header bg-light-success">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">
-                        <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_position', ['number' => '']) }}`.replace(':number', gigPositionCounter)
+                        <i class="ph ph-briefcase me-2"></i>${positionTitle}
                     </h6>
                     <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeGigPosition('${positionId}')">
                         <i class="ph ph-trash"></i>
