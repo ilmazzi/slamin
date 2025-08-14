@@ -262,12 +262,12 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
-                                <li class="menu-title"><span>PROSSIMAMENTE</span></li>
+                                <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
 
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- <?php echo e(__('common.didactic')); ?> Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted"><?php echo e(__('common.didactic')); ?></span>
@@ -276,7 +276,7 @@
                                 <?php endif; ?>
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- <?php echo e(__('common.forum')); ?> Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted"><?php echo e(__('common.forum')); ?></span>
@@ -285,7 +285,7 @@
                                 <?php endif; ?>
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- <?php echo e(__('common.fan_support')); ?> Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted"><?php echo e(__('common.fan_support')); ?></span>
@@ -294,7 +294,7 @@
                                 <?php endif; ?>
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- <?php echo e(__('common.wiki')); ?> Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted"><?php echo e(__('common.wiki')); ?></span>
