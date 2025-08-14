@@ -163,7 +163,7 @@ class ModerationController extends Controller
                            ->where('reportable_id', $id)
                            ->where('status', Report::STATUS_PENDING)
                            ->get();
-            
+
             foreach ($reports as $report) {
                 $report->update([
                     'status' => Report::STATUS_RESOLVED,
@@ -266,6 +266,12 @@ class ModerationController extends Controller
                 'approved' => PoemComment::approved()->count(),
                 'rejected' => PoemComment::rejected()->count(),
             ],
+            'reports' => [
+                'pending' => Report::pending()->count(),
+                'investigating' => Report::investigating()->count(),
+                'resolved' => Report::resolved()->count(),
+                'dismissed' => Report::dismissed()->count(),
+            ],
         ];
     }
 
@@ -295,7 +301,7 @@ class ModerationController extends Controller
             ->with(['user', 'reportable', 'resolver'])
             ->latest()
             ->get();
-        
+
         // Aggiungi i titoli corretti ai report
         foreach ($reports as $report) {
             if ($report->reportable) {
@@ -313,7 +319,7 @@ class ModerationController extends Controller
                 $report->content_title = 'Contenuto non trovato';
             }
         }
-        
+
         return $reports;
     }
 
@@ -349,12 +355,12 @@ class ModerationController extends Controller
                     'resolved_at' => now(),
                     'resolution_notes' => $notes
                 ]);
-                
+
                 // Rifiuta anche il contenuto segnalato
                 if ($report->reportable) {
                     $report->reportable->reject(Auth::user(), $notes);
                 }
-                
+
                 $message = 'Segnalazione risolta e contenuto rifiutato';
                 break;
 
@@ -592,7 +598,7 @@ class ModerationController extends Controller
     public function getReportedContentDetails(Request $request, $reportId)
     {
         $report = Report::with('reportable', 'user')->findOrFail($reportId);
-        
+
         if (!$report->reportable) {
             return response()->json([
                 'success' => false,
@@ -602,7 +608,7 @@ class ModerationController extends Controller
 
         $content = $report->reportable;
         $contentType = $report->content_type;
-        
+
         // Ottieni il titolo direttamente dal contenuto
         $contentTitle = null;
         if ($content) {
@@ -618,12 +624,12 @@ class ModerationController extends Controller
         } else {
             $contentTitle = 'Contenuto non trovato';
         }
-        
+
         // Ottieni il contenuto direttamente dal modello
         $contentBody = null;
         $contentUrl = null;
         $contentThumbnail = null;
-        
+
         if ($content) {
             // Contenuto
             $contentMethods = ['content', 'description', 'body', 'text'];
@@ -633,7 +639,7 @@ class ModerationController extends Controller
                     break;
                 }
             }
-            
+
             // URL
             $urlMethods = ['getContentUrl', 'getUrl', 'url'];
             foreach ($urlMethods as $method) {
@@ -642,7 +648,7 @@ class ModerationController extends Controller
                     break;
                 }
             }
-            
+
             // Thumbnail
             $thumbnailMethods = ['thumbnail', 'image', 'cover', 'thumbnail_url', 'image_url'];
             foreach ($thumbnailMethods as $method) {

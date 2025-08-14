@@ -215,4 +215,51 @@ class ArticleController extends Controller
 
         return redirect()->back()->with('success', 'Articolo rifiutato con successo!');
     }
+
+        /**
+     * Toggle featured status of an article
+     */
+    public function toggleFeatured(Request $request, Article $article)
+    {
+        // Debug log
+        \Illuminate\Support\Facades\Log::info('Toggle featured called', [
+            'article_id' => $article->id,
+            'article_title' => $article->title,
+            'current_featured' => $article->featured,
+            'request_featured' => $request->input('featured'),
+            'user_id' => Auth::id(),
+            'user_email' => Auth::user()->email
+        ]);
+
+        try {
+            $featured = $request->input('featured', !$article->featured);
+
+            // Check if we're trying to add a featured article and we're at the limit
+            if ($featured && !$article->featured) {
+                $currentFeaturedCount = Article::where('featured', true)->count();
+                if ($currentFeaturedCount >= 3) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Limite massimo di 3 articoli featured raggiunto. Rimuovi un articolo featured prima di aggiungerne un altro.'
+                    ], 400);
+                }
+            }
+
+            $article->update(['featured' => $featured]);
+
+            $message = $featured ? 'Articolo aggiunto ai featured con successo!' : 'Articolo rimosso dai featured con successo!';
+
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'featured' => $featured
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'aggiornamento dello stato featured: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

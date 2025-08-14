@@ -118,6 +118,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card hover-effect equal-card">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="ph ph-flag f-s-20"></i>
+                        </div>
+                    </div>
+                    <h6 class="mb-2 f-s-16 f-w-600">Segnalazioni</h6>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <span class="badge bg-warning f-s-12"><?php echo e($stats['reports']['pending']); ?> in attesa</span>
+                        <span class="badge bg-info f-s-12"><?php echo e($stats['reports']['investigating']); ?> in analisi</span>
+                        <span class="badge bg-success f-s-12"><?php echo e($stats['reports']['resolved']); ?> risolte</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Mobile-First Pending Content and Reports -->
@@ -315,7 +333,7 @@
     </div>
 
     <!-- Mobile-First Recent Reports -->
-    <?php if(isset($recentReports) && $recentReports->count() > 0): ?>
+    <?php if(isset($reports) && $reports->count() > 0): ?>
     <div class="row mt-4">
         <div class="col-12">
             <div class="card hover-effect">
@@ -327,7 +345,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <?php $__currentLoopData = $recentReports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-12 col-sm-6 col-lg-4">
                             <div class="border rounded p-3">
                                 <div class="d-flex flex-column gap-2">

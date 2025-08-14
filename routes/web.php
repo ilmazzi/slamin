@@ -85,16 +85,6 @@ Route::view('chart_js', 'chart_js')->name('chart_js');
 
 
 
-use App\Events\TestEvent;
-
-Route::get('/broadcast-test', function () {
-    return view('broadcast-test');
-});
-Route::get('/api/send-broadcast', function () {
-    broadcast(new TestEvent('Ciao dal backend!'));
-    return response()->json(['sent' => true]);
-});
-
 
 
 
@@ -1154,6 +1144,8 @@ Route::prefix('articles')->name('articles.')->group(function () {
 
     // Routes autenticate
     Route::middleware('auth')->group(function () {
+
+
         Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
         Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit');
         Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update');
@@ -1162,7 +1154,6 @@ Route::prefix('articles')->name('articles.')->group(function () {
                          // Azioni sugli articoli
                  Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish');
                  Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish');
-                 Route::post('/{article}/toggle-featured', [App\Http\Controllers\ArticleController::class, 'toggleFeatured'])->name('toggle-featured');
                  Route::post('/{id}/feature', [App\Http\Controllers\ArticleController::class, 'feature'])->name('feature');
                  Route::post('/{id}/unfeature', [App\Http\Controllers\ArticleController::class, 'unfeature'])->name('unfeature');
 
@@ -1223,46 +1214,18 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
     Route::post('/{article}/unpublish', [App\Http\Controllers\Admin\ArticleController::class, 'unpublish'])->name('unpublish');
     Route::post('/{article}/approve', [App\Http\Controllers\Admin\ArticleController::class, 'approve'])->name('approve');
     Route::post('/{article}/reject', [App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject');
+    Route::post('/{article}/toggle-featured', [App\Http\Controllers\Admin\ArticleController::class, 'toggleFeatured'])->name('admin.toggle-featured');
+
+    // Route di test temporanea
+    Route::get('/test-toggle-featured/{article}', function($article) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Route di test funziona',
+            'article_id' => $article,
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
+            'user_roles' => \Illuminate\Support\Facades\Auth::user()->getRoleNames()->toArray()
+        ]);
+    })->name('test-toggle-featured');
+
 });
-
-// Routes per categorie articoli (admin/editor)
-Route::prefix('admin/article-categories')->name('admin.article-categories.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\ArticleCategoryController::class, 'index'])->name('index');
-    Route::get('/create', [App\Http\Controllers\ArticleCategoryController::class, 'create'])->name('create');
-    Route::post('/', [App\Http\Controllers\ArticleCategoryController::class, 'store'])->name('store');
-    Route::get('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'show'])->name('show');
-    Route::get('/{category}/edit', [App\Http\Controllers\ArticleCategoryController::class, 'edit'])->name('edit');
-    Route::put('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'update'])->name('update');
-    Route::delete('/{category}', [App\Http\Controllers\ArticleCategoryController::class, 'destroy'])->name('destroy');
-});
-
-// Routes per tag articoli (admin/editor)
-Route::prefix('admin/article-tags')->name('admin.article-tags.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\ArticleTagController::class, 'index'])->name('index');
-    Route::get('/create', [App\Http\Controllers\ArticleTagController::class, 'create'])->name('create');
-    Route::post('/', [App\Http\Controllers\ArticleTagController::class, 'store'])->name('store');
-    Route::get('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'show'])->name('show');
-    Route::get('/{tag}/edit', [App\Http\Controllers\ArticleTagController::class, 'edit'])->name('edit');
-    Route::put('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'update'])->name('update');
-    Route::delete('/{tag}', [App\Http\Controllers\ArticleTagController::class, 'destroy'])->name('destroy');
-});
-
-// Routes per gestione segnalazioni (admin/editor)
-Route::prefix('admin/article-reports')->name('admin.article-reports.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\ArticleReportController::class, 'index'])->name('index');
-    Route::get('/{report}', [App\Http\Controllers\ArticleReportController::class, 'show'])->name('show');
-    Route::post('/{report}/review', [App\Http\Controllers\ArticleReportController::class, 'review'])->name('review');
-    Route::post('/bulk-review', [App\Http\Controllers\ArticleReportController::class, 'bulkReview'])->name('bulk-review');
-    Route::get('/stats', [App\Http\Controllers\ArticleReportController::class, 'getStats'])->name('stats');
-    Route::get('/pending-count', [App\Http\Controllers\ArticleReportController::class, 'getPendingCount'])->name('pending-count');
-});
-
-// API routes per articoli
-Route::prefix('api/articles')->middleware('auth')->group(function () {
-    Route::post('/likes/multiple-status', [App\Http\Controllers\ArticleLikeController::class, 'getMultipleStatus'])->name('api.articles.likes.multiple-status');
-    Route::get('/reports/reasons', [App\Http\Controllers\ArticleReportController::class, 'getReasons'])->name('api.articles.reports.reasons');
-});
-
-
-
 
