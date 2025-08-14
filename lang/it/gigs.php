@@ -63,6 +63,7 @@ return [
 
     // Stati
     'status' => [
+        'title' => 'Stato',
         'open' => 'Aperto',
         'closed' => 'Chiuso',
         'urgent' => 'Urgente',
@@ -74,6 +75,7 @@ return [
 
     // Filtri e ricerca
     'filters' => [
+        'title' => 'Filtri e Ricerca',
         'search' => 'Cerca ingaggi...',
         'filter_by_category' => 'Filtra per categoria',
         'filter_by_type' => 'Filtra per tipo',
@@ -98,35 +100,7 @@ return [
         'show_featured' => 'Solo in evidenza',
     ],
 
-    // Candidature
-    'applications' => [
-        'title' => 'Candidature',
-        'my_applications' => 'Le Mie Candidature',
-        'pending_applications' => 'Candidature in Attesa',
-        'accepted_applications' => 'Candidature Accettate',
-        'rejected_applications' => 'Candidature Rifiutate',
-        'apply' => 'Candidati',
-        'withdraw' => 'Ritira Candidatura',
-        'accept' => 'Accetta',
-        'reject' => 'Rifiuta',
-        'message' => 'Messaggio di Presentazione',
-        'message_placeholder' => 'Presentati e spiega perché sei perfetto per questa posizione...',
-        'experience' => 'Esperienza',
-        'experience_placeholder' => 'Descrivi la tua esperienza nel settore...',
-        'portfolio' => 'Portfolio',
-        'portfolio_placeholder' => 'Link al tuo portfolio, social media, ecc.',
-        'availability' => 'Disponibilità',
-        'availability_placeholder' => 'Specifica la tua disponibilità per l\'evento...',
-        'compensation_expectation' => 'Aspettative di Compenso',
-        'compensation_expectation_placeholder' => 'Specifica le tue aspettative di compenso...',
-        'submit_application' => 'Invia Candidatura',
-        'application_sent' => 'Candidatura inviata con successo!',
-        'application_error' => 'Errore durante l\'invio della candidatura',
-        'already_applied' => 'Hai già inviato una candidatura per questa posizione',
-        'application_withdrawn' => 'Candidatura ritirata con successo',
-        'withdraw_confirm' => 'Sei sicuro di voler ritirare la tua candidatura?',
-        'submit_application' => 'Invia Candidatura',
-    ],
+
 
     // Gestione
     'management' => [
@@ -180,6 +154,7 @@ return [
         'open_gigs_count' => 'Ingaggi Aperti',
         'urgent_gigs_count' => 'Ingaggi Urgenti',
         'total_applications' => 'Candidature Totali',
+        'applications' => 'Candidature',
         'pending_applications_count' => 'Candidature in Attesa',
         'accepted_applications_count' => 'Candidature Accettate',
         'my_applications_count' => 'Le Mie Candidature',
@@ -257,6 +232,7 @@ return [
 
     // Azioni
     'actions' => [
+        'read' => 'Leggi',
         'share' => 'Condividi',
         'close_gig' => 'Chiudi Ingaggio',
         'reopen_gig' => 'Riapri Ingaggio',
@@ -273,10 +249,14 @@ return [
 
     // Candidature
     'applications' => [
+        'title' => 'Candidature',
+        'my_applications' => 'Le Mie Candidature',
+        'pending_applications' => 'Candidature in Attesa',
+        'accepted_applications' => 'Candidature Accettate',
+        'rejected_applications' => 'Candidature Rifiutate',
         'manage_applications' => 'Gestisci Candidature',
         'applications_list' => 'Lista Candidature',
         'total_applications' => 'Candidature Totali',
-        'accepted_applications' => 'Candidature Accettate',
         'max_positions' => 'Posizioni Massime',
         'pending' => 'In Attesa',
         'accepted' => 'Accettata',
@@ -288,10 +268,12 @@ return [
         'compensation_expectation' => 'Aspettative Compenso',
         'accept' => 'Accetta',
         'reject' => 'Rifiuta',
+        'withdraw' => 'Ritira Candidatura',
         'confirm_accept' => 'Conferma Accettazione',
         'confirm_accept_text' => 'Sei sicuro di voler accettare questa candidatura?',
         'confirm_reject' => 'Conferma Rifiuto',
         'confirm_reject_text' => 'Sei sicuro di voler rifiutare questa candidatura?',
+        'withdraw_confirm' => 'Sei sicuro di voler ritirare la tua candidatura?',
         'no_applications' => 'Nessuna Candidatura',
         'no_applications_description' => 'Non ci sono ancora candidature per questo ingaggio.',
         'apply' => 'Candidati',

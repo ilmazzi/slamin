@@ -348,9 +348,9 @@
                             <a href="{{ route('gigs.my-gigs') }}" class="btn btn-light btn-sm">
                                 <i class="ph ph-briefcase me-2"></i>{{ __('gigs.my_gigs') }}
                             </a>
-                            <a href="{{ route('gigs.my-applications') }}" class="btn btn-light btn-sm">
-                                <i class="ph ph-user-plus me-2"></i>{{ __('gigs.applications.my_applications') }}
-                            </a>
+                                            <a href="{{ route('gigs.my-applications') }}" class="btn btn-light btn-sm">
+                    <i class="ph ph-user-plus me-2"></i>{{ __('gigs.applications.my_applications') }}
+                </a>
                         </div>
                     </div>
                 </div>

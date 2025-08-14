@@ -366,10 +366,10 @@
                                 <i class="ph ph-briefcase me-2"></i><?php echo e(__('gigs.my_gigs')); ?>
 
                             </a>
-                            <a href="<?php echo e(route('gigs.my-applications')); ?>" class="btn btn-light btn-sm">
-                                <i class="ph ph-user-plus me-2"></i><?php echo e(__('gigs.applications.my_applications')); ?>
+                                            <a href="<?php echo e(route('gigs.my-applications')); ?>" class="btn btn-light btn-sm">
+                    <i class="ph ph-user-plus me-2"></i><?php echo e(__('gigs.applications.my_applications')); ?>
 
-                            </a>
+                </a>
                         </div>
                     </div>
                 </div>
