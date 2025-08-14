@@ -130,29 +130,38 @@ $(document).on('click', '.header-toggle', function () {
       $("body").css("overflow", "hidden");
       $("html").css("overflow", "hidden");
       
-      // Su mobile, disabilita completamente SimpleBar
+      // Su mobile, disabilita SimpleBar e crea wrapper di scroll personalizzato
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && simpleBarElement.SimpleBar) {
         simpleBarElement.SimpleBar.unMount();
       }
       
-      // Su mobile, aggiungi event listener per scroll manuale
+      // Su mobile, crea un wrapper di scroll personalizzato
       const navElement = document.querySelector('nav .app-nav');
-      if (navElement) {
-        navElement.addEventListener('wheel', function(e) {
-          e.preventDefault();
-          this.scrollTop += e.deltaY;
-        }, { passive: false });
-        
-        navElement.addEventListener('touchmove', function(e) {
-          // Permetti scroll touch
-        }, { passive: true });
+      if (navElement && !navElement.querySelector('.mobile-scroll-wrapper')) {
+        const content = navElement.querySelector('.simplebar-content');
+        if (content) {
+          // Crea wrapper di scroll
+          const wrapper = document.createElement('div');
+          wrapper.className = 'mobile-scroll-wrapper';
+          wrapper.style.cssText = `
+            height: calc(100vh - 200px);
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+          `;
+          
+          // Sposta il contenuto nel wrapper
+          content.parentNode.insertBefore(wrapper, content);
+          wrapper.appendChild(content);
+        }
       }
     } else {
       $("body").css("overflow", "");
       $("html").css("overflow", "");
       
-      // Su mobile, riabilita SimpleBar
+      // Su mobile, riabilita SimpleBar e rimuovi wrapper personalizzato
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && !simpleBarElement.SimpleBar) {
         new SimpleBar(simpleBarElement, {
@@ -160,6 +169,20 @@ $(document).on('click', '.header-toggle', function () {
           scrollbarMinSize: 40,
           forceVisible: 'y'
         });
+      }
+      
+      // Su mobile, rimuovi wrapper di scroll personalizzato
+      const navElement = document.querySelector('nav .app-nav');
+      if (navElement) {
+        const wrapper = navElement.querySelector('.mobile-scroll-wrapper');
+        if (wrapper) {
+          const content = wrapper.querySelector('.simplebar-content');
+          if (content) {
+            // Riporta il contenuto alla posizione originale
+            wrapper.parentNode.insertBefore(content, wrapper);
+            wrapper.remove();
+          }
+        }
       }
     }
   } else {
