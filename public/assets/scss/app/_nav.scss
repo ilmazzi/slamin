@@ -20,7 +20,7 @@
 }
 
 .semi-nav {
-    &:not(.horizontal-sidebar):not(:hover) {
+    &:not(.horizontal-sidebar) {
         .app-logo {
             .logo {
                 width: 61px;
@@ -46,10 +46,55 @@
         }
     }
 
-    &:hover {
-        .toggle-semi-nav {
-            opacity: 1;
+    // Hover disabilitato - non mostra nulla
+    // &:hover {
+    //     .toggle-semi-nav {
+    //         opacity: 1;
+    //     }
+    // }
+}
+
+// Disabilita l'espansione della sidebar al hover
+.semi-nav:hover {
+    width: var(--semi-nav) !important;
+}
+
+// Nascondi completamente i testi del menu quando sidebar è collassata
+.semi-nav:not(.horizontal-sidebar) {
+    .app-nav .main-nav li a {
+        font-size: 0 !important;
+        text-align: center !important;
+    }
+    
+    .app-nav .main-nav li > a[aria-expanded=true] {
+        font-size: 0 !important;
+    }
+    
+    .app-nav .main-nav .menu-title span {
+        display: none !important;
+    }
+    
+    // Nascondi nome e ruolo, mostra solo avatar
+    .app-logo .nav-profile {
+        padding: 0.5rem !important;
+        
+        .h-45 {
+            height: 35px !important;
+            width: 35px !important;
         }
+        
+        h6, p {
+            display: none !important;
+        }
+        
+        .dropdown {
+            display: none !important;
+        }
+    }
+    
+    // Nascondi la freccia toggle-semi-nav
+    .toggle-semi-nav {
+        display: none !important;
     }
 }
 
@@ -74,15 +119,11 @@ nav {
             }
             
             .logo-icon {
-                display: none !important;
-                visibility: hidden !important;
-                opacity: 0 !important;
+                display: none;
             }
             
             .logo-full {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
+                display: block;
                 max-width: 200px;
                 width: 200px;
                 height: auto;

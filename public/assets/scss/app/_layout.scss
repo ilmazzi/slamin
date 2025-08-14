@@ -383,21 +383,22 @@ body.dark {
 
 
             &:not(.horizontal-sidebar) {
-                &:hover {
-                    &~.app-content {
-                        &:before {
-                            content: "";
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            z-index: 1002;
-                            width: 100vw;
-                            height: 100vh;
-                            background-color: rgba(var(--dark), 0.5);
-                            transition: var(--app-transition);
-                        }
-                    }
-                }
+                // Hover disabilitato - usiamo solo il toggle button
+                // &:hover {
+                //     &~.app-content {
+                //         &:before {
+                //             content: "";
+                //             position: fixed;
+                //             top: 0;
+                //             left: 0;
+                //             z-index: 1002;
+                //             width: 100vw;
+                //             height: 100vh;
+                //             background-color: rgba(var(--dark), 0.5);
+                //             transition: var(--app-transition);
+                //         }
+                //     }
+                // }
 
                 &~.app-content {
                     footer {
