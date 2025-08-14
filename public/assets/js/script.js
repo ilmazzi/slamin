@@ -128,8 +128,10 @@ $(document).on('click', '.header-toggle', function () {
     // Previeni lo scroll della pagina quando la sidebar è aperta
     if ($nav.hasClass("sidebar-open")) {
       $("body").css("overflow", "hidden");
+      $("html").css("overflow", "hidden");
     } else {
       $("body").css("overflow", "");
+      $("html").css("overflow", "");
     }
   } else {
     // Su desktop, toggle della classe semi-nav
@@ -145,6 +147,17 @@ $(document).on('click', '.sidebar-overlay', function () {
   $nav.removeClass("sidebar-open");
   $overlay.removeClass("active");
   $("body").css("overflow", "");
+  $("html").css("overflow", "");
+});
+
+// Previeni lo scroll della pagina quando si tocca la sidebar su mobile
+$(document).on('touchstart touchmove', 'nav.sidebar-open', function(e) {
+  e.stopPropagation();
+});
+
+// Previeni lo scroll della pagina quando si scrolla nella sidebar
+$(document).on('scroll', 'nav.sidebar-open .app-nav', function(e) {
+  e.stopPropagation();
 });
 
 $(".toggle-semi-nav").on("click", function () {

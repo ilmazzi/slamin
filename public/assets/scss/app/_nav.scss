@@ -839,24 +839,36 @@ nav.dark-sidebar {
         display: block !important;
     }
     
-    // Su mobile, riduci le dimensioni del loghino
-    nav .app-logo .logo .logo-icon {
-        max-width: 40px !important;
-        width: 40px !important;
+    // Su mobile, mostra sempre il logo orizzontale
+    nav .app-logo .logo .logo-full {
+        display: block !important;
+        max-width: 180px !important;
+        width: 180px !important;
         height: auto !important;
+    }
+    
+    nav .app-logo .logo .logo-icon {
+        display: none !important;
     }
     
     // Su mobile, assicura che lo scroll funzioni nella sidebar
     nav .app-nav {
-        height: calc(100vh - 162px) !important;
-        max-height: calc(100vh - 162px) !important;
-        overflow-y: auto !important;
+        height: calc(100vh - 200px) !important;
+        max-height: calc(100vh - 200px) !important;
+        overflow-y: scroll !important;
         overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     
     // Su mobile, previeni lo scroll della pagina quando si scrolla nella sidebar
     nav.sidebar-open {
         overflow: hidden !important;
+    }
+    
+    // Su mobile, assicura che il contenuto della sidebar sia scrollabile
+    nav .app-nav .simplebar-content {
+        height: 100% !important;
+        overflow-y: auto !important;
     }
     
     // Overlay per chiudere la sidebar cliccando fuori
