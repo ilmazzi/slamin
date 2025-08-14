@@ -45,14 +45,24 @@
                         <div class="col-12 col-sm-6">
                             <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
                                 <div>
-                                    <span class="badge bg-primary f-s-14">
-                                        <?php echo e(__('articles.current_featured')); ?>: <?php echo e($articles->where('featured', true)->count()); ?>/3
+                                    <?php
+                                        $featuredCount = $articles->where('featured', true)->count();
+                                        $isLimitReached = $featuredCount >= 3;
+                                    ?>
+                                    <span class="badge <?php echo e($isLimitReached ? 'bg-warning' : 'bg-primary'); ?> f-s-14">
+                                        <i class="ph ph-star me-1"></i>
+                                        <?php echo e(__('articles.current_featured')); ?>: <?php echo e($featuredCount); ?>/3
                                     </span>
                                 </div>
-                                <?php if($articles->where('featured', true)->count() >= 3): ?>
+                                <?php if($isLimitReached): ?>
                                     <div class="alert alert-warning py-2 mb-0">
                                         <i class="ph ph-warning me-2"></i>
                                         <span class="f-s-13"><?php echo e(__('articles.featured_limit_reached')); ?></span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="alert alert-success py-2 mb-0">
+                                        <i class="ph ph-check-circle me-2"></i>
+                                        <span class="f-s-13"><?php echo e(__('articles.featured_slots_available', ['count' => 3 - $featuredCount])); ?></span>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -119,110 +129,98 @@
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <!-- Mobile-First Articles Grid -->
-                    <div class="row g-3" id="articlesGrid">
+                <div class="card-body p-0">
+                    <!-- Mobile-First Articles List -->
+                    <div class="list-group list-group-flush" id="articlesList">
                         <?php $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-12 col-sm-6 col-lg-4">
-                            <div class="card hover-effect h-100">
-                                <!-- Article Image -->
-                                <div class="position-relative">
+                        <div class="list-group-item list-group-item-action p-0 border-0">
+                            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center p-3 hover-effect">
+                                <!-- Article Image (Small) -->
+                                <div class="flex-shrink-0 me-3 mb-2 mb-sm-0">
                                     <?php if($article->featured_image): ?>
                                         <img src="<?php echo e(Storage::url($article->featured_image)); ?>"
-                                             class="card-img-top" style="height: 200px; object-fit: cover;"
+                                             class="rounded" style="width: 60px; height: 60px; object-fit: cover;"
                                              alt="<?php echo e($article->title); ?>">
                                     <?php else: ?>
-                                        <div class="card-img-top d-flex align-items-center justify-content-center"
-                                             style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                            <i class="ph ph-newspaper text-white f-s-32"></i>
+                                        <div class="rounded d-flex align-items-center justify-content-center"
+                                             style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                            <i class="ph ph-newspaper text-white f-s-20"></i>
                                         </div>
                                     <?php endif; ?>
+                                </div>
 
-                                    <!-- Status Badge -->
-                                    <div class="position-absolute top-0 start-0 m-2">
+                                <!-- Article Content -->
+                                <div class="flex-grow-1 me-3 mb-3 mb-sm-0">
+                                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 mb-2">
+                                        <h6 class="mb-0 f-s-16 f-w-600 text-truncate"><?php echo e($article->title); ?></h6>
+                                        
+                                        <!-- Status Badge -->
                                         <span class="badge <?php echo e($article->status === 'published' ? 'bg-success' : ($article->status === 'draft' ? 'bg-secondary' : 'bg-warning')); ?> f-s-11">
                                             <?php echo e(ucfirst($article->status)); ?>
 
                                         </span>
-                                    </div>
-
-                                    <!-- Featured Badge -->
-                                    <?php if($article->featured): ?>
-                                    <div class="position-absolute top-0 end-0 m-2">
+                                        
+                                        <!-- Featured Badge -->
+                                        <?php if($article->featured): ?>
                                         <span class="badge bg-warning f-s-11">
                                             <i class="ph ph-star me-1"></i>Featured
                                         </span>
+                                        <?php endif; ?>
                                     </div>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div class="card-body d-flex flex-column">
-                                    <!-- Article Title -->
-                                    <h6 class="card-title f-s-16 f-w-600 mb-2"><?php echo e(Str::limit($article->title, 60)); ?></h6>
 
                                     <!-- Article Meta -->
-                                    <div class="mb-3">
-                                        <small class="text-muted f-s-12">
-                                            <i class="ph ph-user me-1"></i>
-                                            <?php echo e($article->user->name ?? 'N/A'); ?>
+                                    <div class="d-flex flex-wrap gap-3 text-muted f-s-12">
+                                        <span><i class="ph ph-user me-1"></i><?php echo e($article->user->name ?? 'N/A'); ?></span>
+                                        <span><i class="ph ph-calendar me-1"></i><?php echo e($article->created_at->format('d/m/Y')); ?></span>
+                                        <span><i class="ph ph-eye me-1"></i><?php echo e($article->views_count ?? 0); ?> visualizzazioni</span>
+                                    </div>
+                                </div>
 
-                                        </small>
-                                        <br>
-                                        <small class="text-muted f-s-12">
-                                            <i class="ph ph-calendar me-1"></i>
-                                            <?php echo e($article->created_at->format('d/m/Y')); ?>
-
-                                        </small>
-                                        <br>
-                                        <small class="text-muted f-s-12">
-                                            <i class="ph ph-eye me-1"></i>
-                                            <?php echo e($article->views_count ?? 0); ?> visualizzazioni
-                                        </small>
+                                <!-- Actions -->
+                                <div class="flex-shrink-0 d-flex flex-column flex-sm-row gap-2">
+                                    <!-- Primary Actions -->
+                                    <div class="d-flex gap-1">
+                                        <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
+                                           class="btn btn-outline-primary btn-sm"
+                                           target="_blank" title="Visualizza">
+                                            <i class="ph ph-eye f-s-14"></i>
+                                            <span class="d-none d-sm-inline">Vedi</span>
+                                        </a>
+                                        <a href="<?php echo e(route('admin.articles.edit', $article->id)); ?>"
+                                           class="btn btn-outline-info btn-sm"
+                                           title="Modifica">
+                                            <i class="ph ph-pencil f-s-14"></i>
+                                            <span class="d-none d-sm-inline">Modifica</span>
+                                        </a>
                                     </div>
 
-                                    <!-- Article Actions -->
-                                    <div class="mt-auto">
-                                        <div class="d-flex flex-column flex-sm-row gap-2">
-                                            <!-- Primary Actions -->
-                                            <div class="d-flex gap-1 flex-grow-1">
-                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
-                                                   class="btn btn-outline-primary btn-sm flex-fill"
-                                                   target="_blank" title="Visualizza">
-                                                    <i class="ph ph-eye f-s-14"></i>
-                                                    <span class="d-none d-sm-inline">Vedi</span>
-                                                </a>
-                                                <a href="<?php echo e(route('admin.articles.edit', $article->id)); ?>"
-                                                   class="btn btn-outline-info btn-sm flex-fill"
-                                                   title="Modifica">
-                                                    <i class="ph ph-pencil f-s-14"></i>
-                                                    <span class="d-none d-sm-inline">Modifica</span>
-                                                </a>
-                                            </div>
+                                    <!-- Secondary Actions -->
+                                    <div class="d-flex gap-1">
+                                        <!-- Featured Toggle -->
+                                        <?php
+                                            $featuredCount = $articles->where('featured', true)->count();
+                                            $canToggleFeatured = $article->featured || $featuredCount < 3;
+                                        ?>
+                                        <button class="btn btn-sm <?php echo e($article->featured ? 'btn-warning' : 'btn-outline-warning'); ?> <?php echo e(!$canToggleFeatured ? 'disabled' : ''); ?>"
+                                                onclick="<?php echo e($canToggleFeatured ? 'toggleFeatured(' . $article->id . ', ' . ($article->featured ? 'false' : 'true') . ')' : ''); ?>"
+                                                title="<?php echo e($article->featured ? 'Rimuovi da featured' : ($canToggleFeatured ? 'Rendi featured' : 'Limite di 3 articoli featured raggiunto')); ?>"
+                                                <?php echo e(!$canToggleFeatured ? 'disabled' : ''); ?>>
+                                            <i class="ph ph-star f-s-14"></i>
+                                        </button>
 
-                                            <!-- Secondary Actions -->
-                                            <div class="d-flex gap-1">
-                                                <!-- Featured Toggle -->
-                                                <button class="btn btn-sm <?php echo e($article->featured ? 'btn-warning' : 'btn-outline-warning'); ?>"
-                                                        onclick="toggleFeatured(<?php echo e($article->id); ?>, <?php echo e($article->featured ? 'false' : 'true'); ?>)"
-                                                        title="<?php echo e($article->featured ? 'Rimuovi da featured' : 'Rendi featured'); ?>">
-                                                    <i class="ph ph-star f-s-14"></i>
-                                                </button>
+                                        <!-- Status Toggle -->
+                                        <button class="btn btn-sm <?php echo e($article->status === 'published' ? 'btn-success' : 'btn-outline-success'); ?>"
+                                                onclick="toggleStatus(<?php echo e($article->id); ?>, '<?php echo e($article->status); ?>')"
+                                                title="<?php echo e($article->status === 'published' ? 'Metti in bozza' : 'Pubblica'); ?>">
+                                            <i class="ph ph-<?php echo e($article->status === 'published' ? 'eye-slash' : 'eye'); ?> f-s-14"></i>
+                                        </button>
 
-                                                <!-- Status Toggle -->
-                                                <button class="btn btn-sm <?php echo e($article->status === 'published' ? 'btn-success' : 'btn-outline-success'); ?>"
-                                                        onclick="toggleStatus(<?php echo e($article->id); ?>, '<?php echo e($article->status); ?>')"
-                                                        title="<?php echo e($article->status === 'published' ? 'Metti in bozza' : 'Pubblica'); ?>">
-                                                    <i class="ph ph-<?php echo e($article->status === 'published' ? 'eye-slash' : 'eye'); ?> f-s-14"></i>
-                                                </button>
-
-                                                <!-- Delete -->
-                                                <button class="btn btn-outline-danger btn-sm"
-                                                        onclick="deleteArticle(<?php echo e($article->id); ?>)"
-                                                        title="Elimina">
-                                                    <i class="ph ph-trash f-s-14"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        <!-- Delete -->
+                                        <button class="btn btn-outline-danger btn-sm"
+                                                onclick="deleteArticle(<?php echo e($article->id); ?>)"
+                                                title="Elimina">
+                                            <i class="ph ph-trash f-s-14"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -266,25 +264,25 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.style.minWidth = '44px';
         });
 
-        // Adjust card spacing for mobile
-        const cards = document.querySelectorAll('.card.hover-effect');
-        cards.forEach(card => {
-            card.classList.add('mb-3');
+        // Adjust list item spacing for mobile
+        const listItems = document.querySelectorAll('.list-group-item');
+        listItems.forEach(item => {
+            item.classList.add('border-bottom');
         });
     }
 
     // Responsive adjustments
     function adjustMobileLayout() {
         const isMobile = window.innerWidth < 768;
-        const articleCards = document.querySelectorAll('.card.hover-effect');
+        const listItems = document.querySelectorAll('.list-group-item');
 
         if (isMobile) {
-            articleCards.forEach(card => {
-                card.classList.add('mb-3');
+            listItems.forEach(item => {
+                item.classList.add('border-bottom');
             });
         } else {
-            articleCards.forEach(card => {
-                card.classList.remove('mb-3');
+            listItems.forEach(item => {
+                item.classList.remove('border-bottom');
             });
         }
     }
@@ -435,6 +433,7 @@ function toggleStatus(articleId, currentStatus) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 }
             })
@@ -502,6 +501,7 @@ function deleteArticle(articleId) {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 }
             })

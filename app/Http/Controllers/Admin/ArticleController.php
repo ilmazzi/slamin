@@ -91,8 +91,9 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified article
      */
-    public function edit(Article $article)
+    public function edit($article)
     {
+        $article = Article::findOrFail($article);
         $categories = ArticleCategory::active()->ordered()->get();
         $tags = ArticleTag::active()->ordered()->get();
 
@@ -102,8 +103,10 @@ class ArticleController extends Controller
     /**
      * Update the specified article
      */
-    public function update(Request $request, Article $article)
+    public function update(Request $request, $article)
     {
+        $article = Article::findOrFail($article);
+        
         $validated = $request->validate([
             'title' => 'required|array',
             'title.it' => 'required|string|max:255',
@@ -150,13 +153,22 @@ class ArticleController extends Controller
     /**
      * Remove the specified article
      */
-    public function destroy(Article $article)
+    public function destroy($article)
     {
+        $article = Article::findOrFail($article);
+        
         if ($article->featured_image) {
             Storage::disk('public')->delete($article->featured_image);
         }
 
         $article->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Articolo eliminato con successo!'
+            ]);
+        }
 
         return redirect()->route('admin.articles.index')
             ->with('success', 'Articolo eliminato con successo!');
@@ -165,10 +177,22 @@ class ArticleController extends Controller
     /**
      * Publish the specified article
      */
-    public function publish(Article $article)
+    public function publish($article)
     {
+        $article = Article::findOrFail($article);
+        
         $article->publish();
         $article->update(['moderation_status' => 'approved']);
+        
+        // Non rendere automaticamente featured quando pubblicato
+        // L'admin deve decidere manualmente quali articoli mettere in featured
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Articolo pubblicato con successo!'
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Articolo pubblicato con successo!');
     }
@@ -176,23 +200,46 @@ class ArticleController extends Controller
     /**
      * Unpublish the specified article
      */
-    public function unpublish(Article $article)
+    public function unpublish($article)
     {
+        $article = Article::findOrFail($article);
+        
         $article->unpublish();
+        
+        // Rimuovi automaticamente dai featured se era featured
+        if ($article->featured) {
+            $article->update(['featured' => false]);
+        }
 
-        return redirect()->back()->with('success', 'Articolo rimesso in bozza!');
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Articolo rimesso in bozza e rimosso dai featured!'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Articolo rimesso in bozza e rimosso dai featured!');
     }
 
     /**
      * Approve the specified article
      */
-    public function approve(Article $article)
+    public function approve($article)
     {
+        $article = Article::findOrFail($article);
+        
         $article->update([
             'moderation_status' => 'approved',
             'moderated_by' => Auth::id(),
             'moderated_at' => now(),
         ]);
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Articolo approvato con successo!'
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Articolo approvato con successo!');
     }
@@ -200,8 +247,10 @@ class ArticleController extends Controller
     /**
      * Reject the specified article
      */
-    public function reject(Request $request, Article $article)
+    public function reject(Request $request, $article)
     {
+        $article = Article::findOrFail($article);
+        
         $validated = $request->validate([
             'moderation_notes' => 'required|string|max:1000',
         ]);
@@ -212,6 +261,13 @@ class ArticleController extends Controller
             'moderated_by' => Auth::id(),
             'moderated_at' => now(),
         ]);
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Articolo rifiutato con successo!'
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Articolo rifiutato con successo!');
     }

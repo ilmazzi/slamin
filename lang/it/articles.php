@@ -124,6 +124,7 @@ return [
     'featured_limit_description' => 'Puoi selezionare massimo 3 articoli da mettere in evidenza nella homepage. Gli articoli in evidenza vengono mostrati in posizione prominente.',
     'current_featured' => 'Attualmente in Evidenza',
     'featured_limit_reached' => 'Hai già raggiunto il limite di 3 articoli in evidenza. Rimuovi un articolo dall\'evidenza prima di aggiungerne un altro.',
+    'featured_slots_available' => ':count slot disponibili per articoli in evidenza',
     'featured_articles' => 'Articoli in Evidenza',
 
     // Gestione articoli admin
@@ -133,6 +134,7 @@ return [
     'author' => 'Autore',
     'status' => 'Stato',
     'created_at' => 'Creato il',
+    'recent_articles' => 'Articoli Recenti',
     'recent_articles' => 'Articoli Recenti',
 
     // Categorie e tag

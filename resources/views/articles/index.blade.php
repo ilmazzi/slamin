@@ -24,40 +24,6 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <!-- Mobile-First Search -->
-                    <div class="mb-3">
-                        <form action="{{ route('articles.index') }}" method="GET" class="d-flex gap-2">
-                            <input type="text" name="search" class="form-control flex-grow-1"
-                                   placeholder="{{ __('articles.search_placeholder') }}"
-                                   value="{{ request('search') }}">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="ph ph-magnifying-glass"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Mobile-First Sorting -->
-                    <div class="mb-3">
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('sort'), ['sort' => 'newest'])) }}"
-                               class="btn btn-sm {{ request('sort', 'newest') === 'newest' ? 'btn-primary' : 'btn-light' }}">
-                                {{ __('articles.sort_newest') }}
-                            </a>
-                            <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('sort'), ['sort' => 'oldest'])) }}"
-                               class="btn btn-sm {{ request('sort') === 'oldest' ? 'btn-primary' : 'btn-light' }}">
-                                {{ __('articles.sort_oldest') }}
-                            </a>
-                            <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('sort'), ['sort' => 'popular'])) }}"
-                               class="btn btn-sm {{ request('sort') === 'popular' ? 'btn-primary' : 'btn-light' }}">
-                                {{ __('articles.sort_popular') }}
-                            </a>
-                            <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('sort'), ['sort' => 'title'])) }}"
-                               class="btn btn-sm {{ request('sort') === 'title' ? 'btn-primary' : 'btn-light' }}">
-                                {{ __('articles.sort_title') }}
-                            </a>
-                        </div>
-                    </div>
-
                     <!-- Mobile-First Category and Tag Filters -->
                     <div class="row g-3">
                         <div class="col-12 col-sm-6">
@@ -97,94 +63,102 @@
         <!-- Main Content - Mobile-First -->
         <div class="col-12 col-lg-8">
             @if(!$showAllArticles)
-                <!-- Mobile-First Featured Articles -->
+                <!-- Mobile-First Featured + Recent Articles Layout -->
                 @if($featuredArticles->count() > 0)
                     <div class="mb-4">
-                        <h4 class="mb-3 f-s-18 f-w-600">{{ __('articles.featured_articles') }}</h4>
-
-                        <!-- Featured Article 1 - Mobile-First -->
-                        @php $featured1 = $featuredArticles->get(0); @endphp
-                        <div class="card mb-4 hover-effect">
-                            <div class="card-body p-0">
-                                <div class="position-relative">
-                                    @if($featured1->featured_image)
-                                        <img src="{{ Storage::url($featured1->featured_image) }}"
-                                             class="w-100" style="height: 200px; object-fit: cover;"
-                                             alt="{{ $featured1->title }}">
-                                    @else
-                                        <div class="w-100 d-flex align-items-center justify-content-center"
-                                             style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                            <div class="text-center text-white">
-                                                <i class="ph ph-newspaper f-s-32 mb-2"></i>
-                                                <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
+                        <h4 class="mb-3 f-s-18 f-w-600">
+                            <i class="ph ph-star me-2"></i>
+                            {{ __('articles.featured_articles') }}
+                        </h4>
+                        
+                        <!-- Featured Article 1 + 2 Recent -->
+                        @if($featuredArticles->count() >= 1)
+                            <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
+                                <div class="col-12">
+                                    @php $featured1 = $featuredArticles->get(0); @endphp
+                                    <div class="card hover-effect">
+                                        <div class="position-relative">
+                                            @if($featured1->featured_image)
+                                                <img src="{{ Storage::url($featured1->featured_image) }}"
+                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                     alt="{{ $featured1->title }}">
+                                            @else
+                                                <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                    <div class="text-center text-white">
+                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
+                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="position-absolute top-0 start-0 m-3">
+                                                <span class="badge bg-warning">
+                                                    <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
+                                                </span>
                                             </div>
                                         </div>
-                                    @endif
-                                    <div class="position-absolute bottom-0 start-0 w-100 p-3"
-                                         style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
-                                        <div class="text-white">
-                                            <span class="badge bg-primary mb-2">{{ __('articles.featured') }}</span>
-                                            <h5 class="mb-2 f-s-16 f-w-600">{{ $featured1->title }}</h5>
-                                            <p class="mb-2 f-s-14">{{ Str::limit($featured1->excerpt, 100) }}</p>
-                                            <div class="d-flex flex-wrap align-items-center text-white-50 f-s-12">
-                                                <span>{{ __('articles.by') }}
-                                                    <a href="{{ route('user.show', $featured1->user) }}" class="text-white-50 text-decoration-none">
-                                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($featured1->user) }}"
-                                                             class="rounded-circle me-1" style="width: 16px; height: 16px;"
-                                                             alt="{{ $featured1->user->name }}">
-                                                        {{ $featured1->user->name }}
-                                                    </a>
-                                                </span>
-                                                <span class="mx-2">•</span>
-                                                <span>{{ $featured1->published_at->format('d/m/Y') }}</span>
-                                                <span class="mx-2">•</span>
-                                                <span>{{ __('articles.read_time', ['minutes' => $featured1->read_time]) }}</span>
+                                        <div class="card-body">
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured1->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured1->excerpt, 150) }}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex gap-3 text-muted f-s-12">
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured1->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured1->published_at->format('d/m/Y') }}</span>
+                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured1->views_count ?? 0 }}</span>
+                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured1->likes_count }}</span>
+                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured1->comments_count }}</span>
+                                                </div>
+                                                <a href="{{ route('articles.show', $featured1->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="p-3">
-                                    <a href="{{ route('articles.show', $featured1) }}" class="btn btn-primary btn-sm">
-                                        {{ __('articles.read_more') }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Additional Featured Articles - Mobile-First Grid -->
-                        @if($featuredArticles->count() > 1)
-                            <div class="row g-3">
-                                @foreach($featuredArticles->skip(1)->take(2) as $featured)
+                                
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 2)
                                     <div class="col-12 col-sm-6">
-                                        <div class="card h-100 hover-effect">
-                                            <div class="card-body p-0">
-                                                <div class="position-relative">
-                                                    @if($featured->featured_image)
-                                                        <img src="{{ Storage::url($featured->featured_image) }}"
-                                                             class="w-100" style="height: 150px; object-fit: cover;"
-                                                             alt="{{ $featured->title }}">
-                                                    @else
-                                                        <div class="w-100 d-flex align-items-center justify-content-center"
-                                                             style="height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                            <i class="ph ph-newspaper text-white f-s-24"></i>
+                                        @php $recent1 = $recentArticles->get(0); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent1->featured_image)
+                                                    <img src="{{ Storage::url($recent1->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent1->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
                                                         </div>
-                                                    @endif
-                                                    <div class="position-absolute bottom-0 start-0 w-100 p-2"
-                                                         style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
-                                                        <span class="badge bg-primary">{{ __('articles.featured') }}</span>
                                                     </div>
+                                                @endif
+                                                @if($recent1->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent1->category->name }}</span>
                                                 </div>
-                                                <div class="p-3">
-                                                    <h6 class="f-s-14 f-w-600 mb-2">
-                                                        <a href="{{ route('articles.show', $featured) }}" class="text-decoration-none">
-                                                            {{ Str::limit($featured->title, 60) }}
-                                                        </a>
-                                                    </h6>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent1->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent1->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent1->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent1->published_at->format('d/m/Y') }}</span>
+                                                    </div>
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <small class="text-muted f-s-12">
-                                                            {{ $featured->published_at->format('d/m/Y') }}
-                                                        </small>
-                                                        <a href="{{ route('articles.show', $featured) }}" class="btn btn-primary btn-sm">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent1->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent1->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent1->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent1->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
                                                         </a>
                                                     </div>
@@ -192,23 +166,350 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                    
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent2 = $recentArticles->get(1); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent2->featured_image)
+                                                    <img src="{{ Storage::url($recent2->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent2->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if($recent2->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent2->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent2->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent2->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent2->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent2->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent2->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent2->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent2->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent2->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+
+                        <!-- Featured Article 2 + 2 Recent -->
+                        @if($featuredArticles->count() >= 2)
+                            <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
+                                <div class="col-12">
+                                    @php $featured2 = $featuredArticles->get(1); @endphp
+                                    <div class="card hover-effect">
+                                        <div class="position-relative">
+                                            @if($featured2->featured_image)
+                                                <img src="{{ Storage::url($featured2->featured_image) }}"
+                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                     alt="{{ $featured2->title }}">
+                                            @else
+                                                <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                    <div class="text-center text-white">
+                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
+                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="position-absolute top-0 start-0 m-3">
+                                                <span class="badge bg-warning">
+                                                    <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured2->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured2->excerpt, 150) }}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex gap-3 text-muted f-s-12">
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured2->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured2->published_at->format('d/m/Y') }}</span>
+                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured2->views_count ?? 0 }}</span>
+                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured2->likes_count }}</span>
+                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured2->comments_count }}</span>
+                                                </div>
+                                                <a href="{{ route('articles.show', $featured2->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 4)
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent3 = $recentArticles->get(2); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent3->featured_image)
+                                                    <img src="{{ Storage::url($recent3->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent3->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if($recent3->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent3->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent3->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent3->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent3->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent3->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent3->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent3->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent3->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent3->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent4 = $recentArticles->get(3); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent4->featured_image)
+                                                    <img src="{{ Storage::url($recent4->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent4->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if($recent4->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent4->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent4->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent4->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent4->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent4->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent4->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent4->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent4->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent4->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+
+                        <!-- Featured Article 3 + 2 Recent -->
+                        @if($featuredArticles->count() >= 3)
+                            <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
+                                <div class="col-12">
+                                    @php $featured3 = $featuredArticles->get(2); @endphp
+                                    <div class="card hover-effect">
+                                        <div class="position-relative">
+                                            @if($featured3->featured_image)
+                                                <img src="{{ Storage::url($featured3->featured_image) }}"
+                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                     alt="{{ $featured3->title }}">
+                                            @else
+                                                <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                    <div class="text-center text-white">
+                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
+                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="position-absolute top-0 start-0 m-3">
+                                                <span class="badge bg-warning">
+                                                    <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured3->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured3->excerpt, 150) }}</p>
+                                            
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex gap-3 text-muted f-s-12">
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured3->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured3->published_at->format('d/m/Y') }}</span>
+                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured3->views_count ?? 0 }}</span>
+                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured3->likes_count }}</span>
+                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured3->comments_count }}</span>
+                                                </div>
+                                                <a href="{{ route('articles.show', $featured3->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 6)
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent5 = $recentArticles->get(4); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent5->featured_image)
+                                                    <img src="{{ Storage::url($recent5->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent5->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if($recent5->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent5->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent5->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent5->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent5->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent5->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent5->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent5->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent5->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent5->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent6 = $recentArticles->get(5); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent6->featured_image)
+                                                    <img src="{{ Storage::url($recent6->featured_image) }}"
+                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                         alt="{{ $recent6->title }}">
+                                                @else
+                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
+                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        <div class="text-center text-white">
+                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
+                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if($recent6->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent6->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent6->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent6->excerpt, 70) }}</p>
+                                                
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent6->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent6->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent6->views_count ?? 0 }}</span>
+                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent6->likes_count }}</span>
+                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent6->comments_count }}</span>
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent6->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         @endif
                     </div>
                 @endif
-
-                <!-- Mobile-First Recent Articles -->
-                <div class="mb-4">
-                    <h4 class="mb-3 f-s-18 f-w-600">{{ __('articles.recent_articles') }}</h4>
-                    <div class="row g-3">
-                        @foreach($recentArticles->take(6) as $article)
-                            <div class="col-12 col-sm-6 col-lg-4">
-                                @include('articles.partials.article-card', ['article' => $article])
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
             @else
                 <!-- Mobile-First All Articles Layout -->
                 <div class="mb-4">

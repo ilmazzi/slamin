@@ -1147,13 +1147,13 @@ Route::prefix('articles')->name('articles.')->group(function () {
 
 
         Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
-        Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit');
-        Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update');
-        Route::delete('/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('destroy');
+        Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit')->where('article', '[0-9]+');
+        Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update')->where('article', '[0-9]+');
+        Route::delete('/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('destroy')->where('article', '[0-9]+');
 
                          // Azioni sugli articoli
-                 Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish');
-                 Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish');
+                 Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish')->where('article', '[0-9]+');
+                 Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish')->where('article', '[0-9]+');
                  Route::post('/{id}/feature', [App\Http\Controllers\ArticleController::class, 'feature'])->name('feature');
                  Route::post('/{id}/unfeature', [App\Http\Controllers\ArticleController::class, 'unfeature'])->name('unfeature');
 
@@ -1207,13 +1207,13 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
     Route::get('/', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('index');
     Route::get('/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('create');
     Route::post('/', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('store');
-    Route::get('/{article}/edit', [App\Http\Controllers\Admin\ArticleController::class, 'edit'])->name('edit');
-    Route::put('/{article}', [App\Http\Controllers\Admin\ArticleController::class, 'update'])->name('update');
-    Route::delete('/{article}', [App\Http\Controllers\Admin\ArticleController::class, 'destroy'])->name('destroy');
-    Route::post('/{article}/publish', [App\Http\Controllers\Admin\ArticleController::class, 'publish'])->name('publish');
-    Route::post('/{article}/unpublish', [App\Http\Controllers\Admin\ArticleController::class, 'unpublish'])->name('unpublish');
-    Route::post('/{article}/approve', [App\Http\Controllers\Admin\ArticleController::class, 'approve'])->name('approve');
-    Route::post('/{article}/reject', [App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject');
+    Route::get('/{article}/edit', [App\Http\Controllers\Admin\ArticleController::class, 'edit'])->name('edit')->where('article', '[0-9]+');
+    Route::put('/{article}', [App\Http\Controllers\Admin\ArticleController::class, 'update'])->name('update')->where('article', '[0-9]+');
+    Route::delete('/{article}', [App\Http\Controllers\Admin\ArticleController::class, 'destroy'])->name('destroy')->where('article', '[0-9]+');
+    Route::post('/{article}/publish', [App\Http\Controllers\Admin\ArticleController::class, 'publish'])->name('publish')->where('article', '[0-9]+');
+    Route::post('/{article}/unpublish', [App\Http\Controllers\Admin\ArticleController::class, 'unpublish'])->name('unpublish')->where('article', '[0-9]+');
+    Route::post('/{article}/approve', [App\Http\Controllers\Admin\ArticleController::class, 'approve'])->name('approve')->where('article', '[0-9]+');
+    Route::post('/{article}/reject', [App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject')->where('article', '[0-9]+');
     Route::post('/{article}/toggle-featured', [App\Http\Controllers\Admin\ArticleController::class, 'toggleFeatured'])->name('toggle-featured')->where('article', '[0-9]+');
 
     // Route di test temporanea
