@@ -135,6 +135,12 @@ $(document).on('click', '.header-toggle', function () {
       if (simpleBarElement && simpleBarElement.SimpleBar) {
         simpleBarElement.SimpleBar.unMount();
       }
+      
+      // Rimuovi anche la classe simplebar-scrollable-y
+      const scrollableElement = document.querySelector('.simplebar-scrollable-y');
+      if (scrollableElement) {
+        scrollableElement.style.display = 'none';
+      }
     } else {
       $("body").css("overflow", "");
       $("html").css("overflow", "");
@@ -147,6 +153,12 @@ $(document).on('click', '.header-toggle', function () {
           scrollbarMinSize: 40,
           forceVisible: 'y'
         });
+      }
+      
+      // Ripristina la classe simplebar-scrollable-y
+      const scrollableElement = document.querySelector('.simplebar-scrollable-y');
+      if (scrollableElement) {
+        scrollableElement.style.display = '';
       }
     }
   } else {

@@ -851,7 +851,7 @@ nav.dark-sidebar {
         display: none !important;
     }
     
-    // Su mobile, disabilita SimpleBar e usa scroll nativo
+    // Su mobile, disabilita completamente SimpleBar
     nav .app-nav {
         height: calc(100vh - 200px) !important;
         max-height: calc(100vh - 200px) !important;
@@ -860,28 +860,26 @@ nav.dark-sidebar {
         -webkit-overflow-scrolling: touch !important;
     }
     
-    // Su mobile, nascondi SimpleBar
-    nav .app-nav .simplebar-scrollable-y {
-        overflow: visible !important;
-    }
-    
-    nav .app-nav .simplebar-wrapper {
-        overflow: visible !important;
-    }
-    
-    nav .app-nav .simplebar-mask {
-        overflow: visible !important;
-    }
-    
-    nav .app-nav .simplebar-offset {
-        overflow: visible !important;
-    }
-    
+    // Su mobile, rimuovi tutti gli elementi SimpleBar
+    nav .app-nav .simplebar-scrollable-y,
+    nav .app-nav .simplebar-wrapper,
+    nav .app-nav .simplebar-mask,
+    nav .app-nav .simplebar-offset,
     nav .app-nav .simplebar-content-wrapper {
-        overflow: visible !important;
+        display: none !important;
     }
     
+    // Su mobile, mostra direttamente il contenuto
     nav .app-nav .simplebar-content {
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+    
+    // Su mobile, assicura che il contenuto sia scrollabile
+    nav .app-nav .simplebar-content > div {
+        height: auto !important;
         overflow: visible !important;
     }
     
