@@ -129,9 +129,25 @@ $(document).on('click', '.header-toggle', function () {
     if ($nav.hasClass("sidebar-open")) {
       $("body").css("overflow", "hidden");
       $("html").css("overflow", "hidden");
+      
+      // Disabilita SimpleBar su mobile
+      const simpleBarElement = document.getElementById('app-simple-bar');
+      if (simpleBarElement && simpleBarElement.SimpleBar) {
+        simpleBarElement.SimpleBar.unMount();
+      }
     } else {
       $("body").css("overflow", "");
       $("html").css("overflow", "");
+      
+      // Riabilita SimpleBar su mobile
+      const simpleBarElement = document.getElementById('app-simple-bar');
+      if (simpleBarElement && !simpleBarElement.SimpleBar) {
+        new SimpleBar(simpleBarElement, {
+          autoHide: false,
+          scrollbarMinSize: 40,
+          forceVisible: 'y'
+        });
+      }
     }
   } else {
     // Su desktop, toggle della classe semi-nav
