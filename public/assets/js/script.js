@@ -130,35 +130,36 @@ $(document).on('click', '.header-toggle', function () {
       $("body").css("overflow", "hidden");
       $("html").css("overflow", "hidden");
       
-      // Disabilita SimpleBar su mobile
+      // Su mobile, disabilita completamente SimpleBar
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && simpleBarElement.SimpleBar) {
         simpleBarElement.SimpleBar.unMount();
       }
       
-      // Rimuovi anche la classe simplebar-scrollable-y
-      const scrollableElement = document.querySelector('.simplebar-scrollable-y');
-      if (scrollableElement) {
-        scrollableElement.style.display = 'none';
+      // Su mobile, aggiungi event listener per scroll manuale
+      const navElement = document.querySelector('nav .app-nav');
+      if (navElement) {
+        navElement.addEventListener('wheel', function(e) {
+          e.preventDefault();
+          this.scrollTop += e.deltaY;
+        }, { passive: false });
+        
+        navElement.addEventListener('touchmove', function(e) {
+          // Permetti scroll touch
+        }, { passive: true });
       }
     } else {
       $("body").css("overflow", "");
       $("html").css("overflow", "");
       
-      // Riabilita SimpleBar su mobile
+      // Su mobile, riabilita SimpleBar
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && !simpleBarElement.SimpleBar) {
         new SimpleBar(simpleBarElement, {
-          autoHide: false,
+          autoHide: true,
           scrollbarMinSize: 40,
           forceVisible: 'y'
         });
-      }
-      
-      // Ripristina la classe simplebar-scrollable-y
-      const scrollableElement = document.querySelector('.simplebar-scrollable-y');
-      if (scrollableElement) {
-        scrollableElement.style.display = '';
       }
     }
   } else {
