@@ -124,6 +124,13 @@ $(document).on('click', '.header-toggle', function () {
     // Su mobile, toggle della classe sidebar-open
     $nav.toggleClass("sidebar-open");
     $overlay.toggleClass("active");
+    
+    // Previeni lo scroll della pagina quando la sidebar è aperta
+    if ($nav.hasClass("sidebar-open")) {
+      $("body").css("overflow", "hidden");
+    } else {
+      $("body").css("overflow", "");
+    }
   } else {
     // Su desktop, toggle della classe semi-nav
     $nav.toggleClass("semi-nav");
@@ -137,6 +144,7 @@ $(document).on('click', '.sidebar-overlay', function () {
   
   $nav.removeClass("sidebar-open");
   $overlay.removeClass("active");
+  $("body").css("overflow", "");
 });
 
 $(".toggle-semi-nav").on("click", function () {
