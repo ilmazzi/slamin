@@ -60,7 +60,7 @@
 
     <!--customizer-->
     <div id="customizer"></div>
-
+@routes
     <!-- scripts start-->
     @include('layout.script')
     <!-- scripts end-->

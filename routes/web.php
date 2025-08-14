@@ -1214,7 +1214,7 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
     Route::post('/{article}/unpublish', [App\Http\Controllers\Admin\ArticleController::class, 'unpublish'])->name('unpublish');
     Route::post('/{article}/approve', [App\Http\Controllers\Admin\ArticleController::class, 'approve'])->name('approve');
     Route::post('/{article}/reject', [App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject');
-    Route::post('/{article}/toggle-featured', [App\Http\Controllers\Admin\ArticleController::class, 'toggleFeatured'])->name('admin.toggle-featured');
+    Route::post('/{article}/toggle-featured', [App\Http\Controllers\Admin\ArticleController::class, 'toggleFeatured'])->name('toggle-featured')->where('article', '[0-9]+');
 
     // Route di test temporanea
     Route::get('/test-toggle-featured/{article}', function($article) {
@@ -1226,6 +1226,8 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
             'user_roles' => \Illuminate\Support\Facades\Auth::user()->getRoleNames()->toArray()
         ]);
     })->name('test-toggle-featured');
+
+
 
 });
 

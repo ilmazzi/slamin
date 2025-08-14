@@ -335,6 +335,8 @@ function applyFilters() {
 
 // Toggle featured status
 function toggleFeatured(articleId, featured) {
+    console.log('Toggle featured called:', { articleId, featured });
+
     Swal.fire({
         title: featured ? 'Rendi Featured' : 'Rimuovi da Featured',
         text: featured ? 'Vuoi rendere questo articolo featured?' : 'Vuoi rimuovere questo articolo dai featured?',
@@ -356,7 +358,8 @@ function toggleFeatured(articleId, featured) {
                 }
             });
 
-            fetch(`/admin/articles/${articleId}/toggle-featured`, {
+            console.log('Fetching:', `/admin/articles/${articleId}/toggle-featured`);
+            fetch(route("admin.articles.toggle-featured", articleId), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

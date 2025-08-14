@@ -355,7 +355,7 @@ function toggleFeatured(articleId, featured) {
             });
 
             console.log('Fetching:', `/admin/articles/${articleId}/toggle-featured`);
-            fetch(`/admin/articles/${articleId}/toggle-featured`, {
+            fetch(route("admin.articles.toggle-featured", articleId), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

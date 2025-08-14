@@ -219,8 +219,11 @@ class ArticleController extends Controller
         /**
      * Toggle featured status of an article
      */
-    public function toggleFeatured(Request $request, Article $article)
+    public function toggleFeatured(Request $request, $article)
     {
+        // Find the article by ID
+        $article = Article::findOrFail($article);
+        
         // Debug log
         \Illuminate\Support\Facades\Log::info('Toggle featured called', [
             'article_id' => $article->id,
