@@ -32,6 +32,8 @@
         @include('layout.sidebar')
         <!-- Menu Navigation end -->
 
+        <!-- Sidebar Overlay per mobile -->
+        <div class="sidebar-overlay"></div>
 
         <div class="app-content">
             <!-- Header Section start -->

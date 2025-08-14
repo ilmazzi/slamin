@@ -32,6 +32,8 @@
         <?php echo $__env->make('layout.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         <!-- Menu Navigation end -->
 
+        <!-- Sidebar Overlay per mobile -->
+        <div class="sidebar-overlay"></div>
 
         <div class="app-content">
             <!-- Header Section start -->

@@ -820,3 +820,39 @@ nav.dark-sidebar {
         }
     }
 }
+
+// Su mobile, nascondi completamente la sidebar di default
+@media (max-width: 768px) {
+    nav {
+        display: none !important;
+        z-index: 1005 !important;
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: var(--sidebar-width) !important;
+        height: 100vh !important;
+    }
+    
+    // Quando la sidebar è aperta su mobile
+    nav.sidebar-open {
+        display: block !important;
+    }
+    
+    // Overlay per chiudere la sidebar cliccando fuori
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1004;
+        display: none;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+

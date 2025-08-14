@@ -116,8 +116,29 @@ function copyvalue() {
 
 // >>-- 04 Sidebar toggle js --<<
 $(document).on('click', '.header-toggle', function () {
-  $("nav").toggleClass("semi-nav");
+  const $nav = $("nav");
+  const $overlay = $(".sidebar-overlay");
+  const isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    // Su mobile, toggle della classe sidebar-open
+    $nav.toggleClass("sidebar-open");
+    $overlay.toggleClass("active");
+  } else {
+    // Su desktop, toggle della classe semi-nav
+    $nav.toggleClass("semi-nav");
+  }
 });
+
+// Chiudi sidebar cliccando sull'overlay
+$(document).on('click', '.sidebar-overlay', function () {
+  const $nav = $("nav");
+  const $overlay = $(".sidebar-overlay");
+  
+  $nav.removeClass("sidebar-open");
+  $overlay.removeClass("active");
+});
+
 $(".toggle-semi-nav").on("click", function () {
   $("nav").removeClass("semi-nav");
 });
