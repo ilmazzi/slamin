@@ -2,10 +2,10 @@
 <nav class="vertical-sidebar">
     <div class="app-logo">
         <a class="logo d-inline-block" href="/">
-            <!-- Logo orizzontale per desktop -->
-            <img alt="Slam In" src="<?php echo e(asset('../assets/images/Logo_orizzontale_nerosubianco.png')); ?>" class="logo-full w-75">
-            <!-- Loghino per mobile/sidebar collassata -->
+            <!-- Loghino per sidebar collassata -->
             <img alt="Slam In" src="<?php echo e(asset('../assets/images/Loghino_nerosubianco.png')); ?>" class="logo-icon">
+            <!-- Logo orizzontale per sidebar espansa -->
+            <img alt="Slam In" src="<?php echo e(asset('../assets/images/Logo_orizzontale_nerosubianco.png')); ?>" class="logo-full">
         </a>
 
         <span class="bg-light-primary toggle-semi-nav d-flex-center">

@@ -135,7 +135,8 @@ return [
     'status' => 'Stato',
     'created_at' => 'Creato il',
     'recent_articles' => 'Articoli Recenti',
-    'recent_articles' => 'Articoli Recenti',
+    'show_filters' => 'Mostra Filtri',
+    'hide_filters' => 'Nascondi Filtri',
 
     // Categorie e tag
     'categories' => 'Categorie',

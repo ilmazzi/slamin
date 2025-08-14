@@ -58,7 +58,7 @@ $(document).ready(function() {
 <script src="{{asset('assets/js/tooltips_popovers.js')}}"></script>
 
 <!-- Sidebar logo responsive -->
-<script src="{{asset('assets/js/sidebar-logo.js')}}"></script>
+
 
 <!-- {{ __('wishlist.wishlist') }} Management -->
 <script src="{{asset('assets/js/wishlist.js')}}"></script>

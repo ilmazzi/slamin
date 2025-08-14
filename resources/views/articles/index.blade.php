@@ -58,10 +58,21 @@
         </div>
     </div>
 
+    <!-- Mobile-First Sidebar Toggle Button -->
+    <div class="row mb-3 d-lg-none">
+        <div class="col-12">
+            <button class="btn btn-outline-primary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
+                <i class="ph ph-funnel me-2"></i>
+                {{ __('articles.show_filters') }}
+                <i class="ph ph-chevron-down ms-2"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Mobile-First Content Layout -->
     <div class="row">
         <!-- Main Content - Mobile-First -->
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-8 order-1 order-lg-1">
             @if(!$showAllArticles)
                 <!-- Mobile-First Featured + Recent Articles Layout -->
                 @if($featuredArticles->count() > 0)
@@ -552,7 +563,7 @@
         </div>
 
         <!-- Mobile-First Sidebar -->
-        <div class="col-12 col-lg-4 mt-4 mt-lg-0">
+        <div class="col-12 col-lg-4 order-2 order-lg-2 collapse d-lg-block" id="sidebarCollapse">
             <!-- Mobile-First Search Widget -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -664,6 +675,60 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+/* Mobile-First Logo Responsive Fix */
+@media (max-width: 767px) {
+    #sidebarCollapse .app-logo .logo-full {
+        max-width: 150px !important;
+        width: 150px !important;
+        height: auto !important;
+    }
+    
+    #sidebarCollapse .app-logo .logo-icon {
+        max-width: 80px !important;
+        width: 80px !important;
+        height: auto !important;
+    }
+    
+    #sidebarCollapse .app-logo .logo {
+        padding: 0.5rem !important;
+        text-align: center !important;
+    }
+    
+    #sidebarCollapse .nav-profile {
+        padding: 0.5rem !important;
+    }
+    
+    #sidebarCollapse .nav-profile .h-45 {
+        height: 35px !important;
+        width: 35px !important;
+    }
+    
+    #sidebarCollapse .nav-profile h6 {
+        font-size: 0.875rem !important;
+    }
+    
+    #sidebarCollapse .nav-profile p {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* Desktop logo normal size */
+@media (min-width: 768px) {
+    #sidebarCollapse .app-logo .logo-full {
+        max-width: 200px !important;
+        width: 200px !important;
+    }
+    
+    #sidebarCollapse .app-logo .logo-icon {
+        max-width: 120px !important;
+        width: 120px !important;
+    }
+}
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -677,17 +742,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Mobile-First Sidebar Toggle Handling
+    const sidebarToggle = document.querySelector('[data-bs-toggle="collapse"]');
+    const sidebarCollapse = document.getElementById('sidebarCollapse');
+    
+    if (sidebarToggle && sidebarCollapse) {
+        sidebarCollapse.addEventListener('show.bs.collapse', function() {
+            sidebarToggle.innerHTML = '<i class="ph ph-funnel me-2"></i>{{ __("articles.hide_filters") }}<i class="ph ph-chevron-up ms-2"></i>';
+        });
+        
+        sidebarCollapse.addEventListener('hide.bs.collapse', function() {
+            sidebarToggle.innerHTML = '<i class="ph ph-funnel me-2"></i>{{ __("articles.show_filters") }}<i class="ph ph-chevron-down ms-2"></i>';
+        });
+    }
+
     // Mobile-First Responsive Adjustments
     function adjustMobileLayout() {
         const isMobile = window.innerWidth < 768;
         const featuredCards = document.querySelectorAll('.card.hover-effect');
+        const sidebarCards = document.querySelectorAll('#sidebarCollapse .card');
 
         if (isMobile) {
             featuredCards.forEach(card => {
                 card.classList.add('mb-3');
             });
+            sidebarCards.forEach(card => {
+                card.classList.add('mb-3');
+            });
         } else {
             featuredCards.forEach(card => {
+                card.classList.remove('mb-3');
+            });
+            sidebarCards.forEach(card => {
                 card.classList.remove('mb-3');
             });
         }

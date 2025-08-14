@@ -58,7 +58,7 @@ $(document).ready(function() {
 <script src="<?php echo e(asset('assets/js/tooltips_popovers.js')); ?>"></script>
 
 <!-- Sidebar logo responsive -->
-<script src="<?php echo e(asset('assets/js/sidebar-logo.js')); ?>"></script>
+
 
 <!-- <?php echo e(__('wishlist.wishlist')); ?> Management -->
 <script src="<?php echo e(asset('assets/js/wishlist.js')); ?>"></script>

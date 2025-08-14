@@ -25,6 +25,23 @@
             .logo {
                 width: 61px;
                 overflow: hidden;
+                
+                .d-flex {
+                    justify-content: center;
+                }
+                
+                .logo-full {
+                    display: none !important;
+                }
+                
+                .logo-icon {
+                    display: block !important;
+                    max-width: 50px !important;
+                    width: 50px !important;
+                    height: auto !important;
+                    margin-right: 0 !important;
+                    object-fit: contain !important;
+                }
             }
         }
     }
@@ -51,6 +68,28 @@ nav {
         .logo {
             padding: 1rem ;
             width: 100%;
+            
+            .d-flex {
+                width: 100%;
+            }
+            
+            .logo-icon {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            .logo-full {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                max-width: 200px;
+                width: 200px;
+                height: auto;
+                flex-shrink: 0;
+                object-fit: contain;
+            }
+            
             img {
                 width: 100%;
                 max-width: 250px;
