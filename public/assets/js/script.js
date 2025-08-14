@@ -141,7 +141,7 @@ $(document).on('click', '.header-toggle', function () {
       if (navElement && !navElement.querySelector('.mobile-scroll-wrapper')) {
         const content = navElement.querySelector('.simplebar-content');
         if (content) {
-          // Crea wrapper di scroll
+          // Crea wrapper di scroll con padding bottom per la barra degli indirizzi
           const wrapper = document.createElement('div');
           wrapper.className = 'mobile-scroll-wrapper';
           wrapper.style.cssText = `
@@ -150,11 +150,21 @@ $(document).on('click', '.header-toggle', function () {
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            padding-bottom: 80px;
           `;
           
           // Sposta il contenuto nel wrapper
           content.parentNode.insertBefore(wrapper, content);
           wrapper.appendChild(content);
+          
+          // Assicurati che tutte le voci del menu siano visibili su mobile
+          const menuItems = wrapper.querySelectorAll('li');
+          menuItems.forEach(item => {
+            if (item.classList.contains('d-none') && item.classList.contains('d-sm-block')) {
+              item.classList.remove('d-none', 'd-sm-block');
+              item.classList.add('d-block');
+            }
+          });
         }
       }
     } else {

@@ -240,12 +240,12 @@
                                     </a>
                                 </li>
                                 @endauth
-                                <li class="menu-title"><span>PROSSIMAMENTE</span></li>
+                                <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
 
                                 @auth
                                 <!-- {{ __('common.didactic') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.didactic') }}</span>
@@ -254,7 +254,7 @@
                                 @endauth
                                 @auth
                                 <!-- {{ __('common.forum') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.forum') }}</span>
@@ -263,7 +263,7 @@
                                 @endauth
                                 @auth
                                 <!-- {{ __('common.fan_support') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.fan_support') }}</span>
@@ -272,7 +272,7 @@
                                 @endauth
                                 @auth
                                 <!-- {{ __('common.wiki') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-sm-block">
+                                <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.wiki') }}</span>

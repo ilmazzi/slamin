@@ -883,6 +883,18 @@ nav.dark-sidebar {
         padding: 0 !important;
     }
     
+    // Su mobile, stile per il wrapper di scroll personalizzato
+    nav .app-nav .mobile-scroll-wrapper {
+        padding-bottom: 80px !important;
+    }
+    
+    // Su mobile, assicura che tutte le voci del menu siano visibili
+    nav .app-nav .simplebar-content ul.main-nav {
+        padding-bottom: 20px !important;
+    }
+    
+
+    
     // Su mobile, previeni lo scroll della pagina quando si scrolla nella sidebar
     nav.sidebar-open {
         overflow: hidden !important;
