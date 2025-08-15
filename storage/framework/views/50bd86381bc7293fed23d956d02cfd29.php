@@ -62,7 +62,7 @@
 
     <!--customizer-->
     <div id="customizer"></div>
-<?php echo app('Tighten\Ziggy\BladeRouteGenerator')->generate(); ?>
+@routes
     <!-- scripts start-->
     <?php echo $__env->make('layout.script', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- scripts end-->

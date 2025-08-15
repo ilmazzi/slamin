@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', 'Dashboard Moderazione'); ?>
 
-@section('title', 'Dashboard Moderazione')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="page-wrapper">
     <div class="page-content">
         <!-- Breadcrumb -->
@@ -11,8 +9,8 @@
                 <h4 class="main-title f-s-18 f-w-600">Dashboard Moderazione</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
-                        <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                            <span><i class="ph-duotone ph-gauge f-s-16"></i> {{ __('dashboard.dashboard') }}</span>
+                        <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
+                            <span><i class="ph-duotone ph-gauge f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?></span>
                         </a>
                     </li>
                     <li class="active">
@@ -40,11 +38,11 @@
                             <i class="ph-duotone ph-question me-2"></i>
                             Guida Moderazione
                         </button>
-                        <a href="{{ route('admin.moderation.settings') }}" class="btn btn-outline-primary btn-sm">
+                        <a href="<?php echo e(route('admin.moderation.settings')); ?>" class="btn btn-outline-primary btn-sm">
                             <i class="ph-duotone ph-gear me-2"></i>
                             Impostazioni
                         </a>
-                        <a href="{{ route('admin.moderation.index', ['type' => 'all', 'status' => 'pending']) }}" class="btn btn-primary btn-sm">
+                        <a href="<?php echo e(route('admin.moderation.index', ['type' => 'all', 'status' => 'pending'])); ?>" class="btn btn-primary btn-sm">
                             <i class="ph-duotone ph-list-checks me-2"></i>
                             Contenuti in Attesa
                         </a>
@@ -54,7 +52,7 @@
         </div>
 
         <!-- Statistics Cards -->
-        @if(isset($stats))
+        <?php if(isset($stats)): ?>
         <div class="row g-3 mb-4">
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="card hover-effect equal-card">
@@ -66,9 +64,9 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Video</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['videos']['pending'] }} in attesa</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['videos']['approved'] }} approvati</span>
-                            <span class="badge bg-danger f-s-12">{{ $stats['videos']['rejected'] }} rifiutati</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['videos']['pending']); ?> in attesa</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['videos']['approved']); ?> approvati</span>
+                            <span class="badge bg-danger f-s-12"><?php echo e($stats['videos']['rejected']); ?> rifiutati</span>
                         </div>
                     </div>
                 </div>
@@ -84,9 +82,9 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Poesie</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['poems']['pending'] }} in attesa</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['poems']['approved'] }} approvate</span>
-                            <span class="badge bg-danger f-s-12">{{ $stats['poems']['rejected'] }} rifiutate</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['poems']['pending']); ?> in attesa</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['poems']['approved']); ?> approvate</span>
+                            <span class="badge bg-danger f-s-12"><?php echo e($stats['poems']['rejected']); ?> rifiutate</span>
                         </div>
                     </div>
                 </div>
@@ -102,9 +100,9 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Eventi</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['events']['pending'] }} in attesa</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['events']['approved'] }} approvati</span>
-                            <span class="badge bg-danger f-s-12">{{ $stats['events']['rejected'] }} rifiutati</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['events']['pending']); ?> in attesa</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['events']['approved']); ?> approvati</span>
+                            <span class="badge bg-danger f-s-12"><?php echo e($stats['events']['rejected']); ?> rifiutati</span>
                         </div>
                     </div>
                 </div>
@@ -120,9 +118,9 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Foto</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['photos']['pending'] }} in attesa</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['photos']['approved'] }} approvate</span>
-                            <span class="badge bg-danger f-s-12">{{ $stats['photos']['rejected'] }} rifiutate</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['photos']['pending']); ?> in attesa</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['photos']['approved']); ?> approvate</span>
+                            <span class="badge bg-danger f-s-12"><?php echo e($stats['photos']['rejected']); ?> rifiutate</span>
                         </div>
                     </div>
                 </div>
@@ -138,9 +136,9 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Articoli</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['articles']['pending'] }} in attesa</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['articles']['approved'] }} approvati</span>
-                            <span class="badge bg-danger f-s-12">{{ $stats['articles']['rejected'] }} rifiutati</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['articles']['pending']); ?> in attesa</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['articles']['approved']); ?> approvati</span>
+                            <span class="badge bg-danger f-s-12"><?php echo e($stats['articles']['rejected']); ?> rifiutati</span>
                         </div>
                     </div>
                 </div>
@@ -156,15 +154,15 @@
                         </div>
                         <h6 class="mb-2 f-s-16 f-w-600">Segnalazioni</h6>
                         <div class="d-flex flex-wrap gap-2 justify-content-center">
-                            <span class="badge bg-warning f-s-12">{{ $stats['reports']['pending'] }} in attesa</span>
-                            <span class="badge bg-info f-s-12">{{ $stats['reports']['investigating'] }} in analisi</span>
-                            <span class="badge bg-success f-s-12">{{ $stats['reports']['resolved'] }} risolte</span>
+                            <span class="badge bg-warning f-s-12"><?php echo e($stats['reports']['pending']); ?> in attesa</span>
+                            <span class="badge bg-info f-s-12"><?php echo e($stats['reports']['investigating']); ?> in analisi</span>
+                            <span class="badge bg-success f-s-12"><?php echo e($stats['reports']['resolved']); ?> risolte</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Filters - SEMPRE visibili -->
         <div class="row mb-4">
@@ -177,31 +175,31 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        <form method="GET" action="{{ route('admin.moderation.index') }}" class="row g-3">
+                        <form method="GET" action="<?php echo e(route('admin.moderation.index')); ?>" class="row g-3">
                             <div class="col-12 col-sm-6 col-lg-3">
                                 <label class="form-label f-s-14 f-w-500">Tipo di Contenuto</label>
                                 <select name="type" class="form-select">
-                                    <option value="all" {{ isset($type) && $type == 'all' ? 'selected' : '' }}>Tutti i contenuti</option>
-                                    <option value="videos" {{ isset($type) && $type == 'videos' ? 'selected' : '' }}>Video</option>
-                                    <option value="poems" {{ isset($type) && $type == 'poems' ? 'selected' : '' }}>Poesie</option>
-                                    <option value="events" {{ isset($type) && $type == 'events' ? 'selected' : '' }}>Eventi</option>
-                                    <option value="photos" {{ isset($type) && $type == 'photos' ? 'selected' : '' }}>Foto</option>
-                                    <option value="articles" {{ isset($type) && $type == 'articles' ? 'selected' : '' }}>Articoli</option>
+                                    <option value="all" <?php echo e(isset($type) && $type == 'all' ? 'selected' : ''); ?>>Tutti i contenuti</option>
+                                    <option value="videos" <?php echo e(isset($type) && $type == 'videos' ? 'selected' : ''); ?>>Video</option>
+                                    <option value="poems" <?php echo e(isset($type) && $type == 'poems' ? 'selected' : ''); ?>>Poesie</option>
+                                    <option value="events" <?php echo e(isset($type) && $type == 'events' ? 'selected' : ''); ?>>Eventi</option>
+                                    <option value="photos" <?php echo e(isset($type) && $type == 'photos' ? 'selected' : ''); ?>>Foto</option>
+                                    <option value="articles" <?php echo e(isset($type) && $type == 'articles' ? 'selected' : ''); ?>>Articoli</option>
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-3">
                                 <label class="form-label f-s-14 f-w-500">Status</label>
                                 <select name="status" class="form-select">
-                                    <option value="pending" {{ isset($status) && $status == 'pending' ? 'selected' : '' }}>In Attesa</option>
-                                    <option value="approved" {{ isset($status) && $status == 'approved' ? 'selected' : '' }}>Approvati</option>
-                                    <option value="rejected" {{ isset($status) && $status == 'rejected' ? 'selected' : '' }}>Rifiutati</option>
+                                    <option value="pending" <?php echo e(isset($status) && $status == 'pending' ? 'selected' : ''); ?>>In Attesa</option>
+                                    <option value="approved" <?php echo e(isset($status) && $status == 'approved' ? 'selected' : ''); ?>>Approvati</option>
+                                    <option value="rejected" <?php echo e(isset($status) && $status == 'rejected' ? 'selected' : ''); ?>>Rifiutati</option>
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-3">
                                 <label class="form-label f-s-14 f-w-500">Ordina per</label>
                                 <select name="sort" class="form-select">
-                                    <option value="newest" {{ isset($sort) && $sort == 'newest' ? 'selected' : '' }}>Più recenti</option>
-                                    <option value="oldest" {{ isset($sort) && $sort == 'oldest' ? 'selected' : '' }}>Più vecchi</option>
+                                    <option value="newest" <?php echo e(isset($sort) && $sort == 'newest' ? 'selected' : ''); ?>>Più recenti</option>
+                                    <option value="oldest" <?php echo e(isset($sort) && $sort == 'oldest' ? 'selected' : ''); ?>>Più vecchi</option>
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-3">
@@ -211,7 +209,7 @@
                                         <i class="ph-duotone ph-magnifying-glass me-1"></i>
                                         Cerca
                                     </button>
-                                    <a href="{{ route('admin.moderation.index') }}" class="btn btn-light btn-sm">
+                                    <a href="<?php echo e(route('admin.moderation.index')); ?>" class="btn btn-light btn-sm">
                                         <i class="ph-duotone ph-arrow-clockwise me-1"></i>
                                         Reset
                                     </a>
@@ -223,57 +221,60 @@
             </div>
         </div>
 
-        @if(isset($contents))
+        <?php if(isset($contents)): ?>
         <!-- Content List -->
 
         <!-- Content List -->
         <div class="row g-3">
-            @forelse($contents as $content)
+            <?php $__empty_1 = true; $__currentLoopData = $contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $content): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="col-12 col-lg-6">
                 <div class="card hover-effect">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0 f-s-16 f-w-600">{{ ucfirst($content->type ?? 'Contenuto') }}</h6>
-                            <span class="badge {{ $content->status == 'pending' ? 'bg-warning' : ($content->status == 'approved' ? 'bg-success' : 'bg-danger') }} f-s-12">
-                                {{ ucfirst($content->status ?? 'Sconosciuto') }}
+                            <h6 class="mb-0 f-s-16 f-w-600"><?php echo e(ucfirst($content->type ?? 'Contenuto')); ?></h6>
+                            <span class="badge <?php echo e($content->status == 'pending' ? 'bg-warning' : ($content->status == 'approved' ? 'bg-success' : 'bg-danger')); ?> f-s-12">
+                                <?php echo e(ucfirst($content->status ?? 'Sconosciuto')); ?>
+
                             </span>
                         </div>
                     </div>
                     <div class="card-body">
-                        <h6 class="mb-2">{{ Str::limit($content->title ?? $content->content ?? 'N/A', 50) }}</h6>
+                        <h6 class="mb-2"><?php echo e(Str::limit($content->title ?? $content->content ?? 'N/A', 50)); ?></h6>
                         <small class="text-muted d-block mb-3">
                             <i class="ph-duotone ph-user me-1"></i>
-                            {{ $content->user->name ?? 'N/A' }} •
+                            <?php echo e($content->user->name ?? 'N/A'); ?> •
                             <i class="ph-duotone ph-calendar me-1"></i>
-                            {{ $content->created_at->diffForHumans() }}
+                            <?php echo e($content->created_at->diffForHumans()); ?>
+
                         </small>
 
                         <div class="d-flex gap-2">
-                            <button class="btn btn-success btn-sm" onclick="approveContent('{{ $content->type }}', {{ $content->id }})">
+                            <button class="btn btn-success btn-sm" onclick="approveContent('<?php echo e($content->type); ?>', <?php echo e($content->id); ?>)">
                                 <i class="ph-duotone ph-check f-s-14 me-1"></i>
                                 Approva
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="rejectContent('{{ $content->type }}', {{ $content->id }})">
+                            <button class="btn btn-danger btn-sm" onclick="rejectContent('<?php echo e($content->type); ?>', <?php echo e($content->id); ?>)">
                                 <i class="ph-duotone ph-x f-s-14 me-1"></i>
                                 Rifiuta
                             </button>
-                            <button class="btn btn-primary btn-sm" onclick="viewContent('{{ $content->type }}', {{ $content->id }})">
+                            <button class="btn btn-primary btn-sm" onclick="viewContent('<?php echo e($content->type); ?>', <?php echo e($content->id); ?>)">
                                 <i class="ph-duotone ph-eye f-s-14"></i>
                             </button>
                         </div>
 
-                        @if(isset($content->reports_count) && $content->reports_count > 0)
+                        <?php if(isset($content->reports_count) && $content->reports_count > 0): ?>
                         <div class="alert alert-warning py-2 mt-3 mb-0">
                             <small class="f-s-12">
                                 <i class="ph-duotone ph-flag me-1"></i>
-                                {{ $content->reports_count }} segnalazione{{ $content->reports_count > 1 ? 'i' : '' }}
+                                <?php echo e($content->reports_count); ?> segnalazione<?php echo e($content->reports_count > 1 ? 'i' : ''); ?>
+
                             </small>
                         </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="col-12">
                 <div class="card">
                     <div class="card-body text-center py-5">
@@ -283,54 +284,54 @@
                     </div>
                 </div>
             </div>
-            @endforelse
+            <?php endif; ?>
         </div>
-        @else
+        <?php else: ?>
         <!-- Pending Content Preview -->
-        @if(isset($pendingContent))
+        <?php if(isset($pendingContent)): ?>
         <div class="row g-3">
-            @foreach(['videos', 'poems', 'events', 'photos', 'articles'] as $contentType)
-                @if(isset($pendingContent[$contentType]) && $pendingContent[$contentType]->count() > 0)
+            <?php $__currentLoopData = ['videos', 'poems', 'events', 'photos', 'articles']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $contentType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if(isset($pendingContent[$contentType]) && $pendingContent[$contentType]->count() > 0): ?>
                 <div class="col-12 col-lg-6">
                     <div class="card hover-effect">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0 f-s-16 f-w-600">{{ ucfirst($contentType) }} in Attesa</h6>
-                                <a href="{{ route('admin.moderation.index', ['type' => $contentType, 'status' => 'pending']) }}" class="btn btn-sm btn-outline-primary">
+                                <h6 class="mb-0 f-s-16 f-w-600"><?php echo e(ucfirst($contentType)); ?> in Attesa</h6>
+                                <a href="<?php echo e(route('admin.moderation.index', ['type' => $contentType, 'status' => 'pending'])); ?>" class="btn btn-sm btn-outline-primary">
                                     Vedi tutti
                                 </a>
                             </div>
                         </div>
                         <div class="card-body">
-                            @foreach($pendingContent[$contentType]->take(3) as $item)
+                            <?php $__currentLoopData = $pendingContent[$contentType]->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
                                 <div>
-                                    <h6 class="mb-1 f-s-14 f-w-600">{{ Str::limit($item->title ?? $item->content ?? 'N/A', 30) }}</h6>
-                                    <small class="text-muted f-s-12">{{ $item->user->name ?? 'N/A' }}</small>
+                                    <h6 class="mb-1 f-s-14 f-w-600"><?php echo e(Str::limit($item->title ?? $item->content ?? 'N/A', 30)); ?></h6>
+                                    <small class="text-muted f-s-12"><?php echo e($item->user->name ?? 'N/A'); ?></small>
                                 </div>
                                 <div class="d-flex gap-1">
-                                    <button class="btn btn-sm btn-success" onclick="approveContent('{{ $contentType }}', {{ $item->id }})" title="Approva">
+                                    <button class="btn btn-sm btn-success" onclick="approveContent('<?php echo e($contentType); ?>', <?php echo e($item->id); ?>)" title="Approva">
                                         <i class="ph-duotone ph-check f-s-12"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger" onclick="rejectContent('{{ $contentType }}', {{ $item->id }})" title="Rifiuta">
+                                    <button class="btn btn-sm btn-danger" onclick="rejectContent('<?php echo e($contentType); ?>', <?php echo e($item->id); ?>)" title="Rifiuta">
                                         <i class="ph-duotone ph-x f-s-12"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-primary" onclick="viewContent('{{ $contentType }}', {{ $item->id }})" title="Visualizza">
+                                    <button class="btn btn-sm btn-primary" onclick="viewContent('<?php echo e($contentType); ?>', <?php echo e($item->id); ?>)" title="Visualizza">
                                         <i class="ph-duotone ph-eye f-s-12"></i>
                                     </button>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
-                @endif
-            @endforeach
+                <?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Recent Reports -->
-        @if(isset($reports) && $reports->count() > 0)
+        <?php if(isset($reports) && $reports->count() > 0): ?>
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card hover-effect">
@@ -342,46 +343,47 @@
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            @foreach($reports->take(6) as $report)
+                            <?php $__currentLoopData = $reports->take(6); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="border rounded p-3">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-secondary me-2">{{ getContentTypeName($report->reportable_type) }}</span>
-                                        <span class="badge bg-warning">{{ $report->status }}</span>
+                                        <span class="badge bg-secondary me-2"><?php echo e(getContentTypeName($report->reportable_type)); ?></span>
+                                        <span class="badge bg-warning"><?php echo e($report->status); ?></span>
                                     </div>
-                                    <h6 class="mb-1 f-s-14 f-w-600">{{ Str::limit($report->content_title ?? $report->reason, 40) }}</h6>
+                                    <h6 class="mb-1 f-s-14 f-w-600"><?php echo e(Str::limit($report->content_title ?? $report->reason, 40)); ?></h6>
                                     <small class="text-muted f-s-12 d-block mb-2">
-                                        {{ $report->reason }} • {{ $report->user->name ?? 'Anonimo' }}
+                                        <?php echo e($report->reason); ?> • <?php echo e($report->user->name ?? 'Anonimo'); ?>
+
                                     </small>
                                     <div class="d-flex gap-1">
-                                        <button class="btn btn-sm btn-primary" onclick="viewReportContent({{ $report->id }})" title="Visualizza Contenuto">
+                                        <button class="btn btn-sm btn-primary" onclick="viewReportContent(<?php echo e($report->id); ?>)" title="Visualizza Contenuto">
                                             <i class="ph-duotone ph-eye f-s-12"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-warning" onclick="investigateReport({{ $report->id }})" title="Investiga">
+                                        <button class="btn btn-sm btn-warning" onclick="investigateReport(<?php echo e($report->id); ?>)" title="Investiga">
                                             <i class="ph-duotone ph-magnifying-glass f-s-12"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-success" onclick="resolveReport({{ $report->id }})" title="Risolvi">
+                                        <button class="btn btn-sm btn-success" onclick="resolveReport(<?php echo e($report->id); ?>)" title="Risolvi">
                                             <i class="ph-duotone ph-check-circle f-s-12"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-secondary" onclick="dismissReport({{ $report->id }})" title="Respingi">
+                                        <button class="btn btn-sm btn-secondary" onclick="dismissReport(<?php echo e($report->id); ?>)" title="Respingi">
                                             <i class="ph-duotone ph-x-circle f-s-12"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
-        @endif
+        <?php endif; ?>
+        <?php endif; ?>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@php
+<?php
 function getContentTypeName($type) {
     switch ($type) {
         case 'App\Models\Video':
@@ -398,9 +400,9 @@ function getContentTypeName($type) {
             return 'Contenuto';
     }
 }
-@endphp
+?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile adjustments
@@ -438,7 +440,7 @@ function approveContent(type, id) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 }
             })
             .then(response => response.json())
@@ -504,7 +506,7 @@ function rejectContent(type, id) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 },
                 body: JSON.stringify({ reason: result.value.trim() })
             })
@@ -926,7 +928,7 @@ function handleReportAction(reportId, action) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
         },
         body: JSON.stringify({
             action: action,
@@ -963,4 +965,6 @@ function handleReportAction(reportId, action) {
     });
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/moderation/index.blade.php ENDPATH**/ ?>

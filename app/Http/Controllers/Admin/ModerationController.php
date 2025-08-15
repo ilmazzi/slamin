@@ -21,56 +21,59 @@ use Illuminate\Support\Str;
 
 class ModerationController extends Controller
 {
-        /**
+                /**
      * Mostra il dashboard di moderazione
      */
-    public function index()
+    public function index(Request $request)
     {
+        // SEMPRE mostra le statistiche e i contenuti pending
         $stats = $this->getModerationStats();
         $pendingContent = $this->getPendingContent();
         $reports = $this->getActiveReports();
 
+        // Se ci sono parametri di ricerca, mostra anche i contenuti filtrati
+        if ($request->hasAny(['type', 'status', 'filter', 'sort'])) {
+            $type = $request->get('type', 'all');
+            $status = $request->get('status', 'pending');
+            $filter = $request->get('filter', 'all');
+            $sort = $request->get('sort', 'newest');
+
+            if ($type === 'all') {
+                $contents = collect();
+
+                $videos = $this->applySorting($this->getContentByType('videos', $status)->with('user'), $sort)->limit(10)->get();
+                $poems = $this->applySorting($this->getContentByType('poems', $status)->with('user'), $sort)->limit(10)->get();
+                $events = $this->applySorting($this->getContentByType('events', $status)->with('organizer'), $sort)->limit(10)->get();
+                $photos = $this->applySorting($this->getContentByType('photos', $status)->with('user'), $sort)->limit(10)->get();
+                $articles = $this->applySorting($this->getContentByType('articles', $status)->with('user'), $sort)->limit(10)->get();
+
+                $contents = $contents->merge($videos->map(function($item) { $item->type = 'videos'; return $item; }))
+                                    ->merge($poems->map(function($item) { $item->type = 'poems'; return $item; }))
+                                    ->merge($events->map(function($item) { $item->type = 'events'; return $item; }))
+                                    ->merge($photos->map(function($item) { $item->type = 'photos'; return $item; }))
+                                    ->merge($articles->map(function($item) { $item->type = 'articles'; return $item; }))
+                                    ->sortByDesc('created_at');
+            } else {
+                $contents = $this->applySorting($this->getContentByType($type, $status)->with($this->getRelationships($type)), $sort)->get();
+            }
+
+            // Add reports count to each content item
+            $contents = $contents->map(function($item) {
+                $item->reports_count = Report::where('reportable_type', get_class($item))
+                                            ->where('reportable_id', $item->id)
+                                            ->where('status', 'pending')
+                                            ->count();
+                return $item;
+            });
+
+            return view('admin.moderation.index', compact('stats', 'pendingContent', 'reports', 'contents', 'type', 'status', 'filter', 'sort'));
+        }
+
+        // Se non ci sono filtri, mostra solo dashboard
         return view('admin.moderation.index', compact('stats', 'pendingContent', 'reports'));
     }
 
-        /**
-     * Mostra i contenuti in attesa di moderazione e le segnalazioni
-     */
-    public function pending(Request $request)
-    {
-        $type = $request->get('type', 'all');
-        $status = $request->get('status', 'pending');
-        $filter = $request->get('filter', 'all'); // all, pending, reports
 
-
-
-        if ($type === 'all') {
-            $content = [
-                'videos' => $this->getContentByType('videos', $status)->with('user')->latest()->get(),
-                'poems' => $this->getContentByType('poems', $status)->with('user')->latest()->get(),
-                'events' => $this->getContentByType('events', $status)->with('organizer')->latest()->get(),
-                'photos' => $this->getContentByType('photos', $status)->with('user')->latest()->get(),
-                'articles' => $this->getContentByType('articles', $status)->with('user')->latest()->get(),
-                'carousels' => $this->getContentByType('carousels', $status)->latest()->get(),
-                'video_comments' => $this->getContentByType('video_comments', $status)->with(['user', 'video'])->latest()->get(),
-                'poem_comments' => $this->getContentByType('poem_comments', $status)->with(['user', 'poem'])->latest()->get(),
-            ];
-        } else {
-            $content = [
-                $type => $this->getContentByType($type, $status)->with($this->getRelationships($type))->latest()->get()
-            ];
-        }
-
-
-
-        // Filtra i report se necessario
-        $reports = collect();
-        if ($filter == 'reports' || $filter == 'all') {
-            $reports = $this->getActiveReports();
-        }
-
-        return view('admin.moderation.pending', compact('content', 'type', 'status', 'reports', 'filter'));
-    }
 
     /**
      * Approva un contenuto
@@ -251,26 +254,10 @@ class ModerationController extends Controller
                 'approved' => Article::approved()->count(),
                 'rejected' => Article::rejected()->count(),
             ],
-            'carousels' => [
-                'pending' => Carousel::pending()->count(),
-                'approved' => Carousel::approved()->count(),
-                'rejected' => Carousel::rejected()->count(),
-            ],
-            'video_comments' => [
-                'pending' => VideoComment::pending()->count(),
-                'approved' => VideoComment::approved()->count(),
-                'rejected' => VideoComment::rejected()->count(),
-            ],
-            'poem_comments' => [
-                'pending' => PoemComment::pending()->count(),
-                'approved' => PoemComment::approved()->count(),
-                'rejected' => PoemComment::rejected()->count(),
-            ],
             'reports' => [
                 'pending' => Report::pending()->count(),
                 'investigating' => Report::investigating()->count(),
                 'resolved' => Report::resolved()->count(),
-                'dismissed' => Report::dismissed()->count(),
             ],
         ];
     }
@@ -286,9 +273,6 @@ class ModerationController extends Controller
             'events' => Event::pending()->with('organizer')->latest()->limit(5)->get(),
             'photos' => Photo::pending()->with('user')->latest()->limit(5)->get(),
             'articles' => Article::pending()->with('user')->latest()->limit(5)->get(),
-            'carousels' => Carousel::pending()->latest()->limit(5)->get(),
-            'video_comments' => VideoComment::pending()->with(['user', 'video'])->latest()->limit(5)->get(),
-            'poem_comments' => PoemComment::pending()->with(['user', 'poem'])->latest()->limit(5)->get(),
         ];
     }
 
@@ -297,9 +281,10 @@ class ModerationController extends Controller
      */
     private function getActiveReports()
     {
-        $reports = Report::active()
-            ->with(['user', 'reportable', 'resolver'])
+        $reports = Report::pending()
+            ->with(['user', 'reportable'])
             ->latest()
+            ->limit(10)
             ->get();
 
         // Aggiungi i titoli corretti ai report
@@ -391,6 +376,130 @@ class ModerationController extends Controller
         ]);
     }
 
+        /**
+     * Ottiene un contenuto specifico per la visualizzazione
+     */
+    public function getContent($type, $id)
+    {
+        $content = $this->getContentModel($type, $id);
+
+        if (!$content) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Contenuto non trovato'
+            ]);
+        }
+
+        // Prepara i dati formattati
+        $formattedContent = [
+            'id' => $content->id,
+            'type' => get_class($content),
+            'title' => $content->title ?? $content->name ?? 'Senza titolo',
+            'description' => $content->description ?? null,
+            'content' => $content->content ?? null,
+            'author' => $content->user->name ?? 'N/A',
+            'created_at' => $content->created_at->format('d/m/Y H:i'),
+            'status' => $content->moderation_status ?? 'N/A',
+            'url' => null,
+            'thumbnail' => null
+        ];
+
+        // Gestione specifica per tipo di contenuto
+        switch (get_class($content)) {
+            case 'App\Models\Video':
+                $formattedContent['url'] = $content->video_url ?? null;
+                $formattedContent['thumbnail'] = $content->thumbnail ?? null;
+                $formattedContent['duration'] = $content->duration ?? null;
+                break;
+
+            case 'App\Models\Photo':
+                $formattedContent['url'] = $content->image_url ?? $content->file_path ?? null;
+                break;
+
+            case 'App\Models\Article':
+                $formattedContent['content'] = $content->content ?? $content->body ?? null;
+                break;
+
+            case 'App\Models\Poem':
+                $formattedContent['content'] = $content->content ?? $content->poem_text ?? null;
+                break;
+
+            case 'App\Models\Event':
+                $formattedContent['start_date'] = $content->start_date ?? null;
+                $formattedContent['end_date'] = $content->end_date ?? null;
+                $formattedContent['location'] = $content->location ?? null;
+                break;
+        }
+
+        return response()->json([
+            'success' => true,
+            'content' => $formattedContent
+        ]);
+    }
+
+    /**
+     * Ottiene il contenuto di una segnalazione
+     */
+    public function getReportContent($reportId)
+    {
+        $report = Report::findOrFail($reportId);
+
+        if (!$report->reportable) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Contenuto non trovato'
+            ]);
+        }
+
+        $content = $report->reportable;
+
+        // Prepara i dati formattati
+        $formattedContent = [
+            'id' => $content->id,
+            'type' => get_class($content),
+            'title' => $content->title ?? $content->name ?? 'Senza titolo',
+            'description' => $content->description ?? null,
+            'content' => $content->content ?? null,
+            'author' => $content->user->name ?? 'N/A',
+            'created_at' => $content->created_at->format('d/m/Y H:i'),
+            'status' => $content->moderation_status ?? 'N/A',
+            'url' => null,
+            'thumbnail' => null
+        ];
+
+        // Gestione specifica per tipo di contenuto
+        switch (get_class($content)) {
+            case 'App\Models\Video':
+                $formattedContent['url'] = $content->video_url ?? null;
+                $formattedContent['thumbnail'] = $content->thumbnail ?? null;
+                $formattedContent['duration'] = $content->duration ?? null;
+                break;
+
+            case 'App\Models\Photo':
+                $formattedContent['url'] = $content->image_url ?? $content->file_path ?? null;
+                break;
+
+            case 'App\Models\Article':
+                $formattedContent['content'] = $content->content ?? $content->body ?? null;
+                break;
+
+            case 'App\Models\Poem':
+                $formattedContent['content'] = $content->content ?? $content->poem_text ?? null;
+                break;
+
+            case 'App\Models\Event':
+                $formattedContent['start_date'] = $content->start_date ?? null;
+                $formattedContent['end_date'] = $content->end_date ?? null;
+                $formattedContent['location'] = $content->location ?? null;
+                break;
+        }
+
+        return response()->json([
+            'success' => true,
+            'content' => $formattedContent
+        ]);
+    }
+
     /**
      * Ottiene le statistiche delle segnalazioni
      */
@@ -425,15 +534,6 @@ class ModerationController extends Controller
             case 'articles':
                 return $status === 'pending' ? Article::pending() :
                        ($status === 'approved' ? Article::approved() : Article::rejected());
-            case 'carousels':
-                return $status === 'pending' ? Carousel::pending() :
-                       ($status === 'approved' ? Carousel::approved() : Carousel::rejected());
-            case 'video_comments':
-                return $status === 'pending' ? VideoComment::pending() :
-                       ($status === 'approved' ? VideoComment::approved() : VideoComment::rejected());
-            case 'poem_comments':
-                return $status === 'pending' ? PoemComment::pending() :
-                       ($status === 'approved' ? PoemComment::approved() : PoemComment::rejected());
             default:
                 return Video::query(); // Return empty query builder
         }
@@ -455,12 +555,6 @@ class ModerationController extends Controller
                 return ['user'];
             case 'articles':
                 return ['user'];
-            case 'carousels':
-                return [];
-            case 'video_comments':
-                return ['user', 'video'];
-            case 'poem_comments':
-                return ['user', 'poem'];
             default:
                 return [];
         }
@@ -482,14 +576,25 @@ class ModerationController extends Controller
                 return Photo::find($id);
             case 'articles':
                 return Article::find($id);
-            case 'carousels':
-                return Carousel::find($id);
-            case 'video_comments':
-                return VideoComment::find($id);
-            case 'poem_comments':
-                return PoemComment::find($id);
             default:
                 return null;
+        }
+    }
+
+    /**
+     * Applica l'ordinamento al contenuto
+     */
+    private function applySorting($query, $sort)
+    {
+        switch ($sort) {
+            case 'oldest':
+                return $query->oldest();
+            case 'priority':
+                // Per ora usa l'ordinamento per priorità (può essere esteso in futuro)
+                return $query->orderBy('created_at', 'desc');
+            case 'newest':
+            default:
+                return $query->latest();
         }
     }
 
@@ -590,6 +695,39 @@ class ModerationController extends Controller
 
         return redirect()->route('admin.moderation.settings')
             ->with('success', "Impostazioni aggiornate con successo ({$updated} modificate)");
+    }
+
+    /**
+     * Ottiene le segnalazioni per un contenuto specifico
+     */
+    public function getContentReports(Request $request, $type, $id)
+    {
+        $content = $this->getContentModel($type, $id);
+
+        if (!$content) {
+            return response()->json(['success' => false, 'message' => 'Contenuto non trovato']);
+        }
+
+        $reports = Report::where('reportable_type', get_class($content))
+                        ->where('reportable_id', $id)
+                        ->with('user')
+                        ->latest()
+                        ->get()
+                        ->map(function($report) {
+                            return [
+                                'id' => $report->id,
+                                'reason' => $report->reason,
+                                'description' => $report->description,
+                                'user_name' => $report->user ? $report->user->name : null,
+                                'created_at' => $report->created_at->diffForHumans(),
+                                'status' => $report->status
+                            ];
+                        });
+
+        return response()->json([
+            'success' => true,
+            'reports' => $reports
+        ]);
     }
 
     /**

@@ -664,12 +664,15 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         // Moderation Routes
         Route::prefix('moderation')->name('moderation.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\ModerationController::class, 'index'])->name('index');
-            Route::get('/pending', [App\Http\Controllers\Admin\ModerationController::class, 'pending'])->name('pending');
+            Route::get('/pending', [App\Http\Controllers\Admin\ModerationController::class, 'index'])->name('pending');
             Route::post('/approve/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'approve'])->name('approve');
             Route::post('/reject/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'reject'])->name('reject');
             Route::post('/approve-all/{type}', [App\Http\Controllers\Admin\ModerationController::class, 'approveAll'])->name('approve-all');
             Route::post('/reports/{report}/handle', [App\Http\Controllers\Admin\ModerationController::class, 'handleReport'])->name('reports.handle');
-            Route::get('/reports/{report}/details', [App\Http\Controllers\Admin\ModerationController::class, 'getReportedContentDetails'])->name('reports.details');
+                Route::get('/reports/{report}/details', [App\Http\Controllers\Admin\ModerationController::class, 'getReportedContentDetails'])->name('reports.details');
+    Route::get('/reports/content/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'getContentReports'])->name('reports.content');
+    Route::get('/reports/{report}/content', [App\Http\Controllers\Admin\ModerationController::class, 'getReportContent'])->name('reports.content.view');
+    Route::get('/content/{type}/{id}', [App\Http\Controllers\Admin\ModerationController::class, 'getContent'])->name('content.view');
             Route::get('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'settings'])->name('settings');
             Route::post('/settings', [App\Http\Controllers\Admin\ModerationController::class, 'updateSettings'])->name('settings.update');
         });
