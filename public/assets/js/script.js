@@ -119,23 +119,23 @@ $(document).on('click', '.header-toggle', function () {
   const $nav = $("nav");
   const $overlay = $(".sidebar-overlay");
   const isMobile = window.innerWidth <= 768;
-  
+
   if (isMobile) {
     // Su mobile, toggle della classe sidebar-open
     $nav.toggleClass("sidebar-open");
     $overlay.toggleClass("active");
-    
+
     // Previeni lo scroll della pagina quando la sidebar è aperta
     if ($nav.hasClass("sidebar-open")) {
       $("body").css("overflow", "hidden");
       $("html").css("overflow", "hidden");
-      
+
       // Su mobile, disabilita SimpleBar e crea wrapper di scroll personalizzato
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && simpleBarElement.SimpleBar) {
         simpleBarElement.SimpleBar.unMount();
       }
-      
+
       // Su mobile, crea un wrapper di scroll personalizzato
       const navElement = document.querySelector('nav .app-nav');
       if (navElement && !navElement.querySelector('.mobile-scroll-wrapper')) {
@@ -152,11 +152,11 @@ $(document).on('click', '.header-toggle', function () {
             -webkit-overflow-scrolling: touch;
             padding-bottom: 80px;
           `;
-          
+
           // Sposta il contenuto nel wrapper
           content.parentNode.insertBefore(wrapper, content);
           wrapper.appendChild(content);
-          
+
           // Assicurati che tutte le voci del menu siano visibili su mobile
           const menuItems = wrapper.querySelectorAll('li');
           menuItems.forEach(item => {
@@ -170,7 +170,7 @@ $(document).on('click', '.header-toggle', function () {
     } else {
       $("body").css("overflow", "");
       $("html").css("overflow", "");
-      
+
       // Su mobile, riabilita SimpleBar e rimuovi wrapper personalizzato
       const simpleBarElement = document.getElementById('app-simple-bar');
       if (simpleBarElement && !simpleBarElement.SimpleBar) {
@@ -180,7 +180,7 @@ $(document).on('click', '.header-toggle', function () {
           forceVisible: 'y'
         });
       }
-      
+
       // Su mobile, rimuovi wrapper di scroll personalizzato
       const navElement = document.querySelector('nav .app-nav');
       if (navElement) {
@@ -205,7 +205,7 @@ $(document).on('click', '.header-toggle', function () {
 $(document).on('click', '.sidebar-overlay', function () {
   const $nav = $("nav");
   const $overlay = $(".sidebar-overlay");
-  
+
   $nav.removeClass("sidebar-open");
   $overlay.removeClass("active");
   $("body").css("overflow", "");
@@ -223,7 +223,24 @@ $(document).on('scroll', 'nav.sidebar-open .app-nav', function(e) {
 });
 
 $(".toggle-semi-nav").on("click", function () {
-  $("nav").removeClass("semi-nav");
+  const $nav = $("nav");
+  const windowWidth = $(window).width();
+
+  // Su tablet (768px - 1199px) alterna tra semi-nav e espansa
+  if (windowWidth >= 768 && windowWidth < 1199) {
+    if ($nav.hasClass("semi-nav")) {
+      $nav.removeClass("semi-nav");
+      $nav.addClass("sidebar-expanded");
+    } else {
+      $nav.removeClass("sidebar-expanded");
+      $nav.addClass("semi-nav");
+    }
+  }
+  // Su desktop (>= 1200px) sempre espansa
+  else if (windowWidth >= 1200) {
+    $nav.removeClass("semi-nav");
+    $nav.addClass("sidebar-expanded");
+  }
 });
 
 
@@ -232,16 +249,75 @@ const $window = $(window);
 const $nav = $('nav');
 const $contactListbox = $(".contact-listbox");
 
+// Aggiungi CSS per gestire gli stati della sidebar
+const sidebarCSS = `
+<style>
+/* Sidebar espansa su tablet */
+nav.sidebar-expanded {
+    width: var(--sidebar-width) !important;
+}
+
+nav.sidebar-expanded .app-logo .logo-full {
+    display: inline-block !important;
+}
+
+nav.sidebar-expanded .app-logo .logo-icon {
+    display: none !important;
+}
+
+nav.sidebar-expanded .app-nav .menu-title span {
+    display: inline !important;
+    text-overflow: unset !important;
+    overflow: unset !important;
+    white-space: unset !important;
+    color: rgba(var(--dark), 1) !important;
+}
+
+/* Sidebar nascosta su mobile */
+nav.sidebar-hidden {
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Aggiusta il contenuto quando la sidebar è espansa su tablet */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+    .app-wrapper nav.sidebar-expanded + .app-content {
+        margin-left: var(--sidebar-width) !important;
+    }
+
+    .app-wrapper nav.sidebar-expanded ~ .sidebar-overlay {
+        display: none !important;
+    }
+}
+</style>
+`;
+
+// Inserisci il CSS nel head
+$('head').append(sidebarCSS);
+
 // Event listener for click
 $contactListbox.on("click", function () {
     $(this).toggleClass("stared");
 });
 
 function resize() {
-    $nav.removeClass('semi-nav');
+    // Su mobile (< 768px) la sidebar è sempre nascosta
     if ($window.width() < 768) {
-    } else if ($window.width() < 1199) {
-        $nav.addClass('semi-nav');
+        $nav.removeClass('semi-nav sidebar-expanded');
+        $nav.addClass('sidebar-hidden');
+    }
+    // Su tablet (768px - 1199px) la sidebar può essere espansa o semi-nav
+    else if ($window.width() < 1199) {
+        $nav.removeClass('sidebar-hidden');
+        // Se non ha già uno stato impostato, usa semi-nav come default
+        if (!$nav.hasClass('semi-nav') && !$nav.hasClass('sidebar-expanded')) {
+            $nav.addClass('semi-nav');
+        }
+    }
+    // Su desktop (>= 1200px) la sidebar è sempre espansa
+    else {
+        $nav.removeClass('semi-nav sidebar-hidden');
+        $nav.addClass('sidebar-expanded');
     }
 }
 $(function () {
