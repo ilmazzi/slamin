@@ -425,7 +425,7 @@ let isFullscreen = false;
 
 // Funzione globale per incrementare le visualizzazioni
 function incrementVideoViews() {
-    
+
 
     fetch('{{ route("videos.increment-views", $video) }}', {
         method: 'POST',
@@ -435,15 +435,15 @@ function incrementVideoViews() {
         }
     })
     .then(response => {
-        
+
         return response.json();
     })
     .then(data => {
-        
+
         if (data.success) {
             document.getElementById('viewCount').textContent = data.view_count;
             document.getElementById('viewCountStats').textContent = data.view_count;
-            
+
         }
     })
     .catch(error => {
@@ -518,12 +518,11 @@ function updateLikeButtons(userLike) {
 
 // Funzioni per snap
 function showSnapModal() {
-    
+
 
     // Ferma il video se è in riproduzione
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-         }} fermato per creazione snap');
     }
 
     // Aggiorna il tempo nel modal prima di mostrarlo
@@ -537,10 +536,10 @@ function createSnap() {
     const title = document.getElementById('snapTitle').value.trim();
     const timestamp = parseInt(document.getElementById('snapTimestamp').value);
 
-    
+
 
     if (!title || timestamp < 0) {
-        
+
         return;
     }
 
@@ -574,7 +573,7 @@ function createSnap() {
             // Ricarica la pagina per aggiornare la timeline
             location.reload();
         } else {
-            
+
         }
     })
     .catch(error => {
@@ -605,7 +604,7 @@ function deleteSnap(snapId) {
 
 // Inizializzazione
 document.addEventListener('DOMContentLoaded', function() {
-    
+
 
     // Inizializza lo stile dei bottoni like
     @if($userLike)
@@ -616,18 +615,18 @@ document.addEventListener('DOMContentLoaded', function() {
     incrementVideoViews();
 
     // Sistema per rilevare interazioni con la timeline
-    
+
 
     // Rileva click sui snap markers
 document.addEventListener('click', function(event) {
     if (event.target.closest('.snap-marker')) {
-        
+
 
         // Ottieni il timestamp dal marker
         const marker = event.target.closest('.snap-marker');
         const timestamp = parseInt(marker.getAttribute('data-timestamp'));
 
-        
+
 
         // Salta al timestamp del snap
         seekToTime(timestamp);
@@ -656,7 +655,7 @@ setInterval(function() {
 
 // Funzioni per la timeline
 function seekToTime(timestamp) {
-    
+
 
     if (videoPlayer) {
         // Imposta il tempo del video
@@ -677,11 +676,11 @@ function formatTimestamp(timestamp) {
 
 // Sistema per Player HTML5 con URL Diretto PeerTube
 async function initializeVideoPlayer() {
-    
+
 
     videoPlayer = document.getElementById('videoPlayer');
     if (!videoPlayer) {
-        
+
         return;
     }
 
@@ -696,7 +695,7 @@ async function initializeVideoPlayer() {
     if (error) error.style.display = 'none';
 
     try {
-        
+
 
         // Ottieni l'URL diretto del video da PeerTube
         const response = await fetch(`/videos/${videoId}/peertube-url`);
@@ -719,13 +718,13 @@ async function initializeVideoPlayer() {
         if (data.success && data.files && data.files.length > 0) {
             // Usa il primo file disponibile (migliore qualità)
             const videoFile = data.files[0];
-            
+
 
             // Test se l'URL è accessibile
-            
+
             fetch(videoFile.url, { method: 'HEAD' })
                 .then(response => {
-                    
+
                 })
                 .catch(error => {
                     console.error('❌ URL video non accessibile:', error);
@@ -736,7 +735,7 @@ async function initializeVideoPlayer() {
             source.src = videoFile.url;
             source.type = 'video/mp4';
 
-            
+
 
             // Rimuovi eventuali source esistenti e aggiungi quello nuovo
             videoPlayer.innerHTML = '';
@@ -760,7 +759,7 @@ async function initializeVideoPlayer() {
             // Nascondi loading indicator
             if (loading) loading.style.display = 'none';
 
-            
+
         } else {
             throw new Error(data.error || 'Nessun file video disponibile');
         }
@@ -786,12 +785,12 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video inizia a caricare
     videoPlayer.addEventListener('loadstart', function() {
-        
+
     });
 
     // Event listener per quando i dati del video sono disponibili
     videoPlayer.addEventListener('loadeddata', function() {
-        
+
     });
 
     // Event listener per quando il video può essere riprodotto
@@ -877,7 +876,7 @@ function setupVideoEventListeners() {
 
 // Funzione per creare snap al tempo corrente
 function createSnapAtCurrentTime() {
-    
+
 
     // Ferma il video
     if (videoPlayer && !videoPlayer.paused) {
@@ -891,7 +890,7 @@ function createSnapAtCurrentTime() {
 
 // Funzione per aggiornare le posizioni degli snap
 function updateSnapPositions(realDuration) {
-    
+
 
     const snapMarkers = document.querySelectorAll('.snap-marker');
     snapMarkers.forEach(marker => {
