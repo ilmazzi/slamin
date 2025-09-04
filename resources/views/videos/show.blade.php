@@ -423,9 +423,17 @@ let videoDuration = {{ $video->duration ?? 60 }};
 let isVideoPlaying = false;
 let isFullscreen = false;
 
+// Variabile per tracciare se le visualizzazioni sono già state incrementate
+let viewsIncremented = false;
+
 // Funzione globale per incrementare le visualizzazioni
 function incrementVideoViews() {
+    // Evita incrementi multipli
+    if (viewsIncremented) {
+        return;
+    }
 
+    viewsIncremented = true;
 
     fetch('{{ route("videos.increment-views", $video) }}', {
         method: 'POST',
@@ -435,19 +443,21 @@ function incrementVideoViews() {
         }
     })
     .then(response => {
-
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return response.json();
     })
     .then(data => {
-
         if (data.success) {
             document.getElementById('viewCount').textContent = data.view_count;
             document.getElementById('viewCountStats').textContent = data.view_count;
-
         }
     })
     .catch(error => {
-        console.error('Errore nell\'incremento delle visualizzazioni:', error);
+        console.error('Errore incremento visualizzazioni:', error);
+        // Reset del flag in caso di errore per permettere un nuovo tentativo
+        viewsIncremented = false;
     });
 }
 
@@ -561,7 +571,7 @@ function createSnap() {
     })
     .then(data => {
         if (data && data.success) {
-             }} creato con successo:', data.snap);
+            console.log('Snap creato con successo:', data.snap);
 
             document.getElementById('snapTitle').value = '';
             document.getElementById('snapTimestamp').value = '0';
@@ -646,7 +656,7 @@ setInterval(function() {
 // Debug: mostra lo stato del video ogni 30 secondi se in riproduzione
 setInterval(function() {
     if (isVideoPlaying) {
-         }} video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
+        console.log('Debug video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
     }
 }, 30000);
 });
@@ -703,7 +713,7 @@ async function initializeVideoPlayer() {
 
         // Gestisci il caso in cui il video è ancora in elaborazione
         if (data.status === 'processing') {
-             }} ancora in elaborazione su PeerTube');
+            console.log('Video ancora in elaborazione su PeerTube');
 
             // Nascondi loading e mostra messaggio di elaborazione
             if (loading) loading.style.display = 'none';
@@ -779,7 +789,7 @@ async function initializeVideoPlayer() {
 function setupVideoEventListeners() {
     // Event listener per quando il video è caricato
     videoPlayer.addEventListener('loadedmetadata', function() {
-         }} caricato - Durata:', videoPlayer.duration);
+        console.log('Video caricato - Durata:', videoPlayer.duration);
         videoDuration = videoPlayer.duration || videoDuration;
     });
 
@@ -795,24 +805,24 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video può essere riprodotto
     videoPlayer.addEventListener('canplay', function() {
-         }} pronto per la riproduzione');
+        console.log('Video pronto per la riproduzione');
     });
 
     // Event listener per quando il video può essere riprodotto senza interruzioni
     videoPlayer.addEventListener('canplaythrough', function() {
-         }} può essere riprodotto completamente');
+        console.log('Video può essere riprodotto completamente');
     });
 
     // Event listener per play
     videoPlayer.addEventListener('play', function() {
-         }} in riproduzione');
+        console.log('Video in riproduzione');
         isVideoPlaying = true;
-        incrementVideoViews();
+        // incrementVideoViews(); // Rimosso per evitare chiamate duplicate
     });
 
     // Event listener per pause
     videoPlayer.addEventListener('pause', function() {
-         }} in pausa');
+        console.log('Video in pausa');
         isVideoPlaying = false;
     });
 
@@ -823,7 +833,7 @@ function setupVideoEventListeners() {
 
     // Event listener per fine video
     videoPlayer.addEventListener('ended', function() {
-         }} terminato');
+        console.log('Video terminato');
         isVideoPlaying = false;
         updatePlayPauseButton();
     });
@@ -843,12 +853,12 @@ function setupVideoEventListeners() {
 
     // Event listener per quando il video non può essere riprodotto
     videoPlayer.addEventListener('stalled', function() {
-         }} in stallo - potrebbe non essere accessibile');
+        console.log('Video in stallo - potrebbe non essere accessibile');
     });
 
     // Event listener per quando il video non ha dati
     videoPlayer.addEventListener('waiting', function() {
-         }} in attesa di dati');
+        console.log('Video in attesa di dati');
     });
 
             // Event listener per l'icona snap
@@ -881,7 +891,7 @@ function createSnapAtCurrentTime() {
     // Ferma il video
     if (videoPlayer && !videoPlayer.paused) {
         videoPlayer.pause();
-         }} fermato per creazione snap');
+        console.log('Video fermato per creazione snap');
     }
 
     // Mostra il modal con il tempo corrente
