@@ -223,30 +223,8 @@ $(document).on('scroll', 'nav.sidebar-open .app-nav', function(e) {
 });
 
 $(".toggle-semi-nav").on("click", function () {
-  const $nav = $("nav");
-  const windowWidth = $(window).width();
-
-  // Su tablet (768px - 1199px) alterna tra semi-nav e espansa
-  if (windowWidth >= 768 && windowWidth < 1199) {
-    if ($nav.hasClass("semi-nav")) {
-      // Espandi la sidebar
-      $nav.removeClass("semi-nav");
-      $nav.addClass("sidebar-expanded");
-      localStorage.setItem('sidebar-tablet-state', 'expanded');
-      console.log("Sidebar espansa su tablet");
-    } else {
-      // Comprimi la sidebar
-      $nav.removeClass("sidebar-expanded");
-      $nav.addClass("semi-nav");
-      localStorage.setItem('sidebar-tablet-state', 'semi-nav');
-      console.log("Sidebar semi-nav su tablet");
-    }
-  }
-  // Su desktop (>= 1200px) sempre espansa
-  else if (windowWidth >= 1200) {
-    $nav.removeClass("semi-nav");
-    $nav.addClass("sidebar-expanded");
-  }
+  // Usa la logica originale del template
+  $("nav").removeClass("semi-nav");
 });
 
 
@@ -255,74 +233,53 @@ const $window = $(window);
 const $nav = $('nav');
 const $contactListbox = $(".contact-listbox");
 
-// Aggiungi CSS per gestire gli stati della sidebar
-const sidebarCSS = `
+// Aggiungi CSS per sovrascrivere le regole del template su tablet
+const tabletSidebarCSS = `
 <style>
-/* Sidebar espansa su tablet - CSS più specifico */
-.app-wrapper nav.sidebar-expanded {
-    width: 280px !important;
-    transform: none !important;
-}
-
-.app-wrapper nav.sidebar-expanded .app-logo .logo-full {
-    display: inline-block !important;
-    opacity: 1 !important;
-}
-
-.app-wrapper nav.sidebar-expanded .app-logo .logo-icon {
-    display: none !important;
-}
-
-.app-wrapper nav.sidebar-expanded .app-nav .menu-title span {
-    display: inline !important;
-    text-overflow: unset !important;
-    overflow: unset !important;
-    white-space: unset !important;
-    color: rgba(var(--dark), 1) !important;
-    opacity: 1 !important;
-}
-
-.app-wrapper nav.sidebar-expanded .app-nav .menu-title {
-    width: auto !important;
-    text-align: left !important;
-}
-
-/* Sidebar nascosta su mobile */
-.app-wrapper nav.sidebar-hidden {
-    width: 0 !important;
-    overflow: hidden !important;
-    transform: translateX(-100%) !important;
-}
-
-/* Aggiusta il contenuto quando la sidebar è espansa su tablet */
+/* Su tablet (768px-1199px), non forzare automaticamente semi-nav */
 @media screen and (min-width: 768px) and (max-width: 1199px) {
-    .app-wrapper nav.sidebar-expanded ~ .app-content {
-        margin-left: 280px !important;
-        width: calc(100% - 280px) !important;
+    .app-wrapper nav {
+        width: var(--sidebar-width) !important;
     }
 
-    .app-wrapper nav.sidebar-expanded ~ .sidebar-overlay {
-        display: none !important;
-    }
-
-    /* Forza la rimozione della classe semi-nav quando espansa */
-    .app-wrapper nav.sidebar-expanded.semi-nav {
-        width: 280px !important;
-    }
-
-    .app-wrapper nav.sidebar-expanded.semi-nav .app-logo .logo-full {
+    .app-wrapper nav .app-logo .logo-full {
         display: inline-block !important;
     }
 
-    .app-wrapper nav.sidebar-expanded.semi-nav .app-nav .menu-title span {
+    .app-wrapper nav .app-logo .logo-icon {
+        display: none !important;
+    }
+
+    .app-wrapper nav .app-nav .menu-title span {
         display: inline !important;
+        text-overflow: unset !important;
+        overflow: unset !important;
+        white-space: unset !important;
+        color: rgba(var(--dark), 1) !important;
+    }
+
+    /* Solo quando ha esplicitamente la classe semi-nav, allora comprimi */
+    .app-wrapper nav.semi-nav {
+        width: var(--semi-nav) !important;
+    }
+
+    .app-wrapper nav.semi-nav .app-logo .logo-full {
+        display: none !important;
+    }
+
+    .app-wrapper nav.semi-nav .app-logo .logo-icon {
+        display: inline-block !important;
+    }
+
+    .app-wrapper nav.semi-nav .app-nav .menu-title span {
+        display: none !important;
     }
 }
 </style>
 `;
 
 // Inserisci il CSS nel head
-$('head').append(sidebarCSS);
+$('head').append(tabletSidebarCSS);
 
 // Event listener for click
 $contactListbox.on("click", function () {
@@ -330,40 +287,12 @@ $contactListbox.on("click", function () {
 });
 
 function resize() {
-    const windowWidth = $window.width();
-
     // Su mobile (< 768px) la sidebar è sempre nascosta
-    if (windowWidth < 768) {
-        $nav.removeClass('semi-nav sidebar-expanded');
-        $nav.addClass('sidebar-hidden');
+    if ($window.width() < 768) {
+        $nav.removeClass('semi-nav');
     }
-    // Su tablet (768px - 1199px) mantieni lo stato corrente o usa semi-nav come default
-    else if (windowWidth < 1199) {
-        $nav.removeClass('sidebar-hidden');
-
-        // Carica lo stato salvato dall'utente
-        const savedState = localStorage.getItem('sidebar-tablet-state');
-
-        if (savedState === 'expanded') {
-            $nav.removeClass('semi-nav');
-            $nav.addClass('sidebar-expanded');
-        } else if (savedState === 'semi-nav') {
-            $nav.removeClass('sidebar-expanded');
-            $nav.addClass('semi-nav');
-        } else {
-            // Se non ha già uno stato impostato dall'utente, usa semi-nav come default
-            if (!$nav.hasClass('semi-nav') && !$nav.hasClass('sidebar-expanded')) {
-                $nav.addClass('semi-nav');
-            }
-        }
-    }
-    // Su desktop (>= 1200px) la sidebar è sempre espansa
-    else {
-        $nav.removeClass('semi-nav sidebar-hidden');
-        $nav.addClass('sidebar-expanded');
-    }
-
-    console.log('Resize - Window width:', windowWidth, 'Sidebar classes:', $nav.attr('class'));
+    // Su tablet e desktop (>= 768px) non forzare nessuno stato
+    // Lascia che l'utente controlli con il toggle
 }
 $(function () {
     resize();
