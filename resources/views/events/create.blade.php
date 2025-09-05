@@ -148,7 +148,7 @@
                                 <div class="error-feedback" id="description-error"></div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="form-label">{{ __('events.event_category') }} *</label>
                                 <select name="category" id="category" class="form-select" required>
                                     <option value="">{{ __('events.category_placeholder') }}</option>
@@ -165,8 +165,8 @@
                                 <h6 class="text-primary mb-3">
                                     <i class="ph ph-globe me-2"></i>{{ __('events.event_mode') }}
                                 </h6>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
                                         <div class="form-check">
                                             <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
                                             <label for="public" class="form-check-label">
@@ -175,7 +175,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-12 col-md-6">
                                         <div class="form-check">
                                             <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
                                             <label for="private" class="form-check-label">
@@ -202,7 +202,7 @@
                     <div class="card-body">
                         <div class="row">
                             <!-- Date and Time -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="text" name="start_datetime" id="start_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora inizio..." required readonly>
                                     <label for="start_datetime">{{ __('events.start_date') }} {{ __('events.start_time') }} *</label>
@@ -210,7 +210,7 @@
                                 <div class="error-feedback" id="start_datetime-error"></div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-floating">
                                     <input type="text" name="end_datetime" id="end_datetime" class="form-control flatpickr-input" placeholder="Seleziona data e ora fine..." required readonly>
                                     <label for="end_datetime">{{ __('events.end_date') }} {{ __('events.end_time') }} *</label>
@@ -385,7 +385,7 @@
 
 
 
-                            <div class="col-md-6 mb-3" id="venue-address-container">
+                            <div class="col-12 col-md-6 mb-3" id="venue-address-container">
                                 <div class="form-floating">
                                     <input type="text" name="venue_address" id="venue_address" class="form-control" placeholder="{{ __('events.venue_address_placeholder') }}" required>
                                     <label for="venue_address">{{ __('events.venue_address') }} *</label>
@@ -393,7 +393,7 @@
                                 <div class="error-feedback" id="venue_address-error"></div>
                             </div>
 
-                            <div class="col-md-3 mb-3" id="city-container">
+                            <div class="col-12 col-md-3 mb-3" id="city-container">
                                 <div class="form-floating">
                                     <input type="text" name="city" id="city" class="form-control" placeholder="{{ __('events.city_placeholder') }}" required>
                                     <label for="city">{{ __('events.city') }} *</label>
@@ -401,7 +401,7 @@
                                 <div class="error-feedback" id="city-error"></div>
                             </div>
 
-                            <div class="col-md-3 mb-3" id="postcode-container">
+                            <div class="col-12 col-md-3 mb-3" id="postcode-container">
                                 <div class="form-floating">
                                     <input type="text" name="postcode" id="postcode" class="form-control" placeholder="{{ __('events.postcode_placeholder') }}" required>
                                     <label for="postcode">{{ __('events.postcode') }} *</label>
@@ -409,7 +409,7 @@
                                 <div class="error-feedback" id="postcode-error"></div>
                             </div>
 
-                            <div class="col-md-6 mb-3" id="country-container">
+                            <div class="col-12 col-md-6 mb-3" id="country-container">
                                 <div class="form-floating">
                                     <select name="country" id="country" class="form-select" required>
                                         <option value="">{{ __('events.select_country') }}...</option>

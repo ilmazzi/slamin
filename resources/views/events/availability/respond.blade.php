@@ -1,6 +1,88 @@
 @extends('layout.master')
 @section('title', 'Disponibilità - ' . $event->title)
 
+@section('css')
+<style>
+/* Mobile-First Responsive Styles for Availability Response */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .badge {
+        font-size: 0.625rem;
+    }
+    
+    .form-floating > label {
+        font-size: 0.875rem;
+    }
+    
+    .form-control {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        font-size: 0.875rem;
+    }
+    
+    .btn-group.flex-column .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        border-radius: 0.375rem !important;
+    }
+    
+    .btn-group.flex-column .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    .btn-group.flex-column .btn:first-child {
+        border-radius: 0.375rem 0.375rem 0 0 !important;
+    }
+    
+    .btn-group.flex-column .btn:last-child {
+        border-radius: 0 0 0.375rem 0.375rem !important;
+    }
+    
+    .legend-item {
+        margin-bottom: 1rem;
+    }
+    
+    .legend-item:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .btn-group.flex-column .btn {
+        width: auto;
+        margin-bottom: 0;
+        border-radius: 0 !important;
+    }
+    
+    .btn-group.flex-column .btn:first-child {
+        border-radius: 0.375rem 0 0 0.375rem !important;
+    }
+    
+    .btn-group.flex-column .btn:last-child {
+        border-radius: 0 0.375rem 0.375rem 0 !important;
+    }
+    
+    .legend-item {
+        margin-bottom: 0;
+    }
+}
+</style>
+@endsection
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Header -->
@@ -31,22 +113,24 @@
             <div class="card hover-effect">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-12 col-md-8">
                             <h6 class="mb-2">{{ $event->title }}</h6>
-                            <p class="text-muted mb-0">{{ $event->description }}</p>
+                            <p class="text-muted mb-2 mb-md-0">{{ $event->description }}</p>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex flex-column gap-1">
-                                @if($event->availability_deadline)
-                                    <span class="badge bg-warning">
-                                        <i class="ph ph-clock me-1"></i>
-                                        Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex flex-column flex-md-column gap-2 mb-3 mb-md-0">
+                                <div class="d-flex flex-wrap gap-2">
+                                    @if($event->availability_deadline)
+                                        <span class="badge bg-warning">
+                                            <i class="ph ph-clock me-1"></i>
+                                            Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
+                                        </span>
+                                    @endif
+                                    <span class="badge bg-info">
+                                        <i class="ph ph-list-checks me-1"></i>
+                                        {{ $event->activeAvailabilityOptions->count() }} Opzioni
                                     </span>
-                                @endif
-                                <span class="badge bg-info">
-                                    <i class="ph ph-list-checks me-1"></i>
-                                    {{ $event->activeAvailabilityOptions->count() }} Opzioni
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -81,29 +165,29 @@
                     <h6 class="mb-3">
                         <i class="ph ph-info-circle me-2"></i>Legenda
                     </h6>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="d-flex align-items-center">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                 <button class="btn btn-success btn-sm me-2" disabled>
                                     <i class="ph ph-heart"></i>
                                 </button>
-                                <span><strong>Preferita</strong> - Questa è la mia scelta migliore</span>
+                                <span class="text-center text-md-start"><strong>Preferita</strong> - Questa è la mia scelta migliore</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="d-flex align-items-center">
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                 <button class="btn btn-warning btn-sm me-2" disabled>
                                     <i class="ph ph-check-circle"></i>
                                 </button>
-                                <span><strong>Disponibile</strong> - Posso partecipare</span>
+                                <span class="text-center text-md-start"><strong>Disponibile</strong> - Posso partecipare</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="d-flex align-items-center">
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                                 <button class="btn btn-danger btn-sm me-2" disabled>
                                     <i class="ph ph-x-circle"></i>
                                 </button>
-                                <span><strong>Non disponibile</strong> - Non posso partecipare</span>
+                                <span class="text-center text-md-start"><strong>Non disponibile</strong> - Non posso partecipare</span>
                             </div>
                         </div>
                     </div>
@@ -128,7 +212,7 @@
                             @csrf
                             <div class="row">
                                 @foreach($event->activeAvailabilityOptions as $option)
-                                    <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="col-12 col-md-6 col-lg-4 mb-4">
                                         <div class="card border-light hover-effect">
                                             <div class="card-body">
                                                 <h6 class="card-title mb-3">
@@ -141,7 +225,7 @@
                                                 @endif
 
                                                 <div class="d-grid gap-2">
-                                                    <div class="btn-group" role="group">
+                                                    <div class="btn-group d-flex flex-column flex-md-row" role="group">
                                                         <input type="radio"
                                                                class="btn-check"
                                                                name="option_{{ $option->id }}"

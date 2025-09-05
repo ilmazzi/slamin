@@ -1,6 +1,62 @@
 @extends('layout.master')
 @section('title', 'Gestione Disponibilità - ' . $event->title)
 
+@section('css')
+<style>
+/* Mobile-First Responsive Styles for Availability Management */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .badge {
+        font-size: 0.625rem;
+    }
+    
+    .form-floating > label {
+        font-size: 0.875rem;
+    }
+    
+    .form-control {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        font-size: 0.875rem;
+    }
+    
+    .option-row .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .option-row .col-12:last-child {
+        margin-top: 0.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .option-row .btn {
+        width: auto;
+        margin-top: 0;
+    }
+    
+    .option-row .col-12:last-child {
+        margin-top: 0;
+    }
+}
+</style>
+@endsection
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Header -->
@@ -34,22 +90,24 @@
             <div class="card hover-effect">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-12 col-md-8">
                             <h6 class="mb-2">{{ $event->title }}</h6>
-                            <p class="text-muted mb-0">{{ $event->description }}</p>
+                            <p class="text-muted mb-2 mb-md-0">{{ $event->description }}</p>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex flex-column gap-1">
-                                <span class="badge bg-info">
-                                    <i class="ph ph-users me-1"></i>
-                                    {{ $event->invitations()->accepted()->count() + $event->requests()->where('status', 'accepted')->count() }} Partecipanti
-                                </span>
-                                @if($event->availability_deadline)
-                                    <span class="badge bg-warning">
-                                        <i class="ph ph-clock me-1"></i>
-                                        Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex flex-column flex-md-column gap-2 mb-3 mb-md-0">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-info">
+                                        <i class="ph ph-users me-1"></i>
+                                        {{ $event->invitations()->accepted()->count() + $event->requests()->where('status', 'accepted')->count() }} Partecipanti
                                     </span>
-                                @endif
+                                    @if($event->availability_deadline)
+                                        <span class="badge bg-warning">
+                                            <i class="ph ph-clock me-1"></i>
+                                            Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -265,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const row = document.createElement('div');
         row.className = 'row mb-3 option-row';
         row.innerHTML = `
-            <div class="col-md-6">
+            <div class="col-12 col-md-6 mb-3 mb-md-0">
                 <div class="form-floating">
                     <input type="text" class="form-control flatpickr-input"
                            id="datetime_${optionCounter}"
@@ -273,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label for="datetime_${optionCounter}">Data e Ora *</label>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-12 col-md-5 mb-3 mb-md-0">
                 <div class="form-floating">
                     <input type="text" class="form-control"
                            id="description_${optionCounter}"
@@ -281,9 +339,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label for="description_${optionCounter}">Descrizione (opzionale)</label>
                 </div>
             </div>
-            <div class="col-md-1 d-flex align-items-end">
-                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOptionRow(this)">
-                    <i class="ph ph-trash"></i>
+            <div class="col-12 col-md-1 d-flex align-items-end justify-content-center justify-content-md-end">
+                <button type="button" class="btn btn-outline-danger btn-sm w-100 w-md-auto" onclick="removeOptionRow(this)">
+                    <i class="ph ph-trash me-1"></i>
+                    <span class="d-md-none">Rimuovi</span>
                 </button>
             </div>
         `;
