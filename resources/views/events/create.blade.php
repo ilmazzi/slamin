@@ -3812,6 +3812,7 @@ function updateInvitationsData() {
 
 // Enhanced form submission
 document.getElementById('eventForm').addEventListener('submit', function(e) {
+    console.log('Form submit event triggered on mobile/desktop');
     e.preventDefault(); // Prevent default submission
 
     // Validate dates
@@ -3833,6 +3834,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
 
         // Validate start datetime (only required for non-availability-based events)
         const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+        console.log('Form validation - isAvailabilityBased:', isAvailabilityBased, 'startDateTime:', startDateTime, 'endDateTime:', endDateTime);
         if (!startDateTime && !isAvailabilityBased) {
             document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_required') }}';
             document.getElementById('start_datetime').classList.add('is-invalid');
@@ -3895,7 +3897,22 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
     submitStatus.style.display = 'block';
 
     // Submit the form
+    console.log('About to submit form');
     this.submit();
+});
+
+// Add specific event listener for submit button for mobile debugging
+document.addEventListener('DOMContentLoaded', function() {
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+            console.log('Submit button clicked on mobile/desktop');
+        });
+
+        submitBtn.addEventListener('touchend', function(e) {
+            console.log('Submit button touched on mobile');
+        });
+    }
 });
 
 function startAutoSave() {
