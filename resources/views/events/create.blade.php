@@ -1892,10 +1892,10 @@ function setupEventListeners() {
 }
 
 function nextStep() {
-
+    console.log('nextStep called, currentStep:', currentStep);
 
     const validationResult = validateCurrentStep();
-
+    console.log('nextStep validation result:', validationResult);
 
     if (validationResult) {
 
@@ -2000,6 +2000,7 @@ function updateProgress() {
 function validateCurrentStep() {
     const step = currentStep;
     let isValid = true;
+    console.log('Validating step:', step);
 
 
 
@@ -2057,10 +2058,11 @@ function validateCurrentStep() {
         const endDateTime = document.getElementById('end_datetime').value;
         const isOnline = document.getElementById('is_online')?.checked || false;
 
-
+        console.log('Step 2 validation - startDateTime:', startDateTime, 'endDateTime:', endDateTime, 'isOnline:', isOnline);
 
         // Check if event is availability-based
         const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+        console.log('Step 2 validation - isAvailabilityBased:', isAvailabilityBased);
 
         if (!startDateTime && !isAvailabilityBased) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
@@ -2072,7 +2074,7 @@ function validateCurrentStep() {
             showError('end_datetime', 'Data e ora di fine sono obbligatorie');
             highlightError('end_datetime');
             isValid = false;
-        } else if (new Date(endDateTime) <= new Date(startDateTime)) {
+        } else if (startDateTime && endDateTime && new Date(endDateTime) <= new Date(startDateTime)) {
             showError('end_datetime', 'La data di fine deve essere successiva a quella di inizio');
             highlightError('start_datetime');
             highlightError('end_datetime');
@@ -2284,6 +2286,7 @@ function validateCurrentStep() {
     }
 
 
+    console.log('Validation result for step', step, ':', isValid);
     return isValid;
 }
 
