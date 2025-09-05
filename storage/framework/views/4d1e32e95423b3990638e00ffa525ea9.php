@@ -333,7 +333,26 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($event->title); ?></h6>
-                                            <small class="text-muted f-s-12"><?php echo e($event->start_datetime->format('d/m/Y H:i')); ?></small>
+                                            <small class="text-muted f-s-12">
+                                                <?php if($event->start_datetime): ?>
+                                                    <?php if($event->start_datetime): ?>
+                                                    <?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>
+
+                                                <?php elseif($event->is_availability_based): ?>
+                                                    <?php echo e(__('events.availability_based_event')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(__('events.not_specified')); ?>
+
+                                                <?php endif; ?>
+                                                <?php elseif($event->is_availability_based): ?>
+                                                    <?php echo e(__('events.availability_based_event')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(__('events.not_specified')); ?>
+
+                                                <?php endif; ?>
+                                            </small>
                                         </div>
                                     </td>
                                     <td class="text-end">
@@ -370,7 +389,16 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($participation->event->title); ?></h6>
-                                            <small class="text-muted f-s-12"><?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?></small>
+                                            <small class="text-muted f-s-12"><?php if($participation->event->start_datetime): ?>
+                                                    <?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?>
+
+                                                <?php elseif($participation->event->is_availability_based): ?>
+                                                    <?php echo e(__('events.availability_based_event')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(__('events.not_specified')); ?>
+
+                                                <?php endif; ?></small>
                                         </div>
                                     </td>
                                     <td class="text-end">
@@ -1102,7 +1130,16 @@
                                             <td>
                                                 <div>
                                                     <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($event->title); ?></h6>
-                                                    <small class="text-muted f-s-12"><?php echo e($event->start_datetime->format('d/m/Y H:i')); ?></small>
+                                                    <small class="text-muted f-s-12"><?php if($event->start_datetime): ?>
+                                                    <?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>
+
+                                                <?php elseif($event->is_availability_based): ?>
+                                                    <?php echo e(__('events.availability_based_event')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(__('events.not_specified')); ?>
+
+                                                <?php endif; ?></small>
                                                 </div>
                                             </td>
                                             <td class="text-end">
@@ -1315,7 +1352,16 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14"><?php echo e($participation->event->title); ?></h6>
-                                            <small class="text-muted f-s-12"><?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?></small>
+                                            <small class="text-muted f-s-12"><?php if($participation->event->start_datetime): ?>
+                                                    <?php echo e($participation->event->start_datetime->format('d/m/Y H:i')); ?>
+
+                                                <?php elseif($participation->event->is_availability_based): ?>
+                                                    <?php echo e(__('events.availability_based_event')); ?>
+
+                                                <?php else: ?>
+                                                    <?php echo e(__('events.not_specified')); ?>
+
+                                                <?php endif; ?></small>
                                         </div>
                                     </td>
                                     <td class="text-end">

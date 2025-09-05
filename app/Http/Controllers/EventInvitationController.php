@@ -47,7 +47,7 @@ class EventInvitationController extends Controller
     /**
      * Show the specified invitation
      */
-    public function show(EventInvitation $invitation): View
+    public function show(Event $event, EventInvitation $invitation): View
     {
         // Check if user can view this invitation
         if ($invitation->invited_user_id !== Auth::id()) {
@@ -147,7 +147,7 @@ class EventInvitationController extends Controller
         ]);
 
         // Debug: log dello status prima dell'accettazione
-        \Log::info('Invitation status before accept:', [
+        Log::info('Invitation status before accept:', [
             'invitation_id' => $invitation->id,
             'current_status' => $invitation->status,
             'can_be_accepted' => $invitation->canBeAccepted(),
@@ -237,7 +237,7 @@ class EventInvitationController extends Controller
     /**
      * Cancel an invitation (organizer only)
      */
-    public function cancel(EventInvitation $invitation): RedirectResponse
+    public function cancel(Event $event, EventInvitation $invitation): RedirectResponse
     {
         // Check if user can cancel this invitation
         if (!$invitation->event->canBeModifiedBy(Auth::user())) {
@@ -313,7 +313,7 @@ class EventInvitationController extends Controller
     /**
      * Resend invitation
      */
-    public function resend(EventInvitation $invitation): JsonResponse
+    public function resend(Event $event, EventInvitation $invitation): JsonResponse
     {
         if (!$invitation->event->canBeModifiedBy(Auth::user())) {
             abort(403, 'Non hai i permessi per reinviare inviti per questo evento.');

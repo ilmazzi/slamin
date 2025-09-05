@@ -404,6 +404,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
     Route::get('/api/events/calendar', [EventController::class, 'calendar'])->name('events.calendar');
 
+    // Event availability routes
+    Route::prefix('events/{event}/availability')->name('events.availability.')->group(function () {
+        Route::get('/', [App\Http\Controllers\EventAvailabilityController::class, 'show'])->name('show');
+        Route::get('/respond', [App\Http\Controllers\EventAvailabilityController::class, 'respond'])->name('respond');
+        Route::post('/options', [App\Http\Controllers\EventAvailabilityController::class, 'storeOptions'])->name('store-options');
+        Route::post('/response', [App\Http\Controllers\EventAvailabilityController::class, 'storeResponse'])->name('store-response');
+        Route::delete('/options/{option}', [App\Http\Controllers\EventAvailabilityController::class, 'deleteOption'])->name('delete-option');
+        Route::get('/options/{option}/responses', [App\Http\Controllers\EventAvailabilityController::class, 'getOptionResponses'])->name('option-responses');
+    });
+
     // Wishlist routes
     Route::prefix('wishlist')->name('wishlist.')->group(function () {
         Route::get('/', [App\Http\Controllers\WishlistController::class, 'index'])->name('index');

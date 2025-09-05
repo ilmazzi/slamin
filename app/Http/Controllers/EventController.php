@@ -39,7 +39,7 @@ class EventController extends Controller
             'requests.user'
         ])
                      ->published()
-                     ->orderBy('start_datetime');
+                     ->orderByRaw('CASE WHEN start_datetime IS NULL THEN 1 ELSE 0 END, start_datetime');
 
         // Apply upcoming filter only if not filtering for past events or invitations
         if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
@@ -352,9 +352,9 @@ class EventController extends Controller
                 'subtitle' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
                 'requirements' => 'nullable|string',
-                'start_datetime' => 'required|date_format:Y-m-d H:i|after:now',
-                'end_datetime' => 'required|date_format:Y-m-d H:i|after:start_datetime',
-                'registration_deadline' => 'nullable|date_format:Y-m-d H:i|before:start_datetime',
+                'start_datetime' => 'nullable|date_format:Y-m-d H:i|after:now',
+                'end_datetime' => 'nullable|date_format:Y-m-d H:i|after:start_datetime',
+                'registration_deadline' => 'nullable|date_format:Y-m-d H:i',
                 'venue_name' => 'nullable|string|max:255',
                 'venue_address' => 'nullable|string',
                 'city' => 'nullable|string|max:255',
@@ -392,6 +392,10 @@ class EventController extends Controller
                 'is_online' => 'nullable|boolean',
                 'timezone' => 'required_if:is_online,1|string|max:50',
                 'online_url' => 'nullable|url|max:500',
+                // Availability fields
+                'is_availability_based' => 'nullable|boolean',
+                'availability_instructions' => 'nullable|string|max:1000',
+                'availability_deadline' => 'nullable|date_format:Y-m-d H:i',
                 // Festival fields
                 'festival_id' => 'nullable|exists:events,id',
                 'selected_festival_events' => 'nullable|string', // JSON string of selected events
@@ -413,6 +417,67 @@ class EventController extends Controller
                 'request_data' => $request->all()
             ]);
             throw $e;
+        }
+
+        // Validazione personalizzata per eventi con disponibilità multiple
+        if ($validated['is_availability_based'] ?? false) {
+            // Per eventi con disponibilità multiple, le date non sono obbligatorie
+            // ma se fornite devono essere valide
+            if (empty($validated['start_datetime']) && empty($validated['end_datetime'])) {
+                // OK - le date verranno definite tramite le opzioni di disponibilità
+            } elseif (!empty($validated['start_datetime']) && !empty($validated['end_datetime'])) {
+                // Se fornite, devono essere valide
+                if (strtotime($validated['end_datetime']) <= strtotime($validated['start_datetime'])) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'end_datetime' => ['La data di fine deve essere successiva a quella di inizio.']
+                    ]);
+                }
+            } else {
+                // Se una sola data è fornita, entrambe devono essere fornite
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'start_datetime' => ['Se fornisci una data, devi fornire sia data di inizio che di fine.'],
+                    'end_datetime' => ['Se fornisci una data, devi fornire sia data di inizio che di fine.']
+                ]);
+            }
+
+            // Validazione registration_deadline se fornita
+            if (!empty($validated['registration_deadline']) && !empty($validated['start_datetime'])) {
+                if (strtotime($validated['registration_deadline']) >= strtotime($validated['start_datetime'])) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'registration_deadline' => ['La scadenza iscrizioni deve essere prima della data di inizio.']
+                    ]);
+                }
+            }
+
+            // Validazione availability_deadline se fornita
+            if (!empty($validated['availability_deadline']) && !empty($validated['start_datetime'])) {
+                if (strtotime($validated['availability_deadline']) >= strtotime($validated['start_datetime'])) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'availability_deadline' => ['La scadenza disponibilità deve essere prima della data di inizio.']
+                    ]);
+                }
+            }
+        } else {
+            // Per eventi normali, le date sono obbligatorie
+            if (empty($validated['start_datetime'])) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'start_datetime' => ['La data e ora di inizio sono obbligatorie per eventi normali.']
+                ]);
+            }
+            if (empty($validated['end_datetime'])) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'end_datetime' => ['La data e ora di fine sono obbligatorie per eventi normali.']
+                ]);
+            }
+
+            // Validazione registration_deadline per eventi normali
+            if (!empty($validated['registration_deadline'])) {
+                if (strtotime($validated['registration_deadline']) >= strtotime($validated['start_datetime'])) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'registration_deadline' => ['La scadenza iscrizioni deve essere prima della data di inizio.']
+                    ]);
+                }
+            }
         }
 
         // Log validated data
@@ -1644,8 +1709,8 @@ class EventController extends Controller
             return [
                 'id' => $event->id,
                 'title' => $event->title,
-                'start' => $event->start_datetime->toISOString(),
-                'end' => $event->end_datetime->toISOString(),
+                'start' => $event->start_datetime ? $event->start_datetime->toISOString() : now()->toISOString(),
+                'end' => $event->end_datetime ? $event->end_datetime->toISOString() : now()->addHour()->toISOString(),
                 'url' => route('events.show', $event),
                 'className' => $className,
                 'backgroundColor' => $backgroundColor,

@@ -108,6 +108,12 @@ class Notification extends Model
     const TYPE_CHAT_MESSAGE = 'chat_message';
 
     /**
+     * Type constants for availability
+     */
+    const TYPE_AVAILABILITY_REQUEST = 'availability_request';
+    const TYPE_AVAILABILITY_RESPONSE = 'availability_response';
+
+    /**
      * Get the user this notification belongs to
      */
     public function user(): BelongsTo
@@ -1092,7 +1098,7 @@ class Notification extends Model
     public static function createContentReportedNotification(Report $report): void
     {
         $contentAuthor = $report->reportable->user ?? null;
-        
+
         if (!$contentAuthor) {
             return;
         }
@@ -1167,7 +1173,7 @@ class Notification extends Model
         string $message
     ): void {
         $contentAuthor = $report->reportable->user ?? null;
-        
+
         if (!$contentAuthor) {
             return;
         }

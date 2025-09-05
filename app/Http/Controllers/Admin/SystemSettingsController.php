@@ -21,6 +21,7 @@ class SystemSettingsController extends Controller
             'upload' => 'Limiti Upload',
             'video' => 'Limiti Video',
             'moderation' => 'Moderazione',
+            'availability' => 'Disponibilità Eventi',
             'system' => 'Impostazioni'
         ];
 

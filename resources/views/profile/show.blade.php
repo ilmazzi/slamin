@@ -330,7 +330,21 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <small class="text-muted f-s-12">
+                                                @if($event->start_datetime)
+                                                    @if($event->start_datetime)
+                                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                @elseif($event->is_availability_based)
+                                                    {{ __('events.availability_based_event') }}
+                                                @else
+                                                    {{ __('events.not_specified') }}
+                                                @endif
+                                                @elseif($event->is_availability_based)
+                                                    {{ __('events.availability_based_event') }}
+                                                @else
+                                                    {{ __('events.not_specified') }}
+                                                @endif
+                                            </small>
                                         </div>
                                     </td>
                                     <td class="text-end">
@@ -367,7 +381,13 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14">{{ $participation->event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $participation->event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <small class="text-muted f-s-12">@if($participation->event->start_datetime)
+                                                    {{ $participation->event->start_datetime->format('d/m/Y H:i') }}
+                                                @elseif($participation->event->is_availability_based)
+                                                    {{ __('events.availability_based_event') }}
+                                                @else
+                                                    {{ __('events.not_specified') }}
+                                                @endif</small>
                                         </div>
                                     </td>
                                     <td class="text-end">
@@ -1069,7 +1089,13 @@
                                             <td>
                                                 <div>
                                                     <h6 class="mb-0 f-w-600 f-s-14">{{ $event->title }}</h6>
-                                                    <small class="text-muted f-s-12">{{ $event->start_datetime->format('d/m/Y H:i') }}</small>
+                                                    <small class="text-muted f-s-12">@if($event->start_datetime)
+                                                    {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                @elseif($event->is_availability_based)
+                                                    {{ __('events.availability_based_event') }}
+                                                @else
+                                                    {{ __('events.not_specified') }}
+                                                @endif</small>
                                                 </div>
                                             </td>
                                             <td class="text-end">
@@ -1278,7 +1304,13 @@
                                     <td>
                                         <div>
                                             <h6 class="mb-0 f-w-600 f-s-14">{{ $participation->event->title }}</h6>
-                                            <small class="text-muted f-s-12">{{ $participation->event->start_datetime->format('d/m/Y H:i') }}</small>
+                                            <small class="text-muted f-s-12">@if($participation->event->start_datetime)
+                                                    {{ $participation->event->start_datetime->format('d/m/Y H:i') }}
+                                                @elseif($participation->event->is_availability_based)
+                                                    {{ __('events.availability_based_event') }}
+                                                @else
+                                                    {{ __('events.not_specified') }}
+                                                @endif</small>
                                         </div>
                                     </td>
                                     <td class="text-end">

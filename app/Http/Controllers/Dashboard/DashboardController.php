@@ -170,7 +170,7 @@ class DashboardController extends Controller
         foreach ($organizedEvents as $event) {
             $events[] = [
                 'title' => $event->title,
-                'date' => $event->start_datetime->format('d M Y, H:i'),
+                'date' => $event->start_datetime ? $event->start_datetime->format('d M Y, H:i') : 'Data non disponibile',
                 'venue' => $event->venue_name,
                 'type' => 'organized',
                 'url' => route('events.show', $event),
@@ -189,7 +189,7 @@ class DashboardController extends Controller
         foreach ($participatingEvents as $event) {
             $events[] = [
                 'title' => $event->title,
-                'date' => $event->start_datetime->format('d M Y, H:i'),
+                'date' => $event->start_datetime ? $event->start_datetime->format('d M Y, H:i') : 'Data non disponibile',
                 'venue' => $event->venue_name,
                 'type' => 'participating',
                 'url' => route('events.show', $event),
@@ -208,7 +208,7 @@ class DashboardController extends Controller
         foreach ($wishlistedEvents as $event) {
             $events[] = [
                 'title' => $event->title,
-                'date' => $event->start_datetime->format('d M Y, H:i'),
+                'date' => $event->start_datetime ? $event->start_datetime->format('d M Y, H:i') : 'Data non disponibile',
                 'venue' => $event->venue_name,
                 'type' => 'wishlisted',
                 'url' => route('events.show', $event),

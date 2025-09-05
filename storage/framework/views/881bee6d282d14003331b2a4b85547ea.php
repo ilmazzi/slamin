@@ -309,7 +309,7 @@
 
                                                 </p>
                                                 <p class="mb-0 text-muted f-s-12">
-                                                    <i class="ph ph-calendar me-1"></i><?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>
+                                                    <i class="ph ph-calendar me-1"></i><?php echo e($event->start_datetime ? $event->start_datetime->format('d/m/Y H:i') : 'Data non disponibile'); ?>
 
                                                 </p>
                                             </div>
@@ -417,7 +417,7 @@
                                         </a>
                                     </p>
                                     <small class="text-muted f-s-12">
-                                        <i class="ph ph-calendar me-1"></i><?php echo e($invitation->event->start_datetime->format('d/m/Y H:i')); ?>
+                                        <i class="ph ph-calendar me-1"></i><?php echo e($invitation->event->start_datetime ? $invitation->event->start_datetime->format('d/m/Y H:i') : 'Data non disponibile'); ?>
 
                                     </small>
                                 </div>

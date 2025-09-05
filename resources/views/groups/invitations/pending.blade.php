@@ -84,7 +84,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <small class="text-muted">{{ $invitation->created_at->format('d/m/Y H:i') }}</small>
+                                                <small class="text-muted">{{ $invitation->created_at ? $invitation->created_at->format('d/m/Y H:i') : 'Data non disponibile' }}</small>
                                             </td>
                                             <td>
                                                 @if($invitation->expires_at)

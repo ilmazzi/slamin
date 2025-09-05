@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <small class="text-muted">Inviato il</small>
-                                        <div class="fw-medium">{{ $invitation->created_at->format('d/m/Y H:i') }}</div>
+                                        <div class="fw-medium">{{ $invitation->created_at ? $invitation->created_at->format('d/m/Y H:i') : 'Data non disponibile' }}</div>
                                     </div>
                                     @if($invitation->expires_at)
                                         <div class="mb-3">

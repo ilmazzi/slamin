@@ -1,59 +1,63 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('events.manage_event') . ' ' . $event->title); ?>
+<?php $__env->startSection('css'); ?>
 
-@section('title', __('events.manage_event') . ' ' . $event->title)
-@section('css')
+<?php $__env->stopSection(); ?>
 
-@endsection
+<?php $__env->startSection('breadcrumb-title'); ?>
+<h3><?php echo e(__('events.manage_event')); ?></h3>
+<?php $__env->stopSection(); ?>
 
-@section('breadcrumb-title')
-<h3>{{ __('events.manage_event') }}</h3>
-@endsection
+<?php $__env->startSection('breadcrumb-items'); ?>
+<li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('events.dashboard')); ?></a></li>
+<li class="breadcrumb-item"><a href="<?php echo e(route('events.index')); ?>"><?php echo e(__('events.events')); ?></a></li>
+<li class="breadcrumb-item"><a href="<?php echo e(route('events.show', $event)); ?>"><?php echo e($event->title); ?></a></li>
+<li class="breadcrumb-item active"><?php echo e(__('common.manage')); ?></li>
+<?php $__env->stopSection(); ?>
 
-@section('breadcrumb-items')
-<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events.dashboard') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events.events') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}">{{ $event->title }}</a></li>
-<li class="breadcrumb-item active">{{ __('common.manage') }}</li>
-@endsection
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
 
-    <!-- {{ __('dashboard.dashboard') }} Header -->
+    <!-- <?php echo e(__('dashboard.dashboard')); ?> Header -->
     <div class="row m-1 mb-4">
         <div class="col-12">
             <div class="card bg-primary text-white position-relative overflow-hidden" style="min-height: 200px;">
-                @if($event->image_url)
-                    <div class="position-absolute w-100 h-100" style="background: url('{{ $event->image_url }}') center/cover; opacity: 0.3;"></div>
-                @endif
+                <?php if($event->image_url): ?>
+                    <div class="position-absolute w-100 h-100" style="background: url('<?php echo e($event->image_url); ?>') center/cover; opacity: 0.3;"></div>
+                <?php endif; ?>
                 <div class="card-body p-4 position-relative" style="z-index: 2;">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h2 class="text-white mb-3 fw-bold">{{ $event->title }}</h2>
-                            @if($event->start_datetime && $event->start_datetime->isPast())
+                            <h2 class="text-white mb-3 fw-bold"><?php echo e($event->title); ?></h2>
+                            <?php if($event->start_datetime && $event->start_datetime->isPast()): ?>
                                 <span class="badge bg-white text-primary fs-6 px-3 py-2">
-                                    <i class="ph ph-clock me-2"></i>{{ __('events.event_ended') }}
+                                    <i class="ph ph-clock me-2"></i><?php echo e(__('events.event_ended')); ?>
+
                                 </span>
-                            @elseif($event->start_datetime && $event->start_datetime->diffInDays(now()) <= 7)
+                            <?php elseif($event->start_datetime && $event->start_datetime->diffInDays(now()) <= 7): ?>
                                 <span class="badge bg-warning text-dark fs-6 px-3 py-2">
-                                    <i class="ph ph-warning me-2"></i>{{ __('events.event_imminent') }}
+                                    <i class="ph ph-warning me-2"></i><?php echo e(__('events.event_imminent')); ?>
+
                                 </span>
-                            @elseif($event->is_availability_based)
+                            <?php elseif($event->is_availability_based): ?>
                                 <span class="badge bg-info fs-6 px-3 py-2">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_based_event') }}
+                                    <i class="ph ph-calendar-check me-2"></i><?php echo e(__('events.availability_based_event')); ?>
+
                                 </span>
-                            @else
+                            <?php else: ?>
                                 <span class="badge bg-success fs-6 px-3 py-2">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.upcoming_events') }}
+                                    <i class="ph ph-calendar-check me-2"></i><?php echo e(__('events.upcoming_events')); ?>
+
                                 </span>
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="col-md-4 text-end">
-                            <a href="{{ route('events.show', $event) }}" class="btn btn-white text-primary me-2 px-4">
-                                <i class="ph ph-eye me-2"></i>{{ __('events.view_event') }}
+                            <a href="<?php echo e(route('events.show', $event)); ?>" class="btn btn-white text-primary me-2 px-4">
+                                <i class="ph ph-eye me-2"></i><?php echo e(__('events.view_event')); ?>
+
                             </a>
-                            <a href="{{ route('events.edit', $event) }}" class="btn btn-light-white text-white px-4">
-                                <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
+                            <a href="<?php echo e(route('events.edit', $event)); ?>" class="btn btn-light-white text-white px-4">
+                                <i class="ph ph-pencil me-2"></i><?php echo e(__('events.edit_event_action')); ?>
+
                             </a>
                         </div>
                     </div>
@@ -68,55 +72,55 @@
             <div class="row g-4">
                     <div class="col-6 col-md-3">
                         <div class="card">
-                            @php $pendingInvites = $event->pendingInvitations->count(); @endphp
+                            <?php $pendingInvites = $event->pendingInvitations->count(); ?>
                             <span class="bg-warning h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
                                 <i class="ph ph-envelope f-s-24"></i>
                             </span>
                             <div class="card-body eshop-cards">
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
-                                    <h3 class="text-warning mb-0">{{ $pendingInvites }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_invitations') }}</p>
-                                    <span class="badge bg-light-warning">📨 {{ __('events.waiting_status') }}</span>
+                                    <h3 class="text-warning mb-0"><?php echo e($pendingInvites); ?></h3>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1"><?php echo e(__('events.pending_invitations')); ?></p>
+                                    <span class="badge bg-light-warning">📨 <?php echo e(__('events.waiting_status')); ?></span>
                     </div>
                 </div>
             </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="card">
-                            @php $pendingRequests = $event->pendingRequests->count(); @endphp
+                            <?php $pendingRequests = $event->pendingRequests->count(); ?>
                             <span class="bg-info h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
                                 <i class="ph ph-hand-waving f-s-24"></i>
                             </span>
                             <div class="card-body eshop-cards">
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
-                                    <h3 class="text-info mb-0">{{ $pendingRequests }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_requests') }}</p>
-                                    <span class="badge bg-light-info">🙋 {{ __('events.applications_status') }}</span>
+                                    <h3 class="text-info mb-0"><?php echo e($pendingRequests); ?></h3>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1"><?php echo e(__('events.pending_requests')); ?></p>
+                                    <span class="badge bg-light-info">🙋 <?php echo e(__('events.applications_status')); ?></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="card">
-                            @php $confirmed = $event->acceptedInvitations->count() + $event->acceptedRequests->count(); @endphp
+                            <?php $confirmed = $event->acceptedInvitations->count() + $event->acceptedRequests->count(); ?>
                             <span class="bg-success h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
                                 <i class="ph ph-check-circle f-s-24"></i>
                             </span>
                             <div class="card-body eshop-cards">
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
-                                    <h3 class="text-success mb-0">{{ $confirmed }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.confirmed_participants') }}</p>
-                                    <span class="badge bg-light-success">✅ {{ __('events.participants_status') }}</span>
+                                    <h3 class="text-success mb-0"><?php echo e($confirmed); ?></h3>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1"><?php echo e(__('events.confirmed_participants')); ?></p>
+                                    <span class="badge bg-light-success">✅ <?php echo e(__('events.participants_status')); ?></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="card">
-                            @php
+                            <?php
                                 if ($event->start_datetime) {
                                     $daysToEvent = $event->start_datetime->diffInDays(now());
                                     $isPast = $event->start_datetime->isPast();
@@ -124,31 +128,36 @@
                                     $daysToEvent = null;
                                     $isPast = false;
                                 }
-                            @endphp
-                            <span class="bg-{{ $isPast ? 'secondary' : 'primary' }} h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
-                                <i class="ph ph-calendar-{{ $isPast ? 'x' : 'check' }} f-s-24"></i>
+                            ?>
+                            <span class="bg-<?php echo e($isPast ? 'secondary' : 'primary'); ?> h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
+                                <i class="ph ph-calendar-<?php echo e($isPast ? 'x' : 'check'); ?> f-s-24"></i>
                             </span>
                             <div class="card-body eshop-cards">
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
-                                    <h3 class="text-{{ $isPast ? 'secondary' : 'primary' }} mb-0">
-                                        @if($daysToEvent !== null)
-                                            {{ abs(ceil($daysToEvent)) }}
-                                        @else
+                                    <h3 class="text-<?php echo e($isPast ? 'secondary' : 'primary'); ?> mb-0">
+                                        <?php if($daysToEvent !== null): ?>
+                                            <?php echo e(abs(ceil($daysToEvent))); ?>
+
+                                        <?php else: ?>
                                             -
-                                        @endif
+                                        <?php endif; ?>
                                     </h3>
                                     <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">
-                                        @if($event->is_availability_based)
-                                            {{ __('events.availability_based_event') }}
-                                        @elseif($daysToEvent !== null)
-                                            {{ $isPast ? __('events.days_ago') : __('events.days_remaining') }}
-                                        @else
-                                            {{ __('events.not_specified') }}
-                                        @endif
+                                        <?php if($event->is_availability_based): ?>
+                                            <?php echo e(__('events.availability_based_event')); ?>
+
+                                        <?php elseif($daysToEvent !== null): ?>
+                                            <?php echo e($isPast ? __('events.days_ago') : __('events.days_remaining')); ?>
+
+                                        <?php else: ?>
+                                            <?php echo e(__('events.not_specified')); ?>
+
+                                        <?php endif; ?>
                                     </p>
-                                    <span class="badge bg-light-{{ $isPast ? 'secondary' : 'primary' }}">
-                                        {{ $isPast ? '🕒 ' . __('events.past') : '⏰ ' . __('events.imminent') }}
+                                    <span class="badge bg-light-<?php echo e($isPast ? 'secondary' : 'primary'); ?>">
+                                        <?php echo e($isPast ? '🕒 ' . __('events.past') : '⏰ ' . __('events.imminent')); ?>
+
                                     </span>
                                 </div>
                             </div>
@@ -159,27 +168,27 @@
     </div>
 
     <!-- Event Image Section -->
-    @if($event->image_url)
+    <?php if($event->image_url): ?>
     <div class="row m-1 mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-image me-2"></i>Immagine {{ __('invitations.event') }}</h6>
+                    <h6 class="mb-0"><i class="ph ph-image me-2"></i>Immagine <?php echo e(__('invitations.event')); ?></h6>
                 </div>
                 <div class="card-body text-center">
-                    <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
+                    <img src="<?php echo e($event->image_url); ?>" alt="<?php echo e($event->title); ?>" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
                 </div>
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Quick Actions -->
     <div class="row m-1 mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-lightning me-2"></i>{{ __('invitations.actions') }} Rapide</h6>
+                    <h6 class="mb-0"><i class="ph ph-lightning me-2"></i><?php echo e(__('invitations.actions')); ?> Rapide</h6>
                 </div>
                 <div class="card-body">
         <div class="row g-3">
@@ -215,18 +224,19 @@
         <div class="col-lg-8">
 
             <!-- Pending Requests -->
-            @if($event->pendingRequests->count() > 0)
+            <?php if($event->pendingRequests->count() > 0): ?>
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
-                        <i class="ph ph-hand-waving me-2"></i>{{ __('events.participation_requests') }}
-                        <span class="badge bg-warning ms-2">{{ $event->pendingRequests->count() }}</span>
+                        <i class="ph ph-hand-waving me-2"></i><?php echo e(__('events.participation_requests')); ?>
+
+                        <span class="badge bg-warning ms-2"><?php echo e($event->pendingRequests->count()); ?></span>
                     </h5>
 
                     <!-- Bulk Actions -->
                     <div class="alert alert-primary d-none" id="bulkActionsRequests">
                         <div class="d-flex align-items-center justify-content-between">
-                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> {{ __('events.requests_selected') }}</span>
+                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> <?php echo e(__('events.requests_selected')); ?></span>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-light-success btn-sm" onclick="bulkActionRequests('accept')">
                                 <i class="ph ph-check me-1"></i>Accetta
@@ -239,40 +249,41 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    @foreach($event->pendingRequests as $request)
-                        <div class="participant-item border-bottom" data-request-id="{{ $request->id }}" style="border-color: #f0f0f0 !important;">
+                    <?php $__currentLoopData = $event->pendingRequests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $request): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="participant-item border-bottom" data-request-id="<?php echo e($request->id); ?>" style="border-color: #f0f0f0 !important;">
                             <div class="p-3">
                                 <div class="d-flex align-items-start">
                                     <div class="form-check me-3 mt-1">
-                                        <input type="checkbox" class="form-check-input request-checkbox" value="{{ $request->id }}">
+                                        <input type="checkbox" class="form-check-input request-checkbox" value="<?php echo e($request->id); ?>">
                                     </div>
 
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <h6 class="mb-1 fw-bold">
-                                                    Da <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">{{ $request->user->getDisplayName() }}</a>
-                                                    @if($request->user->username)
-                                                        <span class="text-muted">({{ $request->user->username }})</span>
-                                                    @endif
+                                                    Da <a href="<?php echo e(route('user.show', $request->user)); ?>" class="text-decoration-none hover-effect"><?php echo e($request->user->getDisplayName()); ?></a>
+                                                    <?php if($request->user->username): ?>
+                                                        <span class="text-muted">(<?php echo e($request->user->username); ?>)</span>
+                                                    <?php endif; ?>
                                                 </h6>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <span class="badge bg-primary">{{ ucfirst($request->requested_role) }}</span>
+                                                    <span class="badge bg-primary"><?php echo e(ucfirst($request->requested_role)); ?></span>
                                                     <small class="text-muted">
-                                                        <i class="ph ph-clock me-1"></i>{{ $request->created_at->diffForHumans() }}
+                                                        <i class="ph ph-clock me-1"></i><?php echo e($request->created_at->diffForHumans()); ?>
+
                                                     </small>
                                                 </div>
                                             </div>
                                             <div class="d-flex gap-2">
-                                                <button class="btn btn-success btn-sm" onclick="quickResponse({{ $request->id }}, 'accept')"
+                                                <button class="btn btn-success btn-sm" onclick="quickResponse(<?php echo e($request->id); ?>, 'accept')"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" title="Accetta richiesta">
                                                     <i class="ph ph-check me-1"></i>Accetta
                                                 </button>
-                                                <button class="btn btn-danger btn-sm" onclick="quickResponse({{ $request->id }}, 'decline')"
+                                                <button class="btn btn-danger btn-sm" onclick="quickResponse(<?php echo e($request->id); ?>, 'decline')"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" title="Rifiuta richiesta">
                                                     <i class="ph ph-x me-1"></i>Rifiuta
                                                 </button>
-                                                <button class="btn btn-light-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#requestDetailModal" data-request-id="{{ $request->id }}"
+                                                <button class="btn btn-light-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#requestDetailModal" data-request-id="<?php echo e($request->id); ?>"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" title="Vedi dettagli">
                                                     <i class="ph ph-eye"></i>
                                                 </button>
@@ -280,55 +291,58 @@
                                         </div>
 
                                         <div class="message-preview mb-2">
-                                            <strong>Messaggio:</strong> {{ $request->message }}
+                                            <strong>Messaggio:</strong> <?php echo e($request->message); ?>
+
                                         </div>
 
-                                        @if($request->experience)
+                                        <?php if($request->experience): ?>
                                             <div class="mb-2">
                                                 <small class="text-muted">
-                                                    <strong>Esperienza:</strong> {{ $request->experience }}
+                                                    <strong>Esperienza:</strong> <?php echo e($request->experience); ?>
+
                                                 </small>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
 
-                                        @if($request->portfolio_links && count($request->portfolio_links) > 0)
+                                        <?php if($request->portfolio_links && count($request->portfolio_links) > 0): ?>
                                             <div class="mb-2">
                                                 <small class="text-muted">
                                                     <strong>Portfolio:</strong>
-                                                    @foreach($request->portfolio_links as $link)
-                                                        <a href="{{ $link }}" target="_blank" class="me-2 text-decoration-none">
-                                                            <i class="ph ph-link me-1"></i>Link {{ $loop->iteration }}
+                                                    <?php $__currentLoopData = $request->portfolio_links; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <a href="<?php echo e($link); ?>" target="_blank" class="me-2 text-decoration-none">
+                                                            <i class="ph ph-link me-1"></i>Link <?php echo e($loop->iteration); ?>
+
                                                         </a>
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </small>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Pending Invitations -->
-            @if($event->pendingInvitations->count() > 0)
+            <?php if($event->pendingInvitations->count() > 0): ?>
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-envelope me-2"></i>Inviti in Attesa di Risposta
-                        <span class="badge bg-primary ms-2">{{ $event->pendingInvitations->count() }}</span>
+                        <span class="badge bg-primary ms-2"><?php echo e($event->pendingInvitations->count()); ?></span>
                     </h5>
                 </div>
                 <div class="card-body p-3">
                     <div class="list-group list-group-flush">
-                    @foreach($event->pendingInvitations as $invitation)
+                    <?php $__currentLoopData = $event->pendingInvitations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invitation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="list-group-item">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->invitedUser) }}"
-                                             alt="{{ $invitation->invitedUser->getDisplayName() }}"
+                                        <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($invitation->invitedUser)); ?>"
+                                             alt="<?php echo e($invitation->invitedUser->getDisplayName()); ?>"
                                              class="h-45 w-45 rounded-circle"
                                              style="object-fit: cover;">
                                     </div>
@@ -336,34 +350,37 @@
                                         <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1">
                                             <h6 class="mb-1">
-                                                <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
-                                                    {{ $invitation->invitedUser->getDisplayName() }}
+                                                <a href="<?php echo e(route('user.show', $invitation->invitedUser)); ?>" class="text-decoration-none hover-effect">
+                                                    <?php echo e($invitation->invitedUser->getDisplayName()); ?>
+
                                                 </a>
                                             </h6>
                                                 <div class="mb-2">
-                                                    <span class="badge bg-light-info">{{ ucfirst($invitation->role) }}</span>
+                                                    <span class="badge bg-light-info"><?php echo e(ucfirst($invitation->role)); ?></span>
                                             <small class="text-muted ms-2">
-                                                Invitato {{ $invitation->created_at->diffForHumans() }}
+                                                Invitato <?php echo e($invitation->created_at->diffForHumans()); ?>
+
                                             </small>
                                                 </div>
-                                            @if($invitation->expires_at)
+                                            <?php if($invitation->expires_at): ?>
                                                     <div class="mb-2">
                                                         <small class="text-warning">
-                                                    <i class="ph ph-clock me-1"></i>Scade {{ $invitation->expires_at->diffForHumans() }}
+                                                    <i class="ph ph-clock me-1"></i>Scade <?php echo e($invitation->expires_at->diffForHumans()); ?>
+
                                                 </small>
                                                     </div>
-                                            @endif
-                                                @if($invitation->message)
+                                            <?php endif; ?>
+                                                <?php if($invitation->message): ?>
                                                     <div class="alert alert-light-primary p-2 mt-2">
-                                                        <small><em>"{{ $invitation->message }}"</em></small>
+                                                        <small><em>"<?php echo e($invitation->message); ?>"</em></small>
                                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         <div class="d-flex gap-2">
-                                            <button class="btn btn-outline-primary btn-sm" onclick="resendInvitation({{ $invitation->id }})">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="resendInvitation(<?php echo e($invitation->id); ?>)">
                                                 <i class="ph ph-arrow-clockwise me-1"></i>Reinvia
                                             </button>
-                                                                                <button class="btn btn-light-danger btn-sm" onclick="cancelInvitation({{ $invitation->id }})">
+                                                                                <button class="btn btn-light-danger btn-sm" onclick="cancelInvitation(<?php echo e($invitation->id); ?>)">
                                                 <i class="ph ph-x me-1"></i>Cancella
                                             </button>
                                         </div>
@@ -371,22 +388,23 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Confirmed Participants -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-users me-2"></i>{{ __('events.confirmed_participants_list') }}
-                        <span class="badge bg-success ms-2">{{ $event->acceptedInvitations->count() + $event->acceptedRequests->count() }}</span>
+                        <i class="ph ph-users me-2"></i><?php echo e(__('events.confirmed_participants_list')); ?>
+
+                        <span class="badge bg-success ms-2"><?php echo e($event->acceptedInvitations->count() + $event->acceptedRequests->count()); ?></span>
                     </h5>
                 </div>
                 <div class="card-body p-3">
-                    @php
+                    <?php
                         $confirmedParticipants = collect();
                         $confirmedParticipants = $confirmedParticipants->merge(
                             $event->acceptedInvitations->map(function($invitation) {
@@ -408,16 +426,16 @@
                                 ];
                             })
                         );
-                    @endphp
+                    ?>
 
-                    @if($confirmedParticipants->count() > 0)
+                    <?php if($confirmedParticipants->count() > 0): ?>
                         <div class="list-group list-group-flush">
-                            @foreach($confirmedParticipants as $participant)
+                            <?php $__currentLoopData = $confirmedParticipants; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $participant): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="list-group-item">
                                     <div class="row">
                                         <div class="col-auto">
-                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($participant['user']) }}"
-                                                 alt="{{ $participant['user']->getDisplayName() }}"
+                                            <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($participant['user'])); ?>"
+                                                 alt="<?php echo e($participant['user']->getDisplayName()); ?>"
                                                  class="h-45 w-45 rounded-circle"
                                                  style="object-fit: cover;">
                                         </div>
@@ -425,35 +443,38 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
                                                 <h6 class="mb-1">
-                                                    <a href="{{ route('user.show', $participant['user']) }}" class="text-decoration-none hover-effect">
-                                                        {{ $participant['user']->getDisplayName() }}
+                                                    <a href="<?php echo e(route('user.show', $participant['user'])); ?>" class="text-decoration-none hover-effect">
+                                                        <?php echo e($participant['user']->getDisplayName()); ?>
+
                                                     </a>
                                                 </h6>
                                                     <div class="mb-1">
-                                                        <span class="badge bg-light-primary">{{ ucfirst($participant['role']) }}</span>
+                                                        <span class="badge bg-light-primary"><?php echo e(ucfirst($participant['role'])); ?></span>
                                                         <span class="badge bg-light-success ms-1">
-                                                            {{ $participant['type'] === 'invited' ? __('events.invited_badge') : __('events.request_badge') }}
+                                                            <?php echo e($participant['type'] === 'invited' ? __('events.invited_badge') : __('events.request_badge')); ?>
+
                                                     </span>
                                                 </div>
                                                 <small class="text-muted">
-                                                    Confermato {{ $participant['confirmed_at']->diffForHumans() }}
+                                                    Confermato <?php echo e($participant['confirmed_at']->diffForHumans()); ?>
+
                                                 </small>
                                             </div>
-                                            <button class="btn btn-outline-secondary btn-sm" onclick="contactParticipant('{{ $participant['user']->id }}')">
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="contactParticipant('<?php echo e($participant['user']->id); ?>')">
                                                 <i class="ph ph-chat-circle"></i>
                                             </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
-                    @else
+                    <?php else: ?>
                         <div class="text-center py-4">
                             <i class="ph ph-users-three display-4 text-muted mb-3"></i>
                             <p class="text-muted">Nessun partecipante confermato ancora</p>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -465,12 +486,13 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="mb-0">
-                        <i class="ph ph-clock me-2"></i>Timeline {{ __('invitations.event') }}
+                        <i class="ph ph-clock me-2"></i>Timeline <?php echo e(__('invitations.event')); ?>
+
                     </h6>
                 </div>
                 <div class="card-body p-3">
                     <ul class="app-timeline-box">
-                    @if($event->registration_deadline && $event->registration_deadline > now())
+                    <?php if($event->registration_deadline && $event->registration_deadline > now()): ?>
                             <li class="timeline-section">
                                 <div class="timeline-icon">
                                     <span class="text-light-danger h-35 w-35 d-flex-center b-r-50">
@@ -482,11 +504,11 @@
                                         <h6 class="mb-1 text-danger">Scadenza Iscrizioni</h6>
                                         <span class="badge bg-danger">Urgente</span>
                                     </div>
-                            <p class="text-muted mb-0">{{ $event->registration_deadline->format('d/m/Y H:i') }}</p>
-                            <small class="text-danger">{{ $event->registration_deadline->diffForHumans() }}</small>
+                            <p class="text-muted mb-0"><?php echo e($event->registration_deadline->format('d/m/Y H:i')); ?></p>
+                            <small class="text-danger"><?php echo e($event->registration_deadline->diffForHumans()); ?></small>
                         </div>
                             </li>
-                    @endif
+                    <?php endif; ?>
 
                         <li class="timeline-section">
                             <div class="timeline-icon">
@@ -496,21 +518,24 @@
                             </div>
                             <div class="timeline-content bg-light-primary b-1-primary">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-primary">{{ __('events.start_event') }}</h6>
-                                    @if($event->start_datetime)
-                                        <span class="badge bg-primary">{{ $event->start_datetime->diffForHumans() }}</span>
-                                    @else
-                                        <span class="badge bg-info">{{ __('events.availability_based_event') }}</span>
-                                    @endif
+                                    <h6 class="mb-1 text-primary"><?php echo e(__('events.start_event')); ?></h6>
+                                    <?php if($event->start_datetime): ?>
+                                        <span class="badge bg-primary"><?php echo e($event->start_datetime->diffForHumans()); ?></span>
+                                    <?php else: ?>
+                                        <span class="badge bg-info"><?php echo e(__('events.availability_based_event')); ?></span>
+                                    <?php endif; ?>
                                 </div>
                         <p class="text-muted mb-0">
-                            @if($event->start_datetime)
-                                {{ $event->start_datetime->format('d/m/Y H:i') }}
-                            @elseif($event->is_availability_based)
-                                {{ __('events.availability_based_event_description') }}
-                            @else
-                                {{ __('events.not_specified') }}
-                            @endif
+                            <?php if($event->start_datetime): ?>
+                                <?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>
+
+                            <?php elseif($event->is_availability_based): ?>
+                                <?php echo e(__('events.availability_based_event_description')); ?>
+
+                            <?php else: ?>
+                                <?php echo e(__('events.not_specified')); ?>
+
+                            <?php endif; ?>
                         </p>
                     </div>
                         </li>
@@ -523,21 +548,24 @@
                             </div>
                             <div class="timeline-content bg-light-success b-1-success">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-success">{{ __('events.end_event') }}</h6>
-                                    @if($event->start_datetime && $event->end_datetime)
-                                        <span class="badge bg-success">{{ $event->duration }}h</span>
-                                    @else
-                                        <span class="badge bg-info">{{ __('events.availability_based_event') }}</span>
-                                    @endif
+                                    <h6 class="mb-1 text-success"><?php echo e(__('events.end_event')); ?></h6>
+                                    <?php if($event->start_datetime && $event->end_datetime): ?>
+                                        <span class="badge bg-success"><?php echo e($event->duration); ?>h</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-info"><?php echo e(__('events.availability_based_event')); ?></span>
+                                    <?php endif; ?>
                                 </div>
                         <p class="text-muted mb-0">
-                            @if($event->end_datetime)
-                                {{ $event->end_datetime->format('d/m/Y H:i') }}
-                            @elseif($event->is_availability_based)
-                                {{ __('events.availability_based_event_description') }}
-                            @else
-                                {{ __('events.not_specified') }}
-                            @endif
+                            <?php if($event->end_datetime): ?>
+                                <?php echo e($event->end_datetime->format('d/m/Y H:i')); ?>
+
+                            <?php elseif($event->is_availability_based): ?>
+                                <?php echo e(__('events.availability_based_event_description')); ?>
+
+                            <?php else: ?>
+                                <?php echo e(__('events.not_specified')); ?>
+
+                            <?php endif; ?>
                         </p>
                     </div>
                         </li>
@@ -556,28 +584,29 @@
                     <div class="row g-3 text-center">
                         <div class="col-6">
                             <div class="border rounded p-3">
-                                <div class="h4 text-primary mb-1">{{ $event->invitations->count() }}</div>
-                                <small class="text-muted">{{ __('invitations.total_invitations') }}</small>
+                                <div class="h4 text-primary mb-1"><?php echo e($event->invitations->count()); ?></div>
+                                <small class="text-muted"><?php echo e(__('invitations.total_invitations')); ?></small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border rounded p-3">
-                                <div class="h4 text-success mb-1">{{ $event->requests->count() }}</div>
-                                <small class="text-muted">{{ __('events.total_requests') }}</small>
+                                <div class="h4 text-success mb-1"><?php echo e($event->requests->count()); ?></div>
+                                <small class="text-muted"><?php echo e(__('events.total_requests')); ?></small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border rounded p-3">
                                 <div class="h4 text-warning mb-1">
-                                    {{ $event->acceptedInvitations->count() }}
+                                    <?php echo e($event->acceptedInvitations->count()); ?>
+
                                 </div>
-                                <small class="text-muted">Inviti {{ __('invitations.accepted_invitations') }}</small>
+                                <small class="text-muted">Inviti <?php echo e(__('invitations.accepted_invitations')); ?></small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border rounded p-3">
                                 <div class="h4 text-info mb-1">
-                                    {{ round(($event->acceptedInvitations->count() / max($event->invitations->count(), 1)) * 100) }}%
+                                    <?php echo e(round(($event->acceptedInvitations->count() / max($event->invitations->count(), 1)) * 100)); ?>%
                                 </div>
                                 <small class="text-muted">Tasso Accettazione</small>
                             </div>
@@ -587,38 +616,39 @@
             </div>
 
             <!-- Available Artists -->
-            @if($availableArtists->count() > 0)
+            <?php if($availableArtists->count() > 0): ?>
             <div class="card">
                 <div class="card-header">
                     <h6 class="mb-0">
                         <i class="ph ph-user-plus me-2"></i>Artisti Disponibili
-                        <span class="badge bg-secondary ms-2">{{ $availableArtists->count() }}</span>
+                        <span class="badge bg-secondary ms-2"><?php echo e($availableArtists->count()); ?></span>
                     </h6>
                 </div>
                 <div class="card-body">
-                    @foreach($availableArtists->take(5) as $artist)
+                    <?php $__currentLoopData = $availableArtists->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $artist): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="d-flex align-items-center mb-3">
                             <div class="participant-avatar me-3" style="width: 35px; height: 35px; font-size: 0.9rem;">
-                                {{ substr($artist->name, 0, 2) }}
+                                <?php echo e(substr($artist->name, 0, 2)); ?>
+
                             </div>
                             <div class="flex-grow-1">
-                                <h6 class="mb-0 small">{{ $artist->name }}</h6>
-                                <small class="text-muted">{{ $artist->role_display_name }}</small>
+                                <h6 class="mb-0 small"><?php echo e($artist->name); ?></h6>
+                                <small class="text-muted"><?php echo e($artist->role_display_name); ?></small>
                             </div>
-                            <button class="btn btn-outline-primary btn-sm" onclick="quickInvite({{ $artist->id }})">
+                            <button class="btn btn-outline-primary btn-sm" onclick="quickInvite(<?php echo e($artist->id); ?>)">
                                 <i class="ph ph-plus"></i>
                             </button>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    @if($availableArtists->count() > 5)
+                    <?php if($availableArtists->count() > 5): ?>
                         <button class="btn btn-light-secondary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#inviteModal">
-                            Vedi tutti ({{ $availableArtists->count() - 5 }} altri)
+                            Vedi tutti (<?php echo e($availableArtists->count() - 5); ?> altri)
                         </button>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -630,11 +660,12 @@
                 title="Invita Artisti"
                 style="width: 60px; height: 60px;">
             <i class="ph ph-envelope f-s-20"></i>
-        @if($event->pendingRequests->count() > 0)
+        <?php if($event->pendingRequests->count() > 0): ?>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {{ $event->pendingRequests->count() }}
+                    <?php echo e($event->pendingRequests->count()); ?>
+
                 </span>
-        @endif
+        <?php endif; ?>
     </button>
 </div>
 
@@ -654,26 +685,27 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Seleziona Artisti *</label>
                             <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 5px; padding: 10px;">
-                                @foreach($availableArtists as $artist)
+                                <?php $__currentLoopData = $availableArtists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $artist): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="form-check">
-                                        <input type="checkbox" name="invited_user_ids[]" value="{{ $artist->id }}" class="form-check-input" id="artist_{{ $artist->id }}">
-                                        <label for="artist_{{ $artist->id }}" class="form-check-label d-flex align-items-center">
+                                        <input type="checkbox" name="invited_user_ids[]" value="<?php echo e($artist->id); ?>" class="form-check-input" id="artist_<?php echo e($artist->id); ?>">
+                                        <label for="artist_<?php echo e($artist->id); ?>" class="form-check-label d-flex align-items-center">
                                             <div class="participant-avatar me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
-                                                {{ substr($artist->name, 0, 2) }}
+                                                <?php echo e(substr($artist->name, 0, 2)); ?>
+
                                             </div>
                                             <div>
-                                                <div>{{ $artist->name }}</div>
-                                                <small class="text-muted">{{ $artist->role_display_name }}</small>
+                                                <div><?php echo e($artist->name); ?></div>
+                                                <small class="text-muted"><?php echo e($artist->role_display_name); ?></small>
                                             </div>
                                         </label>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">{{ __('invitations.role') }} *</label>
+                                <label class="form-label"><?php echo e(__('invitations.role')); ?> *</label>
                                 <select name="role" class="form-select" required>
                                     <option value="performer">Performer</option>
                                     <option value="judge">Judge</option>
@@ -702,7 +734,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-paper-plane me-2"></i>{{ __('videos.send') }} Inviti
+                        <i class="ph ph-paper-plane me-2"></i><?php echo e(__('videos.send')); ?> Inviti
                     </button>
                 </div>
             </form>
@@ -733,17 +765,17 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 // Traduzioni JavaScript
 const translations = {
-    accept_action: '{{ __('events.accept_action') }}',
-    reject_action: '{{ __('events.reject_action') }}',
-    requests: '{{ __('events.requests') }}',
-    message_for_action: '{{ __('events.message_for_action') }}',
-    this_request: '{{ __('events.this_request') }}'
+    accept_action: '<?php echo e(__('events.accept_action')); ?>',
+    reject_action: '<?php echo e(__('events.reject_action')); ?>',
+    requests: '<?php echo e(__('events.requests')); ?>',
+    message_for_action: '<?php echo e(__('events.message_for_action')); ?>',
+    this_request: '<?php echo e(__('events.this_request')); ?>'
 };
 let selectedRequests = [];
 let currentRequestId = null;
@@ -879,7 +911,7 @@ function bulkActionRequests(action) {
         response_message: message
     };
 
-    fetch(`/requests/api/events/{{ $event->id }}/bulk-action`, {
+    fetch(`/requests/api/events/<?php echo e($event->id); ?>/bulk-action`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -904,7 +936,7 @@ function bulkActionRequests(action) {
 function sendInvitations() {
     const formData = new FormData(document.getElementById('inviteForm'));
     const data = {
-        event_id: {{ $event->id }},
+        event_id: <?php echo e($event->id); ?>,
         invited_user_ids: formData.getAll('invited_user_ids[]'),
         role: formData.get('role'),
         compensation: formData.get('compensation'),
@@ -917,7 +949,7 @@ function sendInvitations() {
         return;
     }
 
-    fetch('/events/{{ $event->id }}/invitations', {
+    fetch('/events/<?php echo e($event->id); ?>/invitations', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -949,13 +981,13 @@ function quickInvite(artistId) {
     }
 
     const data = {
-        event_id: {{ $event->id }},
+        event_id: <?php echo e($event->id); ?>,
         invited_user_ids: [artistId],
         role: 'performer',
         message: 'Ti invito a partecipare al mio evento!'
     };
 
-    fetch('/events/{{ $event->id }}/invitations', {
+    fetch('/events/<?php echo e($event->id); ?>/invitations', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -981,7 +1013,7 @@ function resendInvitation(invitationId) {
         return;
     }
 
-    fetch(`/events/{{ $event->id }}/invitations/${invitationId}/resend`, {
+    fetch(`/events/<?php echo e($event->id); ?>/invitations/${invitationId}/resend`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': csrfToken.content
@@ -999,7 +1031,7 @@ function resendInvitation(invitationId) {
 
 function cancelInvitation(invitationId) {
     if (confirm('Sei sicuro di voler cancellare questo invito?')) {
-        fetch(`/events/{{ $event->id }}/invitations/${invitationId}`, {
+        fetch(`/events/<?php echo e($event->id); ?>/invitations/${invitationId}`, {
             method: 'DELETE',
             headers: {
             'X-CSRF-TOKEN': getCSRFToken() || ''
@@ -1066,7 +1098,7 @@ function removeParticipantItem(requestId) {
 
 function updateStats() {
     // Update stats in real-time
-    fetch(`/requests/api/events/{{ $event->id }}/statistics`)
+    fetch(`/requests/api/events/<?php echo e($event->id); ?>/statistics`)
         .then(response => response.json())
         .then(data => {
             // Update stats displays
@@ -1085,14 +1117,14 @@ function refreshPendingItems() {
 }
 
 function exportParticipants() {
-    window.open(`/events/{{ $event->id }}/export`, '_blank');
+    window.open(`/events/<?php echo e($event->id); ?>/export`, '_blank');
 }
 
 function sendUpdateNotification() {
     const message = prompt('Inserisci il messaggio di aggiornamento:');
     if (message) {
         // Send notification to all participants
-        fetch(`/events/{{ $event->id }}/notify`, {
+        fetch(`/events/<?php echo e($event->id); ?>/notify`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1154,4 +1186,6 @@ function showNotification(message, type) {
     }, 5000);
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/events/manage.blade.php ENDPATH**/ ?>

@@ -63,6 +63,9 @@ class Event extends Model
         'is_online',
         'timezone',
         'online_url',
+        'is_availability_based',
+        'availability_deadline',
+        'availability_instructions',
         'festival_id',
         'festival_events',
         'like_count',
@@ -88,6 +91,8 @@ class Event extends Model
         'is_recurring' => 'boolean',
         'recurrence_weekdays' => 'array',
         'is_online' => 'boolean',
+        'is_availability_based' => 'boolean',
+        'availability_deadline' => 'datetime',
         'festival_events' => 'array',
         'like_count' => 'integer',
         'comment_count' => 'integer',
@@ -216,6 +221,30 @@ class Event extends Model
     }
 
     /**
+     * Get all availability options for this event
+     */
+    public function availabilityOptions(): HasMany
+    {
+        return $this->hasMany(EventAvailabilityOption::class);
+    }
+
+    /**
+     * Get all availability responses for this event
+     */
+    public function availabilityResponses(): HasMany
+    {
+        return $this->hasMany(EventAvailabilityResponse::class);
+    }
+
+    /**
+     * Get active availability options
+     */
+    public function activeAvailabilityOptions(): HasMany
+    {
+        return $this->availabilityOptions()->active()->ordered();
+    }
+
+    /**
      * Scope: Published events
      */
     public function scopePublished($query)
@@ -236,7 +265,10 @@ class Event extends Model
      */
     public function scopeUpcoming($query)
     {
-        return $query->where('start_datetime', '>', Carbon::now());
+        return $query->where(function ($q) {
+            $q->where('start_datetime', '>', Carbon::now())
+              ->orWhere('is_availability_based', true);
+        });
     }
 
     /**
@@ -839,5 +871,70 @@ class Event extends Model
     public function closedGigs()
     {
         return $this->gigs()->where('is_closed', true);
+    }
+
+    /**
+     * Check if event is availability-based
+     */
+    public function isAvailabilityBased(): bool
+    {
+        return $this->is_availability_based;
+    }
+
+    /**
+     * Get availability options count
+     */
+    public function getAvailabilityOptionsCount(): int
+    {
+        return $this->availabilityOptions()->active()->count();
+    }
+
+    /**
+     * Check if user has responded to availability
+     */
+    public function hasUserRespondedToAvailability(User $user): bool
+    {
+        return $this->availabilityResponses()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Get user's availability responses
+     */
+    public function getUserAvailabilityResponses(User $user)
+    {
+        return $this->availabilityResponses()->where('user_id', $user->id)->with('availabilityOption');
+    }
+
+    /**
+     * Get availability summary for organizer
+     */
+    public function getAvailabilitySummary(): array
+    {
+        $options = $this->activeAvailabilityOptions()->with('responses')->get();
+
+        $summary = [];
+        foreach ($options as $option) {
+            $summary[] = [
+                'option' => $option,
+                'preferred_count' => $option->preferred_count,
+                'available_count' => $option->available_count,
+                'unavailable_count' => $option->unavailable_count,
+                'total_responses' => $option->total_responses,
+            ];
+        }
+
+        return $summary;
+    }
+
+    /**
+     * Check if availability deadline has passed
+     */
+    public function isAvailabilityDeadlinePassed(): bool
+    {
+        if (!$this->availability_deadline) {
+            return false;
+        }
+
+        return now()->isAfter($this->availability_deadline);
     }
 }

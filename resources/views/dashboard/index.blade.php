@@ -301,7 +301,7 @@
                                                     <i class="ph ph-map-pin me-1"></i>{{ $event->city }}
                                                 </p>
                                                 <p class="mb-0 text-muted f-s-12">
-                                                    <i class="ph ph-calendar me-1"></i>{{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                    <i class="ph ph-calendar me-1"></i>{{ $event->start_datetime ? $event->start_datetime->format('d/m/Y H:i') : 'Data non disponibile' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -403,7 +403,7 @@
                                         </a>
                                     </p>
                                     <small class="text-muted f-s-12">
-                                        <i class="ph ph-calendar me-1"></i>{{ $invitation->event->start_datetime->format('d/m/Y H:i') }}
+                                        <i class="ph ph-calendar me-1"></i>{{ $invitation->event->start_datetime ? $invitation->event->start_datetime->format('d/m/Y H:i') : 'Data non disponibile' }}
                                     </small>
                                 </div>
                                 <div class="flex-shrink-0">
