@@ -312,13 +312,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const rows = document.querySelectorAll('.option-row');
 
             rows.forEach(row => {
-                const datetimeInput = row.querySelector('input[type="text"]');
-                const descriptionInput = row.querySelectorAll('input[type="text"]')[1];
+                const datetimeInput = row.querySelector('input.flatpickr-input');
+                const descriptionInput = row.querySelector('input[type="text"]:not(.flatpickr-input)');
 
-                if (datetimeInput.value) {
+                console.log('Row found, datetimeInput:', datetimeInput, 'descriptionInput:', descriptionInput);
+                console.log('Datetime value:', datetimeInput?.value, 'Description value:', descriptionInput?.value);
+
+                if (datetimeInput && datetimeInput.value) {
                     options.push({
                         datetime: datetimeInput.value,
-                        description: descriptionInput.value || null
+                        description: descriptionInput?.value || null
                     });
                 }
             });

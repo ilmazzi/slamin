@@ -1262,7 +1262,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 isAvailabilityBasedCheckbox.addEventListener('change', function() {
                     console.log('Availability checkbox changed, checked:', this.checked);
-                    alert('DEBUG: Checkbox cambiata! Checked: ' + this.checked);
                     if (this.checked) {
                         availabilitySettings.style.display = 'block';
                         // Rendi i campi di data opzionali per eventi basati su disponibilità
@@ -1479,15 +1478,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Funzione per rendere i campi di data opzionali (per eventi basati su disponibilità)
             function makeDateFieldsOptional() {
                 console.log('makeDateFieldsOptional called');
-                alert('DEBUG: Rendendo campi data opzionali');
                 const dateFields = ['start_datetime', 'end_datetime'];
-                
+
                 dateFields.forEach(fieldId => {
                     const field = document.getElementById(fieldId);
                     if (field) {
                         field.required = false;
                         console.log('Field', fieldId, 'set to not required');
-                        
+
                         // Rimuovi l'asterisco dal label
                         const label = field.parentElement.querySelector('label');
                         if (label) {
@@ -1495,7 +1493,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-                alert('DEBUG: Campi data resi opzionali!');
             }
 
             // Funzione per rendere i campi di data obbligatori (per eventi normali)
@@ -1901,11 +1898,9 @@ function setupEventListeners() {
 
 function nextStep() {
     console.log('nextStep called, currentStep:', currentStep);
-    alert('DEBUG: nextStep chiamato! Step: ' + currentStep);
 
     const validationResult = validateCurrentStep();
     console.log('nextStep validation result:', validationResult);
-    alert('DEBUG: Risultato validazione: ' + validationResult);
 
     if (validationResult) {
 
@@ -2073,13 +2068,12 @@ function validateCurrentStep() {
         // Check if event is availability-based
         const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
         console.log('Step 2 validation - isAvailabilityBased:', isAvailabilityBased);
-        
+
         // Debug: Check if fields are actually required
         const startDateTimeField = document.getElementById('start_datetime');
         const endDateTimeField = document.getElementById('end_datetime');
         console.log('Step 2 validation - startDateTimeField.required:', startDateTimeField?.required, 'endDateTimeField.required:', endDateTimeField?.required);
-        
-        alert('DEBUG: Validazione Step 2 - isAvailabilityBased: ' + isAvailabilityBased + ', startRequired: ' + startDateTimeField?.required + ', endRequired: ' + endDateTimeField?.required);
+
 
         if (!startDateTime && !isAvailabilityBased) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
@@ -2304,7 +2298,6 @@ function validateCurrentStep() {
 
 
     console.log('Validation result for step', step, ':', isValid);
-    alert('DEBUG: Risultato validazione step ' + step + ': ' + isValid);
     return isValid;
 }
 
