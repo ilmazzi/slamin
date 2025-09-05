@@ -323,6 +323,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Availability-Based Event Option -->
+                            <div class="col-12 mb-3">
+                                <div class="card border-warning">
+                                    <div class="card-header bg-light-warning">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_availability_based" id="is_availability_based" class="form-check-input" value="1">
+                                            <label for="is_availability_based" class="form-check-label f-w-600">
+                                                <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_based_event') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="availability-settings" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" name="availability_deadline" id="availability_deadline" class="form-control flatpickr-input" placeholder="Seleziona scadenza risposte..." readonly>
+                                                    <label for="availability_deadline">{{ __('events.availability_deadline') }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="form-floating">
+                                                    <textarea name="availability_instructions" id="availability_instructions" class="form-control" rows="3" placeholder="{{ __('events.availability_instructions_placeholder') }}"></textarea>
+                                                    <label for="availability_instructions">{{ __('events.availability_instructions') }}</label>
+                                                </div>
+                                                <small class="text-muted">{{ __('events.availability_instructions_help') }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
  <!-- Recent Venues Dropdown -->
  @if($recentVenues->count() > 0)
  <div class="col-12 mb-3" id="recent-venues-section">
@@ -1213,6 +1245,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 // console.error('Online event elements not found!');
             }
 
+            // ========================================
+            // GESTIONE EVENTI BASATI SU DISPONIBILITÀ
+            // ========================================
+
+            const isAvailabilityBasedCheckbox = document.getElementById('is_availability_based');
+            const availabilitySettings = document.getElementById('availability-settings');
+
+            if (isAvailabilityBasedCheckbox && availabilitySettings) {
+                // Controlla lo stato iniziale della checkbox
+                if (isAvailabilityBasedCheckbox.checked) {
+                    availabilitySettings.style.display = 'block';
+                } else {
+                    availabilitySettings.style.display = 'none';
+                }
+
+                isAvailabilityBasedCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        availabilitySettings.style.display = 'block';
+                        // Rendi i campi di data opzionali per eventi basati su disponibilità
+                        makeDateFieldsOptional();
+                    } else {
+                        availabilitySettings.style.display = 'none';
+                        // Rendi i campi di data obbligatori per eventi normali
+                        makeDateFieldsRequired();
+                    }
+                });
+            }
+
             // Assicurati che la mappa sia visibile di default per eventi fisici
             const mapContainer = document.getElementById('locationMap');
             if (mapContainer && !isOnlineCheckbox?.checked) {
@@ -1412,6 +1472,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
 
+            }
+
+            // Funzione per rendere i campi di data opzionali (per eventi basati su disponibilità)
+            function makeDateFieldsOptional() {
+                const dateFields = ['start_datetime', 'end_datetime'];
+
+                dateFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = false;
+
+                        // Rimuovi l'asterisco dal label
+                        const label = field.parentElement.querySelector('label');
+                        if (label) {
+                            label.textContent = label.textContent.replace(' *', '');
+                        }
+                    }
+                });
+            }
+
+            // Funzione per rendere i campi di data obbligatori (per eventi normali)
+            function makeDateFieldsRequired() {
+                const dateFields = ['start_datetime', 'end_datetime'];
+
+                dateFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = true;
+
+                        // Aggiungi l'asterisco al label se non c'è già
+                        const label = field.parentElement.querySelector('label');
+                        if (label && !label.textContent.includes('*')) {
+                            label.textContent += ' *';
+                        }
+                    }
+                });
             }
 
 
@@ -1963,13 +2059,16 @@ function validateCurrentStep() {
 
 
 
-        if (!startDateTime) {
+        // Check if event is availability-based
+        const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+
+        if (!startDateTime && !isAvailabilityBased) {
             showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
             highlightError('start_datetime');
             isValid = false;
         }
 
-        if (!endDateTime) {
+        if (!endDateTime && !isAvailabilityBased) {
             showError('end_datetime', 'Data e ora di fine sono obbligatorie');
             highlightError('end_datetime');
             isValid = false;
@@ -2455,6 +2554,11 @@ function updatePreview() {
     const isOnline = document.getElementById('is_online')?.checked || false;
     const onlineUrl = document.getElementById('online_url')?.value || '';
     const timezone = document.getElementById('timezone')?.value || '';
+
+    // Availability settings
+    const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+    const availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
+    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
 
     // Event settings
     const entryFee = document.getElementById('ticket_price')?.value || '0';
@@ -2986,6 +3090,11 @@ function updatePreviewWithImage(imageSrc) {
     const isOnline = document.getElementById('is_online')?.checked || false;
     const onlineUrl = document.getElementById('online_url')?.value || '';
     const timezone = document.getElementById('timezone')?.value || '';
+
+    // Availability settings
+    const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+    const availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
+    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
 
     // Event settings
     const entryFee = document.getElementById('ticket_price')?.value || '0';
@@ -3722,12 +3831,13 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         el.classList.add('is-valid');
     });
 
-        // Validate start datetime
-    if (!startDateTime) {
-        document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_required') }}';
-        document.getElementById('start_datetime').classList.add('is-invalid');
-        document.getElementById('start_datetime').classList.remove('is-valid');
-        hasErrors = true;
+        // Validate start datetime (only required for non-availability-based events)
+        const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+        if (!startDateTime && !isAvailabilityBased) {
+            document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_required') }}';
+            document.getElementById('start_datetime').classList.add('is-invalid');
+            document.getElementById('start_datetime').classList.remove('is-valid');
+            hasErrors = true;
     } else if (startDate && startDate <= now) {
         document.getElementById('start_datetime-error').textContent = '{{ __('events.start_datetime_future') }}';
         document.getElementById('start_datetime').classList.add('is-invalid');
@@ -3738,8 +3848,8 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         document.getElementById('start_datetime').classList.add('is-valid');
     }
 
-    // Validate end datetime
-    if (!endDateTime) {
+    // Validate end datetime (only required for non-availability-based events)
+    if (!endDateTime && !isAvailabilityBased) {
         document.getElementById('end_datetime-error').textContent = '{{ __('events.end_datetime_required') }}';
         document.getElementById('end_datetime').classList.add('is-invalid');
         document.getElementById('end_datetime').classList.remove('is-valid');
@@ -3799,6 +3909,12 @@ function startAutoSave() {
             data.is_public = isPublicRadio.value;
         }
 
+        // Ensure availability fields are properly saved
+        const isAvailabilityBasedCheckbox = document.getElementById('is_availability_based');
+        if (isAvailabilityBasedCheckbox) {
+            data.is_availability_based = isAvailabilityBasedCheckbox.checked ? '1' : '0';
+        }
+
         // Save to localStorage
         localStorage.setItem('eventDraft', JSON.stringify(data));
 
@@ -3819,6 +3935,17 @@ window.addEventListener('load', function() {
                     const radioButton = document.querySelector(`input[name="is_public"][value="${data[key]}"]`);
                     if (radioButton) {
                         radioButton.checked = true;
+                    }
+                    return;
+                }
+
+                // Handle availability checkbox specially
+                if (key === 'is_availability_based') {
+                    const checkbox = document.getElementById('is_availability_based');
+                    if (checkbox) {
+                        checkbox.checked = data[key] === '1';
+                        // Trigger change event to show/hide availability settings
+                        checkbox.dispatchEvent(new Event('change'));
                     }
                     return;
                 }
@@ -3880,6 +4007,27 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('end_datetime-error').textContent = '';
             document.getElementById('end_datetime').classList.remove('is-invalid');
             document.getElementById('end_datetime').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
+
+    // Availability deadline picker
+    flatpickr("#availability_deadline", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
         },
         onClose: function(selectedDates, dateStr, instance) {
             // Ensure the format is correct for Laravel validation

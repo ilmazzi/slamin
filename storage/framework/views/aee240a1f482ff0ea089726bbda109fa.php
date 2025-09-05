@@ -222,14 +222,6 @@
                                 <div class="error-feedback" id="end_datetime-error"></div>
                             </div>
 
-                            <!-- Info message for availability-based events -->
-                            <div class="col-12 mb-3" id="availability-datetime-info" style="display: none;">
-                                <div class="alert alert-info">
-                                    <i class="ph ph-info me-2"></i>
-                                    <strong>Nota:</strong> <?php echo e(__('events.availability_based_event_description')); ?> Le date e gli orari verranno definiti successivamente tramite le opzioni di disponibilità.
-                                </div>
-                            </div>
-
                             <!-- Online Event Option -->
                             <div class="col-12 mb-3">
                                 <div class="card border-info">
@@ -336,6 +328,39 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Availability-Based Event Option -->
+                            <div class="col-12 mb-3">
+                                <div class="card border-warning">
+                                    <div class="card-header bg-light-warning">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="is_availability_based" id="is_availability_based" class="form-check-input" value="1">
+                                            <label for="is_availability_based" class="form-check-label f-w-600">
+                                                <i class="ph ph-calendar-check me-2"></i><?php echo e(__('events.availability_based_event')); ?>
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="availability-settings" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" name="availability_deadline" id="availability_deadline" class="form-control flatpickr-input" placeholder="Seleziona scadenza risposte..." readonly>
+                                                    <label for="availability_deadline"><?php echo e(__('events.availability_deadline')); ?></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="form-floating">
+                                                    <textarea name="availability_instructions" id="availability_instructions" class="form-control" rows="3" placeholder="<?php echo e(__('events.availability_instructions_placeholder')); ?>"></textarea>
+                                                    <label for="availability_instructions"><?php echo e(__('events.availability_instructions')); ?></label>
+                                                </div>
+                                                <small class="text-muted"><?php echo e(__('events.availability_instructions_help')); ?></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
  <!-- Recent Venues Dropdown -->
  <?php if($recentVenues->count() > 0): ?>
  <div class="col-12 mb-3" id="recent-venues-section">
@@ -356,53 +381,6 @@
      <small class="text-muted"><?php echo e(__('events.recent_venues_help')); ?></small>
  </div>
  <?php endif; ?>
-
-                            <!-- Availability-based Event Option -->
-                            <div class="col-12 mb-3">
-                                <div class="card border-warning">
-                                    <div class="card-header bg-light-warning">
-                                        <div class="form-check">
-                                            <input type="checkbox" name="is_availability_based" id="is_availability_based" class="form-check-input" value="1">
-                                            <label for="is_availability_based" class="form-check-label f-w-600">
-                                                <i class="ph ph-calendar-check me-2"></i><?php echo e(__('events.availability_based_event_description')); ?>
-
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" id="availability-settings" style="display: none;">
-                                        <div class="row">
-                                            <!-- Availability Instructions -->
-                                            <div class="col-12 mb-3">
-                                                <div class="form-floating">
-                                                    <textarea name="availability_instructions" id="availability_instructions" class="form-control" style="height: 100px" placeholder="<?php echo e(__('events.availability_instructions_placeholder')); ?>"></textarea>
-                                                    <label for="availability_instructions"><?php echo e(__('events.availability_instructions')); ?> (opzionale)</label>
-                                                </div>
-                                                <small class="text-muted"><?php echo e(__('events.availability_instructions_help')); ?></small>
-                                            </div>
-
-                                            <!-- Availability Deadline -->
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-floating">
-                                                    <input type="text" name="availability_deadline" id="availability_deadline" class="form-control flatpickr-input" placeholder="<?php echo e(__('events.availability_deadline_placeholder')); ?>">
-                                                    <label for="availability_deadline"><?php echo e(__('events.availability_deadline')); ?> (opzionale)</label>
-                                                </div>
-                                                <small class="text-muted"><?php echo e(__('events.availability_deadline_help')); ?></small>
-                                            </div>
-
-                                            <!-- Availability Options Limit Info -->
-                                            <div class="col-12">
-                                                <div class="alert alert-info">
-                                                    <i class="ph ph-info me-2"></i>
-                                                    <strong><?php echo e(__('events.availability_limit_info')); ?>:</strong>
-                                                    <span id="availability-limit-info"><?php echo e(\App\Models\SystemSetting::get('availability_options_limit', 10)); ?> <?php echo e(__('events.availability_limit_free')); ?></span>
-                                                    <span id="availability-limit-premium" style="display: none;"><?php echo e(\App\Models\SystemSetting::get('availability_options_premium_limit', 50)); ?> <?php echo e(__('events.availability_limit_premium')); ?></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Location -->
                             <div class="col-12 mb-3" id="venue-name-container">
                                 <div class="form-floating">
@@ -1300,112 +1278,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // ========================================
-            // INIZIALIZZAZIONE EVENTI DISPONIBILITÀ
+            // GESTIONE EVENTI BASATI SU DISPONIBILITÀ
             // ========================================
 
             const isAvailabilityBasedCheckbox = document.getElementById('is_availability_based');
             const availabilitySettings = document.getElementById('availability-settings');
-            const availabilityLimitInfo = document.getElementById('availability-limit-info');
-            const availabilityLimitPremium = document.getElementById('availability-limit-premium');
 
             if (isAvailabilityBasedCheckbox && availabilitySettings) {
                 // Controlla lo stato iniziale della checkbox
                 if (isAvailabilityBasedCheckbox.checked) {
                     availabilitySettings.style.display = 'block';
-                    makeDateTimeFieldsOptional();
                 } else {
                     availabilitySettings.style.display = 'none';
-                    makeDateTimeFieldsRequired();
                 }
 
                 isAvailabilityBasedCheckbox.addEventListener('change', function() {
                     if (this.checked) {
                         availabilitySettings.style.display = 'block';
-                        // Inizializza flatpickr per la scadenza disponibilità
-                        initializeAvailabilityDeadlinePicker();
-                        // Rendi i campi data opzionali
-                        makeDateTimeFieldsOptional();
+                        // Rendi i campi di data opzionali per eventi basati su disponibilità
+                        makeDateFieldsOptional();
                     } else {
                         availabilitySettings.style.display = 'none';
-                        // Rendi i campi data obbligatori
-                        makeDateTimeFieldsRequired();
+                        // Rendi i campi di data obbligatori per eventi normali
+                        makeDateFieldsRequired();
                     }
                 });
-            }
-
-            // Funzione per inizializzare il picker della scadenza disponibilità
-            function initializeAvailabilityDeadlinePicker() {
-                const availabilityDeadlineInput = document.getElementById('availability_deadline');
-                if (availabilityDeadlineInput && !availabilityDeadlineInput.hasAttribute('data-flatpickr-initialized')) {
-                    flatpickr(availabilityDeadlineInput, {
-                        enableTime: true,
-                        dateFormat: "Y-m-d H:i",
-                        minDate: "today",
-                        time_24hr: true,
-                        locale: "it"
-                    });
-                    availabilityDeadlineInput.setAttribute('data-flatpickr-initialized', 'true');
-                }
-            }
-
-            // Funzione per rendere i campi data opzionali
-            function makeDateTimeFieldsOptional() {
-                const startDateTimeField = document.getElementById('start_datetime');
-                const endDateTimeField = document.getElementById('end_datetime');
-                const availabilityInfo = document.getElementById('availability-datetime-info');
-
-                if (startDateTimeField) {
-                    startDateTimeField.required = false;
-                    // Rimuovi l'asterisco dal label
-                    const startLabel = document.querySelector('label[for="start_datetime"]');
-                    if (startLabel) {
-                        startLabel.innerHTML = startLabel.innerHTML.replace(' *', '');
-                    }
-                }
-
-                if (endDateTimeField) {
-                    endDateTimeField.required = false;
-                    // Rimuovi l'asterisco dal label
-                    const endLabel = document.querySelector('label[for="end_datetime"]');
-                    if (endLabel) {
-                        endLabel.innerHTML = endLabel.innerHTML.replace(' *', '');
-                    }
-                }
-
-                // Mostra il messaggio informativo
-                if (availabilityInfo) {
-                    availabilityInfo.style.display = 'block';
-                }
-            }
-
-            // Funzione per rendere i campi data obbligatori
-            function makeDateTimeFieldsRequired() {
-                const startDateTimeField = document.getElementById('start_datetime');
-                const endDateTimeField = document.getElementById('end_datetime');
-                const availabilityInfo = document.getElementById('availability-datetime-info');
-
-                if (startDateTimeField) {
-                    startDateTimeField.required = true;
-                    // Aggiungi l'asterisco al label se non c'è già
-                    const startLabel = document.querySelector('label[for="start_datetime"]');
-                    if (startLabel && !startLabel.innerHTML.includes('*')) {
-                        startLabel.innerHTML = startLabel.innerHTML.replace('<?php echo e(__('events.start_date')); ?> <?php echo e(__('events.start_time')); ?>', '<?php echo e(__('events.start_date')); ?> <?php echo e(__('events.start_time')); ?> *');
-                    }
-                }
-
-                if (endDateTimeField) {
-                    endDateTimeField.required = true;
-                    // Aggiungi l'asterisco al label se non c'è già
-                    const endLabel = document.querySelector('label[for="end_datetime"]');
-                    if (endLabel && !endLabel.innerHTML.includes('*')) {
-                        endLabel.innerHTML = endLabel.innerHTML.replace('<?php echo e(__('events.end_date')); ?> <?php echo e(__('events.end_time')); ?>', '<?php echo e(__('events.end_date')); ?> <?php echo e(__('events.end_time')); ?> *');
-                    }
-                }
-
-                // Nascondi il messaggio informativo
-                if (availabilityInfo) {
-                    availabilityInfo.style.display = 'none';
-                }
             }
 
             // Assicurati che la mappa sia visibile di default per eventi fisici
@@ -1609,6 +1506,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
             }
 
+            // Funzione per rendere i campi di data opzionali (per eventi basati su disponibilità)
+            function makeDateFieldsOptional() {
+                const dateFields = ['start_datetime', 'end_datetime'];
+
+                dateFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = false;
+
+                        // Rimuovi l'asterisco dal label
+                        const label = field.parentElement.querySelector('label');
+                        if (label) {
+                            label.textContent = label.textContent.replace(' *', '');
+                        }
+                    }
+                });
+            }
+
+            // Funzione per rendere i campi di data obbligatori (per eventi normali)
+            function makeDateFieldsRequired() {
+                const dateFields = ['start_datetime', 'end_datetime'];
+
+                dateFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.required = true;
+
+                        // Aggiungi l'asterisco al label se non c'è già
+                        const label = field.parentElement.querySelector('label');
+                        if (label && !label.textContent.includes('*')) {
+                            label.textContent += ' *';
+                        }
+                    }
+                });
+            }
+
 
         } catch (error) {
             console.error('Errore durante l\'inizializzazione:', error);
@@ -1684,7 +1617,12 @@ function setupEventListeners() {
 
 
         nextStepBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            nextStep();
+        });
 
+        // Aggiungi supporto per touch events su mobile
+        nextStepBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
             nextStep();
         });
@@ -1694,8 +1632,13 @@ function setupEventListeners() {
         // console.error('Next step button not found!');
     }
     if (prevStepBtn) {
-
         prevStepBtn.addEventListener('click', prevStep);
+
+        // Aggiungi supporto per touch events su mobile
+        prevStepBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            prevStep();
+        });
     } else {
         // Il pulsante prev step potrebbe non esistere in tutte le pagine
         // Non è un errore critico, quindi rimuoviamo il console.error
@@ -2145,22 +2088,23 @@ function validateCurrentStep() {
         const startDateTime = document.getElementById('start_datetime').value;
         const endDateTime = document.getElementById('end_datetime').value;
         const isOnline = document.getElementById('is_online')?.checked || false;
+
+
+
+        // Check if event is availability-based
         const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
 
-        // Validazione date solo se non è un evento con disponibilità multiple
-        if (!isAvailabilityBased) {
-            if (!startDateTime) {
-                showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
-                highlightError('start_datetime');
-                isValid = false;
-            }
+        if (!startDateTime && !isAvailabilityBased) {
+            showError('start_datetime', 'Data e ora di inizio sono obbligatorie');
+            highlightError('start_datetime');
+            isValid = false;
+        }
 
-            if (!endDateTime) {
-                showError('end_datetime', 'Data e ora di fine sono obbligatorie');
-                highlightError('end_datetime');
-                isValid = false;
-            }
-        } else if (startDateTime && endDateTime && new Date(endDateTime) <= new Date(startDateTime)) {
+        if (!endDateTime && !isAvailabilityBased) {
+            showError('end_datetime', 'Data e ora di fine sono obbligatorie');
+            highlightError('end_datetime');
+            isValid = false;
+        } else if (new Date(endDateTime) <= new Date(startDateTime)) {
             showError('end_datetime', 'La data di fine deve essere successiva a quella di inizio');
             highlightError('start_datetime');
             highlightError('end_datetime');
@@ -2234,21 +2178,6 @@ function validateCurrentStep() {
                 if (!monthday) {
                     showError('recurrence_monthday', 'Seleziona il giorno del mese');
                     highlightError('recurrence_monthday');
-                    isValid = false;
-                }
-            }
-        }
-
-        // Validazione per eventi con disponibilità multiple
-        if (isAvailabilityBased) {
-            const availabilityDeadline = document.getElementById('availability_deadline')?.value;
-            if (availabilityDeadline && startDateTime) {
-                const deadlineDate = new Date(availabilityDeadline);
-                const startDate = new Date(startDateTime);
-
-                if (deadlineDate >= startDate) {
-                    showError('availability_deadline', 'La scadenza deve essere precedente alla data di inizio dell\'evento');
-                    highlightError('availability_deadline');
                     isValid = false;
                 }
             }
@@ -2657,9 +2586,11 @@ function updatePreview() {
     const isOnline = document.getElementById('is_online')?.checked || false;
     const onlineUrl = document.getElementById('online_url')?.value || '';
     const timezone = document.getElementById('timezone')?.value || '';
+
+    // Availability settings
     const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
-    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
     const availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
+    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
 
     // Event settings
     const entryFee = document.getElementById('ticket_price')?.value || '0';
@@ -3191,9 +3122,11 @@ function updatePreviewWithImage(imageSrc) {
     const isOnline = document.getElementById('is_online')?.checked || false;
     const onlineUrl = document.getElementById('online_url')?.value || '';
     const timezone = document.getElementById('timezone')?.value || '';
+
+    // Availability settings
     const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
-    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
     const availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
+    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
 
     // Event settings
     const entryFee = document.getElementById('ticket_price')?.value || '0';
@@ -3913,9 +3846,6 @@ function updateInvitationsData() {
 document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Prevent default submission
 
-    // Check if this is an availability-based event
-    const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
-
     // Validate dates
     const startDateTime = document.getElementById('start_datetime').value;
     const endDateTime = document.getElementById('end_datetime').value;
@@ -3933,59 +3863,37 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
         el.classList.add('is-valid');
     });
 
-    // Validate start datetime only for non-availability-based events
-    if (!isAvailabilityBased) {
-        if (!startDateTime) {
+        // Validate start datetime (only required for non-availability-based events)
+        const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+        if (!startDateTime && !isAvailabilityBased) {
             document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_required')); ?>';
             document.getElementById('start_datetime').classList.add('is-invalid');
             document.getElementById('start_datetime').classList.remove('is-valid');
             hasErrors = true;
-        } else if (startDate && startDate <= now) {
-            document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_future')); ?>';
-            document.getElementById('start_datetime').classList.add('is-invalid');
-            document.getElementById('start_datetime').classList.remove('is-valid');
-            hasErrors = true;
-        } else {
-            document.getElementById('start_datetime').classList.remove('is-invalid');
-            document.getElementById('start_datetime').classList.add('is-valid');
-        }
-
-        // Validate end datetime only for non-availability-based events
-        if (!endDateTime) {
-            document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_required')); ?>';
-            document.getElementById('end_datetime').classList.add('is-invalid');
-            document.getElementById('end_datetime').classList.remove('is-valid');
-            hasErrors = true;
-        } else if (startDate && endDate && endDate <= startDate) {
-            document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_after_start')); ?>';
-            document.getElementById('end_datetime').classList.add('is-invalid');
-            document.getElementById('end_datetime').classList.remove('is-valid');
-            hasErrors = true;
-        } else {
-            document.getElementById('end_datetime').classList.remove('is-invalid');
-            document.getElementById('end_datetime').classList.add('is-valid');
-        }
+    } else if (startDate && startDate <= now) {
+        document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_future')); ?>';
+        document.getElementById('start_datetime').classList.add('is-invalid');
+        document.getElementById('start_datetime').classList.remove('is-valid');
+        hasErrors = true;
     } else {
-        // For availability-based events, dates are optional but if provided must be valid
-        if (startDateTime && startDate && startDate <= now) {
-            document.getElementById('start_datetime-error').textContent = '<?php echo e(__('events.start_datetime_future')); ?>';
-            document.getElementById('start_datetime').classList.add('is-invalid');
-            document.getElementById('start_datetime').classList.remove('is-valid');
-            hasErrors = true;
-        } else if (startDateTime) {
-            document.getElementById('start_datetime').classList.remove('is-invalid');
-            document.getElementById('start_datetime').classList.add('is-valid');
-        }
+        document.getElementById('start_datetime').classList.remove('is-invalid');
+        document.getElementById('start_datetime').classList.add('is-valid');
+    }
 
-        if (endDateTime && startDate && endDate && endDate <= startDate) {
-            document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_after_start')); ?>';
-            document.getElementById('end_datetime').classList.add('is-invalid');
-            document.getElementById('end_datetime').classList.remove('is-valid');
-            hasErrors = true;
-        } else if (endDateTime) {
-            document.getElementById('end_datetime').classList.remove('is-invalid');
-            document.getElementById('end_datetime').classList.add('is-valid');
-        }
+    // Validate end datetime (only required for non-availability-based events)
+    if (!endDateTime && !isAvailabilityBased) {
+        document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_required')); ?>';
+        document.getElementById('end_datetime').classList.add('is-invalid');
+        document.getElementById('end_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else if (startDate && endDate && endDate <= startDate) {
+        document.getElementById('end_datetime-error').textContent = '<?php echo e(__('events.end_datetime_after_start')); ?>';
+        document.getElementById('end_datetime').classList.add('is-invalid');
+        document.getElementById('end_datetime').classList.remove('is-valid');
+        hasErrors = true;
+    } else {
+        document.getElementById('end_datetime').classList.remove('is-invalid');
+        document.getElementById('end_datetime').classList.add('is-valid');
     }
 
     if (hasErrors) {
@@ -4033,6 +3941,12 @@ function startAutoSave() {
             data.is_public = isPublicRadio.value;
         }
 
+        // Ensure availability fields are properly saved
+        const isAvailabilityBasedCheckbox = document.getElementById('is_availability_based');
+        if (isAvailabilityBasedCheckbox) {
+            data.is_availability_based = isAvailabilityBasedCheckbox.checked ? '1' : '0';
+        }
+
         // Save to localStorage
         localStorage.setItem('eventDraft', JSON.stringify(data));
 
@@ -4053,6 +3967,17 @@ window.addEventListener('load', function() {
                     const radioButton = document.querySelector(`input[name="is_public"][value="${data[key]}"]`);
                     if (radioButton) {
                         radioButton.checked = true;
+                    }
+                    return;
+                }
+
+                // Handle availability checkbox specially
+                if (key === 'is_availability_based') {
+                    const checkbox = document.getElementById('is_availability_based');
+                    if (checkbox) {
+                        checkbox.checked = data[key] === '1';
+                        // Trigger change event to show/hide availability settings
+                        checkbox.dispatchEvent(new Event('change'));
                     }
                     return;
                 }
@@ -4114,6 +4039,27 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('end_datetime-error').textContent = '';
             document.getElementById('end_datetime').classList.remove('is-invalid');
             document.getElementById('end_datetime').classList.add('is-valid');
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
+        }
+    });
+
+    // Availability deadline picker
+    flatpickr("#availability_deadline", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        minDate: "today",
+        minTime: "00:00",
+        time_24hr: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Ensure the format is correct for Laravel validation
+            if (dateStr) {
+                instance.input.value = dateStr.replace('T', ' ');
+            }
         },
         onClose: function(selectedDates, dateStr, instance) {
             // Ensure the format is correct for Laravel validation
