@@ -3,6 +3,12 @@
 @php
     $viewCount = $content->views_count ?? $content->view_count ?? 0;
     $contentType = strtolower(class_basename($content));
+
+    // Assicurati che il tipo sia supportato dal controller
+    $supportedTypes = ['video', 'photo', 'poem', 'article', 'event'];
+    if (!in_array($contentType, $supportedTypes)) {
+        $contentType = 'video'; // fallback
+    }
 @endphp
 
 <div class="post-icon social-view-counter"
@@ -27,7 +33,13 @@ if (!window.socialViewsInitialized) {
             const contentId = counter.dataset.contentId;
             const viewCountSpan = counter.querySelector('.view-count');
 
-            // Incrementa le visualizzazioni
+            // Incrementa le visualizzazioni solo se il tipo è supportato
+            const supportedTypes = ['video', 'photo', 'poem', 'article', 'event'];
+            if (!supportedTypes.includes(contentType)) {
+                console.warn('Tipo di contenuto non supportato per le visualizzazioni:', contentType);
+                return;
+            }
+
             fetch('/api/social/views/increment', {
                 method: 'POST',
                 headers: {
@@ -50,6 +62,8 @@ if (!window.socialViewsInitialized) {
                 if (data.success) {
                     // Aggiorna il contatore
                     viewCountSpan.textContent = data.view_count.toLocaleString();
+                } else {
+                    console.warn('Incremento visualizzazioni fallito:', data.message);
                 }
             })
             .catch(error => {

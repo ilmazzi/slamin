@@ -435,12 +435,16 @@ function incrementVideoViews() {
 
     viewsIncremented = true;
 
-    fetch('{{ route("videos.increment-views", $video) }}', {
+    fetch('/api/social/views/increment', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
             'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({
+            viewable_type: 'video',
+            viewable_id: {{ $video->id }}
+        })
     })
     .then(response => {
         if (!response.ok) {
@@ -734,7 +738,7 @@ async function initializeVideoPlayer() {
 
             fetch(videoFile.url, { method: 'HEAD' })
                 .then(response => {
-
+                    console.log('URL video accessibile:', response.ok);
                 })
                 .catch(error => {
                     console.error('❌ URL video non accessibile:', error);
