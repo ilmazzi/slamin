@@ -8,54 +8,54 @@
     .card-body {
         padding: 1rem !important;
     }
-    
+
     .card-header {
         padding: 0.75rem 1rem !important;
     }
-    
+
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
     }
-    
+
     .badge {
         font-size: 0.625rem;
     }
-    
+
     .form-floating > label {
         font-size: 0.875rem;
     }
-    
+
     .form-control {
         font-size: 0.875rem;
     }
-    
+
     .btn {
         font-size: 0.875rem;
     }
-    
+
     .btn-group.flex-column .btn {
         width: 100%;
         margin-bottom: 0.5rem;
         border-radius: 0.375rem !important;
     }
-    
+
     .btn-group.flex-column .btn:last-child {
         margin-bottom: 0;
     }
-    
+
     .btn-group.flex-column .btn:first-child {
         border-radius: 0.375rem 0.375rem 0 0 !important;
     }
-    
+
     .btn-group.flex-column .btn:last-child {
         border-radius: 0 0 0.375rem 0.375rem !important;
     }
-    
+
     .legend-item {
         margin-bottom: 1rem;
     }
-    
+
     .legend-item:last-child {
         margin-bottom: 0;
     }
@@ -67,15 +67,15 @@
         margin-bottom: 0;
         border-radius: 0 !important;
     }
-    
+
     .btn-group.flex-column .btn:first-child {
         border-radius: 0.375rem 0 0 0.375rem !important;
     }
-    
+
     .btn-group.flex-column .btn:last-child {
         border-radius: 0 0.375rem 0.375rem 0 !important;
     }
-    
+
     .legend-item {
         margin-bottom: 0;
     }

@@ -8,37 +8,37 @@
     .card-body {
         padding: 1rem !important;
     }
-    
+
     .card-header {
         padding: 0.75rem 1rem !important;
     }
-    
+
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
     }
-    
+
     .badge {
         font-size: 0.625rem;
     }
-    
+
     .form-floating > label {
         font-size: 0.875rem;
     }
-    
+
     .form-control {
         font-size: 0.875rem;
     }
-    
+
     .btn {
         font-size: 0.875rem;
     }
-    
+
     .option-row .btn {
         width: 100%;
         margin-top: 0.5rem;
     }
-    
+
     .option-row .col-12:last-child {
         margin-top: 0.5rem;
     }
@@ -49,7 +49,7 @@
         width: auto;
         margin-top: 0;
     }
-    
+
     .option-row .col-12:last-child {
         margin-top: 0;
     }
