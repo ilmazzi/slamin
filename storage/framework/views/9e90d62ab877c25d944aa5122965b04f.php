@@ -1,52 +1,52 @@
-@extends('layout.master')
+<?php $__env->startSection('title', $video->title); ?>
 
-@section('title', $video->title)
-
-@section('main-content')
-@if(!$video)
+<?php $__env->startSection('main-content'); ?>
+<?php if(!$video): ?>
     <div class="page-content">
         <div class="container-fluid">
             <div class="alert alert-danger">
                 <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                {{ __('common.video') }} non trovato.
+                <?php echo e(__('common.video')); ?> non trovato.
             </div>
         </div>
     </div>
-@else
+<?php else: ?>
 <div class="page-content">
     <div class="container-fluid">
         <!-- Breadcrumb -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">{{ $video->title }}</h4>
+                <h4 class="main-title"><?php echo e($video->title); ?></h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
-                        <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                                <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                             </span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="{{ route('profile.videos') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('profile.videos')); ?>" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-video-camera f-s-16"></i> {{ __('videos.videos') }}
+                                <i class="ph-duotone ph-video-camera f-s-16"></i> <?php echo e(__('videos.videos')); ?>
+
                             </span>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">{{ $video->title }}</a>
+                        <a href="#" class="f-s-14 f-w-500"><?php echo e($video->title); ?></a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <!-- {{ __('common.video') }} Player -->
+        <!-- <?php echo e(__('common.video')); ?> Player -->
         <div class="row">
             <div class="col-lg-8">
                 <div class="card hover-effect">
                     <div class="card-body p-0">
-                        @if($video->isUploadedToPeerTube() && $video->peertube_embed_url)
+                        <?php if($video->isUploadedToPeerTube() && $video->peertube_embed_url): ?>
                             <!-- Player HTML5 Nativo con URL Diretto PeerTube -->
                             <div class="video-container position-relative">
                                 <video
@@ -54,8 +54,8 @@
                                     class="w-100"
                                     style="height: 500px; max-height: 500px; object-fit: cover;"
                                     preload="metadata"
-                                    data-duration="{{ $video->duration ?? 60 }}"
-                                    data-video-id="{{ $video->id }}"
+                                    data-duration="<?php echo e($video->duration ?? 60); ?>"
+                                    data-video-id="<?php echo e($video->id); ?>"
                                     controls>
                                     Il tuo browser non supporta la riproduzione video.
                                 </video>
@@ -65,24 +65,24 @@
                                     <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                                             style="width: 70px; height: 70px;"
                                             onclick="createSnapAtCurrentTime()"
-                                            title="{{ __('videos.create_snap_at_current_time') }}">
-                                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
+                                            title="<?php echo e(__('videos.create_snap_at_current_time')); ?>">
+                                        <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
                                     </button>
                                 </div>
 
-                                <!-- {{ __('common.snap') }} Markers sulla Progress Bar del Player -->
+                                <!-- <?php echo e(__('common.snap')); ?> Markers sulla Progress Bar del Player -->
                                 <div class="snap-markers-overlay position-absolute" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
 
 
 
 
-                                    @php
+                                    <?php
                                         // Raggruppa gli snap per timestamp
                                         $snapsByTimestamp = $snaps->groupBy('timestamp');
-                                    @endphp
+                                    ?>
 
-                                    @foreach($snapsByTimestamp as $timestamp => $snapsAtTime)
-                                        @php
+                                    <?php $__currentLoopData = $snapsByTimestamp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $timestamp => $snapsAtTime): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php
                                             $snapCount = $snapsAtTime->count();
                                             $firstSnap = $snapsAtTime->first();
 
@@ -94,150 +94,249 @@
 
                                             $percentage = ($timestamp / $videoDuration) * 100;
                                             $leftPosition = $percentage . '%';
-                                        @endphp
+                                        ?>
 
                                         <div class="snap-marker position-absolute"
-                                             style="left: {{ $leftPosition }}; transform: translateX(-50%); pointer-events: auto; cursor: pointer;"
-                                             data-timestamp="{{ $timestamp }}"
-                                             onclick="seekToTime({{ $timestamp }})"
-                                             title="{{ $firstSnap->display_title }} ({{ $snapCount }} snap)">
+                                             style="left: <?php echo e($leftPosition); ?>; transform: translateX(-50%); pointer-events: auto; cursor: pointer;"
+                                             data-timestamp="<?php echo e($timestamp); ?>"
+                                             onclick="seekToTime(<?php echo e($timestamp); ?>)"
+                                             title="<?php echo e($firstSnap->display_title); ?> (<?php echo e($snapCount); ?> snap)">
 
                                                                                         <!-- Marker principale -->
                                             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
                                                  style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
                                             </div>
 
                                             <!-- Badge per numero di snap -->
-                                            @if($snapCount > 1)
+                                            <?php if($snapCount > 1): ?>
                                                 <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
                                                      style="width: 24px; height: 24px; font-size: 12px; font-weight: bold; transform: translate(30%, -30%);">
-                                                    {{ $snapCount }}
+                                                    <?php echo e($snapCount); ?>
+
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
 
                                             <!-- Tooltip -->
                                             <div class="snap-tooltip position-absolute bottom-100 start-50 translate-middle-x mb-1 bg-dark text-white rounded p-2"
                                                  style="font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; pointer-events: none;">
-                                                <strong>{{ $firstSnap->display_title }}</strong>
-                                                @if($snapCount > 1)
-                                                    <br><small>+{{ $snapCount - 1 }} altri</small>
-                                                @endif
+                                                <strong><?php echo e($firstSnap->display_title); ?></strong>
+                                                <?php if($snapCount > 1): ?>
+                                                    <br><small>+<?php echo e($snapCount - 1); ?> altri</small>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
 
                             <!-- Loading indicator -->
                             <div class="text-center mt-3" id="videoLoading">
                                 <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">{{ __('videos.loading_video') }}</span>
+                                    <span class="visually-hidden"><?php echo e(__('videos.loading_video')); ?></span>
                                 </div>
-                                <p class="mt-2 text-muted">{{ __('videos.loading_video') }}</p>
+                                <p class="mt-2 text-muted"><?php echo e(__('videos.loading_video')); ?></p>
                             </div>
 
                             <!-- Error message -->
                             <div class="alert alert-danger mt-3" id="videoError" style="display: none;">
                                 <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                                <span id="errorMessage">{{ __('videos.video_error') }}</span>
+                                <span id="errorMessage"><?php echo e(__('videos.video_error')); ?></span>
                             </div>
-                        @elseif($video->file_path && Storage::exists($video->file_path))
+                        <?php elseif($video->file_path && Storage::exists($video->file_path)): ?>
                             <!-- Player locale (fallback) -->
                             <video controls class="w-100" style="max-height: 500px;">
-                                <source src="{{ Storage::url($video->file_path) }}" type="video/mp4">
+                                <source src="<?php echo e(Storage::url($video->file_path)); ?>" type="video/mp4">
                                 Il tuo browser non supporta la riproduzione video.
                             </video>
-                        @else
-                            <!-- {{ __('videos.video_unavailable') }} -->
+                        <?php else: ?>
+                            <!-- <?php echo e(__('videos.video_unavailable')); ?> -->
                             <div class="d-flex align-items-center justify-content-center" style="height: 500px; background-color: #f8f9fa;">
                                 <div class="text-center">
                                     <i class="ph-duotone ph-video-camera-slash f-s-48 text-muted mb-3"></i>
-                                    <h5 class="text-muted">{{ __('videos.video_unavailable') }}</h5>
-                                    <p class="text-muted">{{ __('videos.video_processing_message') }}</p>
-                                    @if($video->peertube_url)
-                                        <a href="{{ $video->peertube_url }}" target="_blank" class="btn btn-primary">
-                                            <i class="ph-duotone ph-external-link me-1"></i>{{ __('videos.open_on_peertube') }}
+                                    <h5 class="text-muted"><?php echo e(__('videos.video_unavailable')); ?></h5>
+                                    <p class="text-muted"><?php echo e(__('videos.video_processing_message')); ?></p>
+                                    <?php if($video->peertube_url): ?>
+                                        <a href="<?php echo e($video->peertube_url); ?>" target="_blank" class="btn btn-primary">
+                                            <i class="ph-duotone ph-external-link me-1"></i><?php echo e(__('videos.open_on_peertube')); ?>
+
                                         </a>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
 
-                <!-- {{ __('common.video') }} Info -->
+                <!-- <?php echo e(__('common.video')); ?> Info -->
                 <div class="card hover-effect mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h5 class="card-title mb-1">{{ $video->title }}</h5>
+                                <h5 class="card-title mb-1"><?php echo e($video->title); ?></h5>
                                 <p class="text-muted mb-0">
                                     <i class="ph-duotone ph-eye f-s-14 me-1"></i>
-                                    <span id="viewCount">{{ $video->view_count }}</span> {{ __('videos.views') }}
+                                    <span id="viewCount"><?php echo e($video->view_count); ?></span> <?php echo e(__('videos.views')); ?>
+
                                 </p>
                             </div>
                             <div class="d-flex gap-2">
-                                @if($video->is_public)
+                                <?php if($video->is_public): ?>
                                     <span class="badge bg-success f-s-12">
                                         <i class="ph-duotone ph-globe f-s-12 me-1"></i>Pubblico
                                     </span>
-                                @else
+                                <?php else: ?>
                                     <span class="badge bg-warning f-s-12">
                                         <i class="ph-duotone ph-lock f-s-12 me-1"></i>Privato
                                     </span>
-                                @endif
+                                <?php endif; ?>
 
-                                @if($video->moderation_status === 'approved')
+                                <?php if($video->moderation_status === 'approved'): ?>
                                     <span class="badge bg-success f-s-12">
                                         <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Approvato
                                     </span>
-                                @elseif($video->moderation_status === 'pending')
+                                <?php elseif($video->moderation_status === 'pending'): ?>
                                     <span class="badge bg-warning f-s-12">
                                         <i class="ph-duotone ph-clock f-s-12 me-1"></i>In attesa
                                     </span>
-                                @else
+                                <?php else: ?>
                                     <span class="badge bg-danger f-s-12">
                                         <i class="ph-duotone ph-x-circle f-s-12 me-1"></i>Rifiutato
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
-                        @if($video->description)
-                            <p class="card-text">{{ $video->description }}</p>
-                        @endif
+                        <?php if($video->description): ?>
+                            <p class="card-text"><?php echo e($video->description); ?></p>
+                        <?php endif; ?>
 
                         <!-- Video Actions -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
                                 <!-- Like Button (Sistema Unificato) -->
-                                <x-social-like-button :content="$video" type="video" />
+                                <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-like-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-like-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $attributes = $__attributesOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__attributesOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $component = $__componentOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__componentOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
 
                                 <!-- View Counter (Sistema Unificato) -->
-                                <x-social-view-counter :content="$video" type="video" />
+                                <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-counter'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $attributes = $__attributesOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__attributesOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
 
                                 <!-- Snap Button (Sistema Unificato) -->
-                                <x-social-snap-button :content="$video" type="video" />
+                                <?php if (isset($component)) { $__componentOriginal7abebe354dff9d15a9ac129dc497114d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7abebe354dff9d15a9ac129dc497114d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-snap-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-snap-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7abebe354dff9d15a9ac129dc497114d)): ?>
+<?php $attributes = $__attributesOriginal7abebe354dff9d15a9ac129dc497114d; ?>
+<?php unset($__attributesOriginal7abebe354dff9d15a9ac129dc497114d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7abebe354dff9d15a9ac129dc497114d)): ?>
+<?php $component = $__componentOriginal7abebe354dff9d15a9ac129dc497114d; ?>
+<?php unset($__componentOriginal7abebe354dff9d15a9ac129dc497114d); ?>
+<?php endif; ?>
 
                                 <!-- Report Button -->
-                                <x-report-button :content="$video" type="video" />
+                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
                             </div>
 
                             <small class="text-muted">
                                 <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                {{ __('videos.uploaded_on') }} {{ $video->created_at->format('d/m/Y') }}
+                                <?php echo e(__('videos.uploaded_on')); ?> <?php echo e($video->created_at->format('d/m/Y')); ?>
+
                             </small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Comments Section (Sistema Unificato) -->
-                <x-social-comments-section :content="$video" type="video" />
+                <?php if (isset($component)) { $__componentOriginal3a0426d3cc93dd4143162417cb66a587 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal3a0426d3cc93dd4143162417cb66a587 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-comments-section','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-comments-section'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal3a0426d3cc93dd4143162417cb66a587)): ?>
+<?php $attributes = $__attributesOriginal3a0426d3cc93dd4143162417cb66a587; ?>
+<?php unset($__attributesOriginal3a0426d3cc93dd4143162417cb66a587); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal3a0426d3cc93dd4143162417cb66a587)): ?>
+<?php $component = $__componentOriginal3a0426d3cc93dd4143162417cb66a587; ?>
+<?php unset($__componentOriginal3a0426d3cc93dd4143162417cb66a587); ?>
+<?php endif; ?>
             </div>
 
             <div class="col-lg-4">
-                <!-- {{ __('common.video') }} Stats -->
+                <!-- <?php echo e(__('common.video')); ?> Stats -->
                 <div class="card hover-effect">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
@@ -249,25 +348,25 @@
                         <div class="row text-center">
                             <div class="col-4">
                                 <div class="border-end">
-                                    <h5 class="mb-1" id="viewCountStats">{{ $video->view_count }}</h5>
-                                    <small class="text-muted">{{ __('videos.views') }}</small>
+                                    <h5 class="mb-1" id="viewCountStats"><?php echo e($video->view_count); ?></h5>
+                                    <small class="text-muted"><?php echo e(__('videos.views')); ?></small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="border-end">
-                                    <h5 class="mb-1" id="likeCountStats">{{ $video->like_count }}</h5>
-                                    <small class="text-muted">{{ __('videos.like') }}</small>
+                                    <h5 class="mb-1" id="likeCountStats"><?php echo e($video->like_count); ?></h5>
+                                    <small class="text-muted"><?php echo e(__('videos.like')); ?></small>
                                 </div>
                             </div>
                             <div class="col-4">
-                                <h5 class="mb-1" id="commentCountStats">{{ $video->comment_count }}</h5>
-                                <small class="text-muted">{{ __('common.comments_section') }}</small>
+                                <h5 class="mb-1" id="commentCountStats"><?php echo e($video->comment_count); ?></h5>
+                                <small class="text-muted"><?php echo e(__('common.comments_section')); ?></small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- {{ __('common.video') }} Details -->
+                <!-- <?php echo e(__('common.video')); ?> Details -->
                 <div class="card hover-effect mt-3">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
@@ -277,94 +376,97 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled mb-0">
-                            @if($video->duration)
+                            <?php if($video->duration): ?>
                                 <li class="mb-2">
                                     <i class="ph-duotone ph-clock f-s-14 me-2 text-muted"></i>
-                                    Durata: {{ $video->formatted_duration }}
+                                    Durata: <?php echo e($video->formatted_duration); ?>
+
                                 </li>
-                            @endif
-                            @if($video->file_size)
+                            <?php endif; ?>
+                            <?php if($video->file_size): ?>
                                 <li class="mb-2">
                                     <i class="ph-duotone ph-hard-drive f-s-14 me-2 text-muted"></i>
-                                    Dimensione: {{ $video->formatted_file_size }}
+                                    Dimensione: <?php echo e($video->formatted_file_size); ?>
+
                                 </li>
-                            @endif
-                            @if($video->resolution)
+                            <?php endif; ?>
+                            <?php if($video->resolution): ?>
                                 <li class="mb-2">
                                     <i class="ph-duotone ph-monitor f-s-14 me-2 text-muted"></i>
-                                    Risoluzione: {{ $video->resolution }}
+                                    Risoluzione: <?php echo e($video->resolution); ?>
+
                                 </li>
-                            @endif
+                            <?php endif; ?>
                             <li class="mb-2">
                                 <i class="ph-duotone ph-user f-s-14 me-2 text-muted"></i>
-                                Autore: <a href="{{ route('user.show', $video->user) }}" class="text-decoration-none hover-effect">{{ $video->user->getDisplayName() }}</a>
+                                Autore: <a href="<?php echo e(route('user.show', $video->user)); ?>" class="text-decoration-none hover-effect"><?php echo e($video->user->getDisplayName()); ?></a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Snaps Section -->
-                @if($snaps->count() > 0)
+                <?php if($snaps->count() > 0): ?>
                 <div class="card hover-effect mt-3">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
-                            <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; margin-right: 8px;">
-                            {{ __('common.snap') }} Popolari
+                            <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 16px; height: 16px; margin-right: 8px;">
+                            <?php echo e(__('common.snap')); ?> Popolari
                         </h6>
                     </div>
                     <div class="card-body">
-                        @foreach($snaps->take(5) as $snap)
+                        <?php $__currentLoopData = $snaps->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $snap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="d-flex align-items-center mb-2">
                                 <div class="flex-shrink-0 position-relative">
-                                                                    @if($video->thumbnail_path)
-                                    <img src="{{ $video->thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
-                                    @elseif($video->peertube_thumbnail_url)
-                                        <img src="{{ $video->peertube_thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
-                                    @else
+                                                                    <?php if($video->thumbnail_path): ?>
+                                    <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e(__('common.snap')); ?>" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                    <?php elseif($video->peertube_thumbnail_url): ?>
+                                        <img src="<?php echo e($video->peertube_thumbnail_url); ?>" alt="<?php echo e(__('common.snap')); ?>" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                    <?php else: ?>
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 30px;">
                                             <i class="ph-duotone ph-video-camera f-s-16 text-muted"></i>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                     <div class="position-absolute top-0 end-0 bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 8px; transform: translate(25%, -25%);">
-                                        <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 8px; height: 8px; filter: brightness(0) invert(1);">
+                                        <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 8px; height: 8px; filter: brightness(0) invert(1);">
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-2">
-                                    <h6 class="mb-0 f-s-14">{{ $snap->display_title }}</h6>
-                                    <small class="text-muted">{{ $snap->formatted_timestamp }}</small>
+                                    <h6 class="mb-0 f-s-14"><?php echo e($snap->display_title); ?></h6>
+                                    <small class="text-muted"><?php echo e($snap->formatted_timestamp); ?></small>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="seekToTime({{ $snap->timestamp }})">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="seekToTime(<?php echo e($snap->timestamp); ?>)">
                                         <i class="ph-duotone ph-play f-s-12"></i>
                                     </button>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-<!-- {{ __('common.snap') }} Modal -->
+<!-- <?php echo e(__('common.snap')); ?> Modal -->
 <div class="modal fade" id="snapModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Crea {{ __('common.snap') }}</h5>
+                <h5 class="modal-title">Crea <?php echo e(__('common.snap')); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="snapForm">
                     <div class="mb-3">
                         <label for="snapTitle" class="form-label">Titolo (opzionale)</label>
-                        <input type="text" class="form-control" id="snapTitle" placeholder="{{ __('common.snap_title') }}">
+                        <input type="text" class="form-control" id="snapTitle" placeholder="<?php echo e(__('common.snap_title')); ?>">
                     </div>
                     <div class="mb-3">
                         <label for="snapDescription" class="form-label">Descrizione (opzionale)</label>
-                        <textarea class="form-control" id="snapDescription" rows="3" placeholder="{{ __('common.snap_description') }}"></textarea>
+                        <textarea class="form-control" id="snapDescription" rows="3" placeholder="<?php echo e(__('common.snap_description')); ?>"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Timestamp: <span id="currentTime">00:00</span></label>
@@ -374,17 +476,17 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                <button type="button" class="btn btn-primary" onclick="createSnap()">Crea {{ __('common.snap') }}</button>
+                <button type="button" class="btn btn-primary" onclick="createSnap()">Crea <?php echo e(__('common.snap')); ?></button>
             </div>
         </div>
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <style>
-/* {{ __('common.snap') }} Markers sulla Progress Bar del Player */
+/* <?php echo e(__('common.snap')); ?> Markers sulla Progress Bar del Player */
 .snap-markers-overlay {
     z-index: 10;
 }
@@ -419,7 +521,7 @@ video::-webkit-media-controls-panel {
 // Variabili globali per il player HTML5
 let videoPlayer = null;
 let currentVideoTime = 0;
-let videoDuration = {{ $video->duration ?? 60 }};
+let videoDuration = <?php echo e($video->duration ?? 60); ?>;
 let isVideoPlaying = false;
 let isFullscreen = false;
 
@@ -447,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Funzioni per like/dislike
 function toggleLike(type) {
-    fetch('{{ route("videos.toggle-like", $video) }}', {
+    fetch('<?php echo e(route("videos.toggle-like", $video)); ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -526,7 +628,7 @@ function createSnap() {
         return;
     }
 
-    fetch('{{ route("videos.add-snap", $video) }}', {
+    fetch('<?php echo e(route("videos.add-snap", $video)); ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -567,11 +669,11 @@ function createSnap() {
 function deleteSnap(snapId) {
     if (!confirm('Sei sicuro di voler eliminare questo snap?')) return;
 
-    const deleteSnapBase = '{{ url('/videos/snaps') }}';
+    const deleteSnapBase = '<?php echo e(url('/videos/snaps')); ?>';
     fetch(`${deleteSnapBase}/${snapId}`, {
         method: 'DELETE',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
         }
     })
     .then(response => response.json())
@@ -590,9 +692,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Inizializza lo stile dei bottoni like
-    @if($userLike)
-        updateLikeButtons('{{ $userLike->type }}');
-    @endif
+    <?php if($userLike): ?>
+        updateLikeButtons('<?php echo e($userLike->type); ?>');
+    <?php endif; ?>
 
     // Incrementa le visualizzazioni - ora gestito dal componente social-view-counter
 
@@ -663,7 +765,7 @@ async function initializeVideoPlayer() {
     }
 
     // Ottieni la durata dal video o dal database
-    videoDuration = parseInt(videoPlayer.dataset.duration) || {{ $video->duration ?? 60 }};
+    videoDuration = parseInt(videoPlayer.dataset.duration) || <?php echo e($video->duration ?? 60); ?>;
     const videoId = videoPlayer.dataset.videoId;
 
     // Mostra loading indicator
@@ -734,14 +836,14 @@ async function initializeVideoPlayer() {
             throw new Error(data.error || 'Nessun file video disponibile');
         }
     } catch (error) {
-        console.error('❌ {{ __('videos.video_error') }}:', error);
+        console.error('❌ <?php echo e(__('videos.video_error')); ?>:', error);
 
         // Nascondi loading e mostra errore
         if (loading) loading.style.display = 'none';
         if (error) {
             error.style.display = 'block';
             document.getElementById('errorMessage').textContent =
-                '{{ __('videos.video_error') }}: ' + error.message;
+                '<?php echo e(__('videos.video_error')); ?>: ' + error.message;
         }
     }
 }
@@ -881,5 +983,7 @@ function updateSnapModalTime() {
     }
 }
 </script>
-@endif
-@endpush
+<?php endif; ?>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/videos/show.blade.php ENDPATH**/ ?>

@@ -16,6 +16,7 @@ class ViewController extends Controller
      */
     public function increment(Request $request)
     {
+
         $request->validate([
             'viewable_type' => 'required|string',
             'viewable_id' => 'required|numeric',
@@ -32,7 +33,7 @@ class ViewController extends Controller
         // Verifica se il tipo di contenuto è tracciabile
         $viewableContent = SystemSetting::get('social_viewable_content', ['video', 'photo', 'poem', 'article', 'event']);
         $contentType = $request->viewable_type; // Usa direttamente il tipo ricevuto
-        
+
         if (!in_array($contentType, $viewableContent)) {
             return response()->json([
                 'success' => false,
@@ -42,7 +43,7 @@ class ViewController extends Controller
 
         // Ottieni il contenuto
         $content = $this->getContent($request->viewable_type, $request->viewable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -55,9 +56,19 @@ class ViewController extends Controller
         $result = $content->incrementViewIfNotOwner($user);
 
         if (!$result) {
+            // Se il contenuto è già stato visualizzato, restituisci successo con messaggio informativo
+            if ($wasViewed) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Contenuto già visualizzato',
+                    'view_count' => $content->view_count
+                ], 200);
+            }
+
+            // Solo per errori reali, restituisci 400
             return response()->json([
                 'success' => false,
-                'message' => $wasViewed ? 'Contenuto già visualizzato' : 'Impossibile incrementare le visualizzazioni'
+                'message' => 'Impossibile incrementare le visualizzazioni'
             ], 400);
         }
 
@@ -74,14 +85,14 @@ class ViewController extends Controller
     public function getViewedContent(Request $request)
     {
         $user = Auth::user();
-        
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Autenticazione richiesta'
             ], 401);
         }
-        
+
         $type = $request->get('type', 'all');
         $perPage = $request->get('per_page', 12);
 
@@ -113,7 +124,7 @@ class ViewController extends Controller
         ]);
 
         $content = $this->getContent($request->viewable_type, $request->viewable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -143,7 +154,7 @@ class ViewController extends Controller
     private function getContent(string $type, int $id)
     {
         $modelClass = $this->getModelClass($type);
-        
+
         if (!$modelClass) {
             return null;
         }
