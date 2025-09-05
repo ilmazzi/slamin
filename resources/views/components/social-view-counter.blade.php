@@ -30,13 +30,19 @@ if (!window.socialViewsInitialized) {
 
         viewCounters.forEach(counter => {
             const contentType = counter.dataset.contentType;
-            const contentId = counter.dataset.contentId;
+            const contentId = parseInt(counter.dataset.contentId);
             const viewCountSpan = counter.querySelector('.view-count');
 
             // Incrementa le visualizzazioni solo se il tipo è supportato
             const supportedTypes = ['video', 'photo', 'poem', 'article', 'event'];
             if (!supportedTypes.includes(contentType)) {
                 console.warn('Tipo di contenuto non supportato per le visualizzazioni:', contentType);
+                return;
+            }
+
+            // Verifica che contentId sia un numero valido
+            if (isNaN(contentId) || contentId <= 0) {
+                console.warn('ID contenuto non valido per le visualizzazioni:', contentId);
                 return;
             }
 

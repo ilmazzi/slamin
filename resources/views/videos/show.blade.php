@@ -669,14 +669,10 @@ setInterval(function() {
 
 // Funzioni per la timeline
 function seekToTime(timestamp) {
-
-
     if (videoPlayer) {
         // Imposta il tempo del video
         videoPlayer.currentTime = timestamp;
         currentVideoTime = timestamp;
-
-        );
     }
 }
 
