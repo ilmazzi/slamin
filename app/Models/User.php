@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +16,7 @@ use App\Models\SystemSetting;
 use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\DB;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -62,6 +62,7 @@ class User extends Authenticatable
         'peertube_video_quota_daily',
         'peertube_created_at',
         'peertube_password',
+        'peertube_roles',
     ];
 
     /**
@@ -88,6 +89,7 @@ class User extends Authenticatable
             'peertube_created_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'online_preferences' => 'array',
+            'peertube_roles' => 'array',
         ];
     }
 
@@ -146,6 +148,14 @@ class User extends Authenticatable
     public function getPrivacySafeIdentifier(): string
     {
         return $this->nickname ?: 'ID: ' . $this->id;
+    }
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\EmailVerificationNotification);
     }
 
     /**

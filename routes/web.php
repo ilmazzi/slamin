@@ -11,8 +11,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 
 
-use Illuminate\Http\Request;
-
 // Broadcasting routes per l'autenticazione dei canali privati
 Broadcast::routes(['middleware' => ['web', 'auth']]);
 
@@ -291,7 +289,7 @@ Route::get('/test', function () {
 });
 
 // Dashboard moderna multilanguage
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('dashboard');
     Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
 });
@@ -313,6 +311,7 @@ use App\Http\Controllers\EventInvitationController;
 use App\Http\Controllers\EventRequestController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AnalyticsController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 // Public event routes (no auth required)
 Route::get('/events', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
@@ -396,7 +395,7 @@ Route::get('/test-simple-create', function () {
 })->name('test-simple-create');
 
 // Protected event routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // Event management (organizers) - SENZA CREATE PER TEST
     Route::resource('events', EventController::class)->except(['index', 'show', 'create', 'store']);
@@ -498,14 +497,14 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/views/stats', [App\Http\Controllers\ViewController::class, 'getViewStats'])->name('views.stats');
 
         // Like routes (richiedono autenticazione)
-        Route::middleware('auth')->group(function () {
+        Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/likes/toggle', [App\Http\Controllers\LikeController::class, 'toggle'])->name('likes.toggle');
             Route::get('/likes/content', [App\Http\Controllers\LikeController::class, 'getLikedContent'])->name('likes.content');
             Route::get('/likes/stats', [App\Http\Controllers\LikeController::class, 'getLikeStats'])->name('likes.stats');
         });
 
         // Comment routes (richiedono autenticazione)
-        Route::middleware('auth')->group(function () {
+        Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
             Route::put('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'update'])->name('comments.update');
             Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
@@ -745,10 +744,10 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
     Route::get('/peertube/upload', function() {
         $user = Auth::user();
         return view('videos.upload', compact('user'));
-    })->name('peertube.upload-video')->middleware('auth');
+    })->name('peertube.upload-video')->middleware(['auth', 'verified']);
 
-    // Premium Routes
-    Route::prefix('premium')->name('premium.')->middleware('auth')->group(function () {
+// Premium Routes
+Route::prefix('premium')->name('premium.')->middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [App\Http\Controllers\PremiumController::class, 'index'])->name('index');
         Route::get('/packages/{package}', [App\Http\Controllers\PremiumController::class, 'show'])->name('show');
         Route::get('/checkout/{package}', [App\Http\Controllers\PremiumController::class, 'checkout'])->name('checkout');
@@ -895,19 +894,77 @@ Route::prefix('search')->name('search.')->group(function () {
     Route::get('/api', [App\Http\Controllers\SearchController::class, 'search'])->name('api');
 });
 
+// Routes per verifica email
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        // Dopo la verifica, crea l'utente PeerTube se necessario
+        $user = $request->user();
+        if ($user->peertube_roles && !$user->peertube_user_id) {
+            $roles = json_decode($user->peertube_roles, true);
+            $shouldCreatePeerTubeUser = false;
+
+            foreach ($roles as $role) {
+                if (in_array($role, ['poet', 'organizer'])) {
+                    $shouldCreatePeerTubeUser = true;
+                    break;
+                }
+            }
+
+            if ($shouldCreatePeerTubeUser) {
+                try {
+                    Log::info('Creazione utente PeerTube post-verifica email', [
+                        'user_id' => $user->id,
+                        'email' => $user->email,
+                        'roles' => $roles
+                    ]);
+
+                    $peerTubeService = new \App\Services\PeerTubeService();
+                    $peerTubePassword = \Illuminate\Support\Str::random(12);
+                    $peerTubeUser = $peerTubeService->createPeerTubeUser($user, $peerTubePassword);
+
+                    if ($peerTubeUser) {
+                        Log::info('Utente PeerTube creato con successo post-verifica', [
+                            'user_id' => $user->id,
+                            'peertube_user_id' => $user->peertube_user_id
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Errore creazione utente PeerTube post-verifica', [
+                        'user_id' => $user->id,
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('dashboard')->with('success', '🎉 Email verificata con successo! Il tuo account è ora completamente attivo.');
+    })->middleware(['signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', 'Email di verifica inviata!');
+    })->middleware(['throttle:6,1'])->name('verification.send');
+});
+
 // Routes per le poesie
 Route::prefix('poems')->name('poems.')->group(function () {
     // Routes pubbliche
     Route::get('/', [App\Http\Controllers\PoemController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\PoemController::class, 'search'])->name('search');
     // Spostata qui la route statica prima della dinamica
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [App\Http\Controllers\PoemController::class, 'create'])->name('create');
     });
     Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
 
     // Routes autenticate
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [App\Http\Controllers\PoemController::class, 'store'])->name('store');
         Route::get('/{poem}/edit', [App\Http\Controllers\PoemController::class, 'edit'])->name('edit');
         Route::put('/{poem}', [App\Http\Controllers\PoemController::class, 'update'])->name('update');
@@ -1068,7 +1125,7 @@ Route::prefix('gigs')->name('gigs.')->group(function () {
     Route::get('/my-applications', [App\Http\Controllers\GigController::class, 'myApplications'])->name('my-applications');
 
     // CRUD per gigs (solo utenti autenticati non audience)
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [App\Http\Controllers\GigController::class, 'create'])->name('create');
         Route::post('/', [App\Http\Controllers\GigController::class, 'store'])->name('store');
         Route::get('/{gig}', [App\Http\Controllers\GigController::class, 'show'])->name('show');

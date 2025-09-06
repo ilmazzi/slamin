@@ -72,13 +72,14 @@ class AuthController extends Controller
         }
 
         try {
-            // Crea l'utente
+            // Crea l'utente (senza verifica email iniziale)
             $user = User::create([
                 'name' => $request->name,
                 'nickname' => $request->nickname,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'status' => 'active',
+                'email_verified_at' => null, // Non verificato inizialmente
             ]);
 
             // Assegna i ruoli selezionati
@@ -92,74 +93,45 @@ class AuthController extends Controller
             // Assegna i ruoli
             $user->assignRole($selectedRoles);
 
-            // Crea utente PeerTube se ha ruoli poet o organizer
-            $shouldCreatePeerTubeUser = false;
-            foreach ($selectedRoles as $role) {
-                if (in_array($role, ['poet', 'organizer'])) {
-                    $shouldCreatePeerTubeUser = true;
-                    break;
-                }
-            }
-
-            if ($shouldCreatePeerTubeUser) {
-                try {
-                    Log::info('Creazione utente PeerTube durante registrazione', [
-                        'user_id' => $user->id,
-                        'email' => $user->email,
-                        'roles' => $selectedRoles
-                    ]);
-
-                    $peerTubeService = new PeerTubeService();
-
-                    // Genera una password sicura per PeerTube
-                    $peerTubePassword = \Illuminate\Support\Str::random(12);
-
-                    // Crea l'utente su PeerTube
-                    $peerTubeUser = $peerTubeService->createPeerTubeUser($user, $peerTubePassword);
-
-                    if ($peerTubeUser) {
-                        Log::info('Utente PeerTube creato con successo durante registrazione', [
-                            'user_id' => $user->id,
-                            'peertube_user_id' => $user->peertube_user_id
-                        ]);
-                    } else {
-                        Log::warning('Fallimento creazione utente PeerTube durante registrazione', [
-                            'user_id' => $user->id
-                        ]);
-                    }
-                } catch (Exception $e) {
-                    Log::error('Errore creazione utente PeerTube durante registrazione', [
-                        'user_id' => $user->id,
-                        'error' => $e->getMessage()
-                    ]);
-                    // Non blocchiamo la registrazione se PeerTube fallisce
-                }
-            }
-
-            // Login automatico
+            // Login automatico per permettere l'accesso alla pagina di verifica
             Auth::login($user);
+
+            // Invia email di verifica
+            try {
+                $user->sendEmailVerificationNotification();
+                Log::info('Email di verifica inviata con successo', [
+                    'user_id' => $user->id,
+                    'email' => $user->email
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Errore invio email di verifica', [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'error' => $e->getMessage()
+                ]);
+            }
+
+            // Salva i ruoli per la creazione PeerTube post-verifica
+            $user->update([
+                'peertube_roles' => json_encode($selectedRoles) // Salva i ruoli per dopo la verifica
+            ]);
 
             // Log registration
             LoggingService::logAuth('register', [
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'roles' => $selectedRoles,
-                'peertube_created' => $shouldCreatePeerTubeUser && $user->peertube_user_id
+                'email_verification_sent' => true
             ], 'App\Models\User', $user->id);
 
-            // Messaggio di benvenuto personalizzato
+            // Messaggio di registrazione con verifica email
             $roleText = count($selectedRoles) > 1 ?
                 count($selectedRoles) . ' ruoli' :
                 $this->getRoleDisplayName($selectedRoles[0]);
 
-            $welcomeMessage = "🎉 Ti diamo il benvenuto in Slamin! Hai {$roleText} attivi.";
+            $welcomeMessage = "🎉 Registrazione completata! Hai {$roleText} assegnati. Controlla la tua email per verificare l'account e accedere a tutte le funzionalità.";
 
-            // Aggiungi messaggio PeerTube se applicabile
-            if ($shouldCreatePeerTubeUser && $user->peertube_user_id) {
-                $welcomeMessage .= " 🎬 Il tuo account PeerTube è stato creato automaticamente per caricare i tuoi video!";
-            }
-
-            return redirect()->route('dashboard')
+            return redirect()->route('verification.notice')
                 ->with('success', $welcomeMessage);
 
         } catch (Exception $e) {
