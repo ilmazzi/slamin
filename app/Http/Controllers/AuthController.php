@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use App\Services\PeerTubeService;
 use App\Services\LoggingService;
+use App\Helpers\LanguageHelper;
 use App\Events\UserLogged;
 use App\Events\UserLoggedIn;
 
@@ -36,7 +37,10 @@ class AuthController extends Controller
             ];
         });
 
-                return view('auth.signup', compact('roles'));
+        // Recupera le lingue disponibili dinamicamente
+        $languages = LanguageHelper::getAvailableLanguages();
+
+        return view('auth.signup', compact('roles', 'languages'));
     }
 
 
@@ -52,6 +56,7 @@ class AuthController extends Controller
             'nickname' => 'nullable|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'language' => 'required|string|in:' . implode(',', array_keys(LanguageHelper::getAvailableLanguages())),
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,name',
         ], [
@@ -95,6 +100,10 @@ class AuthController extends Controller
 
             // Login automatico per permettere l'accesso alla pagina di verifica
             Auth::login($user);
+
+            // Imposta la lingua nella sessione
+            $request->session()->put('locale', $request->language);
+            app()->setLocale($request->language);
 
             // Invia email di verifica
             try {
@@ -169,7 +178,9 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             $user = Auth::user();
 
@@ -177,10 +188,12 @@ class AuthController extends Controller
             // Temporaneamente disabilitato per evitare errori Pusher
             // broadcast(new UserLoggedIn($user))->toOthers();
 
-
+            $message = $remember
+                ? "Ti diamo il bentornato, {$user->name}! Ti ricorderemo per i prossimi accessi."
+                : "Ti diamo il bentornato, {$user->name}!";
 
             return redirect()->route('dashboard')
-                ->with('success', "Ti diamo il bentornato, {$user->name}!");
+                ->with('success', $message);
         }
 
         // Log failed login attempt

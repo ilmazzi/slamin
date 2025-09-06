@@ -15,6 +15,8 @@ return [
     'password' => '',
     'password_min_characters' => '',
     'confirm_password' => '',
+    'preferred_language' => '',
+    'language_tip' => '',
     'optional' => '',
     'choose_role' => '',
     'choose_role_description' => '',

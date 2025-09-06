@@ -6,7 +6,7 @@ return [
     'create_account' => 'Crea il tuo account',
     'complete_profile' => 'Completa il tuo profilo in pochi passaggi',
     'join_slam_in' => 'Unisciti a Slam In',
-    
+
     // Campi del form
     'full_name' => 'Nome completo',
     'full_name_placeholder' => 'Inserisci il tuo nome completo',
@@ -17,8 +17,10 @@ return [
     'password' => 'Password',
     'password_min_characters' => '(minimo 8 caratteri)',
     'confirm_password' => 'Conferma password',
+    'preferred_language' => 'Lingua preferita',
+    'language_tip' => 'Potrai sempre cambiare la lingua in seguito nelle impostazioni del tuo profilo.',
     'optional' => '(opzionale)',
-    
+
     // Ruoli e selezione
     'choose_role' => 'Scegli il tuo ruolo',
     'choose_role_description' => 'Seleziona uno o più ruoli che ti rappresentano meglio nella community di Slam In.',
@@ -27,18 +29,18 @@ return [
     'poet' => 'Poeta',
     'venue_owner' => 'Proprietario di venue',
     'audience' => 'Pubblico',
-    
+
     // Statistiche della piattaforma
     'poets' => 'Poeti',
     'events' => 'Eventi',
     'venues' => 'Venue',
     'community' => 'Community',
     'platform_description' => 'La piattaforma completa per la poesia slam in Italia',
-    
+
     // Link e navigazione
     'already_have_account' => 'Hai già un account?',
     'login' => 'Accedi',
-    
+
     // Sezione informativa
     'why_join_slam_in' => 'Perché unirsi a Slam In?',
     'fast_registration' => 'Registrazione veloce',

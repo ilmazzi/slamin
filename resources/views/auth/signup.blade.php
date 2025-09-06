@@ -272,6 +272,23 @@
                             </div>
                         </div>
 
+                        <!-- Selezione Lingua -->
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <strong>🌍 {{ __('register.preferred_language') }}</strong>
+                            </label>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-info-circle"></i> {{ __('register.language_tip') }}
+                            </p>
+                            <select class="form-select" name="language" required>
+                                @foreach($languages as $code => $name)
+                                    <option value="{{ $code }}" {{ old('language', session('locale', 'it')) == $code ? 'selected' : '' }}>
+                                        {{ \App\Helpers\LanguageHelper::getLanguageFlag($code) }} {{ $name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Selezione Multi-{{ __('invitations.role') }} -->
                         <div class="mb-4">
                             <label class="form-label">
@@ -327,7 +344,7 @@
                             <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm">
                                 <i class="bi bi-box-arrow-in-right"></i> {{ __('register.login') }}
                             </a>
-                           
+
                         </div>
                     </div>
 

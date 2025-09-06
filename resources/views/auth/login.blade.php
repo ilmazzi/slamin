@@ -282,8 +282,9 @@
                         <!-- Remember Me -->
                         <div class="mb-3 form-check">
                             <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">
+                            <label class="form-check-label" for="remember" title="{{ __('login.remember_me_tooltip') }}">
                                 {{ __('login.remember_me') }}
+                                <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="{{ __('login.remember_me_tooltip') }}"></i>
                             </label>
                         </div>
 
@@ -310,5 +311,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inizializza i tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
 </body>
 </html>

@@ -273,6 +273,25 @@
                             </div>
                         </div>
 
+                        <!-- Selezione Lingua -->
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <strong>🌍 <?php echo e(__('register.preferred_language')); ?></strong>
+                            </label>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-info-circle"></i> <?php echo e(__('register.language_tip')); ?>
+
+                            </p>
+                            <select class="form-select" name="language" required>
+                                <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $code => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($code); ?>" <?php echo e(old('language', session('locale', 'it')) == $code ? 'selected' : ''); ?>>
+                                        <?php echo e(\App\Helpers\LanguageHelper::getLanguageFlag($code)); ?> <?php echo e($name); ?>
+
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                        </div>
+
                         <!-- Selezione Multi-<?php echo e(__('invitations.role')); ?> -->
                         <div class="mb-4">
                             <label class="form-label">
@@ -332,7 +351,7 @@
                                 <i class="bi bi-box-arrow-in-right"></i> <?php echo e(__('register.login')); ?>
 
                             </a>
-                           
+
                         </div>
                     </div>
 
