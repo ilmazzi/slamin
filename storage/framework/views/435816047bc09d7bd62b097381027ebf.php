@@ -7,6 +7,7 @@
 
     <!-- Solo Bootstrap CSS essenziale -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/vendor/flag-icons-master/flag-icon.css')); ?>">
 
     <style>
         /* CSS con colori del template */
@@ -47,6 +48,62 @@
             width: 100%;
             max-width: 100%;
         }
+
+        /* Custom Language Dropdown */
+        .custom-language-dropdown {
+            position: relative;
+        }
+
+        .custom-language-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .custom-language-dropdown .dropdown-toggle:hover {
+            border-color: #0f626a;
+            box-shadow: 0 0 0 0.2rem rgba(15, 98, 106, 0.25);
+        }
+
+        .custom-language-dropdown .dropdown-toggle:focus {
+            outline: none;
+            border-color: #0f626a;
+            box-shadow: 0 0 0 0.2rem rgba(15, 98, 106, 0.25);
+        }
+
+        .custom-language-dropdown .dropdown-menu {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 4px;
+        }
+
+        .custom-language-dropdown .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-language-dropdown .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #0f626a;
+        }
+
+        .custom-language-dropdown .flag-icon {
+            width: 20px;
+            height: 15px;
+            background-size: cover;
+            display: inline-block;
+        }
+
 
         /* Responsive adjustments */
         @media (max-width: 991.98px) {
@@ -166,11 +223,11 @@
             <div class="col-lg-7 d-none d-lg-block left-section">
                 <div class="brand-container">
                     <img src="<?php echo e(asset('assets/images/logo.png')); ?>"
-                         alt="Slam In - A Home for poetry"
+                         alt="<?php echo e(__('register.home_for_poetry')); ?>"
                          class="img-fluid logo">
 
                     <h1 class="mb-4">🎭 Slam In</h1>
-                    <p class="lead mb-5">A Home for poetry</p>
+                    <p class="lead mb-5"><?php echo e(__('register.home_for_poetry')); ?></p>
 
                     <div class="row text-center justify-content-center">
                         <div class="col-3">
@@ -231,6 +288,37 @@
                     <form method="POST" action="<?php echo e(route('register.process')); ?>">
                         <?php echo csrf_field(); ?>
 
+                        <!-- Selezione Lingua - Prima cosa da scegliere -->
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <strong>🌍 <?php echo e(__('register.preferred_language')); ?></strong>
+                            </label>
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-info-circle"></i> <?php echo e(__('register.language_tip')); ?>
+
+                            </p>
+                            <!-- Dropdown personalizzato con bandiere -->
+                            <div class="custom-language-dropdown">
+                                <div class="dropdown-toggle" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="flag-icon flag-icon-<?php echo e(\App\Helpers\LanguageHelper::getLanguageFlagCode(app()->getLocale())); ?> me-2"></i>
+                                    <span id="selectedLanguageName"><?php echo e(\App\Helpers\LanguageHelper::getLanguageName(app()->getLocale())); ?></span>
+                                    <i class="bi bi-chevron-down ms-auto"></i>
+                                </div>
+                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                    <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $code => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li>
+                                            <a class="dropdown-item language-option" href="#" data-code="<?php echo e($code); ?>">
+                                                <i class="flag-icon flag-icon-<?php echo e(\App\Helpers\LanguageHelper::getLanguageFlagCode($code)); ?> me-2"></i>
+                                                <?php echo e($name); ?>
+
+                                            </a>
+                                        </li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </ul>
+                                <input type="hidden" name="language" id="languageInput" value="<?php echo e(old('language', session('locale', 'it'))); ?>">
+                            </div>
+                        </div>
+
                         <!-- Dati Base - Layout migliorato -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -271,25 +359,6 @@
                                 <input type="password" name="password_confirmation" class="form-control"
                                        required placeholder="••••••••">
                             </div>
-                        </div>
-
-                        <!-- Selezione Lingua -->
-                        <div class="mb-4">
-                            <label class="form-label">
-                                <strong>🌍 <?php echo e(__('register.preferred_language')); ?></strong>
-                            </label>
-                            <p class="text-muted small mb-2">
-                                <i class="bi bi-info-circle"></i> <?php echo e(__('register.language_tip')); ?>
-
-                            </p>
-                            <select class="form-select" name="language" required>
-                                <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $code => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($code); ?>" <?php echo e(old('language', session('locale', 'it')) == $code ? 'selected' : ''); ?>>
-                                        <?php echo e(\App\Helpers\LanguageHelper::getLanguageFlag($code)); ?> <?php echo e($name); ?>
-
-                                    </option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
                         </div>
 
                         <!-- Selezione Multi-<?php echo e(__('invitations.role')); ?> -->
@@ -361,8 +430,8 @@
                             <h6>🌟 <?php echo e(__('register.why_join_slam_in')); ?></h6>
                             <ul class="list-unstyled mb-0 small">
                                 <li>• <strong><?php echo e(__('register.fast_registration')); ?>:</strong> <?php echo e(__('register.only_essential_data')); ?></li>
-                                <li>• <strong><?php echo e(__('register.roles')); ?> flessibili:</strong> <?php echo e(__('register.poet')); ?>, <?php echo e(__('events.organizer')); ?>, <?php echo e(__('register.venue_owner')); ?>, <?php echo e(__('register.audience')); ?></li>
-                                <li>• <strong><?php echo e(__('register.complete_ecosystem')); ?>:</strong> <?php echo e(__('register.artists')); ?>, <?php echo e(__('events.organizers')); ?>, <?php echo e(__('register.venues')); ?> e <?php echo e(__('register.audience')); ?></li>
+                                <li>• <strong><?php echo e(__('register.flexible_roles')); ?>:</strong> <?php echo e(__('register.poet')); ?>, <?php echo e(__('events.organizer')); ?>, <?php echo e(__('register.venue_owner')); ?>, <?php echo e(__('register.audience')); ?></li>
+                                <li>• <strong><?php echo e(__('register.complete_ecosystem')); ?>:</strong> <?php echo e(__('register.artists')); ?>, <?php echo e(__('events.organizers')); ?>, <?php echo e(__('register.venues')); ?> <?php echo e(__('register.and')); ?> <?php echo e(__('register.audience')); ?></li>
                             </ul>
                         </div>
                     </div>
@@ -374,6 +443,53 @@
 
     <!-- Solo JavaScript essenziale -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Gestione dropdown lingua personalizzato
+        document.addEventListener('DOMContentLoaded', function() {
+            const languageOptions = document.querySelectorAll('.language-option');
+            const selectedLanguageName = document.getElementById('selectedLanguageName');
+            const languageInput = document.getElementById('languageInput');
+            const currentLanguage = '<?php echo e(app()->getLocale()); ?>';
+
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const selectedCode = this.getAttribute('data-code');
+                    const selectedName = this.textContent.trim();
+
+                    // Aggiorna il display
+                    selectedLanguageName.textContent = selectedName;
+                    languageInput.value = selectedCode;
+
+                    // Aggiorna la bandiera
+                    const flagIcon = this.querySelector('.flag-icon');
+                    const newFlagClass = flagIcon.className;
+                    const currentFlagIcon = document.querySelector('#languageDropdown .flag-icon');
+                    currentFlagIcon.className = newFlagClass;
+
+                    // Chiudi il dropdown
+                    const dropdown = bootstrap.Dropdown.getInstance(document.getElementById('languageDropdown'));
+                    if (dropdown) {
+                        dropdown.hide();
+                    }
+
+                    // Se la lingua è diversa, ricarica la pagina
+                    if (selectedCode !== currentLanguage) {
+                        const submitButton = document.querySelector('button[type="submit"]');
+                        const originalText = submitButton.innerHTML;
+                        submitButton.innerHTML = '🔄 <?php echo e(__("register.changing_language")); ?>...';
+                        submitButton.disabled = true;
+
+                        const currentUrl = new URL(window.location);
+                        currentUrl.searchParams.set('lang', selectedCode);
+                        window.location.href = currentUrl.toString();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\slamin\resources\views/auth/signup.blade.php ENDPATH**/ ?>

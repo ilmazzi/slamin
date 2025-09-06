@@ -19,6 +19,10 @@ return [
     'confirm_password' => 'Conferma password',
     'preferred_language' => 'Lingua preferita',
     'language_tip' => 'Potrai sempre cambiare la lingua in seguito nelle impostazioni del tuo profilo.',
+    'changing_language' => 'Cambiando lingua',
+    'home_for_poetry' => 'Una casa per la poesia',
+    'flexible_roles' => 'Ruoli flessibili',
+    'and' => 'e',
     'optional' => '(opzionale)',
 
     // Ruoli e selezione

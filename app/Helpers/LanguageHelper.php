@@ -51,28 +51,80 @@ class LanguageHelper
     }
 
     /**
-     * Ottieni l'emoji della bandiera per la lingua
+     * Ottieni il codice paese per la lingua
      */
     public static function getLanguageFlag($code)
     {
-        $flags = [
-            'it' => '🇮🇹',
-            'en' => '🇬🇧',
-            'es' => '🇪🇸',
-            'fr' => '🇫🇷',
-            'de' => '🇩🇪',
-            'pt' => '🇵🇹',
-            'pt-br' => '🇧🇷',
-            'nl' => '🇳🇱',
-            'pl' => '🇵🇱',
-            'ru' => '🇷🇺',
-            'ja' => '🇯🇵',
-            'zh' => '🇨🇳',
-            'ar' => '🇸🇦',
-            'hi' => '🇮🇳',
-            'ko' => '🇰🇷',
+        $flagCodes = [
+            'it' => 'IT',
+            'en' => 'GB',
+            'es' => 'ES',
+            'fr' => 'FR',
+            'de' => 'DE',
+            'pt' => 'PT',
+            'pt-br' => 'BR',
+            'nl' => 'NL',
+            'pl' => 'PL',
+            'ru' => 'RU',
+            'ja' => 'JP',
+            'zh' => 'CN',
+            'ar' => 'SA',
+            'hi' => 'IN',
+            'ko' => 'KR',
         ];
 
-        return $flags[$code] ?? '🌍';
+        return $flagCodes[$code] ?? 'IT';
+    }
+
+    /**
+     * Ottieni il codice CSS per la bandiera della lingua
+     */
+    public static function getLanguageFlagCode($code)
+    {
+        $flagCodes = [
+            'it' => 'ita',
+            'en' => 'gbr',
+            'es' => 'esp',
+            'fr' => 'fra',
+            'de' => 'deu',
+            'pt' => 'prt',
+            'pt-br' => 'bra',
+            'nl' => 'nld',
+            'pl' => 'pol',
+            'ru' => 'rus',
+            'ja' => 'jpn',
+            'zh' => 'chn',
+            'ar' => 'sau',
+            'hi' => 'ind',
+            'ko' => 'kor',
+        ];
+
+        return $flagCodes[$code] ?? 'ita';
+    }
+
+    /**
+     * Ottieni il simbolo della bandiera per la lingua (alternativa compatibile)
+     */
+    public static function getLanguageSymbol($code)
+    {
+        $symbols = [
+            'it' => '●',
+            'en' => '●',
+            'es' => '●',
+            'fr' => '●',
+            'de' => '●',
+            'pt' => '●',
+            'pt-br' => '●',
+            'nl' => '●',
+            'pl' => '●',
+            'ru' => '●',
+            'ja' => '●',
+            'zh' => '●',
+            'ar' => '●',
+            'hi' => '●',
+            'ko' => '●',
+        ];
+
+        return $symbols[$code] ?? '●';
     }
 }
