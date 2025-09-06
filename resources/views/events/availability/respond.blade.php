@@ -1,87 +1,6 @@
 @extends('layout.master')
 @section('title', 'Disponibilità - ' . $event->title)
 
-@section('css')
-<style>
-/* Mobile-First Responsive Styles for Availability Response */
-@media (max-width: 576px) {
-    .card-body {
-        padding: 1rem !important;
-    }
-
-    .card-header {
-        padding: 0.75rem 1rem !important;
-    }
-
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
-
-    .badge {
-        font-size: 0.625rem;
-    }
-
-    .form-floating > label {
-        font-size: 0.875rem;
-    }
-
-    .form-control {
-        font-size: 0.875rem;
-    }
-
-    .btn {
-        font-size: 0.875rem;
-    }
-
-    .btn-group.flex-column .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
-        border-radius: 0.375rem !important;
-    }
-
-    .btn-group.flex-column .btn:last-child {
-        margin-bottom: 0;
-    }
-
-    .btn-group.flex-column .btn:first-child {
-        border-radius: 0.375rem 0.375rem 0 0 !important;
-    }
-
-    .btn-group.flex-column .btn:last-child {
-        border-radius: 0 0 0.375rem 0.375rem !important;
-    }
-
-    .legend-item {
-        margin-bottom: 1rem;
-    }
-
-    .legend-item:last-child {
-        margin-bottom: 0;
-    }
-}
-
-@media (min-width: 768px) {
-    .btn-group.flex-column .btn {
-        width: auto;
-        margin-bottom: 0;
-        border-radius: 0 !important;
-    }
-
-    .btn-group.flex-column .btn:first-child {
-        border-radius: 0.375rem 0 0 0.375rem !important;
-    }
-
-    .btn-group.flex-column .btn:last-child {
-        border-radius: 0 0.375rem 0.375rem 0 !important;
-    }
-
-    .legend-item {
-        margin-bottom: 0;
-    }
-}
-</style>
-@endsection
 
 @section('main-content')
 <div class="container-fluid">
@@ -89,18 +8,20 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card hover-effect">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-0">
-                            <i class="ph ph-calendar-check me-2 text-warning"></i>
-                            Indica la tua Disponibilità
-                        </h5>
-                        <small class="text-muted">{{ $event->title }}</small>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('events.show', $event) }}" class="btn btn-light-primary btn-sm">
-                            <i class="ph ph-arrow-left me-1"></i>Torna all'Evento
-                        </a>
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <h5 class="mb-0">
+                                <i class="ph ph-calendar-check me-2 text-warning"></i>
+                                Indica la tua Disponibilità
+                            </h5>
+                            <small class="text-muted">{{ $event->title }}</small>
+                        </div>
+                        <div class="col-12">
+                            <a href="{{ route('events.show', $event) }}" class="btn btn-light-primary btn-sm w-100">
+                                <i class="ph ph-arrow-left me-1"></i>Torna all'Evento
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -118,19 +39,17 @@
                             <p class="text-muted mb-2 mb-md-0">{{ $event->description }}</p>
                         </div>
                         <div class="col-12 col-md-4">
-                            <div class="d-flex flex-column flex-md-column gap-2 mb-3 mb-md-0">
-                                <div class="d-flex flex-wrap gap-2">
-                                    @if($event->availability_deadline)
-                                        <span class="badge bg-warning">
-                                            <i class="ph ph-clock me-1"></i>
-                                            Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
-                                        </span>
-                                    @endif
-                                    <span class="badge bg-info">
-                                        <i class="ph ph-list-checks me-1"></i>
-                                        {{ $event->activeAvailabilityOptions->count() }} Opzioni
+                            <div class="d-flex flex-wrap gap-2 mb-3 mb-md-0">
+                                @if($event->availability_deadline)
+                                    <span class="badge bg-warning">
+                                        <i class="ph ph-clock me-1"></i>
+                                        Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
                                     </span>
-                                </div>
+                                @endif
+                                <span class="badge bg-info">
+                                    <i class="ph ph-list-checks me-1"></i>
+                                    {{ $event->activeAvailabilityOptions->count() }} Opzioni
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -167,27 +86,27 @@
                     </h6>
                     <div class="row g-3">
                         <div class="col-12 col-md-4">
-                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                            <div class="d-flex align-items-center">
                                 <button class="btn btn-success btn-sm me-2" disabled>
                                     <i class="ph ph-heart"></i>
                                 </button>
-                                <span class="text-center text-md-start"><strong>Preferita</strong> - Questa è la mia scelta migliore</span>
+                                <span class="small"><strong>Preferita</strong> - Questa è la mia scelta migliore</span>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
-                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                            <div class="d-flex align-items-center">
                                 <button class="btn btn-warning btn-sm me-2" disabled>
                                     <i class="ph ph-check-circle"></i>
                                 </button>
-                                <span class="text-center text-md-start"><strong>Disponibile</strong> - Posso partecipare</span>
+                                <span class="small"><strong>Disponibile</strong> - Posso partecipare</span>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
-                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                            <div class="d-flex align-items-center">
                                 <button class="btn btn-danger btn-sm me-2" disabled>
                                     <i class="ph ph-x-circle"></i>
                                 </button>
-                                <span class="text-center text-md-start"><strong>Non disponibile</strong> - Non posso partecipare</span>
+                                <span class="small"><strong>Non disponibile</strong> - Non posso partecipare</span>
                             </div>
                         </div>
                     </div>
@@ -225,7 +144,7 @@
                                                 @endif
 
                                                 <div class="d-grid gap-2">
-                                                    <div class="btn-group d-flex flex-column flex-md-row" role="group">
+                                                    <div class="btn-group w-100" role="group">
                                                         <input type="radio"
                                                                class="btn-check"
                                                                name="option_{{ $option->id }}"

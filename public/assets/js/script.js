@@ -505,3 +505,425 @@ function copyTextToClipboard(text) {
     document.execCommand('copy');
     document.body.removeChild(textarea);
 }
+
+// >>-- Global Search Functionality --<<
+let searchTimeout;
+let currentSearchQuery = '';
+let searchInitialized = false;
+
+// Initialize global search when DOM is ready
+$(document).ready(function() {
+    // Add a small delay to ensure all elements are rendered
+    setTimeout(function() {
+        if (!searchInitialized) {
+            initializeGlobalSearch();
+        }
+    }, 100);
+});
+
+function initializeGlobalSearch() {
+    // Initialize desktop search
+    const searchInput = document.getElementById('globalSearchInput');
+    const searchForm = document.getElementById('globalSearchForm');
+    const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+
+    // Initialize mobile search
+    const searchInputMobile = document.getElementById('globalSearchInputMobile');
+    const searchFormMobile = document.getElementById('globalSearchFormMobile');
+    const searchResultsDropdownMobile = document.getElementById('searchResultsDropdownMobile');
+
+    if (searchInitialized) {
+        console.log('Search already initialized, skipping');
+        return;
+    }
+
+    console.log('Initializing global search...');
+    searchInitialized = true;
+
+    // Initialize desktop search if elements exist
+    if (searchInput && searchForm && searchResultsDropdown) {
+        initializeSearchInstance(searchInput, searchForm, searchResultsDropdown, 'desktop');
+    }
+
+    // Initialize mobile search if elements exist
+    if (searchInputMobile && searchFormMobile && searchResultsDropdownMobile) {
+        initializeSearchInstance(searchInputMobile, searchFormMobile, searchResultsDropdownMobile, 'mobile');
+    }
+}
+
+function initializeSearchInstance(searchInput, searchForm, searchResultsDropdown, type) {
+    console.log(`Initializing ${type} search...`);
+
+    // Handle input changes with debounce
+    searchInput.addEventListener('input', function(e) {
+        try {
+            const query = e.target.value.trim();
+            currentSearchQuery = query;
+
+            // Clear previous timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+
+            if (query.length >= 2) {
+                // Show loading state
+                showSearchLoading(searchResultsDropdown, type);
+
+                // Debounce search request
+                searchTimeout = setTimeout(() => {
+                    performSearch(query, searchResultsDropdown, type);
+                }, 300);
+            } else if (query.length === 0) {
+                showSearchPlaceholder(searchResultsDropdown, type);
+            } else {
+                showSearchEmpty(searchResultsDropdown, type);
+            }
+        } catch (error) {
+            console.error('Error in search input handler:', error);
+        }
+    });
+
+    // Handle form submission
+    searchForm.addEventListener('submit', function(e) {
+        const query = searchInput.value.trim();
+        if (query.length < 2) {
+            e.preventDefault();
+            return false;
+        }
+        // Let the form submit normally to the search page
+    });
+
+    // Handle click outside to close dropdown
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+            hideSearchDropdown(searchResultsDropdown);
+        }
+    });
+
+    // Handle escape key to close dropdown
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideSearchDropdown(searchResultsDropdown);
+            searchInput.blur();
+        }
+    });
+}
+
+function performSearch(query, searchResultsDropdown, type) {
+    if (query !== currentSearchQuery) {
+        return; // Query has changed, ignore this result
+    }
+
+    // Use dynamic configuration if available, fallback to hardcoded URL
+    const apiUrl = (typeof window.SearchConfig !== 'undefined') ?
+        window.SearchConfig.apiUrl : '/search/api';
+    const csrfToken = (typeof window.SearchConfig !== 'undefined') ?
+        window.SearchConfig.csrfToken : document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    fetch(`${apiUrl}?q=${encodeURIComponent(query)}&limit=5`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': csrfToken || ''
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && query === currentSearchQuery) {
+            displaySearchResults(data.results, query, searchResultsDropdown, type);
+        }
+    })
+    .catch(error => {
+        console.error('Search error:', error);
+        if (query === currentSearchQuery) {
+            showSearchError(searchResultsDropdown, type);
+        }
+    });
+}
+
+function displaySearchResults(results, query, searchResultsDropdown, type) {
+    const searchResults = searchResultsDropdown.querySelector('.search-results');
+    const searchLoading = searchResultsDropdown.querySelector('.search-loading');
+    const searchEmpty = searchResultsDropdown.querySelector('.search-empty');
+    const searchPlaceholder = searchResultsDropdown.querySelector('.search-placeholder');
+
+    // Hide all states
+    [searchLoading, searchEmpty, searchPlaceholder].forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+
+    if (!results || Object.keys(results).length === 0) {
+        showSearchEmpty(searchResultsDropdown, type);
+        return;
+    }
+
+    let html = '';
+    let totalResults = 0;
+
+    // Generate results HTML for each category
+    Object.keys(results).forEach(category => {
+        const categoryData = results[category];
+        if (categoryData.count > 0) {
+            totalResults += categoryData.count;
+            html += generateCategoryResults(category, categoryData, query);
+        }
+    });
+
+    if (totalResults === 0) {
+        showSearchEmpty(searchResultsDropdown, type);
+        return;
+    }
+
+    // Add "View all results" link
+    const searchUrl = (typeof window.SearchConfig !== 'undefined') ?
+        window.SearchConfig.searchUrl : '/search';
+
+    html += `
+        <div class="border-top p-2 text-center">
+            <a href="${searchUrl}?q=${encodeURIComponent(query)}"
+               class="btn btn-sm btn-outline-primary w-100">
+                <i class="ph ph-magnifying-glass me-1"></i>
+                Vedi tutti i risultati (${totalResults})
+            </a>
+        </div>
+    `;
+
+    searchResults.innerHTML = html;
+    searchResults.style.display = 'block';
+    showSearchDropdown(searchResultsDropdown);
+}
+
+function generateCategoryResults(category, categoryData, query) {
+    const categoryNames = {
+        'poems': 'Poesie',
+        'events': 'Eventi',
+        'videos': 'Video',
+        'gigs': 'Gig',
+        'users': 'Utenti'
+    };
+
+    const categoryIcons = {
+        'poems': 'ph-pen-nib',
+        'events': 'ph-calendar',
+        'videos': 'ph-video',
+        'gigs': 'ph-briefcase',
+        'users': 'ph-users'
+    };
+
+    const categoryColors = {
+        'poems': 'info',
+        'events': 'success',
+        'videos': 'warning',
+        'gigs': 'primary',
+        'users': 'secondary'
+    };
+
+    let html = `
+        <div class="search-category mb-2">
+            <div class="px-3 py-2 bg-light">
+                <h6 class="mb-0 text-${categoryColors[category]}">
+                    <i class="ph ${categoryIcons[category]} me-1"></i>
+                    ${categoryNames[category]}
+                    <span class="badge bg-${categoryColors[category]} ms-1">${categoryData.count}</span>
+                </h6>
+            </div>
+            <div class="search-category-results">
+    `;
+
+    categoryData.data.forEach(item => {
+        html += generateItemResult(category, item, query);
+    });
+
+    html += `
+            </div>
+        </div>
+    `;
+
+    return html;
+}
+
+function generateItemResult(category, item, query) {
+    let html = '<div class="search-item p-2 border-bottom">';
+
+    if (category === 'poems') {
+        html += `
+            <a href="/poems/${item.slug}" class="text-decoration-none">
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                        <p class="mb-1 text-muted small">${highlightText(item.content ? item.content.substring(0, 80) : '', query)}...</p>
+                        <small class="text-muted">
+                            <i class="ph ph-user me-1"></i>${item.user.name}
+                        </small>
+                    </div>
+                </div>
+            </a>
+        `;
+    } else if (category === 'events') {
+        html += `
+            <a href="/events/${item.id}" class="text-decoration-none">
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                        <p class="mb-1 text-muted small">${highlightText(item.description ? item.description.substring(0, 80) : '', query)}...</p>
+                        <small class="text-muted">
+                            <i class="ph ph-map-pin me-1"></i>${item.city}
+                        </small>
+                    </div>
+                </div>
+            </a>
+        `;
+    } else if (category === 'videos') {
+        html += `
+            <a href="/videos/${item.id}" class="text-decoration-none">
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                        <p class="mb-1 text-muted small">${highlightText(item.description ? item.description.substring(0, 80) : '', query)}...</p>
+                        <small class="text-muted">
+                            <i class="ph ph-user me-1"></i>${item.user.name}
+                        </small>
+                    </div>
+                </div>
+            </a>
+        `;
+    } else if (category === 'gigs') {
+        html += `
+            <a href="/gigs/${item.id}" class="text-decoration-none">
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                        <p class="mb-1 text-muted small">${highlightText(item.description ? item.description.substring(0, 80) : '', query)}...</p>
+                        <small class="text-muted">
+                            <i class="ph ph-map-pin me-1"></i>${item.location}
+                        </small>
+                    </div>
+                </div>
+            </a>
+        `;
+    } else if (category === 'users') {
+        html += `
+            <a href="/profile/${item.id}" class="text-decoration-none">
+                <div class="d-flex align-items-center">
+                    <img src="${item.avatar || '/assets/images/default-avatar.png'}"
+                         alt="${item.name}"
+                         class="rounded-circle me-2"
+                         style="width: 32px; height: 32px;">
+                    <div>
+                        <h6 class="mb-0 text-dark">${highlightText(item.name, query)}</h6>
+                        <small class="text-muted">${item.email}</small>
+                    </div>
+                </div>
+            </a>
+        `;
+    }
+
+    html += '</div>';
+    return html;
+}
+
+function highlightText(text, query) {
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark class="bg-warning">$1</mark>');
+}
+
+function showSearchLoading(searchResultsDropdown, type) {
+    const searchLoading = searchResultsDropdown.querySelector('.search-loading');
+    const searchResults = searchResultsDropdown.querySelector('.search-results');
+    const searchEmpty = searchResultsDropdown.querySelector('.search-empty');
+    const searchPlaceholder = searchResultsDropdown.querySelector('.search-placeholder');
+
+    [searchResults, searchEmpty, searchPlaceholder].forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+
+    if (searchLoading) {
+        searchLoading.style.display = 'block';
+    }
+
+    showSearchDropdown(searchResultsDropdown);
+}
+
+function showSearchEmpty(searchResultsDropdown, type) {
+    const searchLoading = searchResultsDropdown.querySelector('.search-loading');
+    const searchResults = searchResultsDropdown.querySelector('.search-results');
+    const searchEmpty = searchResultsDropdown.querySelector('.search-empty');
+    const searchPlaceholder = searchResultsDropdown.querySelector('.search-placeholder');
+
+    [searchLoading, searchResults, searchPlaceholder].forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+
+    if (searchEmpty) {
+        searchEmpty.style.display = 'block';
+    }
+
+    showSearchDropdown(searchResultsDropdown);
+}
+
+function showSearchPlaceholder(searchResultsDropdown, type) {
+    const searchLoading = searchResultsDropdown.querySelector('.search-loading');
+    const searchResults = searchResultsDropdown.querySelector('.search-results');
+    const searchEmpty = searchResultsDropdown.querySelector('.search-empty');
+    const searchPlaceholder = searchResultsDropdown.querySelector('.search-placeholder');
+
+    [searchLoading, searchResults, searchEmpty].forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+
+    if (searchPlaceholder) {
+        searchPlaceholder.style.display = 'block';
+    }
+
+    showSearchDropdown(searchResultsDropdown);
+}
+
+function showSearchError(searchResultsDropdown, type) {
+    const searchLoading = searchResultsDropdown.querySelector('.search-loading');
+    const searchResults = searchResultsDropdown.querySelector('.search-results');
+    const searchEmpty = searchResultsDropdown.querySelector('.search-empty');
+    const searchPlaceholder = searchResultsDropdown.querySelector('.search-placeholder');
+
+    [searchLoading, searchResults, searchPlaceholder].forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+
+    if (searchEmpty) {
+        searchEmpty.innerHTML = `
+            <i class="ph ph-warning display-6 text-danger mb-2"></i>
+            <p class="text-muted mb-0">Errore durante la ricerca</p>
+        `;
+        searchEmpty.style.display = 'block';
+    }
+
+    showSearchDropdown(searchResultsDropdown);
+}
+
+function showSearchDropdown(searchResultsDropdown) {
+    try {
+        if (searchResultsDropdown) {
+            searchResultsDropdown.classList.add('show');
+            searchResultsDropdown.style.display = 'block';
+            searchResultsDropdown.style.position = 'absolute';
+            searchResultsDropdown.style.top = '100%';
+            searchResultsDropdown.style.left = '0';
+            searchResultsDropdown.style.right = '0';
+            searchResultsDropdown.style.zIndex = '1050';
+        }
+    } catch (error) {
+        console.error('Error showing search dropdown:', error);
+    }
+}
+
+function hideSearchDropdown(searchResultsDropdown) {
+    try {
+        if (searchResultsDropdown) {
+            searchResultsDropdown.classList.remove('show');
+            searchResultsDropdown.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error hiding search dropdown:', error);
+    }
+}

@@ -1062,7 +1062,7 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-light-primary btn-lg px-5" id="submitBtn">
+                            <button type="submit" class="btn btn-light-primary btn-lg w-100" id="submitBtn">
                                 <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
                             </button>
                             <div class="mt-2" id="submitStatus" style="display: none;">
@@ -1085,11 +1085,11 @@
                     </div>
                     <div class="card-body">
                         <!-- Step Navigation -->
-                        <div class="d-flex justify-content-between mb-4">
-                            <button type="button" class="btn btn-light-secondary" id="prevStep" disabled>
+                        <div class="d-grid gap-2 d-md-flex justify-content-between mb-4">
+                            <button type="button" class="btn btn-light-secondary flex-fill" id="prevStep" disabled>
                                 <i class="ph ph-arrow-left me-1"></i>{{ __('events.previous_step') }}
                             </button>
-                            <button type="button" class="btn btn-light-primary" id="nextStep">
+                            <button type="button" class="btn btn-light-primary flex-fill" id="nextStep">
                                 {{ __('events.next_step') }}<i class="ph ph-arrow-right ms-1"></i>
                             </button>
                         </div>

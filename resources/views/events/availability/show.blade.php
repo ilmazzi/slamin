@@ -1,61 +1,6 @@
 @extends('layout.master')
 @section('title', 'Gestione Disponibilità - ' . $event->title)
 
-@section('css')
-<style>
-/* Mobile-First Responsive Styles for Availability Management */
-@media (max-width: 576px) {
-    .card-body {
-        padding: 1rem !important;
-    }
-
-    .card-header {
-        padding: 0.75rem 1rem !important;
-    }
-
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-    }
-
-    .badge {
-        font-size: 0.625rem;
-    }
-
-    .form-floating > label {
-        font-size: 0.875rem;
-    }
-
-    .form-control {
-        font-size: 0.875rem;
-    }
-
-    .btn {
-        font-size: 0.875rem;
-    }
-
-    .option-row .btn {
-        width: 100%;
-        margin-top: 0.5rem;
-    }
-
-    .option-row .col-12:last-child {
-        margin-top: 0.5rem;
-    }
-}
-
-@media (min-width: 768px) {
-    .option-row .btn {
-        width: auto;
-        margin-top: 0;
-    }
-
-    .option-row .col-12:last-child {
-        margin-top: 0;
-    }
-}
-</style>
-@endsection
 
 @section('main-content')
 <div class="container-fluid">
@@ -63,21 +8,25 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card hover-effect">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-0">
-                            <i class="ph ph-calendar-check me-2 text-warning"></i>
-                            Gestione Disponibilità
-                        </h5>
-                        <small class="text-muted">{{ $event->title }}</small>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('events.show', $event) }}" class="btn btn-light-primary btn-sm">
-                            <i class="ph ph-arrow-left me-1"></i>Torna all'Evento
-                        </a>
-                        <button class="btn btn-success btn-sm" id="addAvailabilityOptions">
-                            <i class="ph ph-plus me-1"></i>Aggiungi Opzioni
-                        </button>
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <h5 class="mb-0">
+                                <i class="ph ph-calendar-check me-2 text-warning"></i>
+                                Gestione Disponibilità
+                            </h5>
+                            <small class="text-muted">{{ $event->title }}</small>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-grid gap-2 d-md-flex">
+                                <a href="{{ route('events.show', $event) }}" class="btn btn-light-primary btn-sm flex-fill">
+                                    <i class="ph ph-arrow-left me-1"></i>Torna all'Evento
+                                </a>
+                                <button class="btn btn-success btn-sm flex-fill" id="addAvailabilityOptions">
+                                    <i class="ph ph-plus me-1"></i>Aggiungi Opzioni
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,19 +44,17 @@
                             <p class="text-muted mb-2 mb-md-0">{{ $event->description }}</p>
                         </div>
                         <div class="col-12 col-md-4">
-                            <div class="d-flex flex-column flex-md-column gap-2 mb-3 mb-md-0">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <span class="badge bg-info">
-                                        <i class="ph ph-users me-1"></i>
-                                        {{ $event->invitations()->accepted()->count() + $event->requests()->where('status', 'accepted')->count() }} Partecipanti
+                            <div class="d-flex flex-wrap gap-2 mb-3 mb-md-0">
+                                <span class="badge bg-info">
+                                    <i class="ph ph-users me-1"></i>
+                                    {{ $event->invitations()->accepted()->count() + $event->requests()->where('status', 'accepted')->count() }} Partecipanti
+                                </span>
+                                @if($event->availability_deadline)
+                                    <span class="badge bg-warning">
+                                        <i class="ph ph-clock me-1"></i>
+                                        Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
                                     </span>
-                                    @if($event->availability_deadline)
-                                        <span class="badge bg-warning">
-                                            <i class="ph ph-clock me-1"></i>
-                                            Scadenza: {{ $event->availability_deadline->format('d/m/Y H:i') }}
-                                        </span>
-                                    @endif
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -147,65 +94,127 @@
                 </div>
                 <div class="card-body">
                     @if(count($availabilitySummary) > 0)
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Data e Ora</th>
-                                        <th class="text-center">
-                                            <i class="ph ph-heart text-success me-1"></i>Preferite
-                                        </th>
-                                        <th class="text-center">
-                                            <i class="ph ph-check-circle text-warning me-1"></i>Disponibili
-                                        </th>
-                                        <th class="text-center">
-                                            <i class="ph ph-x-circle text-danger me-1"></i>Non Disponibili
-                                        </th>
-                                        <th class="text-center">Totale Risposte</th>
-                                        <th class="text-center">Azioni</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($availabilitySummary as $summary)
+                        <!-- Mobile View (Cards) -->
+                        <div class="d-block d-md-none">
+                            @foreach($availabilitySummary as $summary)
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                                <h6 class="mb-1">
+                                                    <i class="ph ph-calendar me-1 text-primary"></i>
+                                                    {{ $summary['option']->formatted_datetime }}
+                                                </h6>
+                                                @if($summary['option']->description)
+                                                    <p class="text-muted mb-0 small">{{ $summary['option']->description }}</p>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-4">
+                                                        <div class="text-center">
+                                                            <div class="badge bg-success w-100 py-2">
+                                                                <i class="ph ph-heart me-1"></i>{{ $summary['preferred_count'] }}
+                                                            </div>
+                                                            <small class="text-muted d-block mt-1">Preferite</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="text-center">
+                                                            <div class="badge bg-warning w-100 py-2">
+                                                                <i class="ph ph-check-circle me-1"></i>{{ $summary['available_count'] }}
+                                                            </div>
+                                                            <small class="text-muted d-block mt-1">Disponibili</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="text-center">
+                                                            <div class="badge bg-danger w-100 py-2">
+                                                                <i class="ph ph-x-circle me-1"></i>{{ $summary['unavailable_count'] }}
+                                                            </div>
+                                                            <small class="text-muted d-block mt-1">Non Disponibili</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="d-grid gap-2">
+                                                    <button class="btn btn-outline-info btn-sm" onclick="viewResponses({{ $summary['option']->id }})">
+                                                        <i class="ph ph-eye me-1"></i>Visualizza Risposte ({{ $summary['total_responses'] }})
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteOption({{ $summary['option']->id }})">
+                                                        <i class="ph ph-trash me-1"></i>Elimina Opzione
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Desktop View (Table) -->
+                        <div class="d-none d-md-block">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>{{ $summary['option']->formatted_datetime }}</strong>
-                                                    @if($summary['option']->description)
-                                                        <br><small class="text-muted">{{ $summary['option']->description }}</small>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-success">{{ $summary['preferred_count'] }}</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-warning">{{ $summary['available_count'] }}</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-danger">{{ $summary['unavailable_count'] }}</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-primary">{{ $summary['total_responses'] }}</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group btn-group-sm">
-                                                    <button class="btn btn-outline-info btn-sm"
-                                                            onclick="viewResponses({{ $summary['option']->id }})"
-                                                            title="Visualizza risposte">
-                                                        <i class="ph ph-eye"></i>
-                                                    </button>
-                                                    <button class="btn btn-outline-danger btn-sm"
-                                                            onclick="deleteOption({{ $summary['option']->id }})"
-                                                            title="Elimina opzione">
-                                                        <i class="ph ph-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <th>Data e Ora</th>
+                                            <th class="text-center">
+                                                <i class="ph ph-heart text-success me-1"></i>Preferite
+                                            </th>
+                                            <th class="text-center">
+                                                <i class="ph ph-check-circle text-warning me-1"></i>Disponibili
+                                            </th>
+                                            <th class="text-center">
+                                                <i class="ph ph-x-circle text-danger me-1"></i>Non Disponibili
+                                            </th>
+                                            <th class="text-center">Totale Risposte</th>
+                                            <th class="text-center">Azioni</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($availabilitySummary as $summary)
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <strong>{{ $summary['option']->formatted_datetime }}</strong>
+                                                        @if($summary['option']->description)
+                                                            <br><small class="text-muted">{{ $summary['option']->description }}</small>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-success">{{ $summary['preferred_count'] }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-warning">{{ $summary['available_count'] }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-danger">{{ $summary['unavailable_count'] }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-primary">{{ $summary['total_responses'] }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-info btn-sm"
+                                                                onclick="viewResponses({{ $summary['option']->id }})"
+                                                                title="Visualizza risposte">
+                                                            <i class="ph ph-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger btn-sm"
+                                                                onclick="deleteOption({{ $summary['option']->id }})"
+                                                                title="Elimina opzione">
+                                                            <i class="ph ph-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     @else
                         <div class="text-center py-5">
@@ -225,7 +234,7 @@
 
 <!-- Modal per aggiungere opzioni -->
 <div class="modal fade" id="addOptionsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -238,16 +247,18 @@
                     <!-- Le opzioni verranno aggiunte dinamicamente qui -->
                 </div>
                 <div class="text-center mt-3">
-                    <button type="button" class="btn btn-outline-primary" id="addOptionRow">
+                    <button type="button" class="btn btn-outline-primary w-100" id="addOptionRow">
                         <i class="ph ph-plus me-1"></i>Aggiungi Altra Opzione
                     </button>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                <button type="button" class="btn btn-success" id="saveAvailabilityOptions">
-                    <i class="ph ph-check me-1"></i>Salva Opzioni
-                </button>
+                <div class="d-grid gap-2 w-100">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-success" id="saveAvailabilityOptions">
+                        <i class="ph ph-check me-1"></i>Salva Opzioni
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -255,7 +266,7 @@
 
 <!-- Modal per visualizzare le risposte -->
 <div class="modal fade" id="responsesModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-fullscreen-md-down">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -323,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const row = document.createElement('div');
         row.className = 'row mb-3 option-row';
         row.innerHTML = `
-            <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <div class="col-12 col-md-6 mb-3">
                 <div class="form-floating">
                     <input type="text" class="form-control flatpickr-input"
                            id="datetime_${optionCounter}"
@@ -331,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label for="datetime_${optionCounter}">Data e Ora *</label>
                 </div>
             </div>
-            <div class="col-12 col-md-5 mb-3 mb-md-0">
+            <div class="col-12 col-md-5 mb-3">
                 <div class="form-floating">
                     <input type="text" class="form-control"
                            id="description_${optionCounter}"
@@ -339,10 +350,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label for="description_${optionCounter}">Descrizione (opzionale)</label>
                 </div>
             </div>
-            <div class="col-12 col-md-1 d-flex align-items-end justify-content-center justify-content-md-end">
-                <button type="button" class="btn btn-outline-danger btn-sm w-100 w-md-auto" onclick="removeOptionRow(this)">
-                    <i class="ph ph-trash me-1"></i>
-                    <span class="d-md-none">Rimuovi</span>
+            <div class="col-12 col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-outline-danger btn-sm w-100 d-md-none" onclick="removeOptionRow(this)">
+                    <i class="ph ph-trash me-1"></i>Rimuovi
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm d-none d-md-block" onclick="removeOptionRow(this)">
+                    <i class="ph ph-trash"></i>
                 </button>
             </div>
         `;
@@ -463,29 +476,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${data.option.description ? `<p class="text-muted mb-0">${data.option.description}</p>` : ''}
             </div>
 
-            <div class="row mb-3">
-                <div class="col-3">
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold text-success">${data.summary.preferred}</div>
-                        <small class="text-muted">Preferite</small>
+            <!-- Mobile View (Cards) -->
+            <div class="d-block d-md-none mb-3">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body p-2">
+                                <div class="fs-5 fw-bold text-success">${data.summary.preferred}</div>
+                                <small class="text-muted">Preferite</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body p-2">
+                                <div class="fs-5 fw-bold text-warning">${data.summary.available}</div>
+                                <small class="text-muted">Disponibili</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body p-2">
+                                <div class="fs-5 fw-bold text-danger">${data.summary.unavailable}</div>
+                                <small class="text-muted">Non Disponibili</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card text-center">
+                            <div class="card-body p-2">
+                                <div class="fs-5 fw-bold text-primary">${data.summary.total}</div>
+                                <small class="text-muted">Totale</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-3">
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold text-warning">${data.summary.available}</div>
-                        <small class="text-muted">Disponibili</small>
+            </div>
+
+            <!-- Desktop View (Row) -->
+            <div class="d-none d-md-block mb-3">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="text-center">
+                            <div class="fs-4 fw-bold text-success">${data.summary.preferred}</div>
+                            <small class="text-muted">Preferite</small>
+                        </div>
                     </div>
-                </div>
-                <div class="col-3">
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold text-danger">${data.summary.unavailable}</div>
-                        <small class="text-muted">Non Disponibili</small>
+                    <div class="col-3">
+                        <div class="text-center">
+                            <div class="fs-4 fw-bold text-warning">${data.summary.available}</div>
+                            <small class="text-muted">Disponibili</small>
+                        </div>
                     </div>
-                </div>
-                <div class="col-3">
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold text-primary">${data.summary.total}</div>
-                        <small class="text-muted">Totale</small>
+                    <div class="col-3">
+                        <div class="text-center">
+                            <div class="fs-4 fw-bold text-danger">${data.summary.unavailable}</div>
+                            <small class="text-muted">Non Disponibili</small>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-center">
+                            <div class="fs-4 fw-bold text-primary">${data.summary.total}</div>
+                            <small class="text-muted">Totale</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -493,42 +547,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (data.responses.length > 0) {
             html += `
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Partecipante</th>
-                                <th>Stato</th>
-                                <th>Note</th>
-                                <th>Data Risposta</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            data.responses.forEach(response => {
-                html += `
-                    <tr>
-                        <td>
-                            <div>
-                                <div class="fw-semibold">${response.user_name}</div>
-                                <small class="text-muted">${response.user_email}</small>
+                <!-- Mobile View (Cards) -->
+                <div class="d-block d-md-none">
+                    ${data.responses.map(response => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <h6 class="mb-1">${response.user_name}</h6>
+                                        <small class="text-muted">${response.user_email}</small>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <span class="badge bg-${response.status_color}">${response.status_label}</span>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <strong>Note:</strong> ${response.notes || 'Nessuna nota'}
+                                    </div>
+                                    <div class="col-12">
+                                        <small class="text-muted">
+                                            <i class="ph ph-clock me-1"></i>${response.created_at}
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
-                        </td>
-                        <td>
-                            <span class="badge bg-${response.status_color}">${response.status_label}</span>
-                        </td>
-                        <td>${response.notes || '-'}</td>
-                        <td>
-                            <small class="text-muted">${response.created_at}</small>
-                        </td>
-                    </tr>
-                `;
-            });
+                        </div>
+                    `).join('')}
+                </div>
 
-            html += `
-                        </tbody>
-                    </table>
+                <!-- Desktop View (Table) -->
+                <div class="d-none d-md-block">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Partecipante</th>
+                                    <th>Stato</th>
+                                    <th>Note</th>
+                                    <th>Data Risposta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.responses.map(response => `
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <div class="fw-semibold">${response.user_name}</div>
+                                                <small class="text-muted">${response.user_email}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-${response.status_color}">${response.status_label}</span>
+                                        </td>
+                                        <td>${response.notes || '-'}</td>
+                                        <td>
+                                            <small class="text-muted">${response.created_at}</small>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             `;
         } else {

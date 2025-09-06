@@ -889,6 +889,12 @@ Route::post('/test-upload', function (Request $request) {
     ], 400);
 })->middleware('auth');
 
+// Routes per ricerca globale
+Route::prefix('search')->name('search.')->group(function () {
+    Route::get('/', [App\Http\Controllers\SearchController::class, 'index'])->name('index');
+    Route::get('/api', [App\Http\Controllers\SearchController::class, 'search'])->name('api');
+});
+
 // Routes per le poesie
 Route::prefix('poems')->name('poems.')->group(function () {
     // Routes pubbliche

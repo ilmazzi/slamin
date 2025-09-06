@@ -63,6 +63,8 @@
     <!--customizer-->
     <div id="customizer"></div>
 @routes
+    <!-- Search Configuration -->
+    @include('layout.search-config')
     <!-- scripts start-->
     @include('layout.script')
     <!-- scripts end-->

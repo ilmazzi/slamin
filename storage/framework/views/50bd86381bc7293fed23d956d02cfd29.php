@@ -63,6 +63,8 @@
     <!--customizer-->
     <div id="customizer"></div>
 @routes
+    <!-- Search Configuration -->
+    <?php echo $__env->make('layout.search-config', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- scripts start-->
     <?php echo $__env->make('layout.script', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- scripts end-->

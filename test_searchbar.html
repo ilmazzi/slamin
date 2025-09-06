@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Searchbar Globale</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/phosphor.css" rel="stylesheet">
+    <style>
+        .search-results-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: none;
+        }
+        .search-results-dropdown.show {
+            display: block;
+        }
+        .global-search-container {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Test Searchbar Globale</h1>
+
+        <!-- Simulazione della searchbar -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="global-search-container position-relative w-100">
+                    <form action="/search" method="GET" class="d-flex w-100" id="globalSearchForm">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="ph ph-magnifying-glass text-muted"></i>
+                            </span>
+                            <input type="text"
+                                   class="form-control border-start-0"
+                                   name="q"
+                                   id="globalSearchInput"
+                                   placeholder="Cerca poesie, eventi, video..."
+                                   autocomplete="off"
+                                   data-bs-toggle="dropdown"
+                                   data-bs-auto-close="outside">
+                            <button class="btn btn-outline-secondary border-start-0" type="submit">
+                                <i class="ph ph-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Search Results Dropdown -->
+                        <div class="dropdown-menu w-100 search-results-dropdown" id="searchResultsDropdown" style="max-height: 400px; overflow-y: auto;">
+                            <div class="search-loading text-center p-3" id="searchLoading" style="display: none;">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Caricamento...</span>
+                                </div>
+                                <span class="ms-2">Caricamento...</span>
+                            </div>
+
+                            <div class="search-results" id="searchResults" style="display: none;">
+                                <!-- Results will be populated here -->
+                            </div>
+
+                            <div class="search-empty text-center p-3" id="searchEmpty" style="display: none;">
+                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
+                                <p class="text-muted mb-0">Nessun risultato trovato</p>
+                            </div>
+
+                            <div class="search-placeholder text-center p-3" id="searchPlaceholder">
+                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
+                                <p class="text-muted mb-0">Inizia a digitare per cercare...</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Funzionalità Implementate:</h3>
+                <ul>
+                    <li>✅ SearchController con ricerca unificata</li>
+                    <li>✅ Route per ricerca globale (/search e /search/api)</li>
+                    <li>✅ Searchbar integrata nella topbar</li>
+                    <li>✅ View per risultati di ricerca con componenti template</li>
+                    <li>✅ JavaScript per ricerca AJAX in tempo reale</li>
+                    <li>✅ Traduzioni in italiano e inglese</li>
+                </ul>
+
+                <h3>Caratteristiche:</h3>
+                <ul>
+                    <li>🔍 Ricerca in tempo reale con debounce (300ms)</li>
+                    <li>📱 Design responsive e mobile-first</li>
+                    <li>🎨 Utilizzo esclusivo di componenti template (zero CSS personalizzato)</li>
+                    <li>🌐 Supporto multilingua completo</li>
+                    <li>⚡ Ricerca unificata su: Poesie, Eventi, Video, Gig, Utenti</li>
+                    <li>🎯 Risultati raggruppati per categoria</li>
+                    <li>⌨️ Navigazione da tastiera (Escape per chiudere)</li>
+                    <li>🔄 Stati di caricamento e messaggi di errore</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simulazione del JavaScript della searchbar
+        let searchTimeout;
+        let currentSearchQuery = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGlobalSearch();
+        });
+
+        function initializeGlobalSearch() {
+            const searchInput = document.getElementById('globalSearchInput');
+            const searchForm = document.getElementById('globalSearchForm');
+            const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+
+            if (!searchInput || !searchForm || !searchResultsDropdown) {
+                return;
+            }
+
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.trim();
+                currentSearchQuery = query;
+
+                if (searchTimeout) {
+                    clearTimeout(searchTimeout);
+                }
+
+                if (query.length >= 2) {
+                    showSearchLoading();
+                    searchTimeout = setTimeout(() => {
+                        simulateSearch(query);
+                    }, 300);
+                } else if (query.length === 0) {
+                    showSearchPlaceholder();
+                } else {
+                    showSearchEmpty();
+                }
+            });
+
+            searchForm.addEventListener('submit', function(e) {
+                const query = searchInput.value.trim();
+                if (query.length < 2) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResultsDropdown.contains(e.target)) {
+                    hideSearchDropdown();
+                }
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideSearchDropdown();
+                    searchInput.blur();
+                }
+            });
+        }
+
+        function simulateSearch(query) {
+            if (query !== currentSearchQuery) {
+                return;
+            }
+
+            // Simulazione di risultati
+            setTimeout(() => {
+                if (query === currentSearchQuery) {
+                    const mockResults = {
+                        'poems': {
+                            data: [
+                                { title: 'Poesia di Test 1', content: 'Contenuto della poesia...', user: { name: 'Autore 1' }, slug: 'poesia-test-1' },
+                                { title: 'Poesia di Test 2', content: 'Altro contenuto...', user: { name: 'Autore 2' }, slug: 'poesia-test-2' }
+                            ],
+                            count: 2
+                        },
+                        'events': {
+                            data: [
+                                { title: 'Evento di Test 1', description: 'Descrizione evento...', city: 'Milano', id: 1 },
+                                { title: 'Evento di Test 2', description: 'Altro evento...', city: 'Roma', id: 2 }
+                            ],
+                            count: 2
+                        }
+                    };
+                    displaySearchResults(mockResults, query);
+                }
+            }, 500);
+        }
+
+        function displaySearchResults(results, query) {
+            const searchResults = document.getElementById('searchResults');
+            const searchLoading = document.getElementById('searchLoading');
+            const searchEmpty = document.getElementById('searchEmpty');
+            const searchPlaceholder = document.getElementById('searchPlaceholder');
+
+            [searchLoading, searchEmpty, searchPlaceholder].forEach(el => {
+                if (el) el.style.display = 'none';
+            });
+
+            if (!results || Object.keys(results).length === 0) {
+                showSearchEmpty();
+                return;
+            }
+
+            let html = '';
+            let totalResults = 0;
+
+            Object.keys(results).forEach(category => {
+                const categoryData = results[category];
+                if (categoryData.count > 0) {
+                    totalResults += categoryData.count;
+                    html += generateCategoryResults(category, categoryData, query);
+                }
+            });
+
+            if (totalResults === 0) {
+                showSearchEmpty();
+                return;
+            }
+
+            html += `
+                <div class="border-top p-2 text-center">
+                    <a href="/search?q=${encodeURIComponent(query)}"
+                       class="btn btn-sm btn-outline-primary w-100">
+                        <i class="ph ph-magnifying-glass me-1"></i>
+                        Vedi tutti i risultati (${totalResults})
+                    </a>
+                </div>
+            `;
+
+            searchResults.innerHTML = html;
+            searchResults.style.display = 'block';
+            showSearchDropdown();
+        }
+
+        function generateCategoryResults(category, categoryData, query) {
+            const categoryNames = {
+                'poems': 'Poesie',
+                'events': 'Eventi',
+                'videos': 'Video',
+                'gigs': 'Gig',
+                'users': 'Utenti'
+            };
+
+            const categoryIcons = {
+                'poems': 'ph-pen-nib',
+                'events': 'ph-calendar',
+                'videos': 'ph-video',
+                'gigs': 'ph-briefcase',
+                'users': 'ph-users'
+            };
+
+            const categoryColors = {
+                'poems': 'info',
+                'events': 'success',
+                'videos': 'warning',
+                'gigs': 'primary',
+                'users': 'secondary'
+            };
+
+            let html = `
+                <div class="search-category mb-2">
+                    <div class="px-3 py-2 bg-light">
+                        <h6 class="mb-0 text-${categoryColors[category]}">
+                            <i class="ph ${categoryIcons[category]} me-1"></i>
+                            ${categoryNames[category]}
+                            <span class="badge bg-${categoryColors[category]} ms-1">${categoryData.count}</span>
+                        </h6>
+                    </div>
+                    <div class="search-category-results">
+            `;
+
+            categoryData.data.forEach(item => {
+                html += generateItemResult(category, item, query);
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateItemResult(category, item, query) {
+            let html = '<div class="search-item p-2 border-bottom">';
+
+            if (category === 'poems') {
+                html += `
+                    <a href="/poems/${item.slug}" class="text-decoration-none">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                                <p class="mb-1 text-muted small">${highlightText(item.content ? item.content.substring(0, 80) : '', query)}...</p>
+                                <small class="text-muted">
+                                    <i class="ph ph-user me-1"></i>${item.user.name}
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            } else if (category === 'events') {
+                html += `
+                    <a href="/events/${item.id}" class="text-decoration-none">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 text-dark">${highlightText(item.title, query)}</h6>
+                                <p class="mb-1 text-muted small">${highlightText(item.description ? item.description.substring(0, 80) : '', query)}...</p>
+                                <small class="text-muted">
+                                    <i class="ph ph-map-pin me-1"></i>${item.city}
+                                </small>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function highlightText(text, query) {
+            if (!query || !text) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark class="bg-warning">$1</mark>');
+        }
+
+        function showSearchLoading() {
+            const searchLoading = document.getElementById('searchLoading');
+            const searchResults = document.getElementById('searchResults');
+            const searchEmpty = document.getElementById('searchEmpty');
+            const searchPlaceholder = document.getElementById('searchPlaceholder');
+
+            [searchResults, searchEmpty, searchPlaceholder].forEach(el => {
+                if (el) el.style.display = 'none';
+            });
+
+            if (searchLoading) {
+                searchLoading.style.display = 'block';
+            }
+
+            showSearchDropdown();
+        }
+
+        function showSearchEmpty() {
+            const searchLoading = document.getElementById('searchLoading');
+            const searchResults = document.getElementById('searchResults');
+            const searchEmpty = document.getElementById('searchEmpty');
+            const searchPlaceholder = document.getElementById('searchPlaceholder');
+
+            [searchLoading, searchResults, searchPlaceholder].forEach(el => {
+                if (el) el.style.display = 'none';
+            });
+
+            if (searchEmpty) {
+                searchEmpty.style.display = 'block';
+            }
+
+            showSearchDropdown();
+        }
+
+        function showSearchPlaceholder() {
+            const searchLoading = document.getElementById('searchLoading');
+            const searchResults = document.getElementById('searchResults');
+            const searchEmpty = document.getElementById('searchEmpty');
+            const searchPlaceholder = document.getElementById('searchPlaceholder');
+
+            [searchLoading, searchResults, searchEmpty].forEach(el => {
+                if (el) el.style.display = 'none';
+            });
+
+            if (searchPlaceholder) {
+                searchPlaceholder.style.display = 'block';
+            }
+
+            showSearchDropdown();
+        }
+
+        function showSearchDropdown() {
+            const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+            if (searchResultsDropdown) {
+                searchResultsDropdown.classList.add('show');
+            }
+        }
+
+        function hideSearchDropdown() {
+            const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+            if (searchResultsDropdown) {
+                searchResultsDropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>
+
