@@ -1005,11 +1005,11 @@ class EventController extends Controller
                 return [
                     'id' => $event->id,
                     'title' => $event->title,
-                    'date' => $event->start_datetime->format('d/m/Y'),
+                    'date' => $event->start_datetime ? $event->start_datetime->format('d/m/Y') : 'N/A',
                     'venue' => $event->venue_name ?: $event->city,
                     'city' => $event->city,
                     'category' => $event->category,
-                    'organizer' => $event->organizer->name ?? 'Organizzatore non specificato'
+                    'organizer' => $event->organizer ? $event->organizer->name : 'Organizzatore non specificato'
                 ];
             });
 
@@ -1031,7 +1031,7 @@ class EventController extends Controller
                 return [
                     'id' => $festival->id,
                     'title' => $festival->title,
-                    'date' => $festival->start_datetime->format('d/m/Y'),
+                    'date' => $festival->start_datetime ? $festival->start_datetime->format('d/m/Y') : 'N/A',
                     'city' => $festival->city
                 ];
             });
@@ -1611,7 +1611,7 @@ class EventController extends Controller
                 return [
                     'id' => $event->id,
                     'title' => $event->title,
-                    'start_datetime' => $event->start_datetime->format('d/m/Y H:i'),
+                    'start_datetime' => $event->start_datetime ? $event->start_datetime->format('d/m/Y H:i') : 'N/A',
                     'venue_name' => $event->venue_name,
                     'city' => $event->city,
                     'latitude' => (float) $event->latitude,
@@ -1876,10 +1876,10 @@ class EventController extends Controller
             return [
                 'id' => $event->id,
                 'title' => $event->title,
-                'start_datetime' => $event->start_datetime->format('d/m/Y H:i'),
+                'start_datetime' => $event->start_datetime ? $event->start_datetime->format('d/m/Y H:i') : 'N/A',
                 'venue_name' => $event->venue_name,
                 'city' => $event->city,
-                'organizer' => $event->organizer->name,
+                'organizer' => $event->organizer ? $event->organizer->name : 'N/A',
                 'is_online' => $event->is_online,
                 'timezone' => $event->timezone,
                 'online_url' => $event->online_url,
