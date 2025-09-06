@@ -130,7 +130,7 @@
                                                                 </small>
                                                                 <small class="text-muted">
                                                                     <i class="ph ph-calendar me-1"></i>
-                                                                    {{ $item->published_at->format('d/m/Y') }}
+                                                                    {{ $item->published_at ? $item->published_at->format('d/m/Y') : 'N/A' }}
                                                                 </small>
                                                             </div>
                                                         @elseif($category === 'events')
@@ -149,7 +149,7 @@
                                                                 </small>
                                                                 <small class="text-muted">
                                                                     <i class="ph ph-calendar me-1"></i>
-                                                                    {{ $item->start_datetime->format('d/m/Y') }}
+                                                                    {{ $item->start_datetime ? $item->start_datetime->format('d/m/Y') : 'N/A' }}
                                                                 </small>
                                                             </div>
                                                         @elseif($category === 'videos')
@@ -168,7 +168,7 @@
                                                                 </small>
                                                                 <small class="text-muted">
                                                                     <i class="ph ph-clock me-1"></i>
-                                                                    {{ gmdate('i:s', $item->duration) }}
+                                                                    {{ $item->duration ? gmdate('i:s', $item->duration) : 'N/A' }}
                                                                 </small>
                                                             </div>
                                                         @elseif($category === 'gigs')
@@ -187,7 +187,7 @@
                                                                 </small>
                                                                 <small class="text-muted">
                                                                     <i class="ph ph-calendar me-1"></i>
-                                                                    {{ $item->deadline->format('d/m/Y') }}
+                                                                    {{ $item->deadline ? $item->deadline->format('d/m/Y') : 'N/A' }}
                                                                 </small>
                                                             </div>
                                                         @elseif($category === 'users')
