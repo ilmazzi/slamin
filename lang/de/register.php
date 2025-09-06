@@ -43,4 +43,25 @@ return [
     'artists' => 'Künstler',
     'organizers' => 'Veranstalter',
 
+    // Nomi dei ruoli
+    'role_admin_name' => 'Administrator',
+    'role_moderator_name' => 'Community Manager',
+    'role_poet_name' => 'Dichter/Künstler',
+    'role_organizer_name' => 'Event Manager',
+    'role_judge_name' => 'Wettbewerbsrichter',
+    'role_venue_owner_name' => 'Veranstaltungsort-Besitzer',
+    'role_technician_name' => 'Professioneller Techniker',
+    'role_audience_name' => 'Publikum/Fan',
+
+    // Descrizioni dei ruoli
+    'role_admin_description' => 'Vollständige Kontrolle über die Slamin-Plattform',
+    'role_moderator_description' => 'Inhaltsmoderation und Community-Management',
+    'role_poet_description' => 'Teilnahme an Veranstaltungen, Veröffentlichung künstlerischer Inhalte',
+    'role_organizer_description' => 'Erstellung und Verwaltung von Slam-Events',
+    'role_judge_description' => 'Bewertung von Wettbewerben und Performance-Bewertung',
+    'role_venue_owner_description' => 'Verwaltung von Veranstaltungsorten und Raumreservierungen',
+    'role_technician_description' => 'Technischer Support für Audio/Video bei Veranstaltungen',
+    'role_audience_description' => 'Teilnahme als Publikum, Abstimmungen und Interaktionen',
+    'role_special_description' => 'Spezielle Rolle für die Community',
+
 ];

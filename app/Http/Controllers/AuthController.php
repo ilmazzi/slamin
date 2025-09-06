@@ -251,14 +251,14 @@ class AuthController extends Controller
     private function getRoleDisplayName($roleName)
     {
         $names = [
-            'admin' => 'Amministratore',
-            'moderator' => 'Community Manager',
-            'poet' => 'Poeta/Artista',
-            'organizer' => 'Event Manager',
-            'judge' => 'Giudice Competizioni',
-            'venue_owner' => 'Proprietario Venue',
-            'technician' => 'Tecnico Professionista',
-            'audience' => 'Pubblico/Fan',
+            'admin' => __('register.role_admin_name'),
+            'moderator' => __('register.role_moderator_name'),
+            'poet' => __('register.role_poet_name'),
+            'organizer' => __('register.role_organizer_name'),
+            'judge' => __('register.role_judge_name'),
+            'venue_owner' => __('register.role_venue_owner_name'),
+            'technician' => __('register.role_technician_name'),
+            'audience' => __('register.role_audience_name'),
         ];
 
         return $names[$roleName] ?? ucfirst($roleName);
@@ -270,17 +270,17 @@ class AuthController extends Controller
     private function getRoleDescription($roleName)
     {
         $descriptions = [
-            'admin' => 'Controllo completo della piattaforma Slamin',
-            'moderator' => 'Moderazione contenuti e gestione community',
-            'poet' => 'Partecipazione eventi, pubblicazione contenuti artistici',
-            'organizer' => 'Creazione e gestione eventi slam',
-            'judge' => 'Giudizio competizioni e valutazione performance',
-            'venue_owner' => 'Gestione locali e prenotazioni spazi',
-            'technician' => 'Supporto tecnico audio/video per eventi',
-            'audience' => 'Partecipazione come pubblico, votazioni e interazioni',
+            'admin' => __('register.role_admin_description'),
+            'moderator' => __('register.role_moderator_description'),
+            'poet' => __('register.role_poet_description'),
+            'organizer' => __('register.role_organizer_description'),
+            'judge' => __('register.role_judge_description'),
+            'venue_owner' => __('register.role_venue_owner_description'),
+            'technician' => __('register.role_technician_description'),
+            'audience' => __('register.role_audience_description'),
         ];
 
-        return $descriptions[$roleName] ?? 'Ruolo speciale per la community';
+        return $descriptions[$roleName] ?? __('register.role_special_description');
     }
 
     /**
