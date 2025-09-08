@@ -64,6 +64,16 @@
                             <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
                         </a>
                     </li>
+
+                    <?php if(auth()->user()->hasRole('admin')): ?>
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="#" data-bs-toggle="offcanvas" data-bs-target="#customizerOptions" aria-controls="customizerOptions">
+                            <i class="ph-duotone ph-palette pe-1 f-s-20"></i> <?php echo e(__('common.customize_layout')); ?>
+
+                        </a>
+                    </li>
+                    <?php endif; ?>
+
                     <li class="dropdown-item">
                         <a class="mb-0 text-secondary f-w-500" href="<?php echo e(route('register')); ?>">
                             <i class="ph-bold ph-plus pe-1 f-s-20"></i> <?php echo e(__('sidebar.add_account')); ?>
@@ -111,23 +121,7 @@
                     <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
                         <div class="simplebar-content" style="padding: 0px;">
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
-                                <?php if(auth()->guard()->check()): ?>
-                                <!-- <?php echo e(__('dashboard.dashboard')); ?> - Solo per utenti autenticati -->
-                                <!-- Dashboard nascosto solo quando siamo nella dashboard -->
 
-                                <?php if (! (request()->routeIs('dashboard'))): ?>
-                                <li class="no-sub">
-                                    <a href="<?php echo e(route('dashboard')); ?>">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#home"></use>
-                                        </svg>
-                                        <?php echo e(__('dashboard.dashboard')); ?>
-
-                                    </a>
-                                </li>
-                                <?php endif; ?>
-
-                                <?php endif; ?>
 
                                 <!-- Eventi Section -->
                                 <li class="no-sub <?php echo e(request()->routeIs('events.*') ? 'active' : ''); ?>">
@@ -178,6 +172,27 @@
                                     </a>
                                 </li>
 
+                                <!-- Articoli Section -->
+                                <li class="no-sub <?php echo e(request()->routeIs('articles.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('articles.index')); ?>">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        <?php echo e(__('common.articles_section_menu')); ?>
+
+                                        <?php if(auth()->guard()->check()): ?>
+                                        <?php if(auth()->user()->can('articles.view')): ?>
+                                            <?php
+                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
+                                            ?>
+                                            <?php if($draftArticlesCount > 0): ?>
+                                                <span class="badge bg-warning badge-notification ms-2">
+                                                    <?php echo e($draftArticlesCount); ?>
+
+                                                </span>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
 
 
                                 <!-- Poesie Section -->
@@ -197,27 +212,6 @@
                                     </a>
                                 </li>
 
-                                <!-- Articoli Section -->
-                                <li class="no-sub <?php echo e(request()->routeIs('articles.*') ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('articles.index')); ?>">
-                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
-                                        <?php echo e(__('articles.articles')); ?>
-
-                                        <?php if(auth()->guard()->check()): ?>
-                                        <?php if(auth()->user()->can('articles.view')): ?>
-                                            <?php
-                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
-                                            ?>
-                                            <?php if($draftArticlesCount > 0): ?>
-                                                <span class="badge bg-warning badge-notification ms-2">
-                                                    <?php echo e($draftArticlesCount); ?>
-
-                                                </span>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                        <?php endif; ?>
-                                    </a>
-                                </li>
 
                                 <?php if(auth()->guard()->check()): ?>
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
@@ -225,7 +219,7 @@
                                 <li class="no-sub <?php echo e(request()->routeIs('groups.*') ? 'active' : ''); ?>">
                                     <a href="<?php echo e(route('groups.index')); ?>">
                                         <i class="ph-duotone ph-users f-s-20 me-2"></i>
-                                        <?php echo e(__('groups.title')); ?>
+                                        <?php echo e(__('common.groups_section_menu')); ?>
 
                                         <?php if(auth()->user()->getGroupsCountAttribute() > 0): ?>
                                             <span class="badge bg-info badge-notification ms-2">
@@ -237,22 +231,6 @@
                                 </li>
                                 <?php endif; ?>
 
-                                <!-- Chat Section -->
-                                <?php if(auth()->guard()->check()): ?>
-                                <li class="no-sub <?php echo e(request()->routeIs('chat.*') ? 'active' : ''); ?>">
-                                    <a href="<?php echo e(route('chat.index')); ?>" data-chat-badge-container>
-                                        <i class="ph-duotone ph-chat f-s-20 me-2"></i>
-                                        <?php echo e(__('chat.title')); ?>
-
-                                        <?php if(auth()->user()->unreadChatNotifications()->count() > 0): ?>
-                                            <span class="badge bg-danger badge-notification ms-2" id="chat-notification-badge">
-                                                <?php echo e(auth()->user()->unreadChatNotifications()->count()); ?>
-
-                                            </span>
-                                        <?php endif; ?>
-                                    </a>
-                                </li>
-                                <?php endif; ?>
 
                                 <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
@@ -430,7 +408,12 @@
         <span class="menu-previous d-none"><i class="ti ti-chevron-left"></i></span>
         <span class="menu-next d-none"><i class="ti ti-chevron-right"></i></span>
     </div>
-</nav>
-<!-- Menu Navigation ends -->
+    </nav>
+    <!-- Menu Navigation ends -->
+
+    <!-- Admin Customizer - Solo per admin -->
+    <?php if(auth()->user()->hasRole('admin')): ?>
+    <div id="customizer"></div>
+    <?php endif; ?>
 
 <?php /**PATH C:\xampp\htdocs\slamin\resources\views/layout/sidebar.blade.php ENDPATH**/ ?>

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-9 col-12">
-                <p class="footer-text f-w-600 mb-0"><?php echo e(__('common.copyright')); ?></p>
+                <p class="footer-text f-w-600 mb-0"><?php echo __('common.copyright'); ?></p>
             </div>
             <div class="col-md-3">
                 <div class="footer-text text-end">
@@ -137,7 +137,7 @@ class NotificationManager {
                 eventId = data.event_id;
                 invitationId = data.invitation_id;
             } catch (e) {
-                
+
             }
         }
 

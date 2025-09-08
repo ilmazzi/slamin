@@ -61,6 +61,15 @@
                             <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
                         </a>
                     </li>
+
+                    @if(auth()->user()->hasRole('admin'))
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="#" data-bs-toggle="offcanvas" data-bs-target="#customizerOptions" aria-controls="customizerOptions">
+                            <i class="ph-duotone ph-palette pe-1 f-s-20"></i> {{ __('common.customize_layout') }}
+                        </a>
+                    </li>
+                    @endif
+
                     <li class="dropdown-item">
                         <a class="mb-0 text-secondary f-w-500" href="{{ route('register') }}">
                             <i class="ph-bold ph-plus pe-1 f-s-20"></i> {{ __('sidebar.add_account') }}
@@ -104,22 +113,7 @@
                     <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
                         <div class="simplebar-content" style="padding: 0px;">
                             <ul class="main-nav p-0 mt-2" style="margin-left: 0px;">
-                                @auth
-                                <!-- {{ __('dashboard.dashboard') }} - Solo per utenti autenticati -->
-                                <!-- Dashboard nascosto solo quando siamo nella dashboard -->
 
-                                @unless(request()->routeIs('dashboard'))
-                                <li class="no-sub">
-                                    <a href="{{ route('dashboard') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#home"></use>
-                                        </svg>
-                                        {{ __('dashboard.dashboard') }}
-                                    </a>
-                                </li>
-                                @endunless
-
-                                @endauth
 
                                 <!-- Eventi Section -->
                                 <li class="no-sub {{ request()->routeIs('events.*') ? 'active' : '' }}">
@@ -165,6 +159,25 @@
                                     </a>
                                 </li>
 
+                                <!-- Articoli Section -->
+                                <li class="no-sub {{ request()->routeIs('articles.*') ? 'active' : '' }}">
+                                    <a href="{{ route('articles.index') }}">
+                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        {{ __('common.articles_section_menu') }}
+                                        @auth
+                                        @if(auth()->user()->can('articles.view'))
+                                            @php
+                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
+                                            @endphp
+                                            @if($draftArticlesCount > 0)
+                                                <span class="badge bg-warning badge-notification ms-2">
+                                                    {{ $draftArticlesCount }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                        @endauth
+                                    </a>
+                                </li>
 
 
                                 <!-- Poesie Section -->
@@ -182,25 +195,6 @@
                                     </a>
                                 </li>
 
-                                <!-- Articoli Section -->
-                                <li class="no-sub {{ request()->routeIs('articles.*') ? 'active' : '' }}">
-                                    <a href="{{ route('articles.index') }}">
-                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
-                                        {{ __('articles.articles') }}
-                                        @auth
-                                        @if(auth()->user()->can('articles.view'))
-                                            @php
-                                                $draftArticlesCount = \App\Models\Article::where('user_id', auth()->id())->where('status', 'draft')->count();
-                                            @endphp
-                                            @if($draftArticlesCount > 0)
-                                                <span class="badge bg-warning badge-notification ms-2">
-                                                    {{ $draftArticlesCount }}
-                                                </span>
-                                            @endif
-                                        @endif
-                                        @endauth
-                                    </a>
-                                </li>
 
                                 @auth
                                 <!-- Gruppi Section - Solo per poeti e organizzatori -->
@@ -208,7 +202,7 @@
                                 <li class="no-sub {{ request()->routeIs('groups.*') ? 'active' : '' }}">
                                     <a href="{{ route('groups.index') }}">
                                         <i class="ph-duotone ph-users f-s-20 me-2"></i>
-                                        {{ __('groups.title') }}
+                                        {{ __('common.groups_section_menu') }}
                                         @if(auth()->user()->getGroupsCountAttribute() > 0)
                                             <span class="badge bg-info badge-notification ms-2">
                                                 {{ auth()->user()->getGroupsCountAttribute() }}
@@ -218,20 +212,6 @@
                                 </li>
                                 @endif
 
-                                <!-- Chat Section -->
-                                @auth
-                                <li class="no-sub {{ request()->routeIs('chat.*') ? 'active' : '' }}">
-                                    <a href="{{ route('chat.index') }}" data-chat-badge-container>
-                                        <i class="ph-duotone ph-chat f-s-20 me-2"></i>
-                                        {{ __('chat.title') }}
-                                        @if(auth()->user()->unreadChatNotifications()->count() > 0)
-                                            <span class="badge bg-danger badge-notification ms-2" id="chat-notification-badge">
-                                                {{ auth()->user()->unreadChatNotifications()->count() }}
-                                            </span>
-                                        @endif
-                                    </a>
-                                </li>
-                                @endauth
 
                                 <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
@@ -401,6 +381,11 @@
         <span class="menu-previous d-none"><i class="ti ti-chevron-left"></i></span>
         <span class="menu-next d-none"><i class="ti ti-chevron-right"></i></span>
     </div>
-</nav>
-<!-- Menu Navigation ends -->
+    </nav>
+    <!-- Menu Navigation ends -->
+
+    <!-- Admin Customizer - Solo per admin -->
+    @if(auth()->user()->hasRole('admin'))
+    <div id="customizer"></div>
+    @endif
 

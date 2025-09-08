@@ -55,13 +55,70 @@
             </span>
         </div>
 
+        <!-- Chat Widget -->
+        @auth
+        <div class="chat-widget position-fixed" style="bottom: 20px; right: 140px; z-index: 1050;">
+            <a href="{{ route('chat.index') }}" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
+               data-chat-badge-container
+               style="width: 60px; height: 60px; transition: all 0.3s ease;"
+               title="{{ __('chat.title') }}">
+                <i class="ph-duotone ph-chat f-s-24"></i>
+                @if(auth()->user()->unreadChatNotifications()->count() > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger chat-notification-badge"
+                          id="chat-notification-badge"
+                          style="font-size: 0.7rem; animation: pulse 2s infinite;">
+                        {{ auth()->user()->unreadChatNotifications()->count() }}
+                    </span>
+                @endif
+            </a>
+        </div>
+
+        <style>
+        .chat-widget-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,123,255,0.3) !important;
+        }
+
+        .chat-notification-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+            /* Mobile responsive */
+            @media (max-width: 768px) {
+                .chat-widget {
+                    bottom: 15px !important;
+                    right: 135px !important;
+                }
+
+                .chat-widget-btn {
+                    width: 50px !important;
+                    height: 50px !important;
+                    border-radius: 50% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 !important;
+                }
+
+                .chat-widget-btn i {
+                    font-size: 20px !important;
+                    line-height: 1 !important;
+                }
+            }
+        </style>
+        @endauth
+
         <!-- Footer Section start -->
         @include('layout.footer')
         <!-- Footer Section end -->
     </div>
 
-    <!--customizer-->
-    <div id="customizer"></div>
 @routes
     <!-- Search Configuration -->
     @include('layout.search-config')

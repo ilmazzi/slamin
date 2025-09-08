@@ -1,14 +1,9 @@
-<button class="customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#customizerOptions"
-        aria-controls="customizerOptions">
-  <i class="ti ti-settings-2"></i>
-</button>
-
 <div class="offcanvas offcanvas-end app-customizer" data-bs-scroll="true" tabindex="-1" id="customizerOptions"
      aria-labelledby="customizerOptionsLabel">
 
   <div class="offcanvas-header flex-wrap bg-primary">
-    <h5 class="offcanvas-title text-white" id="customizerOptionsLabel"> Admin Customizer </h5>
-    <p class="d-block text-white opacity-75">it's time to style according to your choice ..!</p>
+    <h5 class="offcanvas-title text-white" id="customizerOptionsLabel"> {{ __('common.customize_layout') }} </h5>
+    <p class="d-block text-white opacity-75">{{ __('common.customize_layout_description') }}</p>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 

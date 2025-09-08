@@ -380,3 +380,66 @@
     </div>
 </header>
 <!-- Header Section ends -->
+
+<!-- Mobile Header CSS Fixes -->
+<style>
+/* Fix mobile header icons to be perfectly circular */
+@media (max-width: 767.98px) {
+    .header-main .head-icon {
+        width: 40px !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+    }
+
+    .header-main .head-icon i {
+        font-size: 20px !important;
+        line-height: 1 !important;
+    }
+
+    /* Fix search bar z-index and positioning */
+    .header-main .search-results-dropdown {
+        z-index: 1002 !important; /* Below sidebar (1005) but above header (1001) */
+        position: fixed !important;
+        top: 65px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-height: 50vh !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+        border-radius: 8px !important;
+    }
+
+    /* Ensure header has proper z-index */
+    .header-main {
+        z-index: 1001 !important; /* Keep original header z-index */
+    }
+
+    /* Fix mobile header padding */
+    .header-main .container-fluid {
+        padding: 0.5rem 1rem !important;
+    }
+
+    /* Mobile search bar improvements */
+    .header-main .input-group {
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    .header-main .input-group .form-control {
+        border-radius: 0 !important;
+        font-size: 16px !important; /* Prevent zoom on iOS */
+    }
+
+    .header-main .input-group-text {
+        border-radius: 0 !important;
+    }
+
+    .header-main .input-group .btn {
+        border-radius: 0 !important;
+    }
+}
+</style>

@@ -8,36 +8,39 @@
     <!-- Header Section -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card hover-effect b-e-4-primary">
+            <div class="card hover-effect equal-card">
                 <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
+                    <!-- Mobile-first layout -->
+                    <div class="row">
+                        <!-- Title Section - Full width on mobile, 8 cols on desktop -->
+                        <div class="col-12 col-lg-8 mb-3 mb-lg-0">
                             <h2 class="mb-2 f-w-600">
-                                <i class="ph ph-chart-line me-2 text-primary"></i>
+                                <i class="ph ph-chart-line me-2 text-dark"></i>
                                 {{ __('user_stats.title') }}
                             </h2>
-                            <p class="text-primary-50 mb-0 f-s-14">
+                            <p class="text-muted mb-0 f-s-14">
                                 {{ __('user_stats.subtitle', ['name' => $user->getDisplayName()]) }}
                             </p>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <!-- Time Period Filter -->
-                            <div class="btn-group" role="group">
+
+                        <!-- Filter Section - Full width on mobile, 4 cols on desktop -->
+                        <div class="col-12 col-lg-4">
+                            <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-end">
                                 <input type="radio" class="btn-check" name="timeframe" id="timeframe_1m" value="1_month"
                                        {{ $timeframe === '1_month' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary btn-sm" for="timeframe_1m">{{ __('user_stats.1_month') }}</label>
+                                <label class="btn btn-outline-secondary btn-sm" for="timeframe_1m">{{ __('user_stats.1_month') }}</label>
 
                                 <input type="radio" class="btn-check" name="timeframe" id="timeframe_3m" value="3_months"
                                        {{ $timeframe === '3_months' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary btn-sm" for="timeframe_3m">{{ __('user_stats.3_months') }}</label>
+                                <label class="btn btn-outline-secondary btn-sm" for="timeframe_3m">{{ __('user_stats.3_months') }}</label>
 
                                 <input type="radio" class="btn-check" name="timeframe" id="timeframe_12m" value="12_months"
                                        {{ $timeframe === '12_months' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary btn-sm" for="timeframe_12m">{{ __('user_stats.12_months') }}</label>
+                                <label class="btn btn-outline-secondary btn-sm" for="timeframe_12m">{{ __('user_stats.12_months') }}</label>
 
                                 <input type="radio" class="btn-check" name="timeframe" id="timeframe_all" value="all_time"
                                        {{ $timeframe === 'all_time' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-primary btn-sm" for="timeframe_all">{{ __('user_stats.all_time') }}</label>
+                                <label class="btn btn-outline-secondary btn-sm" for="timeframe_all">{{ __('user_stats.all_time') }}</label>
                             </div>
                         </div>
                     </div>

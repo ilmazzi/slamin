@@ -10,24 +10,7 @@
 }
 
 .customizer-btn{
-    position: fixed;
-    bottom: 7rem;
-    right: -6px;
-    font-size: 30px;
-    border-radius: var(--bs-border-radius);
-    padding: 0 10px;
-    background-color: rgba(var(--primary),1);
-    border: 3px solid rgba(var(--white), 1);
-    color: rgba(var(--white), 1);
-    z-index: 111;
-    i{
-
-        &:before{
-            margin-top: 9px;
-            display: inline-block;
-            animation: circle-rotate 10s linear infinite;
-        }
-    }
+    display: none !important; /* Nascondi completamente il pulsante customizer */
 }
 .app-customizer{
     font-size: 14px;

@@ -55,13 +55,71 @@
             </span>
         </div>
 
+        <!-- Chat Widget -->
+        <?php if(auth()->guard()->check()): ?>
+        <div class="chat-widget position-fixed" style="bottom: 20px; right: 140px; z-index: 1050;">
+            <a href="<?php echo e(route('chat.index')); ?>" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
+               data-chat-badge-container
+               style="width: 60px; height: 60px; transition: all 0.3s ease;"
+               title="<?php echo e(__('chat.title')); ?>">
+                <i class="ph-duotone ph-chat f-s-24"></i>
+                <?php if(auth()->user()->unreadChatNotifications()->count() > 0): ?>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger chat-notification-badge"
+                          id="chat-notification-badge"
+                          style="font-size: 0.7rem; animation: pulse 2s infinite;">
+                        <?php echo e(auth()->user()->unreadChatNotifications()->count()); ?>
+
+                    </span>
+                <?php endif; ?>
+            </a>
+        </div>
+
+        <style>
+        .chat-widget-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,123,255,0.3) !important;
+        }
+
+        .chat-notification-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+            /* Mobile responsive */
+            @media (max-width: 768px) {
+                .chat-widget {
+                    bottom: 15px !important;
+                    right: 135px !important;
+                }
+
+                .chat-widget-btn {
+                    width: 50px !important;
+                    height: 50px !important;
+                    border-radius: 50% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 !important;
+                }
+
+                .chat-widget-btn i {
+                    font-size: 20px !important;
+                    line-height: 1 !important;
+                }
+            }
+        </style>
+        <?php endif; ?>
+
         <!-- Footer Section start -->
         <?php echo $__env->make('layout.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         <!-- Footer Section end -->
     </div>
 
-    <!--customizer-->
-    <div id="customizer"></div>
 <?php echo app('Tighten\Ziggy\BladeRouteGenerator')->generate(); ?>
     <!-- Search Configuration -->
     <?php echo $__env->make('layout.search-config', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
