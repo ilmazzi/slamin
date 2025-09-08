@@ -50,6 +50,23 @@
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
+                <div class="card card-light-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-info rounded">
+                                        <i class="ph ph-translate text-white"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
                 <div class="card card-light-success">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -134,8 +151,11 @@
                             <!-- Header con badge di stato -->
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <span class="badge bg-primary">Gig</span>
+                                    </div>
                                     <h5 class="card-title mb-1">
-                                        <a href="{{ route('gigs.show', $gig) }}" class="text-decoration-none hover-effect">
+                                        <a href="{{ route('gigs.show', $gig->gig) }}" class="text-decoration-none hover-effect">
                                             {{ $gig->title }}
                                         </a>
                                     </h5>
@@ -182,34 +202,42 @@
                                 <div class="row text-center mb-3">
                                     <div class="col-4">
                                         <div class="border-end">
-                                            <h6 class="mb-1">{{ $gig->application_count }}</h6>
+                                            <h6 class="mb-1">{{ $gig->applications_count ?? 0 }}</h6>
                                             <small class="text-muted">{{ __('gigs.stats.applications') }}</small>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="border-end">
-                                            <h6 class="mb-1">{{ $gig->accepted_applications_count }}</h6>
+                                            <h6 class="mb-1">{{ $gig->accepted_applications_count ?? 0 }}</h6>
                                             <small class="text-muted">{{ __('gigs.stats.accepted_applications_count') }}</small>
                                         </div>
                                     </div>
                                     <div class="col-4">
-                                        <h6 class="mb-1">{{ $gig->max_applications }}</h6>
+                                        <h6 class="mb-1">{{ $gig->max_applications ?? '∞' }}</h6>
                                         <small class="text-muted">Max</small>
                                     </div>
                                 </div>
 
                                 <!-- Categorie e tipo -->
                                 <div class="mb-3">
-                                    <span class="badge bg-light-primary me-1">
-                                        {{ __('gigs.categories.' . $gig->category) }}
-                                    </span>
-                                    <span class="badge bg-light-primary me-1">
-                                        {{ __('gigs.types.' . $gig->type) }}
-                                    </span>
-                                    @if($gig->is_remote)
+                                    @if($gig->type === 'translation')
+                                        <span class="badge bg-light-info me-1">Traduzione</span>
+                                        <span class="badge bg-light-info me-1">Poesia</span>
                                         <span class="badge bg-light-success">
-                                            <i class="ph ph-globe me-1"></i>{{ __('gigs.fields.is_remote') }}
+                                            <i class="ph ph-globe me-1"></i>Remoto
                                         </span>
+                                    @else
+                                        <span class="badge bg-light-primary me-1">
+                                            {{ __('gigs.categories.' . $gig->category) }}
+                                        </span>
+                                        <span class="badge bg-light-primary me-1">
+                                            {{ __('gigs.types.' . $gig->type) }}
+                                        </span>
+                                        @if($gig->is_remote)
+                                            <span class="badge bg-light-success">
+                                                <i class="ph ph-globe me-1"></i>{{ __('gigs.fields.is_remote') }}
+                                            </span>
+                                        @endif
                                     @endif
                                 </div>
 
@@ -239,15 +267,24 @@
 
                             <!-- Azioni -->
                             <div class="d-flex gap-2">
-                                <a href="{{ route('gigs.show', $gig) }}" class="btn btn-primary btn-sm flex-fill">
-                                    <i class="ph ph-eye me-1"></i>{{ __('common.view') }}
-                                </a>
-                                <a href="{{ route('gigs.edit', $gig) }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="ph ph-pencil me-1"></i>{{ __('common.edit') }}
-                                </a>
-                                <button class="btn btn-outline-danger btn-sm" onclick="deleteGig({{ $gig->id }})">
-                                    <i class="ph ph-trash"></i>
-                                </button>
+                                @if($gig->type === 'translation')
+                                    <a href="{{ route('poems.show', $gig->poem) }}" class="btn btn-primary btn-sm flex-fill">
+                                        <i class="ph ph-eye me-1"></i>{{ __('common.view') }}
+                                    </a>
+                                    <a href="{{ route('poems.translation-applications.show', $gig->poem) }}" class="btn btn-info btn-sm">
+                                        <i class="ph ph-users me-1"></i>Gestisci Candidature
+                                    </a>
+                                @else
+                                    <a href="{{ route('gigs.show', $gig->gig) }}" class="btn btn-primary btn-sm flex-fill">
+                                        <i class="ph ph-eye me-1"></i>{{ __('common.view') }}
+                                    </a>
+                                    <a href="{{ route('gigs.edit', $gig->gig) }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="ph ph-pencil me-1"></i>{{ __('common.edit') }}
+                                    </a>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteGig({{ $gig->gig->id }})">
+                                        <i class="ph ph-trash"></i>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>

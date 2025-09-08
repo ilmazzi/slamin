@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\ArticleTag;
 use App\Models\ArticleLayout;
-use App\Services\AutoTranslationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,9 +16,9 @@ class ArticleController extends Controller
 {
     protected $translationService;
 
-    public function __construct(AutoTranslationService $translationService)
+    public function __construct()
     {
-        $this->translationService = $translationService;
+        // Constructor
     }
 
     /**

@@ -136,6 +136,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
+
                                 <?php endif; ?>
 
                                 <!-- Eventi Section -->
@@ -262,6 +263,7 @@
                                     </a>
                                 </li>
                                 <?php endif; ?>
+
                                 <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
 
@@ -312,6 +314,17 @@
                                 <li class="menu-title">
                                     <span><?php echo e(__('sidebar.administration')); ?></span>
                                 </li>
+
+                                <!-- Admin Dashboard - Solo per admin -->
+                                <?php if(auth()->user()->hasRole('admin')): ?>
+                                <li class="no-sub <?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('admin.dashboard')); ?>">
+                                        <i class="ph-duotone ph-chart-line f-s-20 me-2"></i>
+                                        Dashboard Admin
+                                    </a>
+                                </li>
+                                <?php endif; ?>
+
                                 <li class="no-sub <?php echo e(request()->routeIs('permissions.*') ? 'active' : ''); ?>">
                                     <a href="<?php echo e(route('permissions.index')); ?>">
                                         <svg stroke="currentColor" stroke-width="1.5">
@@ -354,6 +367,27 @@
 
                                     </a>
                                 </li>
+
+                                <!-- Payment Accounts Management - Solo per admin -->
+                                <?php if(auth()->user()->hasRole('admin')): ?>
+                                <li class="no-sub <?php echo e(request()->routeIs('admin.payment-accounts.*') ? 'active' : ''); ?>">
+                                    <a href="<?php echo e(route('admin.payment-accounts.index')); ?>">
+                                        <i class="ph-duotone ph-credit-card f-s-20 me-2"></i>
+                                        Conti di Pagamento
+                                        <?php
+                                            $pendingVerification = \App\Models\User::whereNotNull('paypal_email')
+                                                ->where('paypal_verified', false)
+                                                ->count();
+                                        ?>
+                                        <?php if($pendingVerification > 0): ?>
+                                            <span class="badge bg-warning badge-notification ms-2">
+                                                <?php echo e($pendingVerification); ?>
+
+                                            </span>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
+                                <?php endif; ?>
 
                                 <!-- PeerTube Configuration - Solo per admin/moderator -->
                                 <li class="no-sub <?php echo e(request()->routeIs('admin.peertube.*') ? 'active' : ''); ?>">

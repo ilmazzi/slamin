@@ -22,12 +22,29 @@ class SystemSettingsController extends Controller
             'video' => 'Limiti Video',
             'moderation' => 'Moderazione',
             'availability' => 'Disponibilità Eventi',
+            'payment' => 'Pagamenti e Commissioni',
             'system' => 'Impostazioni'
         ];
 
         $settings = [];
         foreach ($groups as $group => $displayName) {
-            $settings[$group] = SystemSetting::getGroup($group);
+            $groupSettings = SystemSetting::getGroup($group);
+
+            // Assicuriamoci che tutti i valori siano gestiti correttamente
+            foreach ($groupSettings as $key => $setting) {
+                if (is_array($setting)) {
+                    $groupSettings[$key] = $setting;
+                } else {
+                    $groupSettings[$key] = [
+                        'value' => $setting,
+                        'type' => 'string',
+                        'display_name' => ucfirst(str_replace('_', ' ', $key)),
+                        'description' => ''
+                    ];
+                }
+            }
+
+            $settings[$group] = $groupSettings;
         }
 
         return view('admin.settings.index', compact('settings', 'groups'));
@@ -40,7 +57,7 @@ class SystemSettingsController extends Controller
     {
         $request->validate([
             'settings' => 'required|array',
-            'settings.*' => 'required'
+            'settings.*' => 'nullable'
         ]);
 
         $updated = 0;
@@ -81,7 +98,7 @@ class SystemSettingsController extends Controller
                 'message' => count($errors) === 0
                     ? "Impostazioni aggiornate con successo ({$updated} modificate)"
                     : "Errore nell'aggiornamento: " . implode(', ', $errors),
-                'errors' => $errors
+                'errors' => count($errors) > 0 ? $errors : []
             ]);
         }
 

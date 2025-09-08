@@ -114,6 +114,19 @@ class Notification extends Model
     const TYPE_AVAILABILITY_RESPONSE = 'availability_response';
 
     /**
+     * Type constants for translations
+     */
+    const TYPE_TRANSLATION_PROPOSAL = 'translation_proposal';
+    const TYPE_TRANSLATION_ACCEPTED = 'translation_accepted';
+    const TYPE_TRANSLATION_REJECTED = 'translation_rejected';
+    const TYPE_TRANSLATION_COUNTER = 'translation_counter';
+    const TYPE_TRANSLATION_MESSAGE = 'translation_message';
+    const TYPE_TRANSLATION_SUBMITTED = 'translation_submitted';
+    const TYPE_TRANSLATION_APPROVED = 'translation_approved';
+
+
+
+    /**
      * Get the user this notification belongs to
      */
     public function user(): BelongsTo
@@ -215,7 +228,15 @@ class Notification extends Model
             self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'ph ph-user-minus',
             self::TYPE_GROUP_MEMBER_JOINED => 'ph ph-user-plus',
             self::TYPE_GROUP_MEMBER_LEFT => 'ph ph-user-minus',
-            self::TYPE_GROUP_ROLE_CHANGED => 'ph ph-user-gear',
+        self::TYPE_GROUP_ROLE_CHANGED => 'ph ph-user-gear',
+            // Translation types
+            self::TYPE_TRANSLATION_PROPOSAL => 'ph ph-language',
+            self::TYPE_TRANSLATION_ACCEPTED => 'ph ph-check-circle',
+            self::TYPE_TRANSLATION_REJECTED => 'ph ph-x-circle',
+            self::TYPE_TRANSLATION_COUNTER => 'ph ph-arrows-clockwise',
+            self::TYPE_TRANSLATION_MESSAGE => 'ph ph-chat-circle',
+            self::TYPE_TRANSLATION_SUBMITTED => 'ph ph-paper-plane',
+            self::TYPE_TRANSLATION_APPROVED => 'ph ph-check-circle',
             default => 'ph ph-bell',
         };
     }
@@ -240,7 +261,15 @@ class Notification extends Model
             self::TYPE_GROUP_JOIN_REQUEST => 'text-info',
             self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED => 'text-success',
             self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'text-danger',
-            self::TYPE_GROUP_ROLE_CHANGED => 'text-warning',
+        self::TYPE_GROUP_ROLE_CHANGED => 'text-warning',
+            // Translation types
+            self::TYPE_TRANSLATION_PROPOSAL => 'text-info',
+            self::TYPE_TRANSLATION_ACCEPTED => 'text-success',
+            self::TYPE_TRANSLATION_REJECTED => 'text-danger',
+            self::TYPE_TRANSLATION_COUNTER => 'text-warning',
+            self::TYPE_TRANSLATION_MESSAGE => 'text-primary',
+            self::TYPE_TRANSLATION_SUBMITTED => 'text-info',
+            self::TYPE_TRANSLATION_APPROVED => 'text-success',
             default => 'text-primary',
         };
     }
@@ -791,6 +820,14 @@ class Notification extends Model
             self::TYPE_CONTENT_REPORTED => 'Contenuto Segnalato',
             self::TYPE_MODERATION_RESPONSE => 'Risposta Moderazione',
             self::TYPE_MODERATION_UPDATE => 'Aggiornamento Moderazione',
+            // Translation types
+            self::TYPE_TRANSLATION_PROPOSAL => 'Proposta Traduzione',
+            self::TYPE_TRANSLATION_ACCEPTED => 'Traduzione Accettata',
+            self::TYPE_TRANSLATION_REJECTED => 'Traduzione Rifiutata',
+            self::TYPE_TRANSLATION_COUNTER => 'Controproposta Traduzione',
+            self::TYPE_TRANSLATION_MESSAGE => 'Messaggio Traduzione',
+            self::TYPE_TRANSLATION_SUBMITTED => 'Traduzione Inviata',
+            self::TYPE_TRANSLATION_APPROVED => 'Traduzione Approvata',
         ];
     }
 
@@ -1207,4 +1244,5 @@ class Notification extends Model
         // Broadcast real-time notification
         self::broadcastNotification($notification);
     }
+
 }

@@ -50,6 +50,12 @@ class GigApplication extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Relazione per negoziazioni traduzioni
+    public function translationNegotiations()
+    {
+        return $this->hasMany(PoemTranslationNegotiation::class);
+    }
+
     // Scopes
     public function scopePending($query)
     {

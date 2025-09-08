@@ -79,48 +79,6 @@ class PoemActionController extends Controller
         ]);
     }
 
-    /**
-     * Richiedi traduzione di una poesia
-     */
-    public function requestTranslation(Request $request, Poem $poem)
-    {
-        if (!$poem->translation_available) {
-            return response()->json([
-                'success' => false,
-                'message' => __('poems.errors.translation_not_available')
-            ], 400);
-        }
-
-        $user = Auth::user();
-        $translationRequests = $poem->translation_requests ?? [];
-
-        // Verifica se l'utente ha già fatto una richiesta
-        $existingRequest = collect($translationRequests)->firstWhere('user_id', $user->id);
-        
-        if ($existingRequest) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Hai già richiesto una traduzione per questa poesia'
-            ], 400);
-        }
-
-        // Aggiungi la richiesta
-        $translationRequests[] = [
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'requested_at' => now()->toISOString(),
-            'target_language' => $request->get('target_language', 'en'),
-            'notes' => $request->get('notes', '')
-        ];
-
-        $poem->update(['translation_requests' => $translationRequests]);
-
-        return response()->json([
-            'success' => true,
-            'message' => __('poems.messages.translation_requested'),
-            'translation_request_count' => count($translationRequests)
-        ]);
-    }
 
     /**
      * Mostra i segnalibri dell'utente
@@ -147,4 +105,6 @@ class PoemActionController extends Controller
 
         return view('poems.liked', compact('likedPoems'));
     }
+
+
 }

@@ -86,3 +86,4 @@
 4. Implementare cache per query frequenti
 5. Aggiungere metriche di ricerca
 
+

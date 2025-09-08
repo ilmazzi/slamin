@@ -6,4 +6,5 @@ window.SearchConfig = {
 };
 </script>
 
+
 <?php /**PATH C:\xampp\htdocs\slamin\resources\views/layout/search-config.blade.php ENDPATH**/ ?>

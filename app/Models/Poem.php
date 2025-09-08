@@ -41,9 +41,6 @@ class Poem extends Model
         'published_at',
         'original_language',
         'translated_from',
-        'translation_price',
-        'translation_available',
-        'translation_requests',
         'poem_type',
         'word_count',
         'is_draft',
@@ -59,18 +56,15 @@ class Poem extends Model
 
     protected $casts = [
         'tags' => 'array',
-        'translation_requests' => 'array',
         'seo_meta' => 'array',
         'donation_info' => 'array',
         'is_public' => 'boolean',
         'is_featured' => 'boolean',
-        'translation_available' => 'boolean',
         'is_draft' => 'boolean',
         'is_premium' => 'boolean',
         'published_at' => 'datetime',
         'draft_saved_at' => 'datetime',
         'moderated_at' => 'datetime',
-        'translation_price' => 'decimal:2',
         'price' => 'decimal:2',
     ];
 
@@ -95,8 +89,13 @@ class Poem extends Model
         return $this->hasMany(Poem::class, 'translated_from');
     }
 
+    public function gigs(): HasMany
+    {
+        return $this->hasMany(Gig::class);
+    }
+
     // Relazioni like e commenti gestite dai trait HasLikes e HasComments
-    
+
     public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'poem_bookmarks')->withTimestamps();
@@ -185,15 +184,6 @@ class Poem extends Model
         return $this->bookmarks()->where('user_id', Auth::id())->exists();
     }
 
-    public function getCanBeTranslatedAttribute()
-    {
-        return $this->translation_available && $this->translation_price > 0;
-    }
-
-    public function getTranslationRequestCountAttribute()
-    {
-        return $this->translation_requests ? count($this->translation_requests) : 0;
-    }
 
     // Mutators
     protected static function boot()
@@ -206,12 +196,6 @@ class Poem extends Model
             }
             if (empty($poem->word_count)) {
                 $poem->word_count = str_word_count(strip_tags($poem->content));
-            }
-
-            // Imposta il moderation_status in base alla configurazione
-            if (empty($poem->moderation_status)) {
-                $autoApprove = config('poems.moderation.auto_approve', false);
-                $poem->moderation_status = $autoApprove ? 'approved' : 'pending';
             }
         });
 
@@ -303,6 +287,41 @@ class Poem extends Model
     {
         return $this->translated_from === null;
     }
+
+    // Metodi per gestione traduzioni
+    public function getAvailableLanguagesAttribute()
+    {
+        $languages = collect();
+
+        // Aggiungi la lingua originale
+        $languages->push([
+            'code' => $this->original_language ?: $this->language,
+            'name' => $this->getLanguageName($this->original_language ?: $this->language),
+            'is_original' => true
+        ]);
+
+
+        return $languages->unique('code')->values();
+    }
+
+
+    public function canBeTranslatedBy($user)
+    {
+        if (!$user) return false;
+
+        // L'autore può sempre tradurre
+        if ($this->user_id === $user->id) return true;
+
+        return false;
+    }
+
+
+    public function getLanguageName($code)
+    {
+        $languages = config('poems.languages', []);
+        return $languages[$code] ?? ucfirst($code);
+    }
+
 
 
 }

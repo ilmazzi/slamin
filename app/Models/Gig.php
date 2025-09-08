@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasModeration;
 
@@ -37,6 +39,11 @@ class Gig extends Model
         'moderation_notes',
         'moderated_by',
         'moderated_at',
+        // Campi per traduzioni
+        'gig_type',
+        'poem_id',
+        'target_languages',
+        'translation_instructions',
     ];
 
     protected $casts = [
@@ -48,6 +55,8 @@ class Gig extends Model
         'allow_group_admin_edit' => 'boolean',
         'application_count' => 'integer',
         'accepted_applications_count' => 'integer',
+        // Cast per traduzioni
+        'target_languages' => 'array',
         'moderated_at' => 'datetime',
     ];
 
@@ -94,6 +103,17 @@ class Gig extends Model
         return $this->hasMany(GigApplication::class)->where('status', 'rejected');
     }
 
+    // Relazioni per traduzioni
+    public function poem(): BelongsTo
+    {
+        return $this->belongsTo(Poem::class);
+    }
+
+    public function poemTranslations(): HasMany
+    {
+        return $this->hasMany(PoemTranslation::class);
+    }
+
     // Scopes
     public function scopeOpen($query)
     {
@@ -135,6 +155,22 @@ class Gig extends Model
     public function scopeByLocation($query, $location)
     {
         return $query->where('location', 'like', '%' . $location . '%');
+    }
+
+    // Scope per traduzioni
+    public function scopeTranslationGigs($query)
+    {
+        return $query->where('gig_type', 'translation');
+    }
+
+    public function scopeEventGigs($query)
+    {
+        return $query->where('gig_type', 'event');
+    }
+
+    public function scopeForPoem($query, $poemId)
+    {
+        return $query->where('poem_id', $poemId);
     }
 
     // Accessors
@@ -180,6 +216,35 @@ class Gig extends Model
     public function can_apply()
     {
         return $this->can_apply;
+    }
+
+    /**
+     * Verifica se un utente può candidarsi a questo gig
+     */
+    public function canUserApply(User $user)
+    {
+        // Controlli base
+        if (!$this->can_apply) {
+            return false;
+        }
+
+        // L'utente non può candidarsi ai propri gig
+        if ($this->user_id === $user->id) {
+            return false;
+        }
+
+        // Per gigs di traduzione, l'autore della poesia non può candidarsi
+        if ($this->gig_type === 'translation' && $this->poem && $this->poem->user_id === $user->id) {
+            return false;
+        }
+
+        // Verifica se l'utente ha già candidato
+        $existingApplication = $this->applications()->where('user_id', $user->id)->first();
+        if ($existingApplication) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

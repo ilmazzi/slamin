@@ -1,0 +1,52 @@
+# Configurazione Sistema Pagamenti
+# Aggiungi queste variabili al tuo file .env
+
+# ===========================================
+# STRIPE CONFIGURATION
+# ===========================================
+# Ottieni le tue chiavi da: https://dashboard.stripe.com/apikeys
+STRIPE_KEY=pk_test_your_stripe_publishable_key_here
+STRIPE_SECRET=sk_test_your_stripe_secret_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+
+# ===========================================
+# PAYPAL CONFIGURATION
+# ===========================================
+# Ottieni le tue credenziali da: https://developer.paypal.com/developer/applications/
+PAYPAL_CLIENT_ID=your_paypal_client_id_here
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret_here
+PAYPAL_MODE=sandbox
+
+# ===========================================
+# ISTRUZIONI SETUP
+# ===========================================
+
+# STRIPE:
+# 1. Vai su https://dashboard.stripe.com/
+# 2. Crea un account o accedi
+# 3. Vai su "Developers" > "API keys"
+# 4. Copia "Publishable key" e "Secret key"
+# 5. Per i webhook: "Developers" > "Webhooks" > "Add endpoint"
+#    URL: https://slamin.local/webhook/stripe
+#    Eventi: payment_intent.succeeded, payment_intent.payment_failed
+
+# PAYPAL:
+# 1. Vai su https://developer.paypal.com/
+# 2. Accedi con il tuo account PayPal
+# 3. Vai su "My Apps & Credentials"
+# 4. Crea una nuova app o usa quella esistente
+# 5. Copia "Client ID" e "Client Secret"
+# 6. Modalità: Sandbox per test, Live per produzione
+
+# ===========================================
+# TESTING
+# ===========================================
+# Carte di test Stripe:
+# - Successo: 4242 4242 4242 4242
+# - Declino: 4000 0000 0000 0002
+# - CVV: qualsiasi 3 cifre
+# - Data: qualsiasi data futura
+
+# PayPal Sandbox:
+# - Usa account sandbox PayPal per test
+# - Crea account test su https://developer.paypal.com/

@@ -10,14 +10,91 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\WebhookController;
 
 
 // Broadcasting routes per l'autenticazione dei canali privati
 Broadcast::routes(['middleware' => ['web', 'auth']]);
 
+// Webhook routes (senza middleware CSRF)
+Route::post('/webhook/stripe', [WebhookController::class, 'stripe'])->name('webhook.stripe');
+
+// Translator Payout Routes
+Route::prefix('translator/payouts')->name('translator.payouts.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\Translator\PayoutController::class, 'index'])->name('index');
+    Route::get('/setup', [App\Http\Controllers\Translator\PayoutController::class, 'setup'])->name('setup');
+    Route::post('/stripe/create', [App\Http\Controllers\Translator\PayoutController::class, 'createStripeAccount'])->name('create-stripe-account');
+    Route::get('/stripe/update-status', [App\Http\Controllers\Translator\PayoutController::class, 'updateStripeStatus'])->name('update-stripe-status');
+    Route::post('/paypal/setup', [App\Http\Controllers\Translator\PayoutController::class, 'setupPayPal'])->name('setup-paypal');
+    Route::get('/{payment}', [App\Http\Controllers\Translator\PayoutController::class, 'show'])->name('show');
+    Route::post('/{payment}/request-manual', [App\Http\Controllers\Translator\PayoutController::class, 'requestManualPayout'])->name('request-manual');
+});
+
+// Profile Payment Accounts Routes
+Route::prefix('profile/payment-accounts')->name('profile.payment-accounts.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'index'])->name('index');
+    Route::post('/stripe/create', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'createStripeAccount'])->name('create-stripe');
+    Route::get('/stripe/update-status', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'updateStripeStatus'])->name('update-stripe-status');
+    Route::post('/paypal/setup', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'setupPayPal'])->name('setup-paypal');
+    Route::post('/bank/setup', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'setupBankDetails'])->name('setup-bank');
+    Route::post('/preferred-method', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'setPreferredPayoutMethod'])->name('set-preferred-method');
+    Route::post('/disconnect', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'disconnectAccount'])->name('disconnect');
+    Route::get('/stripe/onboarding', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'createStripeOnboardingLink'])->name('stripe-onboarding');
+});
+
+// Admin Payment Accounts Routes
+Route::prefix('admin/payment-accounts')->name('admin.payment-accounts.')->middleware(['auth'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'index'])->name('index');
+    Route::get('/{user}', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'show'])->name('show');
+    Route::post('/{user}/verify-paypal', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'verifyPayPal'])->name('verify-paypal');
+    Route::post('/{user}/unverify-paypal', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'unverifyPayPal'])->name('unverify-paypal');
+    Route::get('/{user}/update-stripe-status', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'updateStripeStatus'])->name('update-stripe-status');
+    Route::post('/{user}/disconnect', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'disconnectAccount'])->name('disconnect');
+    Route::get('/paypal/verification', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'paypalVerification'])->name('paypal-verification');
+    Route::get('/stripe/issues', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'stripeIssues'])->name('stripe-issues');
+    Route::get('/statistics', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'statistics'])->name('statistics');
+    Route::post('/export', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'export'])->name('export');
+});
+
+// Admin Dashboard
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+});
+
+// Admin Settings - Separate sections
+Route::prefix('admin/settings')->name('admin.settings.')->middleware(['auth'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('index');
+    Route::post('/', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('update');
+
+    // Payment Settings
+    Route::get('/payment', [App\Http\Controllers\Admin\PaymentSettingsController::class, 'index'])->name('payment.index');
+    Route::post('/payment', [App\Http\Controllers\Admin\PaymentSettingsController::class, 'update'])->name('payment.update');
+    Route::get('/payment/reset', [App\Http\Controllers\Admin\PaymentSettingsController::class, 'reset'])->name('payment.reset');
+
+    // Upload Settings
+    Route::get('/upload', [App\Http\Controllers\Admin\UploadSettingsController::class, 'index'])->name('upload.index');
+    Route::post('/upload', [App\Http\Controllers\Admin\UploadSettingsController::class, 'update'])->name('upload.update');
+});
+
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
+
+// Test route for debugging gigs issue
+Route::get('/gigs-test', function() {
+    $categories = __('gigs.categories');
+    $types = __('gigs.types');
+    $sortOptions = __('gigs.filters.sort_options');
+    return view('gigs.test', compact('categories', 'types', 'sortOptions'));
+})->name('gigs.test');
+
+// Simple test route for gigs
+Route::get('/gigs-simple', function() {
+    $categories = __('gigs.categories');
+    $types = __('gigs.types');
+    $sortOptions = __('gigs.filters.sort_options');
+    return view('gigs.index-simple', compact('categories', 'types', 'sortOptions'));
+})->name('gigs.simple');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 // Report Routes (autenticati)
@@ -629,18 +706,6 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/settings/api', [App\Http\Controllers\Admin\SystemSettingsController::class, 'getSettings'])->name('settings.api');
         Route::post('/settings/thumbnails', [App\Http\Controllers\Admin\SystemSettingsController::class, 'manageThumbnails'])->name('settings.thumbnails');
 
-        // Translation Management
-        Route::get('/translations', [App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('translations.index');
-        Route::get('/translations/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'show'])->name('translations.show');
-        Route::put('/translations/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'update'])->name('translations.update');
-        Route::post('/translations/language', [App\Http\Controllers\Admin\TranslationController::class, 'createLanguage'])->name('translations.create-language');
-        Route::delete('/translations/language/{language}', [App\Http\Controllers\Admin\TranslationController::class, 'deleteLanguage'])->name('translations.delete-language');
-        Route::post('/translations/sync', [App\Http\Controllers\Admin\TranslationController::class, 'syncLanguages'])->name('translations.sync');
-
-        // Auto Translation Routes
-        Route::post('/translations/auto-translate/{language}/{file}', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslate'])->name('translations.auto-translate');
-        Route::post('/translations/auto-translate-all', [App\Http\Controllers\Admin\TranslationController::class, 'autoTranslateAll'])->name('translations.auto-translate-all');
-        Route::post('/translations/test-service', [App\Http\Controllers\Admin\TranslationController::class, 'testTranslationService'])->name('translations.test-service');
 
 
 
@@ -958,10 +1023,13 @@ Route::prefix('poems')->name('poems.')->group(function () {
     // Routes pubbliche
     Route::get('/', [App\Http\Controllers\PoemController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\PoemController::class, 'search'])->name('search');
-    // Spostata qui la route statica prima della dinamica
+
+    // Routes statiche PRIMA delle dinamiche
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', [App\Http\Controllers\PoemController::class, 'create'])->name('create');
     });
+
+    // Route dinamica DOPO le statiche
     Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
 
     // Routes autenticate
@@ -979,7 +1047,10 @@ Route::prefix('poems')->name('poems.')->group(function () {
         Route::post('/{poem}/like', [App\Http\Controllers\PoemActionController::class, 'toggleLike'])->name('like');
         Route::post('/{poem}/bookmark', [App\Http\Controllers\PoemActionController::class, 'toggleBookmark'])->name('bookmark');
         Route::post('/{poem}/share', [App\Http\Controllers\PoemActionController::class, 'share'])->name('share');
-        Route::post('/{poem}/request-translation', [App\Http\Controllers\PoemActionController::class, 'requestTranslation'])->name('request-translation');
+
+
+
+
 
         // Segnalibri e preferiti
         Route::get('/my/bookmarks', [App\Http\Controllers\PoemActionController::class, 'bookmarks'])->name('bookmarks');
@@ -997,6 +1068,80 @@ Route::prefix('poems')->name('poems.')->group(function () {
             Route::post('/comments/{comment}/moderate', [App\Http\Controllers\PoemCommentController::class, 'moderate'])->name('comments.moderate');
         });
     });
+});
+
+// Routes per le traduzioni
+Route::prefix('translations')->name('translations.')->middleware(['auth', 'verified'])->group(function () {
+    // Lista gigs di traduzione
+    Route::get('/', [App\Http\Controllers\TranslationController::class, 'index'])->name('index');
+
+    // Dettaglio gig di traduzione
+    Route::get('/{gig}', [App\Http\Controllers\TranslationController::class, 'show'])->name('show');
+
+    // Gigs di traduzione dell'utente
+    Route::get('/my/translations', [App\Http\Controllers\TranslationController::class, 'myTranslations'])->name('my-translations');
+
+    // Candidature dell'utente per traduzioni
+    Route::get('/my/applications', [App\Http\Controllers\TranslationController::class, 'myApplications'])->name('my-applications');
+});
+
+// Routes per negoziazioni traduzioni
+Route::prefix('translations/negotiation')->name('translations.negotiation.')->middleware(['auth', 'verified'])->group(function () {
+    // Chat di negoziazione
+    Route::get('/{application}', [App\Http\Controllers\TranslationNegotiationController::class, 'show'])->name('show');
+
+    // Invia messaggio
+    Route::post('/{application}', [App\Http\Controllers\TranslationNegotiationController::class, 'store'])->name('store');
+
+    // Accetta proposta
+    Route::post('/{application}/accept', [App\Http\Controllers\TranslationNegotiationController::class, 'acceptProposal'])->name('accept');
+
+    // Rifiuta proposta
+    Route::post('/{application}/reject', [App\Http\Controllers\TranslationNegotiationController::class, 'rejectProposal'])->name('reject');
+});
+
+// Routes per pagamenti traduzioni
+Route::prefix('translations/payment')->name('translations.payment.')->middleware(['auth', 'verified'])->group(function () {
+    // Mostra form pagamento
+    Route::get('/{application}', [App\Http\Controllers\TranslationPaymentController::class, 'show'])->name('show');
+
+    // Crea PaymentIntent Stripe
+    Route::post('/{application}/create-intent', [App\Http\Controllers\TranslationPaymentController::class, 'createPaymentIntent'])->name('create-intent');
+
+    // Conferma pagamento
+    Route::post('/{application}/confirm', [App\Http\Controllers\TranslationPaymentController::class, 'confirmPayment'])->name('confirm');
+
+    // Pagina successo
+    Route::get('/success/{payment}', [App\Http\Controllers\TranslationPaymentController::class, 'success'])->name('success');
+
+    // Lista pagamenti utente
+    Route::get('/', [App\Http\Controllers\TranslationPaymentController::class, 'index'])->name('index');
+});
+
+// Routes per traduzioni finali
+Route::prefix('poem-translations')->name('poem-translations.')->middleware(['auth', 'verified'])->group(function () {
+    // Crea traduzione
+    Route::get('/create/{application}', [App\Http\Controllers\PoemTranslationController::class, 'create'])->name('create');
+    Route::post('/create/{application}', [App\Http\Controllers\PoemTranslationController::class, 'store'])->name('store');
+
+    // Visualizza traduzione
+    Route::get('/{translation}', [App\Http\Controllers\PoemTranslationController::class, 'show'])->name('show');
+
+    // Modifica traduzione
+    Route::get('/{translation}/edit', [App\Http\Controllers\PoemTranslationController::class, 'edit'])->name('edit');
+    Route::put('/{translation}', [App\Http\Controllers\PoemTranslationController::class, 'update'])->name('update');
+
+    // Invia per approvazione
+    Route::post('/{translation}/submit', [App\Http\Controllers\PoemTranslationController::class, 'submit'])->name('submit');
+
+    // Approva traduzione
+    Route::post('/{translation}/approve', [App\Http\Controllers\PoemTranslationController::class, 'approve'])->name('approve');
+
+    // Rifiuta traduzione
+    Route::post('/{translation}/reject', [App\Http\Controllers\PoemTranslationController::class, 'reject'])->name('reject');
+
+    // Traduzioni dell'utente
+    Route::get('/my/translations', [App\Http\Controllers\PoemTranslationController::class, 'myTranslations'])->name('my-translations');
 });
 
 // ========================================

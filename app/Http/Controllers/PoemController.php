@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Poem;
 use App\Models\PoemComment;
+use App\Models\Gig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -100,8 +101,10 @@ class PoemController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_public' => 'boolean',
             'is_draft' => 'boolean',
-            'translation_available' => 'boolean',
-            'translation_price' => 'nullable|numeric|min:0|max:1000',
+            'translation_job_available' => 'boolean',
+            'translation_base_price' => 'nullable|numeric|min:0',
+            'translation_negotiable' => 'boolean',
+            'translation_instructions' => 'nullable|string|max:1000',
         ]);
 
         if ($validator->fails()) {
@@ -140,7 +143,38 @@ class PoemController extends Controller
         // Conteggio parole
         $data['word_count'] = str_word_count(strip_tags($data['content']));
 
+        // Imposta la lingua originale
+        $data['original_language'] = $data['language'];
+
         $poem = Auth::user()->poems()->create($data);
+
+        // Gestione traduzioni ufficiali
+        if (!empty($request->translations)) {
+            foreach ($request->translations as $translation) {
+                if (!empty($translation['language']) && !empty($translation['title']) && !empty($translation['content'])) {
+                    $poem->translations()->create([
+                        'language' => $translation['language'],
+                        'title' => $translation['title'],
+                        'content' => $translation['content'],
+                        'description' => $translation['description'] ?? null,
+                        'notes' => $translation['notes'] ?? null,
+                        'translator_id' => Auth::id(),
+                        'status' => 'approved',
+                        'approved_at' => now(),
+                    ]);
+                }
+            }
+        }
+
+        // Crea gig di traduzione se richiesto
+        if ($request->translation_job_available && !$data['is_draft']) {
+            // Verifica se esiste già un gig di traduzione per questa poesia
+            $existingTranslationGig = $poem->gigs()->where('gig_type', 'translation')->first();
+
+            if (!$existingTranslationGig) {
+                $this->createTranslationGig($poem, $request);
+            }
+        }
 
         return redirect()->route('poems.show', $poem)
             ->with('success', __('poems.messages.created'));
@@ -155,7 +189,7 @@ class PoemController extends Controller
         $poem->incrementViewCount();
 
         // Carica relazioni
-        $poem->load(['user', 'comments.approved', 'likes', 'bookmarks', 'translations']);
+        $poem->load(['user', 'comments.approved', 'likes', 'bookmarks']);
 
         // Poesie correlate
         $relatedPoems = Poem::published()
@@ -207,8 +241,6 @@ class PoemController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_public' => 'boolean',
             'is_draft' => 'boolean',
-            'translation_available' => 'boolean',
-            'translation_price' => 'nullable|numeric|min:0|max:1000',
         ]);
 
         if ($validator->fails()) {
@@ -258,6 +290,16 @@ class PoemController extends Controller
 
         $poem->update($data);
 
+        // Crea gig di traduzione se richiesto e non è già presente
+        if ($request->translation_job_available && !$data['is_draft']) {
+            // Verifica se esiste già un gig di traduzione per questa poesia
+            $existingTranslationGig = $poem->gigs()->where('gig_type', 'translation')->first();
+
+            if (!$existingTranslationGig) {
+                $this->createTranslationGig($poem, $request);
+            }
+        }
+
         return redirect()->route('poems.show', $poem)
             ->with('success', __('poems.messages.updated'));
     }
@@ -292,6 +334,7 @@ class PoemController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
+        // Conta le candidature ricevute per le traduzioni
         return view('poems.my-poems', compact('poems'));
     }
 
@@ -373,5 +416,46 @@ class PoemController extends Controller
         }
 
         return $slug;
+    }
+
+    /**
+     * Crea un gig di traduzione per la poesia
+     */
+    private function createTranslationGig(Poem $poem, Request $request)
+    {
+        // Lingue target di default (tutte le lingue supportate tranne quella originale)
+        $supportedLanguages = [
+            'en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'nl', 'sv', 'no', 'da', 'fi', 'pl', 'cs', 'sk', 'hu', 'ro', 'bg', 'hr', 'sr', 'sl', 'et', 'lv', 'lt', 'el', 'tr', 'uk', 'be', 'mk', 'sq', 'mt', 'ga', 'cy', 'is', 'fo', 'eu', 'ca', 'gl',
+            'zh', 'ja', 'ko', 'th', 'vi', 'id', 'ms', 'tl', 'hi', 'bn', 'ur', 'fa', 'he', 'ar', 'ku', 'az', 'ka', 'hy', 'uz', 'kk', 'ky', 'tg', 'mn', 'my', 'km', 'lo', 'si', 'ne', 'ta', 'te', 'ml', 'kn', 'gu', 'pa', 'or', 'as', 'mr', 'bo', 'dz',
+            'sw', 'am', 'ha', 'yo', 'ig', 'zu', 'xh', 'af', 'so', 'om', 'ti', 'rw', 'rn', 'lg', 'ny', 'sn', 'nd', 'ss', 'st', 'tn', 've', 'ts', 'nr', 'nso',
+            'qu', 'ay', 'gn', 'nah', 'yua', 'iu', 'kl',
+            'haw', 'mi', 'sm', 'to', 'fj', 'ty', 'bi', 'tvl', 'gil', 'na', 'mh', 'ch', 'pau', 'pon', 'kos', 'yap', 'chk', 'wls', 'niu', 'rap', 'rar'
+        ];
+
+        // Rimuovi la lingua originale dalle lingue target
+        $targetLanguages = array_filter($supportedLanguages, function($lang) use ($poem) {
+            return $lang !== $poem->language;
+        });
+
+        $gig = Gig::create([
+            'user_id' => Auth::id(),
+            'title' => "Traduzione: {$poem->title}",
+            'description' => "Traduzione della poesia '{$poem->title}' in diverse lingue. Poesia originale in {$poem->language}.",
+            'gig_type' => 'translation',
+            'poem_id' => $poem->id,
+            'target_languages' => array_values($targetLanguages),
+            'translation_instructions' => $request->translation_instructions ?? "Traduci la poesia mantenendo il significato e lo stile poetico originale.",
+            'compensation' => $request->translation_base_price ?? 50,
+            'deadline' => now()->addDays(30),
+            'is_closed' => false,
+            'is_featured' => false,
+            'location' => 'Remote',
+            'moderation_status' => 'pending',
+            'category' => 'translation',
+            'type' => 'translation',
+            'language' => $poem->language,
+        ]);
+
+        return $gig;
     }
 }

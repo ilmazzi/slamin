@@ -8,6 +8,8 @@ return [
     'all_gigs' => 'Tutti gli Ingaggi',
     'open_gigs' => 'Ingaggi Aperti',
     'closed_gigs' => 'Ingaggi Chiusi',
+    'translation_jobs' => 'Lavori di Traduzione',
+    'translation_jobs_description' => 'Traduci poesie e guadagna',
 
     // Azioni principali
     'create_gig' => 'Crea Ingaggio',
@@ -48,6 +50,7 @@ return [
 
     // Categorie
     'categories' => [
+        'traduzione' => 'Traduzione',
         'poetry_slam' => 'Poetry Slam',
         'theater' => 'Teatro',
         'music' => 'Musica',
@@ -121,6 +124,17 @@ return [
         'delete_confirm' => 'Sei sicuro di voler eliminare questo ingaggio?',
         'allow_group_admin_edit_help' => 'Permetti agli admin del gruppo di modificare questo ingaggio',
     ],
+
+    // Azioni
+    'actions' => [
+        'read' => 'Leggi',
+        'view' => 'Visualizza',
+        'apply' => 'Candidati',
+    ],
+
+    // Altri campi
+    'remote' => 'Remoto',
+    'applications' => 'Candidature',
 
     // Messaggi e notifiche
     'messages' => [

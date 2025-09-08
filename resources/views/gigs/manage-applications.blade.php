@@ -267,6 +267,12 @@
                                         <!-- Action Buttons -->
                                         @if($application->status === 'pending')
                                             <div class="d-flex gap-2 justify-content-end">
+                                                @if($gig->gig_type === 'translation')
+                                                    <a href="{{ route('translations.negotiation.show', $application) }}"
+                                                       class="btn btn-info btn-sm">
+                                                        <i class="ph ph-chat-circle me-1"></i>Negoziare
+                                                    </a>
+                                                @endif
                                                 <button class="btn btn-success btn-sm"
                                                         onclick="acceptApplication({{ $application->id }})">
                                                     <i class="ph ph-check me-1"></i>{{ __('gigs.applications.accept') }}
@@ -275,6 +281,13 @@
                                                         onclick="rejectApplication({{ $application->id }})">
                                                     <i class="ph ph-x me-1"></i>{{ __('gigs.applications.reject') }}
                                                 </button>
+                                            </div>
+                                        @elseif($application->status === 'accepted' && $gig->gig_type === 'translation')
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <a href="{{ route('translations.negotiation.show', $application) }}"
+                                                   class="btn btn-info btn-sm">
+                                                    <i class="ph ph-chat-circle me-1"></i>Chat
+                                                </a>
                                             </div>
                                         @endif
                                     </div>

@@ -51,3 +51,4 @@ return [
     'search_result_label' => 'Risultato: {title}',
 ];
 
+

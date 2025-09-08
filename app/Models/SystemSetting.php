@@ -165,6 +165,103 @@ class SystemSetting extends Model
                 'description' => 'Estensioni di file video consentite'
             ],
 
+            // Payment settings
+            'translation_commission_rate' => [
+                'value' => '0.10',
+                'type' => 'float',
+                'group' => 'payment',
+                'display_name' => 'Commissione traduzioni (%)',
+                'description' => 'Percentuale di commissione per i pagamenti di traduzione (es: 0.10 = 10%)'
+            ],
+            'translation_commission_fixed' => [
+                'value' => '0.00',
+                'type' => 'float',
+                'group' => 'payment',
+                'display_name' => 'Commissione fissa traduzioni (€)',
+                'description' => 'Commissione fissa in euro per i pagamenti di traduzione'
+            ],
+            'payment_methods_enabled' => [
+                'value' => json_encode(['stripe', 'paypal']),
+                'type' => 'json',
+                'group' => 'payment',
+                'display_name' => 'Metodi di pagamento abilitati',
+                'description' => 'Metodi di pagamento disponibili: stripe, paypal'
+            ],
+            'stripe_enabled' => [
+                'value' => 'true',
+                'type' => 'boolean',
+                'group' => 'payment',
+                'display_name' => 'Stripe abilitato',
+                'description' => 'Abilita pagamenti con Stripe (carte di credito)'
+            ],
+            'paypal_enabled' => [
+                'value' => 'true',
+                'type' => 'boolean',
+                'group' => 'payment',
+                'display_name' => 'PayPal abilitato',
+                'description' => 'Abilita pagamenti con PayPal'
+            ],
+
+            // Stripe API Configuration
+            'stripe_public_key' => [
+                'value' => '',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'Stripe Public Key (pk_test_...)',
+                'description' => 'Chiave pubblica di Stripe per i pagamenti (inizia con pk_test_ o pk_live_)'
+            ],
+            'stripe_secret_key' => [
+                'value' => '',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'Stripe Secret Key (sk_test_...)',
+                'description' => 'Chiave segreta di Stripe per i pagamenti (inizia con sk_test_ o sk_live_)'
+            ],
+            'stripe_webhook_secret' => [
+                'value' => '',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'Stripe Webhook Secret (whsec_...)',
+                'description' => 'Chiave segreta per i webhook di Stripe (inizia con whsec_)'
+            ],
+            'stripe_mode' => [
+                'value' => 'test',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'Modalità Stripe',
+                'description' => 'Modalità di Stripe: test (sviluppo) o live (produzione)'
+            ],
+
+            // PayPal API Configuration
+            'paypal_client_id' => [
+                'value' => '',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'PayPal Client ID',
+                'description' => 'Client ID di PayPal per i pagamenti'
+            ],
+            'paypal_client_secret' => [
+                'value' => '',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'PayPal Client Secret',
+                'description' => 'Client Secret di PayPal per i pagamenti'
+            ],
+            'paypal_mode' => [
+                'value' => 'sandbox',
+                'type' => 'string',
+                'group' => 'payment',
+                'display_name' => 'Modalità PayPal',
+                'description' => 'Modalità di PayPal: sandbox (sviluppo) o live (produzione)'
+            ],
+            'stripe_connect_enabled' => [
+                'value' => 'false',
+                'type' => 'boolean',
+                'group' => 'payment',
+                'display_name' => 'Abilita Stripe Connect',
+                'description' => 'Abilita la funzionalità Stripe Connect per i pagamenti ai traduttori'
+            ],
+
             // System settings
             'maintenance_mode' => [
                 'value' => 'false',

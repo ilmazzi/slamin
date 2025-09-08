@@ -62,7 +62,7 @@
 
     <!--customizer-->
     <div id="customizer"></div>
-@routes
+<?php echo app('Tighten\Ziggy\BladeRouteGenerator')->generate(); ?>
     <!-- Search Configuration -->
     <?php echo $__env->make('layout.search-config', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <!-- scripts start-->

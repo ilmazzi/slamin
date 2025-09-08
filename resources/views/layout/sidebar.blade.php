@@ -127,6 +127,7 @@
                                     </a>
                                 </li>
                                 @endunless
+
                                 @endauth
 
                                 <!-- Eventi Section -->
@@ -240,6 +241,7 @@
                                     </a>
                                 </li>
                                 @endauth
+
                                 <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
 
@@ -290,6 +292,17 @@
                                 <li class="menu-title">
                                     <span>{{ __('sidebar.administration') }}</span>
                                 </li>
+
+                                <!-- Admin Dashboard - Solo per admin -->
+                                @if(auth()->user()->hasRole('admin'))
+                                <li class="no-sub {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.dashboard') }}">
+                                        <i class="ph-duotone ph-chart-line f-s-20 me-2"></i>
+                                        Dashboard Admin
+                                    </a>
+                                </li>
+                                @endif
+
                                 <li class="no-sub {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                                     <a href="{{ route('permissions.index') }}">
                                         <svg stroke="currentColor" stroke-width="1.5">
@@ -328,6 +341,26 @@
                                         {{ __('sidebar.settings') }}
                                     </a>
                                 </li>
+
+                                <!-- Payment Accounts Management - Solo per admin -->
+                                @if(auth()->user()->hasRole('admin'))
+                                <li class="no-sub {{ request()->routeIs('admin.payment-accounts.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.payment-accounts.index') }}">
+                                        <i class="ph-duotone ph-credit-card f-s-20 me-2"></i>
+                                        Conti di Pagamento
+                                        @php
+                                            $pendingVerification = \App\Models\User::whereNotNull('paypal_email')
+                                                ->where('paypal_verified', false)
+                                                ->count();
+                                        @endphp
+                                        @if($pendingVerification > 0)
+                                            <span class="badge bg-warning badge-notification ms-2">
+                                                {{ $pendingVerification }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endif
 
                                 <!-- PeerTube Configuration - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">

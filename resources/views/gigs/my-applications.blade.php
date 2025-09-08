@@ -40,6 +40,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Tipo</th>
                                         <th>{{ __('gigs.fields.title') }}</th>
                                         <th>{{ __('gigs.fields.event') }}</th>
                                         <th>{{ __('gigs.applications.message') }}</th>
@@ -52,11 +53,16 @@
                                     @foreach($applications as $application)
                                         <tr>
                                             <td>
+                                                <span class="badge bg-primary">Gig</span>
+                                            </td>
+                                            <td>
                                                 <a href="{{ route('gigs.show', $application->gig) }}" class="text-decoration-none">
-                                                    {{ $application->gig->title }}
+                                                    {{ $application->title }}
                                                 </a>
                                             </td>
-                                            <td>{{ $application->gig->event->title ?? '-' }}</td>
+                                            <td>
+                                                {{ $application->gig->event->title ?? '-' }}
+                                            </td>
                                             <td>
                                                 <div class="text-truncate" style="max-width: 200px;" title="{{ $application->message }}">
                                                     {{ Str::limit($application->message, 100) }}
@@ -76,11 +82,24 @@
                                             <td>{{ $application->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a href="{{ route('gigs.show', $application->gig) }}" class="btn btn-sm btn-light">
-                                                        <i class="ph ph-eye"></i>
-                                                    </a>
+                                                    @if($application->type === 'translation')
+                                                        <a href="{{ route('poems.show', $application->poem) }}" class="btn btn-sm btn-light">
+                                                            <i class="ph ph-eye"></i>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('gigs.show', $application->gig) }}" class="btn btn-sm btn-light">
+                                                            <i class="ph ph-eye"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if($application->gig->gig_type === 'translation' && in_array($application->status, ['pending', 'accepted']))
+                                                        <a href="{{ route('translations.negotiation.show', $application) }}" class="btn btn-sm btn-info">
+                                                            <i class="ph ph-chat-circle"></i>
+                                                        </a>
+                                                    @endif
+
                                                     @if($application->status === 'pending')
-                                                        <button class="btn btn-sm btn-outline-danger" onclick="withdrawApplication({{ $application->id }})">
+                                                        <button class="btn btn-sm btn-outline-danger" onclick="withdrawApplication('{{ $application->id }}', '{{ $application->type }}')">
                                                             <i class="ph ph-x"></i>
                                                         </button>
                                                     @endif
@@ -91,7 +110,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="d-flex justify-content-center mt-3">
                             {{ $applications->links() }}
                         </div>
@@ -113,7 +132,7 @@
 
 @push('scripts')
 <script>
-function withdrawApplication(applicationId) {
+function withdrawApplication(applicationId, type) {
     Swal.fire({
         title: '{{ __("gigs.applications.withdraw_confirm") }}',
         text: '{{ __("common.confirm_action") }}',
@@ -125,7 +144,10 @@ function withdrawApplication(applicationId) {
         cancelButtonText: '{{ __("common.cancel") }}'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`/gig-applications/${applicationId}/withdraw`, {
+            let url;
+            url = `/gig-applications/${applicationId.replace('gig_', '')}/withdraw`;
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

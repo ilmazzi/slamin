@@ -52,6 +52,35 @@
                                     </span>
                                 @endif
                             </div>
+
+                            <!-- Selettore Lingue Disponibili -->
+                            @if($poem->available_languages->count() > 1)
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <span class="text-muted small">
+                                        <i class="ph ph-translate me-1"></i>{{ __('poems.available_languages') }}:
+                                    </span>
+                                    <div class="btn-group" role="group" id="language-selector">
+                                        @foreach($poem->available_languages as $lang)
+                                            <button type="button"
+                                                    class="btn btn-sm {{ $lang['is_original'] ? 'btn-primary' : 'btn-outline-primary' }} language-btn"
+                                                    data-language="{{ $lang['code'] }}"
+                                                    data-original="{{ $lang['is_original'] ? 'true' : 'false' }}">
+                                                @if($lang['is_original'])
+                                                    <i class="ph ph-flag me-1"></i>
+                                                @else
+                                                    <i class="ph ph-translate me-1"></i>
+                                                @endif
+                                                {{ $lang['name'] }}
+                                                @if(!$lang['is_original'] && $lang['is_official'])
+                                                    <i class="ph ph-check-circle ms-1 text-success"></i>
+                                                @endif
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             <div class="d-flex align-items-center text-muted small">
                                 <i class="ph ph-user me-1"></i>
                                 <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
@@ -171,12 +200,6 @@
                             <i class="ph ph-share"></i>
                         </button>
 
-                        @if($poem->translation_available)
-                            <button class="btn btn-outline-success" onclick="requestTranslation()">
-                                <i class="ph ph-translate me-2"></i>
-                                {{ __('poems.actions.request_translation') }}
-                            </button>
-                        @endif
 
                         <x-report-button :content="$poem" type="poem" />
                     </div>
@@ -406,8 +429,6 @@
                         </div>
                         <div class="col-6">
                             <div class="border-end">
-                                <h6 class="text-success">{{ $poem->translation_request_count }}</h6>
-                                <small class="text-muted">{{ __('poems.translation_requests') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
@@ -493,26 +514,67 @@ function sharePoem() {
     }
 }
 
-// Request translation
-function requestTranslation() {
-    if (confirm('{{ __("poems.translation_confirm") }}')) {
-        fetch('{{ route("poems.request-translation", $poem) }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('{{ __("poems.translation_requested") }}');
+
+// Gestione cambio lingua dinamico
+document.addEventListener('DOMContentLoaded', function() {
+    const languageButtons = document.querySelectorAll('.language-btn');
+    const poemTitle = document.querySelector('.card-title');
+    const poemContent = document.querySelector('.poem-content');
+    const poemDescription = document.querySelector('.poem-description');
+
+    // Dati originali della poesia
+    const originalData = {
+        title: '{{ addslashes($poem->title) }}',
+        content: `{!! addslashes(nl2br(e($poem->content))) !!}`,
+        description: '{{ addslashes($poem->description ?? '') }}'
+    };
+
+    languageButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const language = this.dataset.language;
+            const isOriginal = this.dataset.original === 'true';
+
+            // Aggiorna lo stato dei pulsanti
+            languageButtons.forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary');
+
+            if (isOriginal) {
+                // Mostra il contenuto originale
+                poemTitle.textContent = originalData.title;
+                poemContent.innerHTML = originalData.content;
+                if (poemDescription) {
+                    poemDescription.textContent = originalData.description;
+                }
             } else {
-                alert(data.message || '{{ __("poems.translation_error") }}');
+                // Carica il contenuto tradotto
             }
         });
+    });
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                poemTitle.textContent = data.title;
+                poemContent.innerHTML = data.content;
+                if (poemDescription) {
+                    poemDescription.textContent = data.description || '';
+                }
+            })
+            .catch(error => {
+                console.error('Errore nel caricamento della traduzione:', error);
+                // Fallback al contenuto originale
+                poemTitle.textContent = originalData.title;
+                poemContent.innerHTML = originalData.content;
+                if (poemDescription) {
+                    poemDescription.textContent = originalData.description;
+                }
+            });
     }
-}
+});
 </script>
 @endpush
 

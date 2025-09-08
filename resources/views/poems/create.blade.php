@@ -182,26 +182,80 @@
 
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="translation_available" name="translation_available" value="1"
-                                                           {{ old('translation_available') ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="translation_available">
-                                                        {{ __('poems.fields.translation_available') }}
+                                                    <input class="form-check-input" type="checkbox" id="translation_job_available" name="translation_job_available" value="1"
+                                                           {{ old('translation_job_available') ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="translation_job_available">
+                                                        {{ __('poems.fields.translation_job_available') }}
                                                     </label>
                                                 </div>
+                                                <small class="form-text text-muted">{{ __('poems.create.translation_job_help') }}</small>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="translation_price" class="form-label">{{ __('poems.fields.translation_price') }}</label>
+                                                <label for="translation_base_price" class="form-label">{{ __('poems.fields.translation_base_price') }}</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">€</span>
-                                                    <input type="number" class="form-control @error('translation_price') is-invalid @enderror"
-                                                           id="translation_price" name="translation_price"
-                                                           value="{{ old('translation_price') }}" min="0" step="0.01">
+                                                    <input type="number" class="form-control @error('translation_base_price') is-invalid @enderror"
+                                                           id="translation_base_price" name="translation_base_price"
+                                                           value="{{ old('translation_base_price') }}" min="0" step="0.01">
                                                 </div>
-                                                @error('translation_price')
+                                                @error('translation_base_price')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="translation_negotiable" name="translation_negotiable" value="1"
+                                                           {{ old('translation_negotiable', true) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="translation_negotiable">
+                                                        {{ __('poems.fields.translation_negotiable') }}
+                                                    </label>
+                                                </div>
+                                                <small class="form-text text-muted">{{ __('poems.create.translation_negotiable_help') }}</small>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="translation_instructions" class="form-label">{{ __('poems.fields.translation_instructions') }}</label>
+                                                <textarea class="form-control @error('translation_instructions') is-invalid @enderror"
+                                                          id="translation_instructions" name="translation_instructions" rows="3"
+                                                          placeholder="{{ __('poems.create.translation_instructions_placeholder') }}">{{ old('translation_instructions') }}</textarea>
+                                                @error('translation_instructions')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sezione Traduzioni Ufficiali -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="ph ph-translate text-primary me-2"></i>
+                                            {{ __('poems.create.official_translations') }}
+                                        </h5>
+                                        <small class="text-muted">{{ __('poems.create.official_translations_help') }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="translations-container">
+                                            <!-- Le traduzioni verranno aggiunte dinamicamente qui -->
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <button type="button" class="btn btn-outline-primary" id="add-translation-btn">
+                                                <i class="ph ph-plus me-2"></i>
+                                                {{ __('poems.create.add_translation') }}
+                                            </button>
+
+                                            <small class="text-muted">
+                                                <i class="ph ph-info me-1"></i>
+                                                {{ __('poems.create.translation_note') }}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -275,6 +329,231 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Gestione traduzioni dinamiche
+    let translationCount = 0;
+    const translationsContainer = document.getElementById('translations-container');
+    const addTranslationBtn = document.getElementById('add-translation-btn');
+    // Array delle lingue supportate - versione semplificata per evitare errori di parsing
+    const supportedLanguages = {
+        // Lingue Europee
+        'en': 'English',
+        'es': 'Español',
+        'fr': 'Français',
+        'de': 'Deutsch',
+        'it': 'Italiano',
+        'pt': 'Português',
+        'ru': 'Русский',
+        'nl': 'Nederlands',
+        'sv': 'Svenska',
+        'no': 'Norsk',
+        'da': 'Dansk',
+        'fi': 'Suomi',
+        'pl': 'Polski',
+        'cs': 'Čeština',
+        'sk': 'Slovenčina',
+        'hu': 'Magyar',
+        'ro': 'Română',
+        'bg': 'Български',
+        'hr': 'Hrvatski',
+        'sr': 'Српски',
+        'sl': 'Slovenščina',
+        'et': 'Eesti',
+        'lv': 'Latviešu',
+        'lt': 'Lietuvių',
+        'el': 'Ελληνικά',
+        'tr': 'Türkçe',
+        'uk': 'Українська',
+        'be': 'Беларуская',
+        'mk': 'Македонски',
+        'sq': 'Shqip',
+        'mt': 'Malti',
+        'ga': 'Gaeilge',
+        'cy': 'Cymraeg',
+        'is': 'Íslenska',
+        'fo': 'Føroyskt',
+        'eu': 'Euskera',
+        'ca': 'Català',
+        'gl': 'Galego',
+
+        // Lingue Asiatiche
+        'zh': '中文',
+        'ja': '日本語',
+        'ko': '한국어',
+        'th': 'ไทย',
+        'vi': 'Tiếng Việt',
+        'id': 'Bahasa Indonesia',
+        'ms': 'Bahasa Melayu',
+        'tl': 'Filipino',
+        'hi': 'हिन्दी',
+        'bn': 'বাংলা',
+        'ur': 'اردو',
+        'fa': 'فارسی',
+        'he': 'עברית',
+        'ar': 'العربية',
+        'ku': 'Kurdî',
+        'az': 'Azərbaycan',
+        'ka': 'ქართული',
+        'hy': 'Հայերեն',
+        'uz': 'Oʻzbek',
+        'kk': 'Қазақ',
+        'ky': 'Кыргыз',
+        'tg': 'Тоҷикӣ',
+        'mn': 'Монгол',
+        'my': 'မြန်မာ',
+        'km': 'ខ្មែរ',
+        'lo': 'ລາວ',
+        'si': 'සිංහල',
+        'ne': 'नेपाली',
+        'ta': 'தமிழ்',
+        'te': 'తెలుగు',
+        'ml': 'മലയാളം',
+        'kn': 'ಕನ್ನಡ',
+        'gu': 'ગુજરાતી',
+        'pa': 'ਪੰਜਾਬੀ',
+        'or': 'ଓଡ଼ିଆ',
+        'as': 'অসমীয়া',
+        'mr': 'मराठी',
+        'bo': 'བོད་ཡིག',
+        'dz': 'རྫོང་ཁ',
+
+        // Lingue Africane
+        'sw': 'Kiswahili',
+        'am': 'አማርኛ',
+        'ha': 'Hausa',
+        'yo': 'Yorùbá',
+        'ig': 'Igbo',
+        'zu': 'IsiZulu',
+        'xh': 'IsiXhosa',
+        'af': 'Afrikaans',
+        'so': 'Soomaali',
+        'om': 'Oromoo',
+        'ti': 'ትግርኛ',
+        'rw': 'Kinyarwanda',
+        'rn': 'Kirundi',
+        'lg': 'Luganda',
+        'ny': 'Chichewa',
+        'sn': 'ChiShona',
+        'nd': 'IsiNdebele',
+        'ss': 'SiSwati',
+        'st': 'Sesotho',
+        'tn': 'Setswana',
+        've': 'Tshivenḓa',
+        'ts': 'Xitsonga',
+        'nr': 'IsiNdebele',
+        'nso': 'Sesotho sa Leboa',
+
+        // Lingue Americane
+        'qu': 'Runa Simi',
+        'ay': 'Aymar aru',
+        'gn': 'Avañe\'ẽ',
+        'nah': 'Nāhuatl',
+        'yua': 'Maaya T\'aan',
+        'iu': 'ᐃᓄᒃᑎᑐᑦ',
+        'kl': 'Kalaallisut',
+
+        // Lingue del Pacifico
+        'haw': 'ʻŌlelo Hawaiʻi',
+        'mi': 'Te Reo Māori',
+        'sm': 'Gagana Samoa',
+        'to': 'Lea fakatonga',
+        'fj': 'Na Vosa Vakaviti',
+        'ty': 'Reo Tahiti',
+        'bi': 'Bislama',
+        'tvl': 'Te \'gana Tuvalu',
+        'gil': 'Taetae ni Kiribati',
+        'na': 'Dorerin Naoero',
+        'mh': 'Kajin M̧ajeļ',
+        'ch': 'Chamoru',
+        'pau': 'Tekoi er a Belau',
+        'pon': 'Pohnpeian',
+        'kos': 'Kosraean',
+        'yap': 'Wa\'ab',
+        'chk': 'Chuukese',
+        'wls': 'Faka\'uvea',
+        'niu': 'Ko e vagahau Niuē',
+        'rap': 'Vananga Rapa Nui',
+        'rar': 'Māori Kūki \'Āirani'
+    };
+
+    function addTranslationForm() {
+        translationCount++;
+        const translationId = `translation_${translationCount}`;
+
+        const translationHtml = `
+            <div class="card mb-3" id="${translationId}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="ph ph-translate me-2"></i>
+                        {{ __('poems.create.translation') }} #${translationCount}
+                    </h6>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeTranslation('${translationId}')">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="${translationId}_language" class="form-label">{{ __('poems.fields.language') }}</label>
+                            <select class="form-select" id="${translationId}_language" name="translations[${translationCount}][language]" required>
+                                <option value="">{{ __('common.select') }}</option>
+                                ${Object.entries(supportedLanguages).map(([code, name]) =>
+                                    `<option value="${code}">${name}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="${translationId}_title" class="form-label">{{ __('poems.fields.title') }}</label>
+                            <input type="text" class="form-control" id="${translationId}_title"
+                                   name="translations[${translationCount}][title]" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="${translationId}_content" class="form-label">{{ __('poems.fields.content') }}</label>
+                        <textarea class="form-control" id="${translationId}_content"
+                                  name="translations[${translationCount}][content]" rows="8" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="${translationId}_description" class="form-label">{{ __('poems.fields.description') }}</label>
+                        <textarea class="form-control" id="${translationId}_description"
+                                  name="translations[${translationCount}][description]" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="${translationId}_notes" class="form-label">{{ __('poems.fields.translation_notes') }}</label>
+                        <textarea class="form-control" id="${translationId}_notes"
+                                  name="translations[${translationCount}][notes]" rows="2"
+                                  placeholder="{{ __('poems.create.translation_notes_placeholder') }}"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        translationsContainer.insertAdjacentHTML('beforeend', translationHtml);
+    }
+
+    function removeTranslation(translationId) {
+        const element = document.getElementById(translationId);
+        if (element) {
+            element.remove();
+        }
+    }
+
+    // Event listener per il pulsante aggiungi traduzione
+    if (addTranslationBtn) {
+        addTranslationBtn.addEventListener('click', addTranslationForm);
+    }
+
+    // Aggiungi una traduzione di default se ci sono errori di validazione
+    @if(old('translations'))
+        @foreach(old('translations') as $index => $translation)
+            addTranslationForm();
+            document.querySelector(`#translation_${translationCount}_language`).value = '{{ $translation["language"] ?? "" }}';
+            document.querySelector(`#translation_${translationCount}_title`).value = '{{ $translation["title"] ?? "" }}';
+            document.querySelector(`#translation_${translationCount}_content`).value = '{{ $translation["content"] ?? "" }}';
+            document.querySelector(`#translation_${translationCount}_description`).value = '{{ $translation["description"] ?? "" }}';
+            document.querySelector(`#translation_${translationCount}_notes`).value = '{{ $translation["notes"] ?? "" }}';
+        @endforeach
+    @endif
 });
 </script>
 @endpush

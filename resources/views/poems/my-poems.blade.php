@@ -43,6 +43,27 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
+            <div class="card card-light-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">0</h4>
+                            <p class="text-muted mb-0">Candidature Traduzioni</p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <i class="ph ph-users display-4 text-info"></i>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-info disabled">
+                            <i class="ph ph-eye me-1"></i>Visualizza
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
             <div class="card card-light-success">
                 <div class="card-body">
                     <div class="d-flex align-items-center">

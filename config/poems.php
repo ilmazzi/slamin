@@ -48,19 +48,6 @@ return [
         'other' => 'Altro'
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Impostazioni di moderazione
-    |--------------------------------------------------------------------------
-    |
-    | Configurazioni per la moderazione delle poesie
-    |
-    */
-    'moderation' => [
-        'auto_approve' => env('POEMS_AUTO_APPROVE', false),
-        'require_moderation' => env('POEMS_REQUIRE_MODERATION', true),
-        'max_pending_per_user' => env('POEMS_MAX_PENDING_PER_USER', 5),
-    ],
 
     /*
     |--------------------------------------------------------------------------

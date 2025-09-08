@@ -47,6 +47,22 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_seen_at',
         'online_status',
         'online_preferences',
+        // Payment accounts fields
+        'stripe_connect_account_id',
+        'stripe_connect_status',
+        'stripe_connect_details',
+        'stripe_connected_at',
+        'paypal_email',
+        'paypal_merchant_id',
+        'paypal_verified',
+        'paypal_connected_at',
+        'preferred_payout_method',
+        'payout_method_configured',
+        'payout_settings',
+        'bank_name',
+        'bank_iban',
+        'bank_swift',
+        'bank_account_holder',
         // PeerTube fields
         'peertube_user_id',
         'peertube_username',
@@ -90,6 +106,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'last_seen_at' => 'datetime',
             'online_preferences' => 'array',
             'peertube_roles' => 'array',
+            // Payment accounts casts
+            'stripe_connect_details' => 'array',
+            'payout_settings' => 'array',
+            'stripe_connected_at' => 'datetime',
+            'paypal_connected_at' => 'datetime',
+            'paypal_verified' => 'boolean',
+            'payout_method_configured' => 'boolean',
         ];
     }
 
@@ -1005,6 +1028,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function publishedArticles()
     {
         return $this->hasMany(Article::class)->published();
+    }
+
+    /**
+     * Get user's translation payments (as translator)
+     */
+    public function translationPayments()
+    {
+        return $this->hasMany(TranslationPayment::class, 'translator_id');
+    }
+
+    /**
+     * Get user's translation payments (as client)
+     */
+    public function translationPaymentsAsClient()
+    {
+        return $this->hasMany(TranslationPayment::class, 'client_id');
     }
 }
 

@@ -44,7 +44,7 @@ class GigController extends Controller
                 ->get();
         }
 
-        $query = Gig::with(['user', 'event', 'group'])
+        $query = Gig::with(['user', 'event', 'group', 'poem', 'applications.user'])
             ->withCount(['applications', 'pendingApplications', 'acceptedApplications']);
 
         // Filtri
@@ -114,18 +114,42 @@ class GigController extends Controller
                 $query->orderBy('created_at', 'desc');
         }
 
-        $query->whereHas('event');
+        // Mostra sia gigs con event che gigs di traduzione
+        $query->where(function($q) {
+            $q->whereHas('event')
+              ->orWhere(function($subQ) {
+                  $subQ->where('gig_type', 'translation')
+                       ->whereNotNull('poem_id');
+              });
+        });
 
         $gigs = $query->paginate(12);
 
+
         // Statistiche
         $stats = [
-            'total_gigs' => Gig::count(),
-            'open_gigs_count' => Gig::open()->count(),
-            'urgent_gigs_count' => Gig::urgent()->count(),
+            'total_gigs' => (int)Gig::count(),
+            'open_gigs_count' => (int)Gig::open()->count(),
+            'urgent_gigs_count' => (int)Gig::urgent()->count(),
         ];
 
-        return view('gigs.index', compact('gigs', 'stats', 'showOrganizerSection', 'userEvents'));
+        $categories = __('gigs.categories');
+        $types = __('gigs.types');
+        $sortOptions = __('gigs.filters.sort_options');
+
+        // Aggiungi informazioni sulle candidature dell'utente corrente
+        if (Auth::check()) {
+            $userApplications = GigApplication::where('user_id', Auth::id())
+                ->whereIn('gig_id', $gigs->pluck('id'))
+                ->pluck('gig_id')
+                ->toArray();
+
+            $gigs->each(function($gig) use ($userApplications) {
+                $gig->has_applied = in_array($gig->id, $userApplications);
+            });
+        }
+
+        return view('gigs.index', compact('gigs', 'stats', 'showOrganizerSection', 'userEvents', 'categories', 'types', 'sortOptions'));
     }
 
     /**
@@ -359,16 +383,63 @@ class GigController extends Controller
             return redirect()->route('gigs.index')->with('error', __('gigs.messages.audience_not_allowed'));
         }
 
-        $gigs = Gig::where('user_id', $user->id)
+        // Gig normali
+        $normalGigs = Gig::where('user_id', $user->id)
             ->with(['event', 'group'])
             ->withCount(['applications', 'pendingApplications', 'acceptedApplications'])
             ->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->get();
+
+
+        // Solo i gig normali
+        $allGigs = $normalGigs->map(function($gig) {
+            return (object) [
+                'id' => 'gig_' . $gig->id,
+                'title' => $gig->title,
+                'description' => $gig->description,
+                'type' => 'gig',
+                'created_at' => $gig->created_at,
+                'updated_at' => $gig->updated_at,
+                'user' => $gig->user,
+                'gig' => $gig,
+                'poem' => null,
+                'is_translation_job' => false,
+                'applications_count' => $gig->applications_count,
+                'pending_applications_count' => $gig->pending_applications_count,
+                'accepted_applications_count' => $gig->accepted_applications_count,
+                // Proprietà per compatibilità con la vista
+                'is_urgent' => $gig->is_urgent ?? false,
+                'is_closed' => $gig->is_closed ?? false,
+                'is_expired' => $gig->is_expired ?? false,
+                'is_featured' => $gig->is_featured ?? false,
+                'status' => $gig->status ?? 'open',
+                'category' => $gig->category ?? 'other',
+                'compensation' => $gig->compensation ?? 'Da concordare',
+                'deadline' => $gig->deadline ?? null,
+                'days_until_deadline' => $gig->days_until_deadline ?? null,
+                'max_applications' => $gig->max_applications ?? null,
+                'is_remote' => $gig->is_remote ?? false,
+            ];
+        })
+            ->sortByDesc('created_at')
+            ->values();
+
+        // Paginazione manuale
+        $perPage = 12;
+        $currentPage = request()->get('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $gigs = new \Illuminate\Pagination\LengthAwarePaginator(
+            $allGigs->slice($offset, $perPage),
+            $allGigs->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
 
         $stats = [
-            'my_gigs_count' => Gig::where('user_id', $user->id)->count(),
-            'open_gigs_count' => Gig::where('user_id', $user->id)->open()->count(),
-            'urgent_gigs_count' => Gig::where('user_id', $user->id)->urgent()->count(),
+            'my_gigs_count' => $normalGigs->count(),
+            'open_gigs_count' => $normalGigs->where('status', 'open')->count(),
+            'urgent_gigs_count' => $normalGigs->where('is_urgent', true)->count(),
         ];
 
         return view('gigs.my-gigs', compact('gigs', 'stats'));
@@ -385,15 +456,45 @@ class GigController extends Controller
             return redirect()->route('gigs.index')->with('error', __('gigs.messages.audience_not_allowed'));
         }
 
-        $applications = GigApplication::where('user_id', $user->id)
+        // Candidature ai gig normali
+        $gigApplications = GigApplication::where('user_id', $user->id)
             ->with(['gig.user', 'gig.event'])
             ->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->get();
+
+        // Solo candidature ai gig normali
+        $allApplications = $gigApplications->map(function($app) {
+            return (object) [
+                'id' => 'gig_' . $app->id,
+                'type' => 'gig',
+                'title' => $app->gig->title,
+                'description' => $app->gig->description,
+                'status' => $app->status,
+                'message' => $app->message,
+                'created_at' => $app->created_at,
+                'updated_at' => $app->updated_at,
+                'user' => $app->gig->user,
+                'gig' => $app->gig,
+                'poem' => null,
+            ];
+        })->sortByDesc('created_at')->values();
+
+        // Paginazione manuale
+        $perPage = 12;
+        $currentPage = request()->get('page', 1);
+        $offset = ($currentPage - 1) * $perPage;
+        $applications = new \Illuminate\Pagination\LengthAwarePaginator(
+            $allApplications->slice($offset, $perPage),
+            $allApplications->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
 
         $stats = [
-            'my_applications_count' => GigApplication::where('user_id', $user->id)->count(),
-            'pending_applications_count' => GigApplication::where('user_id', $user->id)->pending()->count(),
-            'accepted_applications_count' => GigApplication::where('user_id', $user->id)->accepted()->count(),
+            'total_applications' => $gigApplications->count(),
+            'pending_applications_count' => $gigApplications->where('status', 'pending')->count(),
+            'accepted_applications_count' => $gigApplications->where('status', 'accepted')->count(),
         ];
 
         return view('gigs.my-applications', compact('applications', 'stats'));
@@ -429,14 +530,23 @@ class GigController extends Controller
             return response()->json(['error' => __('gigs.messages.audience_not_allowed')], 403);
         }
 
-        if (!$gig->can_apply) {
-            return response()->json(['error' => __('gigs.applications.already_applied')], 400);
-        }
+        // Verifica se l'utente può candidarsi (include tutti i controlli)
+        if (!$gig->canUserApply($user)) {
+            // Controlla il motivo specifico
+            if ($gig->user_id === $user->id) {
+                return response()->json(['error' => 'Non puoi candidarti ai tuoi stessi gig'], 400);
+            }
 
-        // Verifica se l'utente ha già candidato
-        $existingApplication = $gig->applications()->where('user_id', $user->id)->first();
-        if ($existingApplication) {
-            return response()->json(['error' => __('gigs.applications.already_applied')], 400);
+            if ($gig->gig_type === 'translation' && $gig->poem && $gig->poem->user_id === $user->id) {
+                return response()->json(['error' => 'Non puoi candidarti alla traduzione della tua poesia'], 400);
+            }
+
+            $existingApplication = $gig->applications()->where('user_id', $user->id)->first();
+            if ($existingApplication) {
+                return response()->json(['error' => __('gigs.applications.already_applied')], 400);
+            }
+
+            return response()->json(['error' => 'Non puoi candidarti a questo gig'], 400);
         }
 
         $validated = $request->validate([
