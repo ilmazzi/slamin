@@ -60,19 +60,9 @@
                         </a>
                     </li>
                     <li class="dropdown-item">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <a class="f-w-500" href="#">
-                                    <i class="ph-duotone ph-detective pe-1 f-s-20"></i> <?php echo e(__('sidebar.private_mode')); ?>
-
-                                </a>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input form-check-primary" id="incognitoSwitch" type="checkbox">
-                                </div>
-                            </div>
-                        </div>
+                        <a class="f-w-500" href="<?php echo e(route('profile.payment-accounts.index')); ?>">
+                            <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
+                        </a>
                     </li>
                     <li class="dropdown-item">
                         <a class="mb-0 text-secondary f-w-500" href="<?php echo e(route('register')); ?>">
