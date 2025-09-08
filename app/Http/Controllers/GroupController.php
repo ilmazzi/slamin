@@ -17,55 +17,95 @@ class GroupController extends Controller
     }
 
     /**
-     * Display a listing of groups
+     * Display a listing of groups and users
      */
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = Group::query();
 
-        // Filtri
+        // ========================================
+        // QUERY PER I GRUPPI
+        // ========================================
+        $groupsQuery = Group::query();
+
+        // Filtri per gruppi
         if ($request->has('filter')) {
             switch ($request->filter) {
                 case 'my_groups':
-                    $query->whereHas('members', function($q) use ($user) {
+                    $groupsQuery->whereHas('members', function($q) use ($user) {
                         $q->where('user_id', $user->id);
                     });
                     break;
                 case 'my_admin_groups':
-                    $query->whereHas('members', function($q) use ($user) {
+                    $groupsQuery->whereHas('members', function($q) use ($user) {
                         $q->where('user_id', $user->id)->where('role', 'admin');
                     });
                     break;
                 case 'public':
-                    $query->where('visibility', 'public');
+                    $groupsQuery->where('visibility', 'public');
                     break;
                 case 'private':
                     if ($user->hasRole('admin')) {
-                        $query->where('visibility', 'private');
+                        $groupsQuery->where('visibility', 'private');
                     }
                     break;
             }
         }
 
-        // Ricerca
+        // Ricerca per gruppi
         if ($request->has('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $groupsQuery->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
-        // Ordinamento
+        // Ordinamento per gruppi
         $sortBy = $request->get('sort', 'created_at');
         $sortOrder = $request->get('order', 'desc');
-        $query->orderBy($sortBy, $sortOrder);
+        $groupsQuery->orderBy($sortBy, $sortOrder);
 
-        $groups = $query->with(['creator', 'members.user'])
-                       ->paginate(12);
+        $groups = $groupsQuery->with(['creator', 'members.user'])
+                             ->paginate(6, ['*'], 'groups_page'); // 6 gruppi per pagina (2 righe x 3)
 
-        return view('groups.index', compact('groups'));
+        // ========================================
+        // QUERY PER GLI UTENTI
+        // ========================================
+        $usersQuery = \App\Models\User::query();
+
+        // Filtri per utenti
+        if ($request->has('filter')) {
+            switch ($request->filter) {
+                case 'poets':
+                    $usersQuery->role('poet');
+                    break;
+                case 'organizers':
+                    $usersQuery->role('organizer');
+                    break;
+                case 'active':
+                    $usersQuery->where('is_online', true);
+                    break;
+            }
+        }
+
+        // Ricerca per utenti
+        if ($request->has('search')) {
+            $search = $request->search;
+            $usersQuery->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nickname', 'like', "%{$search}%")
+                  ->orWhere('bio', 'like', "%{$search}%");
+            });
+        }
+
+        // Ordinamento per utenti
+        $usersQuery->orderBy('created_at', 'desc');
+
+        $users = $usersQuery->with(['roles'])
+                           ->paginate(6, ['*'], 'users_page'); // 6 utenti per pagina (2 righe x 3)
+
+        return view('groups.index', compact('groups', 'users'));
     }
 
     /**

@@ -3,6 +3,9 @@
 return [
     // Titoli principali
     'title' => 'Gruppi',
+    'users' => 'Utenti',
+    'groups' => 'Gruppi',
+    'admin' => 'Amministrazione',
     'my_groups' => 'I Miei Gruppi',
     'all_groups' => 'Tutti i Gruppi',
     'create_group' => 'Crea Gruppo',
@@ -74,12 +77,15 @@ return [
     'cannot_demote_member' => 'Questo utente è già un membro normale.',
 
     // Filtri e ricerca
-    'search_placeholder' => 'Cerca gruppi...',
-    'filter_all' => 'Tutti i Gruppi',
+    'search_placeholder' => 'Cerca gruppi e utenti...',
+    'filter_all' => 'Tutti',
     'filter_my_groups' => 'I Miei Gruppi',
     'filter_public' => 'Gruppi Pubblici',
     'filter_private' => 'Gruppi Privati',
     'filter_admin' => 'Gruppi che Amministro',
+    'filter_poets' => 'Poeti',
+    'filter_organizers' => 'Organizzatori',
+    'filter_active_users' => 'Utenti Attivi',
 
     // Form labels
     'group_name_placeholder' => 'Inserisci il nome del gruppo',
@@ -181,6 +187,7 @@ return [
 
     // Vuoto
     'no_groups' => 'Nessun gruppo trovato.',
+    'no_users' => 'Nessun utente trovato.',
     'no_members' => 'Nessun membro in questo gruppo.',
     'no_invitations' => 'Nessun invito in attesa.',
     'no_requests' => 'Nessuna richiesta in attesa.',

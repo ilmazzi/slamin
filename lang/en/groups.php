@@ -3,6 +3,9 @@
 return [
     // Main titles
     'title' => 'Groups',
+    'users' => 'Users',
+    'groups' => 'Groups',
+    'admin' => 'Administration',
     'my_groups' => 'My Groups',
     'all_groups' => 'All Groups',
     'create_group' => 'Create Group',
@@ -74,12 +77,15 @@ return [
     'cannot_demote_member' => 'This user is already a regular member.',
 
     // Filters and search
-    'search_placeholder' => 'Search groups...',
-    'filter_all' => 'All Groups',
+    'search_placeholder' => 'Search groups and users...',
+    'filter_all' => 'All',
     'filter_my_groups' => 'My Groups',
     'filter_public' => 'Public Groups',
     'filter_private' => 'Private Groups',
     'filter_admin' => 'Groups I Admin',
+    'filter_poets' => 'Poets',
+    'filter_organizers' => 'Organizers',
+    'filter_active_users' => 'Active Users',
 
     // Form labels
     'group_name_placeholder' => 'Enter group name',
@@ -143,6 +149,7 @@ return [
 
     // Empty states
     'no_groups' => 'No groups found.',
+    'no_users' => 'No users found.',
     'no_members' => 'No members in this group.',
     'no_invitations' => 'No pending invitations.',
     'no_requests' => 'No pending requests.',
@@ -167,4 +174,4 @@ return [
     'delete_confirmation_invitations' => 'All pending invitations and requests will be deleted',
     'invite_first_member' => 'Invite the first member to start building your community.',
     'you' => 'You',
-]; 
+];
