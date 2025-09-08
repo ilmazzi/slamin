@@ -342,17 +342,13 @@
                                         </div>
                                     </div>
                                     <div class="row text-center">
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="f-s-12 text-muted">{{ __('user_stats.events') }}</div>
                                             <div class="f-w-600">{{ $groupStat['total_events'] }}</div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-6">
                                             <div class="f-s-12 text-muted">{{ __('user_stats.members') }}</div>
                                             <div class="f-w-600">{{ $groupStat['members_count'] }}</div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="f-s-12 text-muted">{{ __('user_stats.this_period') }}</div>
-                                            <div class="f-w-600">{{ $groupStat['events_created'] }}</div>
                                         </div>
                                     </div>
                                 </div>

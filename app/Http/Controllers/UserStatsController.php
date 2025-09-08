@@ -239,7 +239,6 @@ class UserStatsController extends Controller
                 'role' => $user->getRoleInGroup($group),
                 'is_admin' => $user->isAdminOf($group),
                 'is_moderator' => $user->isModeratorOf($group),
-                'events_created' => $group->events()->whereBetween('created_at', $dateRange)->count(),
                 'total_events' => $group->events()->count(),
                 'members_count' => $group->members()->count(),
                 'created_at' => $group->created_at,
