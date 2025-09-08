@@ -828,7 +828,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2"><?php echo e(Str::limit($video->title, 50)); ?></h6>
+                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                                <?php echo e(Str::limit($video->title, 50)); ?>
+
+                                                            </a>
+                                                        </h6>
                                                         <p class="text-muted f-s-12 mb-2">
                                                             <a href="<?php echo e(route('user.show', $video->user)); ?>"
                                                                 class="text-decoration-none hover-effect">
@@ -913,7 +918,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2"><?php echo e(Str::limit($video->title, 50)); ?></h6>
+                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                                <?php echo e(Str::limit($video->title, 50)); ?>
+
+                                                            </a>
+                                                        </h6>
                                                         <p class="text-muted f-s-12 mb-2">
                                                             <a href="<?php echo e(route('user.show', $video->user)); ?>"
                                                                 class="text-decoration-none hover-effect">
@@ -1696,26 +1706,62 @@
         containerDiv.style.display = 'none';
 
         try {
-            // Ottieni i dati del video
+            // Prima ottieni i dati del video
             const videoResponse = await fetch(`/api/videos/${videoId}`);
-            const responseData = await videoResponse.json();
+            const videoData = await videoResponse.json();
 
-            if (!videoResponse.ok || !responseData.success) {
-                throw new Error(responseData.message || 'Errore nel caricamento del video');
+            if (!videoData.success) {
+                throw new Error(videoData.message || 'Errore nel caricamento del video');
             }
 
-            const videoData = responseData.video;
+            const video = videoData.video;
 
-            // Imposta il video
-            videoPlayer.src = videoData.video_url;
-            videoPlayer.load();
+            // Imposta il titolo del modal
+            document.getElementById('videoPlayerModalLabel').textContent = video.title;
+
+            // Usa sempre il player HTML5 nativo
+            videoPlayer.style.display = 'block';
+
+            // Ottieni l'URL diretto del video da PeerTube
+            const urlResponse = await fetch(`/videos/${videoId}/peertube-url`);
+            const urlData = await urlResponse.json();
+
+            // Gestisci il caso in cui il video è ancora in elaborazione
+            if (urlData.status === 'processing') {
+                throw new Error('Il video è ancora in elaborazione su PeerTube. Riprova tra qualche minuto.');
+            }
+
+            if (urlData.success && urlData.files && urlData.files.length > 0) {
+                // Usa il primo file disponibile (migliore qualità)
+                const videoFile = urlData.files[0];
+
+                // Crea l'elemento source
+                const source = document.createElement('source');
+                source.src = videoFile.url;
+                source.type = 'video/mp4';
+
+                // Rimuovi eventuali source esistenti e aggiungi quello nuovo
+                videoPlayer.innerHTML = '';
+                videoPlayer.appendChild(source);
+
+                // Forza il caricamento del video
+                videoPlayer.load();
+
+                // Inizializza il player del modal
+                initializeModalVideoPlayer(video);
+            } else {
+                throw new Error('Nessuna sorgente video disponibile');
+            }
+
+            // Imposta l'ID del video per le funzioni snap
+            videoPlayer.setAttribute('data-video-id', video.id);
+
+            // Carica gli snap
+            loadSnapsForModal(videoId);
 
             // Mostra il container del video
             loadingDiv.style.display = 'none';
             containerDiv.style.display = 'block';
-
-            // Aggiorna il titolo del modal
-            document.getElementById('videoPlayerModalLabel').textContent = videoData.title || 'Video Player';
 
         } catch (error) {
             console.error('Errore caricamento video:', error);
@@ -1739,6 +1785,93 @@
             closeVideoModal();
         }
     });
+
+    // Funzione per inizializzare il player del modal
+    function initializeModalVideoPlayer(video) {
+        const videoPlayer = document.getElementById('modalVideoPlayer');
+        modalVideoDuration = video.duration || 60;
+
+        // Event listener per quando i metadati sono caricati
+        videoPlayer.addEventListener('loadedmetadata', function() {
+            modalVideoDuration = videoPlayer.duration || modalVideoDuration;
+            updateModalSnapMarkers();
+        });
+
+        // Event listener per quando la durata cambia
+        videoPlayer.addEventListener('durationchange', function() {
+            modalVideoDuration = videoPlayer.duration;
+            updateModalSnapMarkers();
+        });
+    }
+
+    // Funzione per caricare gli snap nel modal
+    function loadSnapsForModal(videoId) {
+        fetch(`/api/videos/${videoId}/snaps`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    modalSnaps = data.snaps || [];
+                    updateModalSnapMarkers();
+                } else {
+                    modalSnaps = [];
+                    updateModalSnapMarkers();
+                }
+            })
+            .catch(error => {
+                console.error('Errore caricamento snap:', error);
+                modalSnaps = [];
+                updateModalSnapMarkers();
+            });
+    }
+
+    // Funzione per aggiornare i marker degli snap nel modal
+    function updateModalSnapMarkers() {
+        const markersContainer = document.getElementById('modalSnapMarkers');
+        if (!markersContainer) return;
+
+        markersContainer.innerHTML = '';
+
+        if (!modalSnaps || modalSnaps.length === 0) return;
+
+        // Raggruppa gli snap per timestamp
+        const snapGroups = {};
+        modalSnaps.forEach(snap => {
+            const timestamp = Math.floor(snap.timestamp);
+            if (!snapGroups[timestamp]) {
+                snapGroups[timestamp] = [];
+            }
+            snapGroups[timestamp].push(snap);
+        });
+
+        // Crea i marker per ogni gruppo
+        Object.keys(snapGroups).forEach(timestamp => {
+            const snaps = snapGroups[timestamp];
+            const marker = document.createElement('div');
+            marker.className = 'snap-marker';
+            marker.style.position = 'absolute';
+            marker.style.bottom = '0';
+            marker.style.left = `${(timestamp / modalVideoDuration) * 100}%`;
+            marker.style.width = '4px';
+            marker.style.height = '100%';
+            marker.style.backgroundColor = snaps.length > 1 ? '#ff6b6b' : '#4ecdc4';
+            marker.style.cursor = 'pointer';
+            marker.title = `${snaps.length} snap${snaps.length > 1 ? 's' : ''} a ${Math.floor(timestamp / 60)}:${(timestamp % 60).toString().padStart(2, '0')}`;
+
+            marker.addEventListener('click', () => {
+                const videoPlayer = document.getElementById('modalVideoPlayer');
+                if (videoPlayer) {
+                    videoPlayer.currentTime = timestamp;
+                }
+            });
+
+            markersContainer.appendChild(marker);
+        });
+    }
     </script>
 <?php $__env->stopSection(); ?>
 
