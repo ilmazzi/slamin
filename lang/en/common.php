@@ -179,5 +179,6 @@ return [
     'articles' => 'Articles',
     'kanban_board' => '',
     'loading_error' => '',
+    'no_popular_videos' => 'No popular videos available',
 
 ];

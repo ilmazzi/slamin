@@ -434,6 +434,10 @@
             const labelLeft = document.getElementById('videosToggleLabelLeft');
             const labelRight = document.getElementById('videosToggleLabelRight');
 
+            console.log('Toggle videos content:', type);
+            console.log('New content element:', newContent);
+            console.log('Popular content element:', popularContent);
+
             if (type === 'new') {
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
@@ -452,8 +456,12 @@
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
+
+                console.log('Popular content display:', popularContent.style.display);
+                console.log('Popular content innerHTML length:', popularContent.innerHTML.length);
             }
         };
+
 
         // Funzione per seguire un utente
         window.followUser = function(userId) {
@@ -776,6 +784,7 @@
                                 <!-- New Videos Content (Default) -->
                                 <div id="newVideosContent">
                                     <div class="videos-slider app-arrow" id="new-videos-slider">
+                                        <!-- DEBUG: Recent videos count: {{ $recentVideos->count() }} -->
                                         @foreach ($recentVideos as $video)
                                             <div class="autoplay-item">
                                                 <div class="card overflow-hidden hover-effect h-100">
@@ -841,7 +850,9 @@
                                 <!-- Popular Videos Content (Hidden by default) -->
                                 <div id="popularVideosContent" style="display: none;">
                                     <div class="videos-slider app-arrow" id="popular-videos-slider">
-                                        @foreach ($popularVideos as $video)
+                                        <!-- DEBUG: Popular videos count: {{ $popularVideos->count() }} -->
+                                        @if($popularVideos->count() > 0)
+                                            @foreach ($popularVideos as $video)
                                             <div class="autoplay-item">
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
@@ -900,6 +911,11 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        @else
+                                            <div class="text-center py-4">
+                                                <p class="text-muted">{{ __('common.no_popular_videos') }}</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
 

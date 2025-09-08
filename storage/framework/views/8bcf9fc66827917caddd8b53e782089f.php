@@ -430,6 +430,10 @@
             const labelLeft = document.getElementById('videosToggleLabelLeft');
             const labelRight = document.getElementById('videosToggleLabelRight');
 
+            console.log('Toggle videos content:', type);
+            console.log('New content element:', newContent);
+            console.log('Popular content element:', popularContent);
+
             if (type === 'new') {
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
@@ -448,8 +452,12 @@
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
+
+                console.log('Popular content display:', popularContent.style.display);
+                console.log('Popular content innerHTML length:', popularContent.innerHTML.length);
             }
         };
+
 
         // Funzione per seguire un utente
         window.followUser = function(userId) {
@@ -797,6 +805,7 @@
                                 <!-- New Videos Content (Default) -->
                                 <div id="newVideosContent">
                                     <div class="videos-slider app-arrow" id="new-videos-slider">
+                                        <!-- DEBUG: Recent videos count: <?php echo e($recentVideos->count()); ?> -->
                                         <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="autoplay-item">
                                                 <div class="card overflow-hidden hover-effect h-100">
@@ -887,7 +896,9 @@
                                 <!-- Popular Videos Content (Hidden by default) -->
                                 <div id="popularVideosContent" style="display: none;">
                                     <div class="videos-slider app-arrow" id="popular-videos-slider">
-                                        <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <!-- DEBUG: Popular videos count: <?php echo e($popularVideos->count()); ?> -->
+                                        <?php if($popularVideos->count() > 0): ?>
+                                            <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="autoplay-item">
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
@@ -971,6 +982,11 @@
                                                 </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
+                                            <div class="text-center py-4">
+                                                <p class="text-muted"><?php echo e(__('common.no_popular_videos')); ?></p>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 

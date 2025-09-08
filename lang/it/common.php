@@ -69,4 +69,5 @@ return [
     'timestamp' => 'Timestamp',
     'title' => 'Titolo',
     'description' => 'Descrizione',
+    'no_popular_videos' => 'Nessun video popolare disponibile',
 ];
