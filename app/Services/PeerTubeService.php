@@ -719,6 +719,190 @@ class PeerTubeService
     }
 
     /**
+     * Cerca un utente PeerTube per username
+     */
+    public function findUserByUsername(string $username): ?array
+    {
+        try {
+            if (!$this->accessToken) {
+                $this->getAdminToken();
+            }
+
+            if (!$this->accessToken) {
+                return null;
+            }
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->accessToken,
+            ])->get($this->baseUrl . '/api/v1/users', [
+                'search' => $username
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                if (!empty($data['data'])) {
+                    foreach ($data['data'] as $peerTubeUser) {
+                        if ($peerTubeUser['username'] === $username) {
+                            Log::info('Utente PeerTube trovato per username', [
+                                'username' => $username,
+                                'peertube_user_id' => $peerTubeUser['id']
+                            ]);
+                            return $peerTubeUser;
+                        }
+                    }
+                }
+            }
+
+            Log::info('Utente PeerTube non trovato per username', ['username' => $username]);
+            return null;
+        } catch (Exception $e) {
+            Log::error('Errore ricerca utente PeerTube per username', [
+                'username' => $username,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Cerca un utente PeerTube per email
+     */
+    public function findUserByEmail(string $email): ?array
+    {
+        try {
+            if (!$this->accessToken) {
+                $this->getAdminToken();
+            }
+
+            if (!$this->accessToken) {
+                return null;
+            }
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->accessToken,
+            ])->get($this->baseUrl . '/api/v1/users', [
+                'search' => $email
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                if (!empty($data['data'])) {
+                    foreach ($data['data'] as $peerTubeUser) {
+                        if ($peerTubeUser['email'] === $email) {
+                            Log::info('Utente PeerTube trovato per email', [
+                                'email' => $email,
+                                'peertube_user_id' => $peerTubeUser['id']
+                            ]);
+                            return $peerTubeUser;
+                        }
+                    }
+                }
+            }
+
+            Log::info('Utente PeerTube non trovato per email', ['email' => $email]);
+            return null;
+        } catch (Exception $e) {
+            Log::error('Errore ricerca utente PeerTube per email', [
+                'email' => $email,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Ottiene i dettagli di un canale PeerTube
+     */
+    public function getChannelDetails(int $channelId): ?array
+    {
+        try {
+            if (!$this->accessToken) {
+                $this->getAdminToken();
+            }
+
+            if (!$this->accessToken) {
+                return null;
+            }
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->accessToken,
+            ])->get($this->baseUrl . '/api/v1/video-channels/' . $channelId);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                Log::info('Dettagli canale PeerTube ottenuti', [
+                    'channel_id' => $channelId,
+                    'channel_name' => $data['displayName'] ?? 'N/A'
+                ]);
+                return $data;
+            }
+
+            Log::error('Errore ottenimento dettagli canale PeerTube', [
+                'channel_id' => $channelId,
+                'status' => $response->status()
+            ]);
+
+            return null;
+        } catch (Exception $e) {
+            Log::error('Eccezione ottenimento dettagli canale PeerTube', [
+                'channel_id' => $channelId,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+
+    /**
+     * Elimina un utente PeerTube per email
+     */
+    public function deleteUserByEmail(string $email): ?array
+    {
+        try {
+            // Prima trova l'utente per email
+            $user = $this->findUserByEmail($email);
+            if (!$user) {
+                Log::info('Utente PeerTube non trovato per email', ['email' => $email]);
+                return null;
+            }
+
+            $peerTubeUserId = $user['id'];
+            Log::info('Utente PeerTube trovato per eliminazione', [
+                'email' => $email,
+                'peertube_user_id' => $peerTubeUserId,
+                'username' => $user['username']
+            ]);
+
+            // Elimina l'utente
+            $success = $this->deleteUser($peerTubeUserId);
+
+            if ($success) {
+                return [
+                    'success' => true,
+                    'deleted_user' => $user,
+                    'message' => 'Utente PeerTube eliminato con successo'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'user' => $user,
+                    'message' => 'Errore durante l\'eliminazione dell\'utente PeerTube'
+                ];
+            }
+
+        } catch (Exception $e) {
+            Log::error('Eccezione eliminazione utente PeerTube per email', [
+                'email' => $email,
+                'error' => $e->getMessage()
+            ]);
+            return [
+                'success' => false,
+                'message' => 'Errore: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
      * Ottiene l'URL base del server PeerTube
      */
     public function getBaseUrl(): string

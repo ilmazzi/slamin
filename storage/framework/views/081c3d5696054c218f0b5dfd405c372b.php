@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slam In - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        /* CSS con colori del template */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(12, 78, 85) 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .left-section {
+            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(12, 78, 85) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .right-section {
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: rgb(15, 98, 106);
+            border: 1px solid rgb(15, 98, 106);
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: rgb(12, 78, 85);
+            border-color: rgb(12, 78, 85);
+            transform: translateY(-1px);
+        }
+
+        .form-control:focus {
+            border-color: rgb(15, 98, 106);
+            box-shadow: 0 0 0 0.2rem rgba(15, 98, 106, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .form-label strong {
+            color: rgb(15, 98, 106);
+        }
+
+        .btn-outline-secondary:hover,
+        .btn-outline-info:hover {
+            color: white;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo img {
+            opacity: 0.95;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .logo img:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .logo-brand {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            text-align: left;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .feature-item i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            color: rgb(15, 98, 106);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: rgb(12, 78, 85);
+            text-decoration: underline;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 992px) {
+            .left-section {
+                min-height: 40vh;
+                padding: 2rem 1rem;
+            }
+
+            .right-section {
+                min-height: 60vh;
+                padding: 1rem;
+            }
+
+            .feature-list {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <!-- Left Section - Brand & Features -->
+            <div class="col-lg-7 left-section">
+                <div>
+                    <div class="logo mb-3">
+                        <img src="<?php echo e(asset('assets/images/logo.png')); ?>" alt="Slam In Logo" class="img-fluid" style="max-width: 250px;">
+                    </div>
+                    <div class="logo-brand">
+                        🎭 Slam In
+                    </div>
+                    <div class="welcome-text">
+                        <?php echo e(__('login.welcome_text')); ?>
+
+                    </div>
+
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="bi bi-calendar-event"></i>
+                            <span><?php echo e(__('login.events_and_shows')); ?></span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-people"></i>
+                            <span><?php echo e(__('login.poets_community')); ?></span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-mic"></i>
+                            <span><?php echo e(__('login.share_your_performances')); ?></span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-trophy"></i>
+                            <span><?php echo e(__('login.participate_in_competitions')); ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section - Login Form -->
+            <div class="col-lg-5 right-section">
+                <div class="form-container">
+                    <div class="text-center mb-4">
+                        <div class="d-lg-none mb-3">
+                            <img src="<?php echo e(asset('assets/images/logo.png')); ?>" alt="Slam In Logo" class="img-fluid" style="max-width: 180px;">
+                        </div>
+                        <h2>🔐 <strong><?php echo e(__('login.login_to_your_account')); ?></strong></h2>
+                        <p class="text-muted"><?php echo e(__('login.enter_slam_in_and_discover_the_italian_slam_world')); ?></p>
+                    </div>
+
+                    <?php if($errors->any()): ?>
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if(session('success')): ?>
+                        <div class="alert alert-success">
+                            <?php echo e(session('success')); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" action="<?php echo e(route('login.process')); ?>">
+                        <?php echo csrf_field(); ?>
+
+                        <!-- <?php echo e(__('login.email')); ?> -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <strong>📧 <?php echo e(__('login.email')); ?></strong>
+                            </label>
+                            <input type="email"
+                                   class="form-control <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                                   id="email"
+                                   name="email"
+                                   value="<?php echo e(old('email')); ?>"
+                                   required
+                                   placeholder="<?php echo e(__('login.email_placeholder')); ?>">
+                            <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <strong>🔑 <?php echo e(__('login.password')); ?></strong>
+                            </label>
+                            <input type="password"
+                                   class="form-control <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                                   id="password"
+                                   name="password"
+                                   required
+                                   placeholder="<?php echo e(__('login.password_placeholder')); ?>">
+                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <!-- Remember Me -->
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                            <label class="form-check-label" for="remember" title="<?php echo e(__('login.remember_me_tooltip')); ?>">
+                                <?php echo e(__('login.remember_me')); ?>
+
+                                <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="<?php echo e(__('login.remember_me_tooltip')); ?>"></i>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                    🎭 <?php echo e(__('login.enter_slam_in')); ?>
+
+                            </button>
+                        </div>
+
+                        <!-- Links -->
+                        <div class="text-center">
+                            <p class="mb-0">
+                                <?php echo e(__('login.no_account')); ?>
+
+                                <a href="<?php echo e(route('register')); ?>" class="back-link">
+                                    <?php echo e(__('login.register_here')); ?>
+
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inizializza i tooltip
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>
+<?php /**PATH C:\xampp\htdocs\slamin\resources\views/auth/login.blade.php ENDPATH**/ ?>

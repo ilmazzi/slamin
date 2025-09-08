@@ -734,6 +734,16 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/peertube/statistics', [App\Http\Controllers\Admin\PeerTubeController::class, 'statistics'])->name('peertube.statistics');
         Route::get('/peertube/users', [App\Http\Controllers\Admin\PeerTubeController::class, 'users'])->name('peertube.users');
 
+        // PeerTube User Management Routes
+        Route::get('/peertube/manage-users', [App\Http\Controllers\Admin\PeerTubeController::class, 'manageUsers'])->name('peertube.manage-users');
+        Route::post('/peertube/show-user', [App\Http\Controllers\Admin\PeerTubeController::class, 'showUser'])->name('peertube.show-user');
+        Route::post('/peertube/create-user-account', [App\Http\Controllers\Admin\PeerTubeController::class, 'createUserAccount'])->name('peertube.create-user-account');
+        Route::put('/peertube/update-user-data', [App\Http\Controllers\Admin\PeerTubeController::class, 'updateUserData'])->name('peertube.update-user-data');
+        Route::post('/peertube/verify-user-exists', [App\Http\Controllers\Admin\PeerTubeController::class, 'verifyUserExists'])->name('peertube.verify-user-exists');
+        Route::post('/peertube/sync-user-data', [App\Http\Controllers\Admin\PeerTubeController::class, 'syncUserData'])->name('peertube.sync-user-data');
+        Route::put('/peertube/change-user-email', [App\Http\Controllers\Admin\PeerTubeController::class, 'changeUserEmail'])->name('peertube.change-user-email');
+        Route::delete('/peertube/delete-user', [App\Http\Controllers\Admin\PeerTubeController::class, 'deletePeerTubeUser'])->name('peertube.delete-user');
+
         // User Management Routes
         Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
         Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');

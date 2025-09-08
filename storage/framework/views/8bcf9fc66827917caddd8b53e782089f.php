@@ -770,187 +770,6 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Most Popular <?php echo e(__('common.video')); ?> Section -->
-            <?php if($mostPopularVideo && $mostPopularVideo->exists): ?>
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card hover-effect border-0 shadow-sm">
-                            <div class="card-body p-0">
-                                <div class="position-relative">
-                                    <div class="p-3 p-md-4">
-                                        <!-- Mobile First Layout -->
-                                        <div class="row">
-                                            <!-- <?php echo e(__('common.video')); ?> <?php echo e(__('common.thumbnail')); ?> Column -->
-                                            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                                                <div class="position-relative">
-                                                    <div class="position-relative overflow-hidden rounded-3"
-                                                        style="aspect-ratio: 16/9; cursor: pointer;"
-                                                        onclick="openVideoModal(<?php echo e($mostPopularVideo->id ?? 0); ?>)">
-                                                        <?php if(
-                                                            $mostPopularVideo->thumbnail_url &&
-                                                                $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
-                                                            <img src="<?php echo e($mostPopularVideo->thumbnail_url); ?>"
-                                                                alt="<?php echo e($mostPopularVideo->title); ?>" class="w-100 h-100"
-                                                                style="object-fit: cover;">
-                                                        <?php else: ?>
-                                                            <div
-                                                                class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                <div class="text-center">
-                                                                    <i
-                                                                        class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
-                                                                    <p class="text-muted f-s-14 mb-0"><?php echo e(__('home.preview_not_available')); ?></p>
-                                                                </div>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal(<?php echo e($mostPopularVideo->id ?? 0); ?>)">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center"
-                                                                style="width: 70px; height: 70px;">
-                                                                <i
-                                                                    class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Content Column -->
-                                            <div class="col-12 col-lg-6">
-                                                <div class="h-100 d-flex flex-column justify-content-between">
-                                                    <!-- Title and Description -->
-                                                    <div class="mb-3">
-                                                        <h4 class="text-dark f-w-700 mb-2 f-s-18 f-s-md-20">
-                                                            <?php echo e($mostPopularVideo->title); ?></h4>
-                                                        <?php if($mostPopularVideo->description): ?>
-                                                            <p class="text-muted mb-3 f-s-14">
-                                                                <?php echo e(Str::limit($mostPopularVideo->description, 120)); ?></p>
-                                                        <?php endif; ?>
-
-                                                        <!-- Author Info -->
-                                                        <a href="<?php echo e(route('user.show', $mostPopularVideo->user)); ?>"
-                                                            class="text-decoration-none hover-effect">
-                                                            <div
-                                                                class="d-flex align-items-center mb-3 p-2 rounded-3 transition-all">
-                                                                <?php if($mostPopularVideo->user->profile_photo): ?>
-                                                                    <div
-                                                                        class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3">
-                                                                        <img src="<?php echo e($mostPopularVideo->user->profile_photo_url); ?>"
-                                                                            alt="<?php echo e($mostPopularVideo->user->name); ?>"
-                                                                            class="w-100 h-100"
-                                                                            style="object-fit: cover;">
-                                                                    </div>
-                                                                <?php else: ?>
-                                                                    <div
-                                                                        class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-gradient-primary me-3">
-                                                                        <span
-                                                                            class="text-white fw-bold f-s-16"><?php echo e(substr($mostPopularVideo->user->name, 0, 2)); ?></span>
-                                                                    </div>
-                                                                <?php endif; ?>
-                                                                <div>
-                                                                    <h6 class="mb-0 f-w-600 f-s-14 text-dark">
-                                                                        <?php echo e($mostPopularVideo->user->name); ?></h6>
-                                                                    <small class="text-muted f-s-11"><?php echo e(__('home.video_author')); ?></small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <!-- Watch Button -->
-                                                        <div class="d-flex gap-2">
-
-                                                            <a href="<?php echo e(route('videos.show', $mostPopularVideo)); ?>"
-                                                                class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
-                                                                <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                                <?php echo e(__('home.watch_video')); ?>
-
-                                                            </a>
-                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $mostPopularVideo,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('report-button'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mostPopularVideo),'type' => 'video','size' => 'sm']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
-<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
-<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
-<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
-<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
-<?php endif; ?>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Statistics -->
-                                                    <div class="row g-2">
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-16 f-s-md-18 text-info"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->views_count)); ?></h6>
-                                                                <small class="text-muted f-s-10"><?php echo e(__('home.views')); ?></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-16 f-s-md-18 text-success"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->likes_count)); ?></h6>
-                                                                <small class="text-muted f-s-10"><?php echo e(__('home.likes')); ?></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->comments_count)); ?>
-
-                                                                </h6>
-                                                                <small
-                                                                    class="text-muted f-s-10"><?php echo e(__('common.comments_section')); ?></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <img src="<?php echo e(asset('assets/images/snap.png')); ?>"
-                                                                        alt="Snap"
-                                                                        style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);">
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->snaps()->count())); ?>
-
-                                                                </h6>
-                                                                <small
-                                                                    class="text-muted f-s-10"><?php echo e(__('common.snap')); ?></small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
 
             <!-- Video Carousel Section -->
             <?php if($recentVideos && $recentVideos->count() > 0): ?>
@@ -1024,15 +843,15 @@
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count)); ?>
 
                                                                 </small>
                                                             </div>
-                                                            <div class="d-flex gap-1">
-                                                                <a href="<?php echo e(route('videos.show', $video)); ?>" class="btn btn-sm btn-primary">
-                                                                    <i class="ph-duotone ph-play f-s-12"></i>
-                                                                </a>
-                                                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('report-button'); ?>
@@ -1052,7 +871,6 @@
 <?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
 <?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
 <?php endif; ?>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1110,15 +928,15 @@
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count)); ?>
 
                                                                 </small>
                                                             </div>
-                                                            <div class="d-flex gap-1">
-                                                                <a href="<?php echo e(route('videos.show', $video)); ?>" class="btn btn-sm btn-primary">
-                                                                    <i class="ph-duotone ph-play f-s-12"></i>
-                                                                </a>
-                                                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('report-button'); ?>
@@ -1138,7 +956,6 @@
 <?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
 <?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
 <?php endif; ?>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1147,30 +964,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Footer with link to all videos -->
-                                <div class="text-center mt-3">
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <?php if(auth()->guard()->check()): ?>
-                                            <a href="<?php echo e(route('videos.upload')); ?>" class="btn btn-primary btn-sm">
-                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
-                                                <?php echo e(__('home.upload_video')); ?>
-
-                                            </a>
-                                        <?php else: ?>
-                                            <a href="<?php echo e(route('login')); ?>" class="btn btn-primary btn-sm"
-                                                title="<?php echo e(__('auth.login_required')); ?>">
-                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
-                                                <?php echo e(__('home.upload_video')); ?>
-
-                                            </a>
-                                        <?php endif; ?>
-                                        <a href="<?php echo e(route('videos.index')); ?>" class="btn btn-outline-primary btn-sm">
-                                            <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                            <?php echo e(__('home.view_all_videos')); ?>
-
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1601,26 +1394,40 @@
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="rounded overflow-hidden"
-                                                                style="width: 60px; height: 60px;">
-                                                                <?php if($article->image_path): ?>
-                                                                    <img src="<?php echo e(asset('storage/' . $article->image_path)); ?>"
-                                                                        alt="<?php echo e($article->title); ?>" class="w-100 h-100"
-                                                                        style="object-fit: cover;">
-                                                                <?php else: ?>
-                                                                    <div
-                                                                        class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                        <i
-                                                                            class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
-                                                                    </div>
-                                                                <?php endif; ?>
+                                                            <div class="position-relative">
+                                                                <div class="rounded overflow-hidden"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    <?php if($article->featured_image): ?>
+                                                                        <img src="<?php echo e($article->featured_image_url); ?>"
+                                                                            alt="<?php echo e($article->title); ?>" class="w-100 h-100"
+                                                                            style="object-fit: cover;">
+                                                                    <?php else: ?>
+                                                                        <div
+                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                        </div>
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-50 start-50 translate-middle">
+                                                                    <i
+                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 <?php echo e(Str::limit($article->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <?php echo e($article->author->name ?? __('home.editorial')); ?></p>
+                                                                <a href="<?php echo e(route('user.show', $article->user)); ?>"
+                                                                    class="text-decoration-none hover-effect">
+                                                                    <?php echo e($article->user->getDisplayName()); ?>
+
+                                                                </a></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -1635,10 +1442,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="<?php echo e(route('articles.show', $article)); ?>"
-                                                                class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                <i class="ph-duotone ph-arrow-right f-s-12"></i>
-                                                            </a>
+                                                            <?php if($article->slug): ?>
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
+                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </span>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1657,26 +1470,40 @@
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="rounded overflow-hidden"
-                                                                style="width: 60px; height: 60px;">
-                                                                <?php if($article->image_path): ?>
-                                                                    <img src="<?php echo e(asset('storage/' . $article->image_path)); ?>"
-                                                                        alt="<?php echo e($article->title); ?>" class="w-100 h-100"
-                                                                        style="object-fit: cover;">
-                                                                <?php else: ?>
-                                                                    <div
-                                                                        class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                        <i
-                                                                            class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
-                                                                    </div>
-                                                                <?php endif; ?>
+                                                            <div class="position-relative">
+                                                                <div class="rounded overflow-hidden"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    <?php if($article->featured_image): ?>
+                                                                        <img src="<?php echo e($article->featured_image_url); ?>"
+                                                                            alt="<?php echo e($article->title); ?>" class="w-100 h-100"
+                                                                            style="object-fit: cover;">
+                                                                    <?php else: ?>
+                                                                        <div
+                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                        </div>
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-50 start-50 translate-middle">
+                                                                    <i
+                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 <?php echo e(Str::limit($article->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <?php echo e($article->author->name ?? __('home.editorial')); ?></p>
+                                                                <a href="<?php echo e(route('user.show', $article->user)); ?>"
+                                                                    class="text-decoration-none hover-effect">
+                                                                    <?php echo e($article->user->getDisplayName()); ?>
+
+                                                                </a></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -1691,10 +1518,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="<?php echo e(route('articles.show', $article)); ?>"
-                                                                class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                <i class="ph-duotone ph-arrow-right f-s-12"></i>
-                                                            </a>
+                                                            <?php if($article->slug): ?>
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
+                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </span>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -819,15 +819,13 @@
                                                                     <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count) }}
                                                                 </small>
                                                             </div>
-                                                            <div class="d-flex gap-1">
-                                                                <a href="{{ route('videos.show', $video) }}" class="btn btn-sm btn-primary">
-                                                                    <i class="ph-duotone ph-play f-s-12"></i>
-                                                                </a>
-                                                                <x-report-button :content="$video" type="video" size="sm" />
-                                                            </div>
+                                                            <x-report-button :content="$video" type="video" size="sm" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -882,15 +880,13 @@
                                                                     <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count) }}
                                                                 </small>
                                                             </div>
-                                                            <div class="d-flex gap-1">
-                                                                <a href="{{ route('videos.show', $video) }}" class="btn btn-sm btn-primary">
-                                                                    <i class="ph-duotone ph-play f-s-12"></i>
-                                                                </a>
-                                                                <x-report-button :content="$video" type="video" size="sm" />
-                                                            </div>
+                                                            <x-report-button :content="$video" type="video" size="sm" />
                                                         </div>
                                                     </div>
                                                 </div>
