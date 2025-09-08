@@ -2,7 +2,7 @@
 
 return [
     // Titoli principali
-    'title' => 'Gruppi',
+    'title' => 'Utenti / Gruppi',
     'users' => 'Utenti',
     'groups' => 'Gruppi',
     'admin' => 'Amministrazione',

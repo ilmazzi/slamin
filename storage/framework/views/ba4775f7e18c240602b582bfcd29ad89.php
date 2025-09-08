@@ -64,6 +64,12 @@
                             <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
                         </a>
                     </li>
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="<?php echo e(route('profile.languages.index')); ?>">
+                            <i class="ph-duotone ph-translate pe-1 f-s-20"></i> <?php echo e(__('languages.title')); ?>
+
+                        </a>
+                    </li>
 
                     <?php if(auth()->user()->hasRole('admin')): ?>
                     <li class="dropdown-item">

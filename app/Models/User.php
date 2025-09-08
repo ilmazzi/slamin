@@ -13,6 +13,7 @@ use App\Models\VideoSnap;
 use App\Models\VideoLike;
 use App\Models\Video;
 use App\Models\SystemSetting;
+use App\Models\UserLanguage;
 use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\DB;
 
@@ -1044,6 +1045,50 @@ class User extends Authenticatable implements MustVerifyEmail
     public function translationPaymentsAsClient()
     {
         return $this->hasMany(TranslationPayment::class, 'client_id');
+    }
+
+    // ========================================
+    // RELAZIONI CON LE LINGUE
+    // ========================================
+
+    /**
+     * Lingue conosciute dall'utente
+     */
+    public function languages()
+    {
+        return $this->hasMany(UserLanguage::class);
+    }
+
+    /**
+     * Lingue madri dell'utente
+     */
+    public function nativeLanguages()
+    {
+        return $this->hasMany(UserLanguage::class)->native();
+    }
+
+    /**
+     * Lingue parlate dall'utente
+     */
+    public function spokenLanguages()
+    {
+        return $this->hasMany(UserLanguage::class)->spoken();
+    }
+
+    /**
+     * Lingue scritte dall'utente
+     */
+    public function writtenLanguages()
+    {
+        return $this->hasMany(UserLanguage::class)->written();
+    }
+
+    /**
+     * Ottieni tutte le lingue dell'utente raggruppate per codice lingua
+     */
+    public function getLanguagesGroupedAttribute()
+    {
+        return $this->languages()->get()->groupBy('language_code');
     }
 }
 

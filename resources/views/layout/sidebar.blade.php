@@ -61,6 +61,11 @@
                             <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
                         </a>
                     </li>
+                    <li class="dropdown-item">
+                        <a class="f-w-500" href="{{ route('profile.languages.index') }}">
+                            <i class="ph-duotone ph-translate pe-1 f-s-20"></i> {{ __('languages.title') }}
+                        </a>
+                    </li>
 
                     @if(auth()->user()->hasRole('admin'))
                     <li class="dropdown-item">

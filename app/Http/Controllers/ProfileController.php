@@ -21,7 +21,7 @@ class ProfileController extends Controller
      */
     public function show($userId = null)
     {
-        $user = $userId ? User::findOrFail($userId) : Auth::user();
+        $user = $userId ? User::with('languages')->findOrFail($userId) : Auth::user()->load('languages');
         $isOwnProfile = Auth::check() && Auth::id() == $user->id;
 
         // Statistiche utente
