@@ -370,6 +370,9 @@ Route::get('/test', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('dashboard');
     Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
+
+    // User Statistics
+    Route::get('/user-stats', [App\Http\Controllers\UserStatsController::class, 'index'])->name('user-stats.index');
 });
 
 /*

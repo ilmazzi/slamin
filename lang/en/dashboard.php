@@ -4,6 +4,8 @@ return [
 
     'welcome' => 'Welcome, :name!',
     'dashboard' => 'Dashboard',
+    'statistics' => 'Statistics',
+    'view_detailed_stats' => 'Detailed Statistics',
     'my_stats' => 'My Statistics',
     'posts_count' => 'Posts published',
     'likes_received' => 'Likes received',
