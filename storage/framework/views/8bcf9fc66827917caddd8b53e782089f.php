@@ -1647,6 +1647,99 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Variabili globali per il modal video
+    let modalCurrentVideoTime = 0;
+    let modalVideoDuration = 0;
+    let modalSnaps = [];
+
+    // Funzione per aprire il modal video
+    function openVideoModal(videoId) {
+        // Mostra il modal personalizzato
+        const modal = document.getElementById('videoPlayerModal');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Previene lo scroll
+
+        // Carica il video
+        loadVideoInModal(videoId);
+    }
+
+    // Funzione per chiudere il modal video
+    function closeVideoModal() {
+        const modal = document.getElementById('videoPlayerModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Ripristina lo scroll
+
+        // Ferma il video se in riproduzione
+        const videoPlayer = document.getElementById('modalVideoPlayer');
+        if (videoPlayer && !videoPlayer.paused) {
+            videoPlayer.pause();
+        }
+
+        // Reset variabili
+        modalCurrentVideoTime = 0;
+        modalVideoDuration = 0;
+        modalSnaps = [];
+    }
+
+    // Funzione per caricare il video nel modal
+    async function loadVideoInModal(videoId) {
+        const loadingDiv = document.getElementById('modalVideoLoading');
+        const errorDiv = document.getElementById('modalVideoError');
+        const containerDiv = document.getElementById('modalVideoContainer');
+        const videoPlayer = document.getElementById('modalVideoPlayer');
+
+        // Mostra loading
+        loadingDiv.style.display = 'block';
+        errorDiv.style.display = 'none';
+        containerDiv.style.display = 'none';
+
+        try {
+            // Ottieni i dati del video
+            const videoResponse = await fetch(`/api/videos/${videoId}`);
+            const responseData = await videoResponse.json();
+
+            if (!videoResponse.ok || !responseData.success) {
+                throw new Error(responseData.message || 'Errore nel caricamento del video');
+            }
+
+            const videoData = responseData.video;
+
+            // Imposta il video
+            videoPlayer.src = videoData.video_url;
+            videoPlayer.load();
+
+            // Mostra il container del video
+            loadingDiv.style.display = 'none';
+            containerDiv.style.display = 'block';
+
+            // Aggiorna il titolo del modal
+            document.getElementById('videoPlayerModalLabel').textContent = videoData.title || 'Video Player';
+
+        } catch (error) {
+            console.error('Errore caricamento video:', error);
+            loadingDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+            document.getElementById('modalErrorMessage').textContent = error.message;
+        }
+    }
+
+    // Chiudi il modal quando si clicca fuori
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('videoPlayerModal');
+        if (event.target === modal) {
+            closeVideoModal();
+        }
+    });
+
+    // Chiudi il modal con il tasto ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeVideoModal();
+        }
+    });
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/home.blade.php ENDPATH**/ ?>
