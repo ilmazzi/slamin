@@ -81,6 +81,83 @@
         .events-slider .card {
             min-height: 400px !important;
         }
+
+        /* Stili per il carosello video */
+        .videos-slider {
+            position: relative;
+            margin: 0 -10px;
+        }
+
+        .videos-slider .autoplay-item {
+            padding: 0 10px;
+            height: auto;
+        }
+
+        .videos-slider .card {
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .videos-slider .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Forza altezza uniforme per le card video nello slider */
+        .videos-slider .slick-track {
+            display: flex !important;
+        }
+
+        .videos-slider .slick-slide {
+            height: inherit;
+        }
+
+        .videos-slider .slick-slide > div {
+            height: 100%;
+        }
+
+        .videos-slider .autoplay-item {
+            height: 100%;
+        }
+
+        /* Forza altezza uniforme delle card video */
+        .videos-slider .slick-slide {
+            height: auto !important;
+        }
+
+        .videos-slider .slick-slide > div {
+            height: 100% !important;
+        }
+
+        .videos-slider .autoplay-item {
+            height: 100% !important;
+        }
+
+        .videos-slider .card {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .videos-slider .card-body {
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+        }
+
+        .videos-slider .card-body > *:not(:last-child) {
+            flex-shrink: 0 !important;
+        }
+
+        .videos-slider .d-flex.justify-content-between {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Forza altezza minima per le card video */
+        .videos-slider .card {
+            min-height: 350px !important;
+        }
     </style>
 <?php $__env->stopSection(); ?>
 
@@ -143,6 +220,74 @@
                 });
             } else {
                 console.error('Slider not found!');
+            }
+
+            // Inizializza il carosello video
+            const $newVideosSlider = $('#new-videos-slider');
+            const $popularVideosSlider = $('#popular-videos-slider');
+
+            if ($newVideosSlider.length > 0) {
+                $newVideosSlider.slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 4000,
+                    arrows: true,
+                    dots: false,
+                    infinite: true,
+                    speed: 500,
+                    responsive: [{
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+            }
+
+            if ($popularVideosSlider.length > 0) {
+                $popularVideosSlider.slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 4000,
+                    arrows: true,
+                    dots: false,
+                    infinite: true,
+                    speed: 500,
+                    responsive: [{
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
             }
 
             // Inizializza il carosello Bootstrap
@@ -232,21 +377,21 @@
             if (type === 'new') {
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
-                toggle.checked = true;
-                // Evidenzia "New" e disattiva "Popolari"
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-            } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
                 toggle.checked = false;
-                // Evidenzia "Popolari" e disattiva "New"
+                // Evidenzia "New" e disattiva "Popolari"
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
                 labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
             }
         };
 
@@ -260,21 +405,49 @@
             if (type === 'new') {
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
-                toggle.checked = true;
-                // Evidenzia "New" e disattiva "Popolari"
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-            } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
                 toggle.checked = false;
-                // Evidenzia "Popolari" e disattiva "New"
+                // Evidenzia "New" e disattiva "Popolari"
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
                 labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            }
+        };
+
+        window.toggleVideosContent = function(type) {
+            const newContent = document.getElementById('newVideosContent');
+            const popularContent = document.getElementById('popularVideosContent');
+            const toggle = document.getElementById('videosToggle');
+            const labelLeft = document.getElementById('videosToggleLabelLeft');
+            const labelRight = document.getElementById('videosToggleLabelRight');
+
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = false;
+                // Evidenzia "New" e disattiva "Popolari"
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
             }
         };
 
@@ -639,15 +812,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- Popular Badge -->
-                                                    <div class="position-absolute top-0 end-0 m-2 m-md-3">
-                                                        <span
-                                                            class="badge bg-warning text-dark f-s-11 fw-bold px-2 px-md-3 py-1 py-md-2 rounded-pill shadow-sm">
-                                                            <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
-                                                            <?php echo e(__('home.most_popular')); ?>
-
-                                                        </span>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -687,10 +851,6 @@
                                                                     <h6 class="mb-0 f-w-600 f-s-14 text-dark">
                                                                         <?php echo e($mostPopularVideo->user->name); ?></h6>
                                                                     <small class="text-muted f-s-11"><?php echo e(__('home.video_author')); ?></small>
-                                                                </div>
-                                                                <div class="ms-auto">
-                                                                    <i
-                                                                        class="ph-duotone ph-arrow-right f-s-16 text-muted"></i>
                                                                 </div>
                                                             </div>
                                                         </a>
@@ -736,7 +896,7 @@
                                                                         class="ph-duotone ph-eye f-s-16 f-s-md-18 text-info"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->view_count)); ?></h6>
+                                                                    <?php echo e(number_format($mostPopularVideo->views_count)); ?></h6>
                                                                 <small class="text-muted f-s-10"><?php echo e(__('home.views')); ?></small>
                                                             </div>
                                                         </div>
@@ -747,7 +907,7 @@
                                                                         class="ph-duotone ph-thumbs-up f-s-16 f-s-md-18 text-success"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->like_count)); ?></h6>
+                                                                    <?php echo e(number_format($mostPopularVideo->likes_count)); ?></h6>
                                                                 <small class="text-muted f-s-10"><?php echo e(__('home.likes')); ?></small>
                                                             </div>
                                                         </div>
@@ -758,7 +918,7 @@
                                                                         class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    <?php echo e(number_format($mostPopularVideo->comment_count)); ?>
+                                                                    <?php echo e(number_format($mostPopularVideo->comments_count)); ?>
 
                                                                 </h6>
                                                                 <small
@@ -784,6 +944,231 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Video Carousel Section -->
+            <?php if($recentVideos && $recentVideos->count() > 0): ?>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">
+                                    <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
+                                    <?php echo e(__('home.videos_section')); ?>
+
+                                </h5>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <span id="videosToggleLabelLeft"
+                                        class="text-primary f-s-12 me-2"><?php echo e(__('common.new')); ?></span>
+                                    <div class="form-check form-switch mx-2">
+                                        <input class="form-check-input" type="checkbox" id="videosToggle"
+                                            onchange="toggleVideosContent(this.checked ? 'popular' : 'new')">
+                                    </div>
+                                    <span id="videosToggleLabelRight"
+                                        class="text-muted f-s-12 ms-2"><?php echo e(__('common.popular')); ?></span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- New Videos Content (Default) -->
+                                <div id="newVideosContent">
+                                    <div class="videos-slider app-arrow" id="new-videos-slider">
+                                        <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="autoplay-item">
+                                                <div class="card overflow-hidden hover-effect h-100">
+                                                    <div class="position-relative">
+                                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                            <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                                alt="<?php echo e($video->title); ?>"
+                                                                style="height: 200px; object-fit: cover;">
+                                                        <?php else: ?>
+                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                                style="height: 200px;">
+                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                        <div class="position-absolute top-0 start-0 m-2">
+                                                            <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                                <i class="ph-duotone ph-clock f-s-10 me-1"></i>
+                                                                <?php echo e(__('common.new')); ?>
+
+                                                            </span>
+                                                        </div>
+                                                        <div class="position-absolute top-50 start-50 translate-middle"
+                                                            style="cursor: pointer;"
+                                                            onclick="openVideoModal(<?php echo e($video->id); ?>)">
+                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                                style="width: 50px; height: 50px;">
+                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body d-flex flex-column">
+                                                        <h6 class="card-title f-w-600 f-s-14 mb-2"><?php echo e(Str::limit($video->title, 50)); ?></h6>
+                                                        <p class="text-muted f-s-12 mb-2">
+                                                            <a href="<?php echo e(route('user.show', $video->user)); ?>"
+                                                                class="text-decoration-none hover-effect">
+                                                                <?php echo e($video->user->getDisplayName()); ?>
+
+                                                            </a>
+                                                        </p>
+                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                            <div class="d-flex gap-2">
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count)); ?>
+
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+
+                                                                </small>
+                                                            </div>
+                                                            <div class="d-flex gap-1">
+                                                                <a href="<?php echo e(route('videos.show', $video)); ?>" class="btn btn-sm btn-primary">
+                                                                    <i class="ph-duotone ph-play f-s-12"></i>
+                                                                </a>
+                                                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+
+                                <!-- Popular Videos Content (Hidden by default) -->
+                                <div id="popularVideosContent" style="display: none;">
+                                    <div class="videos-slider app-arrow" id="popular-videos-slider">
+                                        <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="autoplay-item">
+                                                <div class="card overflow-hidden hover-effect h-100">
+                                                    <div class="position-relative">
+                                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                            <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                                alt="<?php echo e($video->title); ?>"
+                                                                style="height: 200px; object-fit: cover;">
+                                                        <?php else: ?>
+                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                                style="height: 200px;">
+                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                        <div class="position-absolute top-0 start-0 m-2">
+                                                            <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                                <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
+                                                                <?php echo e(__('common.popular')); ?>
+
+                                                            </span>
+                                                        </div>
+                                                        <div class="position-absolute top-50 start-50 translate-middle"
+                                                            style="cursor: pointer;"
+                                                            onclick="openVideoModal(<?php echo e($video->id); ?>)">
+                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                                style="width: 50px; height: 50px;">
+                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body d-flex flex-column">
+                                                        <h6 class="card-title f-w-600 f-s-14 mb-2"><?php echo e(Str::limit($video->title, 50)); ?></h6>
+                                                        <p class="text-muted f-s-12 mb-2">
+                                                            <a href="<?php echo e(route('user.show', $video->user)); ?>"
+                                                                class="text-decoration-none hover-effect">
+                                                                <?php echo e($video->user->getDisplayName()); ?>
+
+                                                            </a>
+                                                        </p>
+                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                            <div class="d-flex gap-2">
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count)); ?>
+
+                                                                </small>
+                                                                <small class="text-muted f-s-11">
+                                                                    <i class="ph-duotone ph-heart f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+
+                                                                </small>
+                                                            </div>
+                                                            <div class="d-flex gap-1">
+                                                                <a href="<?php echo e(route('videos.show', $video)); ?>" class="btn btn-sm btn-primary">
+                                                                    <i class="ph-duotone ph-play f-s-12"></i>
+                                                                </a>
+                                                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+
+                                <!-- Footer with link to all videos -->
+                                <div class="text-center mt-3">
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <?php if(auth()->guard()->check()): ?>
+                                            <a href="<?php echo e(route('videos.upload')); ?>" class="btn btn-primary btn-sm">
+                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
+                                                <?php echo e(__('home.upload_video')); ?>
+
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="<?php echo e(route('login')); ?>" class="btn btn-primary btn-sm"
+                                                title="<?php echo e(__('auth.login_required')); ?>">
+                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
+                                                <?php echo e(__('home.upload_video')); ?>
+
+                                            </a>
+                                        <?php endif; ?>
+                                        <a href="<?php echo e(route('videos.index')); ?>" class="btn btn-outline-primary btn-sm">
+                                            <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
+                                            <?php echo e(__('home.view_all_videos')); ?>
+
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -993,13 +1378,13 @@
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="poetryToggleLabelLeft"
-                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.popular')); ?></span>
+                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.new')); ?></span>
                                 <div class="form-check form-switch mx-2">
                                     <input class="form-check-input" type="checkbox" id="poetryToggle"
-                                        onchange="togglePoetryContent(this.checked ? 'new' : 'popular')">
+                                        onchange="togglePoetryContent(this.checked ? 'popular' : 'new')">
                                 </div>
                                 <span id="poetryToggleLabelRight"
-                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.new')); ?></span>
+                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.popular')); ?></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1050,7 +1435,7 @@
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->view_count)); ?>
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->views_count)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
@@ -1061,10 +1446,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="<?php echo e(route('poems.show', $poem)); ?>"
-                                                                class="btn btn-sm btn-gradient-info hover-effect">
-                                                                <i class="ph-duotone ph-book-open f-s-12"></i>
-                                                            </a>
+                                                            <?php if($poem->slug): ?>
+                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>"
+                                                                    class="btn btn-sm btn-gradient-info hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <span class="btn btn-sm btn-secondary" title="Poema non disponibile">
+                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                </span>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1121,21 +1512,27 @@
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->view_count)); ?>
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->views_count)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($poem->like_count)); ?>
+                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($poem->likes_count)); ?>
 
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="<?php echo e(route('poems.show', $poem)); ?>"
-                                                                class="btn btn-sm btn-gradient-info hover-effect">
-                                                                <i class="ph-duotone ph-book-open f-s-12"></i>
-                                                            </a>
+                                                            <?php if($poem->slug): ?>
+                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>"
+                                                                    class="btn btn-sm btn-gradient-info hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <span class="btn btn-sm btn-secondary" title="Poema non disponibile">
+                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                </span>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1185,13 +1582,13 @@
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="articlesToggleLabelLeft"
-                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.popular')); ?></span>
+                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.new')); ?></span>
                                 <div class="form-check form-switch mx-2">
                                     <input class="form-check-input" type="checkbox" id="articlesToggle"
-                                        onchange="toggleArticlesContent(this.checked ? 'new' : 'popular')">
+                                        onchange="toggleArticlesContent(this.checked ? 'popular' : 'new')">
                                 </div>
                                 <span id="articlesToggleLabelRight"
-                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.new')); ?></span>
+                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.popular')); ?></span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1227,7 +1624,7 @@
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->view_count ?? 0)); ?>
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->views_count ?? 0)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
@@ -1283,12 +1680,12 @@
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->view_count ?? 0)); ?>
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->views_count ?? 0)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($article->like_count ?? 0)); ?>
+                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($article->likes_count ?? 0)); ?>
 
                                                                 </small>
                                                             </div>

@@ -18,6 +18,7 @@ return [
     'new_users' => 'Nuovi Utenti',
     'poetry_section' => 'Poesia',
     'articles_section' => 'Articoli',
+    'videos_section' => 'Video',
     'no_videos_available' => 'Nessun video disponibile',
     'no_videos_description' => 'Al momento non ci sono video popolari da mostrare.',
     'upload_first_video' => 'Carica il primo video',
@@ -28,6 +29,8 @@ return [
     'watch_video' => 'Guarda Video',
     'create_poetry' => 'Crea poesia',
     'view_all_poems' => 'Vedi tutte le poesie',
+    'upload_video' => 'Carica video',
+    'view_all_videos' => 'Vedi tutti i video',
     'cancel' => 'Annulla',
 
     // Informazioni utente

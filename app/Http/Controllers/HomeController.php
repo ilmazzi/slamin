@@ -23,12 +23,40 @@ class HomeController extends Controller
         $mostPopularVideo = Video::where('moderation_status', 'approved')
             ->where('is_public', true)
             ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
             ->get()
             ->sortByDesc(function($video) {
-                // Calcola il punteggio totale delle interazioni
-                return $video->view_count + $video->like_count + $video->comment_count + $video->snaps()->count();
+                // Calcola il punteggio totale delle interazioni usando il sistema unificato
+                return $video->views_count + $video->likes_count + $video->comments_count + $video->snaps()->count();
             })
             ->first();
+
+        // Video recenti per carosello
+        $recentVideos = Video::where('moderation_status', 'approved')
+            ->where('is_public', true)
+            ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
+            ->get();
+
+        // Video popolari per carosello
+        $popularVideos = Video::where('moderation_status', 'approved')
+            ->where('is_public', true)
+            ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
+            ->get()
+            ->sortByDesc(function($video) {
+                // Calcola il punteggio totale delle interazioni usando il sistema unificato
+                return $video->views_count + $video->likes_count + $video->comments_count + $video->snaps()->count();
+            })
+            ->take(6);
 
         // Eventi più recenti con conteggio partecipanti
         $recentEvents = Event::where('status', 'published')
@@ -153,6 +181,9 @@ class HomeController extends Controller
         $recentPoems = Poem::where('moderation_status', 'approved')
             ->where('is_public', true)
             ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
             ->orderBy('created_at', 'desc')
             ->limit(4)
             ->get();
@@ -161,9 +192,15 @@ class HomeController extends Controller
         $popularPoems = Poem::where('moderation_status', 'approved')
             ->where('is_public', true)
             ->with('user')
-            ->orderBy('view_count', 'desc')
-            ->limit(4)
-            ->get();
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
+            ->get()
+            ->sortByDesc(function($poem) {
+                // Calcola il punteggio totale delle interazioni usando il sistema unificato
+                return $poem->views_count + $poem->likes_count + $poem->comments_count;
+            })
+            ->take(4);
 
         // Articoli recenti (placeholder - da implementare quando avrai il modello Article)
         $recentArticles = collect([]);
@@ -174,10 +211,10 @@ class HomeController extends Controller
             'total_videos' => Video::where('moderation_status', 'approved')->count(),
             'total_events' => Event::where('status', 'published')->count(),
             'total_users' => User::count(),
-            'total_views' => Video::sum('view_count'),
+            'total_views' => \DB::table('unified_views')->where('viewable_type', 'App\\Models\\Video')->count(),
         ];
 
-        return view('home', compact('carousels', 'mostPopularVideo', 'recentEvents', 'newUsers', 'recentPoems', 'popularPoems', 'recentArticles', 'popularArticles', 'stats'));
+        return view('home', compact('carousels', 'mostPopularVideo', 'recentVideos', 'popularVideos', 'recentEvents', 'newUsers', 'recentPoems', 'popularPoems', 'recentArticles', 'popularArticles', 'stats'));
     }
 
     /**
