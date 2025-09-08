@@ -750,166 +750,6 @@
                 </div>
             @endif
 
-            <!-- Most Popular {{ __('common.video') }} Section -->
-            @if ($mostPopularVideo && $mostPopularVideo->exists)
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card hover-effect border-0 shadow-sm">
-                            <div class="card-body p-0">
-                                <div class="position-relative">
-                                    <div class="p-3 p-md-4">
-                                        <!-- Mobile First Layout -->
-                                        <div class="row">
-                                            <!-- {{ __('common.video') }} {{ __('common.thumbnail') }} Column -->
-                                            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                                                <div class="position-relative">
-                                                    <div class="position-relative overflow-hidden rounded-3"
-                                                        style="aspect-ratio: 16/9; cursor: pointer;"
-                                                        onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
-                                                        @if (
-                                                            $mostPopularVideo->thumbnail_url &&
-                                                                $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                                            <img src="{{ $mostPopularVideo->thumbnail_url }}"
-                                                                alt="{{ $mostPopularVideo->title }}" class="w-100 h-100"
-                                                                style="object-fit: cover;">
-                                                        @else
-                                                            <div
-                                                                class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                <div class="text-center">
-                                                                    <i
-                                                                        class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
-                                                                    <p class="text-muted f-s-14 mb-0">{{ __('home.preview_not_available') }}</p>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center"
-                                                                style="width: 70px; height: 70px;">
-                                                                <i
-                                                                    class="ph-duotone ph-play f-s-24 f-s-md-36 text-primary"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Content Column -->
-                                            <div class="col-12 col-lg-6">
-                                                <div class="h-100 d-flex flex-column justify-content-between">
-                                                    <!-- Title and Description -->
-                                                    <div class="mb-3">
-                                                        <h4 class="text-dark f-w-700 mb-2 f-s-18 f-s-md-20">
-                                                            {{ $mostPopularVideo->title }}</h4>
-                                                        @if ($mostPopularVideo->description)
-                                                            <p class="text-muted mb-3 f-s-14">
-                                                                {{ Str::limit($mostPopularVideo->description, 120) }}</p>
-                                                        @endif
-
-                                                        <!-- Author Info -->
-                                                        <a href="{{ route('user.show', $mostPopularVideo->user) }}"
-                                                            class="text-decoration-none hover-effect">
-                                                            <div
-                                                                class="d-flex align-items-center mb-3 p-2 rounded-3 transition-all">
-                                                                @if ($mostPopularVideo->user->profile_photo)
-                                                                    <div
-                                                                        class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3">
-                                                                        <img src="{{ $mostPopularVideo->user->profile_photo_url }}"
-                                                                            alt="{{ $mostPopularVideo->user->name }}"
-                                                                            class="w-100 h-100"
-                                                                            style="object-fit: cover;">
-                                                                    </div>
-                                                                @else
-                                                                    <div
-                                                                        class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-gradient-primary me-3">
-                                                                        <span
-                                                                            class="text-white fw-bold f-s-16">{{ substr($mostPopularVideo->user->name, 0, 2) }}</span>
-                                                                    </div>
-                                                                @endif
-                                                                <div>
-                                                                    <h6 class="mb-0 f-w-600 f-s-14 text-dark">
-                                                                        {{ $mostPopularVideo->user->name }}</h6>
-                                                                    <small class="text-muted f-s-11">{{ __('home.video_author') }}</small>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <!-- Watch Button -->
-                                                        <div class="d-flex gap-2">
-
-                                                            <a href="{{ route('videos.show', $mostPopularVideo) }}"
-                                                                class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
-                                                                <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                                {{ __('home.watch_video') }}
-                                                            </a>
-                                                            <x-report-button :content="$mostPopularVideo" type="video"
-                                                                size="sm" />
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Statistics -->
-                                                    <div class="row g-2">
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-16 f-s-md-18 text-info"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->views_count) }}</h6>
-                                                                <small class="text-muted f-s-10">{{ __('home.views') }}</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-16 f-s-md-18 text-success"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->likes_count) }}</h6>
-                                                                <small class="text-muted f-s-10">{{ __('home.likes') }}</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <i
-                                                                        class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->comments_count) }}
-                                                                </h6>
-                                                                <small
-                                                                    class="text-muted f-s-10">{{ __('common.comments_section') }}</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 col-md-3">
-                                                            <div class="text-center p-2 rounded-3 txt-bg-success">
-                                                                <div class="d-flex-center mb-1">
-                                                                    <img src="{{ asset('assets/images/snap.png') }}"
-                                                                        alt="Snap"
-                                                                        style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);">
-                                                                </div>
-                                                                <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->snaps()->count()) }}
-                                                                </h6>
-                                                                <small
-                                                                    class="text-muted f-s-10">{{ __('common.snap') }}</small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
 
             <!-- Video Carousel Section -->
             @if ($recentVideos && $recentVideos->count() > 0)
@@ -1059,27 +899,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Footer with link to all videos -->
-                                <div class="text-center mt-3">
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        @auth
-                                            <a href="{{ route('videos.upload') }}" class="btn btn-primary btn-sm">
-                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
-                                                {{ __('home.upload_video') }}
-                                            </a>
-                                        @else
-                                            <a href="{{ route('login') }}" class="btn btn-primary btn-sm"
-                                                title="{{ __('auth.login_required') }}">
-                                                <i class="ph-duotone ph-upload f-s-12 me-1"></i>
-                                                {{ __('home.upload_video') }}
-                                            </a>
-                                        @endauth
-                                        <a href="{{ route('videos.index') }}" class="btn btn-outline-primary btn-sm">
-                                            <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                            {{ __('home.view_all_videos') }}
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1495,26 +1314,39 @@
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="rounded overflow-hidden"
-                                                                style="width: 60px; height: 60px;">
-                                                                @if ($article->image_path)
-                                                                    <img src="{{ asset('storage/' . $article->image_path) }}"
-                                                                        alt="{{ $article->title }}" class="w-100 h-100"
-                                                                        style="object-fit: cover;">
-                                                                @else
-                                                                    <div
-                                                                        class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                        <i
-                                                                            class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
-                                                                    </div>
-                                                                @endif
+                                                            <div class="position-relative">
+                                                                <div class="rounded overflow-hidden"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    @if ($article->featured_image)
+                                                                        <img src="{{ $article->featured_image_url }}"
+                                                                            alt="{{ $article->title }}" class="w-100 h-100"
+                                                                            style="object-fit: cover;">
+                                                                    @else
+                                                                        <div
+                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-50 start-50 translate-middle">
+                                                                    <i
+                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 {{ Str::limit($article->title, 40) }}</h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
+                                                                <a href="{{ route('user.show', $article->user) }}"
+                                                                    class="text-decoration-none hover-effect">
+                                                                    {{ $article->user->getDisplayName() }}
+                                                                </a></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -1527,10 +1359,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('articles.show', $article) }}"
-                                                                class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                <i class="ph-duotone ph-arrow-right f-s-12"></i>
-                                                            </a>
+                                                            @if($article->slug)
+                                                                <a href="{{ route('articles.show', $article->slug) }}"
+                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </a>
+                                                            @else
+                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1549,26 +1387,39 @@
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
-                                                            <div class="rounded overflow-hidden"
-                                                                style="width: 60px; height: 60px;">
-                                                                @if ($article->image_path)
-                                                                    <img src="{{ asset('storage/' . $article->image_path) }}"
-                                                                        alt="{{ $article->title }}" class="w-100 h-100"
-                                                                        style="object-fit: cover;">
-                                                                @else
-                                                                    <div
-                                                                        class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                        <i
-                                                                            class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
-                                                                    </div>
-                                                                @endif
+                                                            <div class="position-relative">
+                                                                <div class="rounded overflow-hidden"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    @if ($article->featured_image)
+                                                                        <img src="{{ $article->featured_image_url }}"
+                                                                            alt="{{ $article->title }}" class="w-100 h-100"
+                                                                            style="object-fit: cover;">
+                                                                    @else
+                                                                        <div
+                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
+                                                                </div>
+                                                                <div
+                                                                    class="position-absolute top-50 start-50 translate-middle">
+                                                                    <i
+                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
                                                                 {{ Str::limit($article->title, 40) }}</h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
+                                                                <a href="{{ route('user.show', $article->user) }}"
+                                                                    class="text-decoration-none hover-effect">
+                                                                    {{ $article->user->getDisplayName() }}
+                                                                </a></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
@@ -1581,10 +1432,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('articles.show', $article) }}"
-                                                                class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                <i class="ph-duotone ph-arrow-right f-s-12"></i>
-                                                            </a>
+                                                            @if($article->slug)
+                                                                <a href="{{ route('articles.show', $article->slug) }}"
+                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </a>
+                                                            @else
+                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                </span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

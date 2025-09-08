@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Carousel;
 use App\Models\Video;
 use App\Models\Poem;
+use App\Models\Article;
 use App\Models\Event;
 use App\Models\User;
 
@@ -19,19 +20,6 @@ class HomeController extends Controller
         // Carousel attivo
         $carousels = Carousel::active()->ordered()->get();
 
-        // Video più popolare (più interazioni totali)
-        $mostPopularVideo = Video::where('moderation_status', 'approved')
-            ->where('is_public', true)
-            ->with('user')
-            ->withCount('views')
-            ->withCount('likes')
-            ->withCount('comments')
-            ->get()
-            ->sortByDesc(function($video) {
-                // Calcola il punteggio totale delle interazioni usando il sistema unificato
-                return $video->views_count + $video->likes_count + $video->comments_count + $video->snaps()->count();
-            })
-            ->first();
 
         // Video recenti per carosello
         $recentVideos = Video::where('moderation_status', 'approved')
@@ -202,9 +190,32 @@ class HomeController extends Controller
             })
             ->take(4);
 
-        // Articoli recenti (placeholder - da implementare quando avrai il modello Article)
-        $recentArticles = collect([]);
-        $popularArticles = collect([]);
+        // Articoli recenti per sezione Articoli
+        $recentArticles = Article::where('moderation_status', 'approved')
+            ->where('is_public', true)
+            ->where('status', 'published')
+            ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
+            ->orderBy('published_at', 'desc')
+            ->limit(4)
+            ->get();
+
+        // Articoli popolari per sezione Articoli
+        $popularArticles = Article::where('moderation_status', 'approved')
+            ->where('is_public', true)
+            ->where('status', 'published')
+            ->with('user')
+            ->withCount('views')
+            ->withCount('likes')
+            ->withCount('comments')
+            ->get()
+            ->sortByDesc(function($article) {
+                // Calcola il punteggio totale delle interazioni usando il sistema unificato
+                return $article->views_count + $article->likes_count + $article->comments_count;
+            })
+            ->take(4);
 
         // Statistiche generali
         $stats = [
@@ -214,7 +225,7 @@ class HomeController extends Controller
             'total_views' => \DB::table('unified_views')->where('viewable_type', 'App\\Models\\Video')->count(),
         ];
 
-        return view('home', compact('carousels', 'mostPopularVideo', 'recentVideos', 'popularVideos', 'recentEvents', 'newUsers', 'recentPoems', 'popularPoems', 'recentArticles', 'popularArticles', 'stats'));
+        return view('home', compact('carousels', 'recentVideos', 'popularVideos', 'recentEvents', 'newUsers', 'recentPoems', 'popularPoems', 'recentArticles', 'popularArticles', 'stats'));
     }
 
     /**
