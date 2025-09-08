@@ -122,9 +122,13 @@
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title f-w-600 mb-0 flex-grow-1">
-                                <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
-                                    {{ $poem->title }}
-                                </a>
+                                @if($poem->id && $poem->slug)
+                                    <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
+                                        {{ $poem->title ?: __('poems.untitled') }}
+                                    </a>
+                                @else
+                                    <span class="text-muted">{{ $poem->title ?: __('poems.untitled') }}</span>
+                                @endif
                             </h5>
                             @if($poem->is_featured)
                             <span class="badge bg-warning ms-2">
@@ -150,22 +154,29 @@
                                 <div class="d-flex gap-3 justify-content-center mb-2">
                                     <span class="text-muted f-s-14">
                                         <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                        {{ $poem->view_count }}
+                                        {{ $poem->views_count }}
                                     </span>
                                     <span class="text-muted f-s-14">
                                         <i class="ph-duotone ph-heart f-s-12 me-1"></i>
-                                        {{ $poem->like_count }}
+                                        {{ $poem->likes_count }}
                                     </span>
                                     <span class="text-muted f-s-14">
                                         <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
-                                        {{ $poem->comment_count }}
+                                        {{ $poem->comments_count }}
                                     </span>
                                 </div>
                                 <div class="d-flex gap-2 justify-content-center align-items-center">
-                                    <a href="{{ route('poems.show', $poem) }}" class="btn btn-primary px-4">
-                                        <i class="ph-bold  ph-read-cv-logo"></i>
-                                        {{ __('poems.actions.read') }}
-                                    </a>
+                                    @if($poem->id && $poem->slug)
+                                        <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-primary px-4">
+                                            <i class="ph-bold  ph-read-cv-logo"></i>
+                                            {{ __('poems.actions.read') }}
+                                        </a>
+                                    @else
+                                        <button class="btn btn-secondary px-4" disabled>
+                                            <i class="ph-bold  ph-read-cv-logo"></i>
+                                            {{ __('poems.actions.read') }}
+                                        </button>
+                                    @endif
                                     @auth
                                     <x-report-button :content="$poem" type="poem" size="sm" />
                                     @endauth

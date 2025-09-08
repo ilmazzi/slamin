@@ -36,6 +36,7 @@ return [
     'follower' => 'Follower',
     'following' => 'Following',
     'editorial' => 'Redazione',
+    'interactions' => 'Interazioni',
 
     // Statistiche
     'views' => 'Visualizzazioni',

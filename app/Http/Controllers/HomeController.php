@@ -37,15 +37,110 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-        // Nuovi utenti registrati
-        $newUsers = User::withCount(['videos' => function($query) {
-                $query->where('moderation_status', 'approved');
-            }])
+        // Nuovi utenti registrati con statistiche complete
+        $newUsers = User::withCount([
+                'videos' => function($query) {
+                    $query->where('moderation_status', 'approved');
+                },
+                'poems' => function($query) {
+                    $query->where('moderation_status', 'approved');
+                },
+                'articles' => function($query) {
+                    $query->where('moderation_status', 'approved');
+                }
+            ])
             ->withCount('followers')
             ->withCount('following')
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
+
+        // Calcola le interazioni totali per ogni utente usando il sistema unificato
+        $newUsers->each(function($user) {
+            // Visualizzazioni ricevute su poesie, articoli e video (sistema unificato)
+            $poemViews = \DB::table('unified_views')
+                ->join('poems', function($join) use ($user) {
+                    $join->on('unified_views.viewable_id', '=', 'poems.id')
+                         ->where('unified_views.viewable_type', '=', 'App\\Models\\Poem')
+                         ->where('poems.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $articleViews = \DB::table('unified_views')
+                ->join('articles', function($join) use ($user) {
+                    $join->on('unified_views.viewable_id', '=', 'articles.id')
+                         ->where('unified_views.viewable_type', '=', 'App\\Models\\Article')
+                         ->where('articles.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $videoViews = \DB::table('unified_views')
+                ->join('videos', function($join) use ($user) {
+                    $join->on('unified_views.viewable_id', '=', 'videos.id')
+                         ->where('unified_views.viewable_type', '=', 'App\\Models\\Video')
+                         ->where('videos.user_id', '=', $user->id);
+                })
+                ->count();
+
+            // Like ricevuti su poesie, articoli e video (sistema unificato)
+            $poemLikes = \DB::table('unified_likes')
+                ->join('poems', function($join) use ($user) {
+                    $join->on('unified_likes.likeable_id', '=', 'poems.id')
+                         ->where('unified_likes.likeable_type', '=', 'App\\Models\\Poem')
+                         ->where('poems.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $articleLikes = \DB::table('unified_likes')
+                ->join('articles', function($join) use ($user) {
+                    $join->on('unified_likes.likeable_id', '=', 'articles.id')
+                         ->where('unified_likes.likeable_type', '=', 'App\\Models\\Article')
+                         ->where('articles.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $videoLikes = \DB::table('unified_likes')
+                ->join('videos', function($join) use ($user) {
+                    $join->on('unified_likes.likeable_id', '=', 'videos.id')
+                         ->where('unified_likes.likeable_type', '=', 'App\\Models\\Video')
+                         ->where('videos.user_id', '=', $user->id);
+                })
+                ->count();
+
+            // Commenti ricevuti su poesie, articoli e video (sistema unificato)
+            $poemComments = \DB::table('unified_comments')
+                ->join('poems', function($join) use ($user) {
+                    $join->on('unified_comments.commentable_id', '=', 'poems.id')
+                         ->where('unified_comments.commentable_type', '=', 'App\\Models\\Poem')
+                         ->where('poems.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $articleComments = \DB::table('unified_comments')
+                ->join('articles', function($join) use ($user) {
+                    $join->on('unified_comments.commentable_id', '=', 'articles.id')
+                         ->where('unified_comments.commentable_type', '=', 'App\\Models\\Article')
+                         ->where('articles.user_id', '=', $user->id);
+                })
+                ->count();
+
+            $videoComments = \DB::table('unified_comments')
+                ->join('videos', function($join) use ($user) {
+                    $join->on('unified_comments.commentable_id', '=', 'videos.id')
+                         ->where('unified_comments.commentable_type', '=', 'App\\Models\\Video')
+                         ->where('videos.user_id', '=', $user->id);
+                })
+                ->count();
+
+            // Snap ricevuti sui video (sistema esistente)
+            $videoSnaps = $user->videos()->withCount('snaps')->get()->sum('snaps_count');
+
+            // Totale interazioni
+            $user->total_interactions = $poemViews + $articleViews + $videoViews +
+                                      $poemLikes + $articleLikes + $videoLikes +
+                                      $poemComments + $articleComments + $videoComments +
+                                      $videoSnaps;
+        });
 
         // Aggiungi lo stato follow per l'utente autenticato
         if (auth()->check()) {

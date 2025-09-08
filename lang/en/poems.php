@@ -4,6 +4,7 @@ return [
 
     'title' => '',
     'my_poems' => '',
+    'untitled' => 'Untitled',
     'create_poem' => '',
     'edit_poem' => '',
     'poem_details' => '',

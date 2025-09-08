@@ -86,7 +86,7 @@
                                 <a href="{{ route('translations.payment.success', $payment) }}" class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-eye me-1"></i>Dettagli
                                 </a>
-                                <a href="{{ route('poems.show', $payment->poem) }}" class="btn btn-outline-secondary btn-sm">
+                                <a href="{{ route('poems.show', $payment->poem->slug) }}" class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-book me-1"></i>Poesia
                                 </a>
                             </div>
@@ -164,7 +164,7 @@
                                 <a href="{{ route('translations.payment.success', $payment) }}" class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-eye me-1"></i>Dettagli
                                 </a>
-                                <a href="{{ route('poems.show', $payment->poem) }}" class="btn btn-outline-secondary btn-sm">
+                                <a href="{{ route('poems.show', $payment->poem->slug) }}" class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-book me-1"></i>Poesia
                                 </a>
                             </div>

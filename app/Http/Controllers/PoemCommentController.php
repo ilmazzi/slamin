@@ -135,22 +135,20 @@ class PoemCommentController extends Controller
     public function toggleLike(PoemComment $comment)
     {
         $user = Auth::user();
-        $isLiked = $comment->likes()->where('user_id', $user->id)->exists();
+        $isLiked = $comment->isLikedBy($user);
 
         if ($isLiked) {
-            $comment->likes()->detach($user->id);
-            $comment->decrementLikeCount();
+            $comment->unlike($user);
             $message = __('poems.actions.unlike');
         } else {
-            $comment->likes()->attach($user->id);
-            $comment->incrementLikeCount();
+            $comment->like($user);
             $message = __('poems.actions.like');
         }
 
         return response()->json([
             'success' => true,
             'liked' => !$isLiked,
-            'like_count' => $comment->fresh()->like_count,
+            'like_count' => $comment->fresh()->likes_count,
             'message' => $message
         ]);
     }
@@ -182,8 +180,8 @@ class PoemCommentController extends Controller
         $data = $validator->validated();
         $comment->update($data);
 
-        $message = $data['moderation_status'] === 'approved' 
-            ? __('poems.messages.approved') 
+        $message = $data['moderation_status'] === 'approved'
+            ? __('poems.messages.approved')
             : __('poems.messages.rejected');
 
         return response()->json([

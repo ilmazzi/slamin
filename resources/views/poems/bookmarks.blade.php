@@ -229,17 +229,17 @@
                         <div class="row text-center mb-3">
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->view_count) }}
+                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->views_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->like_count) }}
+                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->likes_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comment_count) }}
+                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comments_count) }}
                                 </small>
                             </div>
                         </div>

@@ -9,5 +9,6 @@ return [
     'top_poets' => '',
     'cta' => '',
     'fallback' => '',
+    'interactions' => 'Interactions',
 
 ];

@@ -175,6 +175,8 @@ return [
     'gigs' => '',
     'news' => '',
     'media_section' => '',
+    'poems' => 'Poems',
+    'articles' => 'Articles',
     'kanban_board' => '',
     'loading_error' => '',
 

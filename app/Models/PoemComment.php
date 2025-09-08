@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\HasModeration;
+use App\Traits\HasLikes;
 
 class PoemComment extends Model
 {
-    use HasFactory, HasModeration;
+    use HasFactory, HasModeration, HasLikes;
 
     protected $fillable = [
         'poem_id',

@@ -39,6 +39,8 @@ return [
     'thumbnail' => 'Thumbnail',
     'comments_section' => 'Sezione Commenti',
     'articles_section_menu' => 'Notizie',
+    'poems' => 'Poesie',
+    'articles' => 'Articoli',
     'groups_section_menu' => 'Utenti / Gruppi',
     // Sezioni della sidebar
     'gigs' => 'Gig',

@@ -83,7 +83,7 @@
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     @if($application->type === 'translation')
-                                                        <a href="{{ route('poems.show', $application->poem) }}" class="btn btn-sm btn-light">
+                                                        <a href="{{ route('poems.show', $application->poem->slug) }}" class="btn btn-sm btn-light">
                                                             <i class="ph ph-eye"></i>
                                                         </a>
                                                     @else

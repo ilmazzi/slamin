@@ -91,11 +91,11 @@ class PoemController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'content' => 'required|string|min:10',
             'description' => 'nullable|string|max:500',
-            'category' => 'required|string|in:' . implode(',', array_keys(config('poems.categories', []))),
-            'poem_type' => 'required|string|in:' . implode(',', array_keys(config('poems.poem_types', []))),
+            'category' => 'nullable|string|in:' . implode(',', array_keys(config('poems.categories', []))),
+            'poem_type' => 'nullable|string|in:' . implode(',', array_keys(config('poems.poem_types', []))),
             'language' => 'required|string|max:10',
             'tags' => 'nullable|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -137,8 +137,9 @@ class PoemController extends Controller
             $data['published_at'] = now();
         }
 
-        // Slug unico
-        $data['slug'] = $this->generateUniqueSlug($data['title']);
+        // Slug unico (usa ID temporaneo se il titolo è vuoto)
+        $titleForSlug = $data['title'] ?: 'poesia-' . time();
+        $data['slug'] = $this->generateUniqueSlug($titleForSlug);
 
         // Conteggio parole
         $data['word_count'] = str_word_count(strip_tags($data['content']));
@@ -176,7 +177,7 @@ class PoemController extends Controller
             }
         }
 
-        return redirect()->route('poems.show', $poem)
+        return redirect()->route('poems.show', $poem->slug)
             ->with('success', __('poems.messages.created'));
     }
 
@@ -185,8 +186,8 @@ class PoemController extends Controller
      */
     public function show(Poem $poem)
     {
-        // Incrementa le visualizzazioni
-        $poem->incrementViewCount();
+        // Incrementa le visualizzazioni usando il sistema unificato
+        $poem->incrementViewIfNotOwner();
 
         // Carica relazioni
         $poem->load(['user', 'comments.approved', 'likes', 'bookmarks']);
@@ -300,7 +301,7 @@ class PoemController extends Controller
             }
         }
 
-        return redirect()->route('poems.show', $poem)
+        return redirect()->route('poems.show', $poem->slug)
             ->with('success', __('poems.messages.updated'));
     }
 
@@ -402,6 +403,11 @@ class PoemController extends Controller
      */
     private function generateUniqueSlug($title, $excludeId = null)
     {
+        // Se il titolo è vuoto, usa un slug di default con timestamp
+        if (empty($title)) {
+            $title = 'poesia-' . time();
+        }
+
         $slug = Str::slug($title);
         $originalSlug = $slug;
         $counter = 1;

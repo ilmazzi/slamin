@@ -147,7 +147,7 @@
                 <a href="{{ route('translations.payment.index') }}" class="btn btn-outline-primary me-2">
                     <i class="fas fa-list me-1"></i>I Miei Pagamenti
                 </a>
-                <a href="{{ route('poems.show', $payment->poem) }}" class="btn btn-primary">
+                <a href="{{ route('poems.show', $payment->poem->slug) }}" class="btn btn-primary">
                     <i class="fas fa-eye me-1"></i>Visualizza Poesia
                 </a>
             </div>

@@ -355,7 +355,7 @@
                             <!-- Azioni -->
                             <div class="d-flex flex-column flex-sm-row gap-2">
                                 @if(isset($gig->poem) && $gig->poem)
-                                    <a href="{{ route('poems.show', $gig->poem) }}" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ route('poems.show', $gig->poem->slug) }}" class="btn btn-outline-primary btn-sm">
                                         <i class="ph ph-eye me-1"></i>Visualizza
                                     </a>
 

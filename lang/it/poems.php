@@ -4,6 +4,7 @@ return [
 
     'title' => 'Poesie',
     'poems' => 'Poesie',
+    'untitled' => 'Senza titolo',
     'my_poems' => [
         'title' => 'Le mie poesie',
         'total_poems' => 'Poesie totali',

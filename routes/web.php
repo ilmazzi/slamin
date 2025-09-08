@@ -1049,18 +1049,18 @@ Route::prefix('poems')->name('poems.')->group(function () {
     // Routes autenticate
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [App\Http\Controllers\PoemController::class, 'store'])->name('store');
-        Route::get('/{poem}/edit', [App\Http\Controllers\PoemController::class, 'edit'])->name('edit');
-        Route::put('/{poem}', [App\Http\Controllers\PoemController::class, 'update'])->name('update');
-        Route::delete('/{poem}', [App\Http\Controllers\PoemController::class, 'destroy'])->name('destroy');
+        Route::get('/{poem:slug}/edit', [App\Http\Controllers\PoemController::class, 'edit'])->name('edit');
+        Route::put('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'update'])->name('update');
+        Route::delete('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'destroy'])->name('destroy');
 
         // Poesie personali
         Route::get('/my/poems', [App\Http\Controllers\PoemController::class, 'myPoems'])->name('my-poems');
         Route::get('/my/drafts', [App\Http\Controllers\PoemController::class, 'drafts'])->name('drafts');
 
         // Azioni social
-        Route::post('/{poem}/like', [App\Http\Controllers\PoemActionController::class, 'toggleLike'])->name('like');
-        Route::post('/{poem}/bookmark', [App\Http\Controllers\PoemActionController::class, 'toggleBookmark'])->name('bookmark');
-        Route::post('/{poem}/share', [App\Http\Controllers\PoemActionController::class, 'share'])->name('share');
+        Route::post('/{poem:slug}/like', [App\Http\Controllers\PoemActionController::class, 'toggleLike'])->name('like');
+        Route::post('/{poem:slug}/bookmark', [App\Http\Controllers\PoemActionController::class, 'toggleBookmark'])->name('bookmark');
+        Route::post('/{poem:slug}/share', [App\Http\Controllers\PoemActionController::class, 'share'])->name('share');
 
 
 
@@ -1071,8 +1071,8 @@ Route::prefix('poems')->name('poems.')->group(function () {
         Route::get('/my/liked', [App\Http\Controllers\PoemActionController::class, 'liked'])->name('liked');
 
         // Commenti
-        Route::get('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
-        Route::post('/{poem}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
+        Route::get('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
+        Route::post('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
         Route::put('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'update'])->name('comments.update');
         Route::delete('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'destroy'])->name('comments.destroy');
         Route::post('/comments/{comment}/like', [App\Http\Controllers\PoemCommentController::class, 'toggleLike'])->name('comments.like');

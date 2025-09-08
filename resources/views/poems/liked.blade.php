@@ -207,7 +207,7 @@
 
                         <!-- Titolo -->
                         <h5 class="card-title">
-                            <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
+                            <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
                                 {{ $poem->title }}
                             </a>
                         </h5>
@@ -229,17 +229,17 @@
                         <div class="row text-center mb-3">
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->view_count) }}
+                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->views_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->like_count) }}
+                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->likes_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comment_count) }}
+                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comments_count) }}
                                 </small>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                         <!-- {{ __('invitations.actions') }} -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group btn-group-sm">
-                                <a href="{{ route('poems.show', $poem) }}" class="btn btn-outline-primary">
+                                <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-outline-primary">
                                     <i class="ph ph-eye"></i>
                                 </a>
                                 <button type="button" class="btn btn-outline-danger" onclick="unlikePoem({{ $poem->id }})">
@@ -264,7 +264,7 @@
                                 <button type="button" class="btn btn-outline-warning" onclick="toggleBookmark({{ $poem->id }})">
                                     <i class="ph ph-bookmark{{ $poem->is_bookmarked_by_current_user ? '-fill' : '' }}"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-info" onclick="sharePoem('{{ route('poems.show', $poem) }}')">
+                                <button type="button" class="btn btn-outline-info" onclick="sharePoem('{{ route('poems.show', $poem->slug) }}')">
                                     <i class="ph ph-share"></i>
                                 </button>
                             </div>
@@ -275,12 +275,12 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('poems.show', $poem) }}">
+                                        <a class="dropdown-item" href="{{ route('poems.show', $poem->slug) }}">
                                             <i class="ph ph-eye me-2"></i>{{ __('common.view') }}
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="sharePoem('{{ route('poems.show', $poem) }}')">
+                                        <a class="dropdown-item" href="#" onclick="sharePoem('{{ route('poems.show', $poem->slug) }}')">
                                             <i class="ph ph-share me-2"></i>{{ __('common.share') }}
                                         </a>
                                     </li>

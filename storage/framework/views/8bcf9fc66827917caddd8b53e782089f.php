@@ -1,13 +1,9 @@
-@extends('layout.master')
+<?php $__env->startSection('title', 'Slam in - Home'); ?>
 
-
-
-@section('title', 'Slam in - Home')
-
-@section('css')
+<?php $__env->startSection('css'); ?>
     <!-- Slick CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick-theme.css')); ?>">
     <style>
         /* Stili aggiuntivi per lo slider degli eventi */
         .events-slider {
@@ -86,12 +82,12 @@
             min-height: 400px !important;
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <!-- Slick JS -->
-    <script src="{{ asset('assets/vendor/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('assets/js/slick.js') }}"></script>
+    <script src="<?php echo e(asset('assets/vendor/slick/slick.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/slick.js')); ?>"></script>
 
     <script>
         // Aspetta che tutto sia caricato
@@ -285,10 +281,10 @@
         // Funzione per seguire un utente
         window.followUser = function(userId) {
             // Verifica se l'utente è autenticato
-            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+            const isAuthenticated = <?php echo e(auth()->check() ? 'true' : 'false'); ?>;
 
             if (!isAuthenticated) {
-                window.location.href = '{{ route('login') }}';
+                window.location.href = '<?php echo e(route('login')); ?>';
                 return;
             }
 
@@ -398,115 +394,118 @@
             }
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
     <div class="page-content">
         <div class="container-fluid">
 
             <!-- Hero Carousel -->
-            @if ($carousels && $carousels->count() > 0)
+            <?php if($carousels && $carousels->count() > 0): ?>
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body p-0">
                                 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="5000">
-                                    @if ($carousels && $carousels->count() > 1)
+                                    <?php if($carousels && $carousels->count() > 1): ?>
                                         <div class="carousel-indicators">
-                                            @foreach ($carousels as $index => $carousel)
+                                            <?php $__currentLoopData = $carousels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $carousel): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <button type="button" data-bs-target="#heroCarousel"
-                                                    data-bs-slide-to="{{ $index }}"
-                                                    class="bg-primary {{ $index === 0 ? 'active' : '' }}"
-                                                    aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-                                                    aria-label="Slide {{ $index + 1 }}"></button>
-                                            @endforeach
+                                                    data-bs-slide-to="<?php echo e($index); ?>"
+                                                    class="bg-primary <?php echo e($index === 0 ? 'active' : ''); ?>"
+                                                    aria-current="<?php echo e($index === 0 ? 'true' : 'false'); ?>"
+                                                    aria-label="Slide <?php echo e($index + 1); ?>"></button>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
-                                    @endif
+                                    <?php endif; ?>
                                     <div class="carousel-inner">
-                                        @foreach ($carousels as $index => $carousel)
-                                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                @if ($carousel->video_path && $carousel->videoUrl)
+                                        <?php $__currentLoopData = $carousels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $carousel): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="carousel-item <?php echo e($index === 0 ? 'active' : ''); ?>">
+                                                <?php if($carousel->video_path && $carousel->videoUrl): ?>
                                                     <video class="d-block w-100" autoplay muted loop
                                                         style="height: 400px; object-fit: cover;">
-                                                        <source src="{{ $carousel->videoUrl }}" type="video/mp4">
+                                                        <source src="<?php echo e($carousel->videoUrl); ?>" type="video/mp4">
                                                     </video>
-                                                @elseif($carousel->image_path && $carousel->imageUrl)
-                                                    <img src="{{ $carousel->imageUrl }}" class="d-block w-100"
-                                                        alt="{{ $carousel->title }}"
+                                                <?php elseif($carousel->image_path && $carousel->imageUrl): ?>
+                                                    <img src="<?php echo e($carousel->imageUrl); ?>" class="d-block w-100"
+                                                        alt="<?php echo e($carousel->title); ?>"
                                                         style="height: 400px; object-fit: cover;">
-                                                @else
+                                                <?php else: ?>
                                                     <!-- Fallback per media mancante -->
                                                     <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center"
                                                         style="height: 400px;">
                                                         <div class="text-center text-white">
                                                             <i class="ph-duotone ph-image f-s-48 mb-3"></i>
-                                                            <h5 class="f-w-600">{{ $carousel->title }}</h5>
-                                                            @if ($carousel->description)
-                                                                <p class="mb-0">{{ $carousel->description }}</p>
-                                                            @endif
+                                                            <h5 class="f-w-600"><?php echo e($carousel->title); ?></h5>
+                                                            <?php if($carousel->description): ?>
+                                                                <p class="mb-0"><?php echo e($carousel->description); ?></p>
+                                                            <?php endif; ?>
                                                         </div>
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                                 <div
                                                     class="carousel-caption d-none d-md-block bg-light-success bg-opacity-75 rounded-3 p-4 mx-auto">
-                                                    <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->title }}</h5>
-                                                    @if ($carousel->description)
-                                                        <p class="mb-4 f-s-16 text-primary">{{ $carousel->description }}
+                                                    <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->title); ?></h5>
+                                                    <?php if($carousel->description): ?>
+                                                        <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->description); ?>
+
                                                         </p>
-                                                    @endif
-                                                    @if ($carousel->link_url && $carousel->link_text)
-                                                        <a href="{{ $carousel->link_url }}"
+                                                    <?php endif; ?>
+                                                    <?php if($carousel->link_url && $carousel->link_text): ?>
+                                                        <a href="<?php echo e($carousel->link_url); ?>"
                                                             class="btn btn-primary btn-lg hover-effect">
                                                             <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                            {{ $carousel->link_text }}
+                                                            <?php echo e($carousel->link_text); ?>
+
                                                         </a>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                    @if ($carousels && $carousels->count() > 1)
+                                    <?php if($carousels && $carousels->count() > 1): ?>
                                         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
                                             data-bs-slide="prev">
                                             <i class="ph ph-arrow-circle-left f-s-24 text-primary"></i>
-                                            <span class="visually-hidden">{{ __('home.carousel.previous') }}</span>
+                                            <span class="visually-hidden"><?php echo e(__('home.carousel.previous')); ?></span>
                                         </button>
                                         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
                                             data-bs-slide="next">
                                             <i class="ph ph-arrow-circle-right f-s-24 text-primary"></i>
-                                            <span class="visually-hidden">{{ __('home.carousel.next') }}</span>
+                                            <span class="visually-hidden"><?php echo e(__('home.carousel.next')); ?></span>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Upcoming Events Slider Section -->
-            @if ($recentEvents && $recentEvents->count() > 0)
+            <?php if($recentEvents && $recentEvents->count() > 0): ?>
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="mb-0">
                                     <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                    {{ __('home.upcoming_events') }}
+                                    <?php echo e(__('home.upcoming_events')); ?>
+
                                 </h5>
                             </div>
                             <div class="card-body">
                                 <div class="events-slider app-arrow" id="events-slider">
-                                    @foreach ($recentEvents->take(10) as $event)
+                                    <?php $__currentLoopData = $recentEvents->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="autoplay-item">
                                             <div class="card overflow-hidden hover-effect h-100">
-                                                @if ($event->image_url)
-                                                    <img src="{{ $event->image_url }}" class="card-img-top"
-                                                        alt="{{ $event->title }}"
+                                                <?php if($event->image_url): ?>
+                                                    <img src="<?php echo e($event->image_url); ?>" class="card-img-top"
+                                                        alt="<?php echo e($event->title); ?>"
                                                         style="height: 200px; object-fit: cover;">
-                                                @else
-                                                    @php
+                                                <?php else: ?>
+                                                    <?php
                                                         $fallbackImages = [
                                                             'assets/images/background/default-event-1.webp',
                                                             'assets/images/background/default-event-2.webp',
@@ -514,71 +513,92 @@
                                                             'assets/images/background/default-event-4.webp',
                                                         ];
                                                         $randomImage = $fallbackImages[array_rand($fallbackImages)];
-                                                    @endphp
-                                                    <img src="{{ asset($randomImage) }}" class="card-img-top"
-                                                        alt="{{ $event->title }}"
+                                                    ?>
+                                                    <img src="<?php echo e(asset($randomImage)); ?>" class="card-img-top"
+                                                        alt="<?php echo e($event->title); ?>"
                                                         style="height: 200px; object-fit: cover;">
-                                                @endif
+                                                <?php endif; ?>
                                                 <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title f-w-600">{{ $event->title }}</h5>
+                                                    <h5 class="card-title f-w-600"><?php echo e($event->title); ?></h5>
                                                     <p class="card-text text-muted f-s-14">
                                                         <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
-                                                        {{ $event->venue_name }}
+                                                        <?php echo e($event->venue_name); ?>
+
                                                     </p>
 
-                                                    @if ($event->description)
-                                                        <p class="card-text">{{ Str::limit($event->description, 80) }}</p>
-                                                    @endif
+                                                    <?php if($event->description): ?>
+                                                        <p class="card-text"><?php echo e(Str::limit($event->description, 80)); ?></p>
+                                                    <?php endif; ?>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p class="card-text">
                                                             <small class="text-body-secondary">
                                                                 <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                                                {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                                <?php echo e($event->start_datetime->format('d/m/Y H:i')); ?>
+
 
                                                             </small>
                                                         </p>
                                                         <div class="d-flex gap-1 justify-content-end">
-                                                            @auth
+                                                            <?php if(auth()->guard()->check()): ?>
 
                                                                 <a href="#" role="button" class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    data-event-id="{{ $event->id }}"
-                                                                    title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
-                                                                    <img src="{{ asset('assets/images/like.png') }}"
+                                                                    data-event-id="<?php echo e($event->id); ?>"
+                                                                    title="Aggiungi/<?php echo e(__('wishlist.remove_from_wishlist')); ?>">
+                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
                                                                         alt="Like" style="width: 25px; height: 25px;">
                                                                 </a>
-                                                            @else
-                                                                <a href="{{ route('login') }}" role="button"
+                                                            <?php else: ?>
+                                                                <a href="<?php echo e(route('login')); ?>" role="button"
                                                                     class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    title="{{ __('auth.login_required') }}">
-                                                                    <img src="{{ asset('assets/images/like.png') }}"
+                                                                    title="<?php echo e(__('auth.login_required')); ?>">
+                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
                                                                         alt="Like" style="width: 25px; height: 25px;">
                                                                 </a>
-                                                            @endauth
+                                                            <?php endif; ?>
 
 
-                                                            <a href="{{ route('events.show', $event) }}" role="button"
+                                                            <a href="<?php echo e(route('events.show', $event)); ?>" role="button"
                                                                 class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
-                                                                <i class="ph-duotone ph-info f-s-12 me-1"></i>{{ __('home.details') }}
+                                                                <i class="ph-duotone ph-info f-s-12 me-1"></i><?php echo e(__('home.details')); ?>
+
                                                             </a>
 
-                                                            <x-report-button :content="$event" type="event"
-                                                                size="sm" />
+                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $event,'type' => 'event','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($event),'type' => 'event','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
 
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <!-- Most Popular {{ __('common.video') }} Section -->
-            @if ($mostPopularVideo && $mostPopularVideo->exists)
+            <!-- Most Popular <?php echo e(__('common.video')); ?> Section -->
+            <?php if($mostPopularVideo && $mostPopularVideo->exists): ?>
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card hover-effect border-0 shadow-sm">
@@ -587,31 +607,31 @@
                                     <div class="p-3 p-md-4">
                                         <!-- Mobile First Layout -->
                                         <div class="row">
-                                            <!-- {{ __('common.video') }} {{ __('common.thumbnail') }} Column -->
+                                            <!-- <?php echo e(__('common.video')); ?> <?php echo e(__('common.thumbnail')); ?> Column -->
                                             <div class="col-12 col-lg-6 mb-3 mb-lg-0">
                                                 <div class="position-relative">
                                                     <div class="position-relative overflow-hidden rounded-3"
                                                         style="aspect-ratio: 16/9; cursor: pointer;"
-                                                        onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
-                                                        @if (
+                                                        onclick="openVideoModal(<?php echo e($mostPopularVideo->id ?? 0); ?>)">
+                                                        <?php if(
                                                             $mostPopularVideo->thumbnail_url &&
-                                                                $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                                            <img src="{{ $mostPopularVideo->thumbnail_url }}"
-                                                                alt="{{ $mostPopularVideo->title }}" class="w-100 h-100"
+                                                                $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                            <img src="<?php echo e($mostPopularVideo->thumbnail_url); ?>"
+                                                                alt="<?php echo e($mostPopularVideo->title); ?>" class="w-100 h-100"
                                                                 style="object-fit: cover;">
-                                                        @else
+                                                        <?php else: ?>
                                                             <div
                                                                 class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
                                                                 <div class="text-center">
                                                                     <i
                                                                         class="ph-duotone ph-video-camera f-s-48 text-muted mb-2"></i>
-                                                                    <p class="text-muted f-s-14 mb-0">{{ __('home.preview_not_available') }}</p>
+                                                                    <p class="text-muted f-s-14 mb-0"><?php echo e(__('home.preview_not_available')); ?></p>
                                                                 </div>
                                                             </div>
-                                                        @endif
+                                                        <?php endif; ?>
                                                         <div class="position-absolute top-50 start-50 translate-middle"
                                                             style="cursor: pointer;"
-                                                            onclick="openVideoModal({{ $mostPopularVideo->id ?? 0 }})">
+                                                            onclick="openVideoModal(<?php echo e($mostPopularVideo->id ?? 0); ?>)">
                                                             <div class="bg-white bg-opacity-90 rounded-circle p-3 p-md-4 d-flex-center"
                                                                 style="width: 70px; height: 70px;">
                                                                 <i
@@ -624,7 +644,8 @@
                                                         <span
                                                             class="badge bg-warning text-dark f-s-11 fw-bold px-2 px-md-3 py-1 py-md-2 rounded-pill shadow-sm">
                                                             <i class="ph-duotone ph-trophy f-s-12 me-1"></i>
-                                                            {{ __('home.most_popular') }}
+                                                            <?php echo e(__('home.most_popular')); ?>
+
                                                         </span>
                                                     </div>
                                                 </div>
@@ -636,36 +657,36 @@
                                                     <!-- Title and Description -->
                                                     <div class="mb-3">
                                                         <h4 class="text-dark f-w-700 mb-2 f-s-18 f-s-md-20">
-                                                            {{ $mostPopularVideo->title }}</h4>
-                                                        @if ($mostPopularVideo->description)
+                                                            <?php echo e($mostPopularVideo->title); ?></h4>
+                                                        <?php if($mostPopularVideo->description): ?>
                                                             <p class="text-muted mb-3 f-s-14">
-                                                                {{ Str::limit($mostPopularVideo->description, 120) }}</p>
-                                                        @endif
+                                                                <?php echo e(Str::limit($mostPopularVideo->description, 120)); ?></p>
+                                                        <?php endif; ?>
 
                                                         <!-- Author Info -->
-                                                        <a href="{{ route('user.show', $mostPopularVideo->user) }}"
+                                                        <a href="<?php echo e(route('user.show', $mostPopularVideo->user)); ?>"
                                                             class="text-decoration-none hover-effect">
                                                             <div
                                                                 class="d-flex align-items-center mb-3 p-2 rounded-3 transition-all">
-                                                                @if ($mostPopularVideo->user->profile_photo)
+                                                                <?php if($mostPopularVideo->user->profile_photo): ?>
                                                                     <div
                                                                         class="h-40 w-40 d-flex-center b-r-50 overflow-hidden me-3">
-                                                                        <img src="{{ $mostPopularVideo->user->profile_photo_url }}"
-                                                                            alt="{{ $mostPopularVideo->user->name }}"
+                                                                        <img src="<?php echo e($mostPopularVideo->user->profile_photo_url); ?>"
+                                                                            alt="<?php echo e($mostPopularVideo->user->name); ?>"
                                                                             class="w-100 h-100"
                                                                             style="object-fit: cover;">
                                                                     </div>
-                                                                @else
+                                                                <?php else: ?>
                                                                     <div
                                                                         class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-gradient-primary me-3">
                                                                         <span
-                                                                            class="text-white fw-bold f-s-16">{{ substr($mostPopularVideo->user->name, 0, 2) }}</span>
+                                                                            class="text-white fw-bold f-s-16"><?php echo e(substr($mostPopularVideo->user->name, 0, 2)); ?></span>
                                                                     </div>
-                                                                @endif
+                                                                <?php endif; ?>
                                                                 <div>
                                                                     <h6 class="mb-0 f-w-600 f-s-14 text-dark">
-                                                                        {{ $mostPopularVideo->user->name }}</h6>
-                                                                    <small class="text-muted f-s-11">{{ __('home.video_author') }}</small>
+                                                                        <?php echo e($mostPopularVideo->user->name); ?></h6>
+                                                                    <small class="text-muted f-s-11"><?php echo e(__('home.video_author')); ?></small>
                                                                 </div>
                                                                 <div class="ms-auto">
                                                                     <i
@@ -677,13 +698,32 @@
                                                         <!-- Watch Button -->
                                                         <div class="d-flex gap-2">
 
-                                                            <a href="{{ route('videos.show', $mostPopularVideo) }}"
+                                                            <a href="<?php echo e(route('videos.show', $mostPopularVideo)); ?>"
                                                                 class="btn btn-primary btn-sm hover-effect f-w-600 px-3 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
                                                                 <i class="ph-duotone ph-play f-s-14 me-1"></i>
-                                                                {{ __('home.watch_video') }}
+                                                                <?php echo e(__('home.watch_video')); ?>
+
                                                             </a>
-                                                            <x-report-button :content="$mostPopularVideo" type="video"
-                                                                size="sm" />
+                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $mostPopularVideo,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($mostPopularVideo),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
                                                         </div>
                                                     </div>
 
@@ -696,8 +736,8 @@
                                                                         class="ph-duotone ph-eye f-s-16 f-s-md-18 text-info"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->view_count) }}</h6>
-                                                                <small class="text-muted f-s-10">{{ __('home.views') }}</small>
+                                                                    <?php echo e(number_format($mostPopularVideo->view_count)); ?></h6>
+                                                                <small class="text-muted f-s-10"><?php echo e(__('home.views')); ?></small>
                                                             </div>
                                                         </div>
                                                         <div class="col-6 col-md-3">
@@ -707,8 +747,8 @@
                                                                         class="ph-duotone ph-thumbs-up f-s-16 f-s-md-18 text-success"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->like_count) }}</h6>
-                                                                <small class="text-muted f-s-10">{{ __('home.likes') }}</small>
+                                                                    <?php echo e(number_format($mostPopularVideo->like_count)); ?></h6>
+                                                                <small class="text-muted f-s-10"><?php echo e(__('home.likes')); ?></small>
                                                             </div>
                                                         </div>
                                                         <div class="col-6 col-md-3">
@@ -718,24 +758,26 @@
                                                                         class="ph-duotone ph-chat-circle f-s-16 f-s-md-18 text-warning"></i>
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->comment_count) }}
+                                                                    <?php echo e(number_format($mostPopularVideo->comment_count)); ?>
+
                                                                 </h6>
                                                                 <small
-                                                                    class="text-muted f-s-10">{{ __('common.comments_section') }}</small>
+                                                                    class="text-muted f-s-10"><?php echo e(__('common.comments_section')); ?></small>
                                                             </div>
                                                         </div>
                                                         <div class="col-6 col-md-3">
                                                             <div class="text-center p-2 rounded-3 txt-bg-success">
                                                                 <div class="d-flex-center mb-1">
-                                                                    <img src="{{ asset('assets/images/snap.png') }}"
+                                                                    <img src="<?php echo e(asset('assets/images/snap.png')); ?>"
                                                                         alt="Snap"
                                                                         style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);">
                                                                 </div>
                                                                 <h6 class="mb-1 text-dark f-w-700 f-s-12 f-s-md-14">
-                                                                    {{ number_format($mostPopularVideo->snaps()->count()) }}
+                                                                    <?php echo e(number_format($mostPopularVideo->snaps()->count())); ?>
+
                                                                 </h6>
                                                                 <small
-                                                                    class="text-muted f-s-10">{{ __('common.snap') }}</small>
+                                                                    class="text-muted f-s-10"><?php echo e(__('common.snap')); ?></small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -748,7 +790,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Stats Section -->
             <div class="row mb-4">
@@ -762,8 +804,8 @@
                                             <div class="eshop-cards-icon bg-gradient-primary">
                                                 <i class="ph-duotone ph-video-camera f-s-24 text-white"></i>
                                             </div>
-                                            <h4 class="mb-1 text-primary">{{ number_format($stats['total_videos']) }}</h4>
-                                            <p class="mb-0 text-muted">{{ __('home.stats.total_videos') }}</p>
+                                            <h4 class="mb-1 text-primary"><?php echo e(number_format($stats['total_videos'])); ?></h4>
+                                            <p class="mb-0 text-muted"><?php echo e(__('home.stats.total_videos')); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -773,8 +815,8 @@
                                             <div class="eshop-cards-icon bg-gradient-success">
                                                 <i class="ph-duotone ph-eye f-s-24 text-white"></i>
                                             </div>
-                                            <h4 class="mb-1 text-success">{{ number_format($stats['total_views']) }}</h4>
-                                            <p class="mb-0 text-muted">{{ __('home.stats.total_views') }}</p>
+                                            <h4 class="mb-1 text-success"><?php echo e(number_format($stats['total_views'])); ?></h4>
+                                            <p class="mb-0 text-muted"><?php echo e(__('home.stats.total_views')); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -784,8 +826,8 @@
                                             <div class="eshop-cards-icon bg-gradient-warning">
                                                 <i class="ph-duotone ph-calendar f-s-24 text-white"></i>
                                             </div>
-                                            <h4 class="mb-1 text-warning">{{ number_format($stats['total_events']) }}</h4>
-                                            <p class="mb-0 text-muted">{{ __('home.stats.total_events') }}</p>
+                                            <h4 class="mb-1 text-warning"><?php echo e(number_format($stats['total_events'])); ?></h4>
+                                            <p class="mb-0 text-muted"><?php echo e(__('home.stats.total_events')); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -795,8 +837,8 @@
                                             <div class="eshop-cards-icon bg-gradient-info">
                                                 <i class="ph-duotone ph-users f-s-24 text-white"></i>
                                             </div>
-                                            <h4 class="mb-1 text-info">{{ number_format($stats['total_users']) }}</h4>
-                                            <p class="mb-0 text-muted">{{ __('home.stats.total_users') }}</p>
+                                            <h4 class="mb-1 text-info"><?php echo e(number_format($stats['total_users'])); ?></h4>
+                                            <p class="mb-0 text-muted"><?php echo e(__('home.stats.total_users')); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -807,26 +849,27 @@
             </div>
 
             <!-- New Entry Section - Nuovi Utenti Registrati -->
-            @if ($newUsers->count() > 0)
+            <?php if($newUsers->count() > 0): ?>
 
                 <div class="row mb-4">
                     <div class="col-12">
                         <h5 class="text-primary mb-3">
                             <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                            {{ __('home.new_users') }}
+                            <?php echo e(__('home.new_users')); ?>
+
                         </h5>
                     </div>
-                    @foreach ($newUsers->take(3) as $user)
+                    <?php $__currentLoopData = $newUsers->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-lg-4 col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="profile-container"
-                                        onclick="window.location.href='{{ route('user.show', $user) }}'"
+                                        onclick="window.location.href='<?php echo e(route('user.show', $user)); ?>'"
                                         style="cursor: pointer;">
                                         <div class="image-details">
                                             <div class="profile-image">
-                                                <img src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1') }}"
-                                                    alt="{{ $user->name }}" class="w-100 h-100"
+                                                <img src="<?php echo e($user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1')); ?>"
+                                                    alt="<?php echo e($user->name); ?>" class="w-100 h-100"
                                                     style="object-fit: cover;">
                                             </div>
                                             <div class="profile-pic">
@@ -834,14 +877,14 @@
                                                     <div class="avatar-preview">
                                                         <div id="imgPreview">
 
-                                                            <img src="{{ $user->profile_photo_url }}"
-                                                                alt="{{ $user->name }}" class="w-100 h-100"
+                                                            <img src="<?php echo e($user->profile_photo_url); ?>"
+                                                                alt="<?php echo e($user->name); ?>" class="w-100 h-100"
                                                                 style="object-fit: cover;">
 
                                                             <div
                                                                 class="bg-gradient-success rounded-circle d-flex align-items-center justify-content-center w-100 h-100">
                                                                 <span
-                                                                    class="text-white fw-bold f-s-20">{{ strtoupper(substr(trim($user->name), 0, 2)) ?: 'U' }}</span>
+                                                                    class="text-white fw-bold f-s-20"><?php echo e(strtoupper(substr(trim($user->name), 0, 2)) ?: 'U'); ?></span>
                                                             </div>
 
                                                         </div>
@@ -850,42 +893,43 @@
                                             </div>
                                         </div>
                                         <div class="person-details">
-                                            <h4 class="f-w-600 mb-1">{{ $user->name }}
-                                                @if ($user->nickname)
-                                                    <span class="text-muted f-s-14 fw-normal">({{ $user->nickname }})</span>
-                                                @endif
-                                                @if ($user->verified)
+                                            <h4 class="f-w-600 mb-1"><?php echo e($user->name); ?>
+
+                                                <?php if($user->nickname): ?>
+                                                    <span class="text-muted f-s-14 fw-normal">(<?php echo e($user->nickname); ?>)</span>
+                                                <?php endif; ?>
+                                                <?php if($user->verified): ?>
                                                     <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/profile-app/01.png"
                                                         class="w-20 h-20" alt="instagram-check-mark">
-                                                @endif
+                                                <?php endif; ?>
                                             </h4>
-                                            <p class="f-s-12 mb-3">{{ $user->city ?? __('home.location_not_specified') }}</p>
+                                            <p class="f-s-12 mb-3"><?php echo e($user->city ?? __('home.location_not_specified')); ?></p>
                                             <div class="details">
                                                 <div>
-                                                    <h4 class="text-primary">{{ $user->poems_count }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('common.poems') }}</p>
+                                                    <h4 class="text-primary"><?php echo e($user->poems_count); ?></h4>
+                                                    <p class="text-secondary f-s-12"><?php echo e(__('common.poems')); ?></p>
                                                 </div>
                                                 <div>
-                                                    <h4 class="text-primary">{{ $user->articles_count }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('common.articles') }}</p>
+                                                    <h4 class="text-primary"><?php echo e($user->articles_count); ?></h4>
+                                                    <p class="text-secondary f-s-12"><?php echo e(__('common.articles')); ?></p>
                                                 </div>
                                                 <div>
-                                                    <h4 class="text-primary">{{ number_format($user->total_interactions) }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('home.interactions') }}</p>
+                                                    <h4 class="text-primary"><?php echo e(number_format($user->total_interactions)); ?></h4>
+                                                    <p class="text-secondary f-s-12"><?php echo e(__('home.interactions')); ?></p>
                                                 </div>
                                             </div>
                                             <div class="my-2">
-                                                @auth
+                                                <?php if(auth()->guard()->check()): ?>
                                                     <button type="button"
-                                                        class="btn {{ $user->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-primary' }} b-r-22"
-                                                        onclick="event.stopPropagation(); followUser({{ $user->id }})"
-                                                        id="followBtn{{ $user->id }}">
+                                                        class="btn <?php echo e($user->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-primary'); ?> b-r-22"
+                                                        onclick="event.stopPropagation(); followUser(<?php echo e($user->id); ?>)"
+                                                        id="followBtn<?php echo e($user->id); ?>">
                                                         <i
-                                                            class="ti {{ $user->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }}"></i>
+                                                            class="ti <?php echo e($user->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user'); ?>"></i>
                                                         <span
-                                                            id="followText{{ $user->id }}">{{ $user->is_followed_by_current_user ?? false ? 'Following' : 'Follow' }}</span>
+                                                            id="followText<?php echo e($user->id); ?>"><?php echo e($user->is_followed_by_current_user ?? false ? 'Following' : 'Follow'); ?></span>
                                                     </button>
-                                                @else
+                                                <?php else: ?>
                                                     <div class="text-center">
                                                         <div class="social-counter"
                                                             style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
@@ -893,7 +937,7 @@
                                                             <span class="text-secondary f-s-12">Follow</span>
                                                         </div>
                                                     </div>
-                                                @endauth
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -902,10 +946,10 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </div>
-            @else
+            <?php else: ?>
                 <!-- No Videos Available Section -->
                 <div class="row mb-4">
                     <div class="col-12">
@@ -914,24 +958,26 @@
                                 <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                                     <i class="ph-duotone ph-video-camera-slash f-s-48 text-primary"></i>
                                 </div>
-                                <h4 class="text-dark f-w-600 mb-2">{{ __('home.no_videos_available') }}</h4>
-                                <p class="text-muted mb-3">{{ __('home.no_videos_description') }}</p>
-                                @auth
-                                    <a href="{{ route('videos.upload') }}" class="btn btn-primary">
+                                <h4 class="text-dark f-w-600 mb-2"><?php echo e(__('home.no_videos_available')); ?></h4>
+                                <p class="text-muted mb-3"><?php echo e(__('home.no_videos_description')); ?></p>
+                                <?php if(auth()->guard()->check()): ?>
+                                    <a href="<?php echo e(route('videos.upload')); ?>" class="btn btn-primary">
                                         <i class="ph-duotone ph-upload me-2"></i>
-                                        {{ __('home.upload_first_video') }}
+                                        <?php echo e(__('home.upload_first_video')); ?>
+
                                     </a>
-                                @else
-                                    <a href="{{ route('login') }}" class="btn btn-primary">
+                                <?php else: ?>
+                                    <a href="<?php echo e(route('login')); ?>" class="btn btn-primary">
                                         <i class="ph-duotone ph-sign-in me-2"></i>
-                                        {{ __('home.login_to_upload') }}
+                                        <?php echo e(__('home.login_to_upload')); ?>
+
                                     </a>
-                                @endauth
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Poetry and Articles Section -->
             <div class="row">
@@ -942,24 +988,25 @@
                             class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
-                                {{ __('home.poetry_section') }}
+                                <?php echo e(__('home.poetry_section')); ?>
+
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="poetryToggleLabelLeft"
-                                    class="text-primary f-s-12 me-2">{{ __('common.popular') }}</span>
+                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.popular')); ?></span>
                                 <div class="form-check form-switch mx-2">
                                     <input class="form-check-input" type="checkbox" id="poetryToggle"
                                         onchange="togglePoetryContent(this.checked ? 'new' : 'popular')">
                                 </div>
                                 <span id="poetryToggleLabelRight"
-                                    class="text-muted f-s-12 ms-2">{{ __('common.new') }}</span>
+                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.new')); ?></span>
                             </div>
                         </div>
                         <div class="card-body">
                             <!-- New Poetry Content -->
                             <div id="newPoetryContent">
                                 <div class="row">
-                                    @foreach ($recentPoems ?? [] as $poem)
+                                    <?php $__currentLoopData = $recentPoems ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
                                             <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
@@ -968,17 +1015,17 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($poem->thumbnail_path)
-                                                                        <img src="{{ $poem->thumbnail_url }}"
-                                                                            alt="{{ $poem->title }}" class="w-100 h-100"
+                                                                    <?php if($poem->thumbnail_path): ?>
+                                                                        <img src="<?php echo e($poem->thumbnail_url); ?>"
+                                                                            alt="<?php echo e($poem->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
+                                                                    <?php else: ?>
                                                                         <div
                                                                             class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
                                                                             <i
                                                                                 class="ph-duotone ph-book-open f-s-20 text-muted"></i>
                                                                         </div>
-                                                                    @endif
+                                                                    <?php endif; ?>
                                                                 </div>
                                                                 <div
                                                                     class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
@@ -992,26 +1039,29 @@
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                {{ Str::limit($poem->title, 40) }}</h6>
+                                                                <?php echo e(Str::limit($poem->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $poem->user) }}"
+                                                                <a href="<?php echo e(route('user.show', $poem->user)); ?>"
                                                                     class="text-decoration-none hover-effect">
-                                                                    {{ $poem->user->getDisplayName() }}
+                                                                    <?php echo e($poem->user->getDisplayName()); ?>
+
                                                                 </a>
                                                             </p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($poem->view_count) }}
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->view_count)); ?>
+
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $poem->created_at->diffForHumans() }}
+                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i><?php echo e($poem->created_at->diffForHumans()); ?>
+
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('poems.show', $poem->slug) }}"
+                                                            <a href="<?php echo e(route('poems.show', $poem)); ?>"
                                                                 class="btn btn-sm btn-gradient-info hover-effect">
                                                                 <i class="ph-duotone ph-book-open f-s-12"></i>
                                                             </a>
@@ -1020,14 +1070,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
 
                             <!-- Popular Poetry Content (Hidden by default) -->
                             <div id="popularPoetryContent" style="display: none;">
                                 <div class="row">
-                                    @foreach ($popularPoems ?? [] as $poem)
+                                    <?php $__currentLoopData = $popularPoems ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
                                             <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
@@ -1036,17 +1086,17 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($poem->thumbnail_path)
-                                                                        <img src="{{ $poem->thumbnail_url }}"
-                                                                            alt="{{ $poem->title }}" class="w-100 h-100"
+                                                                    <?php if($poem->thumbnail_path): ?>
+                                                                        <img src="<?php echo e($poem->thumbnail_url); ?>"
+                                                                            alt="<?php echo e($poem->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
+                                                                    <?php else: ?>
                                                                         <div
                                                                             class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
                                                                             <i
                                                                                 class="ph-duotone ph-book-open f-s-20 text-muted"></i>
                                                                         </div>
-                                                                    @endif
+                                                                    <?php endif; ?>
                                                                 </div>
                                                                 <div
                                                                     class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
@@ -1060,26 +1110,29 @@
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                {{ Str::limit($poem->title, 40) }}</h6>
+                                                                <?php echo e(Str::limit($poem->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $poem->user) }}"
+                                                                <a href="<?php echo e(route('user.show', $poem->user)); ?>"
                                                                     class="text-decoration-none hover-effect">
-                                                                    {{ $poem->user->getDisplayName() }}
+                                                                    <?php echo e($poem->user->getDisplayName()); ?>
+
                                                                 </a>
                                                             </p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($poem->view_count) }}
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($poem->view_count)); ?>
+
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($poem->like_count) }}
+                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($poem->like_count)); ?>
+
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('poems.show', $poem->slug) }}"
+                                                            <a href="<?php echo e(route('poems.show', $poem)); ?>"
                                                                 class="btn btn-sm btn-gradient-info hover-effect">
                                                                 <i class="ph-duotone ph-book-open f-s-12"></i>
                                                             </a>
@@ -1088,28 +1141,31 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
 
                             <!-- Footer with link to all poems -->
                             <div class="text-center mt-3">
                                 <div class="d-flex gap-2 justify-content-center">
-                                    @auth
-                                        <a href="{{ route('poems.create') }}" class="btn btn-info btn-sm">
+                                    <?php if(auth()->guard()->check()): ?>
+                                        <a href="<?php echo e(route('poems.create')); ?>" class="btn btn-info btn-sm">
                                             <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            {{ __('home.create_poetry') }}
+                                            <?php echo e(__('home.create_poetry')); ?>
+
                                         </a>
-                                    @else
-                                        <a href="{{ route('login') }}" class="btn btn-info btn-sm"
-                                            title="{{ __('auth.login_required') }}">
+                                    <?php else: ?>
+                                        <a href="<?php echo e(route('login')); ?>" class="btn btn-info btn-sm"
+                                            title="<?php echo e(__('auth.login_required')); ?>">
                                             <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            {{ __('home.create_poetry') }}
+                                            <?php echo e(__('home.create_poetry')); ?>
+
                                         </a>
-                                    @endauth
-                                    <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
+                                    <?php endif; ?>
+                                    <a href="<?php echo e(route('poems.index')); ?>" class="btn btn-outline-info btn-sm">
                                         <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                        {{ __('home.view_all_poems') }}
+                                        <?php echo e(__('home.view_all_poems')); ?>
+
                                     </a>
                                 </div>
                             </div>
@@ -1124,24 +1180,25 @@
                             class="card-header bg-gradient-warning text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
-                                {{ __('home.articles_section') }}
+                                <?php echo e(__('home.articles_section')); ?>
+
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="articlesToggleLabelLeft"
-                                    class="text-primary f-s-12 me-2">{{ __('common.popular') }}</span>
+                                    class="text-primary f-s-12 me-2"><?php echo e(__('common.popular')); ?></span>
                                 <div class="form-check form-switch mx-2">
                                     <input class="form-check-input" type="checkbox" id="articlesToggle"
                                         onchange="toggleArticlesContent(this.checked ? 'new' : 'popular')">
                                 </div>
                                 <span id="articlesToggleLabelRight"
-                                    class="text-muted f-s-12 ms-2">{{ __('common.new') }}</span>
+                                    class="text-muted f-s-12 ms-2"><?php echo e(__('common.new')); ?></span>
                             </div>
                         </div>
                         <div class="card-body">
                             <!-- New Articles Content -->
                             <div id="newArticlesContent">
                                 <div class="row">
-                                    @foreach ($recentArticles ?? [] as $article)
+                                    <?php $__currentLoopData = $recentArticles ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
                                             <div class="card  hover-effect border-warning">
                                                 <div class="card-body pa-15">
@@ -1149,37 +1206,39 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="rounded overflow-hidden"
                                                                 style="width: 60px; height: 60px;">
-                                                                @if ($article->image_path)
-                                                                    <img src="{{ asset('storage/' . $article->image_path) }}"
-                                                                        alt="{{ $article->title }}" class="w-100 h-100"
+                                                                <?php if($article->image_path): ?>
+                                                                    <img src="<?php echo e(asset('storage/' . $article->image_path)); ?>"
+                                                                        alt="<?php echo e($article->title); ?>" class="w-100 h-100"
                                                                         style="object-fit: cover;">
-                                                                @else
+                                                                <?php else: ?>
                                                                     <div
                                                                         class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
                                                                         <i
                                                                             class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
                                                                     </div>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                {{ Str::limit($article->title, 40) }}</h6>
+                                                                <?php echo e(Str::limit($article->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
+                                                                <?php echo e($article->author->name ?? __('home.editorial')); ?></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($article->view_count ?? 0) }}
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->view_count ?? 0)); ?>
+
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $article->created_at->diffForHumans() }}
+                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i><?php echo e($article->created_at->diffForHumans()); ?>
+
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('articles.show', $article) }}"
+                                                            <a href="<?php echo e(route('articles.show', $article)); ?>"
                                                                 class="btn btn-sm btn-gradient-warning hover-effect">
                                                                 <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                             </a>
@@ -1188,14 +1247,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
 
                             <!-- Popular Articles Content (Hidden by default) -->
                             <div id="popularArticlesContent" style="display: none;">
                                 <div class="row">
-                                    @foreach ($popularArticles ?? [] as $article)
+                                    <?php $__currentLoopData = $popularArticles ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
                                             <div class="card  hover-effect border-warning">
                                                 <div class="card-body pa-15">
@@ -1203,37 +1262,39 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="rounded overflow-hidden"
                                                                 style="width: 60px; height: 60px;">
-                                                                @if ($article->image_path)
-                                                                    <img src="{{ asset('storage/' . $article->image_path) }}"
-                                                                        alt="{{ $article->title }}" class="w-100 h-100"
+                                                                <?php if($article->image_path): ?>
+                                                                    <img src="<?php echo e(asset('storage/' . $article->image_path)); ?>"
+                                                                        alt="<?php echo e($article->title); ?>" class="w-100 h-100"
                                                                         style="object-fit: cover;">
-                                                                @else
+                                                                <?php else: ?>
                                                                     <div
                                                                         class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
                                                                         <i
                                                                             class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
                                                                     </div>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                {{ Str::limit($article->title, 40) }}</h6>
+                                                                <?php echo e(Str::limit($article->title, 40)); ?></h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                {{ $article->author->name ?? __('home.editorial') }}</p>
+                                                                <?php echo e($article->author->name ?? __('home.editorial')); ?></p>
                                                             <div class="d-flex align-items-center">
                                                                 <small class="text-muted f-s-11 me-3">
                                                                     <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($article->view_count ?? 0) }}
+                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->view_count ?? 0)); ?>
+
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($article->like_count ?? 0) }}
+                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($article->like_count ?? 0)); ?>
+
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
-                                                            <a href="{{ route('articles.show', $article) }}"
+                                                            <a href="<?php echo e(route('articles.show', $article)); ?>"
                                                                 class="btn btn-sm btn-gradient-warning hover-effect">
                                                                 <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                             </a>
@@ -1242,7 +1303,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
                         </div>
@@ -1260,7 +1321,7 @@
             style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;">
             <div class="modal-header"
                 style="background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <h5 class="modal-title text-white" id="videoPlayerModalLabel">{{ __('home.video_player') }}</h5>
+                <h5 class="modal-title text-white" id="videoPlayerModalLabel"><?php echo e(__('home.video_player')); ?></h5>
                 <button type="button" class="btn-close btn-close-white" onclick="closeVideoModal()"
                     aria-label="Close"></button>
             </div>
@@ -1268,16 +1329,16 @@
                 <!-- Loading indicator -->
                 <div class="text-center position-absolute top-50 start-50 translate-middle" id="modalVideoLoading">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">{{ __('home.loading_video') }}</span>
+                        <span class="visually-hidden"><?php echo e(__('home.loading_video')); ?></span>
                     </div>
-                    <p class="mt-2 text-white">{{ __('home.loading_video') }}</p>
+                    <p class="mt-2 text-white"><?php echo e(__('home.loading_video')); ?></p>
                 </div>
 
                 <!-- Error message -->
                 <div class="alert alert-danger position-absolute top-50 start-50 translate-middle" id="modalVideoError"
                     style="display: none; z-index: 1000;">
                     <i class="ph-duotone ph-warning f-s-16 me-2"></i>
-                    <span id="modalErrorMessage">{{ __('home.video_loading_error') }}</span>
+                    <span id="modalErrorMessage"><?php echo e(__('home.video_loading_error')); ?></span>
                 </div>
 
                 <!-- Video Container -->
@@ -1301,58 +1362,61 @@
                     </div>
 
                     <!-- Pulsante per creare snap con scritta sotto (solo per utenti autenticati) -->
-                    @auth
+                    <?php if(auth()->guard()->check()): ?>
                         <div class="position-absolute" id="modalFloatingSnapButton"
                             style="opacity: 1; transition: opacity 0.3s ease; z-index: 10000; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
                             <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                                 style="width: 60px; height: 60px;" onclick="toggleSnapForm()">
-                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap"
+                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap"
                                     style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
                             </button>
                             <div class="snap-label"
                                 style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
-                                {{ __('home.create_snap') }}
+                                <?php echo e(__('home.create_snap')); ?>
+
                             </div>
                         </div>
-                    @endauth
+                    <?php endif; ?>
 
                     <!-- Form inline per creare snap (solo per utenti autenticati) -->
-                    @auth
+                    <?php if(auth()->guard()->check()): ?>
                         <div class="position-absolute" id="modalSnapForm"
                             style="display: none; z-index: 10001; top: 20px; right: 20px; background: rgba(0,0,0,0.9); border-radius: 12px; padding: 20px; min-width: 300px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="text-white mb-0">{{ __('home.create_snap_button') }}</h6>
+                                <h6 class="text-white mb-0"><?php echo e(__('home.create_snap_button')); ?></h6>
                                 <button type="button" class="btn-close btn-close-white" onclick="toggleSnapForm()"></button>
                             </div>
                             <form id="inlineSnapForm">
                                 <div class="mb-3">
                                     <label for="inlineSnapTitle" class="form-label text-white"
-                                        style="font-size: 12px;">{{ __('home.snap_title_optional') }}</label>
+                                        style="font-size: 12px;"><?php echo e(__('home.snap_title_optional')); ?></label>
                                     <input type="text" class="form-control form-control-sm" id="inlineSnapTitle"
                                         style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
                                 </div>
                                 <div class="mb-3">
                                     <label for="inlineSnapDescription" class="form-label text-white"
-                                        style="font-size: 12px;">{{ __('home.snap_description_optional') }}</label>
+                                        style="font-size: 12px;"><?php echo e(__('home.snap_description_optional')); ?></label>
                                     <textarea class="form-control form-control-sm" id="inlineSnapDescription" rows="2"
                                         style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; resize: none;"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label text-white" style="font-size: 12px;">{{ __('home.timestamp') }} <span
+                                    <label class="form-label text-white" style="font-size: 12px;"><?php echo e(__('home.timestamp')); ?> <span
                                             id="inlineCurrentTime" class="text-warning">00:00</span></label>
                                     <input type="hidden" id="inlineSnapTimestamp" value="0">
                                     <input type="hidden" id="inlineSnapVideoId" value="">
                                 </div>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-sm btn-secondary"
-                                        onclick="toggleSnapForm()">{{ __('home.cancel') }}</button>
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()">{{ __('home.create_snap_button') }}</button>
+                                        onclick="toggleSnapForm()"><?php echo e(__('home.cancel')); ?></button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="createInlineSnap()"><?php echo e(__('home.create_snap_button')); ?></button>
                                 </div>
                             </form>
                         </div>
-                    @endauth
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/home.blade.php ENDPATH**/ ?>

@@ -100,7 +100,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <h4 class="mb-1">{{ $poems->sum('like_count') }}</h4>
+                            <h4 class="mb-1">{{ $poems->sum('likes_count') }}</h4>
                             <p class="text-muted mb-0">{{ __('poems.my_poems.total_likes') }}</p>
                         </div>
                         <div class="flex-shrink-0">
@@ -182,7 +182,7 @@
 
                         <!-- Titolo -->
                         <h5 class="card-title">
-                            <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
+                            <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
                                 {{ $poem->title }}
                             </a>
                         </h5>
@@ -203,17 +203,17 @@
                         <div class="row text-center mb-3">
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->view_count) }}
+                                    <i class="ph ph-eye me-1"></i>{{ number_format($poem->views_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->like_count) }}
+                                    <i class="ph ph-heart me-1"></i>{{ number_format($poem->likes_count) }}
                                 </small>
                             </div>
                             <div class="col-4">
                                 <small class="text-muted">
-                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comment_count) }}
+                                    <i class="ph ph-chat-circle me-1"></i>{{ number_format($poem->comments_count) }}
                                 </small>
                             </div>
                         </div>
@@ -233,7 +233,7 @@
                         <!-- {{ __('invitations.actions') }} -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group btn-group-sm">
-                                <a href="{{ route('poems.show', $poem) }}" class="btn btn-outline-primary">
+                                <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-outline-primary">
                                     <i class="ph ph-eye"></i>
                                 </a>
                                 @if($poem->canBeEditedBy(auth()->user()))
@@ -259,7 +259,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('poems.show', $poem) }}">
+                                        <a class="dropdown-item" href="{{ route('poems.show', $poem->slug) }}">
                                             <i class="ph ph-eye me-2"></i>{{ __('common.view') }}
                                         </a>
                                     </li>
@@ -271,7 +271,7 @@
                                         </li>
                                     @endif
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="sharePoem('{{ route('poems.show', $poem) }}')">
+                                        <a class="dropdown-item" href="#" onclick="sharePoem('{{ route('poems.show', $poem->slug) }}')">
                                             <i class="ph ph-share me-2"></i>{{ __('common.share') }}
                                         </a>
                                     </li>

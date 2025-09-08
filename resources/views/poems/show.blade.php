@@ -89,7 +89,7 @@
                                 {{ $poem->published_at ? $poem->published_at->format('d/m/Y') : $poem->created_at->format('d/m/Y') }}
                                 <span class="mx-2">•</span>
                                 <i class="ph ph-eye me-1"></i>
-                                {{ number_format($poem->view_count) }} {{ __('poems.stats.views') }}
+                                {{ number_format($poem->views_count) }} {{ __('poems.stats.views') }}
                             </div>
                         </div>
 
@@ -106,14 +106,14 @@
                                 </li>
                                 @if($poem->canBeEditedBy(auth()->user()))
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('poems.edit', $poem) }}">
+                                        <a class="dropdown-item" href="{{ route('poems.edit', $poem->slug) }}">
                                             <i class="ph ph-pencil me-2"></i>{{ __('common.edit') }}
                                         </a>
                                     </li>
                                 @endif
                                 @if($poem->canBeDeletedBy(auth()->user()))
                                     <li>
-                                        <form action="{{ route('poems.destroy', $poem) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('poems.destroy', $poem->slug) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="dropdown-item text-danger"
@@ -169,13 +169,13 @@
                     <div class="row text-center mb-4">
                         <div class="col-4">
                             <div class="border-end">
-                                <h5 class="text-primary mb-1">{{ number_format($poem->like_count) }}</h5>
+                                <h5 class="text-primary mb-1">{{ number_format($poem->likes_count) }}</h5>
                                 <small class="text-muted">{{ __('poems.stats.likes') }}</small>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="border-end">
-                                <h5 class="text-info mb-1">{{ number_format($poem->comment_count) }}</h5>
+                                <h5 class="text-info mb-1">{{ number_format($poem->comments_count) }}</h5>
                                 <small class="text-muted">{{ __('poems.stats.comments') }}</small>
                             </div>
                         </div>
@@ -188,9 +188,7 @@
                     <!-- {{ __('invitations.actions') }} social -->
                     @auth
                     <div class="d-flex justify-content-center gap-2 mb-4">
-                        <button class="btn btn-primary icon-btn" onclick="toggleLike()" id="likeBtn" title="{{ __('poems.actions.like') }}">
-                            <i class="ph {{ $poem->is_liked_by_current_user ? 'ph-heart-fill text-danger' : 'ph-heart' }}"></i>
-                        </button>
+                        <x-social-like-button :content="$poem" />
 
                         <button class="btn btn-warning icon-btn" onclick="toggleBookmark()" id="bookmarkBtn" title="{{ __('poems.actions.bookmark') }}">
                             <i class="ph {{ $poem->is_bookmarked_by_current_user ? 'ph-bookmark-fill text-warning' : 'ph-bookmark' }}"></i>
@@ -209,7 +207,7 @@
                         <div class="text-center">
                             <div class="social-counter" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
                                 <i class="ph ph-heart f-s-24 text-muted" style="opacity: 0.6;"></i>
-                                <span class="text-secondary f-s-12">{{ number_format($poem->like_count) }}</span>
+                                <span class="text-secondary f-s-12">{{ number_format($poem->likes_count) }}</span>
                             </div>
                         </div>
                         <div class="text-center">
@@ -243,89 +241,8 @@
                 </div>
             </div>
 
-            <!-- {{ __('common.comments_section') }} -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="ph ph-chats-circle text-primary me-2"></i>
-                        {{ __('poems.stats.comments') }} ({{ $poem->comments->count() }})
-                    </h5>
-                </div>
-                <div class="card-body">
-                    @auth
-                    <!-- Form per nuovo commento -->
-                    <form action="{{ route('poems.comments.store', $poem) }}" method="POST" class="mb-4">
-                        @csrf
-                        <div class="mb-3">
-                            <textarea class="form-control" name="content" rows="3"
-                                      placeholder="{{ __('poems.tooltips.comment_placeholder') }}" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="ph ph-paper-plane me-2"></i>
-                            {{ __('poems.tooltips.post_comment') }}
-                        </button>
-                    </form>
-                    @else
-                    <div class="alert alert-info mb-4">
-                        <i class="ph ph-info-circle f-s-16 me-2"></i>
-                        <a href="{{ route('login') }}" class="text-decoration-none">Accedi</a> per lasciare un commento e interagire con la poesia.
-                    </div>
-                    @endauth
-
-                    <!-- Lista commenti -->
-                    <div id="commentsList">
-                        @forelse($poem->comments as $comment)
-                            <div class="d-flex mb-3">
-                                <div class="flex-shrink-0">
-                                    <img src="{{ $comment->user->avatar_url ?? asset('assets/images/avatar/default.png') }}"
-                                         class="rounded-circle" width="40" height="40" alt="{{ $comment->user->name }}">
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h6 class="mb-1">
-                                                <a href="{{ route('user.show', $comment->user) }}" class="text-decoration-none hover-effect">
-                                                    {{ $comment->user->getDisplayName() }}
-                                                </a>
-                                            </h6>
-                                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                                        </div>
-                                        @if($comment->canBeEditedBy(auth()->user()))
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown">
-                                                    <i class="ph ph-dots-three-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a class="dropdown-item" href="#" onclick="editComment({{ $comment->id }})">
-                                                            <i class="ph ph-pencil me-2"></i>{{ __('common.edit') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <form action="{{ route('poems.comments.destroy', $comment) }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger">
-                                                                <i class="ph ph-trash me-2"></i>{{ __('common.delete') }}
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <p class="mb-1">{{ $comment->content }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="text-center text-muted py-4">
-                                <i class="ph ph-chats-circle display-4"></i>
-                                <p class="mt-2">{{ __('poems.no_comments') }}</p>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
+            <!-- Sezione commenti unificata -->
+            <x-social-comments-section :content="$poem" />
         </div>
 
         <!-- Sidebar -->
@@ -354,7 +271,7 @@
                             <small class="text-muted">{{ __('poems.poems') }}</small>
                         </div>
                         <div class="col-4">
-                            <h6 class="text-info">{{ $poem->user->poems()->published()->sum('like_count') }}</h6>
+                            <h6 class="text-info">{{ $poem->user->poems()->published()->get()->sum('likes_count') }}</h6>
                             <small class="text-muted">{{ __('poems.total_likes') }}</small>
                         </div>
                         <div class="col-4">
@@ -383,9 +300,13 @@
                             @endif
                             <div class="flex-grow-1">
                                 <h6 class="mb-1">
-                                    <a href="{{ route('poems.show', $relatedPoem) }}" class="text-decoration-none">
-                                        {{ $relatedPoem->title }}
-                                    </a>
+                                    @if($relatedPoem->slug)
+                                        <a href="{{ route('poems.show', $relatedPoem->slug) }}" class="text-decoration-none">
+                                            {{ $relatedPoem->title }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">{{ $relatedPoem->title }}</span>
+                                    @endif
                                 </h6>
                                 <small class="text-muted">
                                     <a href="{{ route('user.show', $relatedPoem->user) }}" class="text-decoration-none hover-effect">
@@ -394,10 +315,10 @@
                                 </small>
                                 <div class="d-flex align-items-center mt-1">
                                     <small class="text-muted me-3">
-                                        <i class="ph ph-heart me-1"></i>{{ $relatedPoem->like_count }}
+                                        <i class="ph ph-heart me-1"></i>{{ $relatedPoem->likes_count }}
                                     </small>
                                     <small class="text-muted">
-                                        <i class="ph ph-eye me-1"></i>{{ $relatedPoem->view_count }}
+                                        <i class="ph ph-eye me-1"></i>{{ $relatedPoem->views_count }}
                                     </small>
                                 </div>
                             </div>
@@ -432,7 +353,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <h6 class="text-warning">{{ $poem->comments->count() }}</h6>
+                            <h6 class="text-warning">{{ $poem->comments_count }}</h6>
                             <small class="text-muted">{{ __('poems.comments') }}</small>
                         </div>
                     </div>
@@ -444,59 +365,7 @@
 
 @push('scripts')
 <script>
-// Toggle like
-function toggleLike() {
-    fetch('{{ route("poems.like", $poem) }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const likeBtn = document.getElementById('likeBtn');
-            const icon = likeBtn.querySelector('i');
-
-            if (data.liked) {
-                icon.className = 'ph ph-heart-fill text-danger me-2';
-            } else {
-                icon.className = 'ph ph-heart me-2';
-            }
-
-            // Aggiorna il contatore
-            location.reload();
-        }
-    });
-}
-
-// Toggle bookmark
-function toggleBookmark() {
-    fetch('{{ route("poems.bookmark", $poem) }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const bookmarkBtn = document.getElementById('bookmarkBtn');
-            const icon = bookmarkBtn.querySelector('i');
-
-            if (data.bookmarked) {
-                icon.className = 'ph ph-bookmark-fill text-warning me-2';
-            } else {
-                icon.className = 'ph ph-bookmark me-2';
-            }
-
-            // Aggiorna il contatore
-            location.reload();
-        }
-    });
-}
+// Funzioni rimosse - ora usiamo i componenti unificati
 
 // Share poem
 function sharePoem() {
@@ -524,9 +393,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Dati originali della poesia
     const originalData = {
-        title: '{{ addslashes($poem->title) }}',
-        content: `{!! addslashes(nl2br(e($poem->content))) !!}`,
-        description: '{{ addslashes($poem->description ?? '') }}'
+        title: {!! json_encode($poem->title) !!},
+        content: {!! json_encode($poem->content) !!},
+        description: {!! json_encode($poem->description ?? '') !!}
     };
 
     languageButtons.forEach(button => {
@@ -551,29 +420,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 // Carica il contenuto tradotto
+                const url = `/poems/{{ $poem->slug }}/translations/${language}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        poemTitle.textContent = data.title;
+                        poemContent.innerHTML = data.content;
+                        if (poemDescription) {
+                            poemDescription.textContent = data.description || '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Errore nel caricamento della traduzione:', error);
+                        // Fallback al contenuto originale
+                        poemTitle.textContent = originalData.title;
+                        poemContent.innerHTML = originalData.content;
+                        if (poemDescription) {
+                            poemDescription.textContent = originalData.description;
+                        }
+                    });
             }
         });
     });
-
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                poemTitle.textContent = data.title;
-                poemContent.innerHTML = data.content;
-                if (poemDescription) {
-                    poemDescription.textContent = data.description || '';
-                }
-            })
-            .catch(error => {
-                console.error('Errore nel caricamento della traduzione:', error);
-                // Fallback al contenuto originale
-                poemTitle.textContent = originalData.title;
-                poemContent.innerHTML = originalData.content;
-                if (poemDescription) {
-                    poemDescription.textContent = originalData.description;
-                }
-            });
-    }
 });
 </script>
 @endpush

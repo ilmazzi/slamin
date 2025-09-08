@@ -19,22 +19,20 @@ class PoemActionController extends Controller
     public function toggleLike(Poem $poem)
     {
         $user = Auth::user();
-        $isLiked = $poem->likes()->where('user_id', $user->id)->exists();
+        $isLiked = $poem->isLikedBy($user);
 
         if ($isLiked) {
-            $poem->likes()->detach($user->id);
-            $poem->decrementLikeCount();
+            $poem->unlike($user);
             $message = __('poems.actions.unlike');
         } else {
-            $poem->likes()->attach($user->id);
-            $poem->incrementLikeCount();
+            $poem->like($user);
             $message = __('poems.actions.like');
         }
 
         return response()->json([
             'success' => true,
             'liked' => !$isLiked,
-            'like_count' => $poem->fresh()->like_count,
+            'like_count' => $poem->fresh()->likes_count,
             'message' => $message
         ]);
     }

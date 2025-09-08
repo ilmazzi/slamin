@@ -582,7 +582,7 @@
                                             $jobTitle = is_array($job->title) ? implode(', ', $job->title) : $job->title;
                                         @endphp
                                         @if($job->poem)
-                                            <a href="{{ route('poems.show', $job->poem) }}" class="text-decoration-none hover-effect">
+                                            <a href="{{ route('poems.show', $job->poem->slug) }}" class="text-decoration-none hover-effect">
                                                 {{ $jobTitle }}
                                             </a>
                                         @else

@@ -110,7 +110,7 @@
 
                             <!-- Lingua e Tags -->
                             <div class="col-md-6 mb-3">
-                                <label for="language" class="form-label">{{ __('poems.fields.language') }}</label>
+                                <label for="language" class="form-label">{{ __('poems.fields.language') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('language') is-invalid @enderror" id="language" name="language">
                                     <option value="">{{ __('common.select') }}</option>
                                     @foreach($languages as $key => $language)

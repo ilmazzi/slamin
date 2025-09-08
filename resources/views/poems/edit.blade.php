@@ -18,7 +18,7 @@
                             <a href="{{ route('poems.index') }}">{{ __('poems.title') }}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('poems.show', $poem) }}">{{ $poem->title }}</a>
+                            <a href="{{ route('poems.show', $poem->slug) }}">{{ $poem->title }}</a>
                         </li>
                         <li class="breadcrumb-item active">{{ __('common.edit') }}</li>
                     </ol>
@@ -251,15 +251,15 @@
                                             <div class="col-md-6">
                                                 <p class="mb-1">
                                                     <strong>{{ __('poems.fields.view_count') }}:</strong>
-                                                    {{ number_format($poem->view_count) }}
+                                                    {{ number_format($poem->views_count) }}
                                                 </p>
                                                 <p class="mb-1">
                                                     <strong>{{ __('poems.fields.like_count') }}:</strong>
-                                                    {{ number_format($poem->like_count) }}
+                                                    {{ number_format($poem->likes_count) }}
                                                 </p>
                                                 <p class="mb-1">
                                                     <strong>{{ __('poems.fields.comment_count') }}:</strong>
-                                                    {{ number_format($poem->comment_count) }}
+                                                    {{ number_format($poem->comments_count) }}
                                                 </p>
                                             </div>
                                         </div>
