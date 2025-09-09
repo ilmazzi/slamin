@@ -240,7 +240,7 @@
                         @if($user->phone)
                         <div>
                             <span class="fw-medium"><i class="ti ti-phone"></i> {{ __('profile.phone') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->phone }}</span>
+                            <span class="float-end f-s-13 text-secondary">{{ \App\Helpers\PrivacyHelper::hidePhone($user->phone) }}</span>
                         </div>
                         @endif
                         @if($user->display_location)
@@ -761,7 +761,7 @@
                                     @if($user->phone)
                                     <div>
                                         <span class="fw-medium"><i class="ti ti-phone"></i> {{ __('profile.phone') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->phone }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ \App\Helpers\PrivacyHelper::hidePhone($user->phone) }}</span>
                                     </div>
                                     @endif
                                     @if($user->display_location)
