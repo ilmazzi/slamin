@@ -341,6 +341,67 @@
                     @endforelse
                 </div>
             </div>
+
+            <!-- Bacheca annunci -->
+            @if($group->hasMember(auth()->user()))
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="ph-duotone ph-news me-2 text-primary"></i>
+                        Bacheca
+                    </h5>
+                    <a href="{{ route('groups.announcements.index', $group) }}" class="btn btn-primary btn-sm">
+                        Vedi tutti
+                    </a>
+                </div>
+                <div class="card-body">
+                    @php
+                        $recentAnnouncements = $group->announcements()
+                            ->active()
+                            ->with(['author'])
+                            ->orderBy('is_pinned', 'desc')
+                            ->orderBy('created_at', 'desc')
+                            ->limit(3)
+                            ->get();
+                    @endphp
+                    
+                    @forelse($recentAnnouncements as $announcement)
+                        <div class="announcement-item mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="mb-0">
+                                    @if($announcement->is_pinned)
+                                        <i class="ph-duotone ph-pin text-warning me-1" title="Annuncio pinnato"></i>
+                                    @endif
+                                    {{ $announcement->title }}
+                                </h6>
+                                <small class="text-muted">{{ $announcement->created_at->format('d/m') }}</small>
+                            </div>
+                            <p class="text-muted small mb-2">
+                                {{ Str::limit($announcement->content, 100) }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="ph-duotone ph-user me-1"></i>
+                                    {{ $announcement->author->name }}
+                                </small>
+                                <a href="{{ route('groups.announcements.show', [$group, $announcement]) }}" 
+                                   class="btn btn-sm btn-primary">
+                                    Leggi
+                                </a>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-3">
+                            <i class="ph-duotone ph-news f-s-32 text-muted mb-2"></i>
+                            <p class="text-muted mb-0">Nessun annuncio ancora</p>
+                            <a href="{{ route('groups.announcements.create', $group) }}" class="btn btn-sm btn-primary mt-2">
+                                Crea annuncio
+                            </a>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Sidebar con informazioni aggiuntive -->
@@ -392,16 +453,24 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('groups.members.index', $group) }}" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ route('groups.members.index', $group) }}" class="btn btn-primary btn-sm">
                             <i class="ph-duotone ph-users me-2"></i>
                             {{ __('groups.view_members') }}
                         </a>
+                        <a href="{{ route('groups.announcements.create', $group) }}" class="btn btn-success btn-sm">
+                            <i class="ph-duotone ph-plus me-2"></i>
+                            Nuovo annuncio
+                        </a>
                         @if($group->hasAdmin(auth()->user()) || auth()->user()->hasRole('admin'))
-                        <a href="{{ route('groups.invitations.pending', $group) }}" class="btn btn-outline-success btn-sm">
+                        <a href="{{ route('groups.edit', $group) }}" class="btn btn-warning btn-sm">
+                            <i class="ph-duotone ph-pencil me-2"></i>
+                            Modifica gruppo
+                        </a>
+                        <a href="{{ route('groups.invitations.pending', $group) }}" class="btn btn-info btn-sm">
                             <i class="ph-duotone ph-envelope me-2"></i>
                             {{ __('groups.manage_invitations') }}
                         </a>
-                        <a href="{{ route('groups.requests.pending', $group) }}" class="btn btn-outline-info btn-sm">
+                        <a href="{{ route('groups.requests.pending', $group) }}" class="btn btn-secondary btn-sm">
                             <i class="ph-duotone ph-hand-waving me-2"></i>
                             {{ __('groups.manage_requests') }}
                         </a>
@@ -410,6 +479,9 @@
                 </div>
             </div>
             @endif
+
+            <!-- Social Links -->
+            <x-group-social-links :group="$group" />
 
             <!-- Statistiche avanzate -->
             @if($group->hasAdmin(auth()->user()) || auth()->user()->hasRole('admin'))

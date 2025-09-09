@@ -18,6 +18,13 @@ class Group extends Model
         'image',
         'visibility',
         'created_by',
+        'website',
+        'social_facebook',
+        'social_instagram',
+        'social_youtube',
+        'social_twitter',
+        'social_tiktok',
+        'social_linkedin',
     ];
 
     protected $casts = [
@@ -65,6 +72,14 @@ class Group extends Model
     public function joinRequests(): HasMany
     {
         return $this->hasMany(GroupJoinRequest::class);
+    }
+
+    /**
+     * Relazione con gli annunci del gruppo
+     */
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(GroupAnnouncement::class);
     }
 
     /**

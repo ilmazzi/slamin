@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('groups.create_group')); ?>
 
-@section('title', __('groups.create_group'))
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
@@ -10,65 +8,111 @@
                 <div class="card-header">
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-plus-circle me-2 text-primary"></i>
-                        {{ __('groups.create_group') }}
+                        <?php echo e(__('groups.create_group')); ?>
+
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('groups.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
+                    <form action="<?php echo e(route('groups.store')); ?>" method="POST" enctype="multipart/form-data">
+                        <?php echo csrf_field(); ?>
 
                         <!-- Nome del gruppo -->
                         <div class="mb-3">
                             <label for="name" class="form-label">
                                 <i class="ph-duotone ph-tag me-1"></i>
-                                {{ __('groups.name') }} <span class="text-danger">*</span>
+                                <?php echo e(__('groups.name')); ?> <span class="text-danger">*</span>
                             </label>
                             <input type="text"
-                                   class="form-control @error('name') is-invalid @enderror"
+                                   class="form-control <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                    id="name"
                                    name="name"
-                                   value="{{ old('name') }}"
-                                   placeholder="{{ __('groups.group_name_placeholder') }}"
+                                   value="<?php echo e(old('name')); ?>"
+                                   placeholder="<?php echo e(__('groups.group_name_placeholder')); ?>"
                                    required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <!-- Descrizione -->
                         <div class="mb-3">
                             <label for="description" class="form-label">
                                 <i class="ph-duotone ph-text-aa me-1"></i>
-                                {{ __('groups.description') }}
+                                <?php echo e(__('groups.description')); ?>
+
                             </label>
-                            <textarea class="form-control @error('description') is-invalid @enderror"
+                            <textarea class="form-control <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                       id="description"
                                       name="description"
                                       rows="4"
-                                      placeholder="{{ __('groups.group_description_placeholder') }}">{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                      placeholder="<?php echo e(__('groups.group_description_placeholder')); ?>"><?php echo e(old('description')); ?></textarea>
+                            <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <!-- Immagine del gruppo -->
                         <div class="mb-3">
                             <label for="image" class="form-label">
                                 <i class="ph-duotone ph-image me-1"></i>
-                                {{ __('groups.image') }}
+                                <?php echo e(__('groups.image')); ?>
+
                             </label>
                             <input type="file"
-                                   class="form-control @error('image') is-invalid @enderror"
+                                   class="form-control <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                    id="image"
                                    name="image"
                                    accept="image/*"
                                    onchange="previewImage(this)">
                             <div class="form-text">
-                                {{ __('common.image_help_text') }}
+                                <?php echo e(__('common.image_help_text')); ?>
+
                             </div>
-                            @error('image')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
                             <!-- Anteprima immagine -->
                             <div id="imagePreview" class="mt-3" style="display: none;">
@@ -76,7 +120,8 @@
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h6 class="mb-0">
                                             <i class="ph-duotone ph-eye me-1"></i>
-                                            {{ __('groups.image_preview') }}
+                                            <?php echo e(__('groups.image_preview')); ?>
+
                                         </h6>
                                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeImage()">
                                             <i class="ph-duotone ph-x"></i>
@@ -93,158 +138,49 @@
                         <div class="mb-4">
                             <label for="visibility" class="form-label">
                                 <i class="ph-duotone ph-eye me-1"></i>
-                                {{ __('groups.visibility') }} <span class="text-danger">*</span>
+                                <?php echo e(__('groups.visibility')); ?> <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select @error('visibility') is-invalid @enderror"
+                            <select class="form-select <?php $__errorArgs = ['visibility'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                     id="visibility"
                                     name="visibility"
                                     required>
-                                <option value="">{{ __('common.select_option') }}</option>
-                                <option value="public" {{ old('visibility') == 'public' ? 'selected' : '' }}>
-                                    {{ __('groups.visibility_public') }}
+                                <option value=""><?php echo e(__('common.select_option')); ?></option>
+                                <option value="public" <?php echo e(old('visibility') == 'public' ? 'selected' : ''); ?>>
+                                    <?php echo e(__('groups.visibility_public')); ?>
+
                                 </option>
-                                <option value="private" {{ old('visibility') == 'private' ? 'selected' : '' }}>
-                                    {{ __('groups.visibility_private') }}
+                                <option value="private" <?php echo e(old('visibility') == 'private' ? 'selected' : ''); ?>>
+                                    <?php echo e(__('groups.visibility_private')); ?>
+
                                 </option>
                             </select>
                             <div class="form-text">
-                                <strong>{{ __('groups.visibility_public') }}:</strong>
-                                {{ __('groups.tips.public_visibility') }}
-                            </div>
-                            <div class="form-text">
-                                <strong>{{ __('groups.visibility_private') }}:</strong>
-                                {{ __('groups.tips.private_visibility') }}
-                            </div>
-                            @error('visibility')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                                <strong><?php echo e(__('groups.visibility_public')); ?>:</strong>
+                                <?php echo e(__('groups.tips.public_visibility')); ?>
 
-                        <!-- Social Links -->
-                        <div class="mb-4">
-                            <h6 class="mb-3">
-                                <i class="ph-duotone ph-share-network me-2"></i>
-                                Social Links
-                            </h6>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="website" class="form-label">
-                                        <i class="ph-duotone ph-globe me-1"></i>
-                                        Sito Web
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('website') is-invalid @enderror"
-                                           id="website"
-                                           name="website"
-                                           value="{{ old('website') }}"
-                                           placeholder="https://esempio.com">
-                                    @error('website')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_facebook" class="form-label">
-                                        <i class="ph-duotone ph-facebook-logo me-1"></i>
-                                        Facebook
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_facebook') is-invalid @enderror"
-                                           id="social_facebook"
-                                           name="social_facebook"
-                                           value="{{ old('social_facebook') }}"
-                                           placeholder="https://facebook.com/pagina">
-                                    @error('social_facebook')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_instagram" class="form-label">
-                                        <i class="ph-duotone ph-instagram-logo me-1"></i>
-                                        Instagram
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_instagram') is-invalid @enderror"
-                                           id="social_instagram"
-                                           name="social_instagram"
-                                           value="{{ old('social_instagram') }}"
-                                           placeholder="https://instagram.com/profilo">
-                                    @error('social_instagram')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_youtube" class="form-label">
-                                        <i class="ph-duotone ph-youtube-logo me-1"></i>
-                                        YouTube
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_youtube') is-invalid @enderror"
-                                           id="social_youtube"
-                                           name="social_youtube"
-                                           value="{{ old('social_youtube') }}"
-                                           placeholder="https://youtube.com/c/canale">
-                                    @error('social_youtube')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_twitter" class="form-label">
-                                        <i class="ph-duotone ph-twitter-logo me-1"></i>
-                                        Twitter
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_twitter') is-invalid @enderror"
-                                           id="social_twitter"
-                                           name="social_twitter"
-                                           value="{{ old('social_twitter') }}"
-                                           placeholder="https://twitter.com/profilo">
-                                    @error('social_twitter')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_tiktok" class="form-label">
-                                        <i class="ph-duotone ph-tiktok-logo me-1"></i>
-                                        TikTok
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_tiktok') is-invalid @enderror"
-                                           id="social_tiktok"
-                                           name="social_tiktok"
-                                           value="{{ old('social_tiktok') }}"
-                                           placeholder="https://tiktok.com/@profilo">
-                                    @error('social_tiktok')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                
-                                <div class="col-md-6 mb-3">
-                                    <label for="social_linkedin" class="form-label">
-                                        <i class="ph-duotone ph-linkedin-logo me-1"></i>
-                                        LinkedIn
-                                    </label>
-                                    <input type="url"
-                                           class="form-control @error('social_linkedin') is-invalid @enderror"
-                                           id="social_linkedin"
-                                           name="social_linkedin"
-                                           value="{{ old('social_linkedin') }}"
-                                           placeholder="https://linkedin.com/company/azienda">
-                                    @error('social_linkedin')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
                             </div>
-                            
                             <div class="form-text">
-                                <i class="ph-duotone ph-info me-1"></i>
-                                I social links sono opzionali e permettono ai membri di seguire il gruppo sui social media.
+                                <strong><?php echo e(__('groups.visibility_private')); ?>:</strong>
+                                <?php echo e(__('groups.tips.private_visibility')); ?>
+
                             </div>
+                            <?php $__errorArgs = ['visibility'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <!-- Sezione Inviti Membri -->
@@ -252,7 +188,8 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <label class="form-label mb-0">
                                     <i class="ph-duotone ph-users me-1"></i>
-                                    {{ __('groups.invite_members') }}
+                                    <?php echo e(__('groups.invite_members')); ?>
+
                                 </label>
                                 <span class="badge bg-primary" id="invitedUsersCount">0</span>
                             </div>
@@ -263,7 +200,7 @@
                                     <input type="text"
                                            class="form-control"
                                            id="userSearch"
-                                           placeholder="{{ __('groups.search_users_placeholder') }}"
+                                           placeholder="<?php echo e(__('groups.search_users_placeholder')); ?>"
                                            onkeydown="handleUserSearchKeydown(event)">
                                     <button class="btn btn-outline-primary"
                                             type="button"
@@ -277,7 +214,7 @@
                             <div id="searchResults" class="mb-3" style="display: none;">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="mb-0">{{ __('groups.search_results') }}</h6>
+                                        <h6 class="mb-0"><?php echo e(__('groups.search_results')); ?></h6>
                                     </div>
                                     <div class="card-body p-0">
                                         <div id="searchResultsList" class="list-group list-group-flush">
@@ -291,7 +228,7 @@
                             <div id="invitedUsersList" class="mb-3" style="display: none;">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="mb-0">{{ __('groups.invited_users') }}</h6>
+                                        <h6 class="mb-0"><?php echo e(__('groups.invited_users')); ?></h6>
                                     </div>
                                     <div class="card-body p-0">
                                         <div id="invitedUsersContainer" class="list-group list-group-flush">
@@ -309,11 +246,13 @@
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="ph-duotone ph-check me-2"></i>
-                                {{ __('groups.create') }}
+                                <?php echo e(__('groups.create')); ?>
+
                             </button>
-                            <a href="{{ route('groups.index') }}" class="btn btn-light">
+                            <a href="<?php echo e(route('groups.index')); ?>" class="btn btn-light">
                                 <i class="ph-duotone ph-arrow-left me-2"></i>
-                                {{ __('common.cancel') }}
+                                <?php echo e(__('common.cancel')); ?>
+
                             </a>
                         </div>
                     </form>
@@ -325,26 +264,31 @@
                 <div class="card-header">
                     <h6 class="mb-0">
                         <i class="ph-duotone ph-lightbulb me-2 text-warning"></i>
-                        {{ __('common.tips') }}
+                        <?php echo e(__('common.tips')); ?>
+
                     </h6>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-2"></i>
-                            {{ __('groups.tips.create_group') }}
+                            <?php echo e(__('groups.tips.create_group')); ?>
+
                         </li>
                         <li class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-2"></i>
-                            {{ __('groups.tips.invite_members') }}
+                            <?php echo e(__('groups.tips.invite_members')); ?>
+
                         </li>
                         <li class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-2"></i>
-                            {{ __('groups.tips.manage_permissions') }}
+                            <?php echo e(__('groups.tips.manage_permissions')); ?>
+
                         </li>
                         <li>
                             <i class="ph-duotone ph-check-circle text-success me-2"></i>
-                            {{ __('groups.tips.group_events') }}
+                            <?php echo e(__('groups.tips.group_events')); ?>
+
                         </li>
                     </ul>
                 </div>
@@ -352,9 +296,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 // Array per memorizzare gli utenti invitati
 let invitedUsers = [];
@@ -379,12 +323,12 @@ function updateInvitedUsersDisplay() {
     container.innerHTML = invitedUsers.map(user => `
         <div class="list-group-item d-flex justify-content-between align-items-center" data-user-id="${user.id}">
             <div class="d-flex align-items-center">
-                <img src="${user.avatar_url || '{{ asset('assets/images/avatar/default-avatar.webp') }}'}"
+                <img src="${user.avatar_url || '<?php echo e(asset('assets/images/avatar/default-avatar.webp')); ?>'}"
                      alt="Avatar"
                      class="rounded-circle me-3"
                      width="40"
                      height="40"
-                     onerror="this.src='{{ asset('assets/images/avatar/default-avatar.webp') }}'">
+                     onerror="this.src='<?php echo e(asset('assets/images/avatar/default-avatar.webp')); ?>'">
                 <div>
                     <div class="fw-bold">${user.name}</div>
                     <small class="text-muted">${user.email}</small>
@@ -442,12 +386,12 @@ function searchUsersForGroup() {
             resultsList.innerHTML = data.users.map(user => `
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="${user.avatar_url || '{{ asset('assets/images/avatar/default-avatar.webp') }}'}"
+                        <img src="${user.avatar_url || '<?php echo e(asset('assets/images/avatar/default-avatar.webp')); ?>'}"
                              alt="Avatar"
                              class="rounded-circle me-2"
                              width="32"
                              height="32"
-                             onerror="this.src='{{ asset('assets/images/avatar/default-avatar.webp') }}'">
+                             onerror="this.src='<?php echo e(asset('assets/images/avatar/default-avatar.webp')); ?>'">
                         <div>
                             <div class="fw-bold">${user.name}</div>
                             <small class="text-muted">${user.email}</small>
@@ -567,11 +511,13 @@ function removeImage() {
     // Mostra conferma
             Swal.fire({
             icon: 'success',
-            title: '{{ __("groups.image_removed") }}',
-            text: '{{ __("groups.image_removed_message") }}',
+            title: '<?php echo e(__("groups.image_removed")); ?>',
+            text: '<?php echo e(__("groups.image_removed_message")); ?>',
             timer: 1500,
             showConfirmButton: false
         });
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/groups/create.blade.php ENDPATH**/ ?>

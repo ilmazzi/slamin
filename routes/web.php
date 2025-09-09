@@ -1200,6 +1200,18 @@ Route::prefix('groups')->name('groups.')->middleware('auth')->group(function () 
         Route::post('/invite', [App\Http\Controllers\GroupMemberController::class, 'invite'])->name('invite');
     });
 
+    // Gestione annunci
+    Route::prefix('{group}/announcements')->name('announcements.')->group(function () {
+        Route::get('/', [App\Http\Controllers\GroupAnnouncementController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\GroupAnnouncementController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\GroupAnnouncementController::class, 'store'])->name('store');
+        Route::get('/{announcement}', [App\Http\Controllers\GroupAnnouncementController::class, 'show'])->name('show');
+        Route::get('/{announcement}/edit', [App\Http\Controllers\GroupAnnouncementController::class, 'edit'])->name('edit');
+        Route::put('/{announcement}', [App\Http\Controllers\GroupAnnouncementController::class, 'update'])->name('update');
+        Route::delete('/{announcement}', [App\Http\Controllers\GroupAnnouncementController::class, 'destroy'])->name('destroy');
+        Route::post('/{announcement}/vote', [App\Http\Controllers\GroupAnnouncementController::class, 'vote'])->name('vote');
+    });
+
     // Gestione inviti
     Route::prefix('{group}/invitations')->name('invitations.')->group(function () {
         Route::get('/pending', [App\Http\Controllers\GroupInvitationController::class, 'pending'])->name('pending');

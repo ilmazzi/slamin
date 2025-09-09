@@ -143,6 +143,133 @@
                             @enderror
                         </div>
 
+                        <!-- Social Links -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">
+                                <i class="ph-duotone ph-share-network me-2"></i>
+                                Social Links
+                            </h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="website" class="form-label">
+                                        <i class="ph-duotone ph-globe me-1"></i>
+                                        Sito Web
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('website') is-invalid @enderror"
+                                           id="website"
+                                           name="website"
+                                           value="{{ old('website', $group->website) }}"
+                                           placeholder="https://esempio.com">
+                                    @error('website')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_facebook" class="form-label">
+                                        <i class="ph-duotone ph-facebook-logo me-1"></i>
+                                        Facebook
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_facebook') is-invalid @enderror"
+                                           id="social_facebook"
+                                           name="social_facebook"
+                                           value="{{ old('social_facebook', $group->social_facebook) }}"
+                                           placeholder="https://facebook.com/pagina">
+                                    @error('social_facebook')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_instagram" class="form-label">
+                                        <i class="ph-duotone ph-instagram-logo me-1"></i>
+                                        Instagram
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_instagram') is-invalid @enderror"
+                                           id="social_instagram"
+                                           name="social_instagram"
+                                           value="{{ old('social_instagram', $group->social_instagram) }}"
+                                           placeholder="https://instagram.com/profilo">
+                                    @error('social_instagram')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_youtube" class="form-label">
+                                        <i class="ph-duotone ph-youtube-logo me-1"></i>
+                                        YouTube
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_youtube') is-invalid @enderror"
+                                           id="social_youtube"
+                                           name="social_youtube"
+                                           value="{{ old('social_youtube', $group->social_youtube) }}"
+                                           placeholder="https://youtube.com/c/canale">
+                                    @error('social_youtube')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_twitter" class="form-label">
+                                        <i class="ph-duotone ph-twitter-logo me-1"></i>
+                                        Twitter
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_twitter') is-invalid @enderror"
+                                           id="social_twitter"
+                                           name="social_twitter"
+                                           value="{{ old('social_twitter', $group->social_twitter) }}"
+                                           placeholder="https://twitter.com/profilo">
+                                    @error('social_twitter')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_tiktok" class="form-label">
+                                        <i class="ph-duotone ph-tiktok-logo me-1"></i>
+                                        TikTok
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_tiktok') is-invalid @enderror"
+                                           id="social_tiktok"
+                                           name="social_tiktok"
+                                           value="{{ old('social_tiktok', $group->social_tiktok) }}"
+                                           placeholder="https://tiktok.com/@profilo">
+                                    @error('social_tiktok')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_linkedin" class="form-label">
+                                        <i class="ph-duotone ph-linkedin-logo me-1"></i>
+                                        LinkedIn
+                                    </label>
+                                    <input type="url"
+                                           class="form-control @error('social_linkedin') is-invalid @enderror"
+                                           id="social_linkedin"
+                                           name="social_linkedin"
+                                           value="{{ old('social_linkedin', $group->social_linkedin) }}"
+                                           placeholder="https://linkedin.com/company/azienda">
+                                    @error('social_linkedin')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="form-text">
+                                <i class="ph-duotone ph-info me-1"></i>
+                                I social links sono opzionali e permettono ai membri di seguire il gruppo sui social media.
+                            </div>
+                        </div>
+
                         <!-- Pulsanti -->
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-warning">

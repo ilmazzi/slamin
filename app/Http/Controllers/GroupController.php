@@ -134,6 +134,13 @@ class GroupController extends Controller
             'description' => 'nullable|string|max:1000',
             'visibility' => 'required|in:public,private',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'website' => 'nullable|url|max:255',
+            'social_facebook' => 'nullable|url|max:255',
+            'social_instagram' => 'nullable|url|max:255',
+            'social_youtube' => 'nullable|url|max:255',
+            'social_twitter' => 'nullable|url|max:255',
+            'social_tiktok' => 'nullable|url|max:255',
+            'social_linkedin' => 'nullable|url|max:255',
         ]);
 
         $group = new Group();
@@ -141,6 +148,13 @@ class GroupController extends Controller
         $group->description = $request->description;
         $group->visibility = $request->visibility;
         $group->created_by = Auth::id();
+        $group->website = $request->website;
+        $group->social_facebook = $request->social_facebook;
+        $group->social_instagram = $request->social_instagram;
+        $group->social_youtube = $request->social_youtube;
+        $group->social_twitter = $request->social_twitter;
+        $group->social_tiktok = $request->social_tiktok;
+        $group->social_linkedin = $request->social_linkedin;
 
         // Gestione immagine
         if ($request->hasFile('image')) {
@@ -247,11 +261,25 @@ class GroupController extends Controller
             'description' => 'nullable|string|max:1000',
             'visibility' => 'required|in:public,private',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'website' => 'nullable|url|max:255',
+            'social_facebook' => 'nullable|url|max:255',
+            'social_instagram' => 'nullable|url|max:255',
+            'social_youtube' => 'nullable|url|max:255',
+            'social_twitter' => 'nullable|url|max:255',
+            'social_tiktok' => 'nullable|url|max:255',
+            'social_linkedin' => 'nullable|url|max:255',
         ]);
 
         $group->name = $request->name;
         $group->description = $request->description;
         $group->visibility = $request->visibility;
+        $group->website = $request->website;
+        $group->social_facebook = $request->social_facebook;
+        $group->social_instagram = $request->social_instagram;
+        $group->social_youtube = $request->social_youtube;
+        $group->social_twitter = $request->social_twitter;
+        $group->social_tiktok = $request->social_tiktok;
+        $group->social_linkedin = $request->social_linkedin;
 
         // Gestione immagine
         if ($request->hasFile('image')) {
