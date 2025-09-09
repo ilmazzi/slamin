@@ -263,11 +263,17 @@
                 // Rimuove l'ombreggiatura e migliora l'aspetto
                 $videosSlider.on('init', function() {
                     $('.slick-list').css({
-                        'box-shadow': 'none',
-                        'overflow': 'visible'
+                        'box-shadow': 'none !important',
+                        'overflow': 'visible',
+                        'filter': 'none'
                     });
                     $('.slick-track').css({
-                        'box-shadow': 'none'
+                        'box-shadow': 'none !important',
+                        'filter': 'none'
+                    });
+                    $('.slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none'
                     });
                 });
             }
@@ -413,16 +419,22 @@
         function createVideoHTML(video, badgeType) {
             const badgeClass = badgeType === 'new' ? 'bg-success' : 'bg-warning text-dark';
             const badgeIcon = badgeType === 'new' ? 'ph-clock' : 'ph-trophy';
-            const badgeText = badgeType === 'new' ? '{{ __("common.new") }}' : '{{ __("common.popular") }}';
+            const badgeText = badgeType === 'new' ? 'Nuovo' : 'Popolare';
+            
+            // Controlla se c'è una thumbnail valida
+            const hasThumbnail = video.thumbnail_url && 
+                                video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}' &&
+                                video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}';
+            
+            const thumbnailHTML = hasThumbnail 
+                ? `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">`
+                : `<div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px;"><i class="ph-duotone ph-video-camera f-s-48 text-muted"></i></div>`;
             
             return `
                 <div class="item">
                     <div class="card overflow-hidden hover-effect h-100">
                         <div class="position-relative">
-                            ${video.thumbnail_url && video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}' 
-                                ? `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">`
-                                : `<div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px;"><i class="ph-duotone ph-video-camera f-s-48 text-muted"></i></div>`
-                            }
+                            ${thumbnailHTML}
                             <div class="position-absolute top-0 start-0 m-2">
                                 <span class="badge ${badgeClass} f-s-11 fw-bold px-2 py-1 rounded-pill">
                                     <i class="ph-duotone ${badgeIcon} f-s-10 me-1"></i>
@@ -537,11 +549,17 @@
                     
                     // Rimuove l'ombreggiatura
                     $('.slick-list').css({
-                        'box-shadow': 'none',
-                        'overflow': 'visible'
+                        'box-shadow': 'none !important',
+                        'overflow': 'visible',
+                        'filter': 'none'
                     });
                     $('.slick-track').css({
-                        'box-shadow': 'none'
+                        'box-shadow': 'none !important',
+                        'filter': 'none'
+                    });
+                    $('.slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none'
                     });
                 }, 100);
             }
@@ -866,6 +884,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="center-mode app-arrow" id="videos-slider" style="overflow: visible;">
+                                <style>
+                                    #videos-slider .slick-list,
+                                    #videos-slider .slick-track,
+                                    #videos-slider .slick-slide {
+                                        box-shadow: none !important;
+                                        filter: none !important;
+                                    }
+                                </style>
                                     @foreach ($recentVideos as $video)
                                         <div class="item">
                                             <div class="card overflow-hidden hover-effect h-100">
