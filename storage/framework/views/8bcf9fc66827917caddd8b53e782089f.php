@@ -227,30 +227,47 @@
 
             if ($videosSlider.length > 0) {
                 $videosSlider.slick({
-                    slidesToShow: 3,
+                    slidesToShow: 5,
                     slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 4000,
+                    autoplay: false,
                     arrows: true,
                     dots: false,
-                    infinite: true,
+                    infinite: false,
                     speed: 500,
+                    adaptiveHeight: false,
+                    centerMode: true,
+                    centerPadding: '20px',
+                    variableWidth: false,
                     responsive: [{
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: 4,
+                                centerMode: true,
+                                centerPadding: '15px'
+                            }
+                        },
+                        {
                             breakpoint: 992,
                             settings: {
-                                slidesToShow: 2
+                                slidesToShow: 3,
+                                centerMode: true,
+                                centerPadding: '10px'
                             }
                         },
                         {
                             breakpoint: 768,
                             settings: {
-                                slidesToShow: 2
+                                slidesToShow: 2,
+                                centerMode: true,
+                                centerPadding: '10px'
                             }
                         },
                         {
                             breakpoint: 576,
                             settings: {
-                                slidesToShow: 1
+                                slidesToShow: 1,
+                                centerMode: true,
+                                centerPadding: '20px'
                             }
                         }
                     ]
@@ -398,8 +415,6 @@
             const labelRight = document.getElementById('videosToggleLabelRight');
 
             console.log('Toggle videos content:', type);
-            console.log('New content element:', newContent);
-            console.log('Popular content element:', popularContent);
 
             if (type === 'new') {
                 newContent.style.display = 'block';
@@ -419,9 +434,60 @@
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
+            }
 
-                console.log('Popular content display:', popularContent.style.display);
-                console.log('Popular content innerHTML length:', popularContent.innerHTML.length);
+            // Reinizializza il slider dopo il cambio di contenuto
+            const $videosSlider = $('#videos-slider');
+            if ($videosSlider.length > 0) {
+                $videosSlider.slick('unslick'); // Rimuove il slider esistente
+                setTimeout(() => {
+                    $videosSlider.slick({
+                        slidesToShow: 5,
+                        slidesToScroll: 1,
+                        autoplay: false,
+                        arrows: true,
+                        dots: false,
+                        infinite: false,
+                        speed: 500,
+                        adaptiveHeight: false,
+                        centerMode: true,
+                        centerPadding: '20px',
+                        variableWidth: false,
+                        responsive: [{
+                                breakpoint: 1200,
+                                settings: {
+                                    slidesToShow: 4,
+                                    centerMode: true,
+                                    centerPadding: '15px'
+                                }
+                            },
+                            {
+                                breakpoint: 992,
+                                settings: {
+                                    slidesToShow: 3,
+                                    centerMode: true,
+                                    centerPadding: '10px'
+                                }
+                            },
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 2,
+                                    centerMode: true,
+                                    centerPadding: '10px'
+                                }
+                            },
+                            {
+                                breakpoint: 576,
+                                settings: {
+                                    slidesToShow: 1,
+                                    centerMode: true,
+                                    centerPadding: '20px'
+                                }
+                            }
+                        ]
+                    });
+                }, 100);
             }
         };
 
@@ -770,21 +836,21 @@
                             </div>
                             <div class="card-body">
                                 <!-- Single Video Slider -->
-                                <div class="videos-slider app-arrow" id="videos-slider">
+                                <div class="videos-slider app-arrow" id="videos-slider" style="max-width: 100%;">
                                     <!-- New Videos (Default) -->
-                                    <div id="newVideosContent">
+                                <div id="newVideosContent">
                                         <!-- DEBUG: Recent videos count: <?php echo e($recentVideos->count()); ?> -->
                                         <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="autoplay-item">
-                                                <div class="card overflow-hidden hover-effect h-100">
+                                            <div class="autoplay-item" style="padding: 0 10px;">
+                                                <div class="card overflow-hidden hover-effect h-100" style="max-width: 100%;">
                                                     <div class="position-relative">
                                                         <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
                                                             <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
                                                                 alt="<?php echo e($video->title); ?>"
-                                                                style="height: 200px; object-fit: cover;">
+                                                                style="height: 150px; object-fit: cover;">
                                                         <?php else: ?>
                                                             <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 200px;">
+                                                                style="height: 150px;">
                                                                 <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
                                                             </div>
                                                         <?php endif; ?>
@@ -858,23 +924,23 @@
                                                 </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </div>
+                                </div>
 
                                     <!-- Popular Videos (Hidden by default) -->
-                                    <div id="popularVideosContent" style="display: none;">
+                                <div id="popularVideosContent" style="display: none;">
                                         <!-- DEBUG: Popular videos count: <?php echo e($popularVideos->count()); ?> -->
                                         <?php if($popularVideos->count() > 0): ?>
                                             <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="autoplay-item">
-                                                <div class="card overflow-hidden hover-effect h-100">
+                                            <div class="autoplay-item" style="padding: 0 10px;">
+                                                <div class="card overflow-hidden hover-effect h-100" style="max-width: 100%;">
                                                     <div class="position-relative">
                                                         <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
                                                             <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
                                                                 alt="<?php echo e($video->title); ?>"
-                                                                style="height: 200px; object-fit: cover;">
+                                                                style="height: 150px; object-fit: cover;">
                                                         <?php else: ?>
                                                             <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 200px;">
+                                                                style="height: 150px;">
                                                                 <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
                                                             </div>
                                                         <?php endif; ?>

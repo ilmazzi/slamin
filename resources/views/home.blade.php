@@ -233,33 +233,28 @@
                 $videosSlider.slick({
                     slidesToShow: 3,
                     slidesToScroll: 1,
-                    autoplay: false, // Disabilito autoplay per evitare problemi con pochi elementi
+                    autoplay: true,
+                    autoplaySpeed: 2000,
                     arrows: true,
                     dots: false,
-                    infinite: false, // Disabilito infinite per evitare problemi con pochi elementi
+                    infinite: true,
                     speed: 500,
-                    adaptiveHeight: true,
-                    centerMode: false,
-                    variableWidth: false,
                     responsive: [{
                             breakpoint: 992,
                             settings: {
-                                slidesToShow: 2,
-                                infinite: false
+                                slidesToShow: 2
                             }
                         },
                         {
                             breakpoint: 768,
                             settings: {
-                                slidesToShow: 2,
-                                infinite: false
+                                slidesToShow: 2
                             }
                         },
                         {
                             breakpoint: 576,
                             settings: {
-                                slidesToShow: 1,
-                                infinite: false
+                                slidesToShow: 1
                             }
                         }
                     ]
@@ -436,33 +431,28 @@
                     $videosSlider.slick({
                         slidesToShow: 3,
                         slidesToScroll: 1,
-                        autoplay: false,
+                        autoplay: true,
+                        autoplaySpeed: 2000,
                         arrows: true,
                         dots: false,
-                        infinite: false,
+                        infinite: true,
                         speed: 500,
-                        adaptiveHeight: true,
-                        centerMode: false,
-                        variableWidth: false,
                         responsive: [{
                                 breakpoint: 992,
                                 settings: {
-                                    slidesToShow: 2,
-                                    infinite: false
+                                    slidesToShow: 2
                                 }
                             },
                             {
                                 breakpoint: 768,
                                 settings: {
-                                    slidesToShow: 2,
-                                    infinite: false
+                                    slidesToShow: 2
                                 }
                             },
                             {
                                 breakpoint: 576,
                                 settings: {
-                                    slidesToShow: 1,
-                                    infinite: false
+                                    slidesToShow: 1
                                 }
                             }
                         ]
@@ -791,12 +781,12 @@
                             </div>
                             <div class="card-body">
                                 <!-- Single Video Slider -->
-                                <div class="videos-slider app-arrow" id="videos-slider">
+                                <div class="slider-for" id="videos-slider">
                                     <!-- New Videos (Default) -->
-                                    <div id="newVideosContent">
+                                <div id="newVideosContent">
                                         <!-- DEBUG: Recent videos count: {{ $recentVideos->count() }} -->
                                         @foreach ($recentVideos as $video)
-                                            <div class="autoplay-item">
+                                            <div>
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
                                                         @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
@@ -854,14 +844,14 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                    </div>
+                                </div>
 
                                     <!-- Popular Videos (Hidden by default) -->
-                                    <div id="popularVideosContent" style="display: none;">
+                                <div id="popularVideosContent" style="display: none;">
                                         <!-- DEBUG: Popular videos count: {{ $popularVideos->count() }} -->
                                         @if($popularVideos->count() > 0)
                                             @foreach ($popularVideos as $video)
-                                            <div class="autoplay-item">
+                                            <div>
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
                                                         @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
