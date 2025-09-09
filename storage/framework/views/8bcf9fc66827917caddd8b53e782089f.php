@@ -358,7 +358,7 @@
                     <div class="col-12">
                     <div class="card equal-card">
                         <div class="card-header">
-                            <h5>Center Mode</h5>
+                            <h5><?php echo e(__('home.videos')); ?></h5>
                             </div>
                             <div class="card-body">
                             <div class="events-slider app-arrow" id="videos-slider">
@@ -397,28 +397,70 @@
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p class="card-text">
                                                             <small class="text-body-secondary">
-                                                                <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                                <?php echo e(number_format($video->views_count ?? 0)); ?> views
+                                                                <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-counter'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $attributes = $__attributesOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__attributesOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
 
                                                             </small>
                                                         </p>
                                                         <div class="d-flex gap-1 justify-content-end">
-                                                            <?php if(auth()->guard()->check()): ?>
-
-                                                                <a href="#" role="button" class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    data-video-id="<?php echo e($video->id); ?>"
-                                                                    title="Aggiungi/<?php echo e(__('wishlist.remove_from_wishlist')); ?>">
-                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
-                                                                        alt="Like" style="width: 25px; height: 25px;">
-                                                                </a>
-                                                            <?php else: ?>
-                                                                <a href="<?php echo e(route('login')); ?>" role="button"
-                                                                    class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    title="<?php echo e(__('auth.login_required')); ?>">
-                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
-                                                                        alt="Like" style="width: 25px; height: 25px;">
-                                                                </a>
-                                                            <?php endif; ?>
+                                                            <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-like-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-like-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $attributes = $__attributesOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__attributesOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $component = $__componentOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__componentOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+                                                            <?php if (isset($component)) { $__componentOriginal6f504f396e2242cb757c367dd734f8bb = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal6f504f396e2242cb757c367dd734f8bb = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-comment-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-comment-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal6f504f396e2242cb757c367dd734f8bb)): ?>
+<?php $attributes = $__attributesOriginal6f504f396e2242cb757c367dd734f8bb; ?>
+<?php unset($__attributesOriginal6f504f396e2242cb757c367dd734f8bb); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal6f504f396e2242cb757c367dd734f8bb)): ?>
+<?php $component = $__componentOriginal6f504f396e2242cb757c367dd734f8bb; ?>
+<?php unset($__componentOriginal6f504f396e2242cb757c367dd734f8bb); ?>
+<?php endif; ?>
 
 
                                                             <button onclick="openVideoModal(<?php echo e($video->id); ?>)" role="button"
@@ -1449,6 +1491,7 @@
 
             // Inizializza lo slider dei video
             initGenericSlider('#videos-slider', 'Videos slider');
+
 
             // Inizializza il carosello Bootstrap (solo se esiste)
             const $carousel = $('#heroCarousel');

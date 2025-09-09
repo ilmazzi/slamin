@@ -251,9 +251,23 @@ class CommentController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
+        // Aggiungi avatar_url per ogni utente
+        $comments->getCollection()->transform(function ($comment) {
+            if ($comment->user) {
+                $comment->user->avatar_url = \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user);
+            }
+            return $comment;
+        });
+
         return response()->json([
             'success' => true,
-            'data' => $comments
+            'comments' => $comments->items(), // Usa 'comments' invece di 'data' per compatibilità
+            'pagination' => [
+                'current_page' => $comments->currentPage(),
+                'last_page' => $comments->lastPage(),
+                'per_page' => $comments->perPage(),
+                'total' => $comments->total(),
+            ]
         ]);
     }
 

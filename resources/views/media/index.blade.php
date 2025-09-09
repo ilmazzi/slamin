@@ -116,25 +116,7 @@
                                 <div class="d-flex gap-2">
                                     <x-social-like-button :content="$mostPopularVideo" type="video" />
                                     <x-social-view-counter :content="$mostPopularVideo" type="video" />
-                                    @auth
-                                    <div class="social-comment-btn"
-                                         data-content-type="video"
-                                         data-content-id="{{ $mostPopularVideo->id }}"
-                                         onclick="showVideoComments({{ $mostPopularVideo->id }}, event)"
-                                         title="Commenti"
-                                         style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
-                                         onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
-                                         onmouseout="this.style.backgroundColor='transparent'">
-                                        <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
-                                        <span class="text-secondary comment-count f-s-12 comment-count-{{ $mostPopularVideo->id }}">{{ $mostPopularVideo->comments()->where('status', 'approved')->count() }}</span>
-                                    </div>
-                                    @else
-                                    <div class="social-comment-counter"
-                                         style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-                                        <i class="ph-duotone ph-chat-circle f-s-24 text-muted" style="opacity: 0.6;"></i>
-                                        <span class="text-secondary comment-count f-s-12 comment-count-{{ $mostPopularVideo->id }}">{{ $mostPopularVideo->comments()->where('status', 'approved')->count() }}</span>
-                                    </div>
-                                    @endauth
+                                    <x-social-comment-button :content="$mostPopularVideo" type="video" />
                                 </div>
                                 <small class="text-muted">
                                     <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
@@ -207,15 +189,7 @@
                                             <small class="text-muted f-s-11">
                                                 <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
                                             </small>
-                                            @auth
-                                            <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
-                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
-                                            </small>
-                                            @else
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
-                                            </small>
-                                            @endauth
+                                            <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -263,15 +237,7 @@
                                             <small class="text-muted f-s-11">
                                                 <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
                                             </small>
-                                            @auth
-                                            <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
-                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
-                                            </small>
-                                            @else
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
-                                            </small>
-                                            @endauth
+                                            <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -1657,44 +1623,9 @@ function displaySearchResults(results, total) {
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                                                                     <div class="d-flex gap-2">
-                                            ${isAuthenticated ? `
-                                            <div class="social-like-btn"
-                                                 data-content-type="video"
-                                                 data-content-id="${video.id}"
-                                                 onclick="toggleSocialLike(this)"
-                                                 title="Metti like"
-                                                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
-                                                 onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
-                                                 onmouseout="this.style.backgroundColor='transparent'">
-                                                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
-                                                <span class="text-secondary like-count f-s-12">${(video.likes_count || 0).toLocaleString()}</span>
-                                            </div>
-                                            ` : `
-                                            <div class="social-like-counter"
-                                                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-                                                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
-                                                <span class="text-secondary like-count f-s-12">${(video.likes_count || 0).toLocaleString()}</span>
-                                            </div>
-                                            `}
-                                <div class="post-icon social-view-counter"
-                                     data-content-type="video"
-                                     data-content-id="${video.id}"
-                                     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                    <i class="ti ti-eye f-s-30"></i>
-                                    <p class="text-secondary view-count">${(video.view_count || video.views || 0).toLocaleString()}</p>
-                                </div>
-                                                                            ${isAuthenticated ? `
-                                            <div class="social-comment-btn"
-                                                 data-content-type="video"
-                                                 data-content-id="${video.id}"
-                                                 onclick="showVideoComments(${video.id}, event)"
-                                                 title="Commenti"
-                                                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
-                                                 onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
-                                                 onmouseout="this.style.backgroundColor='transparent'">
-                                                <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
-                                                <span class="text-secondary comment-count f-s-12 comment-count-${video.id}">${video.comments_count || 0}</span>
-                                            </div>
+                                            ${createSocialLikeButton('video', video.id, video.likes_count || 0)}
+                                ${createSocialViewCounter('video', video.id, video.view_count || video.views || 0)}
+                                            ${createSocialCommentButton('video', video.id, video.comments_count || 0)}
                                             ` : `
                                             <div class="social-comment-counter"
                                                  style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
@@ -1755,44 +1686,10 @@ function displaySearchResults(results, total) {
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                                                                     <div class="d-flex gap-2">
-                                            ${isAuthenticated ? `
-                                            <div class="social-like-btn"
-                                                 data-content-type="photo"
-                                                 data-content-id="${photo.id}"
-                                                 onclick="toggleSocialLike(this)"
-                                                 title="Metti like"
-                                                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
-                                                 onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
-                                                 onmouseout="this.style.backgroundColor='transparent'">
-                                                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
-                                                <span class="text-secondary like-count f-s-12">${(photo.likes_count || 0).toLocaleString()}</span>
-                                            </div>
-                                            ` : `
-                                            <div class="social-like-counter"
-                                                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-                                                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
-                                                <span class="text-secondary like-count f-s-12">${(photo.likes_count || 0).toLocaleString()}</span>
-                                            </div>
-                                            `}
-                                <div class="post-icon social-view-counter"
-                                     data-content-type="photo"
-                                     data-content-id="${photo.id}"
-                                     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                    <i class="ti ti-eye f-s-30"></i>
-                                    <p class="text-secondary view-count">${(photo.view_count || photo.views || 0).toLocaleString()}</p>
-                                </div>
+                                            ${createSocialLikeButton('photo', photo.id, photo.likes_count || 0)}
+                                ${createSocialViewCounter('photo', photo.id, photo.view_count || photo.views || 0)}
                                                                             ${isAuthenticated ? `
-                                            <div class="social-comment-btn"
-                                                 data-content-type="photo"
-                                                 data-content-id="${photo.id}"
-                                                 onclick="showPhotoComments(${photo.id}, event)"
-                                                 title="Commenti"
-                                                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
-                                                 onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
-                                                 onmouseout="this.style.backgroundColor='transparent'">
-                                                <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
-                                                <span class="text-secondary comment-count f-s-12 comment-count-${photo.id}">${photo.comments_count || 0}</span>
-                                            </div>
+                                            ${createSocialCommentButton('photo', photo.id, photo.comments_count || 0)}
                                             ` : `
                                             <div class="social-comment-counter"
                                                  style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
@@ -1885,6 +1782,63 @@ function toggleSocialLike(button) {
     });
 }
 
+// Crea pulsante commenti dinamico usando la stessa logica del componente
+function createSocialCommentButton(contentType, contentId, commentCount) {
+    return `
+        <div class="social-comment-btn btn btn-sm py-1 px-2 d-flex align-items-center"
+             data-content-type="${contentType}"
+             data-content-id="${contentId}"
+             onclick="showVideoComments(${contentId}, event)"
+             title="Commenti"
+             style="cursor: pointer;">
+            <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
+            <span class="comment-count">${commentCount.toLocaleString()}</span>
+        </div>
+    `;
+}
+
+// Crea view counter dinamico usando la stessa logica del componente
+function createSocialViewCounter(contentType, contentId, viewCount) {
+    return `
+        <div class="post-icon social-view-counter"
+             data-content-type="${contentType}"
+             data-content-id="${contentId}"
+             style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <i class="ti ti-eye f-s-30"></i>
+            <p class="text-secondary view-count">${viewCount.toLocaleString()}</p>
+        </div>
+    `;
+}
+
+// Crea like button dinamico usando la stessa logica del componente
+function createSocialLikeButton(contentType, contentId, likeCount, isLiked = false) {
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    
+    if (isAuthenticated) {
+        return `
+            <div class="social-like-btn"
+                 data-content-type="${contentType}"
+                 data-content-id="${contentId}"
+                 onclick="toggleSocialLike(this)"
+                 title="${isLiked ? 'Rimuovi like' : 'Metti like'}"
+                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                 onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+                 onmouseout="this.style.backgroundColor='transparent'">
+                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; ${isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'}">
+                <span class="text-secondary like-count f-s-12">${likeCount.toLocaleString()}</span>
+            </div>
+        `;
+    } else {
+        return `
+            <div class="social-like-counter"
+                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
+                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+                <span class="text-secondary like-count f-s-12">${likeCount.toLocaleString()}</span>
+            </div>
+        `;
+    }
+}
+
 // Mostra commenti per video nei risultati
 function showVideoComments(videoId, event) {
     event.stopPropagation(); // Previene l'apertura del modal
@@ -1920,10 +1874,10 @@ async function openCommentsModal(mediaType, mediaId) {
     await loadComments(mediaType, mediaId);
 }
 
-// Carica i commenti
+// Carica i commenti usando il sistema unificato
 async function loadComments(mediaType, mediaId) {
     try {
-        const response = await fetch(`/api/${mediaType}s/${mediaId}/comments`, {
+        const response = await fetch(`/api/social/comments?commentable_type=${mediaType}&commentable_id=${mediaId}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

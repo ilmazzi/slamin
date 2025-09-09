@@ -338,7 +338,7 @@
                     <div class="col-12">
                     <div class="card equal-card">
                         <div class="card-header">
-                            <h5>Center Mode</h5>
+                            <h5>{{ __('home.videos') }}</h5>
                             </div>
                             <div class="card-body">
                             <div class="events-slider app-arrow" id="videos-slider">
@@ -376,28 +376,13 @@
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                                         <p class="card-text">
                                                             <small class="text-body-secondary">
-                                                                <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                                {{ number_format($video->views_count ?? 0) }} views
+                                                                <x-social-view-counter :content="$video" type="video" size="sm" />
 
                                                             </small>
                                                         </p>
                                                         <div class="d-flex gap-1 justify-content-end">
-                                                            @auth
-
-                                                                <a href="#" role="button" class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    data-video-id="{{ $video->id }}"
-                                                                    title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
-                                                                    <img src="{{ asset('assets/images/like.png') }}"
-                                                                        alt="Like" style="width: 25px; height: 25px;">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{ route('login') }}" role="button"
-                                                                    class="btn btn-sm py-1 px-2 d-flex align-items-center"
-                                                                    title="{{ __('auth.login_required') }}">
-                                                                    <img src="{{ asset('assets/images/like.png') }}"
-                                                                        alt="Like" style="width: 25px; height: 25px;">
-                                                                </a>
-                                                            @endauth
+                                                            <x-social-like-button :content="$video" type="video" size="sm" />
+                                                            <x-social-comment-button :content="$video" type="video" size="sm" />
 
 
                                                             <button onclick="openVideoModal({{ $video->id }})" role="button"
@@ -1387,6 +1372,7 @@
 
             // Inizializza lo slider dei video
             initGenericSlider('#videos-slider', 'Videos slider');
+
 
             // Inizializza il carosello Bootstrap (solo se esiste)
             const $carousel = $('#heroCarousel');
