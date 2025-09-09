@@ -226,44 +226,11 @@
                 console.error('Slider not found!');
             }
 
-            // Inizializza il carosello video
-            const $newVideosSlider = $('#new-videos-slider');
-            const $popularVideosSlider = $('#popular-videos-slider');
+            // Inizializza il carosello video unico
+            const $videosSlider = $('#videos-slider');
 
-            if ($newVideosSlider.length > 0) {
-                $newVideosSlider.slick({
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 4000,
-                    arrows: true,
-                    dots: false,
-                    infinite: true,
-                    speed: 500,
-                    responsive: [{
-                            breakpoint: 992,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1
-                            }
-                        }
-                    ]
-                });
-            }
-
-            if ($popularVideosSlider.length > 0) {
-                $popularVideosSlider.slick({
+            if ($videosSlider.length > 0) {
+                $videosSlider.slick({
                     slidesToShow: 3,
                     slidesToScroll: 1,
                     autoplay: true,
