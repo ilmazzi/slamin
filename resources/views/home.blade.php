@@ -233,28 +233,33 @@
                 $videosSlider.slick({
                     slidesToShow: 3,
                     slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 4000,
+                    autoplay: false, // Disabilito autoplay per evitare problemi con pochi elementi
                     arrows: true,
                     dots: false,
-                    infinite: true,
+                    infinite: false, // Disabilito infinite per evitare problemi con pochi elementi
                     speed: 500,
+                    adaptiveHeight: true,
+                    centerMode: false,
+                    variableWidth: false,
                     responsive: [{
                             breakpoint: 992,
                             settings: {
-                                slidesToShow: 2
+                                slidesToShow: 2,
+                                infinite: false
                             }
                         },
                         {
                             breakpoint: 768,
                             settings: {
-                                slidesToShow: 2
+                                slidesToShow: 2,
+                                infinite: false
                             }
                         },
                         {
                             breakpoint: 576,
                             settings: {
-                                slidesToShow: 1
+                                slidesToShow: 1,
+                                infinite: false
                             }
                         }
                     ]
@@ -402,8 +407,6 @@
             const labelRight = document.getElementById('videosToggleLabelRight');
 
             console.log('Toggle videos content:', type);
-            console.log('New content element:', newContent);
-            console.log('Popular content element:', popularContent);
 
             if (type === 'new') {
                 newContent.style.display = 'block';
@@ -423,9 +426,48 @@
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
+            }
 
-                console.log('Popular content display:', popularContent.style.display);
-                console.log('Popular content innerHTML length:', popularContent.innerHTML.length);
+            // Reinizializza il slider dopo il cambio di contenuto
+            const $videosSlider = $('#videos-slider');
+            if ($videosSlider.length > 0) {
+                $videosSlider.slick('unslick'); // Rimuove il slider esistente
+                setTimeout(() => {
+                    $videosSlider.slick({
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                        autoplay: false,
+                        arrows: true,
+                        dots: false,
+                        infinite: false,
+                        speed: 500,
+                        adaptiveHeight: true,
+                        centerMode: false,
+                        variableWidth: false,
+                        responsive: [{
+                                breakpoint: 992,
+                                settings: {
+                                    slidesToShow: 2,
+                                    infinite: false
+                                }
+                            },
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 2,
+                                    infinite: false
+                                }
+                            },
+                            {
+                                breakpoint: 576,
+                                settings: {
+                                    slidesToShow: 1,
+                                    infinite: false
+                                }
+                            }
+                        ]
+                    });
+                }, 100);
             }
         };
 
