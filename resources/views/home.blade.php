@@ -338,7 +338,7 @@
                     <div class="col-12">
                     <div class="card equal-card">
                         <div class="card-header">
-                            <h5>{{ __('home.videos') }}</h5>
+                            <h5>{{ __('home.new_videos') }}</h5>
                             </div>
                             <div class="card-body">
                             <div class="events-slider app-arrow" id="videos-slider">

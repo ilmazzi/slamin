@@ -58,5 +58,5 @@ return [
     'snap_description_optional' => 'Descrizione (opzionale)',
     'timestamp' => 'Timestamp:',
     'create_snap_button' => 'Crea Snap',
-
+    'new_videos' => 'Video Recenti',
 ];
