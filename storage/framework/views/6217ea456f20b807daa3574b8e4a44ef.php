@@ -1,6 +1,4 @@
-@extends('layout.master')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Header Compatto -->
     <div class="row mb-3">
@@ -9,28 +7,34 @@
                 <div>
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-translate f-s-18 me-2"></i>
-                        @php echo __('admin.language_' . $language) ?: ucfirst($language); @endphp - {{ ucfirst($file) }}
+                        <?php echo __('admin.language_' . $language) ?: ucfirst($language); ?> - <?php echo e(ucfirst($file)); ?>
+
                     </h4>
                     <small class="text-muted">
-                        {{ $stats['translated_keys'] }}/{{ $stats['total_keys'] }} tradotte
-                        ({{ round(($stats['translated_keys'] / $stats['total_keys']) * 100, 1) }}%)
+                        <?php echo e($stats['translated_keys']); ?>/<?php echo e($stats['total_keys']); ?> tradotte
+                        (<?php echo e(round(($stats['translated_keys'] / $stats['total_keys']) * 100, 1)); ?>%)
                     </small>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="ph-duotone ph-arrow-left me-1"></i> {{ __('admin.back') }}
+                    <a href="<?php echo e(route('admin.translations.index')); ?>" class="btn btn-outline-secondary btn-sm">
+                        <i class="ph-duotone ph-arrow-left me-1"></i> <?php echo e(__('admin.back')); ?>
+
                     </a>
                     <button type="button" class="btn btn-primary btn-sm" onclick="addNewKey()">
-                        <i class="ph-duotone ph-plus f-s-12 me-1"></i> {{ __('admin.add_key') }}
+                        <i class="ph-duotone ph-plus f-s-12 me-1"></i> <?php echo e(__('admin.add_key')); ?>
+
                     </button>
                     <button type="button" class="btn btn-warning btn-sm" onclick="copyFromItalian()">
-                        <i class="ph-duotone ph-copy f-s-12 me-1"></i> {{ __('admin.copy_from_it') }}
+                        <i class="ph-duotone ph-copy f-s-12 me-1"></i> <?php echo e(__('admin.copy_from_it')); ?>
+
                     </button>
                     <button type="button" class="btn btn-danger btn-sm" onclick="clearAllTranslations()">
-                        <i class="ph-duotone ph-trash f-s-12 me-1"></i> {{ __('admin.clear_all') }}
+                        <i class="ph-duotone ph-trash f-s-12 me-1"></i> <?php echo e(__('admin.clear_all')); ?>
+
                     </button>
                     <button type="button" class="btn btn-success btn-sm" onclick="saveTranslations()">
-                        <i class="ph-duotone ph-floppy-disk f-s-12 me-1"></i> {{ __('admin.save') }}
+                        <i class="ph-duotone ph-floppy-disk f-s-12 me-1"></i> <?php echo e(__('admin.save')); ?>
+
                     </button>
                 </div>
             </div>
@@ -46,35 +50,37 @@
                         <div class="col-md-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text"><i class="ph-duotone ph-magnifying-glass f-s-12"></i></span>
-                                <input type="text" id="searchInput" class="form-control" placeholder="{{ __('admin.search_key_or_text') }}" onkeyup="filterTranslations()">
+                                <input type="text" id="searchInput" class="form-control" placeholder="<?php echo e(__('admin.search_key_or_text')); ?>" onkeyup="filterTranslations()">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <select id="statusFilter" class="form-select form-select-sm" onchange="filterTranslations()">
-                                <option value="">{{ __('admin.all_statuses') }}</option>
-                                <option value="translated">{{ __('admin.translated_status') }}</option>
-                                <option value="missing">{{ __('admin.missing_status') }}</option>
-                                <option value="empty">{{ __('admin.empty_status') }}</option>
+                                <option value=""><?php echo e(__('admin.all_statuses')); ?></option>
+                                <option value="translated"><?php echo e(__('admin.translated_status')); ?></option>
+                                <option value="missing"><?php echo e(__('admin.missing_status')); ?></option>
+                                <option value="empty"><?php echo e(__('admin.empty_status')); ?></option>
                             </select>
                         </div>
                         <div class="col-md-2">
                             <select id="sortBy" class="form-select form-select-sm" onchange="sortTranslations()">
-                                <option value="key">{{ __('admin.sort_by_key') }}</option>
-                                <option value="reference">{{ __('admin.sort_by_reference') }}</option>
-                                <option value="status">{{ __('admin.sort_by_status') }}</option>
+                                <option value="key"><?php echo e(__('admin.sort_by_key')); ?></option>
+                                <option value="reference"><?php echo e(__('admin.sort_by_reference')); ?></option>
+                                <option value="status"><?php echo e(__('admin.sort_by_status')); ?></option>
                             </select>
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="resetFilters()">
-                                <i class="ph-duotone ph-arrow-clockwise f-s-12"></i> {{ __('admin.reset_filters') }}
+                                <i class="ph-duotone ph-arrow-clockwise f-s-12"></i> <?php echo e(__('admin.reset_filters')); ?>
+
                             </button>
                         </div>
                         <div class="col-md-2">
                             <small class="text-muted d-flex align-items-center h-100">
-                                <span id="resultsCount">0</span> {{ __('admin.keys_found') }} |
-                                <span class="text-success" id="translatedCount">0</span>{{ __('admin.translated_short') }} |
-                                <span class="text-warning" id="missingCount">0</span>{{ __('admin.missing_short') }} |
-                                <span class="text-danger" id="emptyCount">0</span>{{ __('admin.empty_short') }}
+                                <span id="resultsCount">0</span> <?php echo e(__('admin.keys_found')); ?> |
+                                <span class="text-success" id="translatedCount">0</span><?php echo e(__('admin.translated_short')); ?> |
+                                <span class="text-warning" id="missingCount">0</span><?php echo e(__('admin.missing_short')); ?> |
+                                <span class="text-danger" id="emptyCount">0</span><?php echo e(__('admin.empty_short')); ?>
+
                             </small>
                         </div>
                     </div>
@@ -92,43 +98,44 @@
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width: 25%;">{{ __('admin.key_column') }}</th>
-                                    <th style="width: 30%;">{{ __('admin.reference_column') }}</th>
-                                    <th style="width: 40%;">{{ __('admin.translation_column') }}</th>
-                                    <th style="width: 5%;">{{ __('admin.status_column') }}</th>
+                                    <th style="width: 25%;"><?php echo e(__('admin.key_column')); ?></th>
+                                    <th style="width: 30%;"><?php echo e(__('admin.reference_column')); ?></th>
+                                    <th style="width: 40%;"><?php echo e(__('admin.translation_column')); ?></th>
+                                    <th style="width: 5%;"><?php echo e(__('admin.status_column')); ?></th>
                                 </tr>
                             </thead>
                             <tbody id="translationsTable">
-                                @foreach($translationData as $key => $data)
-                                <tr class="translation-row" data-key="{{ $key }}" data-status="{{ $data['is_translated'] ? 'translated' : ($data['is_missing'] ? 'missing' : 'empty') }}">
+                                <?php $__currentLoopData = $translationData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr class="translation-row" data-key="<?php echo e($key); ?>" data-status="<?php echo e($data['is_translated'] ? 'translated' : ($data['is_missing'] ? 'missing' : 'empty')); ?>">
                                     <td>
-                                        <code class="text-primary f-s-12">{{ $key }}</code>
+                                        <code class="text-primary f-s-12"><?php echo e($key); ?></code>
                                     </td>
                                     <td>
                                         <div class="text-muted f-s-12" style="max-height: 60px; overflow-y: auto;">
-                                            {{ $data['reference'] }}
+                                            <?php echo e($data['reference']); ?>
+
                                         </div>
                                     </td>
                                     <td>
                                         <textarea
-                                            name="translations[{{ $key }}]"
+                                            name="translations[<?php echo e($key); ?>]"
                                             class="form-control form-control-sm translation-input"
                                             rows="2"
                                             style="resize: vertical; min-height: 40px;"
-                                            data-key="{{ $key }}"
-                                        >{{ $data['translation'] }}</textarea>
+                                            data-key="<?php echo e($key); ?>"
+                                        ><?php echo e($data['translation']); ?></textarea>
                                     </td>
                                     <td class="text-center">
-                                        @if($data['is_translated'])
-                                            <i class="ph-duotone ph-check-circle text-success f-s-16" title="{{ __('admin.translated_tooltip') }}"></i>
-                                        @elseif($data['is_missing'])
-                                            <i class="ph-duotone ph-warning-circle text-warning f-s-16" title="{{ __('admin.missing_tooltip') }}"></i>
-                                        @else
-                                            <i class="ph-duotone ph-x-circle text-danger f-s-16" title="{{ __('admin.empty_tooltip') }}"></i>
-                                        @endif
+                                        <?php if($data['is_translated']): ?>
+                                            <i class="ph-duotone ph-check-circle text-success f-s-16" title="<?php echo e(__('admin.translated_tooltip')); ?>"></i>
+                                        <?php elseif($data['is_missing']): ?>
+                                            <i class="ph-duotone ph-warning-circle text-warning f-s-16" title="<?php echo e(__('admin.missing_tooltip')); ?>"></i>
+                                        <?php else: ?>
+                                            <i class="ph-duotone ph-x-circle text-danger f-s-16" title="<?php echo e(__('admin.empty_tooltip')); ?>"></i>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -139,7 +146,7 @@
 </div>
 
 <script>
-let allTranslations = @json($translationData);
+let allTranslations = <?php echo json_encode($translationData, 15, 512) ?>;
 let currentFilter = '';
 let currentSort = 'key';
 
@@ -224,7 +231,7 @@ function resetFilters() {
 function copyFromItalian() {
     Swal.fire({
         title: 'Copia da Italiano',
-        text: '{{ __('admin.copy_confirm') }}',
+        text: '<?php echo e(__('admin.copy_confirm')); ?>',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sì, copia',
@@ -257,7 +264,7 @@ function copyFromItalian() {
 function clearAllTranslations() {
     Swal.fire({
         title: 'Svuota Tutte le Traduzioni',
-        text: '{{ __('admin.clear_confirm') }}',
+        text: '<?php echo e(__('admin.clear_confirm')); ?>',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sì, svuota',
@@ -294,7 +301,7 @@ function saveTranslations() {
         formData.append('translations[' + textarea.dataset.key + ']', textarea.value);
     });
 
-    fetch('{{ route("admin.translations.update", $language) }}', {
+    fetch('<?php echo e(route("admin.translations.update", $language)); ?>', {
         method: 'POST',
         body: formData,
         headers: {
@@ -307,7 +314,7 @@ function saveTranslations() {
             Swal.fire({
                 icon: 'success',
                 title: 'Salvataggio Completato',
-                text: '{{ __('admin.save_success') }}',
+                text: '<?php echo e(__('admin.save_success')); ?>',
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
@@ -317,7 +324,7 @@ function saveTranslations() {
             Swal.fire({
                 icon: 'error',
                 title: 'Errore nel Salvataggio',
-                text: '{{ __('admin.save_error') }}: ' + (data.message || 'Errore sconosciuto'),
+                text: '<?php echo e(__('admin.save_error')); ?>: ' + (data.message || 'Errore sconosciuto'),
                 confirmButtonText: 'OK'
             });
         }
@@ -327,7 +334,7 @@ function saveTranslations() {
         Swal.fire({
             icon: 'error',
             title: 'Errore nel Salvataggio',
-            text: '{{ __('admin.save_error') }}',
+            text: '<?php echo e(__('admin.save_error')); ?>',
             confirmButtonText: 'OK'
         });
     });
@@ -342,17 +349,17 @@ function updateRowStatus(row) {
     if (value) {
         row.dataset.status = 'translated';
         statusIcon.className = 'ph-duotone ph-check-circle text-success f-s-16';
-        statusIcon.title = '{{ __('admin.translated_tooltip') }}';
+        statusIcon.title = '<?php echo e(__('admin.translated_tooltip')); ?>';
     } else {
         const reference = row.querySelector('td:nth-child(2)').textContent.trim();
         if (reference) {
             row.dataset.status = 'missing';
             statusIcon.className = 'ph-duotone ph-warning-circle text-warning f-s-16';
-            statusIcon.title = '{{ __('admin.missing_tooltip') }}';
+            statusIcon.title = '<?php echo e(__('admin.missing_tooltip')); ?>';
         } else {
             row.dataset.status = 'empty';
             statusIcon.className = 'ph-duotone ph-x-circle text-danger f-s-16';
-            statusIcon.title = '{{ __('admin.empty_tooltip') }}';
+            statusIcon.title = '<?php echo e(__('admin.empty_tooltip')); ?>';
         }
     }
 }
@@ -468,7 +475,7 @@ function addKeyToTable(key) {
                       placeholder="Inserisci traduzione..."></textarea>
         </td>
         <td class="text-center">
-            <span class="status-icon" title="{{ __('admin.empty_tooltip') }}">✗</span>
+            <span class="status-icon" title="<?php echo e(__('admin.empty_tooltip')); ?>">✗</span>
         </td>
     `;
 
@@ -505,4 +512,6 @@ function addKeyToTable(key) {
     });
 }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/translations/show.blade.php ENDPATH**/ ?>

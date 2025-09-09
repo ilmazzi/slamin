@@ -46,6 +46,8 @@ return [
     'save' => 'Sauvegarder',
     'statistics' => 'Statistiques',
     'total_keys' => 'Clés Totales',
+    'total_translated' => 'Traduites',
+    'total_missing' => 'Manquantes',
     'translated' => 'Traduites',
     'progress' => 'Progrès',
     'completed' => 'terminé',
