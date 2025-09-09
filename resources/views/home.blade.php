@@ -262,10 +262,6 @@
                 console.error('Slider not found!');
             }
 
-            // Inizializza entrambi i slider video
-            const $newVideosSlider = $('#new-videos-slider');
-            const $popularVideosSlider = $('#popular-videos-slider');
-            
             window.sliderConfig = {
                 slidesToShow: 3,
                 slidesToScroll: 1,

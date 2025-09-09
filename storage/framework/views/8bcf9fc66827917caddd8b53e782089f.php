@@ -4,6 +4,42 @@
     <!-- Slick CSS -->
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick.css')); ?>">
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick-theme.css')); ?>">
+    
+    <!-- Custom CSS per rimuovere ombreggiatura slider -->
+    <style>
+        #new-videos-slider .slick-list,
+        #new-videos-slider .slick-track,
+        #new-videos-slider .slick-slide,
+        #popular-videos-slider .slick-list,
+        #popular-videos-slider .slick-track,
+        #popular-videos-slider .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+        
+        .center-mode .slick-list,
+        .center-mode .slick-track,
+        .center-mode .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+        
+        .app-arrow .slick-list,
+        .app-arrow .slick-track,
+        .app-arrow .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+    </style>
     <style>
         /* Stili aggiuntivi per lo slider degli eventi */
         .events-slider {
@@ -222,57 +258,77 @@
                 console.error('Slider not found!');
             }
 
-            // Inizializza il carosello video unico
-            const $videosSlider = $('#videos-slider');
-
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick({
-                    slidesToShow: 5,
-                    slidesToScroll: 1,
-                    autoplay: false,
-                    arrows: true,
-                    dots: false,
-                    infinite: false,
-                    speed: 500,
-                    adaptiveHeight: false,
-                    centerMode: true,
-                    centerPadding: '20px',
-                    variableWidth: false,
-                    responsive: [{
-                            breakpoint: 1200,
-                            settings: {
-                                slidesToShow: 4,
-                                centerMode: true,
-                                centerPadding: '15px'
-                            }
-                        },
-                        {
-                            breakpoint: 992,
-                            settings: {
-                                slidesToShow: 3,
-                                centerMode: true,
-                                centerPadding: '10px'
-                            }
-                        },
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2,
-                                centerMode: true,
-                                centerPadding: '10px'
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1,
-                                centerMode: true,
-                                centerPadding: '20px'
-                            }
+            window.sliderConfig = {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                centerPadding: '60px',
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: true,
+                dots: false,
+                infinite: true,
+                speed: 500,
+                cssEase: 'linear',
+                responsive: [{
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            centerMode: true,
+                            centerPadding: '40px'
                         }
-                    ]
-                });
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1,
+                            centerMode: true,
+                            centerPadding: '60px'
+                        }
+                    }
+                ]
+            };
+            
+            
+            // Inizializza entrambi gli slider in modo sicuro
+            const $newVideosSlider = $('#new-videos-slider');
+            const $popularVideosSlider = $('#popular-videos-slider');
+            
+            // Funzione per inizializzare uno slider in modo sicuro
+            function initSliderSafely($slider, name) {
+                if ($slider.length === 0) return;
+                
+                try {
+                    // Verifica che abbia contenuto
+                    if ($slider.find('.item').length > 0) {
+                        $slider.slick(window.sliderConfig);
+                        console.log(`Slider ${name} inizializzato`);
+                        
+                        // Rimuovi ombreggiatura
+                        setTimeout(() => {
+                            $slider.find('.slick-list, .slick-track, .slick-slide').css({
+                                'box-shadow': 'none !important',
+                                'filter': 'none !important',
+                                'text-shadow': 'none !important',
+                                '-webkit-box-shadow': 'none !important',
+                                '-moz-box-shadow': 'none !important'
+                            });
+                        }, 100);
+                    }
+                } catch (error) {
+                    console.log(`Errore inizializzazione slider ${name}:`, error);
+                }
             }
+            
+            // Inizializza slider nuovi video (visibile)
+            setTimeout(() => {
+                initSliderSafely($newVideosSlider, 'nuovi video');
+            }, 200);
+            
+            // Inizializza slider popolari video (nascosto) con delay maggiore
+            setTimeout(() => {
+                initSliderSafely($popularVideosSlider, 'popolari video');
+            }, 500);
 
             // Inizializza il carosello Bootstrap
             if ($carousel.length > 0) {
@@ -407,90 +463,57 @@
             }
         };
 
+        // Funzione semplice per il toggle dei video (solo show/hide)
         window.toggleVideosContent = function(type) {
-            const newContent = document.getElementById('newVideosContent');
-            const popularContent = document.getElementById('popularVideosContent');
             const toggle = document.getElementById('videosToggle');
             const labelLeft = document.getElementById('videosToggleLabelLeft');
             const labelRight = document.getElementById('videosToggleLabelRight');
+            const newSlider = document.getElementById('new-videos-slider');
+            const popularSlider = document.getElementById('popular-videos-slider');
 
-            console.log('Toggle videos content:', type);
-
+            // Aggiorna le etichette del toggle
             if (type === 'new') {
-                newContent.style.display = 'block';
-                popularContent.style.display = 'none';
                 toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
                 labelRight.classList.add('text-muted');
+                
+                // Mostra slider nuovi, nascondi popolari
+                newSlider.style.display = 'block';
+                popularSlider.style.display = 'none';
             } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
                 toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
                 labelLeft.classList.remove('text-primary');
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
-            }
-
-            // Reinizializza il slider dopo il cambio di contenuto
-            const $videosSlider = $('#videos-slider');
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick('unslick'); // Rimuove il slider esistente
-                setTimeout(() => {
-                    $videosSlider.slick({
-                        slidesToShow: 5,
-                        slidesToScroll: 1,
-                        autoplay: false,
-                        arrows: true,
-                        dots: false,
-                        infinite: false,
-                        speed: 500,
-                        adaptiveHeight: false,
-                        centerMode: true,
-                        centerPadding: '20px',
-                        variableWidth: false,
-                        responsive: [{
-                                breakpoint: 1200,
-                                settings: {
-                                    slidesToShow: 4,
-                                    centerMode: true,
-                                    centerPadding: '15px'
-                                }
-                            },
-                            {
-                                breakpoint: 992,
-                                settings: {
-                                    slidesToShow: 3,
-                                    centerMode: true,
-                                    centerPadding: '10px'
-                                }
-                            },
-                            {
-                                breakpoint: 768,
-                                settings: {
-                                    slidesToShow: 2,
-                                    centerMode: true,
-                                    centerPadding: '10px'
-                                }
-                            },
-                            {
-                                breakpoint: 576,
-                                settings: {
-                                    slidesToShow: 1,
-                                    centerMode: true,
-                                    centerPadding: '20px'
-                                }
-                            }
-                        ]
-                    });
-                }, 100);
+                
+                // Mostra slider popolari, nascondi nuovi
+                newSlider.style.display = 'none';
+                popularSlider.style.display = 'block';
             }
         };
-
+        
+        // Assicurati che la funzione sia disponibile globalmente
+        console.log('toggleVideosContent function defined:', typeof window.toggleVideosContent);
+        
+        // Fallback per assicurarsi che la funzione sia sempre disponibile
+        if (typeof window.toggleVideosContent === 'undefined') {
+            window.toggleVideosContent = function(type) {
+                console.log('Fallback toggleVideosContent called with type:', type);
+                const newSlider = document.getElementById('new-videos-slider');
+                const popularSlider = document.getElementById('popular-videos-slider');
+                
+                if (type === 'new') {
+                    if (newSlider) newSlider.style.display = 'block';
+                    if (popularSlider) popularSlider.style.display = 'none';
+                } else {
+                    if (newSlider) newSlider.style.display = 'none';
+                    if (popularSlider) popularSlider.style.display = 'block';
+                }
+            };
+        }
 
         // Funzione per seguire un utente
         window.followUser = function(userId) {
@@ -816,7 +839,7 @@
             <?php if(($recentVideos && $recentVideos->count() > 0) || ($popularVideos && $popularVideos->count() > 0)): ?>
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card">
+                        <div class="card equal-card">
                             <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">
                                     <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
@@ -835,71 +858,68 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <!-- Single Video Slider -->
-                                <div class="videos-slider app-arrow" id="videos-slider" style="max-width: 100%;">
-                                    <!-- New Videos (Default) -->
-                                <div id="newVideosContent">
-                                        <!-- DEBUG: Recent videos count: <?php echo e($recentVideos->count()); ?> -->
-                                        <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="autoplay-item" style="padding: 0 10px;">
-                                                <div class="card overflow-hidden hover-effect h-100" style="max-width: 100%;">
-                                                    <div class="position-relative">
-                                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
-                                                            <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
-                                                                alt="<?php echo e($video->title); ?>"
-                                                                style="height: 150px; object-fit: cover;">
-                                                        <?php else: ?>
-                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 150px;">
-                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                                <i class="ph-duotone ph-clock f-s-10 me-1"></i>
-                                                                <?php echo e(__('common.new')); ?>
-
-                                                            </span>
+                                <!-- Slider per video nuovi -->
+                                <div class="center-mode app-arrow" id="new-videos-slider">
+                                    <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="item">
+                                            <div class="card overflow-hidden hover-effect h-100">
+                                                <div class="position-relative">
+                                                    <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                        <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                            alt="<?php echo e($video->title); ?>"
+                                                            style="height: 200px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                            style="height: 200px;">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
                                                         </div>
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal(<?php echo e($video->id); ?>)">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                                style="width: 50px; height: 50px;">
-                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                            </div>
+                                                    <?php endif; ?>
+                                                    <div class="position-absolute top-0 start-0 m-2">
+                                                        <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                            <i class="ph-duotone ph-clock f-s-10 me-1"></i>
+                                                            <?php echo e(__('common.new')); ?>
+
+                                                        </span>
+                                                    </div>
+                                                    <div class="position-absolute top-50 start-50 translate-middle"
+                                                        style="cursor: pointer;"
+                                                        onclick="openVideoModal(<?php echo e($video->id); ?>)">
+                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                            style="width: 50px; height: 50px;">
+                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                                <?php echo e(Str::limit($video->title, 50)); ?>
+                                                </div>
+                                                <div class="card-body d-flex flex-column">
+                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                        <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                            <?php echo e(Str::limit($video->title, 50)); ?>
 
-                                                            </a>
-                                                        </h6>
-                                                        <p class="text-muted f-s-12 mb-2">
-                                                            <a href="<?php echo e(route('user.show', $video->user)); ?>"
-                                                                class="text-decoration-none hover-effect">
-                                                                <?php echo e($video->user->getDisplayName()); ?>
+                                                        </a>
+                                                    </h6>
+                                                    <p class="text-muted f-s-12 mb-2">
+                                                        <a href="<?php echo e(route('user.show', $video->user)); ?>"
+                                                            class="text-decoration-none hover-effect">
+                                                            <?php echo e($video->user->getDisplayName()); ?>
 
-                                                            </a>
-                                                        </p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <div class="d-flex gap-2">
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count)); ?>
+                                                        </a>
+                                                    </p>
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div class="d-flex gap-2">
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
 
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
 
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count)); ?>
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
 
-                                                                </small>
-                                                            </div>
-                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+                                                            </small>
+                                                        </div>
+                                                        <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('report-button'); ?>
@@ -919,76 +939,75 @@
 <?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
 <?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
 <?php endif; ?>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
 
-                                    <!-- Popular Videos (Hidden by default) -->
-                                <div id="popularVideosContent" style="display: none;">
-                                        <!-- DEBUG: Popular videos count: <?php echo e($popularVideos->count()); ?> -->
-                                        <?php if($popularVideos->count() > 0): ?>
-                                            <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class="autoplay-item" style="padding: 0 10px;">
-                                                <div class="card overflow-hidden hover-effect h-100" style="max-width: 100%;">
-                                                    <div class="position-relative">
-                                                        <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
-                                                            <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
-                                                                alt="<?php echo e($video->title); ?>"
-                                                                style="height: 150px; object-fit: cover;">
-                                                        <?php else: ?>
-                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 150px;">
-                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                            </div>
-                                                        <?php endif; ?>
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                                <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                                Popolare
-                                                            </span>
+                                <!-- Slider per video popolari -->
+                                <div class="center-mode app-arrow" id="popular-videos-slider" style="display: none;">
+                                    <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="item">
+                                            <div class="card overflow-hidden hover-effect h-100">
+                                                <div class="position-relative">
+                                                    <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
+                                                        <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                            alt="<?php echo e($video->title); ?>"
+                                                            style="height: 200px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                            style="height: 200px;">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
                                                         </div>
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal(<?php echo e($video->id); ?>)">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                                style="width: 50px; height: 50px;">
-                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                            </div>
+                                                    <?php endif; ?>
+                                                    <div class="position-absolute top-0 start-0 m-2">
+                                                        <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                            <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
+                                                            <?php echo e(__('common.popular')); ?>
+
+                                                        </span>
+                                                    </div>
+                                                    <div class="position-absolute top-50 start-50 translate-middle"
+                                                        style="cursor: pointer;"
+                                                        onclick="openVideoModal(<?php echo e($video->id); ?>)">
+                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                            style="width: 50px; height: 50px;">
+                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
                                                         </div>
                                                     </div>
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                            <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                                <?php echo e(Str::limit($video->title, 50)); ?>
+                                                </div>
+                                                <div class="card-body d-flex flex-column">
+                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                        <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                            <?php echo e(Str::limit($video->title, 50)); ?>
 
-                                                            </a>
-                                                        </h6>
-                                                        <p class="text-muted f-s-12 mb-2">
-                                                            <a href="<?php echo e(route('user.show', $video->user)); ?>"
-                                                                class="text-decoration-none hover-effect">
-                                                                <?php echo e($video->user->getDisplayName()); ?>
+                                                        </a>
+                                                    </h6>
+                                                    <p class="text-muted f-s-12 mb-2">
+                                                        <a href="<?php echo e(route('user.show', $video->user)); ?>"
+                                                            class="text-decoration-none hover-effect">
+                                                            <?php echo e($video->user->getDisplayName()); ?>
 
-                                                            </a>
-                                                        </p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <div class="d-flex gap-2">
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
+                                                        </a>
+                                                    </p>
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div class="d-flex gap-2">
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
 
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
 
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
 
-                                                                </small>
-                                                            </div>
-                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+                                                            </small>
+                                                        </div>
+                                                        <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('report-button'); ?>
@@ -1008,14 +1027,13 @@
 <?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
 <?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
 <?php endif; ?>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
+
                             </div>
                         </div>
                     </div>
