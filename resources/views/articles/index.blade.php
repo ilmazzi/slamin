@@ -43,7 +43,7 @@
                             <i class="ph ph-star me-2"></i>
                             {{ __('articles.featured_articles') }}
                         </h4>
-                        
+
                         <!-- Featured Article 1 + 2 Recent -->
                         @if($featuredArticles->count() >= 1)
                             <div class="row g-3 mb-4">
@@ -74,14 +74,14 @@
                                         <div class="card-body">
                                             <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured1->title }}</h5>
                                             <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured1->excerpt, 150) }}</p>
-                                            
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured1->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured1->published_at->format('d/m/Y') }}</span>
-                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured1->views_count ?? 0 }}</span>
-                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured1->likes_count }}</span>
-                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured1->comments_count }}</span>
+                                                    <x-social-view-counter :content="$featured1" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured1" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured1" type="article" size="sm" />
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured1->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -90,7 +90,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- 2 Recent Articles -->
                                 @if($recentArticles->count() >= 2)
                                     <div class="col-12 col-sm-6">
@@ -119,7 +119,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent1->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent1->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent1->user->name ?? 'N/A' }}</span>
@@ -127,9 +127,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent1->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent1->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent1->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent1" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent1" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent1" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent1->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -139,7 +139,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-12 col-sm-6">
                                         @php $recent2 = $recentArticles->get(1); @endphp
                                         <div class="card hover-effect h-100">
@@ -166,7 +166,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent2->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent2->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent2->user->name ?? 'N/A' }}</span>
@@ -174,9 +174,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent2->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent2->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent2->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent2" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent2" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent2" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent2->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -220,14 +220,14 @@
                                         <div class="card-body">
                                             <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured2->title }}</h5>
                                             <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured2->excerpt, 150) }}</p>
-                                            
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured2->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured2->published_at->format('d/m/Y') }}</span>
-                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured2->views_count ?? 0 }}</span>
-                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured2->likes_count }}</span>
-                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured2->comments_count }}</span>
+                                                    <x-social-view-counter :content="$featured2" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured2" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured2" type="article" size="sm" />
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured2->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -236,7 +236,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- 2 Recent Articles -->
                                 @if($recentArticles->count() >= 4)
                                     <div class="col-12 col-sm-6">
@@ -265,7 +265,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent3->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent3->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent3->user->name ?? 'N/A' }}</span>
@@ -273,9 +273,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent3->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent3->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent3->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent3" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent3" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent3" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent3->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -285,7 +285,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-12 col-sm-6">
                                         @php $recent4 = $recentArticles->get(3); @endphp
                                         <div class="card hover-effect h-100">
@@ -312,7 +312,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent4->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent4->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent4->user->name ?? 'N/A' }}</span>
@@ -320,9 +320,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent4->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent4->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent4->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent4" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent4" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent4" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent4->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -366,14 +366,14 @@
                                         <div class="card-body">
                                             <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured3->title }}</h5>
                                             <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured3->excerpt, 150) }}</p>
-                                            
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured3->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured3->published_at->format('d/m/Y') }}</span>
-                                                    <span><i class="ph ph-eye me-1"></i>{{ $featured3->views_count ?? 0 }}</span>
-                                                    <span><i class="ph ph-heart me-1"></i>{{ $featured3->likes_count }}</span>
-                                                    <span><i class="ph ph-chat-circle me-1"></i>{{ $featured3->comments_count }}</span>
+                                                    <x-social-view-counter :content="$featured3" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured3" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured3" type="article" size="sm" />
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured3->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -382,7 +382,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- 2 Recent Articles -->
                                 @if($recentArticles->count() >= 6)
                                     <div class="col-12 col-sm-6">
@@ -411,7 +411,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent5->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent5->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent5->user->name ?? 'N/A' }}</span>
@@ -419,9 +419,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent5->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent5->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent5->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent5" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent5" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent5" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent5->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -431,7 +431,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-12 col-sm-6">
                                         @php $recent6 = $recentArticles->get(5); @endphp
                                         <div class="card hover-effect h-100">
@@ -458,7 +458,7 @@
                                             <div class="card-body d-flex flex-column">
                                                 <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent6->title, 50) }}</h6>
                                                 <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent6->excerpt, 70) }}</p>
-                                                
+
                                                 <div class="mt-auto">
                                                     <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
                                                         <span><i class="ph ph-user me-1"></i>{{ $recent6->user->name ?? 'N/A' }}</span>
@@ -466,9 +466,9 @@
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <span><i class="ph ph-eye me-1"></i>{{ $recent6->views_count ?? 0 }}</span>
-                                                            <span><i class="ph ph-heart me-1"></i>{{ $recent6->likes_count }}</span>
-                                                            <span><i class="ph ph-chat-circle me-1"></i>{{ $recent6->comments_count }}</span>
+                                                            <x-social-view-counter :content="$recent6" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent6" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent6" type="article" size="sm" />
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent6->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -669,31 +669,31 @@
         width: 150px !important;
         height: auto !important;
     }
-    
+
     #sidebarCollapse .app-logo .logo-icon {
         max-width: 80px !important;
         width: 80px !important;
         height: auto !important;
     }
-    
+
     #sidebarCollapse .app-logo .logo {
         padding: 0.5rem !important;
         text-align: center !important;
     }
-    
+
     #sidebarCollapse .nav-profile {
         padding: 0.5rem !important;
     }
-    
+
     #sidebarCollapse .nav-profile .h-45 {
         height: 35px !important;
         width: 35px !important;
     }
-    
+
     #sidebarCollapse .nav-profile h6 {
         font-size: 0.875rem !important;
     }
-    
+
     #sidebarCollapse .nav-profile p {
         font-size: 0.75rem !important;
     }
@@ -705,7 +705,7 @@
         max-width: 200px !important;
         width: 200px !important;
     }
-    
+
     #sidebarCollapse .app-logo .logo-icon {
         max-width: 120px !important;
         width: 120px !important;
@@ -730,12 +730,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile-First Sidebar Toggle Handling
     const sidebarToggle = document.querySelector('[data-bs-toggle="collapse"]');
     const sidebarCollapse = document.getElementById('sidebarCollapse');
-    
+
     if (sidebarToggle && sidebarCollapse) {
         sidebarCollapse.addEventListener('show.bs.collapse', function() {
             sidebarToggle.innerHTML = '<i class="ph ph-funnel me-2"></i>{{ __("articles.hide_filters") }}<i class="ph ph-chevron-up ms-2"></i>';
         });
-        
+
         sidebarCollapse.addEventListener('hide.bs.collapse', function() {
             sidebarToggle.innerHTML = '<i class="ph ph-funnel me-2"></i>{{ __("articles.show_filters") }}<i class="ph ph-chevron-down ms-2"></i>';
         });

@@ -66,11 +66,11 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('translations.index') }}" class="card card-light-success hover-effect text-decoration-none">
+                            <a href="{{ route('admin.translations.index') }}" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-translate f-s-30 text-success mb-2"></i>
                                     <h6 class="mb-1">Gestione Traduzioni</h6>
-                                    <small class="text-muted">Visualizza traduzioni disponibili</small>
+                                    <small class="text-muted">Gestisci traduzioni del sito</small>
                                 </div>
                             </a>
                         </div>

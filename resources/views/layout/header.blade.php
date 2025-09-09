@@ -132,7 +132,7 @@
                            role="button"
                            id="notificationTrigger"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="Notifications" style="width: 20px; height: 20px;">
+                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" style="width: 20px; height: 20px;">
                             <!-- Dynamic notification badge -->
                             <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
                         </a>
@@ -148,7 +148,7 @@
                                     <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="{{ __('notifications.mark_all_read') }}">
                                         <i class="ph ph-check-circle"></i>
                                     </button>
-                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
+                                    <button aria-label="{{ __('common.close') }}" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
                                 </div>
                             </div>
                             <div class="offcanvas-body app-scroll p-0" id="notificationsContainer">
@@ -291,7 +291,7 @@
                        role="button"
                        id="notificationTrigger"
                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                        <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="Notifications" style="width: 20px; height: 20px;">
+                        <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" style="width: 20px; height: 20px;">
                         <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
                     </a>
                     @endauth

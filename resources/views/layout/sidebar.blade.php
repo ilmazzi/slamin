@@ -3,9 +3,9 @@
     <div class="app-logo">
         <a class="logo d-inline-block" href="/">
             <!-- Loghino per sidebar collassata -->
-            <img alt="Slam In" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}" class="logo-icon">
+            <img alt="{{ __('common.slam_in') }}" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}" class="logo-icon">
             <!-- Logo orizzontale per sidebar espansa -->
-            <img alt="Slam In" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}" class="logo-full">
+            <img alt="{{ __('common.slam_in') }}" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}" class="logo-full">
         </a>
 
         <span class="bg-light-primary toggle-semi-nav d-flex-center">
@@ -311,12 +311,13 @@
                                 </li>
 
                                 <!-- System Settings - Solo per admin/moderator -->
-                                <li class="no-sub {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.translations.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
+                                <li class="no-sub {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.settings.index') }}">
                                         <i class="ph-duotone ph-gear f-s-20 me-2"></i>
                                         {{ __('sidebar.settings') }}
                                     </a>
                                 </li>
+
 
                                 <!-- Payment Accounts Management - Solo per admin -->
                                 @if(auth()->user()?->hasRole('admin'))

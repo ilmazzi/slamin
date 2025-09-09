@@ -83,7 +83,7 @@
                                         </button>
                                     </div>
                                     <div class="card-body text-center">
-                                        <img id="previewImg" src="" alt="Anteprima" class="img-fluid rounded" style="max-height: 200px; max-width: 100%;">
+                                        <img id="previewImg" src="" alt="{{ __('common.preview') }}" class="img-fluid rounded" style="max-height: 200px; max-width: 100%;">
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                 <i class="ph-duotone ph-share-network me-2"></i>
                                 Social Links
                             </h6>
-                            
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="website" class="form-label">
@@ -143,7 +143,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_facebook" class="form-label">
                                         <i class="ph-duotone ph-facebook-logo me-1"></i>
@@ -159,7 +159,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_instagram" class="form-label">
                                         <i class="ph-duotone ph-instagram-logo me-1"></i>
@@ -175,7 +175,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_youtube" class="form-label">
                                         <i class="ph-duotone ph-youtube-logo me-1"></i>
@@ -191,7 +191,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_twitter" class="form-label">
                                         <i class="ph-duotone ph-twitter-logo me-1"></i>
@@ -207,7 +207,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_tiktok" class="form-label">
                                         <i class="ph-duotone ph-tiktok-logo me-1"></i>
@@ -223,7 +223,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="col-md-6 mb-3">
                                     <label for="social_linkedin" class="form-label">
                                         <i class="ph-duotone ph-linkedin-logo me-1"></i>
@@ -240,7 +240,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="form-text">
                                 <i class="ph-duotone ph-info me-1"></i>
                                 I social links sono opzionali e permettono ai membri di seguire il gruppo sui social media.
@@ -380,7 +380,7 @@ function updateInvitedUsersDisplay() {
         <div class="list-group-item d-flex justify-content-between align-items-center" data-user-id="${user.id}">
             <div class="d-flex align-items-center">
                 <img src="${user.avatar_url || '{{ asset('assets/images/avatar/default-avatar.webp') }}'}"
-                     alt="Avatar"
+                     alt="{{ __('common.avatar') }}"
                      class="rounded-circle me-3"
                      width="40"
                      height="40"
@@ -443,7 +443,7 @@ function searchUsersForGroup() {
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <img src="${user.avatar_url || '{{ asset('assets/images/avatar/default-avatar.webp') }}'}"
-                             alt="Avatar"
+                             alt="{{ __('common.avatar') }}"
                              class="rounded-circle me-2"
                              width="32"
                              height="32"

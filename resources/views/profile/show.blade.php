@@ -1811,7 +1811,7 @@ function initializePaginationEvents() {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="photoUploadModalLabel">Carica Nuova Foto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
             <div class="modal-body">
                 <form id="photoUploadForm" enctype="multipart/form-data">

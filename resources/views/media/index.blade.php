@@ -116,6 +116,7 @@
                                 <div class="d-flex gap-2">
                                     <x-social-like-button :content="$mostPopularVideo" type="video" />
                                     <x-social-view-counter :content="$mostPopularVideo" type="video" />
+                                    <x-social-snap-button :content="$mostPopularVideo" type="video" />
                                     <x-social-comment-button :content="$mostPopularVideo" type="video" />
                                 </div>
                                 <small class="text-muted">
@@ -180,15 +181,9 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->views_count ?? $video->view_count ?? $video->views ?? 0 }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->likes_count ?? $video->like_count ?? 0 }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
-                                            </small>
+                                            <x-social-view-counter :content="$video" type="video" size="sm" />
+                                            <x-social-like-button :content="$video" type="video" size="sm" />
+                                            <x-social-snap-button :content="$video" type="video" size="sm" />
                                             <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
                                     </div>
@@ -228,15 +223,9 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->views_count ?? $video->view_count ?? $video->views ?? 0 }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->likes_count ?? $video->like_count ?? 0 }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
-                                            </small>
+                                            <x-social-view-counter :content="$video" type="video" size="sm" />
+                                            <x-social-like-button :content="$video" type="video" size="sm" />
+                                            <x-social-snap-button :content="$video" type="video" size="sm" />
                                             <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
                                     </div>
@@ -302,12 +291,9 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $photo->view_count ?? $photo->views }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $photo->like_count }}
-                                            </small>
+                                            <x-social-view-counter :content="$photo" type="photo" size="sm" />
+                                            <x-social-like-button :content="$photo" type="photo" size="sm" />
+                                            <x-social-comment-button :content="$photo" type="photo" size="sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -346,12 +332,9 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $photo->view_count ?? $photo->views }}
-                                            </small>
-                                            <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $photo->like_count }}
-                                            </small>
+                                            <x-social-view-counter :content="$photo" type="photo" size="sm" />
+                                            <x-social-like-button :content="$photo" type="photo" size="sm" />
+                                            <x-social-comment-button :content="$photo" type="photo" size="sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -424,6 +407,7 @@
                                 <div class="d-flex gap-2">
                                     <x-social-like-button :content="$mostPopularPhoto" type="photo" />
                                     <x-social-view-counter :content="$mostPopularPhoto" type="photo" />
+                                    <x-social-comment-button :content="$mostPopularPhoto" type="photo" />
                                 </div>
                                 <small class="text-muted">
                                     <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
@@ -659,7 +643,7 @@
             <div class="photo-container position-relative d-flex align-items-center justify-content-center" id="modalPhotoContainer" style="display: none; padding: 20px;">
                 <div class="w-100" style="max-width: 1200px;">
                     <div class="photo-container position-relative">
-                        <img id="modalPhotoImage" class="w-100" style="max-height: 70vh; object-fit: contain; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);" alt="Photo">
+                        <img id="modalPhotoImage" class="w-100" style="max-height: 70vh; object-fit: contain; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);" alt="{{ __('common.photo') }}">
                     </div>
                 </div>
 
@@ -718,7 +702,7 @@
                         <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
                                 style="width: 60px; height: 60px;"
                                 onclick="toggleSnapForm()">
-                            <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
+                            <img src="{{ asset('assets/images/snap.png') }}" alt="{{ __('common.snap') }}" style="width: 28px; height: 28px; filter: brightness(0) invert(1);">
                         </button>
                         <div class="snap-label" style="color: white; font-size: 11px; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-weight: 500;">
                             Crea snap
@@ -1079,7 +1063,7 @@ function updateModalSnapMarkers() {
         marker.innerHTML = `
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
                  style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
-                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                <img src="{{ asset('assets/images/snap.png') }}" alt="{{ __('common.snap') }}" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
             </div>
             ${snapCount > 1 ? `
                 <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
@@ -1789,7 +1773,7 @@ function createSocialCommentButton(contentType, contentId, commentCount) {
              data-content-type="${contentType}"
              data-content-id="${contentId}"
              onclick="showVideoComments(${contentId}, event)"
-             title="Commenti"
+             title="{{ __('common.comments') }}"
              style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s; min-width: 60px;"
              onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
              onmouseout="this.style.backgroundColor='transparent'">
@@ -1815,7 +1799,7 @@ function createSocialViewCounter(contentType, contentId, viewCount) {
 // Crea like button dinamico usando la stessa logica del componente
 function createSocialLikeButton(contentType, contentId, likeCount, isLiked = false) {
     const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-    
+
     if (isAuthenticated) {
         return `
             <div class="social-like-btn"
@@ -1826,7 +1810,7 @@ function createSocialLikeButton(contentType, contentId, likeCount, isLiked = fal
                  style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s; min-width: 60px;"
                  onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
                  onmouseout="this.style.backgroundColor='transparent'">
-                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; ${isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'}">
+                <img src="{{ asset('assets/images/like.png') }}" alt="{{ __('common.like') }}" style="width: 24px; height: 24px; ${isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'}">
                 <span class="text-secondary like-count f-s-12">${likeCount.toLocaleString()}</span>
             </div>
         `;
@@ -1834,7 +1818,7 @@ function createSocialLikeButton(contentType, contentId, likeCount, isLiked = fal
         return `
             <div class="social-like-counter"
                  style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; min-width: 60px;">
-                <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+                <img src="{{ asset('assets/images/like.png') }}" alt="{{ __('common.like') }}" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
                 <span class="text-secondary like-count f-s-12">${likeCount.toLocaleString()}</span>
             </div>
         `;

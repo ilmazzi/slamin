@@ -59,7 +59,7 @@
                                                 <input type="radio" name="payment_method" value="stripe" id="stripe_method" checked>
                                                 <span class="radiomark outline-secondary"></span>
                                                 <span class="d-flex align-items-center">
-                                                    <img src="{{asset('assets/images/checkbox-radio/logo1.png')}}" class="w-35 h-35 me-2" alt="Credit Card">
+                                                    <img src="{{asset('assets/images/checkbox-radio/logo1.png')}}" class="w-35 h-35 me-2" alt="{{ __('common.credit_card') }}">
                                                     <span class="fs-6 tab-heading">Carta di Credito/Debito</span>
                                                 </span>
                                             </label>
@@ -70,7 +70,7 @@
                                                     <div class="col-12">
                                                         <div class="mb-3">
                                                             <label class="form-label">Nome Intestatario</label>
-                                                            <input type="text" class="form-control" placeholder="Nome Cognome" id="card-holder">
+                                                            <input type="text" class="form-control" placeholder="{{ __('common.full_name') }}" id="card-holder">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
@@ -109,7 +109,7 @@
                                                 <input type="radio" name="payment_method" value="paypal" id="paypal_method">
                                                 <span class="radiomark outline-secondary position-absolute"></span>
                                                 <span class="d-flex align-items-center mg-s-25">
-                                                    <img src="{{asset('assets/images/checkbox-radio/logo3.png')}}" class="w-35 h-35" alt="PayPal">
+                                                    <img src="{{asset('assets/images/checkbox-radio/logo3.png')}}" class="w-35 h-35" alt="{{ __('common.paypal') }}">
                                                     <span class="ms-2">
                                                         <span class="fs-6 tab-heading">PayPal</span>
                                                         <span class="d-block text-secondary">Paga con PayPal</span>

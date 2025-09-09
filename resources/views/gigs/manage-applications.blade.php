@@ -324,7 +324,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="globalMessageModalLabel">{{ __('gigs.actions.send_global_message') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
             <form id="globalMessageForm">
                 <div class="modal-body">

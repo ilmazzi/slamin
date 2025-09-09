@@ -265,15 +265,15 @@
                                             </div>
                                             <div class="d-flex gap-2">
                                                 <button class="btn btn-success btn-sm" onclick="quickResponse({{ $request->id }}, 'accept')"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Accetta richiesta">
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('common.accept_request') }}">
                                                     <i class="ph ph-check me-1"></i>Accetta
                                                 </button>
                                                 <button class="btn btn-danger btn-sm" onclick="quickResponse({{ $request->id }}, 'decline')"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Rifiuta richiesta">
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('common.reject_request') }}">
                                                     <i class="ph ph-x me-1"></i>Rifiuta
                                                 </button>
                                                 <button class="btn btn-light-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#requestDetailModal" data-request-id="{{ $request->id }}"
-                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Vedi dettagli">
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('common.view_details') }}">
                                                     <i class="ph ph-eye"></i>
                                                 </button>
                                             </div>
@@ -627,7 +627,7 @@
     <div class="position-fixed" style="bottom: 30px; right: 30px; z-index: 1000;">
         <button class="btn btn-primary rounded-circle p-3 position-relative"
                 data-bs-toggle="modal" data-bs-target="#inviteModal"
-                title="Invita Artisti"
+                title="{{ __('common.invite_artists') }}"
                 style="width: 60px; height: 60px;">
             <i class="ph ph-envelope f-s-20"></i>
         @if($event->pendingRequests->count() > 0)

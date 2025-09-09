@@ -3,7 +3,8 @@
 @php
     $commentCount = $content->comment_count ?? 0;
     $contentType = strtolower(class_basename($content));
-    
+    $uniqueId = $contentType . '_' . $content->id;
+
     // Dimensioni
     $sizeStyles = [
         'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
@@ -12,12 +13,12 @@
     ];
     $iconSizes = [
         'sm' => 'f-s-16',
-        'md' => 'f-s-20', 
+        'md' => 'f-s-20',
         'lg' => 'f-s-24'
     ];
     $textSizes = [
         'sm' => 'f-s-10',
-        'md' => 'f-s-12', 
+        'md' => 'f-s-12',
         'lg' => 'f-s-14'
     ];
     $buttonStyle = $sizeStyles[$size] ?? $sizeStyles['md'];
@@ -28,8 +29,9 @@
 <div class="social-comment-btn"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}"
-     onclick="showVideoComments({{ $content->id }}, event)"
-     title="Commenti"
+     data-unique-id="{{ $uniqueId }}"
+     onclick="showCommentsModal_{{ $uniqueId }}(event)"
+     title="{{ __('common.comments') }}"
      style="cursor: pointer; display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; {{ $buttonStyle }}"
      onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
      onmouseout="this.style.backgroundColor='transparent'">
@@ -38,41 +40,51 @@
 </div>
 
 <script>
-function showVideoComments(contentId, event) {
+// Funzione unica per questo componente
+function showCommentsModal_{{ $uniqueId }}(event) {
     event.stopPropagation(); // Previene l'apertura del modal
-    openCommentsModal('{{ $contentType }}', contentId);
+    openCommentsModal_{{ $uniqueId }}('{{ $contentType }}', {{ $content->id }});
 }
 
 // Apre il modal dei commenti
-async function openCommentsModal(mediaType, mediaId) {
+async function openCommentsModal_{{ $uniqueId }}(mediaType, mediaId) {
+    const modalId = 'commentsModal_{{ $uniqueId }}';
+
     // Crea il modal se non esiste
-    if (!document.getElementById('commentsModal')) {
-        createCommentsModal();
+    if (!document.getElementById(modalId)) {
+        createCommentsModal_{{ $uniqueId }}();
     }
 
     // Imposta i valori nel form
-    document.getElementById('commentMediaType').value = mediaType;
-    document.getElementById('commentMediaId').value = mediaId;
+    document.getElementById('commentMediaType_{{ $uniqueId }}').value = mediaType;
+    document.getElementById('commentMediaId_{{ $uniqueId }}').value = mediaId;
 
     // Aggiorna il titolo del modal
-    const modalTitle = document.getElementById('commentsModalLabel');
-    modalTitle.innerHTML = `<i class="ph-duotone ph-chat-circle me-2"></i>Commenti ${mediaType === 'video' ? 'Video' : 'Foto'}`;
+    const modalTitle = document.getElementById('commentsModalLabel_{{ $uniqueId }}');
+    const typeNames = {
+        'video': 'Video',
+        'photo': 'Foto',
+        'article': 'Articolo',
+        'poem': 'Poesia',
+        'event': 'Evento'
+    };
+    modalTitle.innerHTML = `<i class="ph-duotone ph-chat-circle me-2"></i>Commenti ${typeNames[mediaType] || mediaType}`;
 
     // Mostra loading
-    document.getElementById('commentsLoading').style.display = 'block';
-    document.getElementById('commentsError').style.display = 'none';
-    document.getElementById('commentsContainer').style.display = 'none';
+    document.getElementById('commentsLoading_{{ $uniqueId }}').style.display = 'block';
+    document.getElementById('commentsError_{{ $uniqueId }}').style.display = 'none';
+    document.getElementById('commentsContainer_{{ $uniqueId }}').style.display = 'none';
 
     // Apri il modal
-    const modal = new bootstrap.Modal(document.getElementById('commentsModal'));
+    const modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
 
     // Carica i commenti
-    await loadComments(mediaType, mediaId);
+    await loadComments_{{ $uniqueId }}(mediaType, mediaId);
 }
 
 // Carica i commenti usando il sistema unificato
-async function loadComments(mediaType, mediaId) {
+async function loadComments_{{ $uniqueId }}(mediaType, mediaId) {
     try {
         const response = await fetch(`/api/social/comments?commentable_type=${mediaType}&commentable_id=${mediaId}`, {
             method: 'GET',
@@ -85,21 +97,21 @@ async function loadComments(mediaType, mediaId) {
         const data = await response.json();
 
         if (response.ok && data.success) {
-            displayComments(data.comments);
+            displayComments_{{ $uniqueId }}(data.comments);
         } else {
             throw new Error(data.message || 'Errore nel caricamento dei commenti');
         }
     } catch (error) {
         console.error('Errore caricamento commenti:', error);
-        showCommentsError(error.message);
+        showCommentsError_{{ $uniqueId }}(error.message);
     } finally {
-        document.getElementById('commentsLoading').style.display = 'none';
+        document.getElementById('commentsLoading_{{ $uniqueId }}').style.display = 'none';
     }
 }
 
 // Visualizza i commenti
-function displayComments(comments) {
-    const commentsList = document.getElementById('commentsList');
+function displayComments_{{ $uniqueId }}(comments) {
+    const commentsList = document.getElementById('commentsList_{{ $uniqueId }}');
 
     if (comments.length === 0) {
         commentsList.innerHTML = `
@@ -141,35 +153,35 @@ function displayComments(comments) {
         commentsList.innerHTML = html;
     }
 
-    document.getElementById('commentsContainer').style.display = 'block';
+    document.getElementById('commentsContainer_{{ $uniqueId }}').style.display = 'block';
 }
 
 // Mostra errore nei commenti
-function showCommentsError(message) {
-    document.getElementById('commentsError').innerHTML = `
+function showCommentsError_{{ $uniqueId }}(message) {
+    document.getElementById('commentsError_{{ $uniqueId }}').innerHTML = `
         <div class="alert alert-danger">
             <i class="ph-duotone ph-warning-circle me-2"></i>
             ${message}
         </div>
     `;
-    document.getElementById('commentsError').style.display = 'block';
+    document.getElementById('commentsError_{{ $uniqueId }}').style.display = 'block';
 }
 
 // Crea il modal dei commenti se non esiste
-function createCommentsModal() {
+function createCommentsModal_{{ $uniqueId }}() {
     const modalHtml = `
-        <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+        <div class="modal fade" id="commentsModal_{{ $uniqueId }}" tabindex="-1" aria-labelledby="commentsModalLabel_{{ $uniqueId }}" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="commentsModalLabel">
+                        <h5 class="modal-title" id="commentsModalLabel_{{ $uniqueId }}">
                             <i class="ph-duotone ph-chat-circle me-2"></i>Commenti
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <!-- Loading -->
-                        <div id="commentsLoading" class="text-center py-4">
+                        <div id="commentsLoading_{{ $uniqueId }}" class="text-center py-4">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Caricamento...</span>
                             </div>
@@ -177,12 +189,12 @@ function createCommentsModal() {
                         </div>
 
                         <!-- Error -->
-                        <div id="commentsError" style="display: none;"></div>
+                        <div id="commentsError_{{ $uniqueId }}" style="display: none;"></div>
 
                         <!-- Comments Container -->
-                        <div id="commentsContainer" style="display: none;">
+                        <div id="commentsContainer_{{ $uniqueId }}" style="display: none;">
                             <!-- Lista commenti -->
-                            <div id="commentsList" class="mb-3">
+                            <div id="commentsList_{{ $uniqueId }}" class="mb-3">
                                 <!-- I commenti verranno caricati qui -->
                             </div>
 
@@ -192,17 +204,17 @@ function createCommentsModal() {
                                     <i class="ph-duotone ph-plus-circle me-2"></i>
                                     Aggiungi un commento
                                 </h6>
-                                <form id="newCommentForm">
-                                    <input type="hidden" id="commentMediaType" value="">
-                                    <input type="hidden" id="commentMediaId" value="">
+                                <form id="newCommentForm_{{ $uniqueId }}">
+                                    <input type="hidden" id="commentMediaType_{{ $uniqueId }}" value="">
+                                    <input type="hidden" id="commentMediaId_{{ $uniqueId }}" value="">
                                     <div class="mb-3">
-                                        <textarea class="form-control" id="commentContent" rows="3" placeholder="Scrivi il tuo commento..." maxlength="500"></textarea>
+                                        <textarea class="form-control" id="commentContent_{{ $uniqueId }}" rows="3" placeholder="Scrivi il tuo commento..." maxlength="500"></textarea>
                                         <div class="form-text">
-                                            <span id="commentCharCount">0</span>/500 caratteri
+                                            <span id="commentCharCount_{{ $uniqueId }}">0</span>/500 caratteri
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <button type="submit" class="btn btn-primary" id="submitCommentBtn">
+                                        <button type="submit" class="btn btn-primary" id="submitCommentBtn_{{ $uniqueId }}">
                                             <i class="ph-duotone ph-paper-plane-right me-1"></i>
                                             Invia commento
                                         </button>
@@ -219,16 +231,16 @@ function createCommentsModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
-    
+
     // Aggiungi event listeners per il form
-    setupCommentForm();
+    setupCommentForm_{{ $uniqueId }}();
 }
 
 // Configura il form per i commenti
-function setupCommentForm() {
-    const form = document.getElementById('newCommentForm');
-    const textarea = document.getElementById('commentContent');
-    const charCount = document.getElementById('commentCharCount');
+function setupCommentForm_{{ $uniqueId }}() {
+    const form = document.getElementById('newCommentForm_{{ $uniqueId }}');
+    const textarea = document.getElementById('commentContent_{{ $uniqueId }}');
+    const charCount = document.getElementById('commentCharCount_{{ $uniqueId }}');
 
     if (!form || !textarea || !charCount) return;
 
@@ -236,7 +248,7 @@ function setupCommentForm() {
     textarea.addEventListener('input', function() {
         const count = this.value.length;
         charCount.textContent = count;
-        
+
         if (count > 450) {
             charCount.classList.add('text-warning');
         } else {
@@ -247,12 +259,12 @@ function setupCommentForm() {
     // Submit form
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        await submitComment();
+        await submitComment_{{ $uniqueId }}();
     });
 }
 
 // Invia nuovo commento
-async function submitComment() {
+async function submitComment_{{ $uniqueId }}() {
     // Verifica se l'utente è autenticato
     const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
@@ -261,10 +273,10 @@ async function submitComment() {
         return;
     }
 
-    const mediaType = document.getElementById('commentMediaType').value;
-    const mediaId = document.getElementById('commentMediaId').value;
-    const content = document.getElementById('commentContent').value.trim();
-    const submitBtn = document.getElementById('submitCommentBtn');
+    const mediaType = document.getElementById('commentMediaType_{{ $uniqueId }}').value;
+    const mediaId = document.getElementById('commentMediaId_{{ $uniqueId }}').value;
+    const content = document.getElementById('commentContent_{{ $uniqueId }}').value.trim();
+    const submitBtn = document.getElementById('submitCommentBtn_{{ $uniqueId }}');
 
     if (!content) {
         alert('Inserisci un commento');
@@ -294,7 +306,7 @@ async function submitComment() {
 
         if (response.ok) {
             // Aggiungi il nuovo commento alla lista
-            const commentsList = document.getElementById('commentsList');
+            const commentsList = document.getElementById('commentsList_{{ $uniqueId }}');
 
             // Crea il nuovo commento con avatar
             const userName = data.comment.user.name;
@@ -328,11 +340,11 @@ async function submitComment() {
             commentsList.insertAdjacentHTML('afterbegin', newCommentHtml);
 
             // Reset form
-            document.getElementById('commentContent').value = '';
-            document.getElementById('commentCharCount').textContent = '0';
+            document.getElementById('commentContent_{{ $uniqueId }}').value = '';
+            document.getElementById('commentCharCount_{{ $uniqueId }}').textContent = '0';
 
             // Aggiorna il contatore nel pulsante commenti
-            const commentButton = document.querySelector(`.social-comment-btn[data-content-id="${mediaId}"] .comment-count`);
+            const commentButton = document.querySelector(`.social-comment-btn[data-unique-id="{{ $uniqueId }}"] .comment-count`);
             if (commentButton && data.comment_count !== undefined) {
                 commentButton.textContent = data.comment_count;
             }

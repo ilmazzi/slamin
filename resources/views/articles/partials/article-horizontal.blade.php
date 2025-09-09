@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-md-4">
                 @if($article->featured_image)
-                    <img src="{{ Storage::url($article->featured_image) }}" 
-                         class="img-fluid rounded" style="height: 200px; object-fit: cover; width: 100%;" 
+                    <img src="{{ Storage::url($article->featured_image) }}"
+                         class="img-fluid rounded" style="height: 200px; object-fit: cover; width: 100%;"
                          alt="{{ $article->title }}">
                 @endif
             </div>
@@ -26,17 +26,17 @@
                         </button>
                     @endif
                 </div>
-                
+
                 <h4 class="card-title">
                     <a href="{{ route('articles.show', $article) }}" class="text-decoration-none">
                         {{ $article->title }}
                     </a>
                 </h4>
-                
+
                 @if($article->excerpt)
                     <p class="card-text text-muted">{{ Str::limit($article->excerpt, 200) }}</p>
                 @endif
-                
+
                 <div class="d-flex align-items-center text-muted mb-3">
                     <small>{{ __('articles.by') }}
                         <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
@@ -84,11 +84,8 @@
                         <!-- Like Button (Sistema Unificato) -->
                         <x-social-like-button :content="$article" type="article" />
 
-                        <!-- Commenti -->
-                        <a href="{{ route('articles.show', $article) }}#comments" class="btn btn-sm btn-outline-secondary">
-                            <i class="ti ti-message-circle"></i>
-                            {{ $article->comments_count }}
-                        </a>
+                        <!-- Commenti (Sistema Unificato) -->
+                        <x-social-comment-button :content="$article" type="article" />
 
                         <!-- Report Button (Sistema Unificato) -->
                         <x-report-button :content="$article" type="article" />

@@ -145,7 +145,7 @@ class NotificationManager {
             <div class="d-flex align-items-start p-3 border-bottom ${isUnread ? 'bg-light-primary' : ''}" data-notification-id="${notification.id}">
                 <div class="flex-shrink-0 me-3">
                     ${notification.sender_avatar ? `
-                        <img src="${notification.sender_avatar}" alt="Avatar" class="h-40 w-40 rounded-circle object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="${notification.sender_avatar}" alt="{{ __('common.avatar') }}" class="h-40 w-40 rounded-circle object-fit-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="bg-light-${notification.color.replace('text-', '')} h-40 w-40 d-flex-center rounded-circle" style="display: none;">
                             <i class="${notification.icon} f-s-16 text-${notification.color.replace('text-', '')}"></i>
                         </div>
@@ -164,14 +164,14 @@ class NotificationManager {
                             <form action="/events/${eventId}/invitations/${invitationId}/accept" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                                 <input type="hidden" name="_method" value="PATCH">
-                                <button type="submit" class="btn btn-success btn-sm" title="Accetta">
+                                <button type="submit" class="btn btn-success btn-sm" title="{{ __('common.accept') }}">
                                     <i class="ph ph-check f-s-12"></i>
                                 </button>
                             </form>
                             <form action="/events/${eventId}/invitations/${invitationId}/decline" method="POST" class="d-inline invitation-form" data-invitation-id="${invitationId}">
                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
                                 <input type="hidden" name="_method" value="PATCH">
-                                <button type="submit" class="btn btn-danger btn-sm" title="Rifiuta">
+                                <button type="submit" class="btn btn-danger btn-sm" title="{{ __('common.reject') }}">
                                     <i class="ph ph-x f-s-12"></i>
                                 </button>
                             </form>

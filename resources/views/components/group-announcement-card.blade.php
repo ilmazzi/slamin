@@ -11,7 +11,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
             @if($announcement->is_pinned)
-                <i class="ti ti-pin text-warning me-2" title="Annuncio pinnato"></i>
+                <i class="ti ti-pin text-warning me-2" title="{{ __('common.pinned_announcement') }}"></i>
             @endif
             <h6 class="mb-0">{{ $announcement->title }}</h6>
             <span class="badge bg-secondary ms-2">
@@ -28,7 +28,7 @@
                 @endswitch
             </span>
         </div>
-        
+
         @if($canEdit || $canDelete)
         <div class="dropdown">
             <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
@@ -44,8 +44,8 @@
                 @endif
                 @if($canDelete)
                     <li>
-                        <form action="{{ route('groups.announcements.destroy', [$group, $announcement]) }}" 
-                              method="POST" 
+                        <form action="{{ route('groups.announcements.destroy', [$group, $announcement]) }}"
+                              method="POST"
                               onsubmit="return confirm('Sei sicuro di voler eliminare questo annuncio?')">
                             @csrf
                             @method('DELETE')
@@ -59,34 +59,34 @@
         </div>
         @endif
     </div>
-    
+
     <div class="card-body">
         <div class="announcement-content">
             {!! nl2br(e($announcement->content)) !!}
         </div>
-        
+
         @if($announcement->hasPoll())
         <div class="announcement-poll mt-3">
             <h6 class="mb-3">
                 <i class="ti ti-chart-bar me-2"></i>
                 Sondaggio
             </h6>
-            
+
             @if($canVote)
             <div class="poll-options">
                 @foreach($announcement->poll_options as $index => $option)
                 <div class="form-check mb-2">
-                    <input class="form-check-input" 
-                           type="radio" 
-                           name="poll_option_{{ $announcement->id }}" 
-                           value="{{ $index }}" 
+                    <input class="form-check-input"
+                           type="radio"
+                           name="poll_option_{{ $announcement->id }}"
+                           value="{{ $index }}"
                            id="poll_{{ $announcement->id }}_{{ $index }}">
                     <label class="form-check-label" for="poll_{{ $announcement->id }}_{{ $index }}">
                         {{ $option }}
                     </label>
                 </div>
                 @endforeach
-                <button type="button" 
+                <button type="button"
                         class="btn btn-primary btn-sm mt-2"
                         onclick="voteInPoll({{ $announcement->id }})">
                     <i class="ti ti-vote me-1"></i>Vota
@@ -102,11 +102,11 @@
                         <span class="text-muted">{{ $result['votes'] }} voti ({{ $result['percentage'] }}%)</span>
                     </div>
                     <div class="progress" style="height: 8px;">
-                        <div class="progress-bar" 
-                             role="progressbar" 
+                        <div class="progress-bar"
+                             role="progressbar"
                              style="width: {{ $result['percentage'] }}%"
-                             aria-valuenow="{{ $result['percentage'] }}" 
-                             aria-valuemin="0" 
+                             aria-valuenow="{{ $result['percentage'] }}"
+                             aria-valuemin="0"
                              aria-valuemax="100">
                         </div>
                     </div>
@@ -116,7 +116,7 @@
             @endif
         </div>
         @endif
-        
+
         @if($announcement->expires_at)
         <div class="announcement-expiry mt-3">
             <small class="text-muted">
@@ -126,7 +126,7 @@
         </div>
         @endif
     </div>
-    
+
     <div class="card-footer">
         <div class="d-flex justify-content-between align-items-center">
             <div class="announcement-meta">
@@ -138,9 +138,9 @@
                     {{ $announcement->created_at->format('d/m/Y H:i') }}
                 </small>
             </div>
-            
+
             <div class="announcement-actions">
-                <a href="{{ route('groups.announcements.show', [$group, $announcement]) }}" 
+                <a href="{{ route('groups.announcements.show', [$group, $announcement]) }}"
                    class="btn btn-sm btn-outline-primary">
                     <i class="ti ti-eye me-1"></i>Leggi tutto
                 </a>
@@ -152,15 +152,15 @@
 <script>
 function voteInPoll(announcementId) {
     const selectedOption = document.querySelector(`input[name="poll_option_${announcementId}"]:checked`);
-    
+
     if (!selectedOption) {
         alert('Seleziona un\'opzione prima di votare');
         return;
     }
-    
+
     const optionIndex = selectedOption.value;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
-    
+
     fetch(`/groups/{{ $group->id }}/announcements/${announcementId}/vote`, {
         method: 'POST',
         headers: {

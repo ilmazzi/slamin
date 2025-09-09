@@ -141,7 +141,7 @@
 
                                 @if($poem->thumbnail)
                                     <div class="mb-3">
-                                        <img src="{{ $poem->thumbnail }}" class="img-thumbnail" width="200" alt="Current thumbnail">
+                                        <img src="{{ $poem->thumbnail }}" class="img-thumbnail" width="200" alt="{{ __('common.current_thumbnail') }}">
                                         <div class="form-check mt-2">
                                             <input class="form-check-input" type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="1">
                                             <label class="form-check-label" for="remove_thumbnail">

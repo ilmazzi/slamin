@@ -87,11 +87,8 @@
                 <!-- Like Button (Sistema Unificato) -->
                 <x-social-like-button :content="$article" type="article" />
 
-                <!-- Commenti -->
-                <a href="{{ route('articles.show', $article) }}#comments" class="btn btn-sm btn-outline-secondary">
-                    <i class="ti ti-message-circle f-s-12"></i>
-                    <span class="d-none d-sm-inline">{{ $article->comments_count }}</span>
-                </a>
+                <!-- Commenti (Sistema Unificato) -->
+                <x-social-comment-button :content="$article" type="article" />
 
                 <!-- Report Button (Sistema Unificato) -->
                 <x-report-button :content="$article" type="article" />

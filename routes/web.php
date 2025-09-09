@@ -657,6 +657,19 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
+        // Admin Translation Management
+    Route::prefix('admin/translations')->name('admin.translations.')->middleware(['auth', 'admin'])->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\TranslationManagementController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'store'])->name('store');
+        Route::get('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'show'])->name('show');
+        Route::post('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'update'])->name('update');
+        Route::delete('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'destroy'])->name('destroy');
+        Route::post('/sync', [App\Http\Controllers\Admin\TranslationManagementController::class, 'sync'])->name('sync');
+        Route::post('/{language}/copy-from-italian', [App\Http\Controllers\Admin\TranslationManagementController::class, 'copyFromItalian'])->name('copy-from-italian');
+        Route::post('/{language}/clear-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearAll'])->name('clear-all');
+    });
+
         // Carousel Management (Admin only)
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
         // Rota di test temporanea per debug (DEVE essere PRIMA del resource)

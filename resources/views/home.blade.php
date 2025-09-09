@@ -5,7 +5,7 @@
 @section('title', 'Slam in - Home')
 
 @section('css')
-    
+
     <style>
         /* Stili aggiuntivi per lo slider degli eventi */
         .events-slider {
@@ -384,6 +384,7 @@
                                                         <x-social-view-counter :content="$video" type="video" size="sm" />
                                                         <div class="d-flex gap-1 justify-content-end">
                                                             <x-social-like-button :content="$video" type="video" size="sm" />
+                                                            <x-social-snap-button :content="$video" type="video" size="sm" />
                                                             <x-social-comment-button :content="$video" type="video" size="sm" />
 
                                                             <x-report-button :content="$video" type="video"
@@ -650,11 +651,8 @@
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
                                                             </p>
-                                                            <div class="d-flex align-items-center">
-                                                                <small class="text-muted f-s-11 me-3">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($poem->views_count) }}
-                                                                </small>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <x-social-view-counter :content="$poem" type="poem" size="sm" />
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $poem->created_at->diffForHumans() }}
@@ -668,7 +666,7 @@
                                                                     <i class="ph-duotone ph-book-open f-s-12"></i>
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="Poema non disponibile">
+                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.poem_not_available') }}">
                                                                     <i class="ph-duotone ph-book-open f-s-12"></i>
                                                                 </span>
                                                             @endif
@@ -742,7 +740,7 @@
                                                                     <i class="ph-duotone ph-book-open f-s-12"></i>
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="Poema non disponibile">
+                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.poem_not_available') }}">
                                                                     <i class="ph-duotone ph-book-open f-s-12"></i>
                                                                 </span>
                                                             @endif
@@ -843,11 +841,8 @@
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $article->user->getDisplayName() }}
                                                                 </a></p>
-                                                            <div class="d-flex align-items-center">
-                                                                <small class="text-muted f-s-11 me-3">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($article->views_count ?? 0) }}
-                                                                </small>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <x-social-view-counter :content="$article" type="article" size="sm" />
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $article->created_at->diffForHumans() }}
@@ -861,7 +856,7 @@
                                                                     <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.article_not_available') }}">
                                                                     <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                                 </span>
                                                             @endif
@@ -934,7 +929,7 @@
                                                                     <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="Articolo non disponibile">
+                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.article_not_available') }}">
                                                                     <i class="ph-duotone ph-arrow-right f-s-12"></i>
                                                                 </span>
                                                             @endif
@@ -1278,7 +1273,7 @@
     <!-- slick CSS -->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/slick/slick.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/vendor/slick/slick-theme.css')}}">
-    
+
     <!-- slick JS -->
     <script src="{{asset('assets/vendor/slick/slick.min.js')}}"></script>
 
@@ -1302,7 +1297,7 @@
                 console.error('Slick non è caricato!');
                 return;
             }
-            
+
             console.log('Slick è disponibile:', typeof $.fn.slick);
 
             // Funzione per inizializzare uno slider generico
@@ -1317,7 +1312,7 @@
                             if ($slider.hasClass('slick-initialized')) {
                                 $slider.slick('unslick');
                             }
-                            
+
                             // Inizializza con un piccolo delay
                             setTimeout(() => {
                                 $slider.slick({
@@ -1471,7 +1466,7 @@
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
                 toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
+                // Evidenzia "{{ __('common.new_content') }}" e disattiva "{{ __('common.popular_content') }}"
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
@@ -1480,7 +1475,7 @@
                 newContent.style.display = 'none';
                 popularContent.style.display = 'block';
                 toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
+                // Evidenzia "{{ __('common.popular_content') }}" e disattiva "{{ __('common.new_content') }}"
                 labelLeft.classList.remove('text-primary');
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
@@ -1499,7 +1494,7 @@
                 newContent.style.display = 'block';
                 popularContent.style.display = 'none';
                 toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
+                // Evidenzia "{{ __('common.new_content') }}" e disattiva "{{ __('common.popular_content') }}"
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
@@ -1508,7 +1503,7 @@
                 newContent.style.display = 'none';
                 popularContent.style.display = 'block';
                 toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
+                // Evidenzia "{{ __('common.popular_content') }}" e disattiva "{{ __('common.new_content') }}"
                 labelLeft.classList.remove('text-primary');
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');

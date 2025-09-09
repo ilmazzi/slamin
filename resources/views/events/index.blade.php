@@ -382,7 +382,8 @@
                                 @if(Auth::check())
                                     <div class="d-flex align-items-center gap-2">
                                         <x-social-like-button :content="$event" type="event" />
-                                        <x-social-view-display :content="$event" type="event" />
+                                        <x-social-view-counter :content="$event" type="event" />
+                                        <x-social-comment-button :content="$event" type="event" />
                                         <x-report-button :content="$event" type="event" />
                                     </div>
                                 @else
@@ -492,7 +493,7 @@
         <div class="modal-content">
             <div class="modal-header">
                     <h5 class="modal-title" id="eventDetailsModalLabel">{{ __('events.event_details') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
                 <div class="modal-body" id="eventDetailsModalBody">
                     <!-- Content will be loaded here -->
@@ -513,7 +514,7 @@
                 <h5 class="modal-title text-danger" id="deleteEventModalLabel">
                     <i class="ph ph-warning me-2"></i>{{ __('events.delete_event_title') }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
             <div class="modal-body">
                 <p>{{ __('events.confirm_delete_event', ['title' => '<strong id="deleteEventTitle"></strong>']) }}</p>

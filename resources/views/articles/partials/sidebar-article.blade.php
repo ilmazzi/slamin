@@ -1,8 +1,8 @@
 <div class="border-bottom p-3">
     <div class="d-flex align-items-start">
         @if($article->featured_image)
-            <img src="{{ Storage::url($article->featured_image) }}" 
-                 class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" 
+            <img src="{{ Storage::url($article->featured_image) }}"
+                 class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;"
                  alt="{{ $article->title }}">
         @endif
         <div class="flex-grow-1">
@@ -25,18 +25,14 @@
                 <span class="mx-2">•</span>
                 <small>{{ $article->views_count }} {{ __('articles.views') }}</small>
             </div>
-            
+
             <!-- Azioni social compatte -->
             <div class="d-flex gap-1">
                 <!-- Like Button (Sistema Unificato) -->
                 <x-social-like-button :content="$article" type="article" />
 
-                <!-- Commenti -->
-                <a href="{{ route('articles.show', $article) }}#comments" class="btn btn-sm btn-outline-secondary" 
-                   title="{{ __('articles.comment') }}">
-                    <i class="ti ti-message-circle" style="font-size: 12px;"></i>
-                    <span style="font-size: 11px;">{{ $article->comments_count }}</span>
-                </a>
+                <!-- Commenti (Sistema Unificato) -->
+                <x-social-comment-button :content="$article" type="article" />
 
                 <!-- Report Button (Sistema Unificato) -->
                 <x-report-button :content="$article" type="article" />

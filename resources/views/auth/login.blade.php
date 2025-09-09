@@ -186,7 +186,7 @@
             <div class="col-lg-7 left-section">
                 <div>
                     <div class="logo mb-3">
-                        <img src="{{ asset('assets/images/logo.png') }}" alt="Slam In Logo" class="img-fluid" style="max-width: 250px;">
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="{{ __('common.slam_in_logo') }}" class="img-fluid" style="max-width: 250px;">
                     </div>
                     <div class="logo-brand">
                         🎭 Slam In
@@ -221,7 +221,7 @@
                 <div class="form-container">
                     <div class="text-center mb-4">
                         <div class="d-lg-none mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="Slam In Logo" class="img-fluid" style="max-width: 180px;">
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="{{ __('common.slam_in_logo') }}" class="img-fluid" style="max-width: 180px;">
                         </div>
                         <h2>🔐 <strong>{{ __('login.login_to_your_account') }}</strong></h2>
                         <p class="text-muted">{{ __('login.enter_slam_in_and_discover_the_italian_slam_world') }}</p>

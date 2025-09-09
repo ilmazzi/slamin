@@ -483,7 +483,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="applyModalLabel">Candidati all'Ingaggio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
             <form id="applyForm">
                 <div class="modal-body">

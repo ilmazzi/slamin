@@ -12,7 +12,7 @@
                     <div>
                         <h1 class="page-title">
                             @if($announcement->is_pinned)
-                                <i class="ti ti-pin text-warning me-2" title="Annuncio pinnato"></i>
+                                <i class="ti ti-pin text-warning me-2" title="{{ __('common.pinned_announcement') }}"></i>
                             @endif
                             {{ $announcement->title }}
                         </h1>
@@ -71,13 +71,13 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="card-body">
                             <!-- Contenuto -->
                             <div class="announcement-content mb-4">
                                 {!! nl2br(e($announcement->content)) !!}
                             </div>
-                            
+
                             <!-- Sondaggio -->
                             @if($announcement->hasPoll())
                             <div class="announcement-poll">
@@ -85,27 +85,27 @@
                                     <i class="ti ti-chart-bar me-2"></i>
                                     Sondaggio
                                 </h6>
-                                
+
                                 @php
                                     $user = auth()->user();
                                     $canVote = $announcement->canUserVote($user);
                                 @endphp
-                                
+
                                 @if($canVote)
                                 <div class="poll-options">
                                     @foreach($announcement->poll_options as $index => $option)
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" 
-                                               type="radio" 
-                                               name="poll_option_{{ $announcement->id }}" 
-                                               value="{{ $index }}" 
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="poll_option_{{ $announcement->id }}"
+                                               value="{{ $index }}"
                                                id="poll_{{ $announcement->id }}_{{ $index }}">
                                         <label class="form-check-label" for="poll_{{ $announcement->id }}_{{ $index }}">
                                             {{ $option }}
                                         </label>
                                     </div>
                                     @endforeach
-                                    <button type="button" 
+                                    <button type="button"
                                             class="btn btn-primary"
                                             onclick="voteInPoll({{ $announcement->id }})">
                                         <i class="ti ti-vote me-1"></i>Vota
@@ -121,17 +121,17 @@
                                             <span class="text-muted">{{ $result['votes'] }} voti ({{ $result['percentage'] }}%)</span>
                                         </div>
                                         <div class="progress" style="height: 12px;">
-                                            <div class="progress-bar" 
-                                                 role="progressbar" 
+                                            <div class="progress-bar"
+                                                 role="progressbar"
                                                  style="width: {{ $result['percentage'] }}%"
-                                                 aria-valuenow="{{ $result['percentage'] }}" 
-                                                 aria-valuemin="0" 
+                                                 aria-valuenow="{{ $result['percentage'] }}"
+                                                 aria-valuemin="0"
                                                  aria-valuemax="100">
                                             </div>
                                         </div>
                                     </div>
                                     @endforeach
-                                    
+
                                     @php
                                         $totalVotes = array_sum(array_column($results, 'votes'));
                                     @endphp
@@ -145,7 +145,7 @@
                                 @endif
                             </div>
                             @endif
-                            
+
                             <!-- Scadenza -->
                             @if($announcement->expires_at)
                             <div class="announcement-expiry mt-4">
@@ -156,14 +156,14 @@
                             </div>
                             @endif
                         </div>
-                        
+
                         <div class="card-footer">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="announcement-author">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $announcement->author->profile_photo_url }}" 
-                                             alt="{{ $announcement->author->name }}" 
-                                             class="rounded-circle me-2" 
+                                        <img src="{{ $announcement->author->profile_photo_url }}"
+                                             alt="{{ $announcement->author->name }}"
+                                             class="rounded-circle me-2"
                                              style="width: 32px; height: 32px;">
                                         <div>
                                             <div class="fw-medium">{{ $announcement->author->name }}</div>
@@ -179,21 +179,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="announcement-actions">
                                     @if($canEdit)
-                                        <a href="{{ route('groups.announcements.edit', [$group, $announcement]) }}" 
+                                        <a href="{{ route('groups.announcements.edit', [$group, $announcement]) }}"
                                            class="btn btn-sm btn-warning me-2">
                                             <i class="ti ti-edit me-1"></i>Modifica
                                         </a>
                                     @endif
-                                    
+
                                     @php
                                         $canDelete = $announcement->author_id === $user?->id || $group->hasModerator($user);
                                     @endphp
                                     @if($canDelete)
-                                        <form action="{{ route('groups.announcements.destroy', [$group, $announcement]) }}" 
-                                              method="POST" 
+                                        <form action="{{ route('groups.announcements.destroy', [$group, $announcement]) }}"
+                                              method="POST"
                                               class="d-inline"
                                               onsubmit="return confirm('Sei sicuro di voler eliminare questo annuncio?')">
                                             @csrf
@@ -221,16 +221,16 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
-                                <img src="{{ $group->image ? asset('storage/' . $group->image) : asset('assets/images/groups/default-group.webp') }}" 
-                                     alt="{{ $group->name }}" 
-                                     class="rounded me-3" 
+                                <img src="{{ $group->image ? asset('storage/' . $group->image) : asset('assets/images/groups/default-group.webp') }}"
+                                     alt="{{ $group->name }}"
+                                     class="rounded me-3"
                                      style="width: 48px; height: 48px; object-fit: cover;">
                                 <div>
                                     <h6 class="mb-0">{{ $group->name }}</h6>
                                     <small class="text-muted">{{ $group->getMembersCount() }} membri</small>
                                 </div>
                             </div>
-                            
+
                             <a href="{{ route('groups.show', $group) }}" class="btn btn-primary btn-sm w-100">
                                 <i class="ti ti-eye me-1"></i>Vedi gruppo
                             </a>
@@ -248,15 +248,15 @@
 <script>
 function voteInPoll(announcementId) {
     const selectedOption = document.querySelector(`input[name="poll_option_${announcementId}"]:checked`);
-    
+
     if (!selectedOption) {
         alert('Seleziona un\'opzione prima di votare');
         return;
     }
-    
+
     const optionIndex = selectedOption.value;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
-    
+
     fetch(`/groups/{{ $group->id }}/announcements/${announcementId}/vote`, {
         method: 'POST',
         headers: {

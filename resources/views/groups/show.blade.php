@@ -193,7 +193,7 @@
                                             <div class="d-flex gap-1">
                                                 @auth
                                                     <button class="btn btn-sm btn-outline-danger wishlist-toggle" data-event-id="{{ $event->id }}" title="Aggiungi/{{ __('wishlist.remove_from_wishlist') }}">
-                                                        <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
+                                                        <img src="{{ asset('assets/images/like.png') }}" alt="{{ __('common.like') }}" style="width: 16px; height: 16px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);">
                                                     </button>
                                                 @endauth
                                                 <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-warning">
@@ -364,13 +364,13 @@
                             ->limit(3)
                             ->get();
                     @endphp
-                    
+
                     @forelse($recentAnnouncements as $announcement)
                         <div class="announcement-item mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h6 class="mb-0">
                                     @if($announcement->is_pinned)
-                                        <i class="ph-duotone ph-pin text-warning me-1" title="Annuncio pinnato"></i>
+                                        <i class="ph-duotone ph-pin text-warning me-1" title="{{ __('common.pinned_announcement') }}"></i>
                                     @endif
                                     {{ $announcement->title }}
                                 </h6>
@@ -384,7 +384,7 @@
                                     <i class="ph-duotone ph-user me-1"></i>
                                     {{ $announcement->author->name }}
                                 </small>
-                                <a href="{{ route('groups.announcements.show', [$group, $announcement]) }}" 
+                                <a href="{{ route('groups.announcements.show', [$group, $announcement]) }}"
                                    class="btn btn-sm btn-primary">
                                     Leggi
                                 </a>
