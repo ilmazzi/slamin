@@ -26,10 +26,10 @@ class ProfileController extends Controller
 
         // Statistiche utente
         $stats = [
+            'total_poems' => $user->poems()->count(),
             'total_events' => $user->events()->count(),
-            'participated_events' => $user->eventRequests()->where('status', 'accepted')->count(),
-            'total_videos' => $user->videos()->count(),
             'total_articles' => $user->articles()->count(),
+            'total_venues' => $user->events()->distinct('venue_name')->count('venue_name'),
         ];
 
         // Eventi recenti dell'utente

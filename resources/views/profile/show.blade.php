@@ -311,10 +311,10 @@
                             <div class="card card-light-primary hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-calendar-plus f-s-18 text-primary"></i>
+                                        <i class="ph ph-book-open f-s-18 text-primary"></i>
                                     </div>
-                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.organized_events') }}</p>
+                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_poems'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.poems') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -322,10 +322,10 @@
                             <div class="card card-light-success hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-users f-s-18 text-success"></i>
+                                        <i class="ti ti-calendar-plus f-s-18 text-success"></i>
                                     </div>
-                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.participated_events') }}</p>
+                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -333,10 +333,10 @@
                             <div class="card card-light-warning hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-video-camera f-s-18 text-warning"></i>
+                                        <i class="ph ph-newspaper f-s-18 text-warning"></i>
                                     </div>
-                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.uploaded_videos') }}</p>
+                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_articles'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.articles') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -344,10 +344,10 @@
                             <div class="card card-light-info hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ph ph-newspaper f-s-18 text-info"></i>
+                                        <i class="ph ph-map-pin f-s-18 text-info"></i>
                                     </div>
-                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['total_articles'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.articles_written') }}</p>
+                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['total_venues'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.venues') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -453,6 +453,78 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Quick Actions Mobile -->
+            @if($isOwnProfile)
+            <div class="card mb-3 d-lg-none">
+                <div class="card-header">
+                    <h5>{{ __('profile.quick_actions') }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{{ route('profile.edit') }}" class="btn btn-primary hover-effect">
+                            <i class="ti ti-edit me-2"></i>{{ __('profile.modify_profile') }}
+                        </a>
+                        <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
+                            <i class="ti ti-video-camera me-2"></i>{{ __('profile.manage_videos') }}
+                        </a>
+                        <a href="{{ route('articles.create') }}" class="btn btn-warning hover-effect">
+                            <i class="ph ph-newspaper me-2"></i>{{ __('articles.create_article') }}
+                        </a>
+                        <a href="{{ route('profile.activity') }}" class="btn btn-info hover-effect">
+                            <i class="ti ti-activity me-2"></i>{{ __('profile.view_my_activities') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- Friends Card Mobile (Following) -->
+            <div class="card mb-3 d-lg-none">
+                <div class="card-header">
+                    <h5>{{ __('profile.following') }}</h5>
+                </div>
+                <div class="card-body profile-friends">
+                    @forelse($following as $followedUser)
+                    <div class="d-flex align-items-center {{ !$loop->last ? 'mb-3' : '' }}">
+                        <div class="h-40 w-40 d-flex-center b-r-50 overflow-hidden bg-light">
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($followedUser) }}"
+                                 alt="{{ $followedUser->getDisplayName() }}"
+                                 class="img-fluid h-40 w-40 rounded-circle"
+                                 style="object-fit: cover;">
+                        </div>
+                        <div class="flex-grow-1 ps-2">
+                            <div class="fw-medium">{{ $followedUser->getDisplayName() }}</div>
+                            <div class="text-muted f-s-12">
+                                {{ $followedUser->videos_count }} {{ __('profile.videos') }} •
+                                {{ $followedUser->photos_count }} {{ __('profile.photos') }} •
+                                {{ $followedUser->poems_count }} {{ __('profile.poems') }}
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            @if(auth()->check() && auth()->id() !== $followedUser->id)
+                                @if($followedUser->is_followed_by_current_user)
+                                    <button class="btn btn-sm btn-outline-secondary unfollow-btn" data-user-id="{{ $followedUser->id }}">
+                                        <i class="ti ti-user-minus me-1"></i>{{ __('profile.unfollow') }}
+                                    </button>
+                                @else
+                                    <button class="btn btn-sm btn-primary follow-btn" data-user-id="{{ $followedUser->id }}">
+                                        <i class="ti ti-user-plus me-1"></i>{{ __('profile.follow') }}
+                                    </button>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-4">
+                        <div class="mb-3">
+                            <i class="ti ti-users-slash f-s-24 text-muted"></i>
+                        </div>
+                        <p class="text-muted f-s-14 mb-0">{{ __('profile.no_following') }}</p>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 
@@ -469,9 +541,9 @@
                             </li>
                             <li class="tab-link fw-medium f-s-16 f-w-600" data-tab="2">
                                 <i class="ti ti-device-tv fw-bold"></i> I Miei Media
-                                @if($stats['total_videos'] > 0 || $user->photos()->approved()->count() > 0)
+                                @if($user->photos()->approved()->count() > 0)
                                 <span class="badge rounded-pill bg-success badge-notification">
-                                    {{ $stats['total_videos'] + $user->photos()->approved()->count() }}
+                                    {{ $user->photos()->approved()->count() }}
                                 </span>
                                 @endif
                             </li>
@@ -1350,10 +1422,10 @@
                             <div class="card card-light-primary hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-calendar-plus f-s-18 text-primary"></i>
+                                        <i class="ph ph-book-open f-s-18 text-primary"></i>
                                     </div>
-                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.organized_events') }}</p>
+                                    <h4 class="text-primary mb-1 f-w-600">{{ $stats['total_poems'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.poems') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1361,10 +1433,10 @@
                             <div class="card card-light-success hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-users f-s-18 text-success"></i>
+                                        <i class="ti ti-calendar-plus f-s-18 text-success"></i>
                                     </div>
-                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['participated_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.participated_events') }}</p>
+                                    <h4 class="text-success mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1372,10 +1444,10 @@
                             <div class="card card-light-warning hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ti ti-video-camera f-s-18 text-warning"></i>
+                                        <i class="ph ph-newspaper f-s-18 text-warning"></i>
                                     </div>
-                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_videos'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.uploaded_videos') }}</p>
+                                    <h4 class="text-warning mb-1 f-w-600">{{ $stats['total_articles'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.articles') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1383,10 +1455,10 @@
                             <div class="card card-light-info hover-effect equal-card">
                                 <div class="card-body eshop-cards text-center pa-15">
                                     <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                        <i class="ph ph-newspaper f-s-18 text-info"></i>
+                                        <i class="ph ph-map-pin f-s-18 text-info"></i>
                                     </div>
-                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['total_articles'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.articles_written') }}</p>
+                                    <h4 class="text-info mb-1 f-w-600">{{ $stats['total_venues'] }}</h4>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.venues') }}</p>
                                 </div>
                             </div>
                         </div>
