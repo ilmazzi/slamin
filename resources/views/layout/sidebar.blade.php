@@ -67,7 +67,7 @@
                         </a>
                     </li>
 
-                    @if(auth()->user()->hasRole('admin'))
+                    @if(auth()->user()?->hasRole('admin'))
                     <li class="dropdown-item">
                         <a class="f-w-500" href="#" data-bs-toggle="offcanvas" data-bs-target="#customizerOptions" aria-controls="customizerOptions">
                             <i class="ph-duotone ph-palette pe-1 f-s-20"></i> {{ __('common.customize_layout') }}
@@ -138,7 +138,7 @@
                                 </li>
 
                                 @auth
-                                @unless(auth()->user()->hasRole('audience'))
+                                @unless(auth()->user()?->hasRole('audience'))
                                 <!-- Gigs Section -->
                                 <li class="no-sub {{ request()->routeIs('gigs.*') ? 'active' : '' }}">
                                     <a href="{{ route('gigs.index') }}">
@@ -263,14 +263,14 @@
 
 
 
-                                @if(auth()->user()->hasRole(['admin', 'moderator']))
+                                @if(auth()->user()?->hasRole(['admin', 'moderator']))
                                 <!-- Permissions Management Section - Solo per admin/moderator -->
                                 <li class="menu-title">
                                     <span>{{ __('sidebar.administration') }}</span>
                                 </li>
 
                                 <!-- Admin Dashboard - Solo per admin -->
-                                @if(auth()->user()->hasRole('admin'))
+                                @if(auth()->user()?->hasRole('admin'))
                                 <li class="no-sub {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('admin.dashboard') }}">
                                         <i class="ph-duotone ph-chart-line f-s-20 me-2"></i>
@@ -319,7 +319,7 @@
                                 </li>
 
                                 <!-- Payment Accounts Management - Solo per admin -->
-                                @if(auth()->user()->hasRole('admin'))
+                                @if(auth()->user()?->hasRole('admin'))
                                 <li class="no-sub {{ request()->routeIs('admin.payment-accounts.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.payment-accounts.index') }}">
                                         <i class="ph-duotone ph-credit-card f-s-20 me-2"></i>
@@ -390,7 +390,7 @@
     <!-- Menu Navigation ends -->
 
     <!-- Admin Customizer - Solo per admin -->
-    @if(auth()->user()->hasRole('admin'))
+    @if(auth()->user()?->hasRole('admin'))
     <div id="customizer"></div>
     @endif
 
