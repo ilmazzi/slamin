@@ -236,56 +236,47 @@
                 console.error('Slider not found!');
             }
 
-            // Inizializza il carosello video con Center Mode
-            const $videosSlider = $('#videos-slider');
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick({
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    centerMode: true,
-                    centerPadding: '60px',
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: true,
-                    dots: false,
-                    infinite: true,
-                    speed: 500,
-                    cssEase: 'linear',
-                    responsive: [{
-                            breakpoint: 992,
-                            settings: {
-                                slidesToShow: 2,
-                                centerMode: true,
-                                centerPadding: '40px'
-                            }
-                        },
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 1,
-                                centerMode: true,
-                                centerPadding: '60px'
-                            }
+            // Inizializza entrambi i slider video
+            const $newVideosSlider = $('#new-videos-slider');
+            const $popularVideosSlider = $('#popular-videos-slider');
+            
+            const sliderConfig = {
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                centerPadding: '60px',
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: true,
+                dots: false,
+                infinite: true,
+                speed: 500,
+                cssEase: 'linear',
+                responsive: [{
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            centerMode: true,
+                            centerPadding: '40px'
                         }
-                    ]
-                });
-                
-                // Rimuove l'ombreggiatura e migliora l'aspetto
-                $videosSlider.on('init', function() {
-                    $('.slick-list').css({
-                        'box-shadow': 'none !important',
-                        'overflow': 'visible',
-                        'filter': 'none'
-                    });
-                    $('.slick-track').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none'
-                    });
-                    $('.slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none'
-                    });
-                });
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1,
+                            centerMode: true,
+                            centerPadding: '60px'
+                        }
+                    }
+                ]
+            };
+            
+            if ($newVideosSlider.length > 0) {
+                $newVideosSlider.slick(sliderConfig);
+            }
+            
+            if ($popularVideosSlider.length > 0) {
+                $popularVideosSlider.slick(sliderConfig);
             }
 
             // Inizializza il carosello Bootstrap
@@ -421,87 +412,13 @@
             }
         };
 
-        // Dati dei video per il toggle
-        const recentVideosData = @json($recentVideos);
-        const popularVideosData = @json($popularVideos);
-        
-        // Debug: controlla i dati
-        console.log('Recent videos data:', recentVideosData);
-        console.log('Popular videos data:', popularVideosData);
-
-        // Funzione per creare HTML di un video
-        function createVideoHTML(video, badgeType) {
-            const badgeClass = badgeType === 'new' ? 'bg-success' : 'bg-warning text-dark';
-            const badgeIcon = badgeType === 'new' ? 'ph-clock' : 'ph-trophy';
-            const badgeText = badgeType === 'new' ? 'Nuovo' : 'Popolare';
-            
-            // Controlla se c'è una thumbnail valida
-            const placeholderUrl = '{{ asset("assets/images/placeholder/placholder-1.jpg") }}';
-            const hasThumbnail = video.thumbnail_url && 
-                                video.thumbnail_url !== placeholderUrl &&
-                                video.thumbnail_url !== '' &&
-                                video.thumbnail_url !== null;
-            
-            const thumbnailHTML = hasThumbnail 
-                ? `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">`
-                : `<div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px;"><i class="ph-duotone ph-video-camera f-s-48 text-muted"></i></div>`;
-            
-            return `
-                <div class="item">
-                    <div class="card overflow-hidden hover-effect h-100">
-                        <div class="position-relative">
-                            ${thumbnailHTML}
-                            <div class="position-absolute top-0 start-0 m-2">
-                                <span class="badge ${badgeClass} f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                    <i class="ph-duotone ${badgeIcon} f-s-10 me-1"></i>
-                                    ${badgeText}
-                                </span>
-                            </div>
-                            <div class="position-absolute top-50 start-50 translate-middle" style="cursor: pointer;" onclick="openVideoModal(${video.id})">
-                                <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center" style="width: 50px; height: 50px;">
-                                    <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                <a href="/videos/${video.id}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                    ${video.title.length > 50 ? video.title.substring(0, 50) + '...' : video.title}
-                                </a>
-                            </h6>
-                            <p class="text-muted f-s-12 mb-2">
-                                <a href="/user/${video.user.id}" class="text-decoration-none hover-effect">
-                                    ${video.user.name}
-                                </a>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <div class="d-flex gap-2">
-                                    <small class="text-muted f-s-11">
-                                        <i class="ph-duotone ph-eye f-s-10 me-1"></i>${video.views_count || 0}
-                                    </small>
-                                    <small class="text-muted f-s-11">
-                                        <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>${video.likes_count || 0}
-                                    </small>
-                                    <small class="text-muted f-s-11">
-                                        <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>${video.comments_count || 0}
-                                    </small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-secondary" onclick="reportContent('video', ${video.id})">
-                                    <i class="ph-duotone ph-flag f-s-10"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Funzione per il toggle dei video
+        // Funzione semplice per il toggle dei video
         window.toggleVideosContent = function(type) {
             const toggle = document.getElementById('videosToggle');
             const labelLeft = document.getElementById('videosToggleLabelLeft');
             const labelRight = document.getElementById('videosToggleLabelRight');
-            const $videosSlider = $('#videos-slider');
+            const newSlider = document.getElementById('new-videos-slider');
+            const popularSlider = document.getElementById('popular-videos-slider');
 
             // Aggiorna le etichette del toggle
             if (type === 'new') {
@@ -510,74 +427,20 @@
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
                 labelRight.classList.add('text-muted');
+                
+                // Mostra slider nuovi, nascondi popolari
+                newSlider.style.display = 'block';
+                popularSlider.style.display = 'none';
             } else {
                 toggle.checked = true;
                 labelLeft.classList.remove('text-primary');
                 labelLeft.classList.add('text-muted');
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
-            }
-
-            // Ricrea il contenuto del slider
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick('unslick');
                 
-                // Pulisce il contenuto esistente
-                $videosSlider.empty();
-                
-                // Aggiunge il nuovo contenuto
-                const videosData = type === 'new' ? recentVideosData : popularVideosData;
-                videosData.forEach(video => {
-                    $videosSlider.append(createVideoHTML(video, type));
-                });
-                
-                setTimeout(() => {
-                    $videosSlider.slick({
-                        slidesToShow: 3,
-                        slidesToScroll: 1,
-                        centerMode: true,
-                        centerPadding: '60px',
-                        autoplay: true,
-                        autoplaySpeed: 3000,
-                        arrows: true,
-                        dots: false,
-                        infinite: true,
-                        speed: 500,
-                        cssEase: 'linear',
-                        responsive: [{
-                                breakpoint: 992,
-                                settings: {
-                                    slidesToShow: 2,
-                                    centerMode: true,
-                                    centerPadding: '40px'
-                                }
-                            },
-                            {
-                                breakpoint: 768,
-                                settings: {
-                                    slidesToShow: 1,
-                                    centerMode: true,
-                                    centerPadding: '60px'
-                                }
-                            }
-                        ]
-                    });
-                    
-                    // Rimuove l'ombreggiatura
-                    $('.slick-list').css({
-                        'box-shadow': 'none !important',
-                        'overflow': 'visible',
-                        'filter': 'none'
-                    });
-                    $('.slick-track').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none'
-                    });
-                    $('.slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none'
-                    });
-                }, 100);
+                // Mostra slider popolari, nascondi nuovi
+                newSlider.style.display = 'none';
+                popularSlider.style.display = 'block';
             }
         };
 
@@ -899,7 +762,8 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="center-mode app-arrow" id="videos-slider" style="overflow: visible;">
+                                <!-- Slider per video nuovi -->
+                                <div class="center-mode app-arrow" id="new-videos-slider">
                                     @foreach ($recentVideos as $video)
                                         <div class="item">
                                             <div class="card overflow-hidden hover-effect h-100">
@@ -918,6 +782,69 @@
                                                         <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
                                                             <i class="ph-duotone ph-clock f-s-10 me-1"></i>
                                                             {{ __('common.new') }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="position-absolute top-50 start-50 translate-middle"
+                                                        style="cursor: pointer;"
+                                                        onclick="openVideoModal({{ $video->id }})">
+                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                            style="width: 50px; height: 50px;">
+                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body d-flex flex-column">
+                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                        <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                            {{ Str::limit($video->title, 50) }}
+                                                        </a>
+                                                    </h6>
+                                                    <p class="text-muted f-s-12 mb-2">
+                                                        <a href="{{ route('user.show', $video->user) }}"
+                                                            class="text-decoration-none hover-effect">
+                                                            {{ $video->user->getDisplayName() }}
+                                                        </a>
+                                                    </p>
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div class="d-flex gap-2">
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
+                                                            </small>
+                                                        </div>
+                                                        <x-report-button :content="$video" type="video" size="sm" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Slider per video popolari -->
+                                <div class="center-mode app-arrow" id="popular-videos-slider" style="display: none;">
+                                    @foreach ($popularVideos as $video)
+                                        <div class="item">
+                                            <div class="card overflow-hidden hover-effect h-100">
+                                                <div class="position-relative">
+                                                    @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
+                                                        <img src="{{ $video->thumbnail_url }}" class="card-img-top"
+                                                            alt="{{ $video->title }}"
+                                                            style="height: 200px; object-fit: cover;">
+                                                    @else
+                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                            style="height: 200px;">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                                                        </div>
+                                                    @endif
+                                                    <div class="position-absolute top-0 start-0 m-2">
+                                                        <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                            <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
+                                                            {{ __('common.popular') }}
                                                         </span>
                                                     </div>
                                                     <div class="position-absolute top-50 start-50 translate-middle"
