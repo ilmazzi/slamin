@@ -297,32 +297,46 @@
                 ]
             };
             
-            // Inizializza solo lo slider visibile (nuovi video)
-            if ($newVideosSlider.length > 0) {
-                $newVideosSlider.slick(sliderConfig);
+            // Funzione per inizializzare uno slider in modo sicuro
+            function initSliderSafely($slider, config) {
+                if ($slider.length === 0) return;
                 
-                // Forza rimozione ombreggiatura
-                setTimeout(() => {
-                    $newVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none !important',
-                        'text-shadow': 'none !important',
-                        '-webkit-box-shadow': 'none !important',
-                        '-moz-box-shadow': 'none !important'
-                    });
-                }, 100);
-                
-                // Rimuove ombreggiatura ad ogni cambio slide
-                $newVideosSlider.on('afterChange', function() {
-                    $newVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none !important',
-                        'text-shadow': 'none !important',
-                        '-webkit-box-shadow': 'none !important',
-                        '-moz-box-shadow': 'none !important'
-                    });
-                });
+                try {
+                    // Verifica che l'elemento sia visibile e abbia contenuto
+                    if ($slider.is(':visible') && $slider.find('.item').length > 0) {
+                        $slider.slick(config);
+                        
+                        // Forza rimozione ombreggiatura
+                        setTimeout(() => {
+                            $slider.find('.slick-list, .slick-track, .slick-slide').css({
+                                'box-shadow': 'none !important',
+                                'filter': 'none !important',
+                                'text-shadow': 'none !important',
+                                '-webkit-box-shadow': 'none !important',
+                                '-moz-box-shadow': 'none !important'
+                            });
+                        }, 100);
+                        
+                        // Rimuove ombreggiatura ad ogni cambio slide
+                        $slider.on('afterChange', function() {
+                            $slider.find('.slick-list, .slick-track, .slick-slide').css({
+                                'box-shadow': 'none !important',
+                                'filter': 'none !important',
+                                'text-shadow': 'none !important',
+                                '-webkit-box-shadow': 'none !important',
+                                '-moz-box-shadow': 'none !important'
+                            });
+                        });
+                    }
+                } catch (error) {
+                    console.log('Errore inizializzazione slider:', error);
+                }
             }
+            
+            // Inizializza solo lo slider visibile (nuovi video) con un piccolo delay
+            setTimeout(() => {
+                initSliderSafely($newVideosSlider, sliderConfig);
+            }, 100);
 
             // Inizializza il carosello Bootstrap
             if ($carousel.length > 0) {
@@ -491,29 +505,10 @@
                 
                 // Inizializza lo slider popolare se non è già inizializzato
                 if (!$popularVideosSlider.hasClass('slick-initialized')) {
-                    $popularVideosSlider.slick(sliderConfig);
-                    
-                    // Forza rimozione ombreggiatura
+                    // Aspetta che l'elemento sia completamente visibile
                     setTimeout(() => {
-                        $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                            'box-shadow': 'none !important',
-                            'filter': 'none !important',
-                            'text-shadow': 'none !important',
-                            '-webkit-box-shadow': 'none !important',
-                            '-moz-box-shadow': 'none !important'
-                        });
-                    }, 100);
-                    
-                    // Rimuove ombreggiatura ad ogni cambio slide
-                    $popularVideosSlider.on('afterChange', function() {
-                        $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                            'box-shadow': 'none !important',
-                            'filter': 'none !important',
-                            'text-shadow': 'none !important',
-                            '-webkit-box-shadow': 'none !important',
-                            '-moz-box-shadow': 'none !important'
-                        });
-                    });
+                        initSliderSafely($popularVideosSlider, sliderConfig);
+                    }, 50);
                 }
             }
         };
