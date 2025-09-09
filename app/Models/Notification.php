@@ -74,6 +74,8 @@ class Notification extends Model
     const TYPE_GROUP_MEMBER_JOINED = 'group_member_joined';
     const TYPE_GROUP_MEMBER_LEFT = 'group_member_left';
     const TYPE_GROUP_ROLE_CHANGED = 'group_role_changed';
+    const TYPE_GROUP_ANNOUNCEMENT_CREATED = 'group_announcement_created';
+    const TYPE_PUBLIC_GROUP_ANNOUNCEMENT_CREATED = 'public_group_announcement_created';
 
     /**
      * Type constants for gigs
@@ -261,7 +263,9 @@ class Notification extends Model
             self::TYPE_GROUP_JOIN_REQUEST => 'text-info',
             self::TYPE_GROUP_JOIN_REQUEST_ACCEPTED => 'text-success',
             self::TYPE_GROUP_JOIN_REQUEST_DECLINED => 'text-danger',
-        self::TYPE_GROUP_ROLE_CHANGED => 'text-warning',
+            self::TYPE_GROUP_ROLE_CHANGED => 'text-warning',
+            self::TYPE_GROUP_ANNOUNCEMENT_CREATED => 'text-primary',
+            self::TYPE_PUBLIC_GROUP_ANNOUNCEMENT_CREATED => 'text-info',
             // Translation types
             self::TYPE_TRANSLATION_PROPOSAL => 'text-info',
             self::TYPE_TRANSLATION_ACCEPTED => 'text-success',
@@ -1238,6 +1242,87 @@ class Notification extends Model
             ],
             'action_url' => route('moderation.conversation', $report->id),
             'action_text' => 'Vedi Dettagli',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create group announcement notification
+     */
+    public static function createGroupAnnouncement(GroupAnnouncement $announcement, User $user): void
+    {
+        $group = $announcement->group;
+        $author = $announcement->author;
+        
+        // Determina il messaggio in base alla visibilità
+        $visibilityText = match($announcement->visibility) {
+            'public' => 'pubblico',
+            'members_only' => 'per i membri',
+            'admins_only' => 'per gli amministratori',
+            default => ''
+        };
+
+        $message = "Nuovo annuncio {$visibilityText} in {$group->name}: \"{$announcement->title}\"";
+        
+        if ($announcement->hasPoll()) {
+            $message .= " (con sondaggio)";
+        }
+
+        $notification = self::create([
+            'user_id' => $user->id,
+            'type' => self::TYPE_GROUP_ANNOUNCEMENT_CREATED,
+            'title' => 'Nuovo Annuncio',
+            'message' => $message,
+            'data' => [
+                'group_id' => $group->id,
+                'announcement_id' => $announcement->id,
+                'author_id' => $author->id,
+                'group_name' => $group->name,
+                'announcement_title' => $announcement->title,
+                'visibility' => $announcement->visibility,
+                'has_poll' => $announcement->hasPoll(),
+            ],
+            'action_url' => route('groups.announcements.show', [$group, $announcement]),
+            'action_text' => 'Leggi Annuncio',
+            'priority' => self::PRIORITY_NORMAL,
+        ]);
+
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
+    }
+
+    /**
+     * Create public group announcement notification
+     */
+    public static function createPublicGroupAnnouncement(GroupAnnouncement $announcement, User $user): void
+    {
+        $group = $announcement->group;
+        $author = $announcement->author;
+        
+        $message = "Nuovo annuncio pubblico da {$group->name}: \"{$announcement->title}\"";
+        
+        if ($announcement->hasPoll()) {
+            $message .= " (con sondaggio)";
+        }
+
+        $notification = self::create([
+            'user_id' => $user->id,
+            'type' => self::TYPE_PUBLIC_GROUP_ANNOUNCEMENT_CREATED,
+            'title' => 'Nuovo Annuncio Pubblico',
+            'message' => $message,
+            'data' => [
+                'group_id' => $group->id,
+                'announcement_id' => $announcement->id,
+                'author_id' => $author->id,
+                'group_name' => $group->name,
+                'announcement_title' => $announcement->title,
+                'has_poll' => $announcement->hasPoll(),
+            ],
+            'action_url' => route('groups.announcements.show', [$group, $announcement]),
+            'action_text' => 'Leggi Annuncio',
             'priority' => self::PRIORITY_NORMAL,
         ]);
 

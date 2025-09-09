@@ -20,7 +20,7 @@
                         </p>
                     </div>
                     <div>
-                        <a href="<?php echo e(route('groups.show', $group)); ?>" class="btn btn-outline-secondary">
+                        <a href="<?php echo e(route('groups.show', $group)); ?>" class="btn btn-secondary">
                             <i class="ti ti-arrow-left me-1"></i>Torna al gruppo
                         </a>
                         <a href="<?php echo e(route('groups.announcements.create', $group)); ?>" class="btn btn-primary">
@@ -57,7 +57,7 @@
                                        class="form-control form-control-sm me-2" 
                                        placeholder="Cerca annunci..." 
                                        value="<?php echo e(request('search')); ?>">
-                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="ti ti-search"></i>
                                 </button>
                             </form>
@@ -102,7 +102,7 @@
                                 <?php endif; ?>
                             </p>
                             <?php if(!request('search')): ?>
-                                <a href="<?php echo e(route('groups.announcements.create', $group)); ?>" class="btn btn-primary">
+                                <a href="<?php echo e(route('groups.announcements.create', $group)); ?>" class="btn btn-success">
                                     <i class="ti ti-plus me-1"></i>Crea il primo annuncio
                                 </a>
                             <?php endif; ?>

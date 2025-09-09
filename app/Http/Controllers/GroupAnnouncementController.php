@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\GroupAnnouncement;
+use App\Models\Notification;
+use App\Models\User;
+use App\Models\UserNotificationPreference;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class GroupAnnouncementController extends Controller
@@ -90,12 +94,16 @@ class GroupAnnouncementController extends Controller
             'visibility' => 'required|in:public,members_only,admins_only',
             'is_pinned' => 'boolean',
             'has_poll' => 'boolean',
-            'poll_options' => 'array|max:10',
-            'poll_options.*' => 'string|max:255',
+            'poll_options' => 'nullable|array|max:10',
+            'poll_options.*' => 'nullable|string|max:255',
             'expires_at' => 'nullable|date|after:now',
         ]);
 
         if ($validator->fails()) {
+            Log::error('Validazione annuncio fallita', [
+                'errors' => $validator->errors()->toArray(),
+                'input' => $request->all()
+            ]);
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -120,6 +128,14 @@ class GroupAnnouncementController extends Controller
         }
 
         $announcement = GroupAnnouncement::create($data);
+
+        // Invia notifiche agli utenti appropriati
+        try {
+            $this->sendAnnouncementNotifications($announcement);
+        } catch (\Exception $e) {
+            // Log dell'errore ma non bloccare la creazione dell'annuncio
+            Log::error('Errore nell\'invio notifiche annuncio: ' . $e->getMessage());
+        }
 
         return redirect()->route('groups.announcements.show', [$group, $announcement])
             ->with('success', 'Annuncio creato con successo!');
@@ -320,5 +336,105 @@ class GroupAnnouncementController extends Controller
 
         // Gli admin/moderatori possono eliminare tutti gli annunci
         return $announcement->group->hasModerator($user);
+    }
+
+    /**
+     * Invia notifiche per un nuovo annuncio
+     */
+    private function sendAnnouncementNotifications(GroupAnnouncement $announcement)
+    {
+        $group = $announcement->group;
+        $author = $announcement->author;
+        
+        switch ($announcement->visibility) {
+            case 'public':
+                // Per annunci pubblici, notifica tutti gli utenti del sito
+                $this->notifyAllUsers($announcement);
+                break;
+                
+            case 'members_only':
+                // Notifica tutti i membri del gruppo
+                $this->notifyGroupMembers($announcement);
+                break;
+                
+            case 'admins_only':
+                // Notifica solo admin e moderatori del gruppo
+                $this->notifyGroupAdmins($announcement);
+                break;
+        }
+    }
+
+    /**
+     * Notifica tutti gli utenti del sito per annunci pubblici
+     */
+    private function notifyAllUsers(GroupAnnouncement $announcement)
+    {
+        $author = $announcement->author;
+        
+        // Ottieni tutti gli utenti attivi (escludendo l'autore) - limitato per performance
+        $users = User::where('id', '!=', $author->id)
+                    ->where('status', '!=', 'suspended')
+                    ->where('status', '!=', 'banned')
+                    ->limit(100) // Limite per evitare problemi di performance
+                    ->get();
+        
+        foreach ($users as $user) {
+            if ($this->shouldNotifyUser($user, $announcement->group)) {
+                Notification::createPublicGroupAnnouncement($announcement, $user);
+            }
+        }
+    }
+
+    /**
+     * Notifica i membri del gruppo
+     */
+    private function notifyGroupMembers(GroupAnnouncement $announcement)
+    {
+        $group = $announcement->group;
+        $author = $announcement->author;
+        
+        $usersToNotify = $group->users->filter(function($user) use ($author) {
+            return $user->id !== $author->id;
+        });
+        
+        foreach ($usersToNotify as $user) {
+            if ($this->shouldNotifyUser($user, $group)) {
+                Notification::createGroupAnnouncement($announcement, $user);
+            }
+        }
+    }
+
+    /**
+     * Notifica solo admin e moderatori del gruppo
+     */
+    private function notifyGroupAdmins(GroupAnnouncement $announcement)
+    {
+        $group = $announcement->group;
+        $author = $announcement->author;
+        
+        $usersToNotify = $group->users()
+            ->whereHas('groupMembers', function($query) {
+                $query->whereIn('role', ['admin', 'moderator']);
+            })
+            ->get()
+            ->filter(function($user) use ($author) {
+                return $user->id !== $author->id;
+            });
+        
+        foreach ($usersToNotify as $user) {
+            if ($this->shouldNotifyUser($user, $group)) {
+                Notification::createGroupAnnouncement($announcement, $user);
+            }
+        }
+    }
+
+    /**
+     * Verifica se un utente dovrebbe ricevere notifiche per questo gruppo
+     */
+    private function shouldNotifyUser($user, $group)
+    {
+        // Verifica le preferenze notifiche dell'utente
+        $notificationType = $group ? 'group_announcements' : 'public_announcements';
+        return UserNotificationPreference::isEnabled($user->id, $notificationType, $group?->id);
     }
 }

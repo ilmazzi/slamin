@@ -220,8 +220,8 @@
 
 
                                 <?php if(auth()->guard()->check()): ?>
-                                <!-- Gruppi Section - Solo per poeti e organizzatori -->
-                                <?php if(auth()->user()->can('groups.create')): ?>
+                                <!-- Gruppi Section - Solo per poeti, organizzatori e amministratori -->
+                                <?php if(auth()->user()->canViewGroups()): ?>
                                 <li class="no-sub <?php echo e(request()->routeIs('groups.*') ? 'active' : ''); ?>">
                                     <a href="<?php echo e(route('groups.index')); ?>">
                                         <i class="ph-duotone ph-users f-s-20 me-2"></i>

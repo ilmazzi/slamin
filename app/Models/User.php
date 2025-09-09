@@ -699,6 +699,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasAnyRole(['poet', 'organizer', 'admin']);
     }
 
+    public function canViewGroups(): bool
+    {
+        return $this->hasAnyRole(['poet', 'organizer', 'admin', 'audience']);
+    }
+
     /**
      * Verifica se l'utente è membro di un gruppo specifico
      */

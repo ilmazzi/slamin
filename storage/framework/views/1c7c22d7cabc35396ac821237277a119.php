@@ -20,7 +20,7 @@
                         </p>
                     </div>
                     <div>
-                        <a href="<?php echo e(route('groups.announcements.index', $group)); ?>" class="btn btn-outline-secondary">
+                        <a href="<?php echo e(route('groups.announcements.index', $group)); ?>" class="btn btn-secondary">
                             <i class="ti ti-arrow-left me-1"></i>Torna alla bacheca
                         </a>
                     </div>
@@ -187,7 +187,7 @@ unset($__errorArgs, $__bag); ?>
                                                    placeholder="Opzione 2">
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPollOption()">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="addPollOption()">
                                         <i class="ti ti-plus me-1"></i>Aggiungi opzione
                                     </button>
                                 </div>
@@ -227,7 +227,7 @@ unset($__errorArgs, $__bag); ?>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="ti ti-check me-1"></i>Crea annuncio
                                     </button>
-                                    <a href="<?php echo e(route('groups.announcements.index', $group)); ?>" class="btn btn-outline-secondary">
+                                    <a href="<?php echo e(route('groups.announcements.index', $group)); ?>" class="btn btn-secondary">
                                         Annulla
                                     </a>
                                 </div>

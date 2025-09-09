@@ -202,8 +202,8 @@
 
 
                                 @auth
-                                <!-- Gruppi Section - Solo per poeti e organizzatori -->
-                                @if(auth()->user()->can('groups.create'))
+                                <!-- Gruppi Section - Solo per poeti, organizzatori e amministratori -->
+                                @if(auth()->user()->canViewGroups())
                                 <li class="no-sub {{ request()->routeIs('groups.*') ? 'active' : '' }}">
                                     <a href="{{ route('groups.index') }}">
                                         <i class="ph-duotone ph-users f-s-20 me-2"></i>
