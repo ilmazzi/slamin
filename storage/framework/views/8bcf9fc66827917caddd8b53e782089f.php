@@ -361,7 +361,7 @@
                             <h5>Center Mode</h5>
                             </div>
                             <div class="card-body">
-                            <div class="center-mode app-arrow" id="videos-slider">
+                            <div class="events-slider app-arrow" id="videos-slider">
                                 <?php $__currentLoopData = $recentVideos->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="autoplay-item">
                                             <div class="card overflow-hidden hover-effect h-100">
@@ -1386,186 +1386,69 @@
             
             console.log('Slick è disponibile:', typeof $.fn.slick);
 
-            // Inizializza lo slider degli eventi (solo se esiste e è visibile)
-            const $eventsSlider = $('.events-slider');
-            if ($eventsSlider.length > 0 && $eventsSlider.is(':visible')) {
-                // Controlla se ha contenuto
-                const items = $eventsSlider.find('.autoplay-item');
-                if (items.length > 0) {
-                    try {
-                        // Rimuovi eventuali inizializzazioni precedenti
-                        if ($eventsSlider.hasClass('slick-initialized')) {
-                            $eventsSlider.slick('unslick');
-                        }
-                        
-                        // Inizializza con un piccolo delay
-                        setTimeout(() => {
-                            $eventsSlider.slick({
-                                slidesToShow: 2,
-                                slidesToScroll: 1,
-                                autoplay: true,
-                                autoplaySpeed: 3000,
-                                arrows: true,
-                                dots: false,
-                                infinite: true,
-                                speed: 500,
-                                adaptiveHeight: false,
-                                lazyLoad: 'ondemand',
-                                responsive: [{
-                                        breakpoint: 768,
-                                        settings: {
-                                            slidesToShow: 2
-                                        }
-                                    },
-                                    {
-                                        breakpoint: 576,
-                                        settings: {
-                                            slidesToShow: 1
-                                        }
-                                    }
-                                ]
-                            });
-                            console.log('Events slider inizializzato con successo');
-                        }, 100);
-                    } catch (error) {
-                        console.error('Errore inizializzazione events slider:', error);
-                    }
-                } else {
-                    console.warn('Events slider non ha contenuto');
-                }
-            } else {
-                console.warn('Events slider non trovato o non visibile');
-            }
-
-            // Inizializza lo slider dei video con controlli molto specifici
-            const $videosSlider = $('#videos-slider');
-            console.log('Videos slider trovato:', $videosSlider.length);
-            
-            if ($videosSlider.length > 0) {
-                console.log('Videos slider visibile:', $videosSlider.is(':visible'));
-                console.log('Videos slider width:', $videosSlider.width());
-                
-                // Controlla se ha contenuto
-                const items = $videosSlider.find('.item');
-                console.log('Items trovati:', items.length);
-                
-                if (items.length > 0) {
-                    // Aspetta che l'elemento sia completamente renderizzato
-                    setTimeout(() => {
+            // Funzione per inizializzare uno slider generico
+            function initGenericSlider(selector, sliderName) {
+                const $slider = $(selector);
+                if ($slider.length > 0 && $slider.is(':visible')) {
+                    // Controlla se ha contenuto
+                    const items = $slider.find('.autoplay-item');
+                    if (items.length > 0) {
                         try {
-                            // Controlla di nuovo tutto
-                            if ($videosSlider.length > 0 && $videosSlider.is(':visible') && $videosSlider.width() > 0) {
-                                console.log('Inizializzazione videos slider...');
-                                
-                                // Rimuovi eventuali inizializzazioni precedenti
-                                if ($videosSlider.hasClass('slick-initialized')) {
-                                    $videosSlider.slick('unslick');
-                                }
-                                
-                                // Configurazione minimale per evitare errori
-                                $videosSlider.slick({
-                                    centerMode: true,
-                                    centerPadding: '40px',
-                                    slidesToShow: 3,
+                            // Rimuovi eventuali inizializzazioni precedenti
+                            if ($slider.hasClass('slick-initialized')) {
+                                $slider.slick('unslick');
+                            }
+                            
+                            // Inizializza con un piccolo delay
+                            setTimeout(() => {
+                                $slider.slick({
+                                    slidesToShow: 2,
                                     slidesToScroll: 1,
-                                    autoplay: false,
+                                    autoplay: true,
+                                    autoplaySpeed: 3000,
                                     arrows: true,
                                     dots: false,
                                     infinite: true,
                                     speed: 500,
+                                    adaptiveHeight: false,
+                                    lazyLoad: 'ondemand',
                                     accessibility: false,
                                     focusOnSelect: false,
                                     useCSS: false,
                                     useTransform: false,
                                     waitForAnimate: false,
-                                    draggable: true,
-                                    swipe: true,
-                                    touchMove: true,
-                                    touchThreshold: 5,
-                                    swipeToSlide: false,
-                                    edgeFriction: 0.35,
-                                    rows: 1,
-                                    slidesPerRow: 1,
-                                    variableWidth: false,
-                                    vertical: false,
-                                    verticalSwiping: false,
-                                    rtl: false,
-                                    fade: false,
-                                    cssEase: 'ease',
-                                    easing: 'linear',
-                                    pauseOnHover: true,
-                                    pauseOnFocus: true,
-                                    pauseOnDotsHover: false,
-                                    respondTo: 'window',
-                                    // Disabilita completamente le funzioni di accessibilità
-                                    initADA: function() {
-                                        // Funzione vuota per evitare errori
-                                        return;
-                                    },
                                     responsive: [{
                                             breakpoint: 768,
                                             settings: {
-                                                centerMode: true,
-                                                centerPadding: '30px',
                                                 slidesToShow: 2
                                             }
                                         },
                                         {
                                             breakpoint: 576,
                                             settings: {
-                                                centerMode: true,
-                                                centerPadding: '20px',
                                                 slidesToShow: 1
                                             }
                                         }
                                     ]
                                 });
-                                
-                                console.log('Videos slider inizializzato con successo');
-                                
-                                // Verifica se l'inizializzazione è andata a buon fine
-                                setTimeout(() => {
-                                    if ($videosSlider.hasClass('slick-initialized')) {
-                                        console.log('Videos slider confermato inizializzato');
-                                        $videosSlider.slick('slickSetOption', 'autoplay', true, true);
-                                        $videosSlider.slick('slickSetOption', 'autoplaySpeed', 3000, true);
-                                        console.log('Autoplay abilitato');
-                                    } else {
-                                        console.error('Videos slider NON inizializzato correttamente');
-                                        // Prova a reinizializzare
-                                        console.log('Tentativo di reinizializzazione...');
-                                        $videosSlider.slick({
-                                            centerMode: true,
-                                            centerPadding: '40px',
-                                            slidesToShow: 3,
-                                            slidesToScroll: 1,
-                                            autoplay: true,
-                                            autoplaySpeed: 3000,
-                                            arrows: true,
-                                            dots: false,
-                                            infinite: true,
-                                            speed: 500,
-                                            accessibility: false,
-                                            focusOnSelect: false,
-                                            useCSS: false,
-                                            useTransform: false,
-                                            waitForAnimate: false
-                                        });
-                                    }
-                                }, 500);
-                            } else {
-                                console.warn('Videos slider non pronto per l\'inizializzazione');
-                            }
+                                console.log(sliderName + ' inizializzato con successo');
+                            }, 100);
                         } catch (error) {
-                            console.error('Errore inizializzazione videos slider:', error);
+                            console.error('Errore inizializzazione ' + sliderName + ':', error);
                         }
-                    }, 200);
+                    } else {
+                        console.warn(sliderName + ' non ha contenuto');
+                    }
                 } else {
-                    console.warn('Videos slider non ha contenuto');
+                    console.warn(sliderName + ' non trovato o non visibile');
                 }
-            } else {
-                console.warn('Videos slider non trovato');
             }
+
+            // Inizializza lo slider degli eventi
+            initGenericSlider('#events-slider', 'Events slider');
+
+            // Inizializza lo slider dei video
+            initGenericSlider('#videos-slider', 'Videos slider');
 
             // Inizializza il carosello Bootstrap (solo se esiste)
             const $carousel = $('#heroCarousel');
