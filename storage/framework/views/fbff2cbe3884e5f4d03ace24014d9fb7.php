@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content']));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content', 'size' => 'md']));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['content', 'type' => 'content']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['content', 'type' => 'content', 'size' => 'md']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -32,6 +32,26 @@ unset($__defined_vars, $__key, $__value); ?>
     $isLiked = auth()->check() ? $content->isLikedBy(auth()->user()) : false;
     $likeCount = $content->like_count ?? 0;
     $contentType = strtolower(class_basename($content));
+    
+    // Dimensioni
+    $sizeStyles = [
+        'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
+        'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
+        'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
+    ];
+    $iconSizes = [
+        'sm' => 'width: 20px; height: 20px;',
+        'md' => 'width: 24px; height: 24px;', 
+        'lg' => 'width: 28px; height: 28px;'
+    ];
+    $textSizes = [
+        'sm' => 'f-s-10',
+        'md' => 'f-s-12', 
+        'lg' => 'f-s-14'
+    ];
+    $buttonStyle = $sizeStyles[$size] ?? $sizeStyles['md'];
+    $iconStyle = $iconSizes[$size] ?? $iconSizes['md'];
+    $textClass = $textSizes[$size] ?? $textSizes['md'];
 ?>
 
 <?php if(auth()->check()): ?>
@@ -40,17 +60,17 @@ unset($__defined_vars, $__key, $__value); ?>
      data-content-id="<?php echo e($content->id); ?>"
      onclick="toggleSocialLike(this)"
      title="<?php echo e($isLiked ? 'Rimuovi like' : 'Metti like'); ?>"
-     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; <?php echo e($buttonStyle); ?>"
      onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
      onmouseout="this.style.backgroundColor='transparent'">
-    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 24px; height: 24px; <?php echo e($isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'); ?>">
-    <span class="text-secondary like-count f-s-12"><?php echo e(number_format($likeCount)); ?></span>
+    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="<?php echo e($iconStyle); ?> <?php echo e($isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'); ?>">
+    <span class="text-secondary like-count <?php echo e($textClass); ?>"><?php echo e(number_format($likeCount)); ?></span>
 </div>
 <?php else: ?>
 <div class="social-like-counter"
-     style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
-    <span class="text-secondary like-count f-s-12"><?php echo e(number_format($likeCount)); ?></span>
+     style="display: flex; flex-direction: column; align-items: center; border-radius: 8px; <?php echo e($buttonStyle); ?>">
+    <img src="<?php echo e(asset('assets/images/like.png')); ?>" alt="Like" style="<?php echo e($iconStyle); ?> filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+    <span class="text-secondary like-count <?php echo e($textClass); ?>"><?php echo e(number_format($likeCount)); ?></span>
 </div>
 <?php endif; ?>
 

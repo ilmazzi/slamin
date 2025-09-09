@@ -346,9 +346,16 @@
                                         <div class="autoplay-item">
                                             <div class="card overflow-hidden hover-effect h-100">
                                                 @if ($video->thumbnail_path)
-                                                    <img src="{{ $video->thumbnail_url }}" class="card-img-top"
-                                                        alt="{{ $video->title }}"
-                                                        style="height: 200px; object-fit: cover;">
+                                                    <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $video->id }})">
+                                                        <img src="{{ $video->thumbnail_url }}" class="card-img-top"
+                                                            alt="{{ $video->title }}"
+                                                            style="height: 200px; object-fit: cover;">
+                                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                                            <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                                                                <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @else
                                                     @php
                                                         $fallbackImages = [
@@ -374,21 +381,10 @@
                                                         <p class="card-text">{{ Str::limit($video->description, 80) }}</p>
                                                     @endif
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <p class="card-text">
-                                                            <small class="text-body-secondary">
-                                                                <x-social-view-counter :content="$video" type="video" size="sm" />
-
-                                                            </small>
-                                                        </p>
+                                                        <x-social-view-counter :content="$video" type="video" size="sm" />
                                                         <div class="d-flex gap-1 justify-content-end">
                                                             <x-social-like-button :content="$video" type="video" size="sm" />
                                                             <x-social-comment-button :content="$video" type="video" size="sm" />
-
-
-                                                            <button onclick="openVideoModal({{ $video->id }})" role="button"
-                                                                class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
-                                                                <i class="ph-duotone ph-play f-s-12 me-1"></i>
-                                                            </button>
 
                                                             <x-report-button :content="$video" type="video"
                                                                 size="sm" />

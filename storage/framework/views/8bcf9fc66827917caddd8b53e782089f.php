@@ -358,7 +358,7 @@
                     <div class="col-12">
                     <div class="card equal-card">
                         <div class="card-header">
-                            <h5><?php echo e(__('home.videos')); ?></h5>
+                            <h5><?php echo e(__('home.new_videos')); ?></h5>
                             </div>
                             <div class="card-body">
                             <div class="events-slider app-arrow" id="videos-slider">
@@ -366,9 +366,16 @@
                                         <div class="autoplay-item">
                                             <div class="card overflow-hidden hover-effect h-100">
                                                 <?php if($video->thumbnail_path): ?>
-                                                    <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
-                                                        alt="<?php echo e($video->title); ?>"
-                                                        style="height: 200px; object-fit: cover;">
+                                                    <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal(<?php echo e($video->id); ?>)">
+                                                        <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                            alt="<?php echo e($video->title); ?>"
+                                                            style="height: 200px; object-fit: cover;">
+                                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                                            <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                                                                <i class="ph-duotone ph-play f-s-24 text-primary"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 <?php else: ?>
                                                     <?php
                                                         $fallbackImages = [
@@ -379,9 +386,9 @@
                                                         ];
                                                         $randomImage = $fallbackImages[array_rand($fallbackImages)];
                                                     ?>
-                                                    <img src="<?php echo e(asset($randomImage)); ?>" class="card-img-top"
+                                                    <a href="<?php echo e(route('videos.show', $video)); ?>"><img src="<?php echo e(asset($randomImage)); ?>" class="card-img-top"
                                                         alt="<?php echo e($video->title); ?>"
-                                                        style="height: 200px; object-fit: cover;">
+                                                        style="height: 200px; object-fit: cover;"></a>
                                                 <?php endif; ?>
                                                 <div class="card-body d-flex flex-column">
                                                     <h5 class="card-title f-w-600"><?php echo e($video->title); ?></h5>
@@ -395,9 +402,7 @@
                                                         <p class="card-text"><?php echo e(Str::limit($video->description, 80)); ?></p>
                                                     <?php endif; ?>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <p class="card-text">
-                                                            <small class="text-body-secondary">
-                                                                <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+                                                        <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('social-view-counter'); ?>
@@ -417,9 +422,6 @@
 <?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
 <?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
 <?php endif; ?>
-
-                                                            </small>
-                                                        </p>
                                                         <div class="d-flex gap-1 justify-content-end">
                                                             <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
@@ -461,13 +463,6 @@
 <?php $component = $__componentOriginal6f504f396e2242cb757c367dd734f8bb; ?>
 <?php unset($__componentOriginal6f504f396e2242cb757c367dd734f8bb); ?>
 <?php endif; ?>
-
-
-                                                            <button onclick="openVideoModal(<?php echo e($video->id); ?>)" role="button"
-                                                                class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
-                                                                <i class="ph-duotone ph-play f-s-12 me-1"></i><?php echo e(__('home.watch')); ?>
-
-                                                            </button>
 
                                                             <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>

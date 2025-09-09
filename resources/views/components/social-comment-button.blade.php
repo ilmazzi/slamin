@@ -5,28 +5,36 @@
     $contentType = strtolower(class_basename($content));
     
     // Dimensioni
-    $sizeClasses = [
-        'sm' => 'btn btn-sm py-1 px-2 d-flex align-items-center',
-        'md' => 'btn btn-md py-2 px-3 d-flex align-items-center',
-        'lg' => 'btn btn-lg py-3 px-4 d-flex align-items-center'
+    $sizeStyles = [
+        'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
+        'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
+        'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
     ];
-    $iconSize = [
-        'sm' => 'f-s-12',
-        'md' => 'f-s-14', 
-        'lg' => 'f-s-16'
+    $iconSizes = [
+        'sm' => 'f-s-16',
+        'md' => 'f-s-20', 
+        'lg' => 'f-s-24'
     ];
-    $buttonClass = $sizeClasses[$size] ?? $sizeClasses['md'];
-    $iconClass = $iconSize[$size] ?? $iconSize['md'];
+    $textSizes = [
+        'sm' => 'f-s-10',
+        'md' => 'f-s-12', 
+        'lg' => 'f-s-14'
+    ];
+    $buttonStyle = $sizeStyles[$size] ?? $sizeStyles['md'];
+    $iconClass = $iconSizes[$size] ?? $iconSizes['md'];
+    $textClass = $textSizes[$size] ?? $textSizes['md'];
 @endphp
 
-<div class="social-comment-btn {{ $buttonClass }}"
+<div class="social-comment-btn"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}"
      onclick="showVideoComments({{ $content->id }}, event)"
      title="Commenti"
-     style="cursor: pointer;">
-    <i class="ph-duotone ph-chat-circle {{ $iconClass }} me-1"></i>
-    <span class="comment-count">{{ number_format($commentCount) }}</span>
+     style="cursor: pointer; display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; {{ $buttonStyle }}"
+     onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+     onmouseout="this.style.backgroundColor='transparent'">
+    <i class="ph-duotone ph-chat-circle {{ $iconClass }}"></i>
+    <span class="comment-count {{ $textClass }}">{{ number_format($commentCount) }}</span>
 </div>
 
 <script>

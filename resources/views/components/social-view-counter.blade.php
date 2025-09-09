@@ -1,4 +1,4 @@
-@props(['content', 'type' => 'content'])
+@props(['content', 'type' => 'content', 'size' => 'md'])
 
 @php
     $viewCount = $content->views_count ?? $content->view_count ?? 0;
@@ -9,14 +9,34 @@
     if (!in_array($contentType, $supportedTypes)) {
         $contentType = 'video'; // fallback
     }
+    
+    // Dimensioni
+    $sizeStyles = [
+        'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
+        'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
+        'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
+    ];
+    $iconSizes = [
+        'sm' => 'f-s-16',
+        'md' => 'f-s-20', 
+        'lg' => 'f-s-24'
+    ];
+    $textSizes = [
+        'sm' => 'f-s-10',
+        'md' => 'f-s-12', 
+        'lg' => 'f-s-14'
+    ];
+    $buttonStyle = $sizeStyles[$size] ?? $sizeStyles['md'];
+    $iconClass = $iconSizes[$size] ?? $iconSizes['md'];
+    $textClass = $textSizes[$size] ?? $textSizes['md'];
 @endphp
 
 <div class="post-icon social-view-counter"
      data-content-type="{{ $contentType }}"
      data-content-id="{{ $content->id }}"
-     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-    <i class="ti ti-eye f-s-30"></i>
-    <p class="text-secondary view-count">{{ number_format($viewCount) }}</p>
+     style="display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; {{ $buttonStyle }}">
+    <i class="ti ti-eye {{ $iconClass }}"></i>
+    <span class="text-secondary view-count {{ $textClass }}">{{ number_format($viewCount) }}</span>
 </div>
 
 <script>

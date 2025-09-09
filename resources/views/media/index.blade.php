@@ -1688,7 +1688,7 @@ function displaySearchResults(results, total) {
                                                                     <div class="d-flex gap-2">
                                             ${createSocialLikeButton('photo', photo.id, photo.likes_count || 0)}
                                 ${createSocialViewCounter('photo', photo.id, photo.view_count || photo.views || 0)}
-                                                                            ${isAuthenticated ? `
+                                            ${isAuthenticated ? `
                                             ${createSocialCommentButton('photo', photo.id, photo.comments_count || 0)}
                                             ` : `
                                             <div class="social-comment-counter"
@@ -1785,14 +1785,16 @@ function toggleSocialLike(button) {
 // Crea pulsante commenti dinamico usando la stessa logica del componente
 function createSocialCommentButton(contentType, contentId, commentCount) {
     return `
-        <div class="social-comment-btn btn btn-sm py-1 px-2 d-flex align-items-center"
+        <div class="social-comment-btn"
              data-content-type="${contentType}"
              data-content-id="${contentId}"
              onclick="showVideoComments(${contentId}, event)"
              title="Commenti"
-             style="cursor: pointer;">
-            <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
-            <span class="comment-count">${commentCount.toLocaleString()}</span>
+             style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s; min-width: 60px;"
+             onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
+             onmouseout="this.style.backgroundColor='transparent'">
+            <i class="ph-duotone ph-chat-circle f-s-24 text-primary"></i>
+            <span class="text-secondary comment-count f-s-12">${commentCount.toLocaleString()}</span>
         </div>
     `;
 }
@@ -1803,9 +1805,9 @@ function createSocialViewCounter(contentType, contentId, viewCount) {
         <div class="post-icon social-view-counter"
              data-content-type="${contentType}"
              data-content-id="${contentId}"
-             style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-            <i class="ti ti-eye f-s-30"></i>
-            <p class="text-secondary view-count">${viewCount.toLocaleString()}</p>
+             style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; min-width: 60px;">
+            <i class="ti ti-eye f-s-24 text-primary"></i>
+            <span class="text-secondary view-count f-s-12">${viewCount.toLocaleString()}</span>
         </div>
     `;
 }
@@ -1821,7 +1823,7 @@ function createSocialLikeButton(contentType, contentId, likeCount, isLiked = fal
                  data-content-id="${contentId}"
                  onclick="toggleSocialLike(this)"
                  title="${isLiked ? 'Rimuovi like' : 'Metti like'}"
-                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s;"
+                 style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; transition: all 0.2s; min-width: 60px;"
                  onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
                  onmouseout="this.style.backgroundColor='transparent'">
                 <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; ${isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);'}">
@@ -1831,7 +1833,7 @@ function createSocialLikeButton(contentType, contentId, likeCount, isLiked = fal
     } else {
         return `
             <div class="social-like-counter"
-                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
+                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px; min-width: 60px;">
                 <img src="{{ asset('assets/images/like.png') }}" alt="Like" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
                 <span class="text-secondary like-count f-s-12">${likeCount.toLocaleString()}</span>
             </div>

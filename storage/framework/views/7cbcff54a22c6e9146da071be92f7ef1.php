@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content']));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['content', 'type' => 'content', 'size' => 'md']));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['content', 'type' => 'content']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['content', 'type' => 'content', 'size' => 'md']), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -37,14 +37,34 @@ unset($__defined_vars, $__key, $__value); ?>
     if (!in_array($contentType, $supportedTypes)) {
         $contentType = 'video'; // fallback
     }
+    
+    // Dimensioni
+    $sizeStyles = [
+        'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
+        'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
+        'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
+    ];
+    $iconSizes = [
+        'sm' => 'f-s-16',
+        'md' => 'f-s-20', 
+        'lg' => 'f-s-24'
+    ];
+    $textSizes = [
+        'sm' => 'f-s-10',
+        'md' => 'f-s-12', 
+        'lg' => 'f-s-14'
+    ];
+    $buttonStyle = $sizeStyles[$size] ?? $sizeStyles['md'];
+    $iconClass = $iconSizes[$size] ?? $iconSizes['md'];
+    $textClass = $textSizes[$size] ?? $textSizes['md'];
 ?>
 
 <div class="post-icon social-view-counter"
      data-content-type="<?php echo e($contentType); ?>"
      data-content-id="<?php echo e($content->id); ?>"
-     style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-    <i class="ti ti-eye f-s-30"></i>
-    <p class="text-secondary view-count"><?php echo e(number_format($viewCount)); ?></p>
+     style="display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; <?php echo e($buttonStyle); ?>">
+    <i class="ti ti-eye <?php echo e($iconClass); ?>"></i>
+    <span class="text-secondary view-count <?php echo e($textClass); ?>"><?php echo e(number_format($viewCount)); ?></span>
 </div>
 
 <script>
