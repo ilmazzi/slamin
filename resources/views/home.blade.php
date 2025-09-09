@@ -226,6 +226,39 @@
                 console.error('Slider not found!');
             }
 
+            // Inizializza il carosello video con Center Mode
+            const $videosSlider = $('#videos-slider');
+            if ($videosSlider.length > 0) {
+                $videosSlider.slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    centerMode: true,
+                    centerPadding: '60px',
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    arrows: true,
+                    dots: false,
+                    infinite: true,
+                    speed: 500,
+                    responsive: [{
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: 2,
+                                centerMode: true,
+                                centerPadding: '40px'
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 1,
+                                centerMode: true,
+                                centerPadding: '60px'
+                            }
+                        }
+                    ]
+                });
+            }
 
             // Inizializza il carosello Bootstrap
             if ($carousel.length > 0) {
@@ -360,7 +393,69 @@
             }
         };
 
+        // Funzione per il toggle dei video
+        window.toggleVideosContent = function(type) {
+            const newContent = document.getElementById('newVideosContent');
+            const popularContent = document.getElementById('popularVideosContent');
+            const toggle = document.getElementById('videosToggle');
+            const labelLeft = document.getElementById('videosToggleLabelLeft');
+            const labelRight = document.getElementById('videosToggleLabelRight');
+            const $videosSlider = $('#videos-slider');
 
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = false;
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            }
+
+            // Reinizializza il slider dopo il cambio di contenuto
+            if ($videosSlider.length > 0) {
+                $videosSlider.slick('unslick');
+                setTimeout(() => {
+                    $videosSlider.slick({
+                        slidesToShow: 3,
+                        slidesToScroll: 1,
+                        centerMode: true,
+                        centerPadding: '60px',
+                        autoplay: true,
+                        autoplaySpeed: 3000,
+                        arrows: true,
+                        dots: false,
+                        infinite: true,
+                        speed: 500,
+                        responsive: [{
+                                breakpoint: 992,
+                                settings: {
+                                    slidesToShow: 2,
+                                    centerMode: true,
+                                    centerPadding: '40px'
+                                }
+                            },
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 1,
+                                    centerMode: true,
+                                    centerPadding: '60px'
+                                }
+                            }
+                        ]
+                    });
+                }, 100);
+            }
+        };
 
         // Funzione per seguire un utente
         window.followUser = function(userId) {
