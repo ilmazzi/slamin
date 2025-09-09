@@ -5,43 +5,45 @@
 @section('title', 'Slam in - Home')
 
 @section('css')
-    <!-- Slick CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
     
-    <!-- Custom CSS per rimuovere ombreggiatura slider -->
+    <!-- CSS per slider video semplice -->
     <style>
-        #new-videos-slider .slick-list,
-        #new-videos-slider .slick-track,
-        #new-videos-slider .slick-slide,
-        #popular-videos-slider .slick-list,
-        #popular-videos-slider .slick-track,
-        #popular-videos-slider .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
+        .video-slider-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-behavior: smooth;
         }
         
-        .center-mode .slick-list,
-        .center-mode .slick-track,
-        .center-mode .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
+        .video-slider-container .item {
+            flex: 0 0 300px;
+            min-width: 300px;
         }
         
-        .app-arrow .slick-list,
-        .app-arrow .slick-track,
-        .app-arrow .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
+        .video-slider-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .video-slider-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .video-slider-container::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 4px;
+        }
+        
+        .video-slider-container::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+        
+        @media (max-width: 768px) {
+            .video-slider-container .item {
+                flex: 0 0 250px;
+                min-width: 250px;
+            }
         }
     </style>
     <style>
@@ -294,45 +296,8 @@
             };
             
             
-            // Inizializza entrambi gli slider in modo sicuro
-            const $newVideosSlider = $('#new-videos-slider');
-            const $popularVideosSlider = $('#popular-videos-slider');
-            
-            // Funzione per inizializzare uno slider in modo sicuro
-            function initSliderSafely($slider, name) {
-                if ($slider.length === 0) return;
-                
-                try {
-                    // Verifica che abbia contenuto
-                    if ($slider.find('.item').length > 0) {
-                        $slider.slick(window.sliderConfig);
-                        console.log(`Slider ${name} inizializzato`);
-                        
-                        // Rimuovi ombreggiatura
-                        setTimeout(() => {
-                            $slider.find('.slick-list, .slick-track, .slick-slide').css({
-                                'box-shadow': 'none !important',
-                                'filter': 'none !important',
-                                'text-shadow': 'none !important',
-                                '-webkit-box-shadow': 'none !important',
-                                '-moz-box-shadow': 'none !important'
-                            });
-                        }, 100);
-                    }
-                } catch (error) {
-                    console.log(`Errore inizializzazione slider ${name}:`, error);
-                }
-            }
-            
-            // Inizializza slider nuovi video (visibile)
-            setTimeout(() => {
-                initSliderSafely($newVideosSlider, 'nuovi video');
-            }, 200);
-            
-            // Inizializza slider popolari video (nascosto) con delay maggiore
-            setTimeout(() => {
-                initSliderSafely($popularVideosSlider, 'popolari video');
-            }, 500);
+            // Rimuovi completamente Slick e usa CSS semplice
+            console.log('Video sliders pronti - nessuna inizializzazione Slick necessaria');
 
             // Inizializza il carosello Bootstrap
             if ($carousel.length > 0) {
@@ -838,7 +803,7 @@
                             </div>
                             <div class="card-body">
                                 <!-- Slider per video nuovi -->
-                                <div class="center-mode app-arrow" id="new-videos-slider">
+                                <div class="video-slider-container" id="new-videos-slider">
                                     @foreach ($recentVideos as $video)
                                         <div class="item">
                                             <div class="card overflow-hidden hover-effect h-100">
@@ -901,7 +866,7 @@
                                 </div>
 
                                 <!-- Slider per video popolari -->
-                                <div class="center-mode app-arrow" id="popular-videos-slider" style="display: none;">
+                                <div class="video-slider-container" id="popular-videos-slider" style="display: none;">
                                     @foreach ($popularVideos as $video)
                                         <div class="item">
                                             <div class="card overflow-hidden hover-effect h-100">
