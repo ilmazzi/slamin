@@ -395,24 +395,19 @@
 
         // Funzione per il toggle dei video
         window.toggleVideosContent = function(type) {
-            const newContent = document.getElementById('newVideosContent');
-            const popularContent = document.getElementById('popularVideosContent');
             const toggle = document.getElementById('videosToggle');
             const labelLeft = document.getElementById('videosToggleLabelLeft');
             const labelRight = document.getElementById('videosToggleLabelRight');
             const $videosSlider = $('#videos-slider');
 
+            // Aggiorna le etichette del toggle
             if (type === 'new') {
-                newContent.style.display = 'block';
-                popularContent.style.display = 'none';
                 toggle.checked = false;
                 labelLeft.classList.remove('text-muted');
                 labelLeft.classList.add('text-primary');
                 labelRight.classList.remove('text-primary');
                 labelRight.classList.add('text-muted');
             } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
                 toggle.checked = true;
                 labelLeft.classList.remove('text-primary');
                 labelLeft.classList.add('text-muted');
@@ -420,9 +415,22 @@
                 labelRight.classList.add('text-primary');
             }
 
-            // Reinizializza il slider dopo il cambio di contenuto
+            // Ricrea il contenuto del slider
             if ($videosSlider.length > 0) {
                 $videosSlider.slick('unslick');
+                
+                // Pulisce il contenuto esistente
+                $videosSlider.empty();
+                
+                // Aggiunge il nuovo contenuto
+                if (type === 'new') {
+                    // Aggiungi qui il contenuto per i video nuovi
+                    // Per ora manteniamo il contenuto esistente
+                } else {
+                    // Aggiungi qui il contenuto per i video popolari
+                    // Per ora manteniamo il contenuto esistente
+                }
+                
                 setTimeout(() => {
                     $videosSlider.slick({
                         slidesToShow: 3,
@@ -776,131 +784,65 @@
                             </div>
                             <div class="card-body">
                                 <div class="center-mode app-arrow" id="videos-slider">
-                                    <!-- New Videos (Default) -->
-                                    <div id="newVideosContent">
-                                        @foreach ($recentVideos as $video)
-                                            <div class="item">
-                                                <div class="card overflow-hidden hover-effect h-100">
-                                                    <div class="position-relative">
-                                                        @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                                            <img src="{{ $video->thumbnail_url }}" class="card-img-top"
-                                                                alt="{{ $video->title }}"
-                                                                style="height: 200px; object-fit: cover;">
-                                                        @else
-                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 200px;">
-                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                            </div>
-                                                        @endif
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                                <i class="ph-duotone ph-clock f-s-10 me-1"></i>
-                                                                {{ __('common.new') }}
-                                                            </span>
+                                    @foreach ($recentVideos as $video)
+                                        <div class="item">
+                                            <div class="card overflow-hidden hover-effect h-100">
+                                                <div class="position-relative">
+                                                    @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
+                                                        <img src="{{ $video->thumbnail_url }}" class="card-img-top"
+                                                            alt="{{ $video->title }}"
+                                                            style="height: 200px; object-fit: cover;">
+                                                    @else
+                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
+                                                            style="height: 200px;">
+                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
                                                         </div>
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal({{ $video->id }})">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                                style="width: 50px; height: 50px;">
-                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                            </div>
-                                                        </div>
+                                                    @endif
+                                                    <div class="position-absolute top-0 start-0 m-2">
+                                                        <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
+                                                            <i class="ph-duotone ph-clock f-s-10 me-1"></i>
+                                                            {{ __('common.new') }}
+                                                        </span>
                                                     </div>
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                            <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                                {{ Str::limit($video->title, 50) }}
-                                                            </a>
-                                                        </h6>
-                                                        <p class="text-muted f-s-12 mb-2">
-                                                            <a href="{{ route('user.show', $video->user) }}"
-                                                                class="text-decoration-none hover-effect">
-                                                                {{ $video->user->getDisplayName() }}
-                                                            </a>
-                                                        </p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <div class="d-flex gap-2">
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
-                                                                </small>
-                                                            </div>
-                                                            <x-report-button :content="$video" type="video" size="sm" />
+                                                    <div class="position-absolute top-50 start-50 translate-middle"
+                                                        style="cursor: pointer;"
+                                                        onclick="openVideoModal({{ $video->id }})">
+                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
+                                                            style="width: 50px; height: 50px;">
+                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-                                    <!-- Popular Videos (Hidden by default) -->
-                                    <div id="popularVideosContent" style="display: none;">
-                                        @foreach ($popularVideos as $video)
-                                            <div class="item">
-                                                <div class="card overflow-hidden hover-effect h-100">
-                                                    <div class="position-relative">
-                                                        @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                                            <img src="{{ $video->thumbnail_url }}" class="card-img-top"
-                                                                alt="{{ $video->title }}"
-                                                                style="height: 200px; object-fit: cover;">
-                                                        @else
-                                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                                style="height: 200px;">
-                                                                <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                            </div>
-                                                        @endif
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                                <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                                {{ __('common.popular') }}
-                                                            </span>
+                                                <div class="card-body d-flex flex-column">
+                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
+                                                        <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                                            {{ Str::limit($video->title, 50) }}
+                                                        </a>
+                                                    </h6>
+                                                    <p class="text-muted f-s-12 mb-2">
+                                                        <a href="{{ route('user.show', $video->user) }}"
+                                                            class="text-decoration-none hover-effect">
+                                                            {{ $video->user->getDisplayName() }}
+                                                        </a>
+                                                    </p>
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div class="d-flex gap-2">
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
+                                                            </small>
+                                                            <small class="text-muted f-s-11">
+                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
+                                                            </small>
                                                         </div>
-                                                        <div class="position-absolute top-50 start-50 translate-middle"
-                                                            style="cursor: pointer;"
-                                                            onclick="openVideoModal({{ $video->id }})">
-                                                            <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                                style="width: 50px; height: 50px;">
-                                                                <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                            <a href="{{ route('videos.show', $video) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                                {{ Str::limit($video->title, 50) }}
-                                                            </a>
-                                                        </h6>
-                                                        <p class="text-muted f-s-12 mb-2">
-                                                            <a href="{{ route('user.show', $video->user) }}"
-                                                                class="text-decoration-none hover-effect">
-                                                                {{ $video->user->getDisplayName() }}
-                                                            </a>
-                                                        </p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <div class="d-flex gap-2">
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
-                                                                </small>
-                                                                <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
-                                                                </small>
-                                                            </div>
-                                                            <x-report-button :content="$video" type="video" size="sm" />
-                                                        </div>
+                                                        <x-report-button :content="$video" type="video" size="sm" />
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
