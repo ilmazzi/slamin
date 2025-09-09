@@ -21,23 +21,43 @@ class MediaController extends Controller
             ->where('is_public', true)
             ->where('moderation_status', 'approved');
 
-        // Video più popolare (somma di like, commenti, snap e views)
-        $mostPopularVideo = $videosQuery->get()->map(function($video) {
-            $video->total_interactions = ($video->like_count ?? 0) +
-                                       ($video->comment_count ?? 0) +
-                                       ($video->snap_count ?? 0) +
-                                       ($video->view_count ?? $video->views ?? 0);
+        // Video più popolare (somma di like, commenti, snap e views usando withCount per efficienza)
+        $mostPopularVideo = $videosQuery->withCount([
+            'likes',
+            'comments' => function($query) {
+                $query->where('status', 'approved');
+            },
+            'snaps',
+            'views'
+        ])->get()->map(function($video) {
+            $video->total_interactions = ($video->likes_count ?? 0) +
+                                       ($video->comments_count ?? 0) +
+                                       ($video->snaps_count ?? 0) +
+                                       ($video->views_count ?? 0);
             return $video;
         })->sortByDesc('total_interactions')->first();
 
-        // Video popolari (ordinati per interazioni totali)
-        $popularVideos = $videosQuery->get()->map(function($video) {
-            $video->total_interactions = ($video->like_count ?? 0) +
-                                       ($video->comment_count ?? 0) +
-                                       ($video->snap_count ?? 0) +
-                                       ($video->view_count ?? $video->views ?? 0);
+        // Video popolari (ordinati per interazioni totali usando withCount per efficienza)
+        $popularVideos = $videosQuery->withCount([
+            'likes',
+            'comments' => function($query) {
+                $query->where('status', 'approved');
+            },
+            'snaps',
+            'views'
+        ])->get()->map(function($video) {
+            $video->total_interactions = ($video->likes_count ?? 0) +
+                                       ($video->comments_count ?? 0) +
+                                       ($video->snaps_count ?? 0) +
+                                       ($video->views_count ?? 0);
             return $video;
         })->sortByDesc('total_interactions')->take(6);
+
+        // Debug temporaneo per verificare i video popolari
+        \Log::info('Popular videos count: ' . $popularVideos->count());
+        foreach($popularVideos as $video) {
+            \Log::info('Popular video: ' . $video->title . ' - Interactions: ' . $video->total_interactions);
+        }
 
         // Video nuovi (ordinati per data di creazione)
         $newVideos = $videosQuery->orderBy('created_at', 'desc')->take(6)->get();
@@ -46,21 +66,31 @@ class MediaController extends Controller
         $photosQuery = Photo::with(['user', 'likes', 'comments'])
             ->where('moderation_status', 'approved');
 
-        // Foto più popolare (somma di like, commenti, snap e views)
-        $mostPopularPhoto = $photosQuery->get()->map(function($photo) {
-            $photo->total_interactions = ($photo->like_count ?? 0) +
-                                       ($photo->comment_count ?? 0) +
-                                       ($photo->snap_count ?? 0) +
-                                       ($photo->view_count ?? $photo->views ?? 0);
+        // Foto più popolare (somma di like, commenti e views usando withCount per efficienza)
+        $mostPopularPhoto = $photosQuery->withCount([
+            'likes',
+            'comments' => function($query) {
+                $query->where('status', 'approved');
+            },
+            'views'
+        ])->get()->map(function($photo) {
+            $photo->total_interactions = ($photo->likes_count ?? 0) +
+                                       ($photo->comments_count ?? 0) +
+                                       ($photo->views_count ?? 0);
             return $photo;
         })->sortByDesc('total_interactions')->first();
 
-        // Foto popolari (ordinati per interazioni totali)
-        $popularPhotos = $photosQuery->get()->map(function($photo) {
-            $photo->total_interactions = ($photo->like_count ?? 0) +
-                                       ($photo->comment_count ?? 0) +
-                                       ($photo->snap_count ?? 0) +
-                                       ($photo->view_count ?? $photo->views ?? 0);
+        // Foto popolari (ordinati per interazioni totali usando withCount per efficienza)
+        $popularPhotos = $photosQuery->withCount([
+            'likes',
+            'comments' => function($query) {
+                $query->where('status', 'approved');
+            },
+            'views'
+        ])->get()->map(function($photo) {
+            $photo->total_interactions = ($photo->likes_count ?? 0) +
+                                       ($photo->comments_count ?? 0) +
+                                       ($photo->views_count ?? 0);
             return $photo;
         })->sortByDesc('total_interactions')->take(6);
 

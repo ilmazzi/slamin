@@ -199,21 +199,21 @@
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->view_count ?? $video->views }}
+                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->views_count ?? $video->view_count ?? $video->views ?? 0 }}
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->like_count }}
+                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->likes_count ?? $video->like_count ?? 0 }}
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
+                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
                                             </small>
                                             @auth
                                             <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
-                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments()->where('status', 'approved')->count() }}
+                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
                                             </small>
                                             @else
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments()->where('status', 'approved')->count() }}
+                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
                                             </small>
                                             @endauth
                                         </div>
@@ -255,21 +255,21 @@
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->view_count ?? $video->views }}
+                                                <i class="ph-duotone ph-eye me-1"></i>{{ $video->views_count ?? $video->view_count ?? $video->views ?? 0 }}
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->like_count }}
+                                                <i class="ph-duotone ph-heart me-1"></i>{{ $video->likes_count ?? $video->like_count ?? 0 }}
                                             </small>
                                             <small class="text-muted f-s-11">
-                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snap_count ?? 0 }}
+                                                <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);" class="me-1">{{ $video->snaps_count ?? $video->snap_count ?? 0 }}
                                             </small>
                                             @auth
                                             <small class="text-muted f-s-11" style="cursor: pointer;" onclick="showVideoComments({{ $video->id }}, event)">
-                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments()->where('status', 'approved')->count() }}
+                                                <i class="ph-duotone ph-chat-circle me-1"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
                                             </small>
                                             @else
                                             <small class="text-muted f-s-11">
-                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments()->where('status', 'approved')->count() }}
+                                                <i class="ph-duotone ph-chat-circle me-1" style="opacity: 0.6;"></i>{{ $video->comments_count ?? $video->comments()->where('status', 'approved')->count() }}
                                             </small>
                                             @endauth
                                         </div>
