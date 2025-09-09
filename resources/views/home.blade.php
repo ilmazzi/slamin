@@ -226,40 +226,6 @@
                 console.error('Slider not found!');
             }
 
-            // Inizializza il carosello video unico
-            const $videosSlider = $('#videos-slider');
-
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick({
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 2000,
-                    arrows: true,
-                    dots: false,
-                    infinite: true,
-                    speed: 500,
-                    responsive: [{
-                            breakpoint: 992,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1
-                            }
-                        }
-                    ]
-                });
-            }
 
             // Inizializza il carosello Bootstrap
             if ($carousel.length > 0) {
@@ -394,72 +360,6 @@
             }
         };
 
-        window.toggleVideosContent = function(type) {
-            const newContent = document.getElementById('newVideosContent');
-            const popularContent = document.getElementById('popularVideosContent');
-            const toggle = document.getElementById('videosToggle');
-            const labelLeft = document.getElementById('videosToggleLabelLeft');
-            const labelRight = document.getElementById('videosToggleLabelRight');
-
-            console.log('Toggle videos content:', type);
-
-            if (type === 'new') {
-                newContent.style.display = 'block';
-                popularContent.style.display = 'none';
-                toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
-                labelLeft.classList.remove('text-muted');
-                labelLeft.classList.add('text-primary');
-                labelRight.classList.remove('text-primary');
-                labelRight.classList.add('text-muted');
-            } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
-                toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-            }
-
-            // Reinizializza il slider dopo il cambio di contenuto
-            const $videosSlider = $('#videos-slider');
-            if ($videosSlider.length > 0) {
-                $videosSlider.slick('unslick'); // Rimuove il slider esistente
-                setTimeout(() => {
-                    $videosSlider.slick({
-                        slidesToShow: 3,
-                        slidesToScroll: 1,
-                        autoplay: true,
-                        autoplaySpeed: 2000,
-                        arrows: true,
-                        dots: false,
-                        infinite: true,
-                        speed: 500,
-                        responsive: [{
-                                breakpoint: 992,
-                                settings: {
-                                    slidesToShow: 2
-                                }
-                            },
-                            {
-                                breakpoint: 768,
-                                settings: {
-                                    slidesToShow: 2
-                                }
-                            },
-                            {
-                                breakpoint: 576,
-                                settings: {
-                                    slidesToShow: 1
-                                }
-                            }
-                        ]
-                    });
-                }, 100);
-            }
-        };
 
 
         // Funzione per seguire un utente
@@ -762,7 +662,7 @@
             @if (($recentVideos && $recentVideos->count() > 0) || ($popularVideos && $popularVideos->count() > 0))
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card">
+                        <div class="card equal-card">
                             <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">
                                     <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
@@ -780,13 +680,11 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <!-- Single Video Slider -->
-                                <div class="slider-for" id="videos-slider">
+                                <div class="center-mode app-arrow" id="videos-slider">
                                     <!-- New Videos (Default) -->
-                                <div id="newVideosContent">
-                                        <!-- DEBUG: Recent videos count: {{ $recentVideos->count() }} -->
+                                    <div id="newVideosContent">
                                         @foreach ($recentVideos as $video)
-                                            <div>
+                                            <div class="item">
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
                                                         @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
@@ -829,13 +727,13 @@
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                                             <div class="d-flex gap-2">
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count) }}
+                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count) }}
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
                                                                 </small>
                                                             </div>
                                                             <x-report-button :content="$video" type="video" size="sm" />
@@ -844,14 +742,12 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                </div>
+                                    </div>
 
                                     <!-- Popular Videos (Hidden by default) -->
-                                <div id="popularVideosContent" style="display: none;">
-                                        <!-- DEBUG: Popular videos count: {{ $popularVideos->count() }} -->
-                                        @if($popularVideos->count() > 0)
-                                            @foreach ($popularVideos as $video)
-                                            <div>
+                                    <div id="popularVideosContent" style="display: none;">
+                                        @foreach ($popularVideos as $video)
+                                            <div class="item">
                                                 <div class="card overflow-hidden hover-effect h-100">
                                                     <div class="position-relative">
                                                         @if ($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
@@ -867,7 +763,7 @@
                                                         <div class="position-absolute top-0 start-0 m-2">
                                                             <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
                                                                 <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                                Popolare
+                                                                {{ __('common.popular') }}
                                                             </span>
                                                         </div>
                                                         <div class="position-absolute top-50 start-50 translate-middle"
@@ -909,7 +805,6 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                        @endif
                                     </div>
                                 </div>
                             </div>
