@@ -8,6 +8,16 @@
     <!-- Slick CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/slick/slick-theme.css') }}">
+    
+    <!-- Custom CSS per rimuovere ombreggiatura slider -->
+    <style>
+        #videos-slider .slick-list,
+        #videos-slider .slick-track,
+        #videos-slider .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+        }
+    </style>
     <style>
         /* Stili aggiuntivi per lo slider degli eventi */
         .events-slider {
@@ -414,6 +424,10 @@
         // Dati dei video per il toggle
         const recentVideosData = @json($recentVideos);
         const popularVideosData = @json($popularVideos);
+        
+        // Debug: controlla i dati
+        console.log('Recent videos data:', recentVideosData);
+        console.log('Popular videos data:', popularVideosData);
 
         // Funzione per creare HTML di un video
         function createVideoHTML(video, badgeType) {
@@ -422,9 +436,11 @@
             const badgeText = badgeType === 'new' ? 'Nuovo' : 'Popolare';
             
             // Controlla se c'è una thumbnail valida
+            const placeholderUrl = '{{ asset("assets/images/placeholder/placholder-1.jpg") }}';
             const hasThumbnail = video.thumbnail_url && 
-                                video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}' &&
-                                video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}';
+                                video.thumbnail_url !== placeholderUrl &&
+                                video.thumbnail_url !== '' &&
+                                video.thumbnail_url !== null;
             
             const thumbnailHTML = hasThumbnail 
                 ? `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">`
@@ -884,14 +900,6 @@
                             </div>
                             <div class="card-body">
                                 <div class="center-mode app-arrow" id="videos-slider" style="overflow: visible;">
-                                <style>
-                                    #videos-slider .slick-list,
-                                    #videos-slider .slick-track,
-                                    #videos-slider .slick-slide {
-                                        box-shadow: none !important;
-                                        filter: none !important;
-                                    }
-                                </style>
                                     @foreach ($recentVideos as $video)
                                         <div class="item">
                                             <div class="card overflow-hidden hover-effect h-100">
