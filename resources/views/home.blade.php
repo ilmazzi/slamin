@@ -505,19 +505,22 @@
                 $videosSlider.append(videoHtml);
             });
             
-            // Reinizializza slider
-            $videosSlider.slick(window.sliderConfig);
-            
-            // Rimuovi ombreggiatura
+            // Aspetta che le immagini si carichino prima di reinizializzare
             setTimeout(() => {
-                $videosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                    'box-shadow': 'none !important',
-                    'filter': 'none !important',
-                    'text-shadow': 'none !important',
-                    '-webkit-box-shadow': 'none !important',
-                    '-moz-box-shadow': 'none !important'
-                });
-            }, 100);
+                // Reinizializza slider
+                $videosSlider.slick(window.sliderConfig);
+                
+                // Rimuovi ombreggiatura
+                setTimeout(() => {
+                    $videosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                }, 100);
+            }, 200);
         }
         
         // Funzione per mostrare video popolari
@@ -539,19 +542,22 @@
                 $videosSlider.append(videoHtml);
             });
             
-            // Reinizializza slider
-            $videosSlider.slick(window.sliderConfig);
-            
-            // Rimuovi ombreggiatura
+            // Aspetta che le immagini si carichino prima di reinizializzare
             setTimeout(() => {
-                $videosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                    'box-shadow': 'none !important',
-                    'filter': 'none !important',
-                    'text-shadow': 'none !important',
-                    '-webkit-box-shadow': 'none !important',
-                    '-moz-box-shadow': 'none !important'
-                });
-            }, 100);
+                // Reinizializza slider
+                $videosSlider.slick(window.sliderConfig);
+                
+                // Rimuovi ombreggiatura
+                setTimeout(() => {
+                    $videosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                }, 100);
+            }, 200);
         }
         
         // Funzione per creare HTML di un video
@@ -560,9 +566,23 @@
             const badgeIcon = type === 'new' ? 'ph-clock' : 'ph-trophy';
             const badgeText = type === 'new' ? 'Nuovo' : 'Popolare';
             
-            const thumbnailHtml = video.thumbnail_url && video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}' 
-                ? `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">`
-                : `<div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px;"><i class="ph-duotone ph-video-camera f-s-48 text-muted"></i></div>`;
+            // Gestione più robusta delle anteprime
+            let thumbnailHtml = '';
+            if (video.thumbnail_url && 
+                video.thumbnail_url !== '' && 
+                video.thumbnail_url !== null && 
+                video.thumbnail_url !== '{{ asset("assets/images/placeholder/placholder-1.jpg") }}' &&
+                !video.thumbnail_url.includes('placeholder')) {
+                
+                thumbnailHtml = `<img src="${video.thumbnail_url}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px; display: none;">
+                        <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                    </div>`;
+            } else {
+                thumbnailHtml = `<div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light" style="height: 200px;">
+                    <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
+                </div>`;
+            }
             
             return `
                 <div class="item">
