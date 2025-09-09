@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 use Exception;
 use App\Services\PeerTubeService;
@@ -319,5 +322,86 @@ class AuthController extends Controller
         ];
 
         return $colors[$roleName] ?? 'primary';
+    }
+
+    /**
+     * Mostra la pagina per richiedere il reset della password
+     */
+    public function showForgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    /**
+     * Invia il link di reset password via email
+     */
+    public function sendResetLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ], [
+            'email.required' => __('auth.email_required'),
+            'email.email' => __('auth.email_invalid'),
+            'email.exists' => __('auth.email_not_found')
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('status', __('auth.reset_link_sent'));
+        } else {
+            return back()->withErrors(['email' => __('auth.reset_link_failed')]);
+        }
+    }
+
+    /**
+     * Mostra la pagina per resettare la password
+     */
+    public function showResetPassword(Request $request, $token)
+    {
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->email
+        ]);
+    }
+
+    /**
+     * Resetta la password dell'utente
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|confirmed'
+        ], [
+            'email.required' => __('auth.email_required'),
+            'email.email' => __('auth.email_invalid'),
+            'email.exists' => __('auth.email_not_found'),
+            'password.required' => __('auth.password_required'),
+            'password.min' => __('auth.password_min'),
+            'password.confirmed' => __('auth.password_confirmed')
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new \Illuminate\Auth\Events\PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('status', __('auth.password_reset_success'));
+        } else {
+            return back()->withErrors(['email' => __('auth.password_reset_failed')]);
+        }
     }
 }

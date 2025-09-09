@@ -186,31 +186,32 @@
             <div class="col-lg-7 left-section">
                 <div>
                     <div class="logo mb-3">
-                        <img src="{{ asset('assets/images/logo.png') }}" alt="{{ __('common.slam_in_logo') }}" class="img-fluid" style="max-width: 250px;">
+                        <img src="<?php echo e(asset('assets/images/logo.png')); ?>" alt="<?php echo e(__('common.slam_in_logo')); ?>" class="img-fluid" style="max-width: 250px;">
                     </div>
                     <div class="logo-brand">
                         🎭 Slam In
                     </div>
                     <div class="welcome-text">
-                        {{ __('login.welcome_text') }}
+                        <?php echo e(__('login.welcome_text')); ?>
+
                     </div>
 
                     <div class="feature-list">
                         <div class="feature-item">
                             <i class="bi bi-calendar-event"></i>
-                            <span>{{ __('login.events_and_shows') }}</span>
+                            <span><?php echo e(__('login.events_and_shows')); ?></span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-people"></i>
-                            <span>{{ __('login.poets_community') }}</span>
+                            <span><?php echo e(__('login.poets_community')); ?></span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-mic"></i>
-                            <span>{{ __('login.share_your_performances') }}</span>
+                            <span><?php echo e(__('login.share_your_performances')); ?></span>
                         </div>
                         <div class="feature-item">
                             <i class="bi bi-trophy"></i>
-                            <span>{{ __('login.participate_in_competitions') }}</span>
+                            <span><?php echo e(__('login.participate_in_competitions')); ?></span>
                         </div>
                     </div>
                 </div>
@@ -221,93 +222,126 @@
                 <div class="form-container">
                     <div class="text-center mb-4">
                         <div class="d-lg-none mb-3">
-                            <img src="{{ asset('assets/images/logo.png') }}" alt="{{ __('common.slam_in_logo') }}" class="img-fluid" style="max-width: 180px;">
+                            <img src="<?php echo e(asset('assets/images/logo.png')); ?>" alt="<?php echo e(__('common.slam_in_logo')); ?>" class="img-fluid" style="max-width: 180px;">
                         </div>
-                        <h2>🔐 <strong>{{ __('login.login_to_your_account') }}</strong></h2>
-                        <p class="text-muted">{{ __('login.enter_slam_in_and_discover_the_italian_slam_world') }}</p>
+                        <h2>🔐 <strong><?php echo e(__('login.login_to_your_account')); ?></strong></h2>
+                        <p class="text-muted"><?php echo e(__('login.enter_slam_in_and_discover_the_italian_slam_world')); ?></p>
                     </div>
 
-                    @if($errors->any())
+                    <?php if($errors->any()): ?>
                         <div class="alert alert-danger">
                             <ul class="mb-0">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    @if(session('success'))
+                    <?php if(session('success')): ?>
                         <div class="alert alert-success">
-                            {{ session('success') }}
+                            <?php echo e(session('success')); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    <form method="POST" action="{{ route('login.process') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('login.process')); ?>">
+                        <?php echo csrf_field(); ?>
 
-                        <!-- {{ __('login.email') }} -->
+                        <!-- <?php echo e(__('login.email')); ?> -->
                         <div class="mb-3">
                             <label for="email" class="form-label">
-                                <strong>📧 {{ __('login.email') }}</strong>
+                                <strong>📧 <?php echo e(__('login.email')); ?></strong>
                             </label>
                             <input type="email"
-                                   class="form-control @error('email') is-invalid @enderror"
+                                   class="form-control <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                    id="email"
                                    name="email"
-                                   value="{{ old('email') }}"
+                                   value="<?php echo e(old('email')); ?>"
                                    required
-                                   placeholder="{{ __('login.email_placeholder') }}">
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                   placeholder="<?php echo e(__('login.email_placeholder')); ?>">
+                            <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">
-                                <strong>🔑 {{ __('login.password') }}</strong>
+                                <strong>🔑 <?php echo e(__('login.password')); ?></strong>
                             </label>
                             <input type="password"
-                                   class="form-control @error('password') is-invalid @enderror"
+                                   class="form-control <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                    id="password"
                                    name="password"
                                    required
-                                   placeholder="{{ __('login.password_placeholder') }}">
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                   placeholder="<?php echo e(__('login.password_placeholder')); ?>">
+                            <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <!-- Forgot Password Link -->
                         <div class="mb-3 text-end">
-                            <a href="{{ route('password.request') }}" class="text-decoration-none text-muted">
-                                <small>{{ __('auth.forgot_password') }}</small>
+                            <a href="<?php echo e(route('password.request')); ?>" class="text-decoration-none text-muted">
+                                <small><?php echo e(__('auth.forgot_password')); ?></small>
                             </a>
                         </div>
 
                         <!-- Remember Me -->
                         <div class="mb-3 form-check">
                             <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                            <label class="form-check-label" for="remember" title="{{ __('login.remember_me_tooltip') }}">
-                                {{ __('login.remember_me') }}
-                                <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="{{ __('login.remember_me_tooltip') }}"></i>
+                            <label class="form-check-label" for="remember" title="<?php echo e(__('login.remember_me_tooltip')); ?>">
+                                <?php echo e(__('login.remember_me')); ?>
+
+                                <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="<?php echo e(__('login.remember_me_tooltip')); ?>"></i>
                             </label>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="d-grid mb-3">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                    🎭 {{ __('login.enter_slam_in') }}
+                                    🎭 <?php echo e(__('login.enter_slam_in')); ?>
+
                             </button>
                         </div>
 
                         <!-- Links -->
                         <div class="text-center">
                             <p class="mb-0">
-                                {{ __('login.no_account') }}
-                                <a href="{{ route('register') }}" class="back-link">
-                                    {{ __('login.register_here') }}
+                                <?php echo e(__('login.no_account')); ?>
+
+                                <a href="<?php echo e(route('register')); ?>" class="back-link">
+                                    <?php echo e(__('login.register_here')); ?>
+
                                 </a>
                             </p>
                         </div>
@@ -327,3 +361,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\slamin\resources\views/auth/login.blade.php ENDPATH**/ ?>

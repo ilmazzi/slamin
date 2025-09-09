@@ -531,6 +531,7 @@ class TranslationManagementController extends Controller
         ];
     }
 
+
     /**
      * Escapa una stringa per PHP
      */
