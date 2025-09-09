@@ -297,6 +297,7 @@
                 ]
             };
             
+            // Inizializza solo lo slider visibile (nuovi video)
             if ($newVideosSlider.length > 0) {
                 $newVideosSlider.slick(sliderConfig);
                 
@@ -314,32 +315,6 @@
                 // Rimuove ombreggiatura ad ogni cambio slide
                 $newVideosSlider.on('afterChange', function() {
                     $newVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none !important',
-                        'text-shadow': 'none !important',
-                        '-webkit-box-shadow': 'none !important',
-                        '-moz-box-shadow': 'none !important'
-                    });
-                });
-            }
-            
-            if ($popularVideosSlider.length > 0) {
-                $popularVideosSlider.slick(sliderConfig);
-                
-                // Forza rimozione ombreggiatura
-                setTimeout(() => {
-                    $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
-                        'box-shadow': 'none !important',
-                        'filter': 'none !important',
-                        'text-shadow': 'none !important',
-                        '-webkit-box-shadow': 'none !important',
-                        '-moz-box-shadow': 'none !important'
-                    });
-                }, 100);
-                
-                // Rimuove ombreggiatura ad ogni cambio slide
-                $popularVideosSlider.on('afterChange', function() {
-                    $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
                         'box-shadow': 'none !important',
                         'filter': 'none !important',
                         'text-shadow': 'none !important',
@@ -482,7 +457,7 @@
             }
         };
 
-        // Funzione semplice per il toggle dei video
+        // Funzione per il toggle dei video con inizializzazione dinamica
         window.toggleVideosContent = function(type) {
             const toggle = document.getElementById('videosToggle');
             const labelLeft = document.getElementById('videosToggleLabelLeft');
@@ -508,9 +483,38 @@
                 labelRight.classList.remove('text-muted');
                 labelRight.classList.add('text-primary');
                 
-                // Mostra slider popolari, nascondi nuovi
+                // Nascondi slider nuovi
                 newSlider.style.display = 'none';
+                
+                // Mostra slider popolari e inizializza se non già fatto
                 popularSlider.style.display = 'block';
+                
+                // Inizializza lo slider popolare se non è già inizializzato
+                if (!$popularVideosSlider.hasClass('slick-initialized')) {
+                    $popularVideosSlider.slick(sliderConfig);
+                    
+                    // Forza rimozione ombreggiatura
+                    setTimeout(() => {
+                        $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                            'box-shadow': 'none !important',
+                            'filter': 'none !important',
+                            'text-shadow': 'none !important',
+                            '-webkit-box-shadow': 'none !important',
+                            '-moz-box-shadow': 'none !important'
+                        });
+                    }, 100);
+                    
+                    // Rimuove ombreggiatura ad ogni cambio slide
+                    $popularVideosSlider.on('afterChange', function() {
+                        $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                            'box-shadow': 'none !important',
+                            'filter': 'none !important',
+                            'text-shadow': 'none !important',
+                            '-webkit-box-shadow': 'none !important',
+                            '-moz-box-shadow': 'none !important'
+                        });
+                    });
+                }
             }
         };
 
