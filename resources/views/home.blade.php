@@ -11,11 +11,37 @@
     
     <!-- Custom CSS per rimuovere ombreggiatura slider -->
     <style>
-        #videos-slider .slick-list,
-        #videos-slider .slick-track,
-        #videos-slider .slick-slide {
+        #new-videos-slider .slick-list,
+        #new-videos-slider .slick-track,
+        #new-videos-slider .slick-slide,
+        #popular-videos-slider .slick-list,
+        #popular-videos-slider .slick-track,
+        #popular-videos-slider .slick-slide {
             box-shadow: none !important;
             filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+        
+        .center-mode .slick-list,
+        .center-mode .slick-track,
+        .center-mode .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+        }
+        
+        .app-arrow .slick-list,
+        .app-arrow .slick-track,
+        .app-arrow .slick-slide {
+            box-shadow: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
         }
     </style>
     <style>
@@ -273,10 +299,54 @@
             
             if ($newVideosSlider.length > 0) {
                 $newVideosSlider.slick(sliderConfig);
+                
+                // Forza rimozione ombreggiatura
+                setTimeout(() => {
+                    $newVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                }, 100);
+                
+                // Rimuove ombreggiatura ad ogni cambio slide
+                $newVideosSlider.on('afterChange', function() {
+                    $newVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                });
             }
             
             if ($popularVideosSlider.length > 0) {
                 $popularVideosSlider.slick(sliderConfig);
+                
+                // Forza rimozione ombreggiatura
+                setTimeout(() => {
+                    $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                }, 100);
+                
+                // Rimuove ombreggiatura ad ogni cambio slide
+                $popularVideosSlider.on('afterChange', function() {
+                    $popularVideosSlider.find('.slick-list, .slick-track, .slick-slide').css({
+                        'box-shadow': 'none !important',
+                        'filter': 'none !important',
+                        'text-shadow': 'none !important',
+                        '-webkit-box-shadow': 'none !important',
+                        '-moz-box-shadow': 'none !important'
+                    });
+                });
             }
 
             // Inizializza il carosello Bootstrap
