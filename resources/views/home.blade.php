@@ -502,6 +502,26 @@
                 popularSlider.style.display = 'block';
             }
         };
+        
+        // Assicurati che la funzione sia disponibile globalmente
+        console.log('toggleVideosContent function defined:', typeof window.toggleVideosContent);
+        
+        // Fallback per assicurarsi che la funzione sia sempre disponibile
+        if (typeof window.toggleVideosContent === 'undefined') {
+            window.toggleVideosContent = function(type) {
+                console.log('Fallback toggleVideosContent called with type:', type);
+                const newSlider = document.getElementById('new-videos-slider');
+                const popularSlider = document.getElementById('popular-videos-slider');
+                
+                if (type === 'new') {
+                    if (newSlider) newSlider.style.display = 'block';
+                    if (popularSlider) popularSlider.style.display = 'none';
+                } else {
+                    if (newSlider) newSlider.style.display = 'none';
+                    if (popularSlider) popularSlider.style.display = 'block';
+                }
+            };
+        }
 
         // Funzione per seguire un utente
         window.followUser = function(userId) {
