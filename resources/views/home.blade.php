@@ -759,8 +759,8 @@
             @endif
 
 
-            <!-- Video Carousel Section -->
-            @if ($recentVideos && $recentVideos->count() > 0)
+            <!-- Video Slider Section -->
+            @if (($recentVideos && $recentVideos->count() > 0) || ($popularVideos && $popularVideos->count() > 0))
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
@@ -781,9 +781,10 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <!-- New Videos Content (Default) -->
-                                <div id="newVideosContent">
-                                    <div class="videos-slider app-arrow" id="new-videos-slider">
+                                <!-- Single Video Slider -->
+                                <div class="videos-slider app-arrow" id="videos-slider">
+                                    <!-- New Videos (Default) -->
+                                    <div id="newVideosContent">
                                         <!-- DEBUG: Recent videos count: {{ $recentVideos->count() }} -->
                                         @foreach ($recentVideos as $video)
                                             <div class="autoplay-item">
@@ -845,11 +846,9 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                </div>
 
-                                <!-- Popular Videos Content (Hidden by default) -->
-                                <div id="popularVideosContent" style="display: none;">
-                                    <div class="videos-slider app-arrow" id="popular-videos-slider">
+                                    <!-- Popular Videos (Hidden by default) -->
+                                    <div id="popularVideosContent" style="display: none;">
                                         <!-- DEBUG: Popular videos count: {{ $popularVideos->count() }} -->
                                         @if($popularVideos->count() > 0)
                                             @foreach ($popularVideos as $video)
@@ -869,7 +868,7 @@
                                                         <div class="position-absolute top-0 start-0 m-2">
                                                             <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
                                                                 <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                                {{ __('common.popular') }}
+                                                                Popolare
                                                             </span>
                                                         </div>
                                                         <div class="position-absolute top-50 start-50 translate-middle"
@@ -896,13 +895,13 @@
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                                             <div class="d-flex gap-2">
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count) }}
+                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($video->views_count ?? 0) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count) }}
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($video->likes_count ?? 0) }}
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count) }}
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i>{{ number_format($video->comments_count ?? 0) }}
                                                                 </small>
                                                             </div>
                                                             <x-report-button :content="$video" type="video" size="sm" />
@@ -911,14 +910,9 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                        @else
-                                            <div class="text-center py-4">
-                                                <p class="text-muted">{{ __('common.no_popular_videos') }}</p>
-                                            </div>
                                         @endif
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

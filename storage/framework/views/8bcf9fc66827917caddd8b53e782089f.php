@@ -779,8 +779,8 @@
             <?php endif; ?>
 
 
-            <!-- Video Carousel Section -->
-            <?php if($recentVideos && $recentVideos->count() > 0): ?>
+            <!-- Video Slider Section -->
+            <?php if(($recentVideos && $recentVideos->count() > 0) || ($popularVideos && $popularVideos->count() > 0)): ?>
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
@@ -802,9 +802,10 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <!-- New Videos Content (Default) -->
-                                <div id="newVideosContent">
-                                    <div class="videos-slider app-arrow" id="new-videos-slider">
+                                <!-- Single Video Slider -->
+                                <div class="videos-slider app-arrow" id="videos-slider">
+                                    <!-- New Videos (Default) -->
+                                    <div id="newVideosContent">
                                         <!-- DEBUG: Recent videos count: <?php echo e($recentVideos->count()); ?> -->
                                         <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="autoplay-item">
@@ -891,11 +892,9 @@
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                </div>
 
-                                <!-- Popular Videos Content (Hidden by default) -->
-                                <div id="popularVideosContent" style="display: none;">
-                                    <div class="videos-slider app-arrow" id="popular-videos-slider">
+                                    <!-- Popular Videos (Hidden by default) -->
+                                    <div id="popularVideosContent" style="display: none;">
                                         <!-- DEBUG: Popular videos count: <?php echo e($popularVideos->count()); ?> -->
                                         <?php if($popularVideos->count() > 0): ?>
                                             <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -915,8 +914,7 @@
                                                         <div class="position-absolute top-0 start-0 m-2">
                                                             <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
                                                                 <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                                <?php echo e(__('common.popular')); ?>
-
+                                                                Popolare
                                                             </span>
                                                         </div>
                                                         <div class="position-absolute top-50 start-50 translate-middle"
@@ -945,15 +943,15 @@
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                                             <div class="d-flex gap-2">
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count)); ?>
+                                                                    <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count)); ?>
+                                                                    <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
 
                                                                 </small>
                                                                 <small class="text-muted f-s-11">
-                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count)); ?>
+                                                                    <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
 
                                                                 </small>
                                                             </div>
@@ -982,14 +980,9 @@
                                                 </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        <?php else: ?>
-                                            <div class="text-center py-4">
-                                                <p class="text-muted"><?php echo e(__('common.no_popular_videos')); ?></p>
-                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

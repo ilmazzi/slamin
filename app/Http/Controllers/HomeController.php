@@ -32,22 +32,29 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        // Video popolari per carosello - approccio semplificato
+        // Video popolari per carosello - ordinati per interazioni totali
         $popularVideos = Video::where('moderation_status', 'approved')
             ->where('is_public', true)
             ->with('user')
-            ->withCount('views')
-            ->withCount('likes')
-            ->withCount('comments')
-            ->orderBy('created_at', 'desc') // Ordina per data di creazione (più recente = più popolare)
-            ->limit(6)
-            ->get();
+            ->withCount([
+                'likes',
+                'comments' => function($query) {
+                    $query->where('status', 'approved');
+                },
+                'snaps',
+                'views'
+            ])
+            ->get()
+            ->map(function($video) {
+                $video->total_interactions = ($video->likes_count ?? 0) +
+                                           ($video->comments_count ?? 0) +
+                                           ($video->snaps_count ?? 0) +
+                                           ($video->views_count ?? 0);
+                return $video;
+            })
+            ->sortByDesc('total_interactions')
+            ->take(6);
 
-        // Debug temporaneo
-        \Log::info('Popular videos count: ' . $popularVideos->count());
-        foreach($popularVideos as $video) {
-            \Log::info('Popular video: ' . $video->title);
-        }
 
 
 

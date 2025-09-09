@@ -56,11 +56,17 @@ class MediaController extends Controller
         // Debug temporaneo per verificare i video popolari
         \Log::info('Popular videos count: ' . $popularVideos->count());
         foreach($popularVideos as $video) {
-            \Log::info('Popular video: ' . $video->title . ' - Interactions: ' . $video->total_interactions);
+            \Log::info('Popular video: ' . $video->title . ' - Interactions: ' . $video->total_interactions . ' - Thumbnail: ' . ($video->thumbnail_url ?? 'NULL'));
         }
-
+        
         // Video nuovi (ordinati per data di creazione)
         $newVideos = $videosQuery->orderBy('created_at', 'desc')->take(6)->get();
+        
+        // Debug per verificare i video nuovi
+        \Log::info('New videos count: ' . $newVideos->count());
+        foreach($newVideos as $video) {
+            \Log::info('New video: ' . $video->title);
+        }
 
         // Query base per foto
         $photosQuery = Photo::with(['user', 'likes', 'comments'])

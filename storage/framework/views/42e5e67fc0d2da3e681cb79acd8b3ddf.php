@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Configurazione PeerTube - Admin'); ?>
 
 <?php $__env->startSection('main-content'); ?>
