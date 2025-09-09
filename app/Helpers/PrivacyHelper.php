@@ -49,7 +49,7 @@ class PrivacyHelper
 
         // Rimuovi spazi e caratteri speciali per il conteggio
         $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
-        
+
         if (strlen($cleanPhone) <= 4) {
             // Se il numero è molto corto, mostra solo il primo carattere
             return substr($phone, 0, 1) . '***';
@@ -77,7 +77,7 @@ class PrivacyHelper
         }
 
         $length = strlen($value);
-        
+
         if ($length <= $visibleStart + $visibleEnd) {
             // Se la stringa è troppo corta, mostra solo il primo carattere
             return substr($value, 0, 1) . '***';
@@ -85,7 +85,7 @@ class PrivacyHelper
 
         $start = substr($value, 0, $visibleStart);
         $end = substr($value, -$visibleEnd);
-        
+
         return $start . '***' . $end;
     }
 }
