@@ -34,6 +34,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'bio',
         'location',
+        'precise_address',
+        'public_location',
+        'city',
+        'region',
+        'country',
+        'location_privacy',
         'status',
         'phone',
         'website',
@@ -1094,6 +1100,63 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getLanguagesGroupedAttribute()
     {
         return $this->languages()->get()->groupBy('language_code');
+    }
+
+    /**
+     * Get the public location based on privacy settings (renamed to avoid conflict)
+     *
+     * @return string|null
+     */
+    public function getPrivacyBasedLocationAttribute()
+    {
+        switch ($this->location_privacy) {
+            case 'public':
+                return $this->precise_address;
+            case 'region':
+                return $this->region ?: $this->city;
+            case 'country':
+                return $this->country;
+            case 'private':
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Get the display location for public viewing
+     *
+     * @return string|null
+     */
+    public function getDisplayLocationAttribute()
+    {
+        // Usa la logica di privacy basata su location_privacy
+        switch ($this->location_privacy) {
+            case 'public':
+                // Se precise_address è solo una via, costruisci l'indirizzo completo
+                if ($this->precise_address && !str_contains($this->precise_address, ',')) {
+                    // Costruisci indirizzo completo dai campi separati
+                    $addressParts = array_filter([
+                        $this->precise_address,
+                        $this->city,
+                        $this->region,
+                        $this->country
+                    ]);
+                    return implode(', ', $addressParts);
+                }
+                // Altrimenti usa precise_address così com'è
+                return $this->precise_address ?: $this->location;
+            case 'region':
+                return $this->region ?: $this->city;
+            case 'country':
+                return $this->country;
+            case 'custom':
+                // Per l'opzione custom, usa sempre public_location se disponibile
+                return $this->public_location ?: $this->location;
+            case 'private':
+            default:
+                // Se non c'è nulla da mostrare, fallback al campo location originale
+                return $this->location;
+        }
     }
 
     /**

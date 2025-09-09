@@ -139,12 +139,32 @@
 }
 
 .select2-container--default .select2-results__option {
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.75rem !important;
+    border-bottom: 1px solid #f1f3f4 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.select2-container--default .select2-results__option:last-child {
+    border-bottom: none !important;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #007bff !important;
     color: white !important;
+}
+
+/* Hover effect for non-selected options */
+.select2-container--default .select2-results__option:hover:not(.select2-results__option--highlighted) {
+    background-color: #e9ecef !important;
+    transform: translateX(2px) !important;
+}
+
+.select2-container--default .select2-results__option:hover:not(.select2-results__option--highlighted) .venue-name {
+    color: #495057 !important;
+}
+
+.select2-container--default .select2-results__option:hover:not(.select2-results__option--highlighted) .venue-stats {
+    color: #28a745 !important;
 }
 
 .select2-container--default .select2-search--dropdown .select2-search__field {

@@ -106,4 +106,10 @@ class FlagHelper
         $flagCode = \App\Providers\LanguageServiceProvider::getFlagCode($languageCode);
         return '<i class="flag-icon flag-icon-' . $flagCode . ' me-1"></i>' . $languageName;
     }
+
+    public static function getFlagIcon(string $languageCode, string $size = '16px'): string
+    {
+        $flagCode = \App\Providers\LanguageServiceProvider::getFlagCode($languageCode);
+        return '<i class="flag-icon flag-icon-' . $flagCode . '" style="font-size: ' . $size . ';"></i>';
+    }
 }

@@ -106,16 +106,100 @@
                             <small class="text-muted f-s-12">{{ __('profile.bio_help') }}</small>
                         </div>
 
+                        <!-- Location Section -->
+                        <div class="app-divider-v">
+                            <span class="text-primary f-w-600">{{ __('profile.location_section') }}</span>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label f-w-600">{{ __('profile.location') }}</label>
-                                    <input type="text" class="form-control @error('location') is-invalid @enderror"
-                                           name="location" value="{{ old('location', $user->location) }}"
-                                           placeholder="{{ __('profile.location_placeholder') }}">
-                                    @error('location')
+                                    <label class="form-label f-w-600">
+                                        <i class="ph ph-map-pin text-primary me-2"></i>{{ __('profile.precise_address') }}
+                                    </label>
+                                    <input type="text" class="form-control @error('precise_address') is-invalid @enderror"
+                                           name="precise_address" value="{{ old('precise_address', $user->precise_address) }}"
+                                           placeholder="{{ __('profile.precise_address_placeholder') }}">
+                                    @error('precise_address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <small class="text-muted f-s-12">{{ __('profile.precise_address_help') }}</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label f-w-600">
+                                        <i class="ph ph-globe text-success me-2"></i>{{ __('profile.public_location') }}
+                                    </label>
+                                    <input type="text" class="form-control @error('public_location') is-invalid @enderror"
+                                           name="public_location" value="{{ old('public_location', $user->public_location) }}"
+                                           placeholder="{{ __('profile.public_location_placeholder') }}">
+                                    @error('public_location')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="text-muted f-s-12">{{ __('profile.public_location_help') }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label f-w-600">
+                                        <i class="ph ph-building text-info me-2"></i>{{ __('profile.city') }}
+                                    </label>
+                                    <input type="text" class="form-control @error('city') is-invalid @enderror"
+                                           name="city" value="{{ old('city', $user->city) }}"
+                                           placeholder="{{ __('profile.city_placeholder') }}">
+                                    @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label f-w-600">
+                                        <i class="ph ph-flag text-warning me-2"></i>{{ __('profile.region') }}
+                                    </label>
+                                    <input type="text" class="form-control @error('region') is-invalid @enderror"
+                                           name="region" value="{{ old('region', $user->region) }}"
+                                           placeholder="{{ __('profile.region_placeholder') }}">
+                                    @error('region')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label f-w-600">
+                                        <i class="ph ph-shield-check text-success me-2"></i>{{ __('profile.location_privacy') }}
+                                    </label>
+                                    <select class="form-select @error('location_privacy') is-invalid @enderror" name="location_privacy">
+                                        <option value="public" {{ old('location_privacy', $user->location_privacy) == 'public' ? 'selected' : '' }}>
+                                            {{ __('profile.privacy_public') }}
+                                        </option>
+                                        <option value="region" {{ old('location_privacy', $user->location_privacy) == 'region' ? 'selected' : '' }}>
+                                            {{ __('profile.privacy_region') }}
+                                        </option>
+                                        <option value="country" {{ old('location_privacy', $user->location_privacy) == 'country' ? 'selected' : '' }}>
+                                            {{ __('profile.privacy_country') }}
+                                        </option>
+                                        <option value="private" {{ old('location_privacy', $user->location_privacy) == 'private' ? 'selected' : '' }}>
+                                            {{ __('profile.privacy_private') }}
+                                        </option>
+                                        <option value="custom" {{ old('location_privacy', $user->location_privacy) == 'custom' ? 'selected' : '' }}>
+                                            {{ __('profile.privacy_custom') }}
+                                        </option>
+                                    </select>
+                                    @error('location_privacy')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="text-muted f-s-12">{{ __('profile.location_privacy_help') }}</small>
                                 </div>
                             </div>
 
@@ -295,9 +379,9 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
     if (this.files && this.files[0]) {
         const file = this.files[0];
 
-        
-        
-        
+
+
+
 
         // Verifica dimensione file (dinamica dalle impostazioni)
         const maxSize = {{ \App\Models\SystemSetting::get('profile_photo_max_size', 5120) }} * 1024; // Converti KB in bytes
@@ -339,7 +423,7 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
                 }
             });
         } else {
-            
+
             alert('Caricamento foto profilo...');
         }
 
@@ -354,8 +438,8 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
             body: formData
         })
         .then(response => {
-            
-            
+
+
 
             // Check if response is JSON
             const contentType = response.headers.get('content-type');
@@ -370,7 +454,7 @@ document.getElementById('profile-photo-input').addEventListener('change', functi
             }
         })
         .then(data => {
-            
+
             if (data.success) {
                 // Aggiorna l'immagine nella sidebar se esiste
                 const sidebarAvatar = document.querySelector('.nav-profile img');
