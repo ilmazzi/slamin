@@ -71,6 +71,11 @@ class EventController extends Controller
             $query->where('is_public', $request->type === 'public');
         }
 
+        // Filter by organizer
+        if ($request->filled('organizer')) {
+            $query->where('organizer_id', $request->organizer);
+        }
+
         // Filter by date range
         if ($request->filled('date_from')) {
             $query->whereDate('start_datetime', '>=', $request->date_from);
@@ -1792,6 +1797,11 @@ class EventController extends Controller
         // Filter by type (public/private)
         if ($request->filled('type')) {
             $query->where('is_public', $request->type === 'public');
+        }
+
+        // Filter by organizer
+        if ($request->filled('organizer')) {
+            $query->where('organizer_id', $request->organizer);
         }
 
         // Filter by date range

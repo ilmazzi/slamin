@@ -1,0 +1,989 @@
+<?php $__env->startSection('title', $video->title); ?>
+
+<?php $__env->startSection('main-content'); ?>
+<?php if(!$video): ?>
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="alert alert-danger">
+                <i class="ph-duotone ph-warning f-s-16 me-2"></i>
+                <?php echo e(__('common.video')); ?> non trovato.
+            </div>
+        </div>
+    </div>
+<?php else: ?>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- Breadcrumb -->
+        <div class="row m-1">
+            <div class="col-12">
+                <h4 class="main-title"><?php echo e($video->title); ?></h4>
+                <ul class="app-line-breadcrumbs mb-3">
+                    <li class="">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
+                            <span>
+                                <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="<?php echo e(route('profile.videos')); ?>" class="f-s-14 f-w-500">
+                            <span>
+                                <i class="ph-duotone ph-video-camera f-s-16"></i> <?php echo e(__('videos.videos')); ?>
+
+                            </span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="#" class="f-s-14 f-w-500"><?php echo e($video->title); ?></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- <?php echo e(__('common.video')); ?> Player -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card hover-effect">
+                    <div class="card-body p-0">
+                        <?php if($video->isUploadedToPeerTube() && $video->peertube_embed_url): ?>
+                            <!-- Player HTML5 Nativo con URL Diretto PeerTube -->
+                            <div class="video-container position-relative">
+                                <video
+                                    id="videoPlayer"
+                                    class="w-100"
+                                    style="height: 500px; max-height: 500px; object-fit: cover;"
+                                    preload="metadata"
+                                    data-duration="<?php echo e($video->duration ?? 60); ?>"
+                                    data-video-id="<?php echo e($video->id); ?>"
+                                    controls>
+                                    Il tuo browser non supporta la riproduzione video.
+                                </video>
+
+                                                                                                                                                                                                                                                                <!-- Pulsante per creare snap al hover -->
+                                <div class="position-absolute top-50 end-0 translate-middle-y me-4" id="floatingSnapButton" style="opacity: 0; transition: opacity 0.3s ease; z-index: 20;">
+                                    <button type="button" class="btn btn-gradient-success hover-effect rounded-circle shadow-lg"
+                                            style="width: 70px; height: 70px;"
+                                            onclick="createSnapAtCurrentTime()"
+                                            title="<?php echo e(__('videos.create_snap_at_current_time')); ?>">
+                                        <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
+                                    </button>
+                                </div>
+
+                                <!-- <?php echo e(__('common.snap')); ?> Markers sulla Progress Bar del Player -->
+                                <div class="snap-markers-overlay position-absolute" style="bottom: 0; left: 0; right: 0; height: 40px; pointer-events: none;">
+
+
+
+
+                                    <?php
+                                        // Raggruppa gli snap per timestamp
+                                        $snapsByTimestamp = $snaps->groupBy('timestamp');
+                                    ?>
+
+                                    <?php $__currentLoopData = $snapsByTimestamp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $timestamp => $snapsAtTime): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php
+                                            $snapCount = $snapsAtTime->count();
+                                            $firstSnap = $snapsAtTime->first();
+
+                                            // Usa la durata reale del video o fallback
+                                            $videoDuration = $video->duration ?? 60;
+                                            if ($videoDuration <= 0) {
+                                                $videoDuration = 60; // Fallback
+                                            }
+
+                                            $percentage = ($timestamp / $videoDuration) * 100;
+                                            $leftPosition = $percentage . '%';
+                                        ?>
+
+                                        <div class="snap-marker position-absolute"
+                                             style="left: <?php echo e($leftPosition); ?>; transform: translateX(-50%); pointer-events: auto; cursor: pointer;"
+                                             data-timestamp="<?php echo e($timestamp); ?>"
+                                             onclick="seekToTime(<?php echo e($timestamp); ?>)"
+                                             title="<?php echo e($firstSnap->display_title); ?> (<?php echo e($snapCount); ?> snap)">
+
+                                                                                        <!-- Marker principale -->
+                                            <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                                 style="width: 30px; height: 30px; border: 2px solid white; box-shadow: 0 3px 6px rgba(0,0,0,0.4);">
+                                                <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                                            </div>
+
+                                            <!-- Badge per numero di snap -->
+                                            <?php if($snapCount > 1): ?>
+                                                <div class="position-absolute top-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
+                                                     style="width: 24px; height: 24px; font-size: 12px; font-weight: bold; transform: translate(30%, -30%);">
+                                                    <?php echo e($snapCount); ?>
+
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <!-- Tooltip -->
+                                            <div class="snap-tooltip position-absolute bottom-100 start-50 translate-middle-x mb-1 bg-dark text-white rounded p-2"
+                                                 style="font-size: 11px; white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; pointer-events: none;">
+                                                <strong><?php echo e($firstSnap->display_title); ?></strong>
+                                                <?php if($snapCount > 1): ?>
+                                                    <br><small>+<?php echo e($snapCount - 1); ?> altri</small>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                            </div>
+
+                            <!-- Loading indicator -->
+                            <div class="text-center mt-3" id="videoLoading">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden"><?php echo e(__('videos.loading_video')); ?></span>
+                                </div>
+                                <p class="mt-2 text-muted"><?php echo e(__('videos.loading_video')); ?></p>
+                            </div>
+
+                            <!-- Error message -->
+                            <div class="alert alert-danger mt-3" id="videoError" style="display: none;">
+                                <i class="ph-duotone ph-warning f-s-16 me-2"></i>
+                                <span id="errorMessage"><?php echo e(__('videos.video_error')); ?></span>
+                            </div>
+                        <?php elseif($video->file_path && Storage::exists($video->file_path)): ?>
+                            <!-- Player locale (fallback) -->
+                            <video controls class="w-100" style="max-height: 500px;">
+                                <source src="<?php echo e(Storage::url($video->file_path)); ?>" type="video/mp4">
+                                Il tuo browser non supporta la riproduzione video.
+                            </video>
+                        <?php else: ?>
+                            <!-- <?php echo e(__('videos.video_unavailable')); ?> -->
+                            <div class="d-flex align-items-center justify-content-center" style="height: 500px; background-color: #f8f9fa;">
+                                <div class="text-center">
+                                    <i class="ph-duotone ph-video-camera-slash f-s-48 text-muted mb-3"></i>
+                                    <h5 class="text-muted"><?php echo e(__('videos.video_unavailable')); ?></h5>
+                                    <p class="text-muted"><?php echo e(__('videos.video_processing_message')); ?></p>
+                                    <?php if($video->peertube_url): ?>
+                                        <a href="<?php echo e($video->peertube_url); ?>" target="_blank" class="btn btn-primary">
+                                            <i class="ph-duotone ph-external-link me-1"></i><?php echo e(__('videos.open_on_peertube')); ?>
+
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- <?php echo e(__('common.video')); ?> Info -->
+                <div class="card hover-effect mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="card-title mb-1"><?php echo e($video->title); ?></h5>
+                                <p class="text-muted mb-0">
+                                    <i class="ph-duotone ph-eye f-s-14 me-1"></i>
+                                    <span id="viewCount"><?php echo e($video->view_count); ?></span> <?php echo e(__('videos.views')); ?>
+
+                                </p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <?php if($video->is_public): ?>
+                                    <span class="badge bg-success f-s-12">
+                                        <i class="ph-duotone ph-globe f-s-12 me-1"></i>Pubblico
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-warning f-s-12">
+                                        <i class="ph-duotone ph-lock f-s-12 me-1"></i>Privato
+                                    </span>
+                                <?php endif; ?>
+
+                                <?php if($video->moderation_status === 'approved'): ?>
+                                    <span class="badge bg-success f-s-12">
+                                        <i class="ph-duotone ph-check-circle f-s-12 me-1"></i>Approvato
+                                    </span>
+                                <?php elseif($video->moderation_status === 'pending'): ?>
+                                    <span class="badge bg-warning f-s-12">
+                                        <i class="ph-duotone ph-clock f-s-12 me-1"></i>In attesa
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger f-s-12">
+                                        <i class="ph-duotone ph-x-circle f-s-12 me-1"></i>Rifiutato
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <?php if($video->description): ?>
+                            <p class="card-text"><?php echo e($video->description); ?></p>
+                        <?php endif; ?>
+
+                        <!-- Video Actions -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex gap-2">
+                                <!-- Like Button (Sistema Unificato) -->
+                                <?php if (isset($component)) { $__componentOriginal723641259025d9a0842581325b5584a2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal723641259025d9a0842581325b5584a2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-like-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-like-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $attributes = $__attributesOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__attributesOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal723641259025d9a0842581325b5584a2)): ?>
+<?php $component = $__componentOriginal723641259025d9a0842581325b5584a2; ?>
+<?php unset($__componentOriginal723641259025d9a0842581325b5584a2); ?>
+<?php endif; ?>
+
+                                <!-- View Counter (Sistema Unificato) -->
+                                <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-counter'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $attributes = $__attributesOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__attributesOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+
+                                <!-- Snap Button (Sistema Unificato) -->
+                                <?php if (isset($component)) { $__componentOriginal7abebe354dff9d15a9ac129dc497114d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7abebe354dff9d15a9ac129dc497114d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-snap-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-snap-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7abebe354dff9d15a9ac129dc497114d)): ?>
+<?php $attributes = $__attributesOriginal7abebe354dff9d15a9ac129dc497114d; ?>
+<?php unset($__attributesOriginal7abebe354dff9d15a9ac129dc497114d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7abebe354dff9d15a9ac129dc497114d)): ?>
+<?php $component = $__componentOriginal7abebe354dff9d15a9ac129dc497114d; ?>
+<?php unset($__componentOriginal7abebe354dff9d15a9ac129dc497114d); ?>
+<?php endif; ?>
+
+                                <!-- Report Button -->
+                                <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('report-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
+<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
+<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
+<?php endif; ?>
+                            </div>
+
+                            <small class="text-muted">
+                                <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
+                                <?php echo e(__('videos.uploaded_on')); ?> <?php echo e($video->created_at->format('d/m/Y')); ?>
+
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Section (Sistema Unificato) -->
+                <?php if (isset($component)) { $__componentOriginal3a0426d3cc93dd4143162417cb66a587 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal3a0426d3cc93dd4143162417cb66a587 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-comments-section','data' => ['content' => $video,'type' => 'video']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-comments-section'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal3a0426d3cc93dd4143162417cb66a587)): ?>
+<?php $attributes = $__attributesOriginal3a0426d3cc93dd4143162417cb66a587; ?>
+<?php unset($__attributesOriginal3a0426d3cc93dd4143162417cb66a587); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal3a0426d3cc93dd4143162417cb66a587)): ?>
+<?php $component = $__componentOriginal3a0426d3cc93dd4143162417cb66a587; ?>
+<?php unset($__componentOriginal3a0426d3cc93dd4143162417cb66a587); ?>
+<?php endif; ?>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- <?php echo e(__('common.video')); ?> Stats -->
+                <div class="card hover-effect">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <i class="ph-duotone ph-chart-line f-s-16 me-2"></i>
+                            Statistiche
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h5 class="mb-1" id="viewCountStats"><?php echo e($video->view_count); ?></h5>
+                                    <small class="text-muted"><?php echo e(__('videos.views')); ?></small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h5 class="mb-1" id="likeCountStats"><?php echo e($video->like_count); ?></h5>
+                                    <small class="text-muted"><?php echo e(__('videos.like')); ?></small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="mb-1" id="commentCountStats"><?php echo e($video->comment_count); ?></h5>
+                                <small class="text-muted"><?php echo e(__('common.comments_section')); ?></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <?php echo e(__('common.video')); ?> Details -->
+                <div class="card hover-effect mt-3">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <i class="ph-duotone ph-info f-s-16 me-2"></i>
+                            Dettagli
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <?php if($video->duration): ?>
+                                <li class="mb-2">
+                                    <i class="ph-duotone ph-clock f-s-14 me-2 text-muted"></i>
+                                    Durata: <?php echo e($video->formatted_duration); ?>
+
+                                </li>
+                            <?php endif; ?>
+                            <?php if($video->file_size): ?>
+                                <li class="mb-2">
+                                    <i class="ph-duotone ph-hard-drive f-s-14 me-2 text-muted"></i>
+                                    Dimensione: <?php echo e($video->formatted_file_size); ?>
+
+                                </li>
+                            <?php endif; ?>
+                            <?php if($video->resolution): ?>
+                                <li class="mb-2">
+                                    <i class="ph-duotone ph-monitor f-s-14 me-2 text-muted"></i>
+                                    Risoluzione: <?php echo e($video->resolution); ?>
+
+                                </li>
+                            <?php endif; ?>
+                            <li class="mb-2">
+                                <i class="ph-duotone ph-user f-s-14 me-2 text-muted"></i>
+                                Autore: <a href="<?php echo e(route('user.show', $video->user)); ?>" class="text-decoration-none hover-effect"><?php echo e($video->user->getDisplayName()); ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Snaps Section -->
+                <?php if($snaps->count() > 0): ?>
+                <div class="card hover-effect mt-3">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 16px; height: 16px; margin-right: 8px;">
+                            <?php echo e(__('common.snap')); ?> Popolari
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <?php $__currentLoopData = $snaps->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $snap): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="flex-shrink-0 position-relative">
+                                                                    <?php if($video->thumbnail_path): ?>
+                                    <img src="<?php echo e($video->thumbnail_url); ?>" alt="<?php echo e(__('common.snap')); ?>" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                    <?php elseif($video->peertube_thumbnail_url): ?>
+                                        <img src="<?php echo e($video->peertube_thumbnail_url); ?>" alt="<?php echo e(__('common.snap')); ?>" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                    <?php else: ?>
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 30px;">
+                                            <i class="ph-duotone ph-video-camera f-s-16 text-muted"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="position-absolute top-0 end-0 bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 8px; transform: translate(25%, -25%);">
+                                        <img src="<?php echo e(asset('assets/images/snap.png')); ?>" alt="Snap" style="width: 8px; height: 8px; filter: brightness(0) invert(1);">
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <h6 class="mb-0 f-s-14"><?php echo e($snap->display_title); ?></h6>
+                                    <small class="text-muted"><?php echo e($snap->formatted_timestamp); ?></small>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="seekToTime(<?php echo e($snap->timestamp); ?>)">
+                                        <i class="ph-duotone ph-play f-s-12"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <?php echo e(__('common.snap')); ?> Modal -->
+<div class="modal fade" id="snapModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crea <?php echo e(__('common.snap')); ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="snapForm">
+                    <div class="mb-3">
+                        <label for="snapTitle" class="form-label">Titolo (opzionale)</label>
+                        <input type="text" class="form-control" id="snapTitle" placeholder="<?php echo e(__('common.snap_title')); ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="snapDescription" class="form-label">Descrizione (opzionale)</label>
+                        <textarea class="form-control" id="snapDescription" rows="3" placeholder="<?php echo e(__('common.snap_description')); ?>"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Timestamp: <span id="currentTime">00:00</span></label>
+                        <input type="hidden" id="snapTimestamp" value="0">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" onclick="createSnap()">Crea <?php echo e(__('common.snap')); ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<style>
+/* <?php echo e(__('common.snap')); ?> Markers sulla Progress Bar del Player */
+.snap-markers-overlay {
+    z-index: 10;
+}
+
+.snap-marker {
+    transition: all 0.2s ease;
+}
+
+.snap-marker:hover .snap-indicator {
+    transform: scale(1.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4) !important;
+}
+
+.snap-marker:hover .snap-tooltip {
+    opacity: 1 !important;
+}
+
+.snap-indicator {
+    transition: all 0.2s ease;
+}
+
+/* Assicura che i marker siano sopra i controlli del player */
+video::-webkit-media-controls {
+    z-index: 5;
+}
+
+video::-webkit-media-controls-panel {
+    z-index: 5;
+}
+</style>
+<script>
+// Variabili globali per il player HTML5
+let videoPlayer = null;
+let currentVideoTime = 0;
+let videoDuration = <?php echo e($video->duration ?? 60); ?>;
+let isVideoPlaying = false;
+let isFullscreen = false;
+
+// Variabile per tracciare se le visualizzazioni sono già state incrementate - RIMOSSA
+// Ora gestita dal componente social-view-counter
+
+// Funzione globale per incrementare le visualizzazioni - RIMOSSA
+// Ora gestita dal componente social-view-counter
+
+// Inizializzazione del player HTML5
+document.addEventListener('DOMContentLoaded', function() {
+    const snapModal = document.getElementById('snapModal');
+
+    // Event listener per quando il modal snap viene chiuso
+    if (snapModal) {
+        snapModal.addEventListener('hidden.bs.modal', function() {
+            // Rimuovi l'attributo del timestamp fisso quando il modal viene chiuso
+            this.removeAttribute('data-fixed-timestamp');
+        });
+    }
+
+    // Inizializza il player HTML5
+    initializeVideoPlayer();
+});
+
+// Funzioni per like/dislike
+function toggleLike(type) {
+    fetch('<?php echo e(route("videos.toggle-like", $video)); ?>', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ type: type })
+    })
+    .then(response => {
+        if (response.status === 419) {
+            alert('Sessione scaduta. La pagina verrà ricaricata.');
+            location.reload();
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.success) {
+            document.getElementById('likeCount').textContent = data.like_count;
+            document.getElementById('dislikeCount').textContent = data.dislike_count;
+            updateLikeButtons(data.user_like);
+        }
+    })
+    .catch(error => console.error('Errore:', error));
+}
+
+function updateLikeButtons(userLike) {
+    const likeBtn = document.getElementById('likeBtn');
+    const dislikeBtn = document.getElementById('dislikeBtn');
+
+    // Controlla se gli elementi esistono prima di modificarli
+    if (!likeBtn || !dislikeBtn) {
+        return;
+    }
+
+    // Reset
+    likeBtn.classList.remove('btn-primary', 'btn-outline-primary');
+    dislikeBtn.classList.remove('btn-secondary', 'btn-outline-secondary');
+    likeBtn.classList.add('btn-outline-primary');
+    dislikeBtn.classList.add('btn-outline-secondary');
+
+    if (userLike === 'like') {
+        likeBtn.classList.remove('btn-outline-primary');
+        likeBtn.classList.add('btn-primary');
+    } else if (userLike === 'dislike') {
+        dislikeBtn.classList.remove('btn-outline-secondary');
+        dislikeBtn.classList.add('btn-secondary');
+    }
+}
+
+// Funzioni per commenti - RIMOSSO: ora gestito dal componente social-comments-section
+
+// Funzioni per snap
+function showSnapModal() {
+
+
+    // Ferma il video se è in riproduzione
+    if (videoPlayer && !videoPlayer.paused) {
+        videoPlayer.pause();
+    }
+
+    // Aggiorna il tempo nel modal prima di mostrarlo
+    updateSnapModalTime();
+
+    const modal = new bootstrap.Modal(document.getElementById('snapModal'));
+    modal.show();
+}
+
+function createSnap() {
+    const title = document.getElementById('snapTitle').value.trim();
+    const timestamp = parseInt(document.getElementById('snapTimestamp').value);
+
+
+
+    if (!title || timestamp < 0) {
+
+        return;
+    }
+
+    fetch('<?php echo e(route("videos.add-snap", $video)); ?>', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ title: title, timestamp: timestamp })
+    })
+    .then(response => {
+        if (response.status === 419) {
+            alert('Sessione scaduta. La pagina verrà ricaricata.');
+            location.reload();
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.success) {
+            console.log('Snap creato con successo:', data.snap);
+
+            document.getElementById('snapTitle').value = '';
+            document.getElementById('snapTimestamp').value = '0';
+            document.getElementById('currentTime').textContent = '00:00';
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('snapModal'));
+            modal.hide();
+
+            // Ricarica la pagina per aggiornare la timeline
+            location.reload();
+        } else {
+
+        }
+    })
+    .catch(error => {
+        console.error('❌ Errore nella creazione dello snap:', error);
+    });
+}
+
+function deleteSnap(snapId) {
+    if (!confirm('Sei sicuro di voler eliminare questo snap?')) return;
+
+    const deleteSnapBase = '<?php echo e(url('/videos/snaps')); ?>';
+    fetch(`${deleteSnapBase}/${snapId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Errore:', error));
+}
+
+// Contatore caratteri per commenti - RIMOSSO: ora gestito dal componente social-comments-section
+
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', function() {
+
+
+    // Inizializza lo stile dei bottoni like
+    <?php if($userLike): ?>
+        updateLikeButtons('<?php echo e($userLike->type); ?>');
+    <?php endif; ?>
+
+    // Incrementa le visualizzazioni - ora gestito dal componente social-view-counter
+
+    // Sistema per rilevare interazioni con la timeline
+
+
+    // Rileva click sui snap markers
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.snap-marker')) {
+
+
+        // Ottieni il timestamp dal marker
+        const marker = event.target.closest('.snap-marker');
+        const timestamp = parseInt(marker.getAttribute('data-timestamp'));
+
+
+
+        // Salta al timestamp del snap
+        seekToTime(timestamp);
+    }
+});
+
+
+
+    // Aggiorna il tempo nel modal snap ogni secondo quando è aperto
+setInterval(function() {
+    const snapModal = document.getElementById('snapModal');
+    if (snapModal && snapModal.classList.contains('show')) {
+        updateSnapModalTime();
+    }
+}, 1000);
+
+// Debug: mostra lo stato del video ogni 30 secondi se in riproduzione
+setInterval(function() {
+    if (isVideoPlaying) {
+        console.log('Debug video - isVideoPlaying:', isVideoPlaying, 'currentVideoTime:', currentVideoTime, 'videoDuration:', videoDuration);
+    }
+}, 30000);
+});
+
+
+
+// Funzioni per la timeline
+function seekToTime(timestamp) {
+    if (videoPlayer) {
+        // Imposta il tempo del video
+        videoPlayer.currentTime = timestamp;
+        currentVideoTime = timestamp;
+    }
+}
+
+
+
+function formatTimestamp(timestamp) {
+    const minutes = Math.floor(timestamp / 60);
+    const seconds = timestamp % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Sistema per Player HTML5 con URL Diretto PeerTube
+async function initializeVideoPlayer() {
+
+
+    videoPlayer = document.getElementById('videoPlayer');
+    if (!videoPlayer) {
+
+        return;
+    }
+
+    // Ottieni la durata dal video o dal database
+    videoDuration = parseInt(videoPlayer.dataset.duration) || <?php echo e($video->duration ?? 60); ?>;
+    const videoId = videoPlayer.dataset.videoId;
+
+    // Mostra loading indicator
+    const loading = document.getElementById('videoLoading');
+    const error = document.getElementById('videoError');
+    if (loading) loading.style.display = 'block';
+    if (error) error.style.display = 'none';
+
+    try {
+
+
+        // Ottieni l'URL diretto del video da PeerTube
+        const response = await fetch(`/videos/${videoId}/peertube-url`);
+        const data = await response.json();
+
+        // Gestisci il caso in cui il video è ancora in elaborazione
+        if (data.status === 'processing') {
+            console.log('Video ancora in elaborazione su PeerTube');
+
+            // Nascondi loading e mostra messaggio di elaborazione
+            if (loading) loading.style.display = 'none';
+            if (error) {
+                error.style.display = 'block';
+                document.getElementById('errorMessage').textContent =
+                    'Il video è ancora in elaborazione su PeerTube. Riprova tra qualche minuto.';
+            }
+            return;
+        }
+
+        if (data.success && data.files && data.files.length > 0) {
+            // Usa il primo file disponibile (migliore qualità)
+            const videoFile = data.files[0];
+
+
+            // URL video ottenuto da PeerTube
+
+            // Crea l'elemento source
+            const source = document.createElement('source');
+            source.src = videoFile.url;
+            source.type = 'video/mp4';
+
+
+
+            // Rimuovi eventuali source esistenti e aggiungi quello nuovo
+            videoPlayer.innerHTML = '';
+            videoPlayer.appendChild(source);
+
+            // Forza il caricamento del video
+            videoPlayer.load();
+
+            // Aggiorna la durata se disponibile
+            if (data.video_info && data.video_info.duration) {
+                videoDuration = data.video_info.duration;
+                videoPlayer.dataset.duration = videoDuration;
+
+                // Aggiorna la posizione degli snap con la durata reale
+                updateSnapPositions(videoDuration);
+            }
+
+                // Event listeners per il player
+    setupVideoEventListeners();
+
+            // Nascondi loading indicator
+            if (loading) loading.style.display = 'none';
+
+
+        } else {
+            throw new Error(data.error || 'Nessun file video disponibile');
+        }
+    } catch (error) {
+        console.error('❌ <?php echo e(__('videos.video_error')); ?>:', error);
+
+        // Nascondi loading e mostra errore
+        if (loading) loading.style.display = 'none';
+        if (error) {
+            error.style.display = 'block';
+            document.getElementById('errorMessage').textContent =
+                '<?php echo e(__('videos.video_error')); ?>: ' + error.message;
+        }
+    }
+}
+
+function setupVideoEventListeners() {
+    // Event listener per quando il video è caricato
+    videoPlayer.addEventListener('loadedmetadata', function() {
+        console.log('Video caricato - Durata:', videoPlayer.duration);
+        videoDuration = videoPlayer.duration || videoDuration;
+    });
+
+    // Event listener per quando il video inizia a caricare
+    videoPlayer.addEventListener('loadstart', function() {
+
+    });
+
+    // Event listener per quando i dati del video sono disponibili
+    videoPlayer.addEventListener('loadeddata', function() {
+
+    });
+
+    // Event listener per quando il video può essere riprodotto
+    videoPlayer.addEventListener('canplay', function() {
+        console.log('Video pronto per la riproduzione');
+    });
+
+    // Event listener per quando il video può essere riprodotto senza interruzioni
+    videoPlayer.addEventListener('canplaythrough', function() {
+        console.log('Video può essere riprodotto completamente');
+    });
+
+    // Event listener per play
+    videoPlayer.addEventListener('play', function() {
+        console.log('Video in riproduzione');
+        isVideoPlaying = true;
+        // incrementVideoViews(); // Rimosso per evitare chiamate duplicate
+    });
+
+    // Event listener per pause
+    videoPlayer.addEventListener('pause', function() {
+        console.log('Video in pausa');
+        isVideoPlaying = false;
+    });
+
+    // Event listener per aggiornamento tempo
+    videoPlayer.addEventListener('timeupdate', function() {
+        currentVideoTime = videoPlayer.currentTime;
+    });
+
+    // Event listener per fine video
+    videoPlayer.addEventListener('ended', function() {
+        console.log('Video terminato');
+        isVideoPlaying = false;
+        updatePlayPauseButton();
+    });
+
+    // Event listener per errori
+    videoPlayer.addEventListener('error', function() {
+        console.error('❌ Errore nel video:', videoPlayer.error);
+
+        // Mostra messaggio di errore
+        const error = document.getElementById('videoError');
+        if (error) {
+            error.style.display = 'block';
+            document.getElementById('errorMessage').textContent =
+                'Errore nella riproduzione del video. Riprova più tardi.';
+        }
+    });
+
+    // Event listener per quando il video non può essere riprodotto
+    videoPlayer.addEventListener('stalled', function() {
+        console.log('Video in stallo - potrebbe non essere accessibile');
+    });
+
+    // Event listener per quando il video non ha dati
+    videoPlayer.addEventListener('waiting', function() {
+        console.log('Video in attesa di dati');
+    });
+
+            // Event listener per l'icona snap
+    const videoContainer = document.querySelector('.video-container');
+    const floatingButton = document.getElementById('floatingSnapButton');
+
+    if (videoContainer && floatingButton) {
+        videoContainer.addEventListener('mouseenter', function() {
+            floatingButton.style.opacity = '1';
+        });
+
+        videoContainer.addEventListener('mouseleave', function() {
+            floatingButton.style.opacity = '0';
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+// Funzione per creare snap al tempo corrente
+function createSnapAtCurrentTime() {
+
+
+    // Ferma il video
+    if (videoPlayer && !videoPlayer.paused) {
+        videoPlayer.pause();
+        console.log('Video fermato per creazione snap');
+    }
+
+    // Mostra il modal con il tempo corrente
+    showSnapModal();
+}
+
+// Funzione per aggiornare le posizioni degli snap
+function updateSnapPositions(realDuration) {
+
+
+    const snapMarkers = document.querySelectorAll('.snap-marker');
+    snapMarkers.forEach(marker => {
+        const timestamp = parseInt(marker.getAttribute('data-timestamp'));
+        const percentage = (timestamp / realDuration) * 100;
+        marker.style.left = percentage + '%';
+    });
+}
+
+// Funzione per aggiornare il tempo nel modal snap
+function updateSnapModalTime() {
+    const currentTimeElement = document.getElementById('currentTime');
+    const timestampElement = document.getElementById('snapTimestamp');
+
+    if (currentTimeElement && timestampElement) {
+        currentTimeElement.textContent = formatTimestamp(currentVideoTime);
+        timestampElement.value = Math.floor(currentVideoTime);
+    }
+}
+</script>
+<?php endif; ?>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/videos/show.blade.php ENDPATH**/ ?>

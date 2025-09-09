@@ -41,6 +41,10 @@ class PoemController extends Controller
             $query->byType($request->type);
         }
 
+        if ($request->filled('user')) {
+            $query->where('user_id', $request->user);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
