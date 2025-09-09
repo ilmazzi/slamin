@@ -19,44 +19,6 @@
         </div>
     </div>
 
-    <!-- Mobile-First Search and Filters -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <!-- Mobile-First Category and Tag Filters -->
-                    <div class="row g-3">
-                        <div class="col-12 col-sm-6">
-                            <h6 class="mb-2 f-s-14 f-w-600">{{ __('articles.categories') }}</h6>
-                            <div class="d-flex flex-wrap gap-2">
-                                <a href="{{ route('articles.index') }}"
-                                   class="badge {{ !request('category') ? 'bg-primary' : 'bg-light text-dark' }} text-decoration-none">
-                                    {{ __('articles.all_categories') }}
-                                </a>
-                                @foreach($categories as $cat)
-                                    <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('category'), ['category' => $cat->slug])) }}"
-                                       class="badge text-decoration-none {{ request('category') === $cat->slug ? 'bg-primary' : 'bg-light text-dark' }}">
-                                        {{ $cat->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <h6 class="mb-2 f-s-14 f-w-600">{{ __('articles.popular_tags') }}</h6>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach($tags->take(8) as $tag)
-                                    <a href="{{ route('articles.index') }}?{{ http_build_query(array_merge(request()->except('tag'), ['tag' => $tag->slug])) }}"
-                                       class="badge bg-secondary text-decoration-none">
-                                        {{ $tag->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Mobile-First Sidebar Toggle Button -->
     <div class="row mb-3 d-lg-none">
@@ -652,6 +614,29 @@
                 </div>
             </div>
 
+            <!-- Mobile-First Categories -->
+            @if($categories->count() > 0)
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 f-s-16 f-w-600">{{ __('articles.categories') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{{ route('articles.index') }}"
+                               class="badge {{ !request('category') ? 'bg-primary' : 'bg-light text-dark' }} text-decoration-none f-s-12">
+                                {{ __('articles.all_categories') }}
+                            </a>
+                            @foreach($categories as $category)
+                                <a href="{{ route('articles.index', ['category' => $category->slug]) }}"
+                                   class="badge text-decoration-none f-s-12 {{ request('category') === $category->slug ? 'bg-primary' : 'bg-light text-dark' }}">
+                                    {{ $category->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Mobile-First Popular Tags -->
             @if($tags->count() > 0)
                 <div class="card mb-4">
@@ -661,7 +646,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-wrap gap-2">
                             @foreach($tags->take(8) as $tag)
-                                <a href="{{ route('articles.index', ['tag' => $tag->id]) }}"
+                                <a href="{{ route('articles.index', ['tag' => $tag->slug]) }}"
                                    class="badge bg-light text-dark text-decoration-none f-s-12">
                                     {{ $tag->name }}
                                 </a>

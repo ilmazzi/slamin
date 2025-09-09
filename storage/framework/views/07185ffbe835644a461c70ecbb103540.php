@@ -18,47 +18,6 @@
         </div>
     </div>
 
-    <!-- Mobile-First Search and Filters -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <!-- Mobile-First Category and Tag Filters -->
-                    <div class="row g-3">
-                        <div class="col-12 col-sm-6">
-                            <h6 class="mb-2 f-s-14 f-w-600"><?php echo e(__('articles.categories')); ?></h6>
-                            <div class="d-flex flex-wrap gap-2">
-                                <a href="<?php echo e(route('articles.index')); ?>"
-                                   class="badge <?php echo e(!request('category') ? 'bg-primary' : 'bg-light text-dark'); ?> text-decoration-none">
-                                    <?php echo e(__('articles.all_categories')); ?>
-
-                                </a>
-                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="<?php echo e(route('articles.index')); ?>?<?php echo e(http_build_query(array_merge(request()->except('category'), ['category' => $cat->slug]))); ?>"
-                                       class="badge text-decoration-none <?php echo e(request('category') === $cat->slug ? 'bg-primary' : 'bg-light text-dark'); ?>">
-                                        <?php echo e($cat->name); ?>
-
-                                    </a>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <h6 class="mb-2 f-s-14 f-w-600"><?php echo e(__('articles.popular_tags')); ?></h6>
-                            <div class="d-flex flex-wrap gap-2">
-                                <?php $__currentLoopData = $tags->take(8); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <a href="<?php echo e(route('articles.index')); ?>?<?php echo e(http_build_query(array_merge(request()->except('tag'), ['tag' => $tag->slug]))); ?>"
-                                       class="badge bg-secondary text-decoration-none">
-                                        <?php echo e($tag->name); ?>
-
-                                    </a>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Mobile-First Sidebar Toggle Button -->
     <div class="row mb-3 d-lg-none">
@@ -679,6 +638,31 @@
                 </div>
             </div>
 
+            <!-- Mobile-First Categories -->
+            <?php if($categories->count() > 0): ?>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 f-s-16 f-w-600"><?php echo e(__('articles.categories')); ?></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="<?php echo e(route('articles.index')); ?>"
+                               class="badge <?php echo e(!request('category') ? 'bg-primary' : 'bg-light text-dark'); ?> text-decoration-none f-s-12">
+                                <?php echo e(__('articles.all_categories')); ?>
+
+                            </a>
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(route('articles.index', ['category' => $category->slug])); ?>"
+                                   class="badge text-decoration-none f-s-12 <?php echo e(request('category') === $category->slug ? 'bg-primary' : 'bg-light text-dark'); ?>">
+                                    <?php echo e($category->name); ?>
+
+                                </a>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- Mobile-First Popular Tags -->
             <?php if($tags->count() > 0): ?>
                 <div class="card mb-4">
@@ -688,7 +672,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-wrap gap-2">
                             <?php $__currentLoopData = $tags->take(8); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a href="<?php echo e(route('articles.index', ['tag' => $tag->id])); ?>"
+                                <a href="<?php echo e(route('articles.index', ['tag' => $tag->slug])); ?>"
                                    class="badge bg-light text-dark text-decoration-none f-s-12">
                                     <?php echo e($tag->name); ?>
 

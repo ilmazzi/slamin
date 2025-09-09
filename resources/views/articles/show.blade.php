@@ -122,10 +122,7 @@
                             <!-- View Counter (Sistema Unificato) -->
                             <x-social-view-counter :content="$article" type="article" />
 
-                            <!-- Condividi -->
-                            <button class="btn btn-outline-info btn-sm" onclick="shareArticle()">
-                                <i class="ti ti-share f-s-14 me-1"></i> {{ __('articles.share_article') }}
-                            </button>
+                          
 
                             <!-- Report Button (Sistema Unificato) -->
                             <x-report-button :content="$article" type="article" />
@@ -220,6 +217,44 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Mobile-First Categories -->
+            @if($categories->count() > 0)
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 f-s-16 f-w-600">{{ __('articles.categories') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($categories as $category)
+                                <a href="{{ route('articles.index', ['category' => $category->slug]) }}"
+                                   class="badge bg-primary text-decoration-none f-s-12">
+                                    {{ $category->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Mobile-First Popular Tags -->
+            @if($tags->count() > 0)
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 f-s-16 f-w-600">{{ __('articles.popular_tags') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($tags->take(8) as $tag)
+                                <a href="{{ route('articles.index', ['tag' => $tag->slug]) }}"
+                                   class="badge bg-light text-dark text-decoration-none f-s-12">
+                                    {{ $tag->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             <!-- Mobile-First Social Sharing -->
             <div class="card">

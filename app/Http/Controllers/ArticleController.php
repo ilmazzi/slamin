@@ -216,7 +216,11 @@ class ArticleController extends Controller
         // Get related articles
         $relatedArticles = $this->getRelatedArticles($article);
 
-        return view('articles.show', compact('article', 'relatedArticles'));
+        // Get categories and tags for sidebar
+        $categories = ArticleCategory::active()->ordered()->get();
+        $tags = ArticleTag::withCount('articles')->orderBy('articles_count', 'desc')->limit(10)->get();
+
+        return view('articles.show', compact('article', 'relatedArticles', 'categories', 'tags'));
     }
 
     /**
