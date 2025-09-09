@@ -117,8 +117,9 @@ return [
     'join_online' => 'Partecipa Online',
 
     // Luoghi recenti
-    'recent_venues' => 'Luoghi Recenti',
-    'recent_venues_help' => 'Clicca su un luogo per caricarlo rapidamente',
+    'recent_venues' => 'Luoghi Popolari',
+    'recent_venues_help' => 'Luoghi più utilizzati dalla community. Clicca per caricare rapidamente i dati.',
+    'venue_suggestions' => 'Suggerimenti luoghi',
     'select_recent_venue' => 'Seleziona un luogo recente...',
     'venue_name_placeholder' => 'Nome del locale o venue',
     'venue_address_placeholder' => 'Via, numero civico',
@@ -440,8 +441,8 @@ return [
     'venue_name_placeholder' => 'Nome del venue o luogo...',
     'venue_address_placeholder' => 'Indirizzo completo...',
     'select_timezone' => 'Seleziona fuso orario',
-    'recent_venues' => 'Luoghi Recenti',
-    'recent_venues_help' => 'Seleziona un luogo che hai usato di recente',
+    'recent_venues' => 'Luoghi Popolari',
+    'recent_venues_help' => 'Luoghi più utilizzati dalla community. Clicca per caricare rapidamente i dati.',
     'select_recent_venue' => 'Seleziona un luogo recente',
     'max_participants_placeholder' => 'Numero massimo...',
     'ticket_price' => 'Prezzo Biglietto',
@@ -821,4 +822,14 @@ return [
     'success_uploaded' => 'Caricato con successo',
     'success_downloaded' => 'Scaricato con successo',
     'success_copied' => 'Copiato negli appunti',
+
+    // Statistiche
+    'statistics' => 'Statistiche',
+    'total_events' => 'Eventi Totali',
+    'public_events' => 'Eventi Pubblici',
+    'upcoming_events' => 'Prossimi Eventi',
+    'cities_count' => 'Città',
+    'venues_count' => 'Luoghi',
+    'venues_statistics' => 'Luoghi Aggiunti',
+    'venues_statistics_description' => 'Quanti luoghi diversi sono stati utilizzati per gli spettacoli',
 ];

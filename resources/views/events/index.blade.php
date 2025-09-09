@@ -476,11 +476,11 @@
                 <div class="card-body text-center py-3">
                     <div class="d-flex align-items-center justify-content-center mb-2">
                         <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <i class="ph ph-map-pin f-s-20"></i>
+                            <i class="ph ph-buildings f-s-20"></i>
                         </div>
                     </div>
-                    <h5 class="mb-1 f-s-16">{{ $statistics['cities_count'] }}</h5>
-                    <p class="text-muted mb-0 f-s-12">{{ __('events.cities_count') }}</p>
+                    <h5 class="mb-1 f-s-16">{{ $statistics['venues_count'] }}</h5>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.venues_count') }}</p>
                 </div>
             </div>
         </div>

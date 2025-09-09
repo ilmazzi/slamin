@@ -283,7 +283,7 @@ class EventController extends Controller
             'total_events' => $filteredEvents->count(),
             'public_events' => $filteredEvents->where('is_public', true)->count(),
             'upcoming_events' => $filteredEvents->where('start_datetime', '>', now())->count(),
-            'cities_count' => $filteredEvents->pluck('city')->unique()->count(),
+            'venues_count' => $filteredEvents->pluck('venue_name')->filter()->unique()->count(),
         ];
 
         return view('events.index', compact('events', 'statistics'));
@@ -314,11 +314,8 @@ class EventController extends Controller
         $groups = \App\Models\Group::public()->get();
         Log::info('Groups collection created', ['count' => $groups->count(), 'groups' => $groups->pluck('name', 'id')->toArray()]);
 
-        // Ottieni i luoghi recenti dell'utente (solo se autenticato)
-        $recentVenues = collect(); // Default vuoto
-        if (Auth::check()) {
-            $recentVenues = RecentVenue::getRecentVenues(4);
-        }
+        // Ottieni i luoghi popolari di tutti gli utenti
+        $recentVenues = RecentVenue::getPopularVenues(8);
 
         Log::info('About to return view with groups', ['groups_count' => $groups->count(), 'groups_data' => $groups->pluck('name', 'id')->toArray()]);
 
@@ -915,27 +912,57 @@ class EventController extends Controller
     }
 
     /**
-     * Get recent venues for the current user
+     * Get popular venues from all users
      */
     public function getRecentVenues(): JsonResponse
     {
-        $user = Auth::user();
-
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not authenticated'
-            ], 401);
-        }
-
-        $recentVenues = RecentVenue::where('user_id', $user->id)
-            ->orderBy('last_used_at', 'desc')
-            ->limit(4)
-            ->get();
+        $recentVenues = RecentVenue::getPopularVenues(8);
 
         return response()->json([
             'success' => true,
             'venues' => $recentVenues
+        ]);
+    }
+
+    /**
+     * Search venues by name for autocomplete
+     */
+    public function searchVenues(Request $request): JsonResponse
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([
+                'success' => true,
+                'venues' => []
+            ]);
+        }
+
+        $venues = RecentVenue::selectRaw('
+                venue_name,
+                venue_address,
+                city,
+                postcode,
+                country,
+                latitude,
+                longitude,
+                SUM(usage_count) as total_usage,
+                MAX(last_used_at) as last_used_at,
+                COUNT(DISTINCT user_id) as unique_users
+            ')
+            ->where('venue_name', 'LIKE', '%' . $query . '%')
+            ->whereNotNull('venue_name')
+            ->where('venue_name', '!=', '')
+            ->groupBy('venue_name', 'venue_address', 'city', 'postcode', 'country', 'latitude', 'longitude')
+            ->having('total_usage', '>=', 1)
+            ->orderBy('total_usage', 'desc')
+            ->orderBy('unique_users', 'desc')
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'venues' => $venues
         ]);
     }
 

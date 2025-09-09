@@ -87,4 +87,59 @@ class RecentVenue extends Model
             ->limit($limit)
             ->get();
     }
+
+    /**
+     * Ottiene i luoghi più popolari di tutti gli utenti
+     */
+    public static function getPopularVenues($limit = 8)
+    {
+        return self::selectRaw('
+                venue_name,
+                venue_address,
+                city,
+                postcode,
+                country,
+                latitude,
+                longitude,
+                SUM(usage_count) as total_usage,
+                MAX(last_used_at) as last_used_at,
+                COUNT(DISTINCT user_id) as unique_users
+            ')
+            ->whereNotNull('venue_name')
+            ->where('venue_name', '!=', '')
+            ->groupBy('venue_name', 'venue_address', 'city', 'postcode', 'country', 'latitude', 'longitude')
+            ->having('total_usage', '>=', 2) // Solo luoghi usati almeno 2 volte
+            ->orderBy('total_usage', 'desc')
+            ->orderBy('unique_users', 'desc')
+            ->orderBy('last_used_at', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Ottiene i luoghi recenti di tutti gli utenti (ultimi 30 giorni)
+     */
+    public static function getRecentGlobalVenues($limit = 8)
+    {
+        return self::selectRaw('
+                venue_name,
+                venue_address,
+                city,
+                postcode,
+                country,
+                latitude,
+                longitude,
+                SUM(usage_count) as total_usage,
+                MAX(last_used_at) as last_used_at,
+                COUNT(DISTINCT user_id) as unique_users
+            ')
+            ->whereNotNull('venue_name')
+            ->where('venue_name', '!=', '')
+            ->where('last_used_at', '>=', now()->subDays(30))
+            ->groupBy('venue_name', 'venue_address', 'city', 'postcode', 'country', 'latitude', 'longitude')
+            ->orderBy('last_used_at', 'desc')
+            ->orderBy('total_usage', 'desc')
+            ->limit($limit)
+            ->get();
+    }
 }

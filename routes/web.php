@@ -413,6 +413,7 @@ Route::get('/events/create', [EventController::class, 'create'])->name('events.c
 
 // Route per i luoghi recenti (pubblica)
 Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');
+Route::get('/events/search-venues', [EventController::class, 'searchVenues'])->name('events.search-venues');
 
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/api/events/near', [EventController::class, 'near'])->name('events.near');
