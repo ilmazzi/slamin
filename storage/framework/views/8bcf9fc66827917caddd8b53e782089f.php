@@ -1,45 +1,7 @@
 <?php $__env->startSection('title', 'Slam in - Home'); ?>
 
 <?php $__env->startSection('css'); ?>
-    <!-- Slick CSS -->
-    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick.css')); ?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick-theme.css')); ?>">
     
-    <!-- Custom CSS per rimuovere ombreggiatura slider -->
-    <style>
-        #new-videos-slider .slick-list,
-        #new-videos-slider .slick-track,
-        #new-videos-slider .slick-slide,
-        #popular-videos-slider .slick-list,
-        #popular-videos-slider .slick-track,
-        #popular-videos-slider .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-        }
-        
-        .center-mode .slick-list,
-        .center-mode .slick-track,
-        .center-mode .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-        }
-        
-        .app-arrow .slick-list,
-        .app-arrow .slick-track,
-        .app-arrow .slick-slide {
-            box-shadow: none !important;
-            filter: none !important;
-            text-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-        }
-    </style>
     <style>
         /* Stili aggiuntivi per lo slider degli eventi */
         .events-slider {
@@ -118,520 +80,76 @@
             min-height: 400px !important;
         }
 
-        /* Stili per il carosello video */
-        .videos-slider {
+        /* Stili per il videos slider */
+        .center-mode {
             position: relative;
-            margin: 0 -10px;
+            overflow: hidden;
         }
 
-        .videos-slider .autoplay-item {
+        .center-mode .slick-list {
+            overflow: hidden;
+            margin: 0 60px;
+        }
+
+        .center-mode .slick-track {
+            display: flex;
+            align-items: center;
+        }
+
+        .center-mode .slick-slide {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .center-mode .slick-slide.slick-center {
+            opacity: 1;
+        }
+
+        .center-mode .slick-slide .item {
             padding: 0 10px;
-            height: auto;
         }
 
-        .videos-slider .card {
-            height: 100%;
-            transition: transform 0.3s ease;
+        .center-mode .slick-slide .item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
-        .videos-slider .card:hover {
-            transform: translateY(-5px);
+
+        /* Frecce personalizzate */
+        .center-mode .slick-prev,
+        .center-mode .slick-next {
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            color: white;
         }
 
-        /* Forza altezza uniforme per le card video nello slider */
-        .videos-slider .slick-track {
-            display: flex !important;
+        .center-mode .slick-prev:hover,
+        .center-mode .slick-next:hover {
+            background: rgba(0, 0, 0, 0.7);
         }
 
-        .videos-slider .slick-slide {
-            height: inherit;
+        .center-mode .slick-prev {
+            left: 10px;
         }
 
-        .videos-slider .slick-slide > div {
-            height: 100%;
+        .center-mode .slick-next {
+            right: 10px;
         }
 
-        .videos-slider .autoplay-item {
-            height: 100%;
+        .center-mode .slick-prev:before,
+        .center-mode .slick-next:before {
+            font-size: 20px;
+            color: white;
         }
 
-        /* Forza altezza uniforme delle card video */
-        .videos-slider .slick-slide {
-            height: auto !important;
-        }
-
-        .videos-slider .slick-slide > div {
-            height: 100% !important;
-        }
-
-        .videos-slider .autoplay-item {
-            height: 100% !important;
-        }
-
-        .videos-slider .card {
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-        }
-
-        .videos-slider .card-body {
-            height: 100% !important;
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-        }
-
-        .videos-slider .card-body > *:not(:last-child) {
-            flex-shrink: 0 !important;
-        }
-
-        .videos-slider .d-flex.justify-content-between {
-            margin-top: auto !important;
-            flex-shrink: 0 !important;
-        }
-
-        /* Forza altezza minima per le card video */
-        .videos-slider .card {
-            min-height: 350px !important;
-        }
     </style>
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startPush('scripts'); ?>
-    <!-- Slick JS -->
-    <script src="<?php echo e(asset('assets/vendor/slick/slick.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('assets/js/slick.js')); ?>"></script>
-
-    <script>
-        // Aspetta che tutto sia caricato
-        window.addEventListener('load', function() {
-            // Verifica se jQuery è disponibile
-            if (typeof $ === 'undefined') {
-                console.error('jQuery non è caricato!');
-                return;
-            }
-
-            // Verifica se Bootstrap è disponibile
-            if (typeof bootstrap === 'undefined') {
-                console.error('Bootstrap non è caricato!');
-                return;
-            }
-
-            // Verifica se Slick è disponibile
-            if (typeof $.fn.slick === 'undefined') {
-                console.error('Slick non è caricato!');
-                return;
-            }
-
-            // Debug: verifica se lo slider esiste
-            const $slider = $('.events-slider');
-
-            // Verifica se il carousel esiste
-            const $carousel = $('#heroCarousel');
-
-            if ($slider.length > 0) {
-                // Inizializza lo slider degli eventi
-                $slider.slick({
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: true,
-                    dots: false,
-                    infinite: true,
-                    speed: 500,
-                    responsive: [{
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1
-                            }
-                        }
-                    ]
-                });
-            } else {
-                console.error('Slider not found!');
-            }
-
-            window.sliderConfig = {
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                centerMode: true,
-                centerPadding: '60px',
-                autoplay: true,
-                autoplaySpeed: 3000,
-                arrows: true,
-                dots: false,
-                infinite: true,
-                speed: 500,
-                cssEase: 'linear',
-                responsive: [{
-                        breakpoint: 992,
-                        settings: {
-                            slidesToShow: 2,
-                            centerMode: true,
-                            centerPadding: '40px'
-                        }
-                    },
-                    {
-                        breakpoint: 768,
-                        settings: {
-                            slidesToShow: 1,
-                            centerMode: true,
-                            centerPadding: '60px'
-                        }
-                    }
-                ]
-            };
-            
-            
-            // Inizializza entrambi gli slider in modo sicuro
-            const $newVideosSlider = $('#new-videos-slider');
-            const $popularVideosSlider = $('#popular-videos-slider');
-            
-            // Funzione per inizializzare uno slider in modo sicuro
-            function initSliderSafely($slider, name) {
-                if ($slider.length === 0) return;
-                
-                try {
-                    // Verifica che abbia contenuto
-                    if ($slider.find('.item').length > 0) {
-                        $slider.slick(window.sliderConfig);
-                        console.log(`Slider ${name} inizializzato`);
-                        
-                        // Rimuovi ombreggiatura
-                        setTimeout(() => {
-                            $slider.find('.slick-list, .slick-track, .slick-slide').css({
-                                'box-shadow': 'none !important',
-                                'filter': 'none !important',
-                                'text-shadow': 'none !important',
-                                '-webkit-box-shadow': 'none !important',
-                                '-moz-box-shadow': 'none !important'
-                            });
-                        }, 100);
-                    }
-                } catch (error) {
-                    console.log(`Errore inizializzazione slider ${name}:`, error);
-                }
-            }
-            
-            // Inizializza slider nuovi video (visibile)
-            setTimeout(() => {
-                initSliderSafely($newVideosSlider, 'nuovi video');
-            }, 200);
-            
-            // Inizializza slider popolari video (nascosto) con delay maggiore
-            setTimeout(() => {
-                initSliderSafely($popularVideosSlider, 'popolari video');
-            }, 500);
-
-            // Inizializza il carosello Bootstrap
-            if ($carousel.length > 0) {
-                try {
-                    const bsCarousel = new bootstrap.Carousel($carousel[0], {
-                        interval: 5000, // 5 secondi
-                        ride: 'carousel', // Avvia automaticamente
-                        wrap: true, // Loop infinito
-                        keyboard: true, // Controlli da tastiera
-                        pause: 'hover' // Pausa al hover
-                    });
-                } catch (error) {
-                    console.warn('Bootstrap Carousel non disponibile, usando fallback manuale');
-                    initManualCarousel();
-                }
-            }
-
-            // Funzione fallback per carosello manuale
-            function initManualCarousel() {
-                const carousel = document.getElementById('heroCarousel');
-                if (!carousel) return;
-
-                const slides = carousel.querySelectorAll('.carousel-item');
-                const indicators = carousel.querySelectorAll('.carousel-indicators button');
-                const prevBtn = carousel.querySelector('.carousel-control-prev');
-                const nextBtn = carousel.querySelector('.carousel-control-next');
-
-                let currentSlide = 0;
-                let interval;
-
-                function showSlide(index) {
-                    // Nascondi tutte le slide
-                    slides.forEach(slide => slide.classList.remove('active'));
-                    indicators.forEach(indicator => indicator.classList.remove('active'));
-
-                    // Mostra la slide corrente
-                    slides[index].classList.add('active');
-                    if (indicators[index]) {
-                        indicators[index].classList.add('active');
-                    }
-
-                    currentSlide = index;
-                }
-
-                function nextSlide() {
-                    const next = (currentSlide + 1) % slides.length;
-                    showSlide(next);
-                }
-
-                function prevSlide() {
-                    const prev = (currentSlide - 1 + slides.length) % slides.length;
-                    showSlide(prev);
-                }
-
-                // Event listeners
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', nextSlide);
-                }
-                if (prevBtn) {
-                    prevBtn.addEventListener('click', prevSlide);
-                }
-
-                indicators.forEach((indicator, index) => {
-                    indicator.addEventListener('click', () => showSlide(index));
-                });
-
-                // Auto-scroll
-                interval = setInterval(nextSlide, 5000);
-
-                // Pausa al hover
-                carousel.addEventListener('mouseenter', () => clearInterval(interval));
-                carousel.addEventListener('mouseleave', () => {
-                    interval = setInterval(nextSlide, 5000);
-                });
-            }
-        });
-
-        // Toggle functions for Poetry and Articles sections
-        window.togglePoetryContent = function(type) {
-            const newContent = document.getElementById('newPoetryContent');
-            const popularContent = document.getElementById('popularPoetryContent');
-            const toggle = document.getElementById('poetryToggle');
-            const labelLeft = document.getElementById('poetryToggleLabelLeft');
-            const labelRight = document.getElementById('poetryToggleLabelRight');
-
-            if (type === 'new') {
-                newContent.style.display = 'block';
-                popularContent.style.display = 'none';
-                toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
-                labelLeft.classList.remove('text-muted');
-                labelLeft.classList.add('text-primary');
-                labelRight.classList.remove('text-primary');
-                labelRight.classList.add('text-muted');
-            } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
-                toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-            }
-        };
-
-        window.toggleArticlesContent = function(type) {
-            const newContent = document.getElementById('newArticlesContent');
-            const popularContent = document.getElementById('popularArticlesContent');
-            const toggle = document.getElementById('articlesToggle');
-            const labelLeft = document.getElementById('articlesToggleLabelLeft');
-            const labelRight = document.getElementById('articlesToggleLabelRight');
-
-            if (type === 'new') {
-                newContent.style.display = 'block';
-                popularContent.style.display = 'none';
-                toggle.checked = false;
-                // Evidenzia "New" e disattiva "Popolari"
-                labelLeft.classList.remove('text-muted');
-                labelLeft.classList.add('text-primary');
-                labelRight.classList.remove('text-primary');
-                labelRight.classList.add('text-muted');
-            } else {
-                newContent.style.display = 'none';
-                popularContent.style.display = 'block';
-                toggle.checked = true;
-                // Evidenzia "Popolari" e disattiva "New"
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-            }
-        };
-
-        // Funzione semplice per il toggle dei video (solo show/hide)
-        window.toggleVideosContent = function(type) {
-            const toggle = document.getElementById('videosToggle');
-            const labelLeft = document.getElementById('videosToggleLabelLeft');
-            const labelRight = document.getElementById('videosToggleLabelRight');
-            const newSlider = document.getElementById('new-videos-slider');
-            const popularSlider = document.getElementById('popular-videos-slider');
-
-            // Aggiorna le etichette del toggle
-            if (type === 'new') {
-                toggle.checked = false;
-                labelLeft.classList.remove('text-muted');
-                labelLeft.classList.add('text-primary');
-                labelRight.classList.remove('text-primary');
-                labelRight.classList.add('text-muted');
-                
-                // Mostra slider nuovi, nascondi popolari
-                newSlider.style.display = 'block';
-                popularSlider.style.display = 'none';
-            } else {
-                toggle.checked = true;
-                labelLeft.classList.remove('text-primary');
-                labelLeft.classList.add('text-muted');
-                labelRight.classList.remove('text-muted');
-                labelRight.classList.add('text-primary');
-                
-                // Mostra slider popolari, nascondi nuovi
-                newSlider.style.display = 'none';
-                popularSlider.style.display = 'block';
-            }
-        };
-        
-        // Assicurati che la funzione sia disponibile globalmente
-        console.log('toggleVideosContent function defined:', typeof window.toggleVideosContent);
-        
-        // Fallback per assicurarsi che la funzione sia sempre disponibile
-        if (typeof window.toggleVideosContent === 'undefined') {
-            window.toggleVideosContent = function(type) {
-                console.log('Fallback toggleVideosContent called with type:', type);
-                const newSlider = document.getElementById('new-videos-slider');
-                const popularSlider = document.getElementById('popular-videos-slider');
-                
-                if (type === 'new') {
-                    if (newSlider) newSlider.style.display = 'block';
-                    if (popularSlider) popularSlider.style.display = 'none';
-                } else {
-                    if (newSlider) newSlider.style.display = 'none';
-                    if (popularSlider) popularSlider.style.display = 'block';
-                }
-            };
-        }
-
-        // Funzione per seguire un utente
-        window.followUser = function(userId) {
-            // Verifica se l'utente è autenticato
-            const isAuthenticated = <?php echo e(auth()->check() ? 'true' : 'false'); ?>;
-
-            if (!isAuthenticated) {
-                window.location.href = '<?php echo e(route('login')); ?>';
-                return;
-            }
-
-            const button = document.getElementById('followBtn' + userId);
-            const text = document.getElementById('followText' + userId);
-
-            // Disabilita il pulsante durante la richiesta
-            button.disabled = true;
-
-            fetch('/api/follow/toggle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        user_id: userId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Aggiorna il pulsante
-                        if (data.following) {
-                            button.innerHTML = '<i class="ti ti-user-check"></i><span id="followText' +
-                                userId + '">Following</span>';
-                            button.classList.remove('btn-primary');
-                            button.classList.add('btn-success');
-                        } else {
-                            button.innerHTML = '<i class="ti ti-user"></i><span id="followText' +
-                                userId + '">Follow</span>';
-                            button.classList.remove('btn-success');
-                            button.classList.add('btn-primary');
-                        }
-
-                        // Mostra notifica
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Successo!',
-                            text: data.message,
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    } else {
-                        Swal.fire('Errore', data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Errore connessione follow:', error);
-                    Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
-                })
-                .finally(() => {
-                    // Riabilita il pulsante
-                    button.disabled = false;
-                });
-        };
-
-        // Funzione per mostrare messaggio di successo
-        window.showSuccessMessage = function(message) {
-            const successDiv = document.createElement('div');
-            successDiv.className = 'position-fixed';
-            successDiv.style.cssText =
-                'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
-            successDiv.textContent = message;
-            document.body.appendChild(successDiv);
-
-            setTimeout(() => {
-                successDiv.remove();
-            }, 3000);
-        };
-
-        // Funzione per mostrare messaggio di errore
-        window.showErrorMessage = function(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'position-fixed';
-            errorDiv.style.cssText =
-                'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
-            errorDiv.textContent = message;
-            document.body.appendChild(errorDiv);
-
-            setTimeout(() => {
-                errorDiv.remove();
-            }, 3000);
-        };
-
-        // Event listeners per il modal video (da eseguire quando il DOM è pronto)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gestione chiusura modal video con ESC
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    const videoModal = document.getElementById('videoPlayerModal');
-                    if (videoModal && videoModal.style.display === 'block') {
-                        closeVideoModal();
-                    }
-                }
-            });
-
-            // Gestione click fuori dal modal per chiudere
-            const videoModal = document.getElementById('videoPlayerModal');
-            if (videoModal) {
-                videoModal.addEventListener('click', function(event) {
-                    if (event.target === this) {
-                        closeVideoModal();
-                    }
-                });
-            }
-        });
-    </script>
-<?php $__env->stopPush(); ?>
 
 <?php $__env->startSection('main-content'); ?>
     <div class="page-content">
@@ -836,90 +354,80 @@
 
 
             <!-- Video Slider Section -->
-            <?php if(($recentVideos && $recentVideos->count() > 0) || ($popularVideos && $popularVideos->count() > 0)): ?>
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card equal-card">
-                            <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0">
-                                    <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
-                                    <?php echo e(__('home.videos_section')); ?>
-
-                                </h5>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <span id="videosToggleLabelLeft"
-                                        class="text-primary f-s-12 me-2"><?php echo e(__('common.new')); ?></span>
-                                    <div class="form-check form-switch mx-2">
-                                        <input class="form-check-input" type="checkbox" id="videosToggle"
-                                            onchange="toggleVideosContent(this.checked ? 'popular' : 'new')">
-                                    </div>
-                                    <span id="videosToggleLabelRight"
-                                        class="text-muted f-s-12 ms-2"><?php echo e(__('common.popular')); ?></span>
-                                </div>
+                    <div class="card equal-card">
+                        <div class="card-header">
+                            <h5>Center Mode</h5>
                             </div>
                             <div class="card-body">
-                                <!-- Slider per video nuovi -->
-                                <div class="center-mode app-arrow" id="new-videos-slider">
-                                    <?php $__currentLoopData = $recentVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <div class="item">
+                            <div class="center-mode app-arrow" id="videos-slider">
+                                <?php $__currentLoopData = $recentVideos->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="autoplay-item">
                                             <div class="card overflow-hidden hover-effect h-100">
-                                                <div class="position-relative">
-                                                    <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
-                                                        <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
-                                                            alt="<?php echo e($video->title); ?>"
-                                                            style="height: 200px; object-fit: cover;">
-                                                    <?php else: ?>
-                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                            style="height: 200px;">
-                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-success f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                            <i class="ph-duotone ph-clock f-s-10 me-1"></i>
-                                                            <?php echo e(__('common.new')); ?>
-
-                                                        </span>
-                                                    </div>
-                                                    <div class="position-absolute top-50 start-50 translate-middle"
-                                                        style="cursor: pointer;"
-                                                        onclick="openVideoModal(<?php echo e($video->id); ?>)">
-                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                            style="width: 50px; height: 50px;">
-                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <?php if($video->thumbnail_path): ?>
+                                                    <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
+                                                        alt="<?php echo e($video->title); ?>"
+                                                        style="height: 200px; object-fit: cover;">
+                                                <?php else: ?>
+                                                    <?php
+                                                        $fallbackImages = [
+                                                            'assets/images/background/default-video-1.webp',
+                                                            'assets/images/background/default-video-2.webp',
+                                                            'assets/images/background/default-video-3.webp',
+                                                            'assets/images/background/default-video-4.webp',
+                                                        ];
+                                                        $randomImage = $fallbackImages[array_rand($fallbackImages)];
+                                                    ?>
+                                                    <img src="<?php echo e(asset($randomImage)); ?>" class="card-img-top"
+                                                        alt="<?php echo e($video->title); ?>"
+                                                        style="height: 200px; object-fit: cover;">
+                                                <?php endif; ?>
                                                 <div class="card-body d-flex flex-column">
-                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                        <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                            <?php echo e(Str::limit($video->title, 50)); ?>
+                                                    <h5 class="card-title f-w-600"><?php echo e($video->title); ?></h5>
+                                                    <p class="card-text text-muted f-s-14">
+                                                        <i class="ph-duotone ph-user f-s-12 me-1"></i>
+                                                        <?php echo e($video->user->getDisplayName()); ?>
 
-                                                        </a>
-                                                    </h6>
-                                                    <p class="text-muted f-s-12 mb-2">
-                                                        <a href="<?php echo e(route('user.show', $video->user)); ?>"
-                                                            class="text-decoration-none hover-effect">
-                                                            <?php echo e($video->user->getDisplayName()); ?>
-
-                                                        </a>
                                                     </p>
+
+                                                    <?php if($video->description): ?>
+                                                        <p class="card-text"><?php echo e(Str::limit($video->description, 80)); ?></p>
+                                                    <?php endif; ?>
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <div class="d-flex gap-2">
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
+                                                        <p class="card-text">
+                                                            <small class="text-body-secondary">
+                                                                <i class="ph-duotone ph-eye f-s-12 me-1"></i>
+                                                                <?php echo e(number_format($video->views_count ?? 0)); ?> views
 
                                                             </small>
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
+                                                        </p>
+                                                        <div class="d-flex gap-1 justify-content-end">
+                                                            <?php if(auth()->guard()->check()): ?>
 
-                                                            </small>
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
+                                                                <a href="#" role="button" class="btn btn-sm py-1 px-2 d-flex align-items-center"
+                                                                    data-video-id="<?php echo e($video->id); ?>"
+                                                                    title="Aggiungi/<?php echo e(__('wishlist.remove_from_wishlist')); ?>">
+                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
+                                                                        alt="Like" style="width: 25px; height: 25px;">
+                                                                </a>
+                                                            <?php else: ?>
+                                                                <a href="<?php echo e(route('login')); ?>" role="button"
+                                                                    class="btn btn-sm py-1 px-2 d-flex align-items-center"
+                                                                    title="<?php echo e(__('auth.login_required')); ?>">
+                                                                    <img src="<?php echo e(asset('assets/images/like.png')); ?>"
+                                                                        alt="Like" style="width: 25px; height: 25px;">
+                                                                </a>
+                                                            <?php endif; ?>
 
-                                                            </small>
-                                                        </div>
-                                                        <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
+
+                                                            <button onclick="openVideoModal(<?php echo e($video->id); ?>)" role="button"
+                                                                class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
+                                                                <i class="ph-duotone ph-play f-s-12 me-1"></i><?php echo e(__('home.watch')); ?>
+
+                                                            </button>
+
+                                                            <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('report-button'); ?>
@@ -939,106 +447,18 @@
 <?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
 <?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
 <?php endif; ?>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </div>
-
-                                <!-- Slider per video popolari -->
-                                <div class="center-mode app-arrow" id="popular-videos-slider" style="display: none;">
-                                    <?php $__currentLoopData = $popularVideos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $video): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <div class="item">
-                                            <div class="card overflow-hidden hover-effect h-100">
-                                                <div class="position-relative">
-                                                    <?php if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg')): ?>
-                                                        <img src="<?php echo e($video->thumbnail_url); ?>" class="card-img-top"
-                                                            alt="<?php echo e($video->title); ?>"
-                                                            style="height: 200px; object-fit: cover;">
-                                                    <?php else: ?>
-                                                        <div class="card-img-top d-flex align-items-center justify-content-center bg-gradient-light"
-                                                            style="height: 200px;">
-                                                            <i class="ph-duotone ph-video-camera f-s-48 text-muted"></i>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-warning text-dark f-s-11 fw-bold px-2 py-1 rounded-pill">
-                                                            <i class="ph-duotone ph-trophy f-s-10 me-1"></i>
-                                                            <?php echo e(__('common.popular')); ?>
-
-                                                        </span>
-                                                    </div>
-                                                    <div class="position-absolute top-50 start-50 translate-middle"
-                                                        style="cursor: pointer;"
-                                                        onclick="openVideoModal(<?php echo e($video->id); ?>)">
-                                                        <div class="bg-white bg-opacity-90 rounded-circle p-2 d-flex-center"
-                                                            style="width: 50px; height: 50px;">
-                                                            <i class="ph-duotone ph-play f-s-20 text-primary"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body d-flex flex-column">
-                                                    <h6 class="card-title f-w-600 f-s-14 mb-2">
-                                                        <a href="<?php echo e(route('videos.show', $video)); ?>" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                            <?php echo e(Str::limit($video->title, 50)); ?>
-
-                                                        </a>
-                                                    </h6>
-                                                    <p class="text-muted f-s-12 mb-2">
-                                                        <a href="<?php echo e(route('user.show', $video->user)); ?>"
-                                                            class="text-decoration-none hover-effect">
-                                                            <?php echo e($video->user->getDisplayName()); ?>
-
-                                                        </a>
-                                                    </p>
-                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <div class="d-flex gap-2">
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($video->views_count ?? 0)); ?>
-
-                                                            </small>
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($video->likes_count ?? 0)); ?>
-
-                                                            </small>
-                                                            <small class="text-muted f-s-11">
-                                                                <i class="ph-duotone ph-chat-circle f-s-10 me-1"></i><?php echo e(number_format($video->comments_count ?? 0)); ?>
-
-                                                            </small>
-                                                        </div>
-                                                        <?php if (isset($component)) { $__componentOriginalcab7032bfdfb17b0d85d7225950dd852 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.report-button','data' => ['content' => $video,'type' => 'video','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('report-button'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($video),'type' => 'video','size' => 'sm']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
-<?php $attributes = $__attributesOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
-<?php unset($__attributesOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852)): ?>
-<?php $component = $__componentOriginalcab7032bfdfb17b0d85d7225950dd852; ?>
-<?php unset($__componentOriginalcab7032bfdfb17b0d85d7225950dd852); ?>
-<?php endif; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </div>
-
                             </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>
 
             <!-- Stats Section -->
             <div class="row mb-4">
@@ -1935,4 +1355,479 @@
     </script>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startPush('scripts'); ?>
+    <!-- slick CSS -->
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/slick/slick-theme.css')); ?>">
+    
+    <!-- slick JS -->
+    <script src="<?php echo e(asset('assets/vendor/slick/slick.min.js')); ?>"></script>
+
+    <script>
+        // Funzione per inizializzare gli slider in modo sicuro
+        function initSlidersSafely() {
+            // Verifica se jQuery è disponibile
+            if (typeof $ === 'undefined') {
+                console.error('jQuery non è caricato!');
+                return;
+            }
+
+            // Verifica se Bootstrap è disponibile
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap non è caricato!');
+                return;
+            }
+
+            // Verifica se Slick è disponibile
+            if (typeof $.fn.slick === 'undefined') {
+                console.error('Slick non è caricato!');
+                return;
+            }
+            
+            console.log('Slick è disponibile:', typeof $.fn.slick);
+
+            // Inizializza lo slider degli eventi (solo se esiste e è visibile)
+            const $eventsSlider = $('.events-slider');
+            if ($eventsSlider.length > 0 && $eventsSlider.is(':visible')) {
+                // Controlla se ha contenuto
+                const items = $eventsSlider.find('.autoplay-item');
+                if (items.length > 0) {
+                    try {
+                        // Rimuovi eventuali inizializzazioni precedenti
+                        if ($eventsSlider.hasClass('slick-initialized')) {
+                            $eventsSlider.slick('unslick');
+                        }
+                        
+                        // Inizializza con un piccolo delay
+                        setTimeout(() => {
+                            $eventsSlider.slick({
+                                slidesToShow: 2,
+                                slidesToScroll: 1,
+                                autoplay: true,
+                                autoplaySpeed: 3000,
+                                arrows: true,
+                                dots: false,
+                                infinite: true,
+                                speed: 500,
+                                adaptiveHeight: false,
+                                lazyLoad: 'ondemand',
+                                responsive: [{
+                                        breakpoint: 768,
+                                        settings: {
+                                            slidesToShow: 2
+                                        }
+                                    },
+                                    {
+                                        breakpoint: 576,
+                                        settings: {
+                                            slidesToShow: 1
+                                        }
+                                    }
+                                ]
+                            });
+                            console.log('Events slider inizializzato con successo');
+                        }, 100);
+                    } catch (error) {
+                        console.error('Errore inizializzazione events slider:', error);
+                    }
+                } else {
+                    console.warn('Events slider non ha contenuto');
+                }
+            } else {
+                console.warn('Events slider non trovato o non visibile');
+            }
+
+            // Inizializza lo slider dei video con controlli molto specifici
+            const $videosSlider = $('#videos-slider');
+            console.log('Videos slider trovato:', $videosSlider.length);
+            
+            if ($videosSlider.length > 0) {
+                console.log('Videos slider visibile:', $videosSlider.is(':visible'));
+                console.log('Videos slider width:', $videosSlider.width());
+                
+                // Controlla se ha contenuto
+                const items = $videosSlider.find('.item');
+                console.log('Items trovati:', items.length);
+                
+                if (items.length > 0) {
+                    // Aspetta che l'elemento sia completamente renderizzato
+                    setTimeout(() => {
+                        try {
+                            // Controlla di nuovo tutto
+                            if ($videosSlider.length > 0 && $videosSlider.is(':visible') && $videosSlider.width() > 0) {
+                                console.log('Inizializzazione videos slider...');
+                                
+                                // Rimuovi eventuali inizializzazioni precedenti
+                                if ($videosSlider.hasClass('slick-initialized')) {
+                                    $videosSlider.slick('unslick');
+                                }
+                                
+                                // Configurazione minimale per evitare errori
+                                $videosSlider.slick({
+                                    centerMode: true,
+                                    centerPadding: '40px',
+                                    slidesToShow: 3,
+                                    slidesToScroll: 1,
+                                    autoplay: false,
+                                    arrows: true,
+                                    dots: false,
+                                    infinite: true,
+                                    speed: 500,
+                                    accessibility: false,
+                                    focusOnSelect: false,
+                                    useCSS: false,
+                                    useTransform: false,
+                                    waitForAnimate: false,
+                                    draggable: true,
+                                    swipe: true,
+                                    touchMove: true,
+                                    touchThreshold: 5,
+                                    swipeToSlide: false,
+                                    edgeFriction: 0.35,
+                                    rows: 1,
+                                    slidesPerRow: 1,
+                                    variableWidth: false,
+                                    vertical: false,
+                                    verticalSwiping: false,
+                                    rtl: false,
+                                    fade: false,
+                                    cssEase: 'ease',
+                                    easing: 'linear',
+                                    pauseOnHover: true,
+                                    pauseOnFocus: true,
+                                    pauseOnDotsHover: false,
+                                    respondTo: 'window',
+                                    // Disabilita completamente le funzioni di accessibilità
+                                    initADA: function() {
+                                        // Funzione vuota per evitare errori
+                                        return;
+                                    },
+                                    responsive: [{
+                                            breakpoint: 768,
+                                            settings: {
+                                                centerMode: true,
+                                                centerPadding: '30px',
+                                                slidesToShow: 2
+                                            }
+                                        },
+                                        {
+                                            breakpoint: 576,
+                                            settings: {
+                                                centerMode: true,
+                                                centerPadding: '20px',
+                                                slidesToShow: 1
+                                            }
+                                        }
+                                    ]
+                                });
+                                
+                                console.log('Videos slider inizializzato con successo');
+                                
+                                // Verifica se l'inizializzazione è andata a buon fine
+                                setTimeout(() => {
+                                    if ($videosSlider.hasClass('slick-initialized')) {
+                                        console.log('Videos slider confermato inizializzato');
+                                        $videosSlider.slick('slickSetOption', 'autoplay', true, true);
+                                        $videosSlider.slick('slickSetOption', 'autoplaySpeed', 3000, true);
+                                        console.log('Autoplay abilitato');
+                                    } else {
+                                        console.error('Videos slider NON inizializzato correttamente');
+                                        // Prova a reinizializzare
+                                        console.log('Tentativo di reinizializzazione...');
+                                        $videosSlider.slick({
+                                            centerMode: true,
+                                            centerPadding: '40px',
+                                            slidesToShow: 3,
+                                            slidesToScroll: 1,
+                                            autoplay: true,
+                                            autoplaySpeed: 3000,
+                                            arrows: true,
+                                            dots: false,
+                                            infinite: true,
+                                            speed: 500,
+                                            accessibility: false,
+                                            focusOnSelect: false,
+                                            useCSS: false,
+                                            useTransform: false,
+                                            waitForAnimate: false
+                                        });
+                                    }
+                                }, 500);
+                            } else {
+                                console.warn('Videos slider non pronto per l\'inizializzazione');
+                            }
+                        } catch (error) {
+                            console.error('Errore inizializzazione videos slider:', error);
+                        }
+                    }, 200);
+                } else {
+                    console.warn('Videos slider non ha contenuto');
+                }
+            } else {
+                console.warn('Videos slider non trovato');
+            }
+
+            // Inizializza il carosello Bootstrap (solo se esiste)
+            const $carousel = $('#heroCarousel');
+            if ($carousel.length > 0) {
+                try {
+                    const bsCarousel = new bootstrap.Carousel($carousel[0], {
+                        interval: 5000, // 5 secondi
+                        ride: 'carousel', // Avvia automaticamente
+                        wrap: true, // Loop infinito
+                        keyboard: true, // Controlli da tastiera
+                        pause: 'hover' // Pausa al hover
+                    });
+                    console.log('Bootstrap carousel inizializzato');
+                } catch (error) {
+                    console.warn('Bootstrap Carousel non disponibile, usando fallback manuale');
+                    initManualCarousel();
+                }
+            }
+            // Funzione fallback per carosello manuale
+            function initManualCarousel() {
+                const carousel = document.getElementById('heroCarousel');
+                if (!carousel) return;
+
+                const slides = carousel.querySelectorAll('.carousel-item');
+                const indicators = carousel.querySelectorAll('.carousel-indicators button');
+                const prevBtn = carousel.querySelector('.carousel-control-prev');
+                const nextBtn = carousel.querySelector('.carousel-control-next');
+
+                let currentSlide = 0;
+                let interval;
+
+                function showSlide(index) {
+                    // Nascondi tutte le slide
+                    slides.forEach(slide => slide.classList.remove('active'));
+                    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+                    // Mostra la slide corrente
+                    slides[index].classList.add('active');
+                    if (indicators[index]) {
+                        indicators[index].classList.add('active');
+                    }
+
+                    currentSlide = index;
+                }
+
+                function nextSlide() {
+                    const next = (currentSlide + 1) % slides.length;
+                    showSlide(next);
+                }
+
+                function prevSlide() {
+                    const prev = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(prev);
+                }
+
+                // Event listeners
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', nextSlide);
+                }
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', prevSlide);
+                }
+
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => showSlide(index));
+                });
+
+                // Auto-scroll
+                interval = setInterval(nextSlide, 5000);
+
+                // Pausa al hover
+                carousel.addEventListener('mouseenter', () => clearInterval(interval));
+                carousel.addEventListener('mouseleave', () => {
+                    interval = setInterval(nextSlide, 5000);
+                });
+            }
+        }
+
+        // Inizializza quando il DOM è pronto
+        $(document).ready(function() {
+            console.log('DOM pronto, inizializzo gli slider...');
+            setTimeout(initSlidersSafely, 500);
+        });
+
+        // Fallback con window.load
+        window.addEventListener('load', function() {
+            console.log('Window loaded, inizializzo gli slider...');
+            setTimeout(initSlidersSafely, 1000);
+        });
+
+        // Toggle functions for Poetry and Articles sections
+        window.togglePoetryContent = function(type) {
+            const newContent = document.getElementById('newPoetryContent');
+            const popularContent = document.getElementById('popularPoetryContent');
+            const toggle = document.getElementById('poetryToggle');
+            const labelLeft = document.getElementById('poetryToggleLabelLeft');
+            const labelRight = document.getElementById('poetryToggleLabelRight');
+
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = false;
+                // Evidenzia "New" e disattiva "Popolari"
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            }
+        };
+
+        window.toggleArticlesContent = function(type) {
+            const newContent = document.getElementById('newArticlesContent');
+            const popularContent = document.getElementById('popularArticlesContent');
+            const toggle = document.getElementById('articlesToggle');
+            const labelLeft = document.getElementById('articlesToggleLabelLeft');
+            const labelRight = document.getElementById('articlesToggleLabelRight');
+
+            if (type === 'new') {
+                newContent.style.display = 'block';
+                popularContent.style.display = 'none';
+                toggle.checked = false;
+                // Evidenzia "New" e disattiva "Popolari"
+                labelLeft.classList.remove('text-muted');
+                labelLeft.classList.add('text-primary');
+                labelRight.classList.remove('text-primary');
+                labelRight.classList.add('text-muted');
+            } else {
+                newContent.style.display = 'none';
+                popularContent.style.display = 'block';
+                toggle.checked = true;
+                // Evidenzia "Popolari" e disattiva "New"
+                labelLeft.classList.remove('text-primary');
+                labelLeft.classList.add('text-muted');
+                labelRight.classList.remove('text-muted');
+                labelRight.classList.add('text-primary');
+            }
+        };
+
+        // Funzione per seguire un utente
+        window.followUser = function(userId) {
+            // Verifica se l'utente è autenticato
+            const isAuthenticated = <?php echo e(auth()->check() ? 'true' : 'false'); ?>;
+
+            if (!isAuthenticated) {
+                window.location.href = '<?php echo e(route('login')); ?>';
+                return;
+            }
+
+            const button = document.getElementById('followBtn' + userId);
+            const text = document.getElementById('followText' + userId);
+
+            // Disabilita il pulsante durante la richiesta
+            button.disabled = true;
+
+            fetch('/api/follow/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        user_id: userId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Aggiorna il pulsante
+                        if (data.following) {
+                            button.innerHTML = '<i class="ti ti-user-check"></i><span id="followText' +
+                                userId + '">Following</span>';
+                            button.classList.remove('btn-primary');
+                            button.classList.add('btn-success');
+                        } else {
+                            button.innerHTML = '<i class="ti ti-user"></i><span id="followText' +
+                                userId + '">Follow</span>';
+                            button.classList.remove('btn-success');
+                            button.classList.add('btn-primary');
+                        }
+
+                        // Mostra notifica
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Successo!',
+                            text: data.message,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire('Errore', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore connessione follow:', error);
+                    Swal.fire('Errore', 'Errore durante l\'operazione', 'error');
+                })
+                .finally(() => {
+                    // Riabilita il pulsante
+                    button.disabled = false;
+                });
+        };
+
+        // Funzione per mostrare messaggio di successo
+        window.showSuccessMessage = function(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'position-fixed';
+            successDiv.style.cssText =
+                'top: 20px; right: 20px; z-index: 10002; background: rgba(40, 167, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        };
+
+        // Funzione per mostrare messaggio di errore
+        window.showErrorMessage = function(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'position-fixed';
+            errorDiv.style.cssText =
+                'top: 20px; right: 20px; z-index: 10002; background: rgba(220, 53, 69, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; backdrop-filter: blur(10px);';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 3000);
+        };
+
+        // Event listeners per il modal video (da eseguire quando il DOM è pronto)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestione chiusura modal video con ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const videoModal = document.getElementById('videoPlayerModal');
+                    if (videoModal && videoModal.style.display === 'block') {
+                        closeVideoModal();
+                    }
+                }
+            });
+
+            // Gestione click fuori dal modal per chiudere
+            const videoModal = document.getElementById('videoPlayerModal');
+            if (videoModal) {
+                videoModal.addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        closeVideoModal();
+                    }
+                });
+            }
+        });
+    </script>
+<?php $__env->stopPush(); ?>
 <?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/home.blade.php ENDPATH**/ ?>
