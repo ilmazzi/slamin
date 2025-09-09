@@ -266,7 +266,7 @@
             const $newVideosSlider = $('#new-videos-slider');
             const $popularVideosSlider = $('#popular-videos-slider');
             
-            const sliderConfig = {
+            window.sliderConfig = {
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 centerMode: true,
@@ -297,8 +297,8 @@
                 ]
             };
             
-            // Funzione per inizializzare uno slider in modo sicuro
-            function initSliderSafely($slider, config) {
+            // Funzione per inizializzare uno slider in modo sicuro (globale)
+            window.initSliderSafely = function($slider, config) {
                 if ($slider.length === 0) return;
                 
                 try {
@@ -331,11 +331,11 @@
                 } catch (error) {
                     console.log('Errore inizializzazione slider:', error);
                 }
-            }
+            };
             
             // Inizializza solo lo slider visibile (nuovi video) con un piccolo delay
             setTimeout(() => {
-                initSliderSafely($newVideosSlider, sliderConfig);
+                window.initSliderSafely($newVideosSlider, window.sliderConfig);
             }, 100);
 
             // Inizializza il carosello Bootstrap
@@ -504,10 +504,11 @@
                 popularSlider.style.display = 'block';
                 
                 // Inizializza lo slider popolare se non è già inizializzato
-                if (!$popularVideosSlider.hasClass('slick-initialized')) {
+                const $popularSlider = $('#popular-videos-slider');
+                if (!$popularSlider.hasClass('slick-initialized')) {
                     // Aspetta che l'elemento sia completamente visibile
                     setTimeout(() => {
-                        initSliderSafely($popularVideosSlider, sliderConfig);
+                        window.initSliderSafely($popularSlider, window.sliderConfig);
                     }, 50);
                 }
             }
