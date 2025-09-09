@@ -9,7 +9,7 @@
                 <div>
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-translate f-s-18 me-2"></i>
-                        @php echo __('admin.language_' . $language) ?: ucfirst($language); @endphp - {{ ucfirst($file) }}
+                        @php echo __('admin.language_' . $language) ?: ucfirst($language); @endphp - {{ ucfirst($selectedFile) }}
                     </h4>
                     <small class="text-muted">
                         {{ $stats['translated_keys'] }}/{{ $stats['total_keys'] }} tradotte
@@ -43,7 +43,16 @@
             <div class="card">
                 <div class="card-body py-2">
                     <div class="row g-2">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <select id="fileSelect" class="form-select form-select-sm" onchange="changeFile()">
+                                @foreach($translationFiles as $fileKey => $fileDisplayName)
+                                    <option value="{{ $fileKey }}" {{ $fileKey === $selectedFile ? 'selected' : '' }}>
+                                        {{ $fileDisplayName }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text"><i class="ph-duotone ph-magnifying-glass f-s-12"></i></span>
                                 <input type="text" id="searchInput" class="form-control" placeholder="{{ __('admin.search_key_or_text') }}" onkeyup="filterTranslations()">
@@ -290,8 +299,16 @@ function saveTranslations() {
     const formData = new FormData();
     const textareas = document.querySelectorAll('.translation-input');
 
+    // Aggiungi il file corrente
+    const currentFile = document.getElementById('fileSelect').value;
+    formData.append('file', currentFile);
+
     textareas.forEach(textarea => {
-        formData.append('translations[' + textarea.dataset.key + ']', textarea.value);
+        // Usa il name della textarea invece di dataset.key
+        const name = textarea.getAttribute('name');
+        if (name) {
+            formData.append(name, textarea.value);
+        }
     });
 
     fetch('{{ route("admin.translations.update", $language) }}', {
@@ -443,6 +460,14 @@ function addNewKey() {
             addKeyToTable(key);
         }
     });
+}
+
+// Funzione per cambiare file di traduzione
+function changeFile() {
+    const selectedFile = document.getElementById('fileSelect').value;
+    const currentUrl = new URL(window.location);
+    currentUrl.searchParams.set('file', selectedFile);
+    window.location.href = currentUrl.toString();
 }
 
 // Funzione per aggiungere la chiave alla tabella

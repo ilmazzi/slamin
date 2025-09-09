@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'admin_panel' => 'Pannello Amministrazione',
     'dashboard' => 'Dashboard',
     'settings' => 'Impostazioni',
@@ -40,7 +39,7 @@ return [
     'save_error' => 'Errore nel salvataggio delle traduzioni',
     'show_hide_all' => 'Mostra/Nascondi Tutte',
     'copy_from_italian' => 'Copia da Italiano',
-    'clear_all' => 'Svuota Tutte',
+    'clear_all' => 'Svuota',
     'show_untranslated' => 'Mostra Non Tradotte',
     'back_to_list' => 'Torna alla Lista',
     'cancel' => 'Annulla',
@@ -87,8 +86,6 @@ return [
     'complete' => 'Completa',
     'keys_missing' => 'chiavi mancanti',
     'sync_this_language' => 'Sincronizza Questa Lingua',
-
-    // Auto Translation
     'auto_translation' => 'Traduzione Automatica',
     'auto_translation_description' => 'Traduci automaticamente le chiavi mancanti usando AI',
     'auto_translate_file' => 'Traduci File',
@@ -101,8 +98,6 @@ return [
     'translation_provider' => 'Provider Traduzione',
     'translation_api_key' => 'API Key Traduzione',
     'configure_translation_service' => 'Configura Servizio Traduzione',
-
-    // Quick Navigation
     'quick_navigation' => 'Navigazione Rapida',
     'general_settings' => 'Impostazioni Generali',
     'manage_general_settings' => 'Gestisci le impostazioni generali del sistema',
@@ -146,13 +141,8 @@ return [
     'manage_integrations' => 'Gestisci integrazioni esterne',
     'advanced_settings' => 'Impostazioni Avanzate',
     'manage_advanced' => 'Configurazioni avanzate del sistema',
-
-    // Carousel Management
-
     'manage_carousel' => 'Gestisci caroselli e contenuti',
     'manage_translations' => 'Gestisci traduzioni del sistema',
-
-    // Carousel Management
     'carousel_management' => 'Gestione Caroselli',
     'carousel_management_description' => 'Gestisci i caroselli del sito',
     'create_carousel' => 'Crea Carosello',
@@ -168,9 +158,6 @@ return [
     'carousel_created_success' => 'Carosello creato con successo!',
     'carousel_updated_success' => 'Carosello aggiornato con successo!',
     'carousel_deleted_success' => 'Carosello eliminato con successo!',
-
-    // Carousel Content Types
-
     'content_type_video' => 'Video',
     'content_type_poem' => 'Poesia',
     'content_type_event' => 'Evento',
@@ -182,8 +169,6 @@ return [
     'no_content_found' => 'Nessun contenuto trovato',
     'select_content' => 'Seleziona Contenuto',
     'content_selected' => 'Contenuto Selezionato',
-
-    // Carousel Form Fields
     'carousel_title' => 'Titolo Carosello',
     'carousel_description' => 'Descrizione Carosello',
     'carousel_image' => 'Immagine Carosello',
@@ -200,30 +185,21 @@ return [
     'carousel_override_description_help' => 'Lascia vuoto per usare la descrizione originale',
     'carousel_override_link_url_help' => 'Lascia vuoto per usare il link originale',
     'carousel_override_link_text_help' => 'Lascia vuoto per usare il testo originale',
-
-    // Carousel Actions
     'test_manual' => 'Test Manuale',
     'test_manual_api' => 'Test Manuale API',
     'test_debug_route' => 'Test Debug Route',
-
     'search_in_progress' => 'Ricerca in corso...',
     'search_error' => 'Errore durante la ricerca',
     'search_error_details' => 'Errore:',
-
-    // Carousel Content Selection
     'choose_content_type' => 'Scegli Tipo di Contenuto',
     'content_type_help' => 'Seleziona il tipo di contenuto da mostrare nel carosello',
     'content_search_help' => 'Cerca contenuti specifici da includere nel carosello',
     'content_override_help' => 'Personalizza il contenuto selezionato (opzionale)',
     'content_override_section' => 'Personalizza (Opzionale)',
-
-    // Carousel Status
     'carousel_published' => 'Pubblicato',
     'carousel_draft' => 'Bozza',
     'carousel_scheduled' => 'Programmato',
     'carousel_archived' => 'Archiviato',
-
-    // Permissions and Roles
     'technical_name' => 'Nome tecnico',
     'technical_name_help' => 'Nome tecnico (es: admin, moderator)',
     'technical_name_permissions_help' => 'Nome tecnico (es: events.create, users.manage)',
@@ -237,16 +213,12 @@ return [
     'role_host' => 'Presentatore',
     'role_user' => 'Utente',
     'role_event_manager' => 'Event Manager',
-
-    // Moderation
     'content_type' => 'Tipo di Contenuto',
     'moderation_pending' => 'In Attesa di Moderazione',
     'moderation_approved' => 'Approvato',
     'moderation_rejected' => 'Rifiutato',
     'moderation_settings' => 'Impostazioni Moderazione',
     'moderation_settings_description' => 'Configura le impostazioni di moderazione per i contenuti',
-
-    // Debug e Test
     'debug_mode' => 'Modalità Debug',
     'debug_enabled' => 'Debug abilitato',
     'debug_disabled' => 'Debug disabilitato',
@@ -266,22 +238,14 @@ return [
     'total_translations' => 'Traduzioni Totali',
     'translation_quality' => 'Qualità Traduzione',
     'translation_cost' => 'Costo Stimato',
-    'translation_providers' => [
-        'google' => 'Google Translate',
-        'deepl' => 'DeepL',
-        'openai' => 'OpenAI GPT'
-    ],
-
-    // Additional translation keys
+    'translation_providers' => '{\\\"google\\\":\\\"Google Translate\\\",\\\"deepl\\\":\\\"DeepL\\\",\\\"openai\\\":\\\"OpenAI GPT\\\"}',
     'file_admin' => 'Admin',
     'no_languages_found' => 'Nessuna lingua trovata',
     'no_languages_description' => 'Non ci sono lingue configurate nel sistema',
     'no_translations_found' => 'Nessuna traduzione trovata',
     'no_translations_description' => 'Non ci sono traduzioni per questo file',
-    'delete_language_warning' => 'Questa azione eliminerà tutte le traduzioni per questa lingua',
+    'delete_language_warning' => 'Sei sicuro di voler eliminare questa lingua?',
     'sync_error' => 'Errore durante la sincronizzazione',
-
-    // Chiavi hardcoded identificate
     'current_thumbnail' => 'Thumbnail Corrente',
     'preview' => 'Anteprima',
     'avatar' => 'Avatar',
@@ -308,12 +272,8 @@ return [
     'three_dots_separator' => 'Separatore Tre Punti',
     'new_content' => 'Nuovo',
     'popular_content' => 'Popolari',
-
-    // Nuove chiavi per interfaccia compatta
     'back' => 'Indietro',
     'copy_from_it' => 'Copia da IT',
-    'clear_all' => 'Svuota',
-    'save' => 'Salva',
     'search_key_or_text' => 'Cerca chiave o testo...',
     'all_statuses' => 'Tutti',
     'translated_status' => 'Tradotti',
@@ -337,14 +297,8 @@ return [
     'copy_confirm' => 'Copiare tutte le traduzioni dall\'italiano? Questo sovrascriverà le traduzioni esistenti.',
     'clear_confirm' => 'Svuotare tutte le traduzioni? Questa azione non può essere annullata.',
     'save_success' => 'Traduzioni salvate con successo!',
-    'save_error' => 'Errore nel salvataggio delle traduzioni',
-
-    // Chiavi per interfaccia pulita
     'code' => 'Codice',
-    'progress' => 'Progresso',
     'actions' => 'Azioni',
-    'edit_translations' => 'Modifica Traduzioni',
-    'delete_language' => 'Elimina Lingua',
     'add_first_language' => 'Aggiungi Prima Lingua',
     'sync_actions' => 'Azioni di Sincronizzazione',
     'sync_all_languages' => 'Sincronizza Tutte le Lingue',
@@ -353,8 +307,8 @@ return [
     'translation_info' => 'Informazioni Traduzioni',
     'translation_info_description' => 'Le traduzioni sono organizzate per file e lingua',
     'translation_tip' => 'Suggerimento: Usa l\'italiano come riferimento per le traduzioni',
-    'delete_language_warning' => 'Sei sicuro di voler eliminare questa lingua?',
     'delete_language_irreversible' => 'Questa azione non può essere annullata e eliminerà tutte le traduzioni per questa lingua.',
-    'sync_confirm' => 'Sincronizzare tutte le lingue con le chiavi italiane?',
+    'undefined' => 'Mancante',
+    'missing' => 'Mancante',
 
 ];
