@@ -387,7 +387,7 @@
 
                                                             <button onclick="openVideoModal({{ $video->id }})" role="button"
                                                                 class="btn btn-sm btn-primary py-1 px-2 d-flex align-items-center">
-                                                                <i class="ph-duotone ph-play f-s-12 me-1"></i>{{ __('home.watch') }}
+                                                                <i class="ph-duotone ph-play f-s-12 me-1"></i>
                                                             </button>
 
                                                             <x-report-button :content="$video" type="video"
