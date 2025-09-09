@@ -359,9 +359,9 @@
                                                         ];
                                                         $randomImage = $fallbackImages[array_rand($fallbackImages)];
                                                     @endphp
-                                                    <img src="{{ asset($randomImage) }}" class="card-img-top"
+                                                    <a href="{{ route('videos.show', $video) }}"><img src="{{ asset($randomImage) }}" class="card-img-top"
                                                         alt="{{ $video->title }}"
-                                                        style="height: 200px; object-fit: cover;">
+                                                        style="height: 200px; object-fit: cover;"></a>
                                                 @endif
                                                 <div class="card-body d-flex flex-column">
                                                     <h5 class="card-title f-w-600">{{ $video->title }}</h5>
