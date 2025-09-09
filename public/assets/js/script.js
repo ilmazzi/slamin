@@ -804,7 +804,7 @@ function generateItemResult(category, item, query) {
         `;
     } else if (category === 'users') {
         html += `
-            <a href="/profile/${item.id}" class="text-decoration-none">
+            <a href="/user/${item.id}" class="text-decoration-none">
                 <div class="d-flex align-items-center">
                     <img src="${item.avatar || '/assets/images/default-avatar.png'}"
                          alt="${item.name}"
