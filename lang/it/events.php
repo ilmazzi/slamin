@@ -4,6 +4,7 @@ return [
     // Titoli principali
     'events' => 'Eventi',
     'events_poetry_slam' => 'Eventi Slam In',
+    'date_not_set' => 'Data non impostata',
     'events_list' => 'Elenco Eventi',
     'create_event' => 'Crea Evento',
     'edit_event' => 'Modifica Evento',

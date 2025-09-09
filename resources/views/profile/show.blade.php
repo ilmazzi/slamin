@@ -182,7 +182,7 @@
                             @elseif($user->bio)
                             <p>{{ Str::limit($user->bio, 50) }}</p>
                             @else
-                            <p>{{ __('profile.member_since') }} {{ $user->created_at->format('M Y') }}</p>
+                            <p>{{ __('profile.member_since') }} {{ $user->created_at ? $user->created_at->format('M Y') : 'N/A' }}</p>
                             @endif
 
                             <div class="details">
@@ -251,7 +251,7 @@
                         @endif
                         <div>
                             <span class="fw-medium"><i class="ti ti-calendar"></i> {{ __('profile.member_since') }}</span>
-                            <span class="float-end f-s-13 text-secondary">{{ $user->created_at->format('M Y') }}</span>
+                            <span class="float-end f-s-13 text-secondary">{{ $user->created_at ? $user->created_at->format('M Y') : 'N/A' }}</span>
                         </div>
                     </div>
 
@@ -716,7 +716,7 @@
                                         @elseif($user->bio)
                                         <p>{{ Str::limit($user->bio, 50) }}</p>
                                         @else
-                                        <p>{{ __('profile.member_since') }} {{ $user->created_at->format('M Y') }}</p>
+                                        <p>{{ __('profile.member_since') }} {{ $user->created_at ? $user->created_at->format('M Y') : 'N/A' }}</p>
                                         @endif
                                         <div class="details">
                                             <div>
@@ -778,7 +778,7 @@
                                     @endif
                                     <div>
                                         <span class="fw-medium"><i class="ti ti-calendar"></i> {{ __('profile.member_since') }}</span>
-                                        <span class="float-end f-s-13 text-secondary">{{ $user->created_at->format('M Y') }}</span>
+                                        <span class="float-end f-s-13 text-secondary">{{ $user->created_at ? $user->created_at->format('M Y') : 'N/A' }}</span>
                                     </div>
                                 </div>
 
@@ -852,7 +852,7 @@
                                             <h6 class="card-title fw-semibold">{{ Str::limit($poem->title, 30) }}</h6>
                                             <p class="card-text text-muted f-s-13">{{ Str::limit($poem->content, 100) }}</p>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <small class="text-muted">{{ $poem->created_at->format('d/m/Y') }}</small>
+                                                <small class="text-muted">{{ $poem->created_at ? $poem->created_at->format('d/m/Y') : 'N/A' }}</small>
                                                 <a href="{{ route('poems.show', $poem->slug ?: $poem->id) }}" class="btn btn-sm btn-outline-primary">
                                                     {{ __('profile.view') }}
                                                 </a>
@@ -907,7 +907,7 @@
                                         <div class="card-body">
                                             <h6 class="card-title fw-semibold">{{ Str::limit($event->title, 30) }}</h6>
                                             <p class="card-text text-muted f-s-13">
-                                                <i class="ti ti-calendar"></i> {{ $event->date->format('d/m/Y') }}<br>
+                                                <i class="ti ti-calendar"></i> {{ $event->date ? $event->date->format('d/m/Y') : __('events.date_not_set') }}<br>
                                                 <i class="ti ti-map-pin"></i> {{ Str::limit($event->venue_name, 25) }}
                                             </p>
                                             <div class="d-flex justify-content-between align-items-center">
