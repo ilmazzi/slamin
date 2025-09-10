@@ -627,87 +627,26 @@ class ProfileController extends Controller
      */
     private function getUserActivity($user, $limit = 10)
     {
-        $activities = collect();
+        // Usa il sistema Activity per ottenere tutte le attività
+        $activities = \App\Services\ActivityService::getRecentActivities($user, $limit);
 
-        // Eventi organizzati
-        $organizedEvents = $user->events()
-            ->latest()
-            ->take($limit)
-            ->get()
-            ->map(function ($event) {
-                return [
-                    'type' => 'event_organized',
-                    'title' => 'Hai organizzato l\'evento "' . $event->title . '"',
-                    'description' => $event->description,
-                    'date' => $event->created_at,
-                    'icon' => 'ph-calendar-plus',
-                    'color' => 'primary',
-                    'url' => route('events.show', $event->id)
-                ];
-            });
-
-        // Partecipazioni a eventi
-        $participations = $user->eventRequests()
-            ->with('event')
-            ->where('status', 'accepted')
-            ->latest()
-            ->take($limit)
-            ->get()
-            ->map(function ($request) {
-                return [
-                    'type' => 'event_participation',
-                    'title' => 'Hai partecipato all\'evento "' . $request->event->title . '"',
-                    'description' => $request->event->description,
-                    'date' => $request->created_at,
-                    'icon' => 'ph-users',
-                    'color' => 'success',
-                    'url' => route('events.show', $request->event->id)
-                ];
-            });
-
-        // Video caricati
-        $videoUploads = $user->videos()
-            ->latest()
-            ->take($limit)
-            ->get()
-            ->map(function ($video) {
-                return [
-                    'type' => 'video_upload',
-                    'title' => 'Hai caricato il video "' . $video->title . '"',
-                    'description' => $video->description,
-                    'date' => $video->created_at,
-                    'icon' => 'ph-video-camera',
-                    'color' => 'warning',
-                    'url' => route('profile.videos')
-                ];
-            });
-
-        // Articoli scritti
-        $articleWrites = $user->articles()
-            ->latest()
-            ->take($limit)
-            ->get()
-            ->map(function ($article) {
-                return [
-                    'type' => 'article_written',
-                    'title' => 'Hai scritto l\'articolo "' . $article->title . '"',
-                    'description' => $article->excerpt,
-                    'date' => $article->created_at,
-                    'icon' => 'ph-newspaper',
-                    'color' => 'info',
-                    'url' => route('articles.show', $article)
-                ];
-            });
-
-        // Combina e ordina per data
-        $activities = $organizedEvents
-            ->concat($participations)
-            ->concat($videoUploads)
-            ->concat($articleWrites)
-            ->sortByDesc('date')
-            ->take($limit);
-
-        return $activities;
+        return $activities->map(function ($activity) {
+            return [
+                'id' => $activity->id,
+                'type' => $activity->type,
+                'title' => $activity->formatted_description,
+                'description' => $activity->metadata['title'] ?? 'Contenuto',
+                'date' => $activity->created_at,
+                'icon' => $activity->icon,
+                'color' => $activity->color_class,
+                'url' => $activity->metadata['url'] ?? null,
+                'content_type' => $activity->content_type_badge,
+                'content_type_color' => $activity->content_type_color,
+                'thumbnail' => $activity->thumbnail_url,
+                'has_thumbnail' => $activity->has_thumbnail,
+                'action' => $activity->action,
+            ];
+        });
     }
 
     /**

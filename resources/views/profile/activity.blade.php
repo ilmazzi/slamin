@@ -37,9 +37,12 @@
                 <div class="d-flex gap-2">
                     <select class="form-select form-select-sm" id="activityFilter">
                         <option value="">{{ __('profile.all_activities') }}</option>
-                        <option value="event_organized">{{ __('profile.organized_events_filter') }}</option>
-                        <option value="event_participation">{{ __('profile.participations_filter') }}</option>
-                        <option value="video_upload">{{ __('profile.videos_uploaded_filter') }}</option>
+                        <option value="create">{{ __('profile.created_content') }}</option>
+                        <option value="view">{{ __('profile.viewed_content') }}</option>
+                        <option value="like">{{ __('profile.liked_content') }}</option>
+                        <option value="comment">{{ __('profile.commented_content') }}</option>
+                        <option value="upload">{{ __('profile.uploaded_content') }}</option>
+                        <option value="follow">{{ __('profile.followed_users') }}</option>
                     </select>
                     <button class="btn btn-outline-primary hover-effect" onclick="exportActivity()">
                         <i class="ph ph-download me-2"></i>{{ __('profile.export') }}
@@ -72,8 +75,8 @@
                                     <div class="card-body pa-20">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <h6 class="mb-0 f-w-600 f-s-16">{{ $activity['title'] }}</h6>
-                                            <span class="badge bg-{{ $activity['color'] }} f-s-11">
-                                                {{ ucfirst(str_replace('_', ' ', $activity['type'])) }}
+                                            <span class="badge bg-{{ $activity['content_type_color'] ?? $activity['color'] }} f-s-11">
+                                                {{ $activity['content_type'] ?? ucfirst($activity['type']) }}
                                             </span>
                                         </div>
 
