@@ -240,57 +240,63 @@ use App\Helpers\PlaceholderHelper;
                                                             $poemColor = App\Models\PlaceholderSetting::getSettings()->poem_placeholder_color;
                                                         ?>
                                                         <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: <?php echo e($poemColor); ?>;">
-                                                            <div class="text-center text-white">
-                                                                <div style="font-size: 80px; margin-bottom: 20px;">📖</div>
-                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->content_title ?? $carousel->title); ?></h3>
-                                                                <?php if($carousel->content_description ?? $carousel->description): ?>
-                                                                    <p class="mb-4"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
-                                                                <?php endif; ?>
-                                                                <?php if($carousel->content_url ?? $carousel->link_url): ?>
-                                                                    <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
-
-                                                                    </a>
-                                                                <?php endif; ?>
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <div style="font-size: 80px;">📖</div>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->content_title ?? $carousel->title ?? 'Poesia senza titolo'); ?></h5>
+                                                            <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                                <p class="mb-4 f-s-16 text-primary"><?php echo e(Str::limit($carousel->content_description ?? $carousel->description, 100)); ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                                <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    <?php echo e($carousel->link_text ?? 'Leggi poesia'); ?>
+
+                                                                </a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     <?php elseif($carousel->content_type === 'article'): ?>
                                                         <?php
                                                             $articleColor = App\Models\PlaceholderSetting::getSettings()->article_placeholder_color;
                                                         ?>
                                                         <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: <?php echo e($articleColor); ?>;">
-                                                            <div class="text-center text-white">
-                                                                <div style="font-size: 80px; margin-bottom: 20px;">📰</div>
-                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->content_title ?? $carousel->title); ?></h3>
-                                                                <?php if($carousel->content_description ?? $carousel->description): ?>
-                                                                    <p class="mb-4"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
-                                                                <?php endif; ?>
-                                                                <?php if($carousel->content_url ?? $carousel->link_url): ?>
-                                                                    <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
-
-                                                                    </a>
-                                                                <?php endif; ?>
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <div style="font-size: 80px;">📰</div>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->content_title ?? $carousel->title ?? 'Articolo senza titolo'); ?></h5>
+                                                            <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                                <p class="mb-4 f-s-16 text-primary"><?php echo e(Str::limit($carousel->content_description ?? $carousel->description, 100)); ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                                <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    <?php echo e($carousel->link_text ?? 'Leggi articolo'); ?>
+
+                                                                </a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     <?php else: ?>
                                                         <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
-                                                            <div class="text-center text-white">
-                                                                <i class="ph-duotone ph-image f-s-48 mb-3"></i>
-                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->title); ?></h3>
-                                                                <?php if($carousel->description): ?>
-                                                                    <p class="mb-4"><?php echo e($carousel->description); ?></p>
-                                                                <?php endif; ?>
-                                                                <?php if($carousel->link_url): ?>
-                                                                    <a href="<?php echo e($carousel->link_url); ?>" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
-
-                                                                    </a>
-                                                                <?php endif; ?>
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <i class="ph-duotone ph-image f-s-48"></i>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->title); ?></h5>
+                                                            <?php if($carousel->description): ?>
+                                                                <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->description); ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if($carousel->link_url): ?>
+                                                                <a href="<?php echo e($carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                                </a>
+                                                            <?php endif; ?>
                                                         </div>
                                                     <?php endif; ?>
                                                 <?php endif; ?>
@@ -839,8 +845,8 @@ use App\Helpers\PlaceholderHelper;
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>" class="text-decoration-none">
-                                                                    <?php echo e(Str::limit($poem->title, 40)); ?>
+                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e($poem->title ?: 'Poesia senza titolo'); ?>
 
                                                                 </a>
                                                             </h6>
@@ -851,9 +857,12 @@ use App\Helpers\PlaceholderHelper;
 
                                                                 </a>
                                                             </p>
-                                                            <?php if($poem->description): ?>
-                                                                <p class="text-muted f-s-11 mb-1"><?php echo e(Str::limit($poem->description, 60)); ?></p>
-                                                            <?php endif; ?>
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e(Str::limit(strip_tags($poem->content), 100)); ?>
+
+                                                                </a>
+                                                            </p>
                                                             <?php if($poem->category): ?>
                                                                 <span class="badge bg-light-info f-s-10 mb-2"><?php echo e($poem->category); ?></span>
                                                             <?php endif; ?>
@@ -888,12 +897,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             <?php if($poem->slug): ?>
                                                                 <a href="<?php echo e(route('poems.show', $poem->slug)); ?>"
-                                                                    class="btn btn-sm btn-gradient-info hover-effect">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             <?php else: ?>
-                                                                <span class="btn btn-sm btn-secondary" title="<?php echo e(__('common.poem_not_available')); ?>">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="<?php echo e(__('common.poem_not_available')); ?>">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             <?php endif; ?>
                                                         </div>
@@ -962,12 +973,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             <?php if($poem->slug): ?>
                                                                 <a href="<?php echo e(route('poems.show', $poem->slug)); ?>"
-                                                                    class="btn btn-sm btn-gradient-info hover-effect">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             <?php else: ?>
-                                                                <span class="btn btn-sm btn-secondary" title="<?php echo e(__('common.poem_not_available')); ?>">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="<?php echo e(__('common.poem_not_available')); ?>">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             <?php endif; ?>
                                                         </div>
@@ -979,30 +992,6 @@ use App\Helpers\PlaceholderHelper;
                                 </div>
                             </div>
 
-                            <!-- Footer with link to all poems -->
-                            <div class="text-center mt-3">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    <?php if(auth()->guard()->check()): ?>
-                                        <a href="<?php echo e(route('poems.create')); ?>" class="btn btn-info btn-sm">
-                                            <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            <?php echo e(__('home.create_poetry')); ?>
-
-                                        </a>
-                                    <?php else: ?>
-                                        <a href="<?php echo e(route('login')); ?>" class="btn btn-info btn-sm"
-                                            title="<?php echo e(__('auth.login_required')); ?>">
-                                            <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            <?php echo e(__('home.create_poetry')); ?>
-
-                                        </a>
-                                    <?php endif; ?>
-                                    <a href="<?php echo e(route('poems.index')); ?>" class="btn btn-outline-info btn-sm">
-                                        <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                        <?php echo e(__('home.view_all_poems')); ?>
-
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1034,7 +1023,7 @@ use App\Helpers\PlaceholderHelper;
                                 <div class="row">
                                     <?php $__currentLoopData = $recentArticles ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
-                                            <div class="card  hover-effect border-warning">
+                                            <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
@@ -1061,9 +1050,9 @@ use App\Helpers\PlaceholderHelper;
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
-                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none">
-                                                                    <?php echo e(Str::limit($article->title, 40)); ?>
+                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e($article->title ?: 'Articolo senza titolo'); ?>
 
                                                                 </a>
                                                             </h6>
@@ -1074,11 +1063,14 @@ use App\Helpers\PlaceholderHelper;
 
                                                                 </a>
                                                             </p>
-                                                            <?php if($article->excerpt): ?>
-                                                                <p class="text-muted f-s-11 mb-1"><?php echo e(Str::limit($article->excerpt, 60)); ?></p>
-                                                            <?php endif; ?>
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e(Str::limit($article->excerpt ?: strip_tags($article->content), 100)); ?>
+
+                                                                </a>
+                                                            </p>
                                                             <?php if($article->category): ?>
-                                                                <span class="badge bg-light-warning f-s-10 mb-2"><?php echo e($article->category); ?></span>
+                                                                <span class="badge bg-light-info f-s-10 mb-2"><?php echo e($article->category); ?></span>
                                                             <?php endif; ?>
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
@@ -1111,12 +1103,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             <?php if($article->slug): ?>
                                                                 <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
-                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             <?php else: ?>
-                                                                <span class="btn btn-sm btn-secondary" title="<?php echo e(__('common.article_not_available')); ?>">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="<?php echo e(__('common.article_not_available')); ?>">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             <?php endif; ?>
                                                         </div>
@@ -1133,7 +1127,7 @@ use App\Helpers\PlaceholderHelper;
                                 <div class="row">
                                     <?php $__currentLoopData = $popularArticles ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <div class="col-12 mb-3">
-                                            <div class="card  hover-effect border-warning">
+                                            <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
@@ -1160,23 +1154,52 @@ use App\Helpers\PlaceholderHelper;
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
-                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                <?php echo e(Str::limit($article->title, 40)); ?></h6>
+                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e($article->title ?: 'Articolo senza titolo'); ?>
+
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="<?php echo e(route('user.show', $article->user)); ?>"
                                                                     class="text-decoration-none hover-effect">
                                                                     <?php echo e($article->user->getDisplayName()); ?>
 
-                                                                </a></p>
-                                                            <div class="d-flex align-items-center">
-                                                                <small class="text-muted f-s-11 me-3">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i><?php echo e(number_format($article->views_count ?? 0)); ?>
+                                                                </a>
+                                                            </p>
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none hover-effect">
+                                                                    <?php echo e(Str::limit($article->excerpt ?: strip_tags($article->content), 100)); ?>
 
-                                                                </small>
+                                                                </a>
+                                                            </p>
+                                                            <?php if($article->category): ?>
+                                                                <span class="badge bg-light-info f-s-10 mb-2"><?php echo e($article->category); ?></span>
+                                                            <?php endif; ?>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.social-view-counter','data' => ['content' => $article,'type' => 'article','size' => 'sm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('social-view-counter'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['content' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($article),'type' => 'article','size' => 'sm']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $attributes = $__attributesOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__attributesOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal74a3c73fa2014a1304a7d68280593565)): ?>
+<?php $component = $__componentOriginal74a3c73fa2014a1304a7d68280593565; ?>
+<?php unset($__componentOriginal74a3c73fa2014a1304a7d68280593565); ?>
+<?php endif; ?>
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i><?php echo e(number_format($article->likes_count ?? 0)); ?>
+                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i><?php echo e($article->created_at->diffForHumans()); ?>
 
                                                                 </small>
                                                             </div>
@@ -1184,12 +1207,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             <?php if($article->slug): ?>
                                                                 <a href="<?php echo e(route('articles.show', $article->slug)); ?>"
-                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             <?php else: ?>
-                                                                <span class="btn btn-sm btn-secondary" title="<?php echo e(__('common.article_not_available')); ?>">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="<?php echo e(__('common.article_not_available')); ?>">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             <?php endif; ?>
                                                         </div>

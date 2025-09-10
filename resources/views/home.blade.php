@@ -239,54 +239,60 @@ use App\Helpers\PlaceholderHelper;
                                                             $poemColor = App\Models\PlaceholderSetting::getSettings()->poem_placeholder_color;
                                                         @endphp
                                                         <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: {{ $poemColor }};">
-                                                            <div class="text-center text-white">
-                                                                <div style="font-size: 80px; margin-bottom: 20px;">📖</div>
-                                                                <h3 class="f-w-600 mb-3">{{ $carousel->content_title ?? $carousel->title }}</h3>
-                                                                @if($carousel->content_description ?? $carousel->description)
-                                                                    <p class="mb-4">{{ $carousel->content_description ?? $carousel->description }}</p>
-                                                                @endif
-                                                                @if($carousel->content_url ?? $carousel->link_url)
-                                                                    <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
-                                                                    </a>
-                                                                @endif
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <div style="font-size: 80px;">📖</div>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title ?? 'Poesia senza titolo' }}</h5>
+                                                            @if ($carousel->content_description ?? $carousel->description)
+                                                                <p class="mb-4 f-s-16 text-primary">{{ Str::limit($carousel->content_description ?? $carousel->description, 100) }}</p>
+                                                            @endif
+                                                            @if ($carousel->content_url ?? $carousel->link_url)
+                                                                <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    {{ $carousel->link_text ?? 'Leggi poesia' }}
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     @elseif($carousel->content_type === 'article')
                                                         @php
                                                             $articleColor = App\Models\PlaceholderSetting::getSettings()->article_placeholder_color;
                                                         @endphp
                                                         <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: {{ $articleColor }};">
-                                                            <div class="text-center text-white">
-                                                                <div style="font-size: 80px; margin-bottom: 20px;">📰</div>
-                                                                <h3 class="f-w-600 mb-3">{{ $carousel->content_title ?? $carousel->title }}</h3>
-                                                                @if($carousel->content_description ?? $carousel->description)
-                                                                    <p class="mb-4">{{ $carousel->content_description ?? $carousel->description }}</p>
-                                                                @endif
-                                                                @if($carousel->content_url ?? $carousel->link_url)
-                                                                    <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
-                                                                    </a>
-                                                                @endif
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <div style="font-size: 80px;">📰</div>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title ?? 'Articolo senza titolo' }}</h5>
+                                                            @if ($carousel->content_description ?? $carousel->description)
+                                                                <p class="mb-4 f-s-16 text-primary">{{ Str::limit($carousel->content_description ?? $carousel->description, 100) }}</p>
+                                                            @endif
+                                                            @if ($carousel->content_url ?? $carousel->link_url)
+                                                                <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    {{ $carousel->link_text ?? 'Leggi articolo' }}
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     @else
                                                         <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
-                                                            <div class="text-center text-white">
-                                                                <i class="ph-duotone ph-image f-s-48 mb-3"></i>
-                                                                <h3 class="f-w-600 mb-3">{{ $carousel->title }}</h3>
-                                                                @if($carousel->description)
-                                                                    <p class="mb-4">{{ $carousel->description }}</p>
-                                                                @endif
-                                                                @if($carousel->link_url)
-                                                                    <a href="{{ $carousel->link_url }}" class="btn btn-light btn-lg">
-                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
-                                                                    </a>
-                                                                @endif
+                                                            <div class="text-center text-white" style="margin-top: -120px;">
+                                                                <i class="ph-duotone ph-image f-s-48"></i>
                                                             </div>
+                                                        </div>
+                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                            <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->title }}</h5>
+                                                            @if ($carousel->description)
+                                                                <p class="mb-4 f-s-16 text-primary">{{ $carousel->description }}</p>
+                                                            @endif
+                                                            @if ($carousel->link_url)
+                                                                <a href="{{ $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                    <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                    {{ $carousel->link_text ?? 'Visualizza' }}
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     @endif
                                                 @endif
@@ -712,8 +718,8 @@ use App\Helpers\PlaceholderHelper;
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
-                                                                    {{ Str::limit($poem->title, 40) }}
+                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ $poem->title ?: 'Poesia senza titolo' }}
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
@@ -722,9 +728,11 @@ use App\Helpers\PlaceholderHelper;
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
                                                             </p>
-                                                            @if($poem->description)
-                                                                <p class="text-muted f-s-11 mb-1">{{ Str::limit($poem->description, 60) }}</p>
-                                                            @endif
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ Str::limit(strip_tags($poem->content), 100) }}
+                                                                </a>
+                                                            </p>
                                                             @if($poem->category)
                                                                 <span class="badge bg-light-info f-s-10 mb-2">{{ $poem->category }}</span>
                                                             @endif
@@ -739,12 +747,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             @if($poem->slug)
                                                                 <a href="{{ route('poems.show', $poem->slug) }}"
-                                                                    class="btn btn-sm btn-gradient-info hover-effect">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.poem_not_available') }}">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="{{ __('common.poem_not_available') }}">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             @endif
                                                         </div>
@@ -809,12 +819,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             @if($poem->slug)
                                                                 <a href="{{ route('poems.show', $poem->slug) }}"
-                                                                    class="btn btn-sm btn-gradient-info hover-effect">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.poem_not_available') }}">
-                                                                    <i class="ph-duotone ph-book-open f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="{{ __('common.poem_not_available') }}">
+                                                                    <i class="ph-duotone ph-book-open f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             @endif
                                                         </div>
@@ -826,27 +838,6 @@ use App\Helpers\PlaceholderHelper;
                                 </div>
                             </div>
 
-                            <!-- Footer with link to all poems -->
-                            <div class="text-center mt-3">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    @auth
-                                        <a href="{{ route('poems.create') }}" class="btn btn-info btn-sm">
-                                            <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            {{ __('home.create_poetry') }}
-                                        </a>
-                                    @else
-                                        <a href="{{ route('login') }}" class="btn btn-info btn-sm"
-                                            title="{{ __('auth.login_required') }}">
-                                            <i class="ph-duotone ph-plus f-s-12 me-1"></i>
-                                            {{ __('home.create_poetry') }}
-                                        </a>
-                                    @endauth
-                                    <a href="{{ route('poems.index') }}" class="btn btn-outline-info btn-sm">
-                                        <i class="ph-duotone ph-arrow-right f-s-12 me-1"></i>
-                                        {{ __('home.view_all_poems') }}
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -877,7 +868,7 @@ use App\Helpers\PlaceholderHelper;
                                 <div class="row">
                                     @foreach ($recentArticles ?? [] as $article)
                                         <div class="col-12 mb-3">
-                                            <div class="card  hover-effect border-warning">
+                                            <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
@@ -903,9 +894,9 @@ use App\Helpers\PlaceholderHelper;
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
-                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none">
-                                                                    {{ Str::limit($article->title, 40) }}
+                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
+                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ $article->title ?: 'Articolo senza titolo' }}
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
@@ -914,11 +905,13 @@ use App\Helpers\PlaceholderHelper;
                                                                     {{ $article->user->getDisplayName() }}
                                                                 </a>
                                                             </p>
-                                                            @if($article->excerpt)
-                                                                <p class="text-muted f-s-11 mb-1">{{ Str::limit($article->excerpt, 60) }}</p>
-                                                            @endif
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ Str::limit($article->excerpt ?: strip_tags($article->content), 100) }}
+                                                                </a>
+                                                            </p>
                                                             @if($article->category)
-                                                                <span class="badge bg-light-warning f-s-10 mb-2">{{ $article->category }}</span>
+                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $article->category }}</span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <x-social-view-counter :content="$article" type="article" size="sm" />
@@ -931,12 +924,14 @@ use App\Helpers\PlaceholderHelper;
                                                         <div class="flex-shrink-0">
                                                             @if($article->slug)
                                                                 <a href="{{ route('articles.show', $article->slug) }}"
-                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.article_not_available') }}">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="{{ __('common.article_not_available') }}">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             @endif
                                                         </div>
@@ -953,7 +948,7 @@ use App\Helpers\PlaceholderHelper;
                                 <div class="row">
                                     @foreach ($popularArticles ?? [] as $article)
                                         <div class="col-12 mb-3">
-                                            <div class="card  hover-effect border-warning">
+                                            <div class="card  hover-effect border-info">
                                                 <div class="card-body pa-15">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0 me-3">
@@ -979,33 +974,44 @@ use App\Helpers\PlaceholderHelper;
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
-                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                {{ Str::limit($article->title, 40) }}</h6>
+                                                            <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
+                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ $article->title ?: 'Articolo senza titolo' }}
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="{{ route('user.show', $article->user) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $article->user->getDisplayName() }}
-                                                                </a></p>
-                                                            <div class="d-flex align-items-center">
-                                                                <small class="text-muted f-s-11 me-3">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($article->views_count ?? 0) }}
-                                                                </small>
+                                                                </a>
+                                                            </p>
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ Str::limit($article->excerpt ?: strip_tags($article->content), 100) }}
+                                                                </a>
+                                                            </p>
+                                                            @if($article->category)
+                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $article->category }}</span>
+                                                            @endif
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <x-social-view-counter :content="$article" type="article" size="sm" />
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($article->likes_count ?? 0) }}
+                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $article->created_at->diffForHumans() }}
                                                                 </small>
                                                             </div>
                                                         </div>
                                                         <div class="flex-shrink-0">
                                                             @if($article->slug)
                                                                 <a href="{{ route('articles.show', $article->slug) }}"
-                                                                    class="btn btn-sm btn-gradient-warning hover-effect">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                    class="btn btn-primary btn-sm hover-effect">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    Leggi
                                                                 </a>
                                                             @else
-                                                                <span class="btn btn-sm btn-secondary" title="{{ __('common.article_not_available') }}">
-                                                                    <i class="ph-duotone ph-arrow-right f-s-12"></i>
+                                                                <span class="btn btn-secondary btn-sm" title="{{ __('common.article_not_available') }}">
+                                                                    <i class="ph-duotone ph-newspaper f-s-12 me-1"></i>
+                                                                    N/A
                                                                 </span>
                                                             @endif
                                                         </div>
