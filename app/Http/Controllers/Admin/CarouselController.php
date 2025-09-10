@@ -514,16 +514,20 @@ class CarouselController extends Controller
                     ->limit(20)
                     ->get()
                     ->map(function($poem) {
+                        // Debug: log dei dati dell'immagine
+                        Log::info('Poem image debug', [
+                            'id' => $poem->id,
+                            'title' => $poem->title,
+                            'thumbnail_path' => $poem->thumbnail_path,
+                            'thumbnail' => $poem->thumbnail,
+                            'thumbnail_url' => $poem->thumbnail_url
+                        ]);
+                        
                         // Gestione intelligente dell'immagine
                         $imageUrl = $poem->thumbnail_url;
                         
-                        // Se non c'è thumbnail_path, prova a usare il campo thumbnail
-                        if (!$poem->thumbnail_path && $poem->thumbnail) {
-                            $imageUrl = asset('storage/' . $poem->thumbnail);
-                        }
-                        
-                        // Se ancora non c'è nulla, usa un placeholder più appropriato
-                        if (!$poem->thumbnail_path && !$poem->thumbnail) {
+                        // Se thumbnail_url è null, usa un placeholder
+                        if (!$imageUrl) {
                             $imageUrl = asset('assets/images/placeholder/poem-placeholder.jpg');
                         }
                         

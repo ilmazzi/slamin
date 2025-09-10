@@ -160,7 +160,12 @@ class Poem extends Model
         if ($this->thumbnail_path) {
             return asset('storage/' . $this->thumbnail_path);
         }
-        return asset('assets/images/background/default-poem.jpg');
+        
+        if ($this->thumbnail) {
+            return asset('storage/' . $this->thumbnail);
+        }
+        
+        return null; // Restituisce null se non c'è immagine
     }
 
     public function getExcerptAttribute()
