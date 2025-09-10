@@ -68,7 +68,7 @@ unset($__defined_vars, $__key, $__value); ?>
     <?php endif; ?>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('54239d91-b5a3-4bea-a297-5e9ba0286dce')): $__env->markAsRenderedOnce('54239d91-b5a3-4bea-a297-5e9ba0286dce'); ?>
+<?php if (! $__env->hasRenderedOnce('7786424d-e91a-4cb2-8456-3acb969e4d99')): $__env->markAsRenderedOnce('7786424d-e91a-4cb2-8456-3acb969e4d99'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 // Variabile globale per tracciare se il modal è già aperto

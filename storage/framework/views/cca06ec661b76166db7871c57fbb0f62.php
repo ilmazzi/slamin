@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('groups.title')); ?>
 
-@section('title', __('groups.title'))
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Header con titolo e pulsante crea -->
     <div class="row">
@@ -11,50 +9,54 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
                         <i class="ph-duotone ph-users me-2 text-primary"></i>
-                        {{ __('groups.title') }}
+                        <?php echo e(__('groups.title')); ?>
+
                     </h4>
-                    @can('groups.create')
-                    <a href="{{ route('groups.create') }}" class="btn btn-primary">
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('groups.create')): ?>
+                    <a href="<?php echo e(route('groups.create')); ?>" class="btn btn-primary">
                         <i class="ph-duotone ph-plus me-2"></i>
-                        {{ __('groups.create_group') }}
+                        <?php echo e(__('groups.create_group')); ?>
+
                     </a>
-                    @endcan
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Messaggi Flash -->
-    @if(session('success'))
+    <?php if(session('success')): ?>
     <div class="row mb-3">
         <div class="col-12">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="ph-duotone ph-check-circle me-2"></i>
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
     <div class="row mb-3">
         <div class="col-12">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="ph-duotone ph-x-circle me-2"></i>
-                {{ session('error') }}
+                <?php echo e(session('error')); ?>
+
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Filtri e ricerca -->
     <div class="row mb-3">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form method="GET" action="{{ route('groups.index') }}" class="row g-3">
+                    <form method="GET" action="<?php echo e(route('groups.index')); ?>" class="row g-3">
                         <!-- Ricerca -->
                         <div class="col-md-4">
                             <div class="input-group">
@@ -64,46 +66,53 @@
                                 <input type="text"
                                        name="search"
                                        class="form-control"
-                                       placeholder="{{ __('groups.search_placeholder') }}"
-                                       value="{{ request('search') }}">
+                                       placeholder="<?php echo e(__('groups.search_placeholder')); ?>"
+                                       value="<?php echo e(request('search')); ?>">
                             </div>
                         </div>
 
                         <!-- Filtro -->
                         <div class="col-md-3">
                             <select name="filter" class="form-select">
-                                <option value="">{{ __('groups.filter_all') }}</option>
+                                <option value=""><?php echo e(__('groups.filter_all')); ?></option>
                                 <!-- Filtri per gruppi -->
-                                <optgroup label="{{ __('groups.groups') }}">
-                                    <option value="my_groups" {{ request('filter') == 'my_groups' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_my_groups') }}
+                                <optgroup label="<?php echo e(__('groups.groups')); ?>">
+                                    <option value="my_groups" <?php echo e(request('filter') == 'my_groups' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_my_groups')); ?>
+
                                     </option>
-                                    <option value="public" {{ request('filter') == 'public' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_public') }}
+                                    <option value="public" <?php echo e(request('filter') == 'public' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_public')); ?>
+
                                     </option>
-                                    <option value="private" {{ request('filter') == 'private' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_private') }}
+                                    <option value="private" <?php echo e(request('filter') == 'private' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_private')); ?>
+
                                     </option>
                                 </optgroup>
                                 <!-- Filtri per utenti -->
-                                <optgroup label="{{ __('groups.users') }}">
-                                    <option value="poets" {{ request('filter') == 'poets' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_poets') }}
+                                <optgroup label="<?php echo e(__('groups.users')); ?>">
+                                    <option value="poets" <?php echo e(request('filter') == 'poets' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_poets')); ?>
+
                                     </option>
-                                    <option value="organizers" {{ request('filter') == 'organizers' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_organizers') }}
+                                    <option value="organizers" <?php echo e(request('filter') == 'organizers' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_organizers')); ?>
+
                                     </option>
-                                    <option value="active" {{ request('filter') == 'active' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_active_users') }}
-                                    </option>
-                                </optgroup>
-                                @if(auth()->user()->hasRole('admin'))
-                                <optgroup label="{{ __('groups.admin') }}">
-                                    <option value="admin" {{ request('filter') == 'admin' ? 'selected' : '' }}>
-                                        {{ __('groups.filter_admin') }}
+                                    <option value="active" <?php echo e(request('filter') == 'active' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_active_users')); ?>
+
                                     </option>
                                 </optgroup>
-                                @endif
+                                <?php if(auth()->user()->hasRole('admin')): ?>
+                                <optgroup label="<?php echo e(__('groups.admin')); ?>">
+                                    <option value="admin" <?php echo e(request('filter') == 'admin' ? 'selected' : ''); ?>>
+                                        <?php echo e(__('groups.filter_admin')); ?>
+
+                                    </option>
+                                </optgroup>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -111,11 +120,13 @@
                         <div class="col-md-5">
                             <button type="submit" class="btn btn-primary me-2">
                                 <i class="ph-duotone ph-funnel me-1"></i>
-                                {{ __('common.filter') }}
+                                <?php echo e(__('common.filter')); ?>
+
                             </button>
-                            <a href="{{ route('groups.index') }}" class="btn btn-light">
+                            <a href="<?php echo e(route('groups.index')); ?>" class="btn btn-light">
                                 <i class="ph-duotone ph-arrow-clockwise me-1"></i>
-                                {{ __('common.reset') }}
+                                <?php echo e(__('common.reset')); ?>
+
                             </a>
                         </div>
                     </form>
@@ -132,88 +143,93 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0 f-w-600">
-                        <i class="ph-duotone ph-user me-2 text-info"></i>{{ __('groups.users') }}
+                        <i class="ph-duotone ph-user me-2 text-info"></i><?php echo e(__('groups.users')); ?>
+
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @forelse($users as $user)
+                        <?php $__empty_1 = true; $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <div class="col-12 col-md-6 col-lg-4 mb-3">
                             <div class="card hover-effect equal-card">
                                 <div class="card-body text-center pa-20">
                                     <!-- Avatar -->
                                     <div class="mb-3">
-                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                             alt="{{ $user->getDisplayName() }}"
+                                        <img src="<?php echo e(\App\Helpers\AvatarHelper::getUserAvatarUrl($user)); ?>"
+                                             alt="<?php echo e($user->getDisplayName()); ?>"
                                              class="rounded-circle"
                                              style="width: 80px; height: 80px; object-fit: cover;">
                                     </div>
 
                                     <!-- Nome e ruolo -->
-                                    <h6 class="f-w-600 mb-1">{{ $user->getDisplayName() }}</h6>
+                                    <h6 class="f-w-600 mb-1"><?php echo e($user->getDisplayName()); ?></h6>
                                     <div class="mb-3">
-                                        @foreach($user->roles as $role)
-                                            <span class="badge bg-{{ $role->name == 'poet' ? 'success' : ($role->name == 'organizer' ? 'warning' : 'info') }} me-1">
-                                                {{ ucfirst($role->name) }}
+                                        <?php $__currentLoopData = $user->roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <span class="badge bg-<?php echo e($role->name == 'poet' ? 'success' : ($role->name == 'organizer' ? 'warning' : 'info')); ?> me-1">
+                                                <?php echo e(ucfirst($role->name)); ?>
+
                                             </span>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
 
                                     <!-- Bio -->
-                                    @if($user->bio)
+                                    <?php if($user->bio): ?>
                                     <p class="text-muted f-s-12 mb-3">
-                                        {{ Str::limit($user->bio, 80) }}
+                                        <?php echo e(Str::limit($user->bio, 80)); ?>
+
                                     </p>
-                                    @endif
+                                    <?php endif; ?>
 
                                     <!-- Statistiche -->
                                     <div class="row text-center mb-3">
                                         <div class="col-4">
-                                            <div class="text-primary f-w-600">{{ $user->poems()->count() }}</div>
-                                            <small class="text-muted">{{ __('poems.title') }}</small>
+                                            <div class="text-primary f-w-600"><?php echo e($user->poems()->count()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('poems.title')); ?></small>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-success f-w-600">{{ $user->videos()->count() }}</div>
-                                            <small class="text-muted">{{ __('videos.title') }}</small>
+                                            <div class="text-success f-w-600"><?php echo e($user->videos()->count()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('videos.title')); ?></small>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-info f-w-600">{{ $user->groups()->count() }}</div>
-                                            <small class="text-muted">{{ __('groups.title') }}</small>
+                                            <div class="text-info f-w-600"><?php echo e($user->groups()->count()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('groups.title')); ?></small>
                                         </div>
                                     </div>
 
                                     <!-- Azioni -->
-                                    <a href="{{ route('user.show', $user) }}" class="btn btn-primary btn-sm w-100">
+                                    <a href="<?php echo e(route('user.show', $user)); ?>" class="btn btn-primary btn-sm w-100">
                                         <i class="ph-duotone ph-eye me-1"></i>
-                                        {{ __('common.view') }}
+                                        <?php echo e(__('common.view')); ?>
+
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="col-12">
                             <div class="text-center py-4">
                                 <i class="ph-duotone ph-user text-muted f-s-48 mb-3"></i>
-                                <h6 class="text-muted">{{ __('groups.no_users') }}</h6>
+                                <h6 class="text-muted"><?php echo e(__('groups.no_users')); ?></h6>
                             </div>
                         </div>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
 
                     <!-- Paginazione utenti -->
-                    @if($users->hasPages())
+                    <?php if($users->hasPages()): ?>
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="app-pagination-link">
-                                        {{ $users->appends(request()->query())->links('pagination.bootstrap-4') }}
+                                        <?php echo e($users->appends(request()->query())->links('pagination.bootstrap-4')); ?>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -227,102 +243,109 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0 f-w-600">
-                        <i class="ph-duotone ph-users me-2 text-primary"></i>{{ __('groups.group_title') }}
+                        <i class="ph-duotone ph-users me-2 text-primary"></i><?php echo e(__('groups.title')); ?>
+
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @forelse($groups as $group)
+                        <?php $__empty_1 = true; $__currentLoopData = $groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <div class="col-12 col-md-6 col-lg-4 mb-3">
                             <div class="card hover-effect equal-card">
                                 <div class="card-body">
                                     <!-- Header del gruppo -->
                                     <div class="d-flex align-items-start mb-3">
                                         <div class="flex-shrink-0">
-                                            @if($group->image)
-                                                <img src="{{ asset('storage/' . $group->image) }}"
-                                                     alt="{{ $group->name }}"
+                                            <?php if($group->image): ?>
+                                                <img src="<?php echo e(asset('storage/' . $group->image)); ?>"
+                                                     alt="<?php echo e($group->name); ?>"
                                                      class="rounded-circle"
                                                      style="width: 60px; height: 60px; object-fit: cover;">
-                                            @else
+                                            <?php else: ?>
                                                 <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
                                                      style="width: 60px; height: 60px;">
                                                     <i class="ph-duotone ph-users text-primary f-s-24"></i>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h5 class="card-title mb-1">{{ $group->name }}</h5>
+                                            <h5 class="card-title mb-1"><?php echo e($group->name); ?></h5>
                                             <div class="d-flex align-items-center gap-2">
-                                                <span class="badge bg-{{ $group->visibility == 'public' ? 'success' : 'warning' }}">
-                                                    {{ __('groups.visibility_' . $group->visibility) }}
+                                                <span class="badge bg-<?php echo e($group->visibility == 'public' ? 'success' : 'warning'); ?>">
+                                                    <?php echo e(__('groups.visibility_' . $group->visibility)); ?>
+
                                                 </span>
-                                                @if($group->hasMember(auth()->user()))
-                                                    @php $role = $group->getUserRole(auth()->user()); @endphp
+                                                <?php if($group->hasMember(auth()->user())): ?>
+                                                    <?php $role = $group->getUserRole(auth()->user()); ?>
                                                     <span class="badge bg-info">
-                                                        {{ __('groups.role_' . $role) }}
+                                                        <?php echo e(__('groups.role_' . $role)); ?>
+
                                                     </span>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Descrizione -->
-                                    @if($group->description)
+                                    <?php if($group->description): ?>
                                     <p class="card-text text-muted mb-3">
-                                        {{ Str::limit($group->description, 100) }}
+                                        <?php echo e(Str::limit($group->description, 100)); ?>
+
                                     </p>
-                                    @endif
+                                    <?php endif; ?>
 
                                     <!-- Statistiche -->
                                     <div class="row text-center mb-3">
                                         <div class="col-4">
-                                            <div class="text-primary fw-bold">{{ $group->getMembersCount() }}</div>
-                                            <small class="text-muted">{{ __('groups.members_count_label') }}</small>
+                                            <div class="text-primary fw-bold"><?php echo e($group->getMembersCount()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('groups.members_count_label')); ?></small>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-success fw-bold">{{ $group->getAdmins()->count() }}</div>
-                                            <small class="text-muted">{{ __('groups.admins_count') }}</small>
+                                            <div class="text-success fw-bold"><?php echo e($group->getAdmins()->count()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('groups.admins_count')); ?></small>
                                         </div>
                                         <div class="col-4">
-                                            <div class="text-info fw-bold">{{ $group->getModerators()->count() }}</div>
-                                            <small class="text-muted">{{ __('groups.moderators_count') }}</small>
+                                            <div class="text-info fw-bold"><?php echo e($group->getModerators()->count()); ?></div>
+                                            <small class="text-muted"><?php echo e(__('groups.moderators_count')); ?></small>
                                         </div>
                                     </div>
 
                                     <!-- Azioni -->
                                     <div class="d-flex gap-2">
-                                        <a href="{{ route('groups.show', $group) }}" class="btn btn-primary btn-sm flex-fill">
+                                        <a href="<?php echo e(route('groups.show', $group)); ?>" class="btn btn-primary btn-sm flex-fill">
                                             <i class="ph-duotone ph-eye me-1"></i>
-                                            {{ __('common.view') }}
+                                            <?php echo e(__('common.view')); ?>
+
                                         </a>
 
-                                        @if($group->hasMember(auth()->user()))
-                                            @if($group->hasAdmin(auth()->user()) || auth()->user()->hasRole('admin'))
-                                            <a href="{{ route('groups.edit', $group) }}" class="btn btn-light-primary btn-sm">
+                                        <?php if($group->hasMember(auth()->user())): ?>
+                                            <?php if($group->hasAdmin(auth()->user()) || auth()->user()->hasRole('admin')): ?>
+                                            <a href="<?php echo e(route('groups.edit', $group)); ?>" class="btn btn-light-primary btn-sm">
                                                 <i class="ph-duotone ph-pencil"></i>
                                             </a>
-                                            @endif
-                                        @else
-                                            @if($group->visibility == 'public')
-                                                <form action="{{ route('groups.join', $group) }}" method="POST" class="d-inline">
-                                                    @csrf
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <?php if($group->visibility == 'public'): ?>
+                                                <form action="<?php echo e(route('groups.join', $group)); ?>" method="POST" class="d-inline">
+                                                    <?php echo csrf_field(); ?>
                                                     <input type="hidden" name="message" value="">
                                                     <button type="submit" class="btn btn-success btn-sm">
                                                         <i class="ph-duotone ph-plus me-1"></i>
-                                                        {{ __('groups.join') }}
+                                                        <?php echo e(__('groups.join')); ?>
+
                                                     </button>
                                                 </form>
-                                            @else
-                                                <form action="{{ route('groups.requests.store', $group) }}" method="POST" class="d-inline">
-                                                    @csrf
+                                            <?php else: ?>
+                                                <form action="<?php echo e(route('groups.requests.store', $group)); ?>" method="POST" class="d-inline">
+                                                    <?php echo csrf_field(); ?>
                                                     <button type="submit" class="btn btn-info btn-sm">
                                                         <i class="ph-duotone ph-hand-waving me-1"></i>
-                                                        {{ __('groups.send_request') }}
+                                                        <?php echo e(__('groups.send_request')); ?>
+
                                                     </button>
                                                 </form>
-                                            @endif
-                                        @endif
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
@@ -331,52 +354,58 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">
                                             <i class="ph-duotone ph-user me-1"></i>
-                                            <a href="{{ route('user.show', $group->creator) }}" class="text-decoration-none hover-effect">
-                                                {{ $group->creator->getDisplayName() }}
+                                            <a href="<?php echo e(route('user.show', $group->creator)); ?>" class="text-decoration-none hover-effect">
+                                                <?php echo e($group->creator->getDisplayName()); ?>
+
                                             </a>
                                         </small>
                                         <small class="text-muted">
                                             <i class="ph-duotone ph-calendar me-1"></i>
-                                            {{ $group->created_at->format('d/m/Y') }}
+                                            <?php echo e($group->created_at->format('d/m/Y')); ?>
+
                                         </small>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="col-12">
                             <div class="text-center py-4">
                                 <i class="ph-duotone ph-users text-muted f-s-48 mb-3"></i>
-                                <h6 class="text-muted">{{ __('groups.no_groups') }}</h6>
-                                @can('groups.create')
-                                <p class="text-muted mb-3">{{ __('groups.tips.create_group') }}</p>
-                                <a href="{{ route('groups.create') }}" class="btn btn-primary">
+                                <h6 class="text-muted"><?php echo e(__('groups.no_groups')); ?></h6>
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('groups.create')): ?>
+                                <p class="text-muted mb-3"><?php echo e(__('groups.tips.create_group')); ?></p>
+                                <a href="<?php echo e(route('groups.create')); ?>" class="btn btn-primary">
                                     <i class="ph-duotone ph-plus me-2"></i>
-                                    {{ __('groups.create_group') }}
+                                    <?php echo e(__('groups.create_group')); ?>
+
                                 </a>
-                                @endcan
+                                <?php endif; ?>
                             </div>
                         </div>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
 
                     <!-- Paginazione gruppi -->
-                    @if($groups->hasPages())
+                    <?php if($groups->hasPages()): ?>
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="app-pagination-link">
-                                        {{ $groups->appends(request()->query())->links('pagination.bootstrap-4') }}
+                                        <?php echo e($groups->appends(request()->query())->links('pagination.bootstrap-4')); ?>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/groups/index.blade.php ENDPATH**/ ?>

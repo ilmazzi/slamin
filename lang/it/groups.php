@@ -231,4 +231,7 @@ return [
     'invitation_expired' => 'Invito scaduto',
     'no_invitations_received' => 'Nessun invito ricevuto',
     'no_invitations_received_description' => 'Non hai ricevuto ancora inviti ai gruppi.',
+
+    // Titolo gruppi
+    'group_title' => 'Gruppi',
 ];
