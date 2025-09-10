@@ -1,3 +1,7 @@
+<?php
+use App\Helpers\PlaceholderHelper;
+?>
+
 <?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Mobile-First Header -->
@@ -53,9 +57,14 @@
                                     <?php $featured1 = $featuredArticles->get(0); ?>
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            <img src="<?php echo e($featured1->featured_image_url); ?>"
-                                                 class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                 alt="<?php echo e($featured1->title); ?>">
+                                            <?php if($featured1->featured_image_url): ?>
+                                                <img src="<?php echo e($featured1->featured_image_url); ?>"
+                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                     alt="<?php echo e($featured1->title); ?>">
+                                            <?php else: ?>
+                                                <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $featured1->slug)); ?>
+
+                                            <?php endif; ?>
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i><?php echo e(__('articles.featured')); ?>
@@ -147,9 +156,14 @@
                                         <?php $recent1 = $recentArticles->get(0); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent1->featured_image_url); ?>"
+                                                <?php if($recent1->featured_image_url): ?>
+                        <img src="<?php echo e($recent1->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent1->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent1->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent1->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent1->category->name); ?></span>
@@ -242,9 +256,14 @@
                                         <?php $recent2 = $recentArticles->get(1); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent2->featured_image_url); ?>"
+                                                <?php if($recent2->featured_image_url): ?>
+                        <img src="<?php echo e($recent2->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent2->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent2->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent2->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent2->category->name); ?></span>
@@ -344,9 +363,14 @@
                                     <?php $featured2 = $featuredArticles->get(1); ?>
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            <img src="<?php echo e($featured2->featured_image_url); ?>"
+                                            <?php if($featured2->featured_image_url): ?>
+                        <img src="<?php echo e($featured2->featured_image_url); ?>"
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
                                                  alt="<?php echo e($featured2->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured2->slug)); ?>
+
+                    <?php endif; ?>
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i><?php echo e(__('articles.featured')); ?>
@@ -438,9 +462,14 @@
                                         <?php $recent3 = $recentArticles->get(2); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent3->featured_image_url); ?>"
+                                                <?php if($recent3->featured_image_url): ?>
+                        <img src="<?php echo e($recent3->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent3->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent3->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent3->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent3->category->name); ?></span>
@@ -533,9 +562,14 @@
                                         <?php $recent4 = $recentArticles->get(3); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent4->featured_image_url); ?>"
+                                                <?php if($recent4->featured_image_url): ?>
+                        <img src="<?php echo e($recent4->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent4->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent4->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent4->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent4->category->name); ?></span>
@@ -635,9 +669,14 @@
                                     <?php $featured3 = $featuredArticles->get(2); ?>
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            <img src="<?php echo e($featured3->featured_image_url); ?>"
+                                            <?php if($featured3->featured_image_url): ?>
+                        <img src="<?php echo e($featured3->featured_image_url); ?>"
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
                                                  alt="<?php echo e($featured3->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured3->slug)); ?>
+
+                    <?php endif; ?>
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i><?php echo e(__('articles.featured')); ?>
@@ -729,9 +768,14 @@
                                         <?php $recent5 = $recentArticles->get(4); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent5->featured_image_url); ?>"
+                                                <?php if($recent5->featured_image_url): ?>
+                        <img src="<?php echo e($recent5->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent5->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent5->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent5->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent5->category->name); ?></span>
@@ -824,9 +868,14 @@
                                         <?php $recent6 = $recentArticles->get(5); ?>
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                <img src="<?php echo e($recent6->featured_image_url); ?>"
+                                                <?php if($recent6->featured_image_url): ?>
+                        <img src="<?php echo e($recent6->featured_image_url); ?>"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="<?php echo e($recent6->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent6->slug)); ?>
+
+                    <?php endif; ?>
                                                 <?php if($recent6->category): ?>
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary"><?php echo e($recent6->category->name); ?></span>
@@ -1030,9 +1079,14 @@
                     <?php $__currentLoopData = $recentArticles->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sidebarArticle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="d-flex align-items-start mb-3">
                             <div class="flex-shrink-0 me-3">
-                                <img src="<?php echo e($sidebarArticle->featured_image_url); ?>"
+                                <?php if($sidebarArticle->featured_image_url): ?>
+                        <img src="<?php echo e($sidebarArticle->featured_image_url); ?>"
                                      class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
                                      alt="<?php echo e($sidebarArticle->title); ?>">
+                    <?php else: ?>
+                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(50, 50, 'rounded', route('articles.show', $sidebarArticle->slug)); ?>
+
+                    <?php endif; ?>
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 f-s-14 f-w-600">

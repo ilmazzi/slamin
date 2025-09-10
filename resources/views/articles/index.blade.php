@@ -57,15 +57,11 @@ use App\Helpers\PlaceholderHelper;
                                     <div class="card hover-effect">
                                         <div class="position-relative">
                                             @if($featured1->featured_image_url)
-                                                @if($featured1->featured_image_url)
-                        <img src="{{ $featured1->featured_image_url }}"
+                                                <img src="{{ $featured1->featured_image_url }}"
                                                      class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $featured1->
-                    @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                                                     alt="{{ $featured1->title }}">
                                             @else
-                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $article->slug)) !!}
+                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $featured1->slug)) !!}
                                             @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -102,10 +98,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent1->featured_image_url)
                         <img src="{{ $recent1->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent1->
+                                                     alt="{{ $recent1->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent1->slug)) !!}
+                    @endif
                                                 @if($recent1->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent1->category->name }}</span>
@@ -143,10 +139,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent2->featured_image_url)
                         <img src="{{ $recent2->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent2->
+                                                     alt="{{ $recent2->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent2->slug)) !!}
+                    @endif
                                                 @if($recent2->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent2->category->name }}</span>
@@ -191,10 +187,10 @@ use App\Helpers\PlaceholderHelper;
                                             @if($featured2->featured_image_url)
                         <img src="{{ $featured2->featured_image_url }}"
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                 alt="{{ $featured2->
+                                                 alt="{{ $featured2->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured2->slug)) !!}
+                    @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -230,10 +226,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent3->featured_image_url)
                         <img src="{{ $recent3->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent3->
+                                                     alt="{{ $recent3->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent3->slug)) !!}
+                    @endif
                                                 @if($recent3->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent3->category->name }}</span>
@@ -271,10 +267,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent4->featured_image_url)
                         <img src="{{ $recent4->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent4->
+                                                     alt="{{ $recent4->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent4->slug)) !!}
+                    @endif
                                                 @if($recent4->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent4->category->name }}</span>
@@ -319,10 +315,10 @@ use App\Helpers\PlaceholderHelper;
                                             @if($featured3->featured_image_url)
                         <img src="{{ $featured3->featured_image_url }}"
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                 alt="{{ $featured3->
+                                                 alt="{{ $featured3->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured3->slug)) !!}
+                    @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -358,10 +354,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent5->featured_image_url)
                         <img src="{{ $recent5->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent5->
+                                                     alt="{{ $recent5->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent5->slug)) !!}
+                    @endif
                                                 @if($recent5->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent5->category->name }}</span>
@@ -399,10 +395,10 @@ use App\Helpers\PlaceholderHelper;
                                                 @if($recent6->featured_image_url)
                         <img src="{{ $recent6->featured_image_url }}"
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                     alt="{{ $recent6->
+                                                     alt="{{ $recent6->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent6->slug)) !!}
+                    @endif
                                                 @if($recent6->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent6->category->name }}</span>
@@ -542,10 +538,10 @@ use App\Helpers\PlaceholderHelper;
                                 @if($sidebarArticle->featured_image_url)
                         <img src="{{ $sidebarArticle->featured_image_url }}"
                                      class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
-                                     alt="{{ $sidebarArticle->
+                                     alt="{{ $sidebarArticle->title }}">
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                    @endiftitle }}">
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(50, 50, 'rounded', route('articles.show', $sidebarArticle->slug)) !!}
+                    @endif
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 f-s-14 f-w-600">
