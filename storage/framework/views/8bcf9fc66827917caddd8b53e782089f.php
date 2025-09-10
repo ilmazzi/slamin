@@ -604,11 +604,11 @@ use App\Helpers\PlaceholderHelper;
             <!-- Stats Section -->
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card card-light-primary">
+                    <div class="card">
                         <div class="card-body">
                             <div class="row text-center">
                                 <div class="col-md-3 col-6 mb-3">
-                                    <div class="card equal-card">
+                                    <div class="card" style="cursor: default; pointer-events: none;">
                                         <div class="card-body text-center py-3">
                                             <div class="d-flex align-items-center justify-content-center mb-2">
                                                 <div class="rounded-circle bg-light-primary d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -621,7 +621,7 @@ use App\Helpers\PlaceholderHelper;
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-3">
-                                    <div class="card equal-card">
+                                    <div class="card" style="cursor: default; pointer-events: none;">
                                         <div class="card-body text-center py-3">
                                             <div class="d-flex align-items-center justify-content-center mb-2">
                                                 <div class="rounded-circle bg-light-success d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -634,7 +634,7 @@ use App\Helpers\PlaceholderHelper;
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-3">
-                                    <div class="card equal-card">
+                                    <div class="card" style="cursor: default; pointer-events: none;">
                                         <div class="card-body text-center py-3">
                                             <div class="d-flex align-items-center justify-content-center mb-2">
                                                 <div class="rounded-circle bg-light-warning d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -647,7 +647,7 @@ use App\Helpers\PlaceholderHelper;
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6 mb-3">
-                                    <div class="card equal-card">
+                                    <div class="card" style="cursor: default; pointer-events: none;">
                                         <div class="card-body text-center py-3">
                                             <div class="d-flex align-items-center justify-content-center mb-2">
                                                 <div class="rounded-circle bg-light-info d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
