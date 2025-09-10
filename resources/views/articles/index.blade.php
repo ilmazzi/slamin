@@ -62,10 +62,10 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 250px; object-fit: cover;"
                                                      alt="{{ $featured1->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                             @else
-                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 250, 'card-img-top', route('articles.show', $article->slug)) !!}
+                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $article->slug)) !!}
                                             @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -104,7 +104,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent1->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent1->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -145,7 +145,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent2->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent2->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -193,7 +193,7 @@ use App\Helpers\PlaceholderHelper;
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
                                                  alt="{{ $featured2->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -232,7 +232,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent3->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent3->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -273,7 +273,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent4->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent4->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -321,7 +321,7 @@ use App\Helpers\PlaceholderHelper;
                                                  class="card-img-top" style="height: 250px; object-fit: cover;"
                                                  alt="{{ $featured3->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -360,7 +360,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent5->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent5->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -401,7 +401,7 @@ use App\Helpers\PlaceholderHelper;
                                                      class="card-img-top" style="height: 140px; object-fit: cover;"
                                                      alt="{{ $recent6->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                                                 @if($recent6->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
@@ -544,7 +544,7 @@ use App\Helpers\PlaceholderHelper;
                                      class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
                                      alt="{{ $sidebarArticle->
                     @else
-                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
                     @endiftitle }}">
                             </div>
                             <div class="flex-grow-1">
