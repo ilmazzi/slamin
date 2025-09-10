@@ -9,19 +9,7 @@
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}" class="text-decoration-none">
-                                <i class="ph ph-house me-1"></i>{{ __('common.dashboard') }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('events.index') }}" class="text-decoration-none">
-                                <i class="ph ph-calendar me-1"></i>{{ __('events.events') }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">{{ __('events.edit_event') }}</li>
-                    </ol>
+                    
                 </div>
                 <h4 class="page-title">
                     <i class="ph ph-pencil-simple me-2"></i>{{ __('events.edit_event') }}

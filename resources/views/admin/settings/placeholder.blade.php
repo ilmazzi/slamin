@@ -9,21 +9,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h4 class="main-title">Impostazioni Placeholder</h4>
-                    <ul class="app-line-breadcrumbs mb-3">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}" class="f-s-14 f-w-500">
-                                <span><i class="ph-duotone ph-house f-s-16"></i> Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.settings.index') }}" class="f-s-14 f-w-500">
-                                <span><i class="ph-duotone ph-gear f-s-16"></i> Impostazioni</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="#" class="f-s-14 f-w-500">Placeholder</a>
-                        </li>
-                    </ul>
+                    
                 </div>
             </div>
         </div>

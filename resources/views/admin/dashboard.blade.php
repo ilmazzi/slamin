@@ -11,11 +11,7 @@
                 <i class="ph ph-chart-line me-2"></i>
                 Dashboard Admin
             </h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Dashboard</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
 

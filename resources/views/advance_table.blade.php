@@ -11,18 +11,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Advance Table</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-table f-s-16"></i>  Table
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Advance Table</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->

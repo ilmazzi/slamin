@@ -11,18 +11,7 @@
                 <i class="ph ph-gear me-2"></i>
                 Impostazioni
             </h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('admin.dashboard') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard Admin
-                        </span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Impostazioni</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
 

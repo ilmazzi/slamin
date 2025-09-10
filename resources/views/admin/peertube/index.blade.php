@@ -7,20 +7,7 @@
     <!-- Breadcrumbs -->
     <div class="row">
         <div class="col-12">
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-gauge f-s-16"></i> Admin
-                        </span>
-                    </a>
-                </li>
-                <li class="active">
-                    <span class="f-s-14 f-w-500">
-                        <i class="ph-duotone ph-video-camera f-s-16"></i> Configurazione PeerTube
-                    </span>
-                </li>
-            </ul>
+            
         </div>
     </div>
 

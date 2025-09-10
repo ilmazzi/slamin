@@ -10,18 +10,7 @@
             <div class="page-title-box d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">{{ __('poems.edit.title') }}</h4>
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}">{{ __('common.home') }}</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('poems.index') }}">{{ __('poems.title') }}</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('poems.show', $poem->slug) }}">{{ $poem->title }}</a>
-                        </li>
-                        <li class="breadcrumb-item active">{{ __('common.edit') }}</li>
-                    </ol>
+                    
                 </div>
             </div>
         </div>

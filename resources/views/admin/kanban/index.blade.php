@@ -144,10 +144,7 @@
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('dashboard.dashboard') }}</a></li>
-                        <li class="breadcrumb-item active">{{ __('common.kanban_board') }}</li>
-                    </ol>
+                    
                 </div>
                 <h4 class="page-title">
                     <i class="ph ph-kanban me-2"></i>Gestione Task di Sviluppo

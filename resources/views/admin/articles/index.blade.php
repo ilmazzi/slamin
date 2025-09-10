@@ -8,10 +8,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                 <div>
                     <h4 class="page-title f-s-18 f-w-600 mb-2">{{ __('articles.manage_articles') }}</h4>
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}" class="f-s-14">{{ __('admin.dashboard') }}</a></li>
-                        <li class="breadcrumb-item active f-s-14">{{ __('articles.manage_articles') }}</li>
-                    </ol>
+                    
                 </div>
                 <div>
                     <a href="{{ route('admin.articles.create') }}" class="btn btn-primary btn-sm">

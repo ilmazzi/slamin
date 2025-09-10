@@ -11,18 +11,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">{{ __('permissions.permissions') }}</h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
-                        </span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">{{ __('permissions.permissions') }}</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
 

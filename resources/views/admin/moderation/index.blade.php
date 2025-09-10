@@ -9,18 +9,7 @@
         <div class="row m-1">
             <div class="col-12">
                 <h4 class="main-title f-s-18 f-w-600">Dashboard Moderazione</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                            <span><i class="ph-duotone ph-gauge f-s-16"></i> {{ __('dashboard.dashboard') }}</span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <span class="f-s-14 f-w-500">
-                            <i class="ph-duotone ph-shield-check f-s-16"></i> Moderazione
-                        </span>
-                    </li>
-                </ul>
+                
             </div>
         </div>
 

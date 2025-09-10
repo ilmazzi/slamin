@@ -9,26 +9,7 @@
         <div class="page-title-box">
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0 small">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}" class="text-decoration-none">
-                                <i class="ph ph-house me-1"></i>{{ __('common.home') }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('gigs.index') }}" class="text-decoration-none">
-                                <i class="ph ph-briefcase me-1"></i>{{ __('gigs.title') }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('gigs.show', $gig) }}" class="text-decoration-none">
-                                {{ $gig->title }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            {{ __('common.edit') }}
-                        </li>
-                    </ol>
+                    
                 </div>
             </div>
         </div>

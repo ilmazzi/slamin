@@ -10,25 +10,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Column</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a class="f-s-14 f-w-500" href="#">
-                      <span>
-                        <i class="ph-duotone  ph-chart-pie-slice f-s-16"></i> Chart
-                      </span>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="f-s-14 f-w-500" href="#">
-                      <span>
-                        Apexcharts
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a class="f-s-14 f-w-500" href="#">Column</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->

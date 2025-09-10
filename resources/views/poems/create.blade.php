@@ -8,23 +8,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">{{ __('poems.create.title') }}</h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('home') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('common.home') }}
-                        </span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="{{ route('poems.index') }}" class="f-s-14 f-w-500">
-                        <span>{{ __('poems.title') }}</span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">{{ __('poems.create.title') }}</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
     <!-- Breadcrumb end -->

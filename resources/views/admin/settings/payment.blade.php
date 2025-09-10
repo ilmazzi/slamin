@@ -11,23 +11,7 @@
                 <i class="ph ph-credit-card me-2"></i>
                 Impostazioni Pagamenti
             </h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
-                        </span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="{{ route('admin.settings.index') }}" class="f-s-14 f-w-500">
-                        <span>Impostazioni</span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Pagamenti</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
 

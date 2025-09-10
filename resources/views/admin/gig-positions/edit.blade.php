@@ -9,26 +9,7 @@
         <div class="page-title-box">
             <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0 small">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('home') }}" class="text-decoration-none">
-                                <i class="ph ph-house me-1"></i>Home
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
-                                <i class="ph ph-gear me-1"></i>Admin
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.gig-positions.index') }}" class="text-decoration-none">
-                                Posizioni Ingaggi
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            Modifica Posizione
-                        </li>
-                    </ol>
+                    
                 </div>
             </div>
         </div>

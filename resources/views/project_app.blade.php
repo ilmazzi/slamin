@@ -9,21 +9,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Projects</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-stack f-s-16"></i> Apps
-                      </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="f-s-14 f-w-500">Project App</a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Projects</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->
@@ -107,32 +93,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-30 w-30 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-30 w-30 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-30 w-30 d-flex-center b-r-50 text-bg-warning b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/2.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-30 w-30 d-flex-center b-r-50 text-bg-info b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/3.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        5+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -197,22 +158,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        5+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -277,27 +223,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -362,27 +288,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -447,27 +353,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -532,27 +418,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        2+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -621,32 +487,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-warning b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/2.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-info b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/3.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        5+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -711,27 +552,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -796,27 +617,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        2+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -885,27 +686,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 
@@ -970,27 +751,7 @@
                                             </div>
                                             <div class="col-6">
 
-                                                <ul class="avatar-group float-end breadcrumb-start ">
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-danger b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/4.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/1.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="h-25 w-25 d-flex-center b-r-50 text-bg-success b-2-light position-relative"
-                                                        data-bs-toggle="tooltip" data-bs-title="Sabrina Torres">
-                                                        <img src="{{asset('../assets/images/avatar/5.png')}}" alt=""
-                                                             class="img-fluid b-r-50 overflow-hidden">
-                                                    </li>
-                                                    <li class="text-bg-primary h-25 w-25 d-flex-center b-r-50" data-bs-toggle="tooltip"
-                                                        data-bs-title="5 More">
-                                                        10+
-                                                    </li>
-                                                </ul>
+                                                
                                             </div>
                                         </div>
 

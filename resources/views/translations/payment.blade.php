@@ -8,21 +8,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">Pagamento Traduzione</h4>
-            <ul class="app-line-breadcrumbs mb-3">
-                <li class="">
-                    <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
-                        <span>
-                            <i class="ph-duotone ph-house f-s-16"></i> Dashboard
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('translations.index') }}" class="f-s-14 f-w-500">Traduzioni</a>
-                </li>
-                <li class="active">
-                    <a href="#" class="f-s-14 f-w-500">Pagamento</a>
-                </li>
-            </ul>
+            
         </div>
     </div>
     <!-- Breadcrumb end -->

@@ -12,21 +12,7 @@
                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
 
                     <div class="page-title-right">
-                        <ol class="breadcrumb m-0 small">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('home') }}" class="text-decoration-none">
-                                    <i class="ph ph-house me-1"></i>{{ __('common.home') }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('poems.index') }}" class="text-decoration-none">
-                                    <i class="ph ph-book-open me-1"></i>{{ __('poems.title') }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">
-                                {{ $poem->title }}
-                            </li>
-                        </ol>
+                        
                     </div>
                 </div>
             </div>

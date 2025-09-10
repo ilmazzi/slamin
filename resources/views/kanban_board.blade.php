@@ -15,18 +15,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h4 class="main-title">{{ __('common.kanban_board') }}</h4>
-                        <ul class="app-line-breadcrumbs mb-3">
-                            <li class="">
-                                <a href="#" class="f-s-14 f-w-500">
-                                    <span>
-                                        <i class="ph-duotone ph-stack f-s-16"></i> Apps
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="active">
-                                <a href="#" class="f-s-14 f-w-500">{{ __('common.kanban_board') }}</a>
-                            </li>
-                        </ul>
+                        
                     </div>
                     <div>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">

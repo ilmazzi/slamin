@@ -9,18 +9,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Floating Labels</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a class="f-s-14 f-w-500" href="#">
-                      <span>
-                        <i class="ph-duotone  ph-cardholder f-s-16"></i>  Forms elements
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a class="f-s-14 f-w-500" href="#">Floating Labels</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->

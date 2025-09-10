@@ -10,18 +10,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Form wizard 2</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-hand-heart f-s-16"></i> Ready to use
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Form wizard 2</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->

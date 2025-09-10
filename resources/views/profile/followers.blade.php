@@ -9,25 +9,7 @@
         <div class="row m-1">
             <div class="col-12">
                 <h4 class="main-title">{{ __('profile.followers') }} - {{ $user->getDisplayName() }}</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="{{ route('home') }}" class="f-s-14 f-w-500">
-                            <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
-                            </span>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a href="{{ route('user.show', $user) }}" class="f-s-14 f-w-500">
-                            <span>
-                                <i class="ph-duotone ph-user f-s-16"></i> {{ $user->getDisplayName() }}
-                            </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">{{ __('profile.followers') }}</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
 

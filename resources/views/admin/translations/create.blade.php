@@ -5,26 +5,7 @@
     <!-- Breadcrumb -->
     <div class="row mb-3">
         <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">
-                            <i class="ph-duotone ph-house me-1"></i>
-                            {{ __('admin.dashboard') }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('admin.translations.index') }}" class="text-decoration-none">
-                            <i class="ph-duotone ph-translate me-1"></i>
-                            {{ __('admin.translations') }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <i class="ph-duotone ph-plus me-1"></i>
-                        {{ __('admin.add_language') }}
-                    </li>
-                </ol>
-            </nav>
+            
         </div>
     </div>
 

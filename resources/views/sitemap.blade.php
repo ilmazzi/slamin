@@ -9,18 +9,7 @@
         <div class="row m-1">
             <div class="col-12 ">
                 <h4 class="main-title">Sitemap</h4>
-                <ul class="app-line-breadcrumbs mb-3">
-                    <li class="">
-                        <a href="#" class="f-s-14 f-w-500">
-                      <span>
-                        <i class="ph-duotone  ph-newspaper f-s-16"></i> Other Pages
-                      </span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">Sitemap</a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
         <!-- Breadcrumb end -->
