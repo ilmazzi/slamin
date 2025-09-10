@@ -212,6 +212,25 @@ return [
 
     // Layout
     'layout_updated' => 'Layout aggiornato con successo',
+    'layout_management' => 'Gestione Layout Articoli',
+    'layout_preview' => 'Anteprima Layout',
+    'back_to_layout' => 'Torna al Layout',
+    'save_all' => 'Salva Tutto',
+    'available_articles' => 'Articoli Disponibili',
+    'drag_article_here' => 'Trascina un articolo qui',
+    'error_saving_layout' => 'Errore nel salvare il layout',
+
+    // Posizioni layout
+    'banner' => 'Banner Principale',
+    'column1' => 'Colonna 1',
+    'column2' => 'Colonna 2',
+    'column3' => 'Colonna 3',
+    'column4' => 'Colonna 4',
+    'column5' => 'Colonna 5',
+    'column6' => 'Colonna 6',
+    'horizontal1' => 'Orizzontale 1',
+    'horizontal2' => 'Orizzontale 2',
+    'horizontal3' => 'Orizzontale 3',
 
     // Ordinamento e filtri
     'sort_newest' => 'Più Recenti',
