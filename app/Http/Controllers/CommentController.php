@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Models\SystemSetting;
 use App\Models\Notification;
+use App\Services\ActivityService;
 
 class CommentController extends Controller
 {
@@ -94,6 +95,9 @@ class CommentController extends Controller
                     'message' => 'Impossibile aggiungere il commento'
                 ], 500);
             }
+
+            // Log activity
+            ActivityService::logComment($user, $content, $request);
         } catch (\Exception $e) {
             \Log::error('Errore creazione commento', [
                 'error' => $e->getMessage(),

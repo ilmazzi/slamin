@@ -32,6 +32,7 @@ return [
     'no_recent_activity' => 'No recent activity',
     'no_upcoming_events' => 'No upcoming events',
     'view_all_activity' => 'View all activity',
+    'start_activity_message' => 'Start exploring the platform to see your activities here!',
     'view_calendar' => 'View Calendar',
     'poet_section' => 'Poet Section',
     'venue_section' => 'Venue Section',

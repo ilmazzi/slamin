@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Gig;
 use App\Models\Notification;
 use App\Models\GigApplication;
+use App\Services\ActivityService;
 use Illuminate\Support\Facades\Log;
 
 class EventObserver
@@ -17,6 +18,11 @@ class EventObserver
     {
         // Sincronizza le posizioni d'ingaggio con i gig
         $this->syncGigPositions($event);
+
+        // Log activity
+        if ($event->organizer) {
+            ActivityService::logCreate($event->organizer, $event, request());
+        }
     }
 
     /**
@@ -28,6 +34,11 @@ class EventObserver
         if ($event->wasChanged('gig_positions')) {
             $this->syncGigPositions($event);
         }
+
+        // Log activity for important changes
+        if ($event->organizer && $event->wasChanged(['title', 'description', 'start_datetime', 'status'])) {
+            ActivityService::logUpdate($event->organizer, $event, request());
+        }
     }
 
     /**
@@ -36,6 +47,17 @@ class EventObserver
     public function deleted(Event $event): void
     {
         try {
+            // Log activity before deletion
+            if ($event->organizer) {
+                ActivityService::logDelete(
+                    $event->organizer,
+                    'App\\Models\\Event',
+                    $event->id,
+                    $event->title,
+                    request()
+                );
+            }
+
             // Elimina tutte le notifiche correlate all'evento
             $this->deleteEventNotifications($event);
 

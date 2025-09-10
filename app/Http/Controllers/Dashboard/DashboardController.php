@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\EventInvitation;
 use App\Models\EventRequest;
+use App\Services\ActivityService;
 
 class DashboardController extends Controller
 {
@@ -146,9 +147,25 @@ class DashboardController extends Controller
      */
     private function getRecentActivity($user)
     {
-        // TODO: Implementare sistema attività
-        // Per ora return array vuoto
-        return [];
+        $activities = ActivityService::getRecentActivities($user, 10);
+
+        return $activities->map(function ($activity) {
+            return [
+                'id' => $activity->id,
+                'message' => $activity->formatted_description,
+                'time' => $activity->created_at->diffForHumans(),
+                'icon' => $activity->icon,
+                'color' => $activity->color_class,
+                'url' => $activity->metadata['url'] ?? null,
+                'type' => $activity->type,
+                'action' => $activity->action,
+                'content_type' => $activity->content_type_badge,
+                'content_type_color' => $activity->content_type_color,
+                'thumbnail' => $activity->thumbnail_url,
+                'has_thumbnail' => $activity->has_thumbnail,
+                'title' => $activity->metadata['title'] ?? 'Contenuto',
+            ];
+        })->toArray();
     }
 
     /**

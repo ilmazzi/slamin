@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Video;
 use App\Services\ThumbnailService;
+use App\Services\ActivityService;
 use App\Jobs\GenerateVideoThumbnailJob;
 use App\Jobs\UpdatePeerTubeVideoStatusJob;
 use Illuminate\Support\Facades\Log;
@@ -24,6 +25,11 @@ class VideoObserver
     {
         Log::info("Video created: {$video->id} - {$video->title}");
 
+        // Log activity
+        if ($video->user) {
+            ActivityService::logCreate($video->user, $video, request());
+        }
+
         // Se è un video PeerTube in elaborazione, lancia il job di controllo
         if ($video->peertube_uuid && $video->peertube_status === 'processing') {
             Log::info("🔄 Lanciando job controllo stato PeerTube per video {$video->id}");
@@ -43,6 +49,11 @@ class VideoObserver
     {
         Log::info("Video updated: {$video->id} - {$video->title}");
 
+        // Log activity for important changes
+        if ($video->user && $video->wasChanged(['title', 'description', 'status', 'moderation_status'])) {
+            ActivityService::logUpdate($video->user, $video, request());
+        }
+
         // Se il video è stato approvato e non ha thumbnail, generane una
         if ($video->wasChanged('moderation_status') &&
             $video->moderation_status === 'approved' &&
@@ -57,6 +68,17 @@ class VideoObserver
     public function deleted(Video $video): void
     {
         Log::info("Video deleted: {$video->id} - {$video->title}");
+
+        // Log activity before deletion
+        if ($video->user) {
+            ActivityService::logDelete(
+                $video->user,
+                'App\\Models\\Video',
+                $video->id,
+                $video->title ?? 'Video',
+                request()
+            );
+        }
 
         // Elimina le thumbnail associate
         $this->deleteThumbnails($video);

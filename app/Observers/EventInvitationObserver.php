@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Observers;
+
+use App\Models\EventInvitation;
+use App\Services\ActivityService;
+
+class EventInvitationObserver
+{
+    /**
+     * Handle the EventInvitation "created" event.
+     */
+    public function created(EventInvitation $eventInvitation): void
+    {
+        // Log activity for the inviter
+        if ($eventInvitation->inviter) {
+            ActivityService::log(
+                $eventInvitation->inviter,
+                'invite',
+                'App\\Models\\Event',
+                $eventInvitation->event_id,
+                'invited',
+                null,
+                [
+                    'title' => $eventInvitation->event->title ?? 'Evento',
+                    'url' => route('events.show', $eventInvitation->event),
+                    'invited_user' => $eventInvitation->invitedUser->getDisplayName() ?? 'Utente',
+                ],
+                request()
+            );
+        }
+    }
+
+    /**
+     * Handle the EventInvitation "updated" event.
+     */
+    public function updated(EventInvitation $eventInvitation): void
+    {
+        // Log activity for status changes
+        if ($eventInvitation->wasChanged('status')) {
+            $user = $eventInvitation->invitedUser;
+            $action = match($eventInvitation->status) {
+                'accepted' => 'accepted',
+                'declined' => 'declined',
+                default => 'updated'
+            };
+
+            if ($user) {
+                ActivityService::log(
+                    $user,
+                    $action === 'accepted' ? 'accept' : 'decline',
+                    'App\\Models\\Event',
+                    $eventInvitation->event_id,
+                    $action,
+                    null,
+                    [
+                        'title' => $eventInvitation->event->title ?? 'Evento',
+                        'url' => route('events.show', $eventInvitation->event),
+                    ],
+                    request()
+                );
+            }
+        }
+    }
+
+    /**
+     * Handle the EventInvitation "deleted" event.
+     */
+    public function deleted(EventInvitation $eventInvitation): void
+    {
+        //
+    }
+
+    /**
+     * Handle the EventInvitation "restored" event.
+     */
+    public function restored(EventInvitation $eventInvitation): void
+    {
+        //
+    }
+
+    /**
+     * Handle the EventInvitation "force deleted" event.
+     */
+    public function forceDeleted(EventInvitation $eventInvitation): void
+    {
+        //
+    }
+}

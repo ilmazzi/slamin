@@ -31,6 +31,7 @@ return [
     'recent_activity' => 'Attività Recente',
     'no_recent_activity' => 'Nessuna attività recente',
     'view_all_activity' => 'Vedi tutta l\'attività',
+    'start_activity_message' => 'Inizia a esplorare la piattaforma per vedere le tue attività qui!',
 
     // Azioni rapide
     'quick_actions' => 'Azioni Rapide',

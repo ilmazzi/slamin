@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\SystemSetting;
 use App\Models\Notification;
+use App\Services\ActivityService;
 
 class LikeController extends Controller
 {
@@ -36,7 +37,7 @@ class LikeController extends Controller
         // Verifica se il tipo di contenuto è likeabile
         $likeableContent = SystemSetting::get('social_likeable_content', ['video', 'photo', 'poem', 'article', 'event', 'comment']);
         $contentType = $request->likeable_type; // Usa direttamente il tipo ricevuto
-        
+
         if (!in_array($contentType, $likeableContent)) {
             return response()->json([
                 'success' => false,
@@ -46,7 +47,7 @@ class LikeController extends Controller
 
         // Ottieni il contenuto
         $content = $this->getContent($request->likeable_type, $request->likeable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -65,10 +66,16 @@ class LikeController extends Controller
             ], 500);
         }
 
+        // Log activity
+        if (!$wasLiked) {
+            // User liked the content
+            ActivityService::logLike($user, $content, $request);
+        }
+
         // Invia notifica se abilitata
         if (SystemSetting::get('social_enable_notifications', true)) {
             $notificationTypes = SystemSetting::get('social_notification_types', ['like', 'comment', 'snap']);
-            
+
             if (in_array('like', $notificationTypes) && !$wasLiked) {
                 $this->sendLikeNotification($content, $user);
             }
@@ -119,7 +126,7 @@ class LikeController extends Controller
         ]);
 
         $content = $this->getContent($request->likeable_type, $request->likeable_id);
-        
+
         if (!$content) {
             return response()->json([
                 'success' => false,
@@ -149,7 +156,7 @@ class LikeController extends Controller
     private function getContent(string $type, int $id)
     {
         $modelClass = $this->getModelClass($type);
-        
+
         if (!$modelClass) {
             return null;
         }
@@ -215,7 +222,7 @@ class LikeController extends Controller
     {
         // Ottieni l'utente proprietario del contenuto
         $contentOwner = $this->getContentOwner($content);
-        
+
         if (!$contentOwner) {
             \Log::info('Like notification: content owner not found', [
                 'content_type' => get_class($content),
@@ -270,17 +277,17 @@ class LikeController extends Controller
         if ($content instanceof \App\Models\Event) {
             return $content->organizer;
         }
-        
+
         // Per altri contenuti, usa user
         if (method_exists($content, 'user')) {
             return $content->user;
         }
-        
+
         // Fallback per contenuti con user_id diretto
         if (isset($content->user_id)) {
             return \App\Models\User::find($content->user_id);
         }
-        
+
         return null;
     }
 
@@ -290,7 +297,7 @@ class LikeController extends Controller
     private function getContentTitle($content): string
     {
         $methods = ['title', 'name', 'subject'];
-        
+
         foreach ($methods as $method) {
             if (method_exists($content, $method)) {
                 return $content->$method;
@@ -306,7 +313,7 @@ class LikeController extends Controller
     private function getContentUrl($content): string
     {
         $type = $this->getContentTypeFromClass(get_class($content));
-        
+
         switch ($type) {
             case 'video':
                 return route('videos.show', $content);

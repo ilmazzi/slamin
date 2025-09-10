@@ -7,11 +7,27 @@ use App\Models\Group;
 use App\Models\GigApplication;
 use App\Models\Event;
 use App\Models\ChatMessage;
+use App\Models\Poem;
+use App\Models\Article;
+use App\Models\Photo;
+use App\Models\Gig;
+use App\Models\EventInvitation;
+use App\Models\EventRequest;
+use App\Models\GroupInvitation;
+use App\Models\Follow;
 use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
 use App\Observers\GigApplicationObserver;
 use App\Observers\EventObserver;
 use App\Observers\ChatMessageObserver;
+use App\Observers\PoemObserver;
+use App\Observers\ArticleObserver;
+use App\Observers\PhotoObserver;
+use App\Observers\GigObserver;
+use App\Observers\EventInvitationObserver;
+use App\Observers\EventRequestObserver;
+use App\Observers\GroupInvitationObserver;
+use App\Observers\FollowObserver;
 use App\Services\LoggingService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
@@ -45,6 +61,30 @@ class AppServiceProvider extends ServiceProvider
 
         // Registra l'observer per i messaggi chat
         ChatMessage::observe(ChatMessageObserver::class);
+
+        // Registra l'observer per le poesie
+        Poem::observe(PoemObserver::class);
+
+        // Registra l'observer per gli articoli
+        Article::observe(ArticleObserver::class);
+
+        // Registra l'observer per le foto
+        Photo::observe(PhotoObserver::class);
+
+        // Registra l'observer per i gig
+        Gig::observe(GigObserver::class);
+
+        // Registra l'observer per gli inviti agli eventi
+        EventInvitation::observe(EventInvitationObserver::class);
+
+        // Registra l'observer per le richieste agli eventi
+        EventRequest::observe(EventRequestObserver::class);
+
+        // Registra l'observer per gli inviti ai gruppi
+        GroupInvitation::observe(GroupInvitationObserver::class);
+
+        // Registra l'observer per i follow
+        Follow::observe(FollowObserver::class);
 
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();

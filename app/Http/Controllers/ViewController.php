@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\SystemSetting;
+use App\Services\ActivityService;
 
 class ViewController extends Controller
 {
@@ -70,6 +71,11 @@ class ViewController extends Controller
                 'success' => false,
                 'message' => 'Impossibile incrementare le visualizzazioni'
             ], 400);
+        }
+
+        // Log activity for authenticated users
+        if ($user) {
+            ActivityService::logView($user, $content, $request);
         }
 
         return response()->json([

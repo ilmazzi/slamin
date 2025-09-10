@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Group;
 use App\Models\GroupMember;
+use App\Services\ActivityService;
 
 class GroupObserver
 {
@@ -20,6 +21,11 @@ class GroupObserver
                 'role' => 'admin',
                 'joined_at' => $group->created_at,
             ]);
+        }
+
+        // Log activity
+        if ($group->creator) {
+            ActivityService::logCreate($group->creator, $group, request());
         }
     }
 
@@ -56,4 +62,4 @@ class GroupObserver
         // Rimuovi tutti i membri del gruppo quando viene eliminato definitivamente
         $group->members()->forceDelete();
     }
-} 
+}

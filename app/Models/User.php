@@ -790,6 +790,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get all activities performed by this user
+     */
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    /**
      * Contenuti likati dall'utente (relazione polimorfa)
      */
     public function likedContent()
