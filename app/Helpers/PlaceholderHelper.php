@@ -88,10 +88,16 @@ class PlaceholderHelper
         $settings = PlaceholderSetting::getSettings();
         $color = $settings->poem_placeholder_color;
         
-        // Calcola la dimensione dell'emoji in base alle dimensioni del placeholder
-        $emojiSize = min($width, $height) * 0.3; // 30% della dimensione più piccola
+        // Se le dimensioni sono 0 o negative, usa dimensioni responsive
+        if ($width <= 0 || $height <= 0) {
+            $style = "width: 100%; height: {$height}px; background-color: {$color}; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; border-radius: 8px;";
+        } else {
+            // Calcola la dimensione dell'emoji in base alle dimensioni del placeholder
+            $emojiSize = min($width, $height) * 0.3; // 30% della dimensione più piccola
+            $style = "width: {$width}px; height: {$height}px; background-color: {$color}; display: flex; align-items: center; justify-content: center; color: white; font-size: {$emojiSize}px; border-radius: 8px;";
+        }
         
-        $placeholder = "<div class='poem-placeholder {$class}' style='width: {$width}px; height: {$height}px; background-color: {$color}; display: flex; align-items: center; justify-content: center; color: white; font-size: {$emojiSize}px; border-radius: 8px;'>📖</div>";
+        $placeholder = "<div class='poem-placeholder {$class}' style='{$style}'>📖</div>";
         
         if ($url) {
             return "<a href='{$url}' class='text-decoration-none'>{$placeholder}</a>";
