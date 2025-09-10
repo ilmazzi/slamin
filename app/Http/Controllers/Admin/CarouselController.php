@@ -87,11 +87,12 @@ class CarouselController extends Controller
                         } elseif ($content->thumbnail) {
                             $imagePath = asset('storage/' . $content->thumbnail);
                         } else {
-                            $imagePath = PlaceholderHelper::getPoemPlaceholderUrl();
+                            // Non salviamo un placeholder come image_path, lasciamo null
+                            $imagePath = null;
                         }
                         break;
                     case 'article':
-                        $imagePath = $content->featured_image_url ?? PlaceholderHelper::getArticlePlaceholderUrl();
+                        $imagePath = $content->featured_image_url ?? null;
                         break;
                 }
 
