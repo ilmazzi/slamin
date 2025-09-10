@@ -198,6 +198,18 @@ $(document).on('click', '.header-toggle', function () {
   } else {
     // Su desktop, toggle della classe semi-nav
     $nav.toggleClass("semi-nav");
+
+    // Salva lo stato in localStorage
+    const isCollapsed = $nav.hasClass("semi-nav");
+    localStorage.setItem('sidebarCollapsed', isCollapsed);
+
+    // Aggiorna l'icona del toggle
+    const $toggleIcon = $('.toggle-semi-nav i');
+    if (isCollapsed) {
+      $toggleIcon.removeClass('ti-chevron-right').addClass('ti-chevron-left');
+    } else {
+      $toggleIcon.removeClass('ti-chevron-left').addClass('ti-chevron-right');
+    }
   }
 });
 
@@ -222,10 +234,6 @@ $(document).on('scroll', 'nav.sidebar-open .app-nav', function(e) {
   e.stopPropagation();
 });
 
-$(".toggle-semi-nav").on("click", function () {
-  // Usa la logica originale del template
-  $("nav").removeClass("semi-nav");
-});
 
 
 // >>-- 05 List page js --<<
@@ -290,17 +298,51 @@ function resize() {
     // Su mobile (< 768px) la sidebar è sempre nascosta
     if ($window.width() < 768) {
         $nav.removeClass('semi-nav');
+        // Su mobile non salvare lo stato
+        localStorage.removeItem('sidebarCollapsed');
     }
-    // Su tablet e desktop (>= 768px) non forzare nessuno stato
-    // Lascia che l'utente controlli con il toggle
+    // Su tablet e desktop (>= 768px) ripristina lo stato salvato
+    else {
+        restoreSidebarState();
+    }
 }
 $(function () {
     resize();
+
+    // Ripristina lo stato della sidebar dal localStorage
+    setTimeout(function() {
+        restoreSidebarState();
+    }, 100);
 });
 
 window.addEventListener("resize", () => {
     resize();
 });
+
+// Funzione per ripristinare lo stato della sidebar
+function restoreSidebarState() {
+    try {
+        const savedState = localStorage.getItem('sidebarCollapsed');
+
+        if (savedState !== null) {
+            const isCollapsed = savedState === 'true';
+            const $nav = $('nav');
+            const $toggleIcon = $('.toggle-semi-nav i');
+
+            if ($nav.length && $toggleIcon.length) {
+                if (isCollapsed) {
+                    $nav.addClass('semi-nav');
+                    $toggleIcon.removeClass('ti-chevron-right').addClass('ti-chevron-left');
+                } else {
+                    $nav.removeClass('semi-nav');
+                    $toggleIcon.removeClass('ti-chevron-left').addClass('ti-chevron-right');
+                }
+            }
+        }
+    } catch (e) {
+        console.log('Errore nel ripristino sidebar:', e);
+    }
+}
 
 // >>-- 06 Sidebar scroll js --<<
 const myElement = document.getElementById('app-simple-bar');

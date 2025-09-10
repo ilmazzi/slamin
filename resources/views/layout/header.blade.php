@@ -63,7 +63,7 @@
                     <li class="header-dashboard">
                         <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('dashboard.dashboard') }}">
-                            <i class="ph ph-gauge"></i>
+                            <x-icon name="dashboard" size="20" class="me-2" />
                         </a>
                     </li>
 
@@ -73,12 +73,12 @@
                             <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
                                data-bs-toggle="dropdown"
                                href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.shortcuts') }}">
-                                <i class="ph ph-lightning"></i>
+                                <x-icon name="shortcuts" size="20" class="me-2" />
                             </a>
                             <ul class="dropdown-menu header-card border-0">
                                 <li class="dropdown-header">
                                     <h6 class="mb-0">
-                                        <i class="ph ph-lightning me-2"></i>{{ __('common.shortcuts') }}
+                                        <x-icon name="shortcuts" size="20" class="me-2" />{{ __('common.shortcuts') }}
                                     </h6>
                                 </li>
                                 <li class="dropdown-divider"></li>
@@ -86,7 +86,7 @@
                                 @can('poems.create')
                                 <li class="dropdown-item">
                                     <a href="{{ route('poems.create') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-pen-nib me-2 text-info"></i>
+                                        <x-icon name="poetry" size="20" class="me-2 text-info" />
                                         <span>{{ __('dashboard.write_poem') }}</span>
                                     </a>
                                 </li>
@@ -95,7 +95,7 @@
                                 @can('events.create.public')
                                 <li class="dropdown-item">
                                     <a href="{{ route('events.create') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-calendar-plus me-2 text-success"></i>
+                                        <x-icon name="event" size="20" class="me-2 text-success" />
                                         <span>{{ __('dashboard.organize_event') }}</span>
                                     </a>
                                 </li>
@@ -104,7 +104,7 @@
                                 @can('videos.upload')
                                 <li class="dropdown-item">
                                     <a href="{{ route('videos.upload') }}" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-upload me-2 text-warning"></i>
+                                        <x-icon name="media" size="20" class="me-2 text-warning" />
                                         <span>{{ __('dashboard.upload_performance') }}</span>
                                     </a>
                                 </li>
@@ -113,7 +113,7 @@
                                 @can('articles.create')
                                 <li class="dropdown-item">
                                     <a href="#" class="d-flex align-items-center text-decoration-none">
-                                        <i class="ph ph-newspaper me-2 text-primary"></i>
+                                        <x-icon name="article" size="20" class="me-2 text-primary" />
                                         <span>{{ __('dashboard.write_article') }}</span>
                                     </a>
                                 </li>
@@ -141,7 +141,7 @@
                              id="notificationcanvasRight" tabindex="-1">
                             <div class="offcanvas-header">
                                 <h5 class="offcanvas-title" id="notificationcanvasRightLabel">
-                                    <i class="ph ph-bell me-2"></i>{{ __('notifications.notifications') }}
+                                    <x-icon name="notification" size="20" class="me-2" />{{ __('notifications.notifications') }}
                                     <span id="notificationCount" class="badge bg-primary ms-2">0</span>
                                 </h5>
                                 <div class="d-flex align-items-center">

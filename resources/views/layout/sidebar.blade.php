@@ -123,9 +123,7 @@
                                 <!-- Eventi Section -->
                                 <li class="no-sub {{ request()->routeIs('events.*') ? 'active' : '' }}">
                                     <a href="{{ route('events.index') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#stack"></use>
-                                        </svg>
+                                        <x-icon name="event" size="20" class="me-2" />
                                         {{ __('events.events') }}
                                         @auth
                                         @if(auth()->user()->organizedEvents()->where('start_datetime', '>', now())->count() > 0)
@@ -142,7 +140,7 @@
                                 <!-- Gigs Section -->
                                 <li class="no-sub {{ request()->routeIs('gigs.*') ? 'active' : '' }}">
                                     <a href="{{ route('gigs.index') }}">
-                                        <i class="ph-duotone ph-briefcase f-s-20 me-2"></i>
+                                        <x-icon name="gigs" size="20" class="me-2" />
                                         {{ __('gigs.title') }}
                                         @if(auth()->user()->gigs()->open()->count() > 0)
                                             <span class="badge bg-success badge-notification ms-2">
@@ -159,7 +157,7 @@
                                 <!-- {{ __('common.media_section') }} Section -->
                                 <li class="no-sub {{ request()->routeIs('media.*') ? 'active' : '' }}">
                                     <a href="{{ route('media.index') }}">
-                                        <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
+                                        <x-icon name="media" size="20" class="me-2" />
                                         {{ __('common.media_section') }}
                                     </a>
                                 </li>
@@ -167,7 +165,7 @@
                                 <!-- Articoli Section -->
                                 <li class="no-sub {{ request()->routeIs('articles.*') ? 'active' : '' }}">
                                     <a href="{{ route('articles.index') }}">
-                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        <x-icon name="article" size="20" class="me-2" />
                                         {{ __('common.articles_section_menu') }}
                                         @auth
                                         @if(auth()->user()->can('articles.view'))
@@ -188,7 +186,7 @@
                                 <!-- Poesie Section -->
                                 <li class="no-sub {{ request()->routeIs('poems.*') ? 'active' : '' }}">
                                     <a href="{{ route('poems.index') }}">
-                                        <i class="ph-duotone ph-book-open f-s-20 me-2"></i>
+                                        <x-icon name="poetry" size="20" class="me-2" />
                                         {{ __('poems.title') }}
                                         @auth
                                         @if(auth()->user()->poems()->drafts()->count() > 0)
@@ -206,7 +204,7 @@
                                 @if(auth()->user()->canViewGroups())
                                 <li class="no-sub {{ request()->routeIs('groups.*') ? 'active' : '' }}">
                                     <a href="{{ route('groups.index') }}">
-                                        <i class="ph-duotone ph-users f-s-20 me-2"></i>
+                                        <x-icon name="team" size="20" class="me-2" />
                                         {{ __('common.groups_section_menu') }}
                                         @if(auth()->user()->getGroupsCountAttribute() > 0)
                                             <span class="badge bg-info badge-notification ms-2">
@@ -273,7 +271,7 @@
                                 @if(auth()->user()?->hasRole('admin'))
                                 <li class="no-sub {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('admin.dashboard') }}">
-                                        <i class="ph-duotone ph-chart-line f-s-20 me-2"></i>
+                                        <x-icon name="dashboard" size="20" class="me-2" />
                                         Dashboard Admin
                                     </a>
                                 </li>
@@ -281,9 +279,7 @@
 
                                 <li class="no-sub {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                                     <a href="{{ route('permissions.index') }}">
-                                        <svg stroke="currentColor" stroke-width="1.5">
-                                            <use xlink:href="../assets/svg/_sprite.svg#briefcase"></use>
-                                        </svg>
+                                        <x-icon name="permissions" size="20" class="me-2" />
                                         {{ __('sidebar.permissions_management') }}
                                     </a>
                                 </li>
@@ -291,7 +287,7 @@
                                                                 <!-- Moderation {{ __('dashboard.dashboard') }} - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.moderation.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.moderation.index') }}" title="{{ __('sidebar.moderation_tooltip') }}">
-                                        <i class="ph-duotone ph-shield-check f-s-20 me-2"></i>
+                                        <x-icon name="moderation" size="20" class="me-2" />
                                         {{ __('sidebar.moderation') }}
                                         @php
                                             $pendingCount = \App\Models\Video::pending()->count() +
@@ -313,7 +309,7 @@
                                 <!-- System Settings - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.settings.*') || request()->routeIs('admin.carousels.*') || request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.settings.index') }}">
-                                        <i class="ph-duotone ph-gear f-s-20 me-2"></i>
+                                        <x-icon name="settings" size="20" class="me-2" />
                                         {{ __('sidebar.settings') }}
                                     </a>
                                 </li>
@@ -323,7 +319,7 @@
                                 @if(auth()->user()?->hasRole('admin'))
                                 <li class="no-sub {{ request()->routeIs('admin.payment-accounts.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.payment-accounts.index') }}">
-                                        <i class="ph-duotone ph-credit-card f-s-20 me-2"></i>
+                                        <x-icon name="payment" size="20" class="me-2" />
                                         Conti di Pagamento
                                         @php
                                             $pendingVerification = \App\Models\User::whereNotNull('paypal_email')
@@ -342,7 +338,7 @@
                                 <!-- PeerTube Configuration - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.peertube.index') }}">
-                                        <i class="ph-duotone ph-video-camera f-s-20 me-2"></i>
+                                        <x-icon name="peertube" size="20" class="me-2" />
                                         PeerTube
                                     </a>
                                 </li>
@@ -350,23 +346,17 @@
                                 <!-- {{ __('common.kanban_board') }} - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.kanban.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.kanban.index') }}">
-                                        <i class="ph-duotone ph-kanban f-s-20 me-2"></i>
+                                        <x-icon name="kanban" size="20" class="me-2" />
                                         {{ __('common.kanban_board') }}
                                     </a>
                                 </li>
 
-                                <!-- Articles Management - Solo per admin/moderator -->
-                                <li class="no-sub {{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.articles.index') }}">
-                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
-                                        {{ __('articles.articles_management') }}
-                                    </a>
-                                </li>
+
 
                                 <!-- System Logs - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.logs.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.logs.index') }}">
-                                        <i class="ph-duotone ph-newspaper f-s-20 me-2"></i>
+                                        <x-icon name="logs" size="20" class="me-2" />
                                         {{ __('sidebar.system_logs') }}
                                     </a>
                                 </li>
