@@ -54,7 +54,8 @@ class Carousel extends Model
     const CONTENT_TYPE_VIDEO = 'video';
     const CONTENT_TYPE_EVENT = 'event';
     const CONTENT_TYPE_USER = 'user';
-    const CONTENT_TYPE_SNAP = 'snap';
+    const CONTENT_TYPE_POEM = 'poem';
+    const CONTENT_TYPE_ARTICLE = 'article';
 
     /**
      * Scope per i carousel attivi
@@ -205,8 +206,10 @@ class Carousel extends Model
                 return Event::find($this->content_id);
             case self::CONTENT_TYPE_USER:
                 return User::find($this->content_id);
-            case self::CONTENT_TYPE_SNAP:
-                return VideoSnap::find($this->content_id);
+            case self::CONTENT_TYPE_POEM:
+                return Poem::find($this->content_id);
+            case self::CONTENT_TYPE_ARTICLE:
+                return Article::find($this->content_id);
             default:
                 return null;
         }
@@ -260,12 +263,20 @@ class Carousel extends Model
                     'content_url' => route('user.show', $content),
                 ];
 
-            case self::CONTENT_TYPE_SNAP:
+            case self::CONTENT_TYPE_POEM:
                 return [
-                    'content_title' => $content->title ?: "Snap di {$content->video->title}",
+                    'content_title' => $content->title,
                     'content_description' => $content->description,
-                    'content_image_url' => $content->thumbnail_url,
-                    'content_url' => route('videos.show', $content->video) . "#snap-{$content->id}",
+                    'content_image_url' => $content->thumbnail_url ?? asset('assets/images/placeholder/poem-placeholder.jpg'),
+                    'content_url' => route('poems.show', $content),
+                ];
+
+            case self::CONTENT_TYPE_ARTICLE:
+                return [
+                    'content_title' => $content->title,
+                    'content_description' => $content->excerpt,
+                    'content_image_url' => $content->featured_image_url,
+                    'content_url' => route('articles.show', $content),
                 ];
 
             default:
@@ -282,7 +293,8 @@ class Carousel extends Model
             self::CONTENT_TYPE_VIDEO => 'Video',
             self::CONTENT_TYPE_EVENT => 'Eventi',
             self::CONTENT_TYPE_USER => 'Utenti',
-            self::CONTENT_TYPE_SNAP => 'Snap',
+            self::CONTENT_TYPE_POEM => 'Poesie',
+            self::CONTENT_TYPE_ARTICLE => 'Articoli',
         ];
     }
 }

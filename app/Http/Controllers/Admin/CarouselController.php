@@ -8,7 +8,8 @@ use App\Models\Carousel;
 use App\Models\Video;
 use App\Models\Event;
 use App\Models\User;
-use App\Models\VideoSnap;
+use App\Models\Poem;
+use App\Models\Article;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,7 @@ class CarouselController extends Controller
         if ($request->input('content_type') && $request->input('content_id')) {
             // Contenuto referenziato
             $request->validate([
-                'content_type' => 'required|string|in:video,event,user,snap',
+                'content_type' => 'required|string|in:video,event,user,poem,article',
                 'content_id' => 'required|integer',
                 'title' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
@@ -78,8 +79,11 @@ class CarouselController extends Controller
                     case 'user':
                         $imagePath = $content->profile_photo_url ?? 'placeholder/placeholder-1.jpg';
                         break;
-                    case 'snap':
-                        $imagePath = $content->thumbnail_url ?? 'placeholder/placeholder-1.jpg';
+                    case 'poem':
+                        $imagePath = $content->thumbnail_url ?? 'placeholder/poem-placeholder.jpg';
+                        break;
+                    case 'article':
+                        $imagePath = $content->featured_image_url ?? 'placeholder/article-placeholder.jpg';
                         break;
                 }
 
@@ -224,7 +228,7 @@ class CarouselController extends Controller
         if ($request->input('content_type') && $request->input('content_id')) {
             // Contenuto referenziato
             $request->validate([
-                'content_type' => 'required|string|in:video,event,user,snap',
+                'content_type' => 'required|string|in:video,event,user,poem,article',
                 'content_id' => 'required|integer',
                 'title' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:1000',
@@ -234,6 +238,8 @@ class CarouselController extends Controller
                 'is_active' => 'boolean',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after:start_date',
+                'use_original_image' => 'nullable|boolean',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             try {
@@ -258,6 +264,24 @@ class CarouselController extends Controller
                     'image_path' => null,
                     'video_path' => null,
                 ];
+
+                // Gestione immagine personalizzata per contenuti referenziati
+                if ($request->boolean('use_original_image', true)) {
+                    // Usa l'immagine originale del contenuto
+                    $data['image_path'] = null;
+                } else {
+                    // Usa un'immagine personalizzata se caricata
+                    if ($request->hasFile('image')) {
+                        // Elimina l'immagine precedente se esiste
+                        if ($carousel->image_path) {
+                            Storage::disk('public')->delete($carousel->image_path);
+                        }
+                        $data['image_path'] = $request->file('image')->store('carousel', 'public');
+                    } else {
+                        // Mantieni l'immagine attuale se non ne viene caricata una nuova
+                        $data['image_path'] = $carousel->image_path;
+                    }
+                }
 
                 $carousel->update($data);
 
@@ -383,7 +407,7 @@ class CarouselController extends Controller
     public function searchContent(Request $request)
     {
         $request->validate([
-            'type' => 'required|string|in:video,event,user,snap',
+            'type' => 'required|string|in:video,event,user,poem,article',
             'query' => 'nullable|string|min:2',
         ]);
 
@@ -466,27 +490,65 @@ class CarouselController extends Controller
                     });
                 break;
 
-            case 'snap':
-                $content = VideoSnap::where('status', 'approved')
+            case 'poem':
+                $content = Poem::where('is_public', true)
+                    ->where(function($q) {
+                        $q->where('moderation_status', 'approved')
+                          ->orWhereNull('moderation_status');
+                    })
+                    ->where('is_draft', false)
                     ->when($query, function($q) use ($query) {
                         $q->where('title', 'like', "%{$query}%")
-                          ->orWhere('description', 'like', "%{$query}%");
+                          ->orWhere('description', 'like', "%{$query}%")
+                          ->orWhere('content', 'like', "%{$query}%");
                     })
-                    ->with(['video', 'user'])
-                    ->orderBy('like_count', 'desc')
+                    ->with('user')
+                    ->orderBy('view_count', 'desc')
                     ->limit(20)
                     ->get()
-                    ->map(function($snap) {
+                    ->map(function($poem) {
                         return [
-                            'id' => $snap->id,
-                            'title' => $snap->title ?: "Snap di {$snap->video->title}",
-                            'description' => Str::limit($snap->description, 100),
-                            'image_url' => $snap->thumbnail_url ? asset($snap->thumbnail_url) : asset('assets/images/placeholder/placeholder-1.jpg'),
-                            'url' => route('videos.show', $snap->video) . "#snap-{$snap->id}",
-                            'video_title' => $snap->video->title,
-                            'user' => $snap->video->user->getDisplayName(),
-                            'likes' => $snap->like_count,
-                            'timestamp' => gmdate('i:s', $snap->timestamp),
+                            'id' => $poem->id,
+                            'title' => $poem->title,
+                            'description' => Str::limit($poem->description, 100),
+                            'image_url' => $poem->thumbnail_url ?? asset('assets/images/placeholder/poem-placeholder.jpg'),
+                            'url' => route('poems.show', $poem),
+                            'user' => $poem->user->getDisplayName(),
+                            'views' => $poem->view_count,
+                            'likes' => $poem->like_count,
+                            'category' => $poem->category,
+                            'created_at' => $poem->created_at->format('d/m/Y'),
+                        ];
+                    });
+                break;
+
+            case 'article':
+                $content = Article::where('status', 'published')
+                    ->where('is_public', true)
+                    ->when($query, function($q) use ($query) {
+                        $q->whereJsonContains('title', ['it' => $query])
+                          ->orWhereJsonContains('title', ['en' => $query])
+                          ->orWhereJsonContains('content', ['it' => $query])
+                          ->orWhereJsonContains('content', ['en' => $query])
+                          ->orWhereJsonContains('excerpt', ['it' => $query])
+                          ->orWhereJsonContains('excerpt', ['en' => $query]);
+                    })
+                    ->with(['user', 'category'])
+                    ->orderBy('views_count', 'desc')
+                    ->limit(20)
+                    ->get()
+                    ->map(function($article) {
+                        return [
+                            'id' => $article->id,
+                            'title' => $article->title,
+                            'description' => Str::limit($article->excerpt, 100),
+                            'image_url' => $article->featured_image_url,
+                            'url' => route('articles.show', $article),
+                            'user' => $article->user->getDisplayName(),
+                            'views' => $article->views_count,
+                            'likes' => $article->likes_count,
+                            'category' => $article->category->name ?? 'Senza categoria',
+                            'created_at' => $article->created_at->format('d/m/Y'),
                         ];
                     });
                 break;
@@ -518,8 +580,18 @@ class CarouselController extends Controller
                 return Event::where('status', 'published')->find($id);
             case 'user':
                 return User::find($id);
-            case 'snap':
-                return VideoSnap::where('status', 'approved')->find($id);
+            case 'poem':
+                return Poem::where('is_public', true)
+                    ->where(function($q) {
+                        $q->where('moderation_status', 'approved')
+                          ->orWhereNull('moderation_status');
+                    })
+                    ->where('is_draft', false)
+                    ->find($id);
+            case 'article':
+                return Article::where('status', 'published')
+                    ->where('is_public', true)
+                    ->find($id);
             default:
                 return null;
         }
@@ -534,8 +606,10 @@ class CarouselController extends Controller
                 return $content->title ?? 'Evento senza titolo';
             case 'user':
                 return $content->getDisplayName() ?? 'Utente senza nome';
-            case 'snap':
-                return $content->title ?: "Snap di {$content->video->title}" ?? 'Snap senza titolo';
+            case 'poem':
+                return $content->title ?? 'Poesia senza titolo';
+            case 'article':
+                return $content->title ?? 'Articolo senza titolo';
             default:
                 return 'Contenuto senza titolo';
         }
@@ -550,8 +624,10 @@ class CarouselController extends Controller
                 return $content->description ?? null;
             case 'user':
                 return $content->bio ?? null;
-            case 'snap':
+            case 'poem':
                 return $content->description ?? null;
+            case 'article':
+                return $content->excerpt ?? null;
             default:
                 return null;
         }
@@ -566,8 +642,10 @@ class CarouselController extends Controller
                 return route('events.show', $content);
             case 'user':
                 return route('user.show', $content);
-            case 'snap':
-                return route('videos.show', $content->video) . "#snap-{$content->id}";
+            case 'poem':
+                return route('poems.show', $content);
+            case 'article':
+                return route('articles.show', $content);
             default:
                 return null;
         }

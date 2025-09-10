@@ -1,32 +1,31 @@
-@extends('layout.master')
+<?php $__env->startSection('title', 'Crea ' . __('notifications.new') . ' Slide Carosello'); ?>
 
-@section('title', 'Crea ' . __('notifications.new') . ' Slide Carosello')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="page-content">
     <div class="container-fluid">
 
         <!-- Header -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">Crea {{ __('notifications.new') }} Slide Carosello</h4>
+                <h4 class="main-title">Crea <?php echo e(__('notifications.new')); ?> Slide Carosello</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
-                        <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                                <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                             </span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="{{ route('admin.carousels.index') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('admin.carousels.index')); ?>" class="f-s-14 f-w-500">
                             <span>
                                 <i class="ph-duotone ph-images f-s-16"></i> Carosello
                             </span>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">{{ __('notifications.new') }} Slide</a>
+                        <a href="#" class="f-s-14 f-w-500"><?php echo e(__('notifications.new')); ?> Slide</a>
                     </li>
                 </ul>
             </div>
@@ -63,8 +62,8 @@
                         <div class="tab-content mt-3" id="contentTypeTabContent">
                             <!-- Upload Tab -->
                             <div class="tab-pane fade show active" id="upload" role="tabpanel">
-                                <form action="{{ route('admin.carousels.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
+                                <form action="<?php echo e(route('admin.carousels.store')); ?>" method="POST" enctype="multipart/form-data">
+                                    <?php echo csrf_field(); ?>
 
                                     <div class="row">
                                         <div class="col-md-8">
@@ -72,18 +71,18 @@
                                             <div class="mb-3">
                                                 <label for="title" class="form-label">Titolo *</label>
                                                 <input type="text" class="form-control" id="title" name="title"
-                                                       value="{{ old('title') }}" required maxlength="255">
+                                                       value="<?php echo e(old('title')); ?>" required maxlength="255">
                                                 <div class="form-text">Titolo della slide che apparirà nel carosello</div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Descrizione</label>
                                                 <textarea class="form-control" id="description" name="description"
-                                                          rows="3" maxlength="1000">{{ old('description') }}</textarea>
+                                                          rows="3" maxlength="1000"><?php echo e(old('description')); ?></textarea>
                                                 <div class="form-text">Descrizione opzionale che apparirà sotto il titolo</div>
                                             </div>
 
-                                            <!-- {{ __('common.media_section') }} Upload -->
+                                            <!-- <?php echo e(__('common.media_section')); ?> Upload -->
                                             <div class="mb-3">
                                                 <label for="image" class="form-label">Immagine *</label>
                                                 <input type="file" class="form-control" id="image" name="image"
@@ -92,24 +91,24 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="video" class="form-label">{{ __('common.video') }} (opzionale)</label>
+                                                <label for="video" class="form-label"><?php echo e(__('common.video')); ?> (opzionale)</label>
                                                 <input type="file" class="form-control" id="video" name="video"
                                                        accept="video/*">
-                                                <div class="form-text">{{ __('common.video') }} opzionale (MP4, AVI, MOV, MKV, WEBM, FLV - max 10MB)</div>
+                                                <div class="form-text"><?php echo e(__('common.video')); ?> opzionale (MP4, AVI, MOV, MKV, WEBM, FLV - max 10MB)</div>
                                             </div>
 
                                             <!-- Link Settings -->
                                             <div class="mb-3">
                                                 <label for="link_url" class="form-label">URL Link</label>
                                                 <input type="url" class="form-control" id="link_url" name="link_url"
-                                                       value="{{ old('link_url') }}" placeholder="https://example.com">
+                                                       value="<?php echo e(old('link_url')); ?>" placeholder="https://example.com">
                                                 <div class="form-text">URL opzionale per il link della slide</div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="link_text" class="form-label">Testo Link</label>
                                                 <input type="text" class="form-control" id="link_text" name="link_text"
-                                                       value="{{ old('link_text') }}" placeholder="Scopri di più">
+                                                       value="<?php echo e(old('link_text')); ?>" placeholder="Scopri di più">
                                                 <div class="form-text">Testo del pulsante link</div>
                                             </div>
                                         </div>
@@ -127,13 +126,13 @@
                                                     <div class="mb-3">
                                                         <label for="order" class="form-label">Ordine</label>
                                                         <input type="number" class="form-control" id="order" name="order"
-                                                               value="{{ old('order', 0) }}" min="0">
+                                                               value="<?php echo e(old('order', 0)); ?>" min="0">
                                                         <div class="form-text">Ordine di visualizzazione (0 = primo)</div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" <?php echo e(old('is_active', true) ? 'checked' : ''); ?>>
                                                             <label class="form-check-label" for="is_active">Attivo</label>
                                                         </div>
                                                     </div>
@@ -141,14 +140,14 @@
                                                     <div class="mb-3">
                                                         <label for="start_date" class="form-label">Data Inizio</label>
                                                         <input type="datetime-local" class="form-control" id="start_date" name="start_date"
-                                                               value="{{ old('start_date') }}">
+                                                               value="<?php echo e(old('start_date')); ?>">
                                                         <div class="form-text">Lascia vuoto per sempre attivo</div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label for="end_date" class="form-label">Data Fine</label>
                                                         <input type="datetime-local" class="form-control" id="end_date" name="end_date"
-                                                               value="{{ old('end_date') }}">
+                                                               value="<?php echo e(old('end_date')); ?>">
                                                         <div class="form-text">Lascia vuoto per sempre attivo</div>
                                                     </div>
                                                 </div>
@@ -160,7 +159,7 @@
                                     <div class="row mt-3">
                                         <div class="col-12">
                                             <div class="d-flex justify-content-end gap-2">
-                                                <a href="{{ route('admin.carousels.index') }}" class="btn btn-secondary hover-effect">
+                                                <a href="<?php echo e(route('admin.carousels.index')); ?>" class="btn btn-secondary hover-effect">
                                                     <i class="ph-duotone ph-arrow-left f-s-16 me-2"></i>
                                                     Annulla
                                                 </a>
@@ -176,27 +175,28 @@
 
                             <!-- Existing Content Tab -->
                             <div class="tab-pane fade" id="existing" role="tabpanel">
-                                @if ($errors->any())
+                                <?php if($errors->any()): ?>
                                     <div class="alert alert-danger mb-3">
                                         <h6 class="alert-heading">Errore di Validazione</h6>
                                         <ul class="mb-0">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
+                                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <li><?php echo e($error); ?></li>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </ul>
                                     </div>
-                                @endif
+                                <?php endif; ?>
 
-                                @if (session('error'))
+                                <?php if(session('error')): ?>
                                     <div class="alert alert-danger mb-3">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
+                                        <?php echo e(session('error')); ?>
 
-                                <form action="{{ route('admin.carousels.store') }}" method="POST" id="existingContentForm">
-                                    @csrf
-                                    <input type="hidden" name="content_type" id="content_type" value="{{ old('content_type') }}">
-                                    <input type="hidden" name="content_id" id="content_id" value="{{ old('content_id') }}">
+                                    </div>
+                                <?php endif; ?>
+
+                                <form action="<?php echo e(route('admin.carousels.store')); ?>" method="POST" id="existingContentForm">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="content_type" id="content_type" value="<?php echo e(old('content_type')); ?>">
+                                    <input type="hidden" name="content_id" id="content_id" value="<?php echo e(old('content_id')); ?>">
 
                                     <div class="row">
                                         <div class="col-md-8">
@@ -205,9 +205,9 @@
                                                 <label for="content_type_select" class="form-label">Tipo di Contenuto *</label>
                                                 <select class="form-select" id="content_type_select" required>
                                                     <option value="">Seleziona tipo di contenuto</option>
-                                                    @foreach($contentTypes as $type => $label)
-                                                        <option value="{{ $type }}">{{ $label }}</option>
-                                                    @endforeach
+                                                    <?php $__currentLoopData = $contentTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option value="<?php echo e($type); ?>"><?php echo e($label); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </select>
                                             </div>
 
@@ -260,25 +260,25 @@
                                                         <div class="mb-3">
                                                             <label for="override_title" class="form-label">Titolo Personalizzato</label>
                                                             <input type="text" class="form-control" id="override_title" name="title"
-                                                                   value="{{ old('title') }}" placeholder="Lascia vuoto per usare il titolo originale">
+                                                                   value="<?php echo e(old('title')); ?>" placeholder="Lascia vuoto per usare il titolo originale">
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="override_description" class="form-label">Descrizione Personalizzata</label>
                                                             <textarea class="form-control" id="override_description" name="description"
-                                                                      rows="2" placeholder="Lascia vuoto per usare la descrizione originale">{{ old('description') }}</textarea>
+                                                                      rows="2" placeholder="Lascia vuoto per usare la descrizione originale"><?php echo e(old('description')); ?></textarea>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="override_link_url" class="form-label">URL Link Personalizzato</label>
                                                             <input type="url" class="form-control" id="override_link_url" name="link_url"
-                                                                   value="{{ old('link_url') }}" placeholder="Lascia vuoto per usare il link originale">
+                                                                   value="<?php echo e(old('link_url')); ?>" placeholder="Lascia vuoto per usare il link originale">
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="override_link_text" class="form-label">Testo Link Personalizzato</label>
                                                             <input type="text" class="form-control" id="override_link_text" name="link_text"
-                                                                   value="{{ old('link_text', 'Scopri di più') }}" placeholder="Scopri di più">
+                                                                   value="<?php echo e(old('link_text', 'Scopri di più')); ?>" placeholder="Scopri di più">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -298,14 +298,14 @@
                                                     <div class="mb-3">
                                                         <label for="existing_order" class="form-label">Ordine</label>
                                                         <input type="number" class="form-control" id="existing_order" name="order"
-                                                               value="{{ old('order', 0) }}" min="0">
+                                                               value="<?php echo e(old('order', 0)); ?>" min="0">
                                                         <div class="form-text">Ordine di visualizzazione (0 = primo)</div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input" type="checkbox" id="existing_is_active" name="is_active" value="1"
-                                                                   {{ old('is_active', true) ? 'checked' : '' }}>
+                                                                   <?php echo e(old('is_active', true) ? 'checked' : ''); ?>>
                                                             <label class="form-check-label" for="existing_is_active">Attivo</label>
                                                         </div>
                                                     </div>
@@ -313,14 +313,14 @@
                                                     <div class="mb-3">
                                                         <label for="existing_start_date" class="form-label">Data Inizio</label>
                                                         <input type="datetime-local" class="form-control" id="existing_start_date" name="start_date"
-                                                               value="{{ old('start_date') }}">
+                                                               value="<?php echo e(old('start_date')); ?>">
                                                         <div class="form-text">Lascia vuoto per sempre attivo</div>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label for="existing_end_date" class="form-label">Data Fine</label>
                                                         <input type="datetime-local" class="form-control" id="existing_end_date" name="end_date"
-                                                               value="{{ old('end_date') }}">
+                                                               value="<?php echo e(old('end_date')); ?>">
                                                         <div class="form-text">Lascia vuoto per sempre attivo</div>
                                                     </div>
                                                 </div>
@@ -332,7 +332,7 @@
                                     <div class="row mt-3">
                                         <div class="col-12">
                                             <div class="d-flex justify-content-end gap-2">
-                                                <a href="{{ route('admin.carousels.index') }}" class="btn btn-secondary hover-effect">
+                                                <a href="<?php echo e(route('admin.carousels.index')); ?>" class="btn btn-secondary hover-effect">
                                                     <i class="ph-duotone ph-arrow-left f-s-16 me-2"></i>
                                                     Annulla
                                                 </a>
@@ -353,9 +353,9 @@
 
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 (function() {
     'use strict';
@@ -563,10 +563,10 @@ function performSearch() {
     contentList.innerHTML = '<div class="text-center p-3"><i class="ph-duotone ph-spinner f-s-24 text-primary"></i><p class="mt-2">Ricerca in corso...</p></div>';
     contentResults.style.display = 'block';
 
-    fetch(`{{ route('admin.carousels.search-content') }}?type=${contentType}&query=${encodeURIComponent(query)}`, {
+    fetch(`<?php echo e(route('admin.carousels.search-content')); ?>?type=${contentType}&query=${encodeURIComponent(query)}`, {
         method: 'GET',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
@@ -671,7 +671,7 @@ function selectContent(item) {
     // Update form action
     const existingContentForm = document.getElementById('existingContentForm');
     if (existingContentForm) {
-        existingContentForm.action = '{{ route("admin.carousels.store") }}';
+        existingContentForm.action = '<?php echo e(route("admin.carousels.store")); ?>';
 
     } else {
         console.error('❌ Form not found');
@@ -700,13 +700,13 @@ function openContentSelectionModal(item) {
     const modalSelectedInfo = document.getElementById('modalSelectedInfo');
     switch (contentType) {
         case 'video':
-            modalSelectedInfo.textContent = `{{ __('common.video') }} • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni`;
+            modalSelectedInfo.textContent = `<?php echo e(__('common.video')); ?> • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni`;
             break;
         case 'event':
-            modalSelectedInfo.textContent = `{{ __('invitations.event') }} • ${item.dataset.organizer || 'N/A'} • ${item.dataset.date || 'N/A'} • ${item.dataset.location || 'N/A'}`;
+            modalSelectedInfo.textContent = `<?php echo e(__('invitations.event')); ?> • ${item.dataset.organizer || 'N/A'} • ${item.dataset.date || 'N/A'} • ${item.dataset.location || 'N/A'}`;
             break;
         case 'user':
-            modalSelectedInfo.textContent = `{{ __('permissions.user') }} • ${item.dataset.videos_count || '0'} video • ${item.dataset.location || 'N/A'}`;
+            modalSelectedInfo.textContent = `<?php echo e(__('permissions.user')); ?> • ${item.dataset.videos_count || '0'} video • ${item.dataset.location || 'N/A'}`;
             break;
         case 'poem':
             modalSelectedInfo.textContent = `Poesia • ${item.dataset.user || 'N/A'} • ${item.dataset.views || '0'} visualizzazioni • ${item.dataset.likes || '0'} like`;
@@ -753,7 +753,7 @@ function submitModalForm() {
     formData.append('is_active', document.getElementById('modal_is_active').checked ? '1' : '0');
 
     // CSRF token
-    formData.append('_token', '{{ csrf_token() }}');
+    formData.append('_token', '<?php echo e(csrf_token()); ?>');
 
 
 
@@ -763,12 +763,12 @@ function submitModalForm() {
     submitBtn.innerHTML = '<i class="ph-duotone ph-spinner f-s-16 me-2"></i>Creazione...';
     submitBtn.disabled = true;
 
-    // {{ __('videos.send') }} la richiesta
-    fetch('{{ route("admin.carousels.store") }}', {
+    // <?php echo e(__('videos.send')); ?> la richiesta
+    fetch('<?php echo e(route("admin.carousels.store")); ?>', {
         method: 'POST',
         body: formData,
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
         }
@@ -803,7 +803,7 @@ function submitModalForm() {
                 confirmButtonText: 'OK'
             }).then(() => {
                 // Redirect alla lista caroselli
-                window.location.href = '{{ route("admin.carousels.index") }}';
+                window.location.href = '<?php echo e(route("admin.carousels.index")); ?>';
             });
         } else {
             throw new Error(data.message || 'Errore sconosciuto');
@@ -952,4 +952,6 @@ document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
         </div>
     </div>
 </div>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/carousels/create.blade.php ENDPATH**/ ?>

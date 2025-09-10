@@ -1,32 +1,31 @@
-@extends('layout.master')
+<?php $__env->startSection('title', __('permissions.modify') . ' Slide Carosello'); ?>
 
-@section('title', __('permissions.modify') . ' Slide Carosello')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="page-content">
     <div class="container-fluid">
 
         <!-- Header -->
         <div class="row m-1">
             <div class="col-12">
-                <h4 class="main-title">{{ __('permissions.modify') }} Slide Carosello</h4>
+                <h4 class="main-title"><?php echo e(__('permissions.modify')); ?> Slide Carosello</h4>
                 <ul class="app-line-breadcrumbs mb-3">
                     <li class="">
-                        <a href="{{ route('dashboard') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="f-s-14 f-w-500">
                             <span>
-                                <i class="ph-duotone ph-house f-s-16"></i> {{ __('dashboard.dashboard') }}
+                                <i class="ph-duotone ph-house f-s-16"></i> <?php echo e(__('dashboard.dashboard')); ?>
+
                             </span>
                         </a>
                     </li>
                     <li class="">
-                        <a href="{{ route('admin.carousels.index') }}" class="f-s-14 f-w-500">
+                        <a href="<?php echo e(route('admin.carousels.index')); ?>" class="f-s-14 f-w-500">
                             <span>
                                 <i class="ph-duotone ph-images f-s-16"></i> Carosello
                             </span>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="#" class="f-s-14 f-w-500">{{ __('permissions.modify') }} Slide</a>
+                        <a href="#" class="f-s-14 f-w-500"><?php echo e(__('permissions.modify')); ?> Slide</a>
                     </li>
                 </ul>
             </div>
@@ -39,13 +38,14 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0">
                             <i class="ph-duotone ph-pencil-circle f-s-16 me-2"></i>
-                            {{ __('permissions.modify') }} Slide: {{ $carousel->title }}
+                            <?php echo e(__('permissions.modify')); ?> Slide: <?php echo e($carousel->title); ?>
+
                         </h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('admin.carousels.update', $carousel) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
+                        <form action="<?php echo e(route('admin.carousels.update', $carousel)); ?>" method="POST" enctype="multipart/form-data">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('PUT'); ?>
 
                             <div class="row">
                                 <div class="col-md-8">
@@ -53,22 +53,22 @@
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Titolo *</label>
                                         <input type="text" class="form-control" id="title" name="title"
-                                               value="{{ old('title', $carousel->title) }}" required maxlength="255">
+                                               value="<?php echo e(old('title', $carousel->title)); ?>" required maxlength="255">
                                         <div class="form-text">Titolo della slide che apparirà nel carosello</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Descrizione</label>
                                         <textarea class="form-control" id="description" name="description"
-                                                  rows="3" maxlength="1000">{{ old('description', $carousel->description) }}</textarea>
+                                                  rows="3" maxlength="1000"><?php echo e(old('description', $carousel->description)); ?></textarea>
                                         <div class="form-text">Descrizione opzionale che apparirà sotto il titolo</div>
                                     </div>
 
-                                    <!-- {{ __('common.media_section') }} Upload -->
+                                    <!-- <?php echo e(__('common.media_section')); ?> Upload -->
                                     <div class="mb-3">
                                         <label for="image" class="form-label">Immagine</label>
                                         
-                                        @if($carousel->isContentReference() && $carousel->content_image_url)
+                                        <?php if($carousel->isContentReference() && $carousel->content_image_url): ?>
                                             <!-- Toggle per scegliere tra foto originale e caricata -->
                                             <div class="mb-3">
                                                 <div class="form-check form-switch">
@@ -83,7 +83,7 @@
                                             <!-- Mostra immagine originale -->
                                             <div class="mb-3" id="original-image-preview">
                                                 <small class="text-muted">Immagine originale del contenuto:</small>
-                                                <img src="{{ $carousel->content_image_url }}" alt="Original" class="img-thumbnail ms-2" style="height: 80px;">
+                                                <img src="<?php echo e($carousel->content_image_url); ?>" alt="Original" class="img-thumbnail ms-2" style="height: 80px;">
                                             </div>
                                             
                                             <!-- Campo per caricare nuova immagine (nascosto di default) -->
@@ -91,46 +91,46 @@
                                                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
                                                 <div class="form-text">Carica una nuova immagine personalizzata</div>
                                             </div>
-                                        @else
+                                        <?php else: ?>
                                             <!-- Upload normale per contenuti non referenziati -->
                                             <input type="file" class="form-control" id="image" name="image" accept="image/*">
                                             <div class="form-text">Lascia vuoto per mantenere l'immagine attuale</div>
-                                        @endif
+                                        <?php endif; ?>
                                         
-                                        @if($carousel->image_path)
+                                        <?php if($carousel->image_path): ?>
                                             <div class="mt-2">
                                                 <small class="text-muted">Immagine attuale:</small>
-                                                <img src="{{ $carousel->imageUrl }}" alt="Current" class="img-thumbnail ms-2" style="height: 50px;">
+                                                <img src="<?php echo e($carousel->imageUrl); ?>" alt="Current" class="img-thumbnail ms-2" style="height: 50px;">
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="video" class="form-label">{{ __('common.video') }} (Opzionale)</label>
+                                        <label for="video" class="form-label"><?php echo e(__('common.video')); ?> (Opzionale)</label>
                                         <input type="file" class="form-control" id="video" name="video" accept="video/*">
                                         <div class="form-text">Lascia vuoto per mantenere il video attuale</div>
-                                        @if($carousel->video_path)
+                                        <?php if($carousel->video_path): ?>
                                             <div class="mt-2">
-                                                <small class="text-muted">{{ __('common.video') }} attuale:</small>
+                                                <small class="text-muted"><?php echo e(__('common.video')); ?> attuale:</small>
                                                 <video class="ms-2" style="height: 50px;" controls>
-                                                    <source src="{{ $carousel->videoUrl }}" type="video/mp4">
+                                                    <source src="<?php echo e($carousel->videoUrl); ?>" type="video/mp4">
                                                 </video>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
 
                                     <!-- Link -->
                                     <div class="mb-3">
                                         <label for="link_url" class="form-label">URL Link</label>
                                         <input type="url" class="form-control" id="link_url" name="link_url"
-                                               value="{{ old('link_url', $carousel->link_url) }}" placeholder="https://...">
+                                               value="<?php echo e(old('link_url', $carousel->link_url)); ?>" placeholder="https://...">
                                         <div class="form-text">URL opzionale per il link del pulsante</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="link_text" class="form-label">Testo Link</label>
                                         <input type="text" class="form-control" id="link_text" name="link_text"
-                                               value="{{ old('link_text', $carousel->link_text) }}" maxlength="100" placeholder="Scopri di più">
+                                               value="<?php echo e(old('link_text', $carousel->link_text)); ?>" maxlength="100" placeholder="Scopri di più">
                                         <div class="form-text">Testo del pulsante (richiede URL)</div>
                                     </div>
                                 </div>
@@ -148,14 +148,14 @@
                                             <div class="mb-3">
                                                 <label for="order" class="form-label">Ordine</label>
                                                 <input type="number" class="form-control" id="order" name="order"
-                                                       value="{{ old('order', $carousel->order) }}" min="0">
+                                                       value="<?php echo e(old('order', $carousel->order)); ?>" min="0">
                                                 <div class="form-text">Ordine di visualizzazione (0 = primo)</div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" id="is_active"
-                                                           name="is_active" value="1" {{ old('is_active', $carousel->is_active) ? 'checked' : '' }}>
+                                                           name="is_active" value="1" <?php echo e(old('is_active', $carousel->is_active) ? 'checked' : ''); ?>>
                                                     <label class="form-check-label" for="is_active">
                                                         Slide Attiva
                                                     </label>
@@ -166,14 +166,14 @@
                                             <div class="mb-3">
                                                 <label for="start_date" class="form-label">Data Inizio</label>
                                                 <input type="datetime-local" class="form-control" id="start_date"
-                                                       name="start_date" value="{{ old('start_date', $carousel->start_date ? $carousel->start_date->format('Y-m-d\TH:i') : '') }}">
+                                                       name="start_date" value="<?php echo e(old('start_date', $carousel->start_date ? $carousel->start_date->format('Y-m-d\TH:i') : '')); ?>">
                                                 <div class="form-text">Quando iniziare a mostrare la slide</div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="end_date" class="form-label">Data Fine</label>
                                                 <input type="datetime-local" class="form-control" id="end_date"
-                                                       name="end_date" value="{{ old('end_date', $carousel->end_date ? $carousel->end_date->format('Y-m-d\TH:i') : '') }}">
+                                                       name="end_date" value="<?php echo e(old('end_date', $carousel->end_date ? $carousel->end_date->format('Y-m-d\TH:i') : '')); ?>">
                                                 <div class="form-text">Quando smettere di mostrare la slide</div>
                                             </div>
                                         </div>
@@ -184,26 +184,29 @@
                                         <div class="card-header">
                                             <h6 class="card-title mb-0">
                                                 <i class="ph-duotone ph-info-circle f-s-16 me-2"></i>
-                                                {{ __('invitations.status') }} Attuale
+                                                <?php echo e(__('invitations.status')); ?> Attuale
                                             </h6>
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-2">
-                                                <strong>{{ __('invitations.status') }}:</strong>
-                                                @if($carousel->isCurrentlyActive())
+                                                <strong><?php echo e(__('invitations.status')); ?>:</strong>
+                                                <?php if($carousel->isCurrentlyActive()): ?>
                                                     <span class="badge bg-success ms-2">Attivo</span>
-                                                @else
+                                                <?php else: ?>
                                                     <span class="badge bg-danger ms-2">Inattivo</span>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                             <div class="mb-2">
-                                                <strong>Ordine:</strong> {{ $carousel->order }}
+                                                <strong>Ordine:</strong> <?php echo e($carousel->order); ?>
+
                                             </div>
                                             <div class="mb-2">
-                                                <strong>Creata:</strong> {{ $carousel->created_at->format('d/m/Y H:i') }}
+                                                <strong>Creata:</strong> <?php echo e($carousel->created_at->format('d/m/Y H:i')); ?>
+
                                             </div>
                                             <div class="mb-0">
-                                                <strong>Aggiornata:</strong> {{ $carousel->updated_at->format('d/m/Y H:i') }}
+                                                <strong>Aggiornata:</strong> <?php echo e($carousel->updated_at->format('d/m/Y H:i')); ?>
+
                                             </div>
                                         </div>
                                     </div>
@@ -214,7 +217,7 @@
                             <div class="row mt-4">
                                 <div class="col-12">
                                     <div class="d-flex justify-content-between">
-                                        <a href="{{ route('admin.carousels.index') }}" class="btn btn-secondary hover-effect">
+                                        <a href="<?php echo e(route('admin.carousels.index')); ?>" class="btn btn-secondary hover-effect">
                                             <i class="ph-duotone ph-arrow-left f-s-16 me-2"></i>
                                             Annulla
                                         </a>
@@ -234,9 +237,9 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 (function() {
     'use strict';
@@ -276,4 +279,6 @@
     
 })();
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/carousels/edit.blade.php ENDPATH**/ ?>
