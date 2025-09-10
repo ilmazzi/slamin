@@ -29,6 +29,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin.access' => \App\Http\Middleware\AdminAccess::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'logging' => \App\Http\Middleware\LoggingMiddleware::class,
+            // Spatie Permission middleware
+            'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

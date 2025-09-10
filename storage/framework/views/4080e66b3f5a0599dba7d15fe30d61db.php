@@ -1,19 +1,21 @@
-@extends('layout.master')
 
-@section('main-content')
+
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0">{{ __('articles.layout_management') }}</h4>
+                        <h4 class="mb-0"><?php echo e(__('articles.layout_management')); ?></h4>
                         <div>
-                            <a href="{{ route('articles.layout.preview') }}" class="btn btn-outline-primary me-2" target="_blank">
-                                <i class="ti ti-eye"></i> {{ __('articles.preview') }}
+                            <a href="<?php echo e(route('articles.layout.preview')); ?>" class="btn btn-outline-primary me-2" target="_blank">
+                                <i class="ti ti-eye"></i> <?php echo e(__('articles.preview')); ?>
+
                             </a>
                             <button class="btn btn-success" onclick="saveAllLayout()">
-                                <i class="ti ti-device-floppy"></i> {{ __('articles.save_all') }}
+                                <i class="ti ti-device-floppy"></i> <?php echo e(__('articles.save_all')); ?>
+
                             </button>
                         </div>
                     </div>
@@ -27,21 +29,21 @@
                                 <div class="col-12 mb-4">
                                     <div class="card border-primary">
                                         <div class="card-header bg-primary text-white">
-                                            <h5 class="mb-0">{{ __('articles.banner') }}</h5>
+                                            <h5 class="mb-0"><?php echo e(__('articles.banner')); ?></h5>
                                         </div>
                                         <div class="card-body">
-                                            <div id="banner-position" class="layout-position {{ !isset($layoutData['banner']['article']) ? 'empty' : '' }}" 
+                                            <div id="banner-position" class="layout-position <?php echo e(!isset($layoutData['banner']['article']) ? 'empty' : ''); ?>" 
                                                  data-position="banner" 
                                                  onclick="openArticleSelector('banner')">
-                                                @if(isset($layoutData['banner']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['banner']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['banner']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['banner']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-4">
                                                         <i class="ti ti-plus-circle h1"></i>
-                                                        <p>{{ __('articles.drag_article_here') }}</p>
+                                                        <p><?php echo e(__('articles.drag_article_here')); ?></p>
                                                         <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -51,19 +53,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column1') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column1')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column1-position" class="layout-position empty" data-position="column1" onclick="openArticleSelector('column1')">
-                                                @if(isset($layoutData['column1']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column1']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column1']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column1']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -72,19 +74,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column2') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column2')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column2-position" class="layout-position empty" data-position="column2" onclick="openArticleSelector('column2')">
-                                                @if(isset($layoutData['column2']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column2']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column2']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column2']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -94,19 +96,19 @@
                                 <div class="col-12 mb-4">
                                     <div class="card border-warning">
                                         <div class="card-header bg-warning text-dark">
-                                            <h6 class="mb-0">{{ __('articles.horizontal1') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.horizontal1')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="horizontal1-position" class="layout-position empty" data-position="horizontal1" onclick="openArticleSelector('horizontal1')">
-                                                @if(isset($layoutData['horizontal1']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal1']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['horizontal1']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['horizontal1']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -116,19 +118,19 @@
                                 <div class="col-12 mb-4">
                                     <div class="card border-warning">
                                         <div class="card-header bg-warning text-dark">
-                                            <h6 class="mb-0">{{ __('articles.horizontal2') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.horizontal2')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="horizontal2-position" class="layout-position empty" data-position="horizontal2" onclick="openArticleSelector('horizontal2')">
-                                                @if(isset($layoutData['horizontal2']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal2']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['horizontal2']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['horizontal2']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -138,19 +140,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column3') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column3')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column3-position" class="layout-position empty" data-position="column3" onclick="openArticleSelector('column3')">
-                                                @if(isset($layoutData['column3']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column3']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column3']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column3']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -159,19 +161,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column4') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column4')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column4-position" class="layout-position empty" data-position="column4" onclick="openArticleSelector('column4')">
-                                                @if(isset($layoutData['column4']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column4']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column4']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column4']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -181,19 +183,19 @@
                                 <div class="col-12 mb-4">
                                     <div class="card border-warning">
                                         <div class="card-header bg-warning text-dark">
-                                            <h6 class="mb-0">{{ __('articles.horizontal3') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.horizontal3')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="horizontal3-position" class="layout-position empty" data-position="horizontal3" onclick="openArticleSelector('horizontal3')">
-                                                @if(isset($layoutData['horizontal3']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal3']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['horizontal3']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['horizontal3']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -203,19 +205,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column5') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column5')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column5-position" class="layout-position empty" data-position="column5" onclick="openArticleSelector('column5')">
-                                                @if(isset($layoutData['column5']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column5']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column5']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column5']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -224,19 +226,19 @@
                                 <div class="col-md-6 mb-4">
                                     <div class="card border-info">
                                         <div class="card-header bg-info text-white">
-                                            <h6 class="mb-0">{{ __('articles.column6') }}</h6>
+                                            <h6 class="mb-0"><?php echo e(__('articles.column6')); ?></h6>
                                         </div>
                                         <div class="card-body">
                                             <div id="column6-position" class="layout-position empty" data-position="column6" onclick="openArticleSelector('column6')">
-                                                @if(isset($layoutData['column6']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column6']['article']])
-                                                @else
+                                                <?php if(isset($layoutData['column6']['article'])): ?>
+                                                    <?php echo $__env->make('articles.layout.article-preview', ['article' => $layoutData['column6']['article']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                                                <?php else: ?>
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -255,7 +257,7 @@
                         <div class="col-md-4">
                             <div class="card sticky-sidebar" id="articlesSidebar">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">{{ __('articles.available_articles') }}</h5>
+                                    <h5 class="mb-0"><?php echo e(__('articles.available_articles')); ?></h5>
                                     <button class="btn btn-sm btn-outline-secondary d-md-none" onclick="closeMobileSidebar()">
                                         <i class="ph ph-x"></i>
                                     </button>
@@ -263,32 +265,32 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <input type="text" id="articleSearch" class="form-control" 
-                                               placeholder="{{ __('articles.search_articles') }}">
+                                               placeholder="<?php echo e(__('articles.search_articles')); ?>">
                                     </div>
                                     <div id="articlesList" class="articles-list">
-                                        @foreach($articles as $article)
-                                            <div class="article-item mb-2" data-article-id="{{ $article->id }}" draggable="true">
+                                        <?php $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="article-item mb-2" data-article-id="<?php echo e($article->id); ?>" draggable="true">
                                                 <div class="card">
                                                     <div class="card-body p-2">
                                                         <div class="d-flex align-items-center">
-                                                            @if($article->featured_image)
-                                                                <img src="{{ Storage::url($article->featured_image) }}" 
+                                                            <?php if($article->featured_image): ?>
+                                                                <img src="<?php echo e(Storage::url($article->featured_image)); ?>" 
                                                                      class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;" 
-                                                                     alt="{{ $article->title }}">
-                                                            @endif
+                                                                     alt="<?php echo e($article->title); ?>">
+                                                            <?php endif; ?>
                                                             <div class="flex-grow-1">
-                                                                <h6 class="mb-0 small">{{ Str::limit($article->title, 40) }}</h6>
-                                                                <small class="text-muted">{{ $article->user->name }}</small>
+                                                                <h6 class="mb-0 small"><?php echo e(Str::limit($article->title, 40)); ?></h6>
+                                                                <small class="text-muted"><?php echo e($article->user->name); ?></small>
                                                             </div>
                                                             <button class="btn btn-sm btn-outline-primary" 
-                                                                    onclick="selectArticleForPosition('{{ $article->id }}')">
+                                                                    onclick="selectArticleForPosition('<?php echo e($article->id); ?>')">
                                                                 <i class="ti ti-plus"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -305,40 +307,50 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('articles.select_position') }}</h5>
+                <h5 class="modal-title"><?php echo e(__('articles.select_position')); ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="d-grid gap-2">
                     <button class="btn btn-outline-primary" onclick="assignArticleToPosition('banner')">
-                        {{ __('articles.banner') }}
+                        <?php echo e(__('articles.banner')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column1')">
-                        {{ __('articles.column1') }}
+                        <?php echo e(__('articles.column1')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column2')">
-                        {{ __('articles.column2') }}
+                        <?php echo e(__('articles.column2')); ?>
+
                     </button>
                     <button class="btn btn-outline-warning" onclick="assignArticleToPosition('horizontal1')">
-                        {{ __('articles.horizontal1') }}
+                        <?php echo e(__('articles.horizontal1')); ?>
+
                     </button>
                     <button class="btn btn-outline-warning" onclick="assignArticleToPosition('horizontal2')">
-                        {{ __('articles.horizontal2') }}
+                        <?php echo e(__('articles.horizontal2')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column3')">
-                        {{ __('articles.column3') }}
+                        <?php echo e(__('articles.column3')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column4')">
-                        {{ __('articles.column4') }}
+                        <?php echo e(__('articles.column4')); ?>
+
                     </button>
                     <button class="btn btn-outline-warning" onclick="assignArticleToPosition('horizontal3')">
-                        {{ __('articles.horizontal3') }}
+                        <?php echo e(__('articles.horizontal3')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column5')">
-                        {{ __('articles.column5') }}
+                        <?php echo e(__('articles.column5')); ?>
+
                     </button>
                     <button class="btn btn-outline-info" onclick="assignArticleToPosition('column6')">
-                        {{ __('articles.column6') }}
+                        <?php echo e(__('articles.column6')); ?>
+
                     </button>
                 </div>
             </div>
@@ -346,9 +358,9 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
 let selectedArticleId = null;
@@ -450,7 +462,7 @@ function removeArticleFromPosition(position) {
     positionElement.innerHTML = `
         <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
-                            <p class="small">{{ __('articles.drag_article_here') }}</p>
+                            <p class="small"><?php echo e(__('articles.drag_article_here')); ?></p>
                             <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
                         </div>
     `;
@@ -499,11 +511,11 @@ function saveAllLayout() {
         article_id: layoutChanges[position]
     }));
 
-    fetch('{{ route('articles.layout.bulk-update') }}', {
+    fetch('<?php echo e(route('articles.layout.bulk-update')); ?>', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
         },
         body: JSON.stringify({
             layout: changes
@@ -520,7 +532,7 @@ function saveAllLayout() {
     })
     .catch(error => {
         console.error('Error:', error);
-        showNotification('{{ __('articles.error_saving_layout') }}', 'error');
+        showNotification('<?php echo e(__('articles.error_saving_layout')); ?>', 'error');
     });
 }
 
@@ -545,7 +557,7 @@ function refreshAvailableArticles() {
     const searchTerm = searchInput ? searchInput.value : '';
     
     // Fetch updated articles list
-    fetch(`{{ route('articles.layout.articles') }}?search=${encodeURIComponent(searchTerm)}`)
+    fetch(`<?php echo e(route('articles.layout.articles')); ?>?search=${encodeURIComponent(searchTerm)}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -729,4 +741,6 @@ document.addEventListener('click', function(e) {
     }
 }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/articles/layout/index.blade.php ENDPATH**/ ?>

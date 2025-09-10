@@ -41,6 +41,7 @@ return [
     'excerpt_help' => 'Breve descrizione dell\'articolo (opzionale)',
     'featured_image' => 'Immagine in Evidenza',
     'featured_articles' => 'Articoli in Evidenza',
+    'editor_picks' => 'Scelte della Redazione',
     'unfeatured' => 'Non in Evidenza',
     'select_category' => 'Seleziona Categoria',
     'select_tags' => 'Seleziona Tag',

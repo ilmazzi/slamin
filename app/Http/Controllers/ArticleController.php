@@ -26,14 +26,8 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        // Get featured articles for horizontal display (max 3)
-        $featuredArticles = Article::with(['user', 'category', 'tags'])
-            ->published()
-            ->featured()
-            ->withCount(['likes', 'comments'])
-            ->orderBy('published_at', 'desc')
-            ->limit(3)
-            ->get();
+        // Get layout articles for the main content area
+        $layoutArticles = $this->getLayoutArticles();
 
         // Get articles for the main content area
         $mainQuery = Article::with(['user', 'category', 'tags'])
@@ -79,16 +73,10 @@ class ArticleController extends Controller
                 $mainQuery->orderBy('published_at', 'desc');
         }
 
-        // If no filters applied, show featured + recent layout
+        // If no filters applied, show layout articles
         if (!$request->filled('search') && !$request->filled('category') && !$request->filled('tag')) {
-            // Get recent articles for the 2-column layout (excluding featured)
-            $recentQuery = Article::with(['user', 'category', 'tags'])
-                ->published()
-                ->notFeatured()
-                ->withCount(['likes', 'comments'])
-                ->orderBy('published_at', 'desc');
-
-            $recentArticles = $recentQuery->paginate(12);
+            // Use layout articles for the main display
+            $recentArticles = collect(); // Empty collection for layout mode
             $showAllArticles = false;
         } else {
             // Show all articles when filters are applied
@@ -101,7 +89,7 @@ class ArticleController extends Controller
         $tags = ArticleTag::active()->popular()->limit(20)->get();
 
         return view('articles.index', compact(
-            'featuredArticles',
+            'layoutArticles',
             'recentArticles',
             'categories',
             'tags',
@@ -664,7 +652,7 @@ class ArticleController extends Controller
      */
     private function getLayoutArticles()
     {
-        $positions = ['banner', 'column1', 'column2', 'horizontal1', 'horizontal2'];
+        $positions = ['banner', 'column1', 'column2', 'horizontal1', 'horizontal2', 'column3', 'column4', 'horizontal3', 'column5', 'column6'];
         $layoutArticles = [];
 
         foreach ($positions as $position) {

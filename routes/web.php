@@ -1413,6 +1413,17 @@ Route::post('/reactions/toggle', [App\Http\Controllers\ChatReactionController::c
 
 // ===== ROUTES PER ARTICOLI/NOTIZIE =====
 
+// Routes per layout articoli (admin/editor) - DEVE ESSERE PRIMA del gruppo articles
+Route::prefix('articles/layout')->name('articles.layout.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ArticleLayoutController::class, 'index'])->name('index');
+    Route::post('/update', [App\Http\Controllers\ArticleLayoutController::class, 'update'])->name('update');
+    Route::post('/clear', [App\Http\Controllers\ArticleLayoutController::class, 'clear'])->name('clear');
+    Route::post('/bulk-update', [App\Http\Controllers\ArticleLayoutController::class, 'bulkUpdate'])->name('bulk-update');
+    Route::get('/preview', [App\Http\Controllers\ArticleLayoutController::class, 'preview'])->name('preview');
+    Route::get('/articles', [App\Http\Controllers\ArticleLayoutController::class, 'getArticles'])->name('articles');
+    Route::get('/current', [App\Http\Controllers\ArticleLayoutController::class, 'getLayout'])->name('current');
+});
+
 // Routes per le poesie
 Route::prefix('articles')->name('articles.')->group(function () {
     // Routes pubbliche
@@ -1471,17 +1482,6 @@ Route::prefix('articles')->name('articles.')->group(function () {
             Route::get('/check', [App\Http\Controllers\ArticleCommentController::class, 'checkReport'])->name('check');
         });
     });
-});
-
-// Routes per layout articoli (admin/editor)
-Route::prefix('articles/layout')->name('articles.layout.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\ArticleLayoutController::class, 'index'])->name('index');
-    Route::post('/update', [App\Http\Controllers\ArticleLayoutController::class, 'update'])->name('update');
-    Route::post('/clear', [App\Http\Controllers\ArticleLayoutController::class, 'clear'])->name('clear');
-    Route::post('/bulk-update', [App\Http\Controllers\ArticleLayoutController::class, 'bulkUpdate'])->name('bulk-update');
-    Route::get('/preview', [App\Http\Controllers\ArticleLayoutController::class, 'preview'])->name('preview');
-    Route::get('/articles', [App\Http\Controllers\ArticleLayoutController::class, 'getArticles'])->name('articles');
-    Route::get('/current', [App\Http\Controllers\ArticleLayoutController::class, 'getLayout'])->name('current');
 });
 
 // Dashboard principale articoli (admin/editor)

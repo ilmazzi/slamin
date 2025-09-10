@@ -12,7 +12,6 @@ class ArticleLayoutController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permission:articles.manage_layout');
     }
 
     /**
@@ -20,6 +19,11 @@ class ArticleLayoutController extends Controller
      */
     public function index()
     {
+        // Check if user has permission to manage article layout
+        if (!Auth::check() || !Auth::user()->hasPermissionTo('articles.manage_layout')) {
+            abort(403, 'Non hai i permessi per gestire il layout degli articoli.');
+        }
+
         $positions = ArticleLayout::getPositions();
         $layoutData = [];
 
@@ -32,8 +36,13 @@ class ArticleLayoutController extends Controller
             ];
         }
 
+        // Get articles already used in layout
+        $usedArticleIds = collect($layoutData)->pluck('article')->filter()->pluck('id')->toArray();
+        
+        // Get available articles (excluding already used ones)
         $articles = Article::published()
             ->with(['user', 'category'])
+            ->whereNotIn('id', $usedArticleIds)
             ->orderBy('title')
             ->get();
 
@@ -77,8 +86,12 @@ class ArticleLayoutController extends Controller
      */
     public function getArticles(Request $request)
     {
+        // Get articles already used in layout
+        $usedArticleIds = ArticleLayout::pluck('article_id')->filter()->toArray();
+        
         $query = Article::with(['user', 'category'])
             ->published()
+            ->whereNotIn('id', $usedArticleIds)
             ->orderBy('title');
 
         if ($request->filled('search')) {
@@ -195,7 +208,7 @@ class ArticleLayoutController extends Controller
      */
     private function getLayoutArticles()
     {
-        $positions = ['banner', 'column1', 'column2', 'horizontal1', 'horizontal2'];
+        $positions = ['banner', 'column1', 'column2', 'horizontal1', 'horizontal2', 'column3', 'column4', 'horizontal3', 'column5', 'column6'];
         $layoutArticles = [];
 
         foreach ($positions as $position) {

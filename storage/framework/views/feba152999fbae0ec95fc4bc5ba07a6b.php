@@ -1,8 +1,6 @@
-@extends('layout.master')
+<?php $__env->startSection('title', 'Impostazioni - Admin'); ?>
 
-@section('title', 'Impostazioni - Admin')
-
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row m-1">
@@ -22,13 +20,14 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-navigation-arrow me-2"></i>
-                        {{ __('admin.quick_navigation') }}
+                        <?php echo e(__('admin.quick_navigation')); ?>
+
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.settings.upload.index') }}" class="card card-light-primary hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.settings.upload.index')); ?>" class="card card-light-primary hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-upload f-s-30 text-primary mb-2"></i>
                                     <h6 class="mb-1">Impostazioni Upload</h6>
@@ -37,7 +36,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.settings.payment.index') }}" class="card card-light-success hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.settings.payment.index')); ?>" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-credit-card f-s-30 text-success mb-2"></i>
                                     <h6 class="mb-1">Impostazioni Pagamenti</h6>
@@ -46,16 +45,16 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.carousels.index') }}" class="card card-light-info hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.carousels.index')); ?>" class="card card-light-info hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-squares-four f-s-30 text-info mb-2"></i>
-                                    <h6 class="mb-1">{{ __('admin.carousel_management') }}</h6>
-                                    <small class="text-muted">{{ __('admin.manage_carousel') }}</small>
+                                    <h6 class="mb-1"><?php echo e(__('admin.carousel_management')); ?></h6>
+                                    <small class="text-muted"><?php echo e(__('admin.manage_carousel')); ?></small>
                                 </div>
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.settings.placeholder') }}" class="card card-light-info hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.settings.placeholder')); ?>" class="card card-light-info hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-palette f-s-30 text-info mb-2"></i>
                                     <h6 class="mb-1">Impostazioni Placeholder</h6>
@@ -64,7 +63,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('articles.layout.index') }}" class="card card-light-warning hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('articles.layout.index')); ?>" class="card card-light-warning hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-newspaper f-s-30 text-warning mb-2"></i>
                                     <h6 class="mb-1">Layout Articoli</h6>
@@ -73,7 +72,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.translations.index') }}" class="card card-light-success hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.translations.index')); ?>" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-translate f-s-30 text-success mb-2"></i>
                                     <h6 class="mb-1">Gestione Traduzioni</h6>
@@ -82,7 +81,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.peertube.index') }}" class="card card-light-warning hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.peertube.index')); ?>" class="card card-light-warning hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-video-camera f-s-30 text-warning mb-2"></i>
                                     <h6 class="mb-1">Configurazione PeerTube</h6>
@@ -91,7 +90,7 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('admin.payment-accounts.index') }}" class="card card-light-info hover-effect text-decoration-none">
+                            <a href="<?php echo e(route('admin.payment-accounts.index')); ?>" class="card card-light-info hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-users f-s-30 text-info mb-2"></i>
                                     <h6 class="mb-1">Conti di Pagamento</h6>
@@ -106,60 +105,62 @@
     </div>
 
     <!-- Settings Form -->
-    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST">
-        @csrf
-        @method('PUT')
+    <form id="settingsForm" action="<?php echo e(route('admin.settings.update')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
+        <?php echo method_field('PUT'); ?>
 
         <div class="row">
-            @foreach($groups as $groupKey => $groupName)
+            <?php $__currentLoopData = $groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $groupKey => $groupName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-lg-6 mb-4">
                 <div class="card hover-effect">
                     <div class="card-header">
                         <h5 class="mb-0 f-w-600 text-dark">
-                            <i class="ph ph-{{ $groupKey === 'upload' ? 'upload' : ($groupKey === 'video' ? 'video-camera' : ($groupKey === 'payment' ? 'credit-card' : 'gear')) }} me-2"></i>
-                            {{ $groupName }}
+                            <i class="ph ph-<?php echo e($groupKey === 'upload' ? 'upload' : ($groupKey === 'video' ? 'video-camera' : ($groupKey === 'payment' ? 'credit-card' : 'gear'))); ?> me-2"></i>
+                            <?php echo e($groupName); ?>
+
                         </h5>
                     </div>
                     <div class="card-body pa-30">
-                        @if(isset($settings[$groupKey]))
-                            @foreach($settings[$groupKey] as $key => $setting)
+                        <?php if(isset($settings[$groupKey])): ?>
+                            <?php $__currentLoopData = $settings[$groupKey]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $setting): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="mb-4">
-                                    <label class="form-label f-w-600">{{ $setting['display_name'] }}</label>
+                                    <label class="form-label f-w-600"><?php echo e($setting['display_name']); ?></label>
 
-                                    @if($setting['type'] === 'boolean')
+                                    <?php if($setting['type'] === 'boolean'): ?>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox"
-                                                   name="settings[{{ $key }}]" value="1"
-                                                   {{ $setting['value'] ? 'checked' : '' }}>
+                                                   name="settings[<?php echo e($key); ?>]" value="1"
+                                                   <?php echo e($setting['value'] ? 'checked' : ''); ?>>
                                             <label class="form-check-label">
-                                                {{ $setting['value'] ? 'Abilitato' : 'Disabilitato' }}
+                                                <?php echo e($setting['value'] ? 'Abilitato' : 'Disabilitato'); ?>
+
                                             </label>
                                         </div>
-                                    @elseif($setting['type'] === 'json')
-                                        <textarea class="form-control" name="settings[{{ $key }}]" rows="3"
-                                                  placeholder="{{ $setting['description'] }}">{{ is_array($setting['value']) ? json_encode($setting['value'], JSON_PRETTY_PRINT) : $setting['value'] }}</textarea>
-                                    @elseif($setting['type'] === 'integer' || $setting['type'] === 'float')
-                                        <input type="number" class="form-control" name="settings[{{ $key }}]"
-                                               value="{{ $setting['value'] }}" step="{{ $setting['type'] === 'float' ? '0.01' : '1' }}"
-                                               placeholder="{{ $setting['description'] }}">
-                                    @else
-                                        <input type="text" class="form-control" name="settings[{{ $key }}]"
-                                               value="{{ $setting['value'] }}"
-                                               placeholder="{{ $setting['description'] }}">
-                                    @endif
+                                    <?php elseif($setting['type'] === 'json'): ?>
+                                        <textarea class="form-control" name="settings[<?php echo e($key); ?>]" rows="3"
+                                                  placeholder="<?php echo e($setting['description']); ?>"><?php echo e(is_array($setting['value']) ? json_encode($setting['value'], JSON_PRETTY_PRINT) : $setting['value']); ?></textarea>
+                                    <?php elseif($setting['type'] === 'integer' || $setting['type'] === 'float'): ?>
+                                        <input type="number" class="form-control" name="settings[<?php echo e($key); ?>]"
+                                               value="<?php echo e($setting['value']); ?>" step="<?php echo e($setting['type'] === 'float' ? '0.01' : '1'); ?>"
+                                               placeholder="<?php echo e($setting['description']); ?>">
+                                    <?php else: ?>
+                                        <input type="text" class="form-control" name="settings[<?php echo e($key); ?>]"
+                                               value="<?php echo e($setting['value']); ?>"
+                                               placeholder="<?php echo e($setting['description']); ?>">
+                                    <?php endif; ?>
 
-                                    @if(isset($setting['description']))
-                                        <div class="form-text">{{ $setting['description'] }}</div>
-                                    @endif
+                                    <?php if(isset($setting['description'])): ?>
+                                        <div class="form-text"><?php echo e($setting['description']); ?></div>
+                                    <?php endif; ?>
                                 </div>
-                            @endforeach
-                        @else
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
                             <p class="text-muted">Nessuna impostazione disponibile per questo gruppo.</p>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
         <!-- Action Buttons -->
@@ -176,7 +177,7 @@
                                 <i class="ph ph-arrow-clockwise me-2"></i>
                                 Reset ai Default
                             </button>
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
+                            <a href="<?php echo e(route('admin.dashboard')); ?>" class="btn btn-secondary">
                                 <i class="ph ph-arrow-left me-2"></i>
                                 Torna alla Dashboard
                             </a>
@@ -187,9 +188,9 @@
         </div>
     </form>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('settingsForm');
@@ -284,4 +285,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\slamin\resources\views/admin/settings/index.blade.php ENDPATH**/ ?>
