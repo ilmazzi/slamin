@@ -264,10 +264,23 @@ class Carousel extends Model
                 ];
 
             case self::CONTENT_TYPE_POEM:
+                // Gestione intelligente dell'immagine per le poesie
+                $imageUrl = $content->thumbnail_url;
+                
+                // Se non c'è thumbnail_path, prova a usare il campo thumbnail
+                if (!$content->thumbnail_path && $content->thumbnail) {
+                    $imageUrl = asset('storage/' . $content->thumbnail);
+                }
+                
+                // Se ancora non c'è nulla, usa un placeholder appropriato
+                if (!$content->thumbnail_path && !$content->thumbnail) {
+                    $imageUrl = asset('assets/images/placeholder/poem-placeholder.jpg');
+                }
+                
                 return [
                     'content_title' => $content->title,
                     'content_description' => $content->description,
-                    'content_image_url' => $content->thumbnail_url ?? asset('assets/images/placeholder/poem-placeholder.jpg'),
+                    'content_image_url' => $imageUrl,
                     'content_url' => route('poems.show', $content),
                 ];
 

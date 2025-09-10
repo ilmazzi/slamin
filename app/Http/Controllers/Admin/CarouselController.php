@@ -80,7 +80,14 @@ class CarouselController extends Controller
                         $imagePath = $content->profile_photo_url ?? 'placeholder/placeholder-1.jpg';
                         break;
                     case 'poem':
-                        $imagePath = $content->thumbnail_url ?? 'placeholder/poem-placeholder.jpg';
+                        // Gestione intelligente dell'immagine per le poesie
+                        if ($content->thumbnail_path) {
+                            $imagePath = $content->thumbnail_url;
+                        } elseif ($content->thumbnail) {
+                            $imagePath = asset('storage/' . $content->thumbnail);
+                        } else {
+                            $imagePath = 'placeholder/poem-placeholder.jpg';
+                        }
                         break;
                     case 'article':
                         $imagePath = $content->featured_image_url ?? 'placeholder/article-placeholder.jpg';
@@ -507,11 +514,24 @@ class CarouselController extends Controller
                     ->limit(20)
                     ->get()
                     ->map(function($poem) {
+                        // Gestione intelligente dell'immagine
+                        $imageUrl = $poem->thumbnail_url;
+                        
+                        // Se non c'è thumbnail_path, prova a usare il campo thumbnail
+                        if (!$poem->thumbnail_path && $poem->thumbnail) {
+                            $imageUrl = asset('storage/' . $poem->thumbnail);
+                        }
+                        
+                        // Se ancora non c'è nulla, usa un placeholder più appropriato
+                        if (!$poem->thumbnail_path && !$poem->thumbnail) {
+                            $imageUrl = asset('assets/images/placeholder/poem-placeholder.jpg');
+                        }
+                        
                         return [
                             'id' => $poem->id,
                             'title' => $poem->title,
                             'description' => Str::limit($poem->description, 100),
-                            'image_url' => $poem->thumbnail_url ?? asset('assets/images/placeholder/poem-placeholder.jpg'),
+                            'image_url' => $imageUrl,
                             'url' => route('poems.show', $poem),
                             'user' => $poem->user->getDisplayName(),
                             'views' => $poem->view_count,
