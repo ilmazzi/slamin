@@ -514,33 +514,19 @@ class CarouselController extends Controller
                     ->limit(20)
                     ->get()
                     ->map(function($poem) {
-                        // Debug: log dei dati dell'immagine
-                        Log::info('Poem image debug', [
-                            'id' => $poem->id,
-                            'title' => $poem->title,
-                            'thumbnail_path' => $poem->thumbnail_path,
-                            'thumbnail' => $poem->thumbnail,
-                            'thumbnail_url' => $poem->thumbnail_url
-                        ]);
-                        
-                        // Gestione intelligente dell'immagine
+                        // Usa l'accessor del modello per l'immagine
                         $imageUrl = $poem->thumbnail_url;
-                        
-                        // Se thumbnail_url è null, usa un placeholder
-                        if (!$imageUrl) {
-                            $imageUrl = asset('assets/images/placeholder/poem-placeholder.jpg');
-                        }
                         
                         return [
                             'id' => $poem->id,
-                            'title' => $poem->title,
-                            'description' => Str::limit($poem->description, 100),
+                            'title' => $poem->title ?: 'Poesia senza titolo',
+                            'description' => $poem->description ? Str::limit($poem->description, 100) : Str::limit(strip_tags($poem->content), 100),
                             'image_url' => $imageUrl,
                             'url' => route('poems.show', $poem),
                             'user' => $poem->user->getDisplayName(),
                             'views' => $poem->view_count,
                             'likes' => $poem->like_count,
-                            'category' => $poem->category,
+                            'category' => $poem->category ?: 'Non categorizzata',
                             'created_at' => $poem->created_at->format('d/m/Y'),
                         ];
                     });

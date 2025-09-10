@@ -236,11 +236,11 @@ class PoemController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'content' => 'required|string|min:10',
             'description' => 'nullable|string|max:500',
-            'category' => 'required|string|in:' . implode(',', array_keys(config('poems.categories', []))),
-            'poem_type' => 'required|string|in:' . implode(',', array_keys(config('poems.poem_types', []))),
+            'category' => 'nullable|string|in:' . implode(',', array_keys(config('poems.categories', []))),
+            'poem_type' => 'nullable|string|in:' . implode(',', array_keys(config('poems.poem_types', []))),
             'language' => 'required|string|max:10',
             'tags' => 'nullable|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',

@@ -135,9 +135,9 @@
                 </div>
 
                 <!-- {{ __('common.thumbnail') }} -->
-                @if($poem->thumbnail)
+                @if($poem->thumbnail_path)
                 <div class="card-img-top">
-                    <img src="{{ $poem->thumbnail }}" class="img-fluid w-100" alt="{{ $poem->title }}">
+                    <img src="{{ $poem->thumbnail_url }}" class="img-fluid w-100" alt="{{ $poem->title }}">
                 </div>
                 @endif
 

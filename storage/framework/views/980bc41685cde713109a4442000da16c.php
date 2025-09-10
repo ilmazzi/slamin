@@ -144,9 +144,9 @@
                 </div>
 
                 <!-- <?php echo e(__('common.thumbnail')); ?> -->
-                <?php if($poem->thumbnail): ?>
+                <?php if($poem->thumbnail_path): ?>
                 <div class="card-img-top">
-                    <img src="<?php echo e($poem->thumbnail); ?>" class="img-fluid w-100" alt="<?php echo e($poem->title); ?>">
+                    <img src="<?php echo e($poem->thumbnail_url); ?>" class="img-fluid w-100" alt="<?php echo e($poem->title); ?>">
                 </div>
                 <?php endif; ?>
 
