@@ -48,7 +48,7 @@ use App\Helpers\PlaceholderHelper;
                         </h4>
 
                         <!-- Layout Articles - Editor Controlled -->
-                        
+
                         <!-- Featured Article 1 (Horizontal) -->
                         @if(isset($layoutArticles['horizontal1']))
                             <div class="row g-3 mb-4">
@@ -130,7 +130,7 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if(isset($layoutArticles['column2']))
                                     <div class="col-12 col-sm-6">
                                         @php $article = $layoutArticles['column2']; @endphp
@@ -252,7 +252,7 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if(isset($layoutArticles['column4']))
                                     <div class="col-12 col-sm-6">
                                         @php $article = $layoutArticles['column4']; @endphp
@@ -374,7 +374,7 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if(isset($layoutArticles['column6']))
                                     <div class="col-12 col-sm-6">
                                         @php $article = $layoutArticles['column6']; @endphp
@@ -515,7 +515,7 @@ use App\Helpers\PlaceholderHelper;
                     </h5>
                 </div>
                 <div class="card-body">
-                    @foreach($recentArticles->take(5) as $sidebarArticle)
+                    @foreach($sidebarRecentArticles->take(10) as $sidebarArticle)
                         <div class="d-flex align-items-start mb-3">
                             <div class="flex-shrink-0 me-3">
                                 @if($sidebarArticle->featured_image_url)

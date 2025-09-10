@@ -23,9 +23,7 @@
     <!-- Loader start-->
     <div class="app-wrapper">
         <!-- Loader start-->
-        <div class="loader-wrapper">
-            <div class="loader_24"></div>
-        </div>
+        <x-splash-screen />
         <!-- Loader end-->
 
         <!-- Menu Navigation start -->

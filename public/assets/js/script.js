@@ -337,7 +337,7 @@ $(function () {
 });
 // >>-- 07 Loader JS --<<
 $('.loader-wrapper').fadeOut('slow', function () {
-  $(this).remove();
+    $(this).remove();
 });
 
 

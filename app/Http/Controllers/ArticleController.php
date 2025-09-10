@@ -84,6 +84,14 @@ class ArticleController extends Controller
             $showAllArticles = true;
         }
 
+        // Always get recent articles for sidebar (last 10)
+        $sidebarRecentArticles = Article::with(['user', 'category'])
+            ->published()
+            ->withCount(['likes', 'comments'])
+            ->orderBy('published_at', 'desc')
+            ->limit(10)
+            ->get();
+
         // Get categories and tags for filters
         $categories = ArticleCategory::active()->ordered()->get();
         $tags = ArticleTag::active()->popular()->limit(20)->get();
@@ -91,6 +99,7 @@ class ArticleController extends Controller
         return view('articles.index', compact(
             'layoutArticles',
             'recentArticles',
+            'sidebarRecentArticles',
             'categories',
             'tags',
             'showAllArticles'

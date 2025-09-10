@@ -23,9 +23,26 @@
     <!-- Loader start-->
     <div class="app-wrapper">
         <!-- Loader start-->
-        <div class="loader-wrapper">
-            <div class="loader_24"></div>
-        </div>
+        <?php if (isset($component)) { $__componentOriginal1cf7ddb08d3976da931ed0aee29f0761 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal1cf7ddb08d3976da931ed0aee29f0761 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.splash-screen','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('splash-screen'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal1cf7ddb08d3976da931ed0aee29f0761)): ?>
+<?php $attributes = $__attributesOriginal1cf7ddb08d3976da931ed0aee29f0761; ?>
+<?php unset($__attributesOriginal1cf7ddb08d3976da931ed0aee29f0761); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal1cf7ddb08d3976da931ed0aee29f0761)): ?>
+<?php $component = $__componentOriginal1cf7ddb08d3976da931ed0aee29f0761; ?>
+<?php unset($__componentOriginal1cf7ddb08d3976da931ed0aee29f0761); ?>
+<?php endif; ?>
         <!-- Loader end-->
 
         <!-- Menu Navigation start -->

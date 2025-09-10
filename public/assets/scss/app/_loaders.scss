@@ -759,11 +759,27 @@
 	align-items: center;
 	gap: 10px;
 }
+
+/* Dynamic splash text - priority rule */
+.loader_24[data-splash-text]::before {
+	content: attr(data-splash-text) !important;
+	line-height: 1em;
+	color: rgb(var(--primary));
+	font-size: 24px;
+	text-align: center;
+	max-width: 400px;
+	word-wrap: break-word;
+}
+
+/* Fallback for when no data-splash-text is set */
 .loader_24::before {
 	content: "Poetry Loading...";
 	line-height: 1em;
 	color: rgb(var(--primary));
 	font-size: 24px;
+	text-align: center;
+	max-width: 400px;
+	word-wrap: break-word;
 }
 
 .loader_24::after {
