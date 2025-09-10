@@ -911,7 +911,13 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </p>
                                                             @if($article->category)
-                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $article->category }}</span>
+                                                                <span class="badge bg-light-info f-s-10 mb-2">
+                                                                    @if(is_array($article->category) || is_object($article->category))
+                                                                        {{ $article->category->name ?? 'Categoria' }}
+                                                                    @else
+                                                                        {{ $article->category }}
+                                                                    @endif
+                                                                </span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <x-social-view-counter :content="$article" type="article" size="sm" />
@@ -991,7 +997,13 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </p>
                                                             @if($article->category)
-                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $article->category }}</span>
+                                                                <span class="badge bg-light-info f-s-10 mb-2">
+                                                                    @if(is_array($article->category) || is_object($article->category))
+                                                                        {{ $article->category->name ?? 'Categoria' }}
+                                                                    @else
+                                                                        {{ $article->category }}
+                                                                    @endif
+                                                                </span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <x-social-view-counter :content="$article" type="article" size="sm" />
