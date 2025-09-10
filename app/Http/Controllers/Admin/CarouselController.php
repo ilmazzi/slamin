@@ -13,6 +13,7 @@ use App\Models\Article;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\PlaceholderHelper;
 
 class CarouselController extends Controller
 {
@@ -86,11 +87,11 @@ class CarouselController extends Controller
                         } elseif ($content->thumbnail) {
                             $imagePath = asset('storage/' . $content->thumbnail);
                         } else {
-                            $imagePath = 'placeholder/poem-placeholder.jpg';
+                            $imagePath = PlaceholderHelper::getPoemPlaceholderUrl();
                         }
                         break;
                     case 'article':
-                        $imagePath = $content->featured_image_url ?? 'placeholder/article-placeholder.jpg';
+                        $imagePath = $content->featured_image_url ?? PlaceholderHelper::getArticlePlaceholderUrl();
                         break;
                 }
 

@@ -14,6 +14,7 @@ use App\Traits\HasModeration;
 use App\Traits\HasLikes;
 use App\Traits\HasViews;
 use App\Traits\HasComments;
+use App\Helpers\PlaceholderHelper;
 
 class Poem extends Model
 {
@@ -161,7 +162,21 @@ class Poem extends Model
             return asset('storage/' . $this->thumbnail_path);
         }
         
-        return asset('assets/images/placeholder/poem-placeholder.jpg');
+        // Restituisce null se non c'è immagine, così il template può gestire il placeholder
+        return null;
+    }
+
+    /**
+     * Genera HTML per il placeholder se non c'è immagine
+     */
+    public function getThumbnailHtmlAttribute()
+    {
+        if ($this->thumbnail_path) {
+            return '<img src="' . asset('storage/' . $this->thumbnail_path) . '" alt="' . htmlspecialchars($this->title) . '" class="img-fluid">';
+        }
+        
+        // Usa il placeholder HTML personalizzato
+        return PlaceholderHelper::getPoemPlaceholderHtml();
     }
 
     public function getExcerptAttribute()

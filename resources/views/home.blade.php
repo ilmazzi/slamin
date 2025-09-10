@@ -1,6 +1,8 @@
 @extends('layout.master')
 
-
+@php
+use App\Helpers\PlaceholderHelper;
+@endphp
 
 @section('title', 'Slam in - Home')
 
@@ -186,50 +188,120 @@
                                                         style="height: 400px; object-fit: cover;">
                                                         <source src="{{ $carousel->videoUrl }}" type="video/mp4">
                                                     </video>
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
+                                                        @if ($carousel->content_description ?? $carousel->description)
+                                                            <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
+                                                        @endif
+                                                        @if ($carousel->content_url ?? $carousel->link_url)
+                                                            <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                {{ $carousel->link_text ?? 'Visualizza' }}
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                 @elseif($carousel->image_path && $carousel->imageUrl)
                                                     <img src="{{ $carousel->imageUrl }}" class="d-block w-100"
                                                         alt="{{ $carousel->title }}"
                                                         style="height: 400px; object-fit: cover;">
-                                                @else
-                                                    <!-- Fallback per media mancante -->
-                                                    <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center"
-                                                        style="height: 400px;">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph-duotone ph-image f-s-48 mb-3"></i>
-                                                            <h5 class="f-w-600">{{ $carousel->title }}</h5>
-                                                            @if ($carousel->description)
-                                                                <p class="mb-0">{{ $carousel->description }}</p>
-                                                            @endif
-                                                        </div>
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
+                                                        @if ($carousel->content_description ?? $carousel->description)
+                                                            <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
+                                                        @endif
+                                                        @if ($carousel->content_url ?? $carousel->link_url)
+                                                            <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                {{ $carousel->link_text ?? 'Visualizza' }}
+                                                            </a>
+                                                        @endif
                                                     </div>
+                                                @elseif($carousel->content_image_url)
+                                                    <img src="{{ $carousel->content_image_url }}" class="d-block w-100"
+                                                        alt="{{ $carousel->content_title ?? $carousel->title }}"
+                                                        style="height: 400px; object-fit: cover;">
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
+                                                        @if ($carousel->content_description ?? $carousel->description)
+                                                            <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
+                                                        @endif
+                                                        @if ($carousel->content_url ?? $carousel->link_url)
+                                                            <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                {{ $carousel->link_text ?? 'Visualizza' }}
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <!-- Placeholder personalizzato con contenuto del carosello -->
+                                                    @if($carousel->content_type === 'poem')
+                                                        @php
+                                                            $poemColor = App\Models\PlaceholderSetting::getSettings()->poem_placeholder_color;
+                                                        @endphp
+                                                        <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: {{ $poemColor }};">
+                                                            <div class="text-center text-white">
+                                                                <div style="font-size: 80px; margin-bottom: 20px;">📖</div>
+                                                                <h3 class="f-w-600 mb-3">{{ $carousel->content_title ?? $carousel->title }}</h3>
+                                                                @if($carousel->content_description ?? $carousel->description)
+                                                                    <p class="mb-4">{{ $carousel->content_description ?? $carousel->description }}</p>
+                                                                @endif
+                                                                @if($carousel->content_url ?? $carousel->link_url)
+                                                                    <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
+                                                                    </a>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @elseif($carousel->content_type === 'article')
+                                                        @php
+                                                            $articleColor = App\Models\PlaceholderSetting::getSettings()->article_placeholder_color;
+                                                        @endphp
+                                                        <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: {{ $articleColor }};">
+                                                            <div class="text-center text-white">
+                                                                <div style="font-size: 80px; margin-bottom: 20px;">📰</div>
+                                                                <h3 class="f-w-600 mb-3">{{ $carousel->content_title ?? $carousel->title }}</h3>
+                                                                @if($carousel->content_description ?? $carousel->description)
+                                                                    <p class="mb-4">{{ $carousel->content_description ?? $carousel->description }}</p>
+                                                                @endif
+                                                                @if($carousel->content_url ?? $carousel->link_url)
+                                                                    <a href="{{ $carousel->content_url ?? $carousel->link_url }}" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
+                                                                    </a>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
+                                                            <div class="text-center text-white">
+                                                                <i class="ph-duotone ph-image f-s-48 mb-3"></i>
+                                                                <h3 class="f-w-600 mb-3">{{ $carousel->title }}</h3>
+                                                                @if($carousel->description)
+                                                                    <p class="mb-4">{{ $carousel->description }}</p>
+                                                                @endif
+                                                                @if($carousel->link_url)
+                                                                    <a href="{{ $carousel->link_url }}" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        {{ $carousel->link_text ?? 'Visualizza' }}
+                                                                    </a>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                 @endif
-                                                <div
-                                                    class="carousel-caption d-none d-md-block bg-light-success bg-opacity-75 rounded-3 p-4 mx-auto">
-                                                    <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->title }}</h5>
-                                                    @if ($carousel->description)
-                                                        <p class="mb-4 f-s-16 text-primary">{{ $carousel->description }}
-                                                        </p>
-                                                    @endif
-                                                    @if ($carousel->link_url && $carousel->link_text)
-                                                        <a href="{{ $carousel->link_url }}"
-                                                            class="btn btn-primary btn-lg hover-effect">
-                                                            <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                            {{ $carousel->link_text }}
-                                                        </a>
-                                                    @endif
-                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
                                     @if ($carousels && $carousels->count() > 1)
                                         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
-                                            data-bs-slide="prev">
-                                            <i class="ph ph-arrow-circle-left f-s-24 text-primary"></i>
+                                            data-bs-slide="prev" style="background: none; border: none; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="ph ph-arrow-left f-s-32 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></i>
                                             <span class="visually-hidden">{{ __('home.carousel.previous') }}</span>
                                         </button>
                                         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
-                                            data-bs-slide="next">
-                                            <i class="ph ph-arrow-circle-right f-s-24 text-primary"></i>
+                                            data-bs-slide="next" style="background: none; border: none; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="ph ph-arrow-right f-s-32 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></i>
                                             <span class="visually-hidden">{{ __('home.carousel.next') }}</span>
                                         </button>
                                     @endif
@@ -620,37 +692,42 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($poem->thumbnail_path)
+                                                                    @if($poem->thumbnail_url)
                                                                         <img src="{{ $poem->thumbnail_url }}"
                                                                             alt="{{ $poem->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-book-open f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-book-open f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    @else
+                                                                        {!! PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
                                                                     @endif
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-book-open f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                {{ Str::limit($poem->title, 40) }}</h6>
+                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
+                                                                    {{ Str::limit($poem->title, 40) }}
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="{{ route('user.show', $poem->user) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
                                                             </p>
+                                                            @if($poem->description)
+                                                                <p class="text-muted f-s-11 mb-1">{{ Str::limit($poem->description, 60) }}</p>
+                                                            @endif
+                                                            @if($poem->category)
+                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $poem->category }}</span>
+                                                            @endif
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <x-social-view-counter :content="$poem" type="poem" size="sm" />
                                                                 <small class="text-muted f-s-11">
@@ -691,25 +768,21 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($poem->thumbnail_path)
+                                                                    @if($poem->thumbnail_url)
                                                                         <img src="{{ $poem->thumbnail_url }}"
                                                                             alt="{{ $poem->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-book-open f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-book-open f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    @else
+                                                                        {!! PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
                                                                     @endif
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-book-open f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -811,36 +884,42 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($article->featured_image)
+                                                                    @if($article->featured_image_url)
                                                                         <img src="{{ $article->featured_image_url }}"
                                                                             alt="{{ $article->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    @else
+                                                                        {!! PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                {{ Str::limit($article->title, 40) }}</h6>
+                                                                <a href="{{ route('articles.show', $article->slug) }}" class="text-decoration-none">
+                                                                    {{ Str::limit($article->title, 40) }}
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="{{ route('user.show', $article->user) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $article->user->getDisplayName() }}
-                                                                </a></p>
+                                                                </a>
+                                                            </p>
+                                                            @if($article->excerpt)
+                                                                <p class="text-muted f-s-11 mb-1">{{ Str::limit($article->excerpt, 60) }}</p>
+                                                            @endif
+                                                            @if($article->category)
+                                                                <span class="badge bg-light-warning f-s-10 mb-2">{{ $article->category }}</span>
+                                                            @endif
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <x-social-view-counter :content="$article" type="article" size="sm" />
                                                                 <small class="text-muted f-s-11">
@@ -881,25 +960,21 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    @if ($article->featured_image)
+                                                                    @if($article->featured_image_url)
                                                                         <img src="{{ $article->featured_image_url }}"
                                                                             alt="{{ $article->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    @else
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    @else
+                                                                        {!! PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>

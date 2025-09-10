@@ -111,9 +111,16 @@ class Carousel extends Model
             return null;
         }
 
-        // Se il percorso inizia già con http, restituiscilo così com'è
+        // Se il percorso inizia già con http, controlla se il file esiste
         if (filter_var($this->image_path, FILTER_VALIDATE_URL)) {
+            // Per URL esterni, restituisci sempre l'URL (non possiamo controllare l'esistenza)
             return $this->image_path;
+        }
+
+        // Controlla se il file esiste localmente
+        $filePath = public_path('storage/' . $this->image_path);
+        if (!file_exists($filePath)) {
+            return null;
         }
 
         // Altrimenti usa Storage::url
@@ -226,6 +233,13 @@ class Carousel extends Model
 
         $content = $this->getReferencedContent();
         if (!$content) {
+            // Se il contenuto non esiste più, pulisci la cache
+            $this->update([
+                'content_title' => null,
+                'content_description' => null,
+                'content_image_url' => null,
+                'content_url' => null,
+            ]);
             return;
         }
 

@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@php
+use App\Helpers\PlaceholderHelper;
+@endphp
+
 @section('main-content')
 <div class="container-fluid">
     <div class="row">
@@ -17,18 +21,12 @@
 
             <!-- Mobile-First Article Card -->
             <div class="card mb-4 hover-effect">
-                @if($article->featured_image)
-                    <img src="{{ Storage::url($article->featured_image) }}"
+                @if($article->featured_image_url)
+                    <img src="{{ $article->featured_image_url }}"
                          class="card-img-top" style="height: 250px; object-fit: cover;"
                          alt="{{ $article->title }}">
                 @else
-                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                         style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                        <div class="text-center text-white">
-                            <i class="ph ph-newspaper f-s-48 mb-2"></i>
-                            <div class="f-s-16 f-w-600">{{ __('articles.article') }}</div>
-                        </div>
-                    </div>
+                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top') !!}
                 @endif
                 <div class="card-body">
                     <!-- Mobile-First Article Header -->

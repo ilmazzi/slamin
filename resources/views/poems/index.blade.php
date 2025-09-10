@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@php
+use App\Helpers\PlaceholderHelper;
+@endphp
+
 @section('title', __('poems.title'))
 
 @section('main-content')
@@ -116,8 +120,10 @@
             @forelse($poems as $poem)
             <div class="col-12 col-sm-6 col-lg-4 mb-4">
                 <div class="card hover-effect h-100">
-                    @if($poem->thumbnail_path)
-                    <img src="{{ $poem->thumbnail_url }}" class="card-img-top" alt="{{ $poem->title }}" style="height: 200px; object-fit: cover;">
+                    @if($poem->thumbnail_url)
+                        <img src="{{ $poem->thumbnail_url }}" class="card-img-top" alt="{{ $poem->title }}" style="height: 200px; object-fit: cover;">
+                    @else
+                        {!! PlaceholderHelper::getPoemPlaceholderHtml(300, 200, 'card-img-top', route('poems.show', $poem->slug)) !!}
                     @endif
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">

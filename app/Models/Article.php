@@ -16,6 +16,7 @@ use App\Traits\HasComments;
 use App\Traits\HasViews;
 use App\Traits\HasModeration;
 use App\Traits\Reportable;
+use App\Helpers\PlaceholderHelper;
 
 class Article extends Model
 {
@@ -209,9 +210,23 @@ class Article extends Model
     public function getFeaturedImageUrlAttribute()
     {
         if (!$this->featured_image) {
-            return asset('assets/images/placeholder/article-placeholder.jpg');
+            // Restituisce null se non c'è immagine, così il template può gestire il placeholder
+            return null;
         }
         return asset('storage/' . $this->featured_image);
+    }
+
+    /**
+     * Genera HTML per il placeholder se non c'è immagine
+     */
+    public function getFeaturedImageHtmlAttribute()
+    {
+        if ($this->featured_image) {
+            return '<img src="' . asset('storage/' . $this->featured_image) . '" alt="' . htmlspecialchars($this->title) . '" class="img-fluid">';
+        }
+        
+        // Usa il placeholder HTML personalizzato
+        return PlaceholderHelper::getArticlePlaceholderHtml();
     }
 
     public function getReadTimeAttribute()

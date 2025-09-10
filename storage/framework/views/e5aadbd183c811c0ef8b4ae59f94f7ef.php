@@ -124,9 +124,7 @@
             <?php $__empty_1 = true; $__currentLoopData = $poems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
             <div class="col-12 col-sm-6 col-lg-4 mb-4">
                 <div class="card hover-effect h-100">
-                    <?php if($poem->thumbnail_path): ?>
                     <img src="<?php echo e($poem->thumbnail_url); ?>" class="card-img-top" alt="<?php echo e($poem->title); ?>" style="height: 200px; object-fit: cover;">
-                    <?php endif; ?>
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title f-w-600 mb-0 flex-grow-1">

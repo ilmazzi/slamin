@@ -1,3 +1,7 @@
+<?php
+use App\Helpers\PlaceholderHelper;
+?>
+
 <?php $__env->startSection('title', 'Slam in - Home'); ?>
 
 <?php $__env->startSection('css'); ?>
@@ -182,52 +186,126 @@
                                                         style="height: 400px; object-fit: cover;">
                                                         <source src="<?php echo e($carousel->videoUrl); ?>" type="video/mp4">
                                                     </video>
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->content_title ?? $carousel->title); ?></h5>
+                                                        <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                            <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                            <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 <?php elseif($carousel->image_path && $carousel->imageUrl): ?>
                                                     <img src="<?php echo e($carousel->imageUrl); ?>" class="d-block w-100"
                                                         alt="<?php echo e($carousel->title); ?>"
                                                         style="height: 400px; object-fit: cover;">
-                                                <?php else: ?>
-                                                    <!-- Fallback per media mancante -->
-                                                    <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center"
-                                                        style="height: 400px;">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph-duotone ph-image f-s-48 mb-3"></i>
-                                                            <h5 class="f-w-600"><?php echo e($carousel->title); ?></h5>
-                                                            <?php if($carousel->description): ?>
-                                                                <p class="mb-0"><?php echo e($carousel->description); ?></p>
-                                                            <?php endif; ?>
-                                                        </div>
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->content_title ?? $carousel->title); ?></h5>
+                                                        <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                            <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                            <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                            </a>
+                                                        <?php endif; ?>
                                                     </div>
+                                                <?php elseif($carousel->content_image_url): ?>
+                                                    <img src="<?php echo e($carousel->content_image_url); ?>" class="d-block w-100"
+                                                        alt="<?php echo e($carousel->content_title ?? $carousel->title); ?>"
+                                                        style="height: 400px; object-fit: cover;">
+                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->content_title ?? $carousel->title); ?></h5>
+                                                        <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                            <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                            <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-primary btn-lg hover-effect">
+                                                                <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <!-- Placeholder personalizzato con contenuto del carosello -->
+                                                    <?php if($carousel->content_type === 'poem'): ?>
+                                                        <?php
+                                                            $poemColor = App\Models\PlaceholderSetting::getSettings()->poem_placeholder_color;
+                                                        ?>
+                                                        <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: <?php echo e($poemColor); ?>;">
+                                                            <div class="text-center text-white">
+                                                                <div style="font-size: 80px; margin-bottom: 20px;">📖</div>
+                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->content_title ?? $carousel->title); ?></h3>
+                                                                <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                                    <p class="mb-4"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
+                                                                <?php endif; ?>
+                                                                <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                                    <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php elseif($carousel->content_type === 'article'): ?>
+                                                        <?php
+                                                            $articleColor = App\Models\PlaceholderSetting::getSettings()->article_placeholder_color;
+                                                        ?>
+                                                        <div class="d-block w-100 d-flex align-items-center justify-content-center position-relative" style="height: 400px; background-color: <?php echo e($articleColor); ?>;">
+                                                            <div class="text-center text-white">
+                                                                <div style="font-size: 80px; margin-bottom: 20px;">📰</div>
+                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->content_title ?? $carousel->title); ?></h3>
+                                                                <?php if($carousel->content_description ?? $carousel->description): ?>
+                                                                    <p class="mb-4"><?php echo e($carousel->content_description ?? $carousel->description); ?></p>
+                                                                <?php endif; ?>
+                                                                <?php if($carousel->content_url ?? $carousel->link_url): ?>
+                                                                    <a href="<?php echo e($carousel->content_url ?? $carousel->link_url); ?>" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="d-block w-100 bg-gradient-primary d-flex align-items-center justify-content-center" style="height: 400px;">
+                                                            <div class="text-center text-white">
+                                                                <i class="ph-duotone ph-image f-s-48 mb-3"></i>
+                                                                <h3 class="f-w-600 mb-3"><?php echo e($carousel->title); ?></h3>
+                                                                <?php if($carousel->description): ?>
+                                                                    <p class="mb-4"><?php echo e($carousel->description); ?></p>
+                                                                <?php endif; ?>
+                                                                <?php if($carousel->link_url): ?>
+                                                                    <a href="<?php echo e($carousel->link_url); ?>" class="btn btn-light btn-lg">
+                                                                        <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
+                                                                        <?php echo e($carousel->link_text ?? 'Visualizza'); ?>
+
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
-                                                <div
-                                                    class="carousel-caption d-none d-md-block bg-light-success bg-opacity-75 rounded-3 p-4 mx-auto">
-                                                    <h5 class="f-w-600 f-s-24 mb-3 text-dark"><?php echo e($carousel->title); ?></h5>
-                                                    <?php if($carousel->description): ?>
-                                                        <p class="mb-4 f-s-16 text-primary"><?php echo e($carousel->description); ?>
-
-                                                        </p>
-                                                    <?php endif; ?>
-                                                    <?php if($carousel->link_url && $carousel->link_text): ?>
-                                                        <a href="<?php echo e($carousel->link_url); ?>"
-                                                            class="btn btn-primary btn-lg hover-effect">
-                                                            <i class="ph-duotone ph-arrow-right f-s-16 me-2"></i>
-                                                            <?php echo e($carousel->link_text); ?>
-
-                                                        </a>
-                                                    <?php endif; ?>
-                                                </div>
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                     <?php if($carousels && $carousels->count() > 1): ?>
                                         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
-                                            data-bs-slide="prev">
-                                            <i class="ph ph-arrow-circle-left f-s-24 text-primary"></i>
+                                            data-bs-slide="prev" style="background: none; border: none; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="ph ph-arrow-left f-s-32 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></i>
                                             <span class="visually-hidden"><?php echo e(__('home.carousel.previous')); ?></span>
                                         </button>
                                         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
-                                            data-bs-slide="next">
-                                            <i class="ph ph-arrow-circle-right f-s-24 text-primary"></i>
+                                            data-bs-slide="next" style="background: none; border: none; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="ph ph-arrow-right f-s-32 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></i>
                                             <span class="visually-hidden"><?php echo e(__('home.carousel.next')); ?></span>
                                         </button>
                                     <?php endif; ?>
@@ -740,31 +818,32 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    <?php if($poem->thumbnail_path): ?>
+                                                                    <?php if($poem->thumbnail_url): ?>
                                                                         <img src="<?php echo e($poem->thumbnail_url); ?>"
                                                                             alt="<?php echo e($poem->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    <?php else: ?>
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-book-open f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-book-open f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    <?php else: ?>
+                                                                        <?php echo PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)); ?>
+
                                                                     <?php endif; ?>
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-book-open f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                <?php echo e(Str::limit($poem->title, 40)); ?></h6>
+                                                                <a href="<?php echo e(route('poems.show', $poem->slug)); ?>" class="text-decoration-none">
+                                                                    <?php echo e(Str::limit($poem->title, 40)); ?>
+
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="<?php echo e(route('user.show', $poem->user)); ?>"
                                                                     class="text-decoration-none hover-effect">
@@ -772,6 +851,12 @@
 
                                                                 </a>
                                                             </p>
+                                                            <?php if($poem->description): ?>
+                                                                <p class="text-muted f-s-11 mb-1"><?php echo e(Str::limit($poem->description, 60)); ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if($poem->category): ?>
+                                                                <span class="badge bg-light-info f-s-10 mb-2"><?php echo e($poem->category); ?></span>
+                                                            <?php endif; ?>
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
@@ -832,25 +917,22 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    <?php if($poem->thumbnail_path): ?>
+                                                                    <?php if($poem->thumbnail_url): ?>
                                                                         <img src="<?php echo e($poem->thumbnail_url); ?>"
                                                                             alt="<?php echo e($poem->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    <?php else: ?>
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-book-open f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-book-open f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    <?php else: ?>
+                                                                        <?php echo PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)); ?>
+
                                                                     <?php endif; ?>
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-book-open f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -959,37 +1041,45 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    <?php if($article->featured_image): ?>
+                                                                    <?php if($article->featured_image_url): ?>
                                                                         <img src="<?php echo e($article->featured_image_url); ?>"
                                                                             alt="<?php echo e($article->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    <?php else: ?>
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    <?php else: ?>
+                                                                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)); ?>
+
                                                                     <?php endif; ?>
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-warning">
-                                                                <?php echo e(Str::limit($article->title, 40)); ?></h6>
+                                                                <a href="<?php echo e(route('articles.show', $article->slug)); ?>" class="text-decoration-none">
+                                                                    <?php echo e(Str::limit($article->title, 40)); ?>
+
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="<?php echo e(route('user.show', $article->user)); ?>"
                                                                     class="text-decoration-none hover-effect">
                                                                     <?php echo e($article->user->getDisplayName()); ?>
 
-                                                                </a></p>
+                                                                </a>
+                                                            </p>
+                                                            <?php if($article->excerpt): ?>
+                                                                <p class="text-muted f-s-11 mb-1"><?php echo e(Str::limit($article->excerpt, 60)); ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if($article->category): ?>
+                                                                <span class="badge bg-light-warning f-s-10 mb-2"><?php echo e($article->category); ?></span>
+                                                            <?php endif; ?>
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <?php if (isset($component)) { $__componentOriginal74a3c73fa2014a1304a7d68280593565 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal74a3c73fa2014a1304a7d68280593565 = $attributes; } ?>
@@ -1050,25 +1140,22 @@
                                                             <div class="position-relative">
                                                                 <div class="rounded overflow-hidden"
                                                                     style="width: 60px; height: 60px;">
-                                                                    <?php if($article->featured_image): ?>
+                                                                    <?php if($article->featured_image_url): ?>
                                                                         <img src="<?php echo e($article->featured_image_url); ?>"
                                                                             alt="<?php echo e($article->title); ?>" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                    <?php else: ?>
                                                                         <div
-                                                                            class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient-light">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-20 text-muted"></i>
+                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
                                                                         </div>
+                                                                        <div
+                                                                            class="position-absolute top-50 start-50 translate-middle">
+                                                                            <i
+                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
+                                                                        </div>
+                                                                    <?php else: ?>
+                                                                        <?php echo PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)); ?>
+
                                                                     <?php endif; ?>
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                </div>
-                                                                <div
-                                                                    class="position-absolute top-50 start-50 translate-middle">
-                                                                    <i
-                                                                        class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                 </div>
                                                             </div>
                                                         </div>

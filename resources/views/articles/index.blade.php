@@ -1,5 +1,9 @@
 @extends('layout.master')
 
+@php
+use App\Helpers\PlaceholderHelper;
+@endphp
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Mobile-First Header -->
@@ -52,18 +56,16 @@
                                     @php $featured1 = $featuredArticles->get(0); @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($featured1->featured_image)
-                                                <img src="{{ Storage::url($featured1->featured_image) }}"
+                                            @if($featured1->featured_image_url)
+                                                @if($featured1->featured_image_url)
+                        <img src="{{ $featured1->featured_image_url }}"
                                                      class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $featured1->title }}">
+                                                     alt="{{ $featured1->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                             @else
-                                                <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                    <div class="text-center text-white">
-                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
-                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
-                                                    </div>
-                                                </div>
+                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 250, 'card-img-top', route('articles.show', $article->slug)) !!}
                                             @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -97,19 +99,13 @@
                                         @php $recent1 = $recentArticles->get(0); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent1->featured_image)
-                                                    <img src="{{ Storage::url($recent1->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent1->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent1->featured_image_url)
+                        <img src="{{ $recent1->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent1->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent1->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent1->category->name }}</span>
@@ -144,19 +140,13 @@
                                         @php $recent2 = $recentArticles->get(1); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent2->featured_image)
-                                                    <img src="{{ Storage::url($recent2->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent2->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent2->featured_image_url)
+                        <img src="{{ $recent2->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent2->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent2->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent2->category->name }}</span>
@@ -198,19 +188,13 @@
                                     @php $featured2 = $featuredArticles->get(1); @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($featured2->featured_image)
-                                                <img src="{{ Storage::url($featured2->featured_image) }}"
-                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $featured2->title }}">
-                                            @else
-                                                <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                    <div class="text-center text-white">
-                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
-                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                            @if($featured2->featured_image_url)
+                        <img src="{{ $featured2->featured_image_url }}"
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                 alt="{{ $featured2->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -243,19 +227,13 @@
                                         @php $recent3 = $recentArticles->get(2); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent3->featured_image)
-                                                    <img src="{{ Storage::url($recent3->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent3->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent3->featured_image_url)
+                        <img src="{{ $recent3->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent3->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent3->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent3->category->name }}</span>
@@ -290,19 +268,13 @@
                                         @php $recent4 = $recentArticles->get(3); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent4->featured_image)
-                                                    <img src="{{ Storage::url($recent4->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent4->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent4->featured_image_url)
+                        <img src="{{ $recent4->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent4->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent4->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent4->category->name }}</span>
@@ -344,19 +316,13 @@
                                     @php $featured3 = $featuredArticles->get(2); @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($featured3->featured_image)
-                                                <img src="{{ Storage::url($featured3->featured_image) }}"
-                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $featured3->title }}">
-                                            @else
-                                                <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                     style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                    <div class="text-center text-white">
-                                                        <i class="ph ph-newspaper f-s-32 mb-2"></i>
-                                                        <div class="f-s-14 f-w-600">{{ __('articles.featured_article') }}</div>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                            @if($featured3->featured_image_url)
+                        <img src="{{ $featured3->featured_image_url }}"
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                 alt="{{ $featured3->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -389,19 +355,13 @@
                                         @php $recent5 = $recentArticles->get(4); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent5->featured_image)
-                                                    <img src="{{ Storage::url($recent5->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent5->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent5->featured_image_url)
+                        <img src="{{ $recent5->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent5->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent5->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent5->category->name }}</span>
@@ -436,19 +396,13 @@
                                         @php $recent6 = $recentArticles->get(5); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($recent6->featured_image)
-                                                    <img src="{{ Storage::url($recent6->featured_image) }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $recent6->title }}">
-                                                @else
-                                                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                         style="height: 140px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                                        <div class="text-center text-white">
-                                                            <i class="ph ph-newspaper f-s-20 mb-1"></i>
-                                                            <div class="f-s-10 f-w-600">{{ __('articles.article') }}</div>
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                @if($recent6->featured_image_url)
+                        <img src="{{ $recent6->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent6->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                                                 @if($recent6->category)
                                                 <div class="position-absolute top-0 start-0 m-2">
                                                     <span class="badge bg-primary">{{ $recent6->category->name }}</span>
@@ -585,16 +539,13 @@
                     @foreach($recentArticles->take(5) as $sidebarArticle)
                         <div class="d-flex align-items-start mb-3">
                             <div class="flex-shrink-0 me-3">
-                                @if($sidebarArticle->featured_image)
-                                    <img src="{{ Storage::url($sidebarArticle->featured_image) }}"
-                                         class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
-                                         alt="{{ $sidebarArticle->title }}">
-                                @else
-                                    <div class="rounded d-flex align-items-center justify-content-center"
-                                         style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                        <i class="ph ph-newspaper text-white f-s-16"></i>
-                                    </div>
-                                @endif
+                                @if($sidebarArticle->featured_image_url)
+                        <img src="{{ $sidebarArticle->featured_image_url }}"
+                                     class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
+                                     alt="{{ $sidebarArticle->
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(300, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                    @endiftitle }}">
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 f-s-14 f-w-600">

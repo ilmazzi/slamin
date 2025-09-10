@@ -66,6 +66,10 @@ Route::prefix('admin/settings')->name('admin.settings.')->middleware(['auth'])->
     Route::get('/', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('index');
     Route::post('/', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('update');
 
+    // Placeholder Settings
+    Route::get('/placeholder', [App\Http\Controllers\Admin\PlaceholderSettingsController::class, 'index'])->name('placeholder');
+    Route::put('/placeholder', [App\Http\Controllers\Admin\PlaceholderSettingsController::class, 'update'])->name('placeholder.update');
+
     // Payment Settings
     Route::get('/payment', [App\Http\Controllers\Admin\PaymentSettingsController::class, 'index'])->name('payment.index');
     Route::post('/payment', [App\Http\Controllers\Admin\PaymentSettingsController::class, 'update'])->name('payment.update');

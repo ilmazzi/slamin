@@ -145,7 +145,23 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                             <div class="fs-6"> {{ auth()->user()->name }}</div>
                             <div class="text-muted f-s-12"> {{ auth()->user()->nickname }}</div>
                         </div>
-                        <div>
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Pulsante + sempre visibile (mobile e desktop) -->
+                            <div class="btn-group dropdown-icon-none">
+                                <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <i class="ti ti-plus"></i>
+                                </button>
+                                <ul class="dropdown-menu" data-popper-placement="bottom-start">
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newChatModal"><i class="ti ti-brand-hipchat"></i> <span
+                                                class="f-s-13">New Chat</span></a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
+                                                class="f-s-13">New Contact</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            
                             <div class="btn-group dropdown-icon-none">
                                 <a role="button" data-bs-placement="top" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                     <i class="ti ti-settings fs-5"></i>
@@ -164,8 +180,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                     </li>
                                 </ul>
                             </div>
-
-
                         </div>
                         <div class="close-togglebtn">
                             <a class="ms-2 toggle-btn" role="button">
@@ -386,8 +400,8 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="float-end">
-                                            <div class="btn-group dropup  dropdown-icon-none">
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <div class="btn-group dropup dropdown-icon-none">
                                                 <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
                                                         data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                                                     <i class="ti ti-plus"></i>
@@ -513,7 +527,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                 </div>
                             </div>
 
-                            <div class="float-end">
+                            <div class="d-flex justify-content-end mt-3">
                                 <div class="btn-group dropdown-icon-none">
                                     <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
                                             data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
@@ -698,7 +712,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                 </div>
 
                             </div>
-                            <div class="float-end">
+                            <div class="d-flex justify-content-end mt-3">
                                 <div class="btn-group dropdown-icon-none">
                                     <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
                                             data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
@@ -1129,8 +1143,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
         padding: 15px;
     }
 
-
-
     /* Prevenire zoom su input focus */
     input, textarea {
         font-size: 16px !important;
@@ -1155,6 +1167,76 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
         border: 1px solid #dee2e6;
         border-radius: 20px;
         padding: 10px 15px;
+    }
+
+    /* Nascondi completamente i pulsanti + originali in fondo su mobile */
+    .d-flex.justify-content-end.mt-3 {
+        display: none !important;
+    }
+
+    /* Pulsante + nell'header sempre visibile su mobile */
+    .d-flex.align-items-center.gap-2 .btn-group.dropdown-icon-none .btn {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        border-radius: 8px !important;
+        font-size: 18px !important;
+    }
+}
+
+/* Miglioramenti per desktop - pulsanti + sempre visibili */
+@media (min-width: 992px) {
+    /* Assicura che i pulsanti + siano sempre visibili su desktop */
+    .d-flex.justify-content-end.mt-3 {
+        position: sticky !important;
+        bottom: 10px !important;
+        z-index: 100 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 10px !important;
+        padding: 10px 0 !important;
+        margin: 10px 0 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .d-flex.justify-content-end.mt-3 .btn-group.dropdown-icon-none .btn {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        border: 2px solid white !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+    }
+
+    /* Assicura che il contenuto sia scrollabile */
+    .chat-contact {
+        padding-bottom: 60px !important;
+    }
+
+    .content-wrapper {
+        padding-bottom: 20px !important;
+    }
+
+    /* Pulsante + nell'header su desktop */
+    .d-flex.align-items-center.gap-2 .btn-group.dropdown-icon-none .btn {
+        min-width: 35px !important;
+        min-height: 35px !important;
+        border-radius: 6px !important;
+        font-size: 16px !important;
+    }
+
+    /* Migliora la visibilità del dropdown */
+    .dropdown-menu {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        min-width: 200px !important;
+    }
+
+    /* Assicura che il contenuto sia scrollabile */
+    .chat-contact {
+        padding-bottom: 80px !important;
+    }
+
+    .content-wrapper {
+        padding-bottom: 20px !important;
     }
 }
 </style>

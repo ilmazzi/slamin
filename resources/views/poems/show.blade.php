@@ -154,7 +154,7 @@
                     </div>
 
                     <!-- Tags -->
-                    @if($poem->tags && count($poem->tags) > 0)
+                    @if($poem->tags && is_array($poem->tags) && count($poem->tags) > 0)
                         <div class="mb-4">
                             <h6 class="text-muted mb-2">{{ __('poems.tags') }}:</h6>
                             <div class="d-flex flex-wrap gap-1">

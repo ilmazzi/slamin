@@ -66,6 +66,15 @@
                             </a>
                         </div>
                         <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('admin.settings.placeholder') }}" class="card card-light-info hover-effect text-decoration-none">
+                                <div class="card-body text-center py-3">
+                                    <i class="ph-duotone ph-palette f-s-30 text-info mb-2"></i>
+                                    <h6 class="mb-1">Impostazioni Placeholder</h6>
+                                    <small class="text-muted">Colori placeholder immagini</small>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
                             <a href="{{ route('admin.translations.index') }}" class="card card-light-success hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-translate f-s-30 text-success mb-2"></i>
