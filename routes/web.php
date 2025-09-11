@@ -1437,7 +1437,7 @@ Route::prefix('articles')->name('articles.')->group(function () {
 
     // Routes autenticate
     Route::middleware('auth')->group(function () {
-
+        Route::get('/my-articles', [App\Http\Controllers\ArticleController::class, 'myArticles'])->name('my-articles');
 
         Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
         Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit')->where('article', '[0-9]+');

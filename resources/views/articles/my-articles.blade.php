@@ -108,11 +108,13 @@
                                                             </button>
                                                         </li>
                                                         <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ $article->title }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
-                                                            </button>
-                                                        </li>
+                                                        @if(auth()->user()->id === $article->user_id || auth()->user()->hasRole(['admin', 'editor']) || auth()->user()->hasPermissionTo('articles.delete'))
+                                                            <li>
+                                                                <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
+                                                                    <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
+                                                                </button>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </div>
@@ -196,11 +198,13 @@
                                                             </button>
                                                         </li>
                                                         <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ $article->title }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
-                                                            </button>
-                                                        </li>
+                                                        @if(auth()->user()->id === $article->user_id || auth()->user()->hasRole(['admin', 'editor']) || auth()->user()->hasPermissionTo('articles.delete'))
+                                                            <li>
+                                                                <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
+                                                                    <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
+                                                                </button>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </div>
