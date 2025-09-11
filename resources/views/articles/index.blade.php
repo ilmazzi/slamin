@@ -80,9 +80,18 @@ use App\Helpers\PlaceholderHelper;
                                                     <x-social-like-button :content="$article" type="article" size="sm" />
                                                     <x-social-comment-button :content="$article" type="article" size="sm" />
                                                 </div>
-                                                <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                    {{ __('articles.read_more') }}
-                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
+                                                        {{ __('articles.read_more') }}
+                                                    </a>
+                                                    @auth
+                                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
+                                                                title="{{ __('articles.delete') }}">
+                                                            <i class="ph ph-trash f-s-12"></i>
+                                                        </button>
+                                                    @endauth
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -202,9 +211,18 @@ use App\Helpers\PlaceholderHelper;
                                                     <x-social-like-button :content="$article" type="article" size="sm" />
                                                     <x-social-comment-button :content="$article" type="article" size="sm" />
                                                 </div>
-                                                <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                    {{ __('articles.read_more') }}
-                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
+                                                        {{ __('articles.read_more') }}
+                                                    </a>
+                                                    @auth
+                                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
+                                                                title="{{ __('articles.delete') }}">
+                                                            <i class="ph ph-trash f-s-12"></i>
+                                                        </button>
+                                                    @endauth
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -324,9 +342,18 @@ use App\Helpers\PlaceholderHelper;
                                                     <x-social-like-button :content="$article" type="article" size="sm" />
                                                     <x-social-comment-button :content="$article" type="article" size="sm" />
                                                 </div>
-                                                <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                    {{ __('articles.read_more') }}
-                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
+                                                        {{ __('articles.read_more') }}
+                                                    </a>
+                                                    @auth
+                                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
+                                                                title="{{ __('articles.delete') }}">
+                                                            <i class="ph ph-trash f-s-12"></i>
+                                                        </button>
+                                                    @endauth
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
