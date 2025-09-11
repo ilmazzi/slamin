@@ -129,7 +129,7 @@ return [
     // Password Reset Email
     'reset_password_email_subject' => 'Reset Password - Slam In',
     'reset_password_email_greeting' => 'Ciao!',
-    'reset_password_email_line1' => 'Hai ricevuto questa email perché abbiamo ricevuto una richiesta di reset password per il tuo account.',
+    'reset_password_email_line1' => 'Ciao! Abbiamo ricevuto una richiesta di modifica della password per questo account. Se non era tua intenzione cambiarla, ignora questo messaggio, se, invece, vuoi procedere con la modifica, fai clic sul pulsante qui sotto e segui la procedura. Grazie mille!',
     'reset_password_email_action' => 'Resetta Password',
     'reset_password_email_line2' => 'Questo link di reset password scadrà tra 60 minuti.',
     'reset_password_email_line3' => 'Se non hai richiesto il reset della password, ignora questa email.',

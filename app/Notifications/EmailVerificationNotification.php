@@ -25,7 +25,7 @@ class EmailVerificationNotification extends VerifyEmail
             ->subject('🎭 Verifica il tuo account Slamin')
             ->greeting('Ciao ' . $notifiable->getDisplayName() . '!')
             ->line('Benvenuto nella community Poetry Slam!')
-            ->line('Per completare la registrazione e accedere a tutte le funzionalità, clicca sul pulsante qui sotto per verificare il tuo indirizzo email.')
+            ->line('Ciao e grazie per aver richiesto di essere parte di Slam In, la piattaforma internazionale di poesia. Facendo clic sul pulsante qui sotto, potrai concludere il processo d\'iscrizione e avrai accesso al tuo profilo privato, potrai interagire con il resto della comunità. Ringraziandoti ancora una volta, ti ricordiamo di mantenere un comportamento rispettoso e di utilizzare questo mezzo per il bene della comunità.')
             ->action('Verifica Email', $verificationUrl)
             ->line('Una volta verificata l\'email, potrai:')
             ->line('• Partecipare agli eventi Poetry Slam')
