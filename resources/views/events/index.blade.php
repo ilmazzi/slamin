@@ -517,7 +517,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
             <div class="modal-body">
-                <p>{{ __('events.confirm_delete_event', ['title' => '<strong id="deleteEventTitle"></strong>']) }}</p>
+                <p>{{ __('events.confirm_delete_event', ['title' => '']) }} <strong id="deleteEventTitle"></strong></p>
                 <div class="alert alert-warning">
                     <i class="ph ph-warning me-2"></i>
                     <strong>{{ __('events.warning') }}</strong> {{ __('events.delete_action_warning') }}
@@ -552,14 +552,23 @@ function changePerPage(value) {
 
 function confirmDeleteEvent(eventId, eventTitle) {
     // Set the event title in the modal
-    document.getElementById('deleteEventTitle').textContent = eventTitle;
+    const titleElement = document.getElementById('deleteEventTitle');
+    if (titleElement) {
+        titleElement.textContent = eventTitle;
+    }
 
     // Set the form action
-    document.getElementById('deleteEventForm').action = `/events/${eventId}`;
+    const formElement = document.getElementById('deleteEventForm');
+    if (formElement) {
+        formElement.action = `/events/${eventId}`;
+    }
 
     // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById('deleteEventModal'));
-    modal.show();
+    const modalElement = document.getElementById('deleteEventModal');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
 }
 </script>
 @endsection
