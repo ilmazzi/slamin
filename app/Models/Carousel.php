@@ -224,6 +224,7 @@ class Carousel extends Model
 
     /**
      * Update content cache from referenced content
+     * Preserva le personalizzazioni dell'utente (title, description, link_url)
      */
     public function updateContentCache()
     {
@@ -244,7 +245,36 @@ class Carousel extends Model
         }
 
         $cacheData = $this->getContentCacheData($content);
-        $this->update($cacheData);
+        
+        // Preserva le personalizzazioni dell'utente se esistono
+        $updateData = [];
+        
+        // Solo se non c'è un titolo personalizzato, usa quello del contenuto
+        if (empty($this->title) || $this->title === $this->content_title) {
+            $updateData['content_title'] = $cacheData['content_title'] ?? null;
+        }
+        
+        // Solo se non c'è una descrizione personalizzata, usa quella del contenuto
+        if (empty($this->description) || $this->description === $this->content_description) {
+            $description = $cacheData['content_description'] ?? null;
+            // Tronca la descrizione se è troppo lunga (limite di 500 caratteri per il carosello)
+            if ($description && strlen($description) > 500) {
+                $description = \Illuminate\Support\Str::limit($description, 500, '...');
+            }
+            $updateData['content_description'] = $description;
+        }
+        
+        // Solo se non c'è un link personalizzato, usa quello del contenuto
+        if (empty($this->link_url) || $this->link_url === $this->content_url) {
+            $updateData['content_url'] = $cacheData['content_url'] ?? null;
+        }
+        
+        // L'immagine viene sempre aggiornata dalla cache
+        $updateData['content_image_url'] = $cacheData['content_image_url'] ?? null;
+        
+        if (!empty($updateData)) {
+            $this->update($updateData);
+        }
     }
 
     /**

@@ -99,6 +99,12 @@ class CarouselController extends Controller
                 // Usa il titolo del contenuto se non è specificato uno personalizzato
                 $title = $request->title ?: $this->getContentTitle($content, $request->content_type);
                 $description = $request->description ?: $this->getContentDescription($content, $request->content_type);
+                
+                // Tronca la descrizione se è troppo lunga (limite di 500 caratteri per il carosello)
+                if ($description && strlen($description) > 500) {
+                    $description = Str::limit($description, 500, '...');
+                }
+                
                 $linkUrl = $request->link_url ?: $this->getContentUrl($content, $request->content_type);
 
                 $carouselData = [
