@@ -835,8 +835,8 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', adjustMobileLayout);
 });
 
-// Delete Article Function with SweetAlert2
-function deleteArticle(articleSlug) {
+// Delete Article Function with SweetAlert2 (Global scope)
+window.deleteArticle = function(articleSlug) {
     Swal.fire({
         title: '{{ __("articles.delete_article") }}',
         text: '{{ __("articles.delete_confirmation") }}',
