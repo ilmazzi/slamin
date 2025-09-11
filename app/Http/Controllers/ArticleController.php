@@ -324,10 +324,16 @@ class ArticleController extends Controller
 
         $article->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => __('articles.article_deleted')
-        ]);
+        // Check if it's an AJAX request
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('articles.article_deleted')
+            ]);
+        }
+
+        // For form submissions, redirect back with success message
+        return redirect()->back()->with('success', __('articles.article_deleted'));
     }
 
     /**
