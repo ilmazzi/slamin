@@ -5,13 +5,23 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Video;
 use App\Models\Poem;
+use App\Models\Article;
+use App\Models\ArticleCategory;
+use App\Models\ArticleTag;
+use App\Models\ArticleLayout;
+use App\Models\ArticleReport;
+use App\Models\ArticleComment;
+use App\Models\ArticleLike;
+use App\Models\UnifiedLike;
+use App\Models\UnifiedComment;
+use App\Models\UnifiedView;
 use App\Models\Event;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\ActivityLog;
 use App\Models\Wishlist;
-use App\Models\Chat;
+use App\Models\ChatRoom;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
 use App\Models\GroupMember;
@@ -68,41 +78,53 @@ class CleanupAllMedia extends Command
         // 3. ELIMINAZIONE POESIE
         $this->cleanupPoems($dryRun);
 
-        // 4. ELIMINAZIONE EVENTI (se richiesto)
+        // 4. ELIMINAZIONE ARTICOLI
+        $this->cleanupArticles($dryRun);
+        $this->cleanupArticleCategories($dryRun);
+        $this->cleanupArticleTags($dryRun);
+        $this->cleanupArticleLayouts($dryRun);
+        $this->cleanupArticleReports($dryRun);
+        $this->cleanupArticleComments($dryRun);
+        $this->cleanupArticleLikes($dryRun);
+        $this->cleanupUnifiedLikes($dryRun);
+        $this->cleanupUnifiedComments($dryRun);
+        $this->cleanupUnifiedViews($dryRun);
+
+        // 5. ELIMINAZIONE EVENTI (se richiesto)
         if (!$keepEvents) {
             $this->cleanupEvents($dryRun);
         }
 
-        // 5. ELIMINAZIONE GRUPPI
+        // 6. ELIMINAZIONE GRUPPI
         $this->cleanupGroups($dryRun);
 
-        // 6. ELIMINAZIONE UTENTI (se richiesto)
+        // 7. ELIMINAZIONE UTENTI (se richiesto)
         if (!$keepUsers) {
             $this->cleanupUsers($dryRun);
         }
 
-        // 7. ELIMINAZIONE NOTIFICHE
+        // 8. ELIMINAZIONE NOTIFICHE
         $this->cleanupNotifications($dryRun);
 
-        // 8. ELIMINAZIONE LOG ATTIVITÀ
+        // 9. ELIMINAZIONE LOG ATTIVITÀ
         $this->cleanupActivityLogs($dryRun);
 
-        // 9. ELIMINAZIONE DATI SOCIAL
+        // 10. ELIMINAZIONE DATI SOCIAL
         $this->cleanupSocialData($dryRun);
 
-        // 10. ELIMINAZIONE DATI GRUPPI
+        // 11. ELIMINAZIONE DATI GRUPPI
         $this->cleanupGroupData($dryRun);
 
-        // 11. ELIMINAZIONE DATI EVENTI
+        // 12. ELIMINAZIONE DATI EVENTI
         $this->cleanupEventData($dryRun);
 
-        // 12. ELIMINAZIONE DATI VIDEO
+        // 13. ELIMINAZIONE DATI VIDEO
         $this->cleanupVideoData($dryRun);
 
-        // 13. ELIMINAZIONE DATI POESIE
+        // 14. ELIMINAZIONE DATI POESIE
         $this->cleanupPoemData($dryRun);
 
-        // 14. ELIMINAZIONE ALTRI DATI (escluso kanban se richiesto)
+        // 15. ELIMINAZIONE ALTRI DATI (escluso kanban se richiesto)
         if (!$keepKanban) {
             $this->cleanupOtherData($dryRun);
         } else {
@@ -138,13 +160,23 @@ class CleanupAllMedia extends Command
         $this->info('📊 STATISTICHE ATUALI:');
         $this->line("   📹 Video: " . Video::count());
         $this->line("   📝 Poesie: " . Poem::count());
+        $this->line("   📰 Articoli: " . Article::count());
+        $this->line("   📂 Categorie articoli: " . ArticleCategory::count());
+        $this->line("   🏷️ Tag articoli: " . ArticleTag::count());
+        $this->line("   📐 Layout articoli: " . ArticleLayout::count());
+        $this->line("   🚨 Segnalazioni articoli: " . ArticleReport::count());
+        $this->line("   💬 Commenti articoli: " . ArticleComment::count());
+        $this->line("   ❤️ Like articoli: " . ArticleLike::count());
+        $this->line("   ❤️ Like unificati: " . UnifiedLike::count());
+        $this->line("   💬 Commenti unificati: " . UnifiedComment::count());
+        $this->line("   👁️ Visualizzazioni unificate: " . UnifiedView::count());
         $this->line("   📅 Eventi: " . Event::count() . ($keepEvents ? ' (MANTENUTI)' : ''));
         $this->line("   👥 Gruppi: " . Group::count());
         $this->line("   👤 Utenti: " . User::count() . ($keepUsers ? ' (MANTENUTI)' : ''));
         $this->line("   🔔 Notifiche: " . Notification::count());
         $this->line("   📊 Log attività: " . ActivityLog::count());
         $this->line("   ❤️ Wishlist: " . Wishlist::count());
-        $this->line("   💬 Chat: " . Chat::count());
+        $this->line("   💬 Chat room: " . ChatRoom::count());
         $this->line("   💬 Messaggi chat: " . ChatMessage::count());
         $this->line("   👥 Membri gruppi: " . GroupMember::count());
         $this->line("   📨 Inviti gruppi: " . GroupInvitation::count());
@@ -236,6 +268,264 @@ class CleanupAllMedia extends Command
         }
 
         $this->info("   📊 Risultati: {$deletedCount} poesie eliminate");
+    }
+
+    private function cleanupArticles($dryRun)
+    {
+        $this->info('📰 ELIMINAZIONE ARTICOLI...');
+        
+        $articles = Article::all();
+        $this->line("   Trovati {$articles->count()} articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($articles as $article) {
+            try {
+                // Elimina immagine featured se esiste
+                if ($article->featured_image && Storage::disk('public')->exists($article->featured_image)) {
+                    Storage::disk('public')->delete($article->featured_image);
+                }
+
+                // Elimina l'articolo
+                $article->delete();
+                $deletedCount++;
+
+                $this->line("   ✅ Eliminato: {$article->title}");
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione articolo {$article->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} articoli eliminati");
+    }
+
+    private function cleanupArticleCategories($dryRun)
+    {
+        $this->info('📂 ELIMINAZIONE CATEGORIE ARTICOLI...');
+        
+        $categories = ArticleCategory::all();
+        $this->line("   Trovate {$categories->count()} categorie articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($categories as $category) {
+            try {
+                $category->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione categoria {$category->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} categorie eliminate");
+    }
+
+    private function cleanupArticleTags($dryRun)
+    {
+        $this->info('🏷️ ELIMINAZIONE TAG ARTICOLI...');
+        
+        $tags = ArticleTag::all();
+        $this->line("   Trovati {$tags->count()} tag articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($tags as $tag) {
+            try {
+                $tag->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione tag {$tag->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} tag eliminati");
+    }
+
+    private function cleanupArticleLayouts($dryRun)
+    {
+        $this->info('📐 ELIMINAZIONE LAYOUT ARTICOLI...');
+        
+        $layouts = ArticleLayout::all();
+        $this->line("   Trovati {$layouts->count()} layout articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($layouts as $layout) {
+            try {
+                $layout->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione layout {$layout->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} layout eliminati");
+    }
+
+    private function cleanupArticleReports($dryRun)
+    {
+        $this->info('🚨 ELIMINAZIONE SEGNALAZIONI ARTICOLI...');
+        
+        $reports = ArticleReport::all();
+        $this->line("   Trovate {$reports->count()} segnalazioni articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($reports as $report) {
+            try {
+                $report->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione segnalazione {$report->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} segnalazioni eliminate");
+    }
+
+    private function cleanupArticleComments($dryRun)
+    {
+        $this->info('💬 ELIMINAZIONE COMMENTI ARTICOLI...');
+        
+        $comments = ArticleComment::all();
+        $this->line("   Trovati {$comments->count()} commenti articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($comments as $comment) {
+            try {
+                $comment->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione commento {$comment->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} commenti eliminati");
+    }
+
+    private function cleanupArticleLikes($dryRun)
+    {
+        $this->info('❤️ ELIMINAZIONE LIKE ARTICOLI...');
+        
+        $likes = ArticleLike::all();
+        $this->line("   Trovati {$likes->count()} like articoli");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($likes as $like) {
+            try {
+                $like->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione like {$like->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} like eliminati");
+    }
+
+    private function cleanupUnifiedLikes($dryRun)
+    {
+        $this->info('❤️ ELIMINAZIONE LIKE UNIFICATI...');
+        
+        $likes = UnifiedLike::all();
+        $this->line("   Trovati {$likes->count()} like unificati");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($likes as $like) {
+            try {
+                $like->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione like unificato {$like->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} like unificati eliminati");
+    }
+
+    private function cleanupUnifiedComments($dryRun)
+    {
+        $this->info('💬 ELIMINAZIONE COMMENTI UNIFICATI...');
+        
+        $comments = UnifiedComment::all();
+        $this->line("   Trovati {$comments->count()} commenti unificati");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($comments as $comment) {
+            try {
+                $comment->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione commento unificato {$comment->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} commenti unificati eliminati");
+    }
+
+    private function cleanupUnifiedViews($dryRun)
+    {
+        $this->info('👁️ ELIMINAZIONE VISUALIZZAZIONI UNIFICATE...');
+        
+        $views = UnifiedView::all();
+        $this->line("   Trovate {$views->count()} visualizzazioni unificate");
+
+        if ($dryRun) {
+            $this->info('   🔍 DRY-RUN: Nessuna eliminazione verrà eseguita');
+            return;
+        }
+
+        $deletedCount = 0;
+        foreach ($views as $view) {
+            try {
+                $view->delete();
+                $deletedCount++;
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione visualizzazione unificata {$view->id}: " . $e->getMessage());
+            }
+        }
+
+        $this->info("   📊 Risultati: {$deletedCount} visualizzazioni unificate eliminate");
     }
 
     private function cleanupEvents($dryRun)
@@ -430,20 +720,21 @@ class CleanupAllMedia extends Command
             $this->line("   ✅ {$deletedCount} wishlist eliminate");
         }
 
-        // Chat
-        $chats = Chat::all();
-        $this->line("   Trovate {$chats->count()} chat");
+
+        // Chat Rooms
+        $chatRooms = ChatRoom::all();
+        $this->line("   Trovate {$chatRooms->count()} chat room");
         if (!$dryRun) {
             $deletedCount = 0;
-            foreach ($chats as $chat) {
+            foreach ($chatRooms as $chatRoom) {
                 try {
-                    $chat->delete();
+                    $chatRoom->delete();
                     $deletedCount++;
                 } catch (\Exception $e) {
-                    $this->error("   ❌ Errore eliminazione chat {$chat->id}: " . $e->getMessage());
+                    $this->error("   ❌ Errore eliminazione chat room {$chatRoom->id}: " . $e->getMessage());
                 }
             }
-            $this->line("   ✅ {$deletedCount} chat eliminate");
+            $this->line("   ✅ {$deletedCount} chat room eliminate");
         }
 
         // Chat Messages

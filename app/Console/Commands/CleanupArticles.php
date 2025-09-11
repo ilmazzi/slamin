@@ -3,161 +3,155 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Article;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CleanupArticles extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'cleanup:articles {--force} {--dry-run}';
+    protected $signature = 'db:cleanup-articles {--force} {--dry-run}';
+    protected $description = 'Elimina TUTTI gli articoli e le loro relazioni';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Elimina tutti gli articoli e crea articoli di test senza immagini';
-
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $force = $this->option('force');
         $dryRun = $this->option('dry-run');
 
         if ($dryRun) {
-            $this->info('🔍 Modalità DRY-RUN - Nessuna modifica verrà applicata');
+            $this->info('🔍 MODALITÀ DRY-RUN: Nessuna eliminazione verrà eseguita');
         }
 
-        // Conta articoli esistenti
-        $existingArticles = Article::count();
-        $this->info("📊 Articoli esistenti: {$existingArticles}");
+        $this->line('');
+        $this->line('📰 PULIZIA ARTICOLI E RELAZIONI');
+        $this->line('');
 
-        if ($existingArticles > 0) {
-            if (!$force && !$dryRun) {
-                if (!$this->confirm('⚠️  Sei sicuro di voler eliminare TUTTI gli articoli?')) {
-                    $this->info('❌ Operazione annullata');
-                    return;
-                }
-            }
+        // Mostra statistiche attuali
+        $this->showCurrentStats();
 
-            if (!$dryRun) {
-                $this->info('🗑️  Eliminazione articoli in corso...');
-                
-                // Elimina in transazione per sicurezza
-                DB::transaction(function () {
-                    // Elimina commenti associati (se la tabella esiste)
-                    if (DB::getSchemaBuilder()->hasTable('comments')) {
-                        DB::table('comments')->where('commentable_type', 'App\Models\Article')->delete();
-                    }
-                    
-                    // Elimina report associati (se la tabella esiste)
-                    if (DB::getSchemaBuilder()->hasTable('reports')) {
-                        DB::table('reports')->where('reportable_type', 'App\Models\Article')->delete();
-                    }
-                    
-                    // Elimina articoli
-                    Article::query()->delete();
-                });
-
-                $this->info('✅ Articoli eliminati con successo');
-            } else {
-                $this->info('🔍 DRY-RUN: Articoli che verrebbero eliminati: ' . $existingArticles);
+        if (!$force && !$dryRun) {
+            if (!$this->confirm('⚠️  ATTENZIONE: Eliminerà TUTTI gli articoli e le loro relazioni. Continuare?')) {
+                $this->info('Operazione annullata.');
+                return;
             }
         }
 
-        // Crea articoli di test
+        $this->line('');
+        $this->line('🚀 Inizio pulizia articoli...');
+        $this->line('');
+
+        // Disabilita foreign key checks
         if (!$dryRun) {
-            $this->info('📝 Creazione articoli di test...');
-            $this->createTestArticles();
-        } else {
-            $this->info('🔍 DRY-RUN: Verrebbero creati 5 articoli di test');
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $this->line('🔓 Foreign key checks disabilitati');
         }
 
-        $this->info('🎉 Operazione completata!');
+        // Pulisci articoli e relazioni
+        $this->cleanupArticlesAndRelations($dryRun);
+
+        // Riabilita foreign key checks
+        if (!$dryRun) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            $this->line('🔒 Foreign key checks riabilitati');
+        }
+
+        $this->line('');
+        $this->line('✅ Pulizia articoli completata!');
+        $this->line('');
+        $this->showFinalStats();
     }
 
-    private function createTestArticles()
+    private function showCurrentStats()
     {
-        // Ottieni un utente admin o il primo utente disponibile
-        $user = User::whereHas('roles', function($q) {
-            $q->where('name', 'admin');
-        })->first() ?? User::first();
+        $this->line('📊 STATISTICHE ATUALI ARTICOLI:');
+        $this->line("   📰 Articoli: " . DB::table('articles')->count());
+        $this->line("   📂 Categorie articoli: " . DB::table('article_categories')->count());
+        $this->line("   🏷️ Tag articoli: " . DB::table('article_tags')->count());
+        $this->line("   📐 Layout articoli: " . DB::table('article_layouts')->count());
+        $this->line("   🚨 Segnalazioni articoli: " . DB::table('article_reports')->count());
+        $this->line("   💬 Commenti articoli: " . DB::table('article_comments')->count());
+        $this->line("   ❤️ Like articoli: " . DB::table('article_likes')->count());
+        $this->line("   ❤️ Like unificati: " . DB::table('unified_likes')->count());
+        $this->line("   💬 Commenti unificati: " . DB::table('unified_comments')->count());
+        $this->line("   👁️ Visualizzazioni unificate: " . DB::table('unified_views')->count());
+        $this->line('');
+    }
 
-        if (!$user) {
-            $this->error('❌ Nessun utente trovato per creare gli articoli');
-            return;
-        }
+    private function showFinalStats()
+    {
+        $this->line('📊 STATISTICHE FINALI ARTICOLI:');
+        $this->line("   📰 Articoli: " . DB::table('articles')->count());
+        $this->line("   📂 Categorie articoli: " . DB::table('article_categories')->count());
+        $this->line("   🏷️ Tag articoli: " . DB::table('article_tags')->count());
+        $this->line("   📐 Layout articoli: " . DB::table('article_layouts')->count());
+        $this->line("   🚨 Segnalazioni articoli: " . DB::table('article_reports')->count());
+        $this->line("   💬 Commenti articoli: " . DB::table('article_comments')->count());
+        $this->line("   ❤️ Like articoli: " . DB::table('article_likes')->count());
+        $this->line("   ❤️ Like unificati: " . DB::table('unified_likes')->count());
+        $this->line("   💬 Commenti unificati: " . DB::table('unified_comments')->count());
+        $this->line("   👁️ Visualizzazioni unificate: " . DB::table('unified_views')->count());
+        $this->line('');
+    }
 
-        $testArticles = [
-            [
-                'title' => 'Storia del Poetry Slam in Europa',
-                'content' => 'Il Poetry Slam è nato negli Stati Uniti negli anni \'80 e si è diffuso rapidamente in Europa. Questo movimento artistico ha portato una nuova forma di espressione poetica che combina performance, competizione e community building. In Europa, il Poetry Slam ha trovato terreno fertile, specialmente in Germania, Francia e Italia, dove ha sviluppato caratteristiche uniche e locali.',
-                'excerpt' => 'Un viaggio attraverso la storia del Poetry Slam in Europa, dalle origini americane alle evoluzioni europee.',
-                'status' => 'published',
-                'is_public' => true,
-                'featured' => true,
-            ],
-            [
-                'title' => 'Come Scrivere Testi Emotivamente Coinvolgenti',
-                'content' => 'La scrittura di testi emotivamente coinvolgenti richiede una profonda comprensione delle emozioni umane e delle tecniche narrative. È importante creare connessioni autentiche con il pubblico attraverso l\'uso di immagini vivide, metafore potenti e un linguaggio che risuoni con l\'esperienza comune. La chiave è l\'autenticità e la capacità di toccare le corde emotive del pubblico.',
-                'excerpt' => 'Tecniche e consigli per creare testi che emozionano e coinvolgono il pubblico.',
-                'status' => 'published',
-                'is_public' => true,
-                'featured' => false,
-            ],
-            [
-                'title' => 'Come Costruire una Community di Poetry Slam',
-                'content' => 'Costruire una community di Poetry Slam richiede passione, dedizione e una visione chiara. È importante creare spazi inclusivi dove tutti si sentano benvenuti, indipendentemente dal loro livello di esperienza. Organizzare eventi regolari, workshop e momenti di condivisione aiuta a rafforzare i legami tra i membri della community.',
-                'excerpt' => 'Strategie e consigli per creare e mantenere una community attiva di Poetry Slam.',
-                'status' => 'published',
-                'is_public' => true,
-                'featured' => false,
-            ],
-            [
-                'title' => 'Poetry Slam e Social Media: Una Guida Completa',
-                'content' => 'I social media offrono infinite possibilità per promuovere il Poetry Slam e raggiungere nuovi pubblici. Instagram, TikTok e YouTube sono piattaforme ideali per condividere performance, backstage e contenuti educativi. È importante creare contenuti autentici che riflettano i valori del Poetry Slam: inclusività, creatività e community.',
-                'excerpt' => 'Come utilizzare i social media per promuovere il Poetry Slam e costruire una community online.',
-                'status' => 'published',
-                'is_public' => true,
-                'featured' => true,
-            ],
-            [
-                'title' => 'Workshop di Scrittura Creativa per Poetry Slam',
-                'content' => 'I workshop di scrittura creativa sono fondamentali per sviluppare le competenze dei poeti slam. Questi momenti di formazione permettono di esplorare diverse tecniche narrative, lavorare sulla struttura dei testi e migliorare la capacità di comunicazione. Un buon workshop combina teoria e pratica, offrendo esercizi guidati e feedback costruttivi.',
-                'excerpt' => 'Organizzazione e gestione di workshop efficaci per la scrittura creativa nel Poetry Slam.',
-                'status' => 'published',
-                'is_public' => true,
-                'featured' => false,
-            ],
+    private function cleanupArticlesAndRelations($dryRun)
+    {
+        $this->line('🗑️  Eliminazione articoli e relazioni...');
+
+        // Ordine di eliminazione: prima le relazioni, poi gli articoli
+        $tablesToClean = [
+            // 1. Prima elimina le relazioni che dipendono dagli articoli
+            'article_comments',      // Commenti articoli
+            'article_likes',         // Like articoli
+            'article_reports',       // Segnalazioni articoli
+            'article_tag',           // Tag degli articoli (tabella pivot)
+            'article_layouts',       // Layout articoli
+            'article_tags',          // Tag articoli
+            'article_categories',    // Categorie articoli
+            
+            // 2. Poi elimina i modelli unificati che potrebbero riferirsi agli articoli
+            'unified_likes',         // Like unificati
+            'unified_comments',      // Commenti unificati
+            'unified_views',         // Visualizzazioni unificate
+            
+            // 3. Infine elimina gli articoli
+            'articles',              // Articoli
         ];
 
-        foreach ($testArticles as $index => $articleData) {
-            $article = Article::create([
-                'user_id' => $user->id,
-                'title' => $articleData['title'],
-                'content' => $articleData['content'],
-                'excerpt' => $articleData['excerpt'],
-                'status' => $articleData['status'],
-                'is_public' => $articleData['is_public'],
-                'featured' => $articleData['featured'],
-                'moderation_status' => 'approved', // Approvato per essere visibile
-                'featured_image' => null, // Nessuna immagine per testare i placeholder
-                'published_at' => now()->subDays(rand(1, 30)),
-                'views_count' => rand(1, 100),
-                'likes_count' => rand(0, 50),
-                'comments_count' => rand(0, 20),
-            ]);
-
-            $this->info("✅ Creato: {$article->title}");
+        foreach ($tablesToClean as $table) {
+            try {
+                $count = DB::table($table)->count();
+                $this->line("   Trovati {$count} record in {$table}");
+                
+                if (!$dryRun && $count > 0) {
+                    // Elimina TUTTI i record dalla tabella
+                    DB::statement("DELETE FROM {$table}");
+                    $this->line("   ✅ {$count} record eliminati da {$table}");
+                } elseif ($dryRun) {
+                    $this->line("   🔍 DRY-RUN: Eliminerebbe {$count} record da {$table}");
+                }
+            } catch (\Exception $e) {
+                $this->error("   ❌ Errore eliminazione {$table}: " . $e->getMessage());
+            }
         }
 
-        $this->info("🎯 Creati " . count($testArticles) . " articoli di test senza immagini");
+        // Pulisci anche i file degli articoli
+        if (!$dryRun) {
+            $this->line('');
+            $this->line('🧹 Pulizia file articoli...');
+            
+            try {
+                // Pulisci file temporanei di upload
+                $tempDirs = ['temp', 'uploads/temp', 'public/temp', 'storage/app/public/articles'];
+                foreach ($tempDirs as $dir) {
+                    if (Storage::exists($dir)) {
+                        $files = Storage::allFiles($dir);
+                        foreach ($files as $file) {
+                            Storage::delete($file);
+                        }
+                        $this->line("   ✅ File eliminati da {$dir}");
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->error('   ❌ Errore pulizia file: ' . $e->getMessage());
+            }
+        }
     }
 }
