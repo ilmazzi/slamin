@@ -100,11 +100,9 @@
                 </a>
                 
                 @auth
-                    @if(auth()->user()->id === $article->user_id || auth()->user()->hasRole(['admin', 'editor']) || auth()->user()->hasPermissionTo('articles.delete'))
-                        <button class="btn btn-outline-danger btn-sm" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')" title="{{ __('articles.delete') }}">
-                            <i class="ph ph-trash f-s-12"></i>
-                        </button>
-                    @endif
+                    <button class="btn btn-outline-danger btn-sm" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')" title="{{ __('articles.delete') }}">
+                        <i class="ph ph-trash f-s-12"></i>
+                    </button>
                 @endauth
             </div>
         </div>
