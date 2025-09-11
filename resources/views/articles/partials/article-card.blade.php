@@ -191,31 +191,23 @@ function showNotification(message, type) {
 }
 
 function deleteArticle(articleId, title) {
-    if (confirm(`{{ __('articles.confirm_delete') }} "${title}"?`)) {
-        fetch(`/articles/${articleId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showNotification(data.message, 'success');
-                // Rimuovi la card dall'DOM
-                const articleCard = document.querySelector(`[onclick*="deleteArticle(${articleId}"]`);
-                if (articleCard) {
-                    articleCard.closest('.col-12').remove();
-                }
-            } else {
-                showNotification(data.message || '{{ __('articles.error_deleting') }}', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('{{ __('articles.error_processing_request') }}', 'error');
-        });
+    // Set the article title in the modal
+    const titleElement = document.getElementById('deleteArticleTitle');
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
+
+    // Set the form action
+    const formElement = document.getElementById('deleteArticleForm');
+    if (formElement) {
+        formElement.action = `/articles/${articleId}`;
+    }
+
+    // Show the modal
+    const modalElement = document.getElementById('deleteArticleModal');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
     }
 }
 </script>

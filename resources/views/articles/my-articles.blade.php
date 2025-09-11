@@ -232,6 +232,37 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Article Modal -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteArticleModalLabel">
+                    <i class="ph ph-warning me-2"></i>{{ __('articles.delete_article_title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('articles.confirm_delete') }} <strong id="deleteArticleTitle"></strong>?</p>
+                <div class="alert alert-warning">
+                    <i class="ph ph-warning me-2"></i>
+                    <strong>{{ __('articles.warning') }}</strong> {{ __('articles.delete_action_warning') }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('articles.cancel') }}</button>
+                <form id="deleteArticleForm" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="ph ph-trash me-2"></i>{{ __('articles.delete_permanently') }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -300,51 +331,23 @@ function toggleFeatured(articleId) {
 }
 
 function deleteArticle(articleId, title) {
-    if (confirm(`{{ __("articles.confirm_delete") }} "${title}"?`)) {
-        fetch(`/articles/${articleId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Mostra notifica di successo
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        text: data.message,
-                        icon: 'success',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                } else {
-                    alert(data.message);
-                }
-                
-                // Rimuovi la card dall'DOM
-                const articleCard = document.querySelector(`[onclick*="deleteArticle(${articleId}"]`);
-                if (articleCard) {
-                    articleCard.closest('.col-12').remove();
-                }
-                
-                // Ricarica la pagina se non ci sono più articoli
-                setTimeout(() => {
-                    if (document.querySelectorAll('.col-12.col-sm-6.col-lg-4').length === 0) {
-                        window.location.reload();
-                    }
-                }, 1000);
-            } else {
-                alert(data.message || '{{ __("articles.error_deleting") }}');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('{{ __("articles.error_processing_request") }}');
-        });
+    // Set the article title in the modal
+    const titleElement = document.getElementById('deleteArticleTitle');
+    if (titleElement) {
+        titleElement.textContent = title;
+    }
+
+    // Set the form action
+    const formElement = document.getElementById('deleteArticleForm');
+    if (formElement) {
+        formElement.action = `/articles/${articleId}`;
+    }
+
+    // Show the modal
+    const modalElement = document.getElementById('deleteArticleModal');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
     }
 }
 </script>

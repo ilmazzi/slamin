@@ -702,3 +702,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+
+<!-- Delete Article Modal -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteArticleModalLabel">
+                    <i class="ph ph-warning me-2"></i>{{ __('articles.delete_article_title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('articles.confirm_delete') }} <strong id="deleteArticleTitle"></strong>?</p>
+                <div class="alert alert-warning">
+                    <i class="ph ph-warning me-2"></i>
+                    <strong>{{ __('articles.warning') }}</strong> {{ __('articles.delete_action_warning') }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('articles.cancel') }}</button>
+                <form id="deleteArticleForm" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="ph ph-trash me-2"></i>{{ __('articles.delete_permanently') }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
