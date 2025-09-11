@@ -17,7 +17,7 @@
                 <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
             </span>
             <div class="flex-grow-1 ps-2">
-                <h6 class="text-primary mb-0">{{ auth()->user()->getDisplayName() }}</h6>
+                <a href="{{ route('user.show', auth()->user()) }}" class="text-primary mb-0">{{ auth()->user()->getDisplayName() }}</a>
                 <p class="text-muted f-s-12 mb-0">
                     @if(auth()->user()->getRoleNames()->count() > 0)
                         @php
