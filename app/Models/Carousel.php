@@ -303,7 +303,7 @@ class Carousel extends Model
                 return [
                     'content_title' => $content->getDisplayName(),
                     'content_description' => $content->bio,
-                    'content_image_url' => $content->profile_photo_url,
+                    'content_image_url' => $content->profile_photo ? asset('storage/' . $content->profile_photo) : null,
                     'content_url' => route('user.show', $content),
                 ];
 

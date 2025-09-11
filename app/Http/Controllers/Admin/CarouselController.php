@@ -69,16 +69,21 @@ class CarouselController extends Controller
                 }
 
                 // Determina l'immagine da usare
-                $imagePath = 'placeholder/placeholder-1.jpg'; // Default
+                $imagePath = null; // Default: nessuna immagine
                 switch ($request->content_type) {
                     case 'video':
-                        $imagePath = $content->thumbnail_url ?? 'placeholder/placeholder-1.jpg';
+                        $imagePath = $content->thumbnail_url ?? null;
                         break;
                     case 'event':
-                        $imagePath = $content->image_url ?? 'placeholder/placeholder-1.jpg';
+                        $imagePath = $content->image_url ?? null;
                         break;
                     case 'user':
-                        $imagePath = $content->profile_photo_url ?? 'placeholder/placeholder-1.jpg';
+                        // Per gli utenti, controlla se ha una foto profilo personalizzata
+                        if ($content->profile_photo) {
+                            $imagePath = asset('storage/' . $content->profile_photo);
+                        } else {
+                            $imagePath = null; // Nessuna immagine personalizzata
+                        }
                         break;
                     case 'poem':
                         // Gestione intelligente dell'immagine per le poesie
@@ -87,7 +92,6 @@ class CarouselController extends Controller
                         } elseif ($content->thumbnail) {
                             $imagePath = asset('storage/' . $content->thumbnail);
                         } else {
-                            // Non salviamo un placeholder come image_path, lasciamo null
                             $imagePath = null;
                         }
                         break;
