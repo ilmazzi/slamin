@@ -94,9 +94,19 @@
                 <x-report-button :content="$article" type="article" />
             </div>
 
-            <a href="{{ route('articles.show', $article) }}" class="btn btn-primary btn-sm">
-                {{ __('articles.read_more') }}
-            </a>
+            <div class="d-flex gap-1">
+                <a href="{{ route('articles.show', $article) }}" class="btn btn-primary btn-sm">
+                    {{ __('articles.read_more') }}
+                </a>
+                
+                @auth
+                    @if(auth()->user()->id === $article->user_id || auth()->user()->hasRole(['admin', 'editor']) || auth()->user()->hasPermissionTo('articles.delete'))
+                        <button class="btn btn-outline-danger btn-sm" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')" title="{{ __('articles.delete') }}">
+                            <i class="ph ph-trash f-s-12"></i>
+                        </button>
+                    @endif
+                @endauth
+            </div>
         </div>
     </div>
 </div>
@@ -179,6 +189,35 @@ function showNotification(message, type) {
         });
     } else {
         alert(message);
+    }
+}
+
+function deleteArticle(articleId, title) {
+    if (confirm(`{{ __('articles.confirm_delete') }} "${title}"?`)) {
+        fetch(`/articles/${articleId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                // Rimuovi la card dall'DOM
+                const articleCard = document.querySelector(`[onclick*="deleteArticle(${articleId}"]`);
+                if (articleCard) {
+                    articleCard.closest('.col-12').remove();
+                }
+            } else {
+                showNotification(data.message || '{{ __('articles.error_deleting') }}', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('{{ __('articles.error_processing_request') }}', 'error');
+        });
     }
 }
 </script>

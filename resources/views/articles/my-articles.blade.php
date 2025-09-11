@@ -301,8 +301,50 @@ function toggleFeatured(articleId) {
 
 function deleteArticle(articleId, title) {
     if (confirm(`{{ __("articles.confirm_delete") }} "${title}"?`)) {
-        // Implementation for deleting article
-        console.log('Deleting article:', articleId);
+        fetch(`/articles/${articleId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mostra notifica di successo
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        text: data.message,
+                        icon: 'success',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                } else {
+                    alert(data.message);
+                }
+                
+                // Rimuovi la card dall'DOM
+                const articleCard = document.querySelector(`[onclick*="deleteArticle(${articleId}"]`);
+                if (articleCard) {
+                    articleCard.closest('.col-12').remove();
+                }
+                
+                // Ricarica la pagina se non ci sono più articoli
+                setTimeout(() => {
+                    if (document.querySelectorAll('.col-12.col-sm-6.col-lg-4').length === 0) {
+                        window.location.reload();
+                    }
+                }, 1000);
+            } else {
+                alert(data.message || '{{ __("articles.error_deleting") }}');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('{{ __("articles.error_processing_request") }}');
+        });
     }
 }
 </script>

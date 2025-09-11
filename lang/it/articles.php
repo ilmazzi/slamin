@@ -117,6 +117,8 @@ return [
     'close' => 'Chiudi',
     'actions' => 'Azioni',
     'confirm_delete' => 'Sei sicuro di voler eliminare questo articolo?',
+    'error_deleting' => 'Errore durante l\'eliminazione dell\'articolo',
+    'error_processing_request' => 'Errore durante l\'elaborazione della richiesta',
     'pending' => 'In Attesa',
 
     // Gestione featured
