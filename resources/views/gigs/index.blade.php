@@ -17,77 +17,57 @@
         <!-- Statistiche -->
         <div class="row g-3 mb-4">
             <div class="col-6 col-md-3">
-                <div class="card card-light-primary hover-effect">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="avatar-sm">
-                                    <span class="avatar-title bg-primary rounded">
-                                        <i class="ph ph-briefcase text-white f-s-14"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                <h6 class="mb-1 f-s-12 f-w-500">Ingaggi Totali</h6>
-                                <h4 class="mb-0 f-s-18 f-w-600">{{ number_format($stats['total_gigs'] ?? 0) }}</h4>
-                            </div>
+                <div class="card hover-effect equal-card">
+                    <div class="card-body eshop-cards text-center pa-15">
+                        <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                            <i class="ph ph-briefcase f-s-18 text-primary"></i>
+                        </div>
+                        <span class="ripple-effect"></span>
+                        <div class="overflow-hidden">
+                            <h4 class="text-primary mb-1 f-w-600">{{ number_format($stats['total_gigs'] ?? 0) }}</h4>
+                            <p class="f-w-500 text-dark f-s-12 mb-1">Ingaggi Totali</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card card-light-success hover-effect">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="avatar-sm">
-                                    <span class="avatar-title bg-success rounded">
-                                        <i class="ph ph-check-circle text-white f-s-14"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                <h6 class="mb-1 f-s-12 f-w-500">Ingaggi Aperti</h6>
-                                <h4 class="mb-0 f-s-18 f-w-600">{{ number_format($stats['open_gigs_count'] ?? 0) }}</h4>
-                            </div>
+                <div class="card hover-effect equal-card">
+                    <div class="card-body eshop-cards text-center pa-15">
+                        <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                            <i class="ph ph-check-circle f-s-18 text-success"></i>
+                        </div>
+                        <span class="ripple-effect"></span>
+                        <div class="overflow-hidden">
+                            <h4 class="text-success mb-1 f-w-600">{{ number_format($stats['open_gigs_count'] ?? 0) }}</h4>
+                            <p class="f-w-500 text-dark f-s-12 mb-1">Ingaggi Aperti</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card card-light-warning hover-effect">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="avatar-sm">
-                                    <span class="avatar-title bg-warning rounded">
-                                        <i class="ph ph-warning text-white f-s-14"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                <h6 class="mb-1 f-s-12 f-w-500">Ingaggi Urgenti</h6>
-                                <h4 class="mb-0 f-s-18 f-w-600">{{ number_format($stats['urgent_gigs_count'] ?? 0) }}</h4>
-                            </div>
+                <div class="card hover-effect equal-card">
+                    <div class="card-body eshop-cards text-center pa-15">
+                        <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                            <i class="ph ph-warning f-s-18 text-warning"></i>
+                        </div>
+                        <span class="ripple-effect"></span>
+                        <div class="overflow-hidden">
+                            <h4 class="text-warning mb-1 f-w-600">{{ number_format($stats['urgent_gigs_count'] ?? 0) }}</h4>
+                            <p class="f-w-500 text-dark f-s-12 mb-1">Ingaggi Urgenti</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
-                <div class="card card-light-info hover-effect">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="avatar-sm">
-                                    <span class="avatar-title bg-info rounded">
-                                        <i class="ph ph-users text-white f-s-14"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                <h6 class="mb-1 f-s-12 f-w-500">Candidature Totali</h6>
-                                <h4 class="mb-0 f-s-18 f-w-600">{{ number_format(isset($gigs) ? $gigs->sum('application_count') : 0) }}</h4>
-                            </div>
+                <div class="card hover-effect equal-card">
+                    <div class="card-body eshop-cards text-center pa-15">
+                        <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
+                            <i class="ph ph-users f-s-18 text-info"></i>
+                        </div>
+                        <span class="ripple-effect"></span>
+                        <div class="overflow-hidden">
+                            <h4 class="text-info mb-1 f-w-600">{{ number_format(isset($gigs) ? $gigs->sum('application_count') : 0) }}</h4>
+                            <p class="f-w-500 text-dark f-s-12 mb-1">Candidature Totali</p>
                         </div>
                     </div>
                 </div>
