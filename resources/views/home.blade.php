@@ -153,6 +153,40 @@ use App\Helpers\PlaceholderHelper;
             color: white;
         }
 
+        /* Carousel captions responsive */
+        .carousel-caption {
+            position: absolute !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            max-width: 80% !important;
+            text-align: center !important;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .carousel-caption {
+                bottom: 10px !important;
+                max-width: 90% !important;
+                padding: 1rem !important;
+            }
+            
+            .carousel-caption h5 {
+                font-size: 1.1rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .carousel-caption p {
+                font-size: 0.9rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .carousel-caption .btn {
+                font-size: 0.8rem !important;
+                padding: 0.5rem 1rem !important;
+            }
+        }
+
     </style>
 @endsection
 
@@ -188,7 +222,7 @@ use App\Helpers\PlaceholderHelper;
                                                         style="height: 400px; object-fit: cover;">
                                                         <source src="{{ $carousel->videoUrl }}" type="video/mp4">
                                                     </video>
-                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                    <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                         <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
                                                         @if ($carousel->content_description ?? $carousel->description)
                                                             <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
@@ -204,7 +238,7 @@ use App\Helpers\PlaceholderHelper;
                                                     <img src="{{ $carousel->imageUrl }}" class="d-block w-100"
                                                         alt="{{ $carousel->title }}"
                                                         style="height: 400px; object-fit: cover;">
-                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                    <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                         <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
                                                         @if ($carousel->content_description ?? $carousel->description)
                                                             <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
@@ -220,7 +254,7 @@ use App\Helpers\PlaceholderHelper;
                                                     <img src="{{ $carousel->content_image_url }}" class="d-block w-100"
                                                         alt="{{ $carousel->content_title ?? $carousel->title }}"
                                                         style="height: 400px; object-fit: cover;">
-                                                    <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                    <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                         <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title }}</h5>
                                                         @if ($carousel->content_description ?? $carousel->description)
                                                             <p class="mb-4 f-s-16 text-primary">{{ $carousel->content_description ?? $carousel->description }}</p>
@@ -243,7 +277,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 <div style="font-size: 80px;">📖</div>
                                                             </div>
                                                         </div>
-                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                             <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title ?? 'Poesia senza titolo' }}</h5>
                                                             @if ($carousel->content_description ?? $carousel->description)
                                                                 <p class="mb-4 f-s-16 text-primary">{{ Str::limit($carousel->content_description ?? $carousel->description, 100) }}</p>
@@ -264,7 +298,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 <div style="font-size: 80px;">📰</div>
                                                             </div>
                                                         </div>
-                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                             <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->content_title ?? $carousel->title ?? 'Articolo senza titolo' }}</h5>
                                                             @if ($carousel->content_description ?? $carousel->description)
                                                                 <p class="mb-4 f-s-16 text-primary">{{ Str::limit($carousel->content_description ?? $carousel->description, 100) }}</p>
@@ -282,7 +316,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 <i class="ph-duotone ph-image f-s-48"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="carousel-caption d-none d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
+                                                        <div class="carousel-caption d-md-block bg-white rounded-3 p-4 shadow" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 80%; text-align: center;">
                                                             <h5 class="f-w-600 f-s-24 mb-3 text-dark">{{ $carousel->title }}</h5>
                                                             @if ($carousel->description)
                                                                 <p class="mb-4 f-s-16 text-primary">{{ $carousel->description }}</p>
