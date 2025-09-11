@@ -1429,14 +1429,10 @@ Route::prefix('articles')->name('articles.')->group(function () {
     // Routes pubbliche
     Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
-    // Spostata qui la route statica prima della dinamica
+    
+    // Routes autenticate - DEVE ESSERE PRIMA della rotta generica
     Route::middleware('auth')->group(function () {
         Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('create');
-    });
-    Route::get('/{article:slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
-
-    // Routes autenticate
-    Route::middleware('auth')->group(function () {
         Route::get('/my-articles', [App\Http\Controllers\ArticleController::class, 'myArticles'])->name('my-articles');
 
         Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
@@ -1482,6 +1478,9 @@ Route::prefix('articles')->name('articles.')->group(function () {
             Route::get('/check', [App\Http\Controllers\ArticleCommentController::class, 'checkReport'])->name('check');
         });
     });
+
+    // Route generica per visualizzare articoli - DEVE ESSERE ALLA FINE
+    Route::get('/{article:slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
 });
 
 // Dashboard principale articoli (admin/editor)
