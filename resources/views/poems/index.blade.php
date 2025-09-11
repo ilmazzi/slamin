@@ -112,7 +112,7 @@ use App\Helpers\PlaceholderHelper;
                     @if($poem->thumbnail_url)
                         <img src="{{ $poem->thumbnail_url }}" class="card-img-top" alt="{{ $poem->title }}" style="height: 200px; object-fit: cover;">
                     @else
-                        {!! PlaceholderHelper::getPoemPlaceholderHtml(0, 200, 'card-img-top', route('poems.show', $poem->slug)) !!}
+                        {!! poem_placeholder_html(0, 200, 'card-img-top', route('poems.show', $poem->slug)) !!}
                     @endif
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">

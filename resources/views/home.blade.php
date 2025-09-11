@@ -745,7 +745,7 @@ use App\Helpers\PlaceholderHelper;
                                                                             alt="{{ $poem->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
                                                                     @else
-                                                                        {!! PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
+                                                                        {!! poem_placeholder_html(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -817,7 +817,7 @@ use App\Helpers\PlaceholderHelper;
                                                                             alt="{{ $poem->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
                                                                     @else
-                                                                        {!! PlaceholderHelper::getPoemPlaceholderHtml(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
+                                                                        {!! poem_placeholder_html(60, 60, 'w-100 h-100', route('poems.show', $poem->slug)) !!}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -914,7 +914,7 @@ use App\Helpers\PlaceholderHelper;
                                                                                 class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                         </div>
                                                                     @else
-                                                                        {!! PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
+                                                                        {!! article_placeholder_html(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -1000,7 +1000,7 @@ use App\Helpers\PlaceholderHelper;
                                                                                 class="ph-duotone ph-newspaper f-s-12 text-white"></i>
                                                                         </div>
                                                                     @else
-                                                                        {!! PlaceholderHelper::getArticlePlaceholderHtml(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
+                                                                        {!! article_placeholder_html(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
                                                                 </div>
                                                             </div>

@@ -26,7 +26,7 @@ use App\Helpers\PlaceholderHelper;
                          class="card-img-top" style="height: 250px; object-fit: cover;"
                          alt="{{ $article->title }}">
                 @else
-                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top') !!}
+                    {!! article_placeholder_html(0, 250, 'card-img-top') !!}
                 @endif
                 <div class="card-body">
                     <!-- Mobile-First Article Header -->

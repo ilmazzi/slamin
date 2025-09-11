@@ -2,6 +2,7 @@
 
 use App\Helpers\GroupImageHelper;
 use App\Helpers\AvatarHelper;
+use App\Helpers\PlaceholderHelper;
 
 if (!function_exists('group_banner_url')) {
     function group_banner_url($group) {
@@ -39,6 +40,18 @@ if (!function_exists('getUserStatusClass')) {
             'busy' => 'bg-danger',
             default => 'bg-secondary'
         };
+    }
+}
+
+if (!function_exists('poem_placeholder_html')) {
+    function poem_placeholder_html($width = 300, $height = 200, $class = '', $url = null) {
+        return PlaceholderHelper::getPoemPlaceholderHtml($width, $height, $class, $url);
+    }
+}
+
+if (!function_exists('article_placeholder_html')) {
+    function article_placeholder_html($width = 300, $height = 200, $class = '', $url = null) {
+        return PlaceholderHelper::getArticlePlaceholderHtml($width, $height, $class, $url);
     }
 }
 

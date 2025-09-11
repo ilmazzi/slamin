@@ -349,9 +349,11 @@
                 <div class="card-body">
                     @foreach($relatedPoems as $relatedPoem)
                         <div class="d-flex mb-3">
-                            @if($relatedPoem->thumbnail)
-                                <img src="{{ $relatedPoem->thumbnail }}" class="rounded me-3"
+                            @if($relatedPoem->thumbnail_path)
+                                <img src="{{ $relatedPoem->thumbnail_url }}" class="rounded me-3"
                                      width="60" height="60" alt="{{ $relatedPoem->title }}">
+                            @else
+                                {!! poem_placeholder_html(60, 60, 'rounded me-3', route('poems.show', $relatedPoem->slug)) !!}
                             @endif
                             <div class="flex-grow-1">
                                 <h6 class="mb-1">
