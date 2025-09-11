@@ -110,6 +110,40 @@
     opacity: 0.9;
     margin-bottom: 0;
 }
+
+/* Stili per le card delle poesie nel profilo */
+.profile-poems .card {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.profile-poems .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+}
+
+.profile-poems .card-img-top {
+    border-radius: 8px 8px 0 0;
+}
+
+.profile-poems .card-title a {
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.profile-poems .card-title a:hover {
+    color: #007bff;
+}
+
+.profile-poems .social-buttons {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.profile-poems .card:hover .social-buttons {
+    opacity: 1;
+}
 </style>
 @endsection
 
@@ -833,18 +867,28 @@
                         </div>
                         <div class="card-body">
                             @if($stats['total_poems'] > 0)
-                            <div class="row">
+                            <div class="row profile-poems">
                                 @foreach($user->poems()->latest()->take(6)->get() as $poem)
                                 <div class="col-md-6 col-lg-4 mb-3">
-                                    <div class="card hover-effect">
-                                        <div class="card-body">
-                                            <h6 class="card-title fw-semibold">{{ Str::limit($poem->title, 30) }}</h6>
-                                            <p class="card-text text-muted f-s-13">{{ Str::limit($poem->content, 100) }}</p>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <small class="text-muted">{{ $poem->created_at ? $poem->created_at->format('d/m/Y') : 'N/A' }}</small>
-                                                <a href="{{ route('poems.show', $poem->slug ?: $poem->id) }}" class="btn btn-sm btn-outline-primary">
-                                                    {{ __('profile.view') }}
+                                    <div class="card hover-effect h-100">
+                                        @if($poem->thumbnail_path)
+                                            <img src="{{ $poem->thumbnail_url }}" class="card-img-top" alt="{{ $poem->title }}" style="height: 150px; object-fit: cover;">
+                                        @else
+                                            {!! poem_placeholder_html(0, 150, 'card-img-top', route('poems.show', $poem->slug ?: $poem->id)) !!}
+                                        @endif
+                                        <div class="card-body d-flex flex-column">
+                                            <h6 class="card-title fw-semibold mb-2">
+                                                <a href="{{ route('poems.show', $poem->slug ?: $poem->id) }}" class="text-decoration-none text-dark">
+                                                    {{ Str::limit($poem->title, 30) }}
                                                 </a>
+                                            </h6>
+                                            <p class="card-text text-muted f-s-13 flex-grow-1">{{ Str::limit(strip_tags($poem->content), 80) }}</p>
+                                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                <small class="text-muted">{{ $poem->created_at ? $poem->created_at->format('d/m/Y') : 'N/A' }}</small>
+                                                <div class="d-flex gap-1 social-buttons">
+                                                    <x-social-like-button :content="$poem" type="poem" size="sm" />
+                                                    <x-social-view-counter :content="$poem" type="poem" size="sm" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
