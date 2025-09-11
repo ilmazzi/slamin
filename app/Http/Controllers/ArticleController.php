@@ -73,11 +73,25 @@ class ArticleController extends Controller
                 $mainQuery->orderBy('published_at', 'desc');
         }
 
-        // If no filters applied, show layout articles
+        // Get featured articles for the layout
+        $featuredArticles = Article::with(['user', 'category'])
+            ->published()
+            ->where('featured', true)
+            ->withCount(['likes', 'comments'])
+            ->orderBy('published_at', 'desc')
+            ->get();
+
+        // If no filters applied, show layout articles or recent articles
         if (!$request->filled('search') && !$request->filled('category') && !$request->filled('tag')) {
-            // Use layout articles for the main display
-            $recentArticles = collect(); // Empty collection for layout mode
-            $showAllArticles = false;
+            // If we have layout articles, use them, otherwise show recent articles
+            if (!empty($layoutArticles) || $featuredArticles->count() > 0) {
+                $recentArticles = collect(); // Empty collection for layout mode
+                $showAllArticles = false;
+            } else {
+                // No layout articles, show recent articles
+                $recentArticles = $mainQuery->paginate(12);
+                $showAllArticles = true;
+            }
         } else {
             // Show all articles when filters are applied
             $recentArticles = $mainQuery->paginate(12);
@@ -98,6 +112,7 @@ class ArticleController extends Controller
 
         return view('articles.index', compact(
             'layoutArticles',
+            'featuredArticles',
             'recentArticles',
             'sidebarRecentArticles',
             'categories',
@@ -131,7 +146,7 @@ class ArticleController extends Controller
             'tags.*' => 'exists:article_tags,id',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:draft,published',
-            'published_at' => 'nullable|date|after:now',
+            'published_at' => 'nullable|date',
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:255',
@@ -153,7 +168,7 @@ class ArticleController extends Controller
         }
 
         // Set published_at if publishing now
-        if ($data['status'] === 'published' && !$request->filled('published_at')) {
+        if ($data['status'] === 'published' && empty($data['published_at'])) {
             $data['published_at'] = now();
         }
 
@@ -179,12 +194,17 @@ class ArticleController extends Controller
             }
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => __('articles.article_created'),
-            'article' => $article->load(['user', 'category', 'tags']),
-            'redirect' => route('articles.show', $article)
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('articles.article_created'),
+                'article' => $article->load(['user', 'category', 'tags']),
+                'redirect' => route('articles.show', $article)
+            ]);
+        }
+
+        return redirect()->route('articles.show', $article)
+            ->with('success', __('articles.article_created'));
     }
 
     /**
@@ -298,11 +318,16 @@ class ArticleController extends Controller
         // Update tag usage counts
         $this->updateTagUsage($oldTags, $newTags);
 
-        return response()->json([
-            'success' => true,
-            'message' => __('articles.article_updated'),
-            'article' => $article->load(['user', 'category', 'tags'])
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('articles.article_updated'),
+                'article' => $article->load(['user', 'category', 'tags'])
+            ]);
+        }
+
+        return redirect()->route('articles.show', $article)
+            ->with('success', __('articles.article_updated'));
     }
 
     /**
@@ -310,7 +335,23 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        if (!Auth::check()) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Devi essere autenticato per eliminare un articolo'
+                ], 401);
+            }
+            return redirect()->route('login');
+        }
+
         if (!$this->canDeleteArticle($article)) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Non hai i permessi per eliminare questo articolo'
+                ], 403);
+            }
             abort(403);
         }
 
@@ -324,7 +365,6 @@ class ArticleController extends Controller
 
         $article->delete();
 
-        // Check if it's an AJAX request
         if (request()->ajax() || request()->wantsJson()) {
             return response()->json([
                 'success' => true,
@@ -332,7 +372,6 @@ class ArticleController extends Controller
             ]);
         }
 
-        // For form submissions, redirect back with success message
         return redirect()->back()->with('success', __('articles.article_deleted'));
     }
 
@@ -428,14 +467,13 @@ class ArticleController extends Controller
     /**
      * Feature article
      */
-    public function feature(Request $request, $id)
+    public function feature(Request $request, Article $article)
     {
         if (!Auth::user()->hasPermissionTo('articles.feature')) {
             abort(403);
         }
 
         try {
-            $article = Article::findOrFail($id);
             $article->update(['featured' => true]);
 
             return response()->json([
@@ -443,11 +481,6 @@ class ArticleController extends Controller
                 'message' => __('articles.article_featured'),
                 'featured' => true
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Articolo non trovato'
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -459,14 +492,13 @@ class ArticleController extends Controller
     /**
      * Unfeature article
      */
-    public function unfeature(Request $request, $id)
+    public function unfeature(Request $request, Article $article)
     {
         if (!Auth::user()->hasPermissionTo('articles.feature')) {
             abort(403);
         }
 
         try {
-            $article = Article::findOrFail($id);
             $article->update(['featured' => false]);
 
             return response()->json([
@@ -474,11 +506,6 @@ class ArticleController extends Controller
                 'message' => __('articles.article_unfeatured'),
                 'featured' => false
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Articolo non trovato'
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -492,7 +519,7 @@ class ArticleController extends Controller
      */
     public function myArticles(Request $request)
     {
-        $query = Article::where('user_id', auth()->id())
+        $query = Article::where('user_id', Auth::id())
             ->with(['category', 'tags', 'user'])
             ->withCount(['likes', 'comments', 'views']);
 
@@ -673,7 +700,10 @@ class ArticleController extends Controller
         foreach ($positions as $position) {
             $layout = ArticleLayout::getLayoutForPosition($position);
             if ($layout->isNotEmpty()) {
-                $layoutArticles[$position] = $layout->first()->article;
+                $firstLayout = $layout->first();
+                if ($firstLayout && $firstLayout->article) {
+                    $layoutArticles[$position] = $firstLayout->article;
+                }
             }
         }
 
@@ -810,12 +840,7 @@ class ArticleController extends Controller
      */
     private function canDeleteArticle(Article $article)
     {
-        $user = Auth::user();
-        if (!$user) return false;
-
-        return $user->id === $article->user_id ||
-               $user->hasRole(['admin', 'editor']) ||
-               $user->hasPermissionTo('articles.delete');
+        return $article->canBeDeletedBy(Auth::user());
     }
 
     /**

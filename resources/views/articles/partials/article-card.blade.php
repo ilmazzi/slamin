@@ -100,11 +100,6 @@
                 </a>
                 
                 @auth
-                    <button type="button" class="btn btn-outline-danger btn-sm"
-                            onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
-                            title="{{ __('articles.delete') }}">
-                        <i class="ph ph-trash f-s-12"></i>
-                    </button>
                 @endauth
             </div>
         </div>
@@ -192,25 +187,5 @@ function showNotification(message, type) {
     }
 }
 
-function deleteArticle(articleId, title) {
-    // Set the article title in the modal
-    const titleElement = document.getElementById('deleteArticleTitle');
-    if (titleElement) {
-        titleElement.textContent = title;
-    }
-
-    // Set the form action
-    const formElement = document.getElementById('deleteArticleForm');
-    if (formElement) {
-        formElement.action = `/articles/${articleId}`;
-    }
-
-    // Show the modal
-    const modalElement = document.getElementById('deleteArticleModal');
-    if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-    }
-}
 </script>
 @endpush

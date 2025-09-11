@@ -117,13 +117,6 @@ return [
     'close' => 'Chiudi',
     'actions' => 'Azioni',
     'confirm_delete' => 'Sei sicuro di voler eliminare questo articolo?',
-    'delete_article_title' => 'Elimina Articolo',
-    'warning' => 'Attenzione',
-    'delete_action_warning' => 'Questa azione non può essere annullata.',
-    'cancel' => 'Annulla',
-    'delete_permanently' => 'Elimina Definitivamente',
-    'error_deleting' => 'Errore durante l\'eliminazione dell\'articolo',
-    'error_processing_request' => 'Errore durante l\'elaborazione della richiesta',
     'pending' => 'In Attesa',
 
     // Gestione featured

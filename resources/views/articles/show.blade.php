@@ -67,9 +67,9 @@ use App\Helpers\PlaceholderHelper;
                                         <i class="ti ti-star me-2"></i> {{ $article->featured ? __('articles.unfeature') : __('articles.feature') }}
                                     </a></li>
                                 @endif
-                                @if(auth()->check() && auth()->user()->can('delete', $article))
+                                @if(auth()->check() && $article->canBeDeletedBy(auth()->user()))
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteArticle({{ $article->id }})">
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteArticle('{{ $article->slug }}')">
                                         <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
                                     </a></li>
                                 @endif
@@ -92,7 +92,7 @@ use App\Helpers\PlaceholderHelper;
                             </span>
                         </div>
                         <div class="d-flex flex-wrap align-items-center gap-2 f-s-12">
-                            <span>{{ $article->published_at->format('d/m/Y H:i') }}</span>
+                            <span>{{ $article->published_at ? $article->published_at->format('d/m/Y H:i') : $article->created_at->format('d/m/Y H:i') }}</span>
                             <span>•</span>
                             <span>{{ __('articles.read_time', ['minutes' => $article->read_time]) }}</span>
                             <span>•</span>
@@ -398,20 +398,54 @@ function toggleFeatured(articleId) {
     });
 }
 
-function deleteArticle(articleId) {
-    if (confirm('{{ __('articles.confirm_delete_article') }}')) {
-        fetch(`/articles/${articleId}`, {
+function deleteArticle(articleSlug) {
+    Swal.fire({
+        title: '{{ __("articles.confirm_delete_article") }}',
+        text: 'Questa azione non può essere annullata!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/articles/${articleSlug}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '{{ route('articles.index') }}';
+                Swal.fire({
+                    title: '{{ __("articles.article_deleted") }}',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '{{ route('articles.index') }}';
+                });
+            } else {
+                Swal.fire({
+                    title: 'Errore',
+                    text: data.message || 'Errore durante l\'eliminazione',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Errore',
+                text: 'Errore durante l\'eliminazione',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         });
     }
 }
@@ -427,7 +461,12 @@ function showNotification(message, type) {
             timer: 3000
         });
     } else {
-        alert(message);
+        Swal.fire({
+            title: 'Notifica',
+            text: message,
+            icon: type,
+            confirmButtonText: 'OK'
+        });
     }
 }
 </script>

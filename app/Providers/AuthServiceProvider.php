@@ -34,9 +34,5 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAnyRole(['admin', 'moderator']);
         });
 
-        // Articles gates
-        Gate::define('articles.manage.own', function ($user) {
-            return $user->hasAnyRole(['admin', 'editor', 'moderator']) || $user->hasPermissionTo('articles.manage');
-        });
     }
 }

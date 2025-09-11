@@ -1424,9 +1424,9 @@ Route::prefix('articles/layout')->name('articles.layout.')->middleware(['auth', 
     Route::get('/current', [App\Http\Controllers\ArticleLayoutController::class, 'getLayout'])->name('current');
 });
 
-// Routes per le poesie
+// Routes per articoli - RIPRISTINATE
 Route::prefix('articles')->name('articles.')->group(function () {
-    // Routes pubbliche
+    // Routes pubbliche specifiche - DEVE ESSERE PRIMA della rotta generica
     Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
     
@@ -1436,15 +1436,15 @@ Route::prefix('articles')->name('articles.')->group(function () {
         Route::get('/my-articles', [App\Http\Controllers\ArticleController::class, 'myArticles'])->name('my-articles');
 
         Route::post('/', [App\Http\Controllers\ArticleController::class, 'store'])->name('store');
-        Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit')->where('article', '[0-9]+');
-        Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update')->where('article', '[0-9]+');
-        Route::delete('/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('destroy')->where('article', '[0-9]+');
+        Route::get('/{article}/edit', [App\Http\Controllers\ArticleController::class, 'edit'])->name('edit');
+        Route::put('/{article}', [App\Http\Controllers\ArticleController::class, 'update'])->name('update');
+        Route::delete('/{article}', [App\Http\Controllers\ArticleController::class, 'destroy'])->name('destroy');
 
                          // Azioni sugli articoli
-                 Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish')->where('article', '[0-9]+');
-                 Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish')->where('article', '[0-9]+');
-                 Route::post('/{id}/feature', [App\Http\Controllers\ArticleController::class, 'feature'])->name('feature');
-                 Route::post('/{id}/unfeature', [App\Http\Controllers\ArticleController::class, 'unfeature'])->name('unfeature');
+                 Route::post('/{article}/publish', [App\Http\Controllers\ArticleController::class, 'publish'])->name('publish');
+                 Route::post('/{article}/unpublish', [App\Http\Controllers\ArticleController::class, 'unpublish'])->name('unpublish');
+                 Route::post('/{article}/feature', [App\Http\Controllers\ArticleController::class, 'feature'])->name('feature');
+                 Route::post('/{article}/unfeature', [App\Http\Controllers\ArticleController::class, 'unfeature'])->name('unfeature');
 
         // Like degli articoli
         Route::prefix('{article}/likes')->name('likes.')->group(function () {
@@ -1480,7 +1480,7 @@ Route::prefix('articles')->name('articles.')->group(function () {
     });
 
     // Route generica per visualizzare articoli - DEVE ESSERE ALLA FINE
-    Route::get('/{article:slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
+    Route::get('/{article}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
 });
 
 // Dashboard principale articoli (admin/editor)
@@ -1511,4 +1511,3 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
 
 
 });
-

@@ -243,8 +243,8 @@ class Article extends Model
 
     public function getCanEditAttribute()
     {
-        if (!auth()->check()) return false;
-        $user = auth()->user();
+        if (!\Illuminate\Support\Facades\Auth::check()) return false;
+        $user = \Illuminate\Support\Facades\Auth::user();
 
         return $user->id === $this->user_id ||
                $user->hasRole(['admin', 'editor']) ||
@@ -253,12 +253,21 @@ class Article extends Model
 
     public function getCanDeleteAttribute()
     {
-        if (!auth()->check()) return false;
-        $user = auth()->user();
+        if (!\Illuminate\Support\Facades\Auth::check()) return false;
+        $user = \Illuminate\Support\Facades\Auth::user();
 
         return $user->id === $this->user_id ||
                $user->hasRole(['admin', 'editor']) ||
                $user->can('articles.delete');
+    }
+
+    public function canBeDeletedBy($user)
+    {
+        if (!$user) return false;
+        
+        return $user->id === $this->user_id ||
+               $user->hasRole(['admin', 'editor', 'moderator', 'organizer']) ||
+               $user->hasPermissionTo('articles.delete');
     }
 
     // Mutators
@@ -355,7 +364,7 @@ class Article extends Model
     public function isReportedByUser(?User $user = null): bool
     {
         if (!$user) {
-            $user = auth()->user();
+            $user = \Illuminate\Support\Facades\Auth::user();
         }
         
         if (!$user) {

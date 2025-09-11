@@ -32,7 +32,7 @@
                                                  onclick="openArticleSelector('banner')"
                                                  style="cursor: pointer;">
                                                 @if(isset($layoutData['banner']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['banner']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['banner']['article'], 'position' => 'banner'])
                                                 @else
                                                     <div class="text-center text-muted py-4">
                                                         <i class="ti ti-plus-circle h1"></i>
@@ -54,7 +54,7 @@
                                         <div class="card-body">
                                             <div id="column1-position" class="layout-position empty" data-position="column1" onclick="openArticleSelector('column1')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column1']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column1']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column1']['article'], 'position' => 'column1'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -75,7 +75,7 @@
                                         <div class="card-body">
                                             <div id="column2-position" class="layout-position empty" data-position="column2" onclick="openArticleSelector('column2')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column2']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column2']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column2']['article'], 'position' => 'column2'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -97,7 +97,7 @@
                                         <div class="card-body">
                                             <div id="horizontal1-position" class="layout-position empty" data-position="horizontal1" onclick="openArticleSelector('horizontal1')" style="cursor: pointer;">
                                                 @if(isset($layoutData['horizontal1']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal1']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal1']['article'], 'position' => 'horizontal1'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -119,7 +119,7 @@
                                         <div class="card-body">
                                             <div id="horizontal2-position" class="layout-position empty" data-position="horizontal2" onclick="openArticleSelector('horizontal2')" style="cursor: pointer;">
                                                 @if(isset($layoutData['horizontal2']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal2']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal2']['article'], 'position' => 'horizontal2'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -141,7 +141,7 @@
                                         <div class="card-body">
                                             <div id="column3-position" class="layout-position empty" data-position="column3" onclick="openArticleSelector('column3')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column3']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column3']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column3']['article'], 'position' => 'column3'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -162,7 +162,7 @@
                                         <div class="card-body">
                                             <div id="column4-position" class="layout-position empty" data-position="column4" onclick="openArticleSelector('column4')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column4']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column4']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column4']['article'], 'position' => 'column4'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -184,7 +184,7 @@
                                         <div class="card-body">
                                             <div id="horizontal3-position" class="layout-position empty" data-position="horizontal3" onclick="openArticleSelector('horizontal3')" style="cursor: pointer;">
                                                 @if(isset($layoutData['horizontal3']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal3']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['horizontal3']['article'], 'position' => 'horizontal3'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -206,7 +206,7 @@
                                         <div class="card-body">
                                             <div id="column5-position" class="layout-position empty" data-position="column5" onclick="openArticleSelector('column5')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column5']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column5']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column5']['article'], 'position' => 'column5'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -227,7 +227,7 @@
                                         <div class="card-body">
                                             <div id="column6-position" class="layout-position empty" data-position="column6" onclick="openArticleSelector('column6')" style="cursor: pointer;">
                                                 @if(isset($layoutData['column6']['article']))
-                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column6']['article']])
+                                                    @include('articles.layout.article-preview', ['article' => $layoutData['column6']['article'], 'position' => 'column6'])
                                                 @else
                                                     <div class="text-center text-muted py-3">
                             <i class="ti ti-plus-circle"></i>
@@ -476,25 +476,48 @@ function removeArticleFromPosition(position) {
         return;
     }
 
-    positionElement.innerHTML = `
-        <div class="text-center text-muted py-3">
-            <i class="ti ti-plus-circle"></i>
-            <p class="small">{{ __('articles.drag_article_here') }}</p>
-            <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
-        </div>
-    `;
+    // Call the clear endpoint to remove from database
+    fetch('{{ route('articles.layout.clear') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            position: position
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update UI
+            positionElement.innerHTML = `
+                <div class="text-center text-muted py-3">
+                    <i class="ti ti-plus-circle"></i>
+                    <p class="small">{{ __('articles.drag_article_here') }}</p>
+                    <small class="text-muted d-block mt-2">Clicca per selezionare un articolo</small>
+                </div>
+            `;
 
-    // Add empty class back
-    positionElement.classList.add('empty');
+            // Add empty class back
+            positionElement.classList.add('empty');
 
-    // Track changes
-    layoutChanges[position] = null;
+            // Track changes
+            layoutChanges[position] = null;
 
-    // Show success message
-    showNotification('Articolo rimosso dalla posizione ' + position, 'success');
+            // Show success message
+            showNotification('Articolo rimosso dalla posizione ' + position, 'success');
 
-    // Refresh available articles list
-    refreshAvailableArticles();
+            // Refresh available articles list
+            refreshAvailableArticles();
+        } else {
+            showNotification(data.message || 'Errore durante la rimozione', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Errore durante la rimozione dell\'articolo', 'error');
+    });
 }
 
 function selectArticleForPosition(articleId) {

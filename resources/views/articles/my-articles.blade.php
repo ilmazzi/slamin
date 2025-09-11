@@ -90,29 +90,36 @@
                                                         </li>
                                                         @if($article->status === 'published')
                                                             <li>
-                                                                <button class="dropdown-item" onclick="unpublishArticle({{ $article->id }})">
+                                                                <button class="dropdown-item" onclick="unpublishArticle('{{ $article->slug }}')">
                                                                     <i class="ti ti-eye-off me-2"></i> {{ __('articles.unpublish') }}
                                                                 </button>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <button class="dropdown-item" onclick="publishArticle({{ $article->id }})">
+                                                                <button class="dropdown-item" onclick="publishArticle('{{ $article->slug }}')">
                                                                     <i class="ti ti-eye me-2"></i> {{ __('articles.publish') }}
                                                                 </button>
                                                             </li>
                                                         @endif
                                                         <li>
-                                                            <button class="dropdown-item" onclick="toggleFeatured({{ $article->id }})">
+                                                            <button class="dropdown-item" onclick="toggleFeatured('{{ $article->slug }}')">
                                                                 <i class="ti ti-star me-2"></i>
                                                                 {{ $article->featured ? __('articles.unfeature') : __('articles.feature') }}
                                                             </button>
                                                         </li>
-                                                        <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
-                                                            </button>
-                                                        </li>
+                                                        @if($article->canBeDeletedBy(auth()->user()))
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                                                <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="dropdown-item text-danger"
+                                                                            onclick="return confirm('{{ __('articles.confirm_delete_article') }}')">
+                                                                        <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </div>
@@ -178,27 +185,21 @@
                                                         </li>
                                                         @if($article->status === 'published')
                                                             <li>
-                                                                <button class="dropdown-item" onclick="unpublishArticle({{ $article->id }})">
+                                                                <button class="dropdown-item" onclick="unpublishArticle('{{ $article->slug }}')">
                                                                     <i class="ti ti-eye-off me-2"></i> {{ __('articles.unpublish') }}
                                                                 </button>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <button class="dropdown-item" onclick="publishArticle({{ $article->id }})">
+                                                                <button class="dropdown-item" onclick="publishArticle('{{ $article->slug }}')">
                                                                     <i class="ti ti-eye me-2"></i> {{ __('articles.publish') }}
                                                                 </button>
                                                             </li>
                                                         @endif
                                                         <li>
-                                                            <button class="dropdown-item" onclick="toggleFeatured({{ $article->id }})">
+                                                            <button class="dropdown-item" onclick="toggleFeatured('{{ $article->slug }}')">
                                                                 <i class="ti ti-star me-2"></i>
                                                                 {{ $article->featured ? __('articles.unfeature') : __('articles.feature') }}
-                                                            </button>
-                                                        </li>
-                                                        <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
                                                             </button>
                                                         </li>
                                                     </ul>
@@ -233,36 +234,6 @@
     </div>
 </div>
 
-<!-- Delete Article Modal -->
-<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="deleteArticleModalLabel">
-                    <i class="ph ph-warning me-2"></i>{{ __('articles.delete_article_title') }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{ __('articles.confirm_delete') }} <strong id="deleteArticleTitle"></strong>?</p>
-                <div class="alert alert-warning">
-                    <i class="ph ph-warning me-2"></i>
-                    <strong>{{ __('articles.warning') }}</strong> {{ __('articles.delete_action_warning') }}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('articles.cancel') }}</button>
-                <form id="deleteArticleForm" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="ph ph-trash me-2"></i>{{ __('articles.delete_permanently') }}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -309,46 +280,128 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Article management functions
-function publishArticle(articleId) {
+function publishArticle(articleSlug) {
     if (confirm('{{ __("articles.confirm_publish") }}')) {
-        // Implementation for publishing article
-        console.log('Publishing article:', articleId);
+        fetch(`/articles/${articleSlug}/publish`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Successo',
+                    text: data.message || 'Articolo pubblicato con successo',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Errore',
+                    text: data.message || 'Errore durante la pubblicazione',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Errore',
+                text: 'Errore durante la pubblicazione',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
     }
 }
 
-function unpublishArticle(articleId) {
+function unpublishArticle(articleSlug) {
     if (confirm('{{ __("articles.confirm_unpublish") }}')) {
-        // Implementation for unpublishing article
-        console.log('Unpublishing article:', articleId);
+        fetch(`/articles/${articleSlug}/unpublish`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Successo',
+                    text: data.message || 'Articolo rimosso dalla pubblicazione',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Errore',
+                    text: data.message || 'Errore durante la rimozione dalla pubblicazione',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Errore',
+                text: 'Errore durante la rimozione dalla pubblicazione',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
     }
 }
 
-function toggleFeatured(articleId) {
+function toggleFeatured(articleSlug) {
     if (confirm('{{ __("articles.confirm_toggle_featured") }}')) {
-        // Implementation for toggling featured status
-        console.log('Toggling featured for article:', articleId);
+        fetch(`/articles/${articleSlug}/feature`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Successo',
+                    text: data.message || 'Stato articolo modificato con successo',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Errore',
+                    text: data.message || 'Errore durante la modifica dello stato',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Errore',
+                text: 'Errore durante la modifica dello stato',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
     }
 }
 
-function deleteArticle(articleId, title) {
-    // Set the article title in the modal
-    const titleElement = document.getElementById('deleteArticleTitle');
-    if (titleElement) {
-        titleElement.textContent = title;
-    }
-
-    // Set the form action
-    const formElement = document.getElementById('deleteArticleForm');
-    if (formElement) {
-        formElement.action = `/articles/${articleId}`;
-    }
-
-    // Show the modal
-    const modalElement = document.getElementById('deleteArticleModal');
-    if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-    }
-}
 </script>
 @endpush

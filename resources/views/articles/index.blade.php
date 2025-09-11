@@ -23,6 +23,7 @@ use App\Helpers\PlaceholderHelper;
         </div>
     </div>
 
+
     <!-- Mobile-First Sidebar Toggle Button -->
     <div class="row mb-3 d-lg-none">
         <div class="col-12">
@@ -40,7 +41,7 @@ use App\Helpers\PlaceholderHelper;
         <div class="col-12 col-lg-8 order-1 order-lg-1">
             @if(!$showAllArticles)
                 <!-- Editor-Controlled Layout -->
-                @if(isset($layoutArticles) && count($layoutArticles) > 0)
+                @if(isset($layoutArticles) && !empty($layoutArticles))
                     <div class="mb-4">
                         <h4 class="mb-3 f-s-18 f-w-600">
                             <i class="ph ph-star me-2"></i>
@@ -48,20 +49,63 @@ use App\Helpers\PlaceholderHelper;
                         </h4>
 
                         <!-- Layout Articles - Editor Controlled -->
+                        <!-- Banner Article -->
+                        @if(isset($layoutArticles['banner']))
+                            <div class="row g-3 mb-4">
+                                <!-- Banner Article -->
+                                <div class="col-12">
+                                    @php $bannerArticle = $layoutArticles['banner']; @endphp
+                                    <div class="card hover-effect">
+                                        <div class="position-relative">
+                                            @if($bannerArticle->featured_image_url)
+                                                <img src="{{ $bannerArticle->featured_image_url }}"
+                                                     class="card-img-top" style="height: 300px; object-fit: cover;"
+                                                     alt="{{ $bannerArticle->title }}">
+                                            @else
+                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 300, 'card-img-top', route('articles.show', $bannerArticle->slug)) !!}
+                                            @endif
+                                            <div class="position-absolute top-0 start-0 m-3">
+                                                <span class="badge bg-primary">
+                                                    <i class="ph ph-star me-1"></i>{{ __('articles.banner') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="card-title f-s-20 f-w-600 mb-3">{{ $bannerArticle->title }}</h4>
+                                            <p class="card-text f-s-16 text-muted mb-3">{{ Str::limit($bannerArticle->excerpt, 200) }}</p>
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex gap-3 text-muted f-s-14">
+                                                    <span><i class="ph ph-user me-1"></i>{{ $bannerArticle->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $bannerArticle->published_at ? $bannerArticle->published_at->format('d/m/Y') : $bannerArticle->created_at->format('d/m/Y') }}</span>
+                                                    <x-social-view-counter :content="$bannerArticle" type="article" size="sm" />
+                                                    <x-social-like-button :content="$bannerArticle" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$bannerArticle" type="article" size="sm" />
+                                                </div>
+                                                <a href="{{ route('articles.show', $bannerArticle->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- Featured Article 1 (Horizontal) -->
                         @if(isset($layoutArticles['horizontal1']))
                             <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
                                 <div class="col-12">
-                                    @php $article = $layoutArticles['horizontal1']; @endphp
+                                    @php $featured1 = $layoutArticles['horizontal1']; @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($article->featured_image_url)
-                                                <img src="{{ $article->featured_image_url }}"
+                                            @if($featured1->featured_image_url)
+                                                <img src="{{ $featured1->featured_image_url }}"
                                                      class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $article->title }}">
+                                                     alt="{{ $featured1->title }}">
                                             @else
-                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $article->slug)) !!}
+                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 250, 'card-img-top', route('articles.show', $featured1->slug)) !!}
                                             @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
@@ -70,67 +114,101 @@ use App\Helpers\PlaceholderHelper;
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $article->title }}</h5>
-                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($article->excerpt, 150) }}</p>
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured1->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured1->excerpt, 150) }}</p>
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
-                                                    <span><i class="ph ph-user me-1"></i>{{ $article->user->name ?? 'N/A' }}</span>
-                                                    <span><i class="ph ph-calendar me-1"></i>{{ $article->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                    <x-social-like-button :content="$article" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured1->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured1->published_at->format('d/m/Y') }}</span>
+                                                    <x-social-view-counter :content="$featured1" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured1" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured1" type="article" size="sm" />
                                                 </div>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                        {{ __('articles.read_more') }}
-                                                    </a>
-                                                    @auth
-                                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
-                                                                title="{{ __('articles.delete') }}">
-                                                            <i class="ph ph-trash f-s-12"></i>
-                                                        </button>
-                                                    @endauth
-                                                </div>
+                                                <a href="{{ route('articles.show', $featured1->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
 
-                        <!-- Column Articles 1 & 2 -->
-                        @if(isset($layoutArticles['column1']) || isset($layoutArticles['column2']))
-                            <div class="row g-3 mb-4">
-                                @if(isset($layoutArticles['column1']))
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 2)
                                     <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column1']; @endphp
+                                        @php $recent1 = $recentArticles->get(0); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
+                                                @if($recent1->featured_image_url)
+                        <img src="{{ $recent1->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent1->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent1->slug)) !!}
+                    @endif
+                                                @if($recent1->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent1->category->name }}</span>
+                                                </div>
                                                 @endif
                                             </div>
                                             <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent1->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent1->excerpt, 70) }}</p>
+
                                                 <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent1->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent1->published_at->format('d/m/Y') }}</span>
+                                                    </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                            <x-social-view-counter :content="$recent1" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent1" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent1" type="article" size="sm" />
                                                         </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                        <a href="{{ route('articles.show', $recent1->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent2 = $recentArticles->get(1); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent2->featured_image_url)
+                        <img src="{{ $recent2->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent2->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent2->slug)) !!}
+                    @endif
+                                                @if($recent2->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent2->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent2->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent2->excerpt, 70) }}</p>
+
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent2->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent2->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <x-social-view-counter :content="$recent2" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent2" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent2" type="article" size="sm" />
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent2->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
                                                         </a>
                                                     </div>
@@ -139,61 +217,24 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                     </div>
                                 @endif
-
-                                @if(isset($layoutArticles['column2']))
-                                    <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column2']; @endphp
-                                        <div class="card hover-effect h-100">
-                                            <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
-                                                <div class="mt-auto">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
-                                                        </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
-                                                            {{ __('articles.read_more') }}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         @endif
 
-                        <!-- Featured Article 2 (Horizontal) -->
-                        @if(isset($layoutArticles['horizontal2']))
+                        <!-- Featured Article 2 + 2 Recent -->
+                        @if($featuredArticles->count() >= 2)
                             <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
                                 <div class="col-12">
-                                    @php $article = $layoutArticles['horizontal2']; @endphp
+                                    @php $featured2 = $featuredArticles->get(1); @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($article->featured_image_url)
-                                                <img src="{{ $article->featured_image_url }}"
-                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $article->title }}">
-                                            @else
-                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                            @endif
+                                            @if($featured2->featured_image_url)
+                        <img src="{{ $featured2->featured_image_url }}"
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                 alt="{{ $featured2->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured2->slug)) !!}
+                    @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -201,67 +242,101 @@ use App\Helpers\PlaceholderHelper;
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $article->title }}</h5>
-                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($article->excerpt, 150) }}</p>
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured2->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured2->excerpt, 150) }}</p>
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
-                                                    <span><i class="ph ph-user me-1"></i>{{ $article->user->name ?? 'N/A' }}</span>
-                                                    <span><i class="ph ph-calendar me-1"></i>{{ $article->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                    <x-social-like-button :content="$article" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured2->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured2->published_at->format('d/m/Y') }}</span>
+                                                    <x-social-view-counter :content="$featured2" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured2" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured2" type="article" size="sm" />
                                                 </div>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                        {{ __('articles.read_more') }}
-                                                    </a>
-                                                    @auth
-                                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
-                                                                title="{{ __('articles.delete') }}">
-                                                            <i class="ph ph-trash f-s-12"></i>
-                                                        </button>
-                                                    @endauth
-                                                </div>
+                                                <a href="{{ route('articles.show', $featured2->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
 
-                        <!-- Column Articles 3 & 4 -->
-                        @if(isset($layoutArticles['column3']) || isset($layoutArticles['column4']))
-                            <div class="row g-3 mb-4">
-                                @if(isset($layoutArticles['column3']))
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 4)
                                     <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column3']; @endphp
+                                        @php $recent3 = $recentArticles->get(2); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
+                                                @if($recent3->featured_image_url)
+                        <img src="{{ $recent3->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent3->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent3->slug)) !!}
+                    @endif
+                                                @if($recent3->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent3->category->name }}</span>
+                                                </div>
                                                 @endif
                                             </div>
                                             <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent3->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent3->excerpt, 70) }}</p>
+
                                                 <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent3->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent3->published_at->format('d/m/Y') }}</span>
+                                                    </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                            <x-social-view-counter :content="$recent3" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent3" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent3" type="article" size="sm" />
                                                         </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                        <a href="{{ route('articles.show', $recent3->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                            {{ __('articles.read_more') }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6">
+                                        @php $recent4 = $recentArticles->get(3); @endphp
+                                        <div class="card hover-effect h-100">
+                                            <div class="position-relative">
+                                                @if($recent4->featured_image_url)
+                        <img src="{{ $recent4->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent4->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent4->slug)) !!}
+                    @endif
+                                                @if($recent4->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent4->category->name }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="card-body d-flex flex-column">
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent4->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent4->excerpt, 70) }}</p>
+
+                                                <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent4->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent4->published_at->format('d/m/Y') }}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex gap-2 text-muted f-s-11">
+                                                            <x-social-view-counter :content="$recent4" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent4" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent4" type="article" size="sm" />
+                                                        </div>
+                                                        <a href="{{ route('articles.show', $recent4->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
                                                         </a>
                                                     </div>
@@ -270,61 +345,24 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                     </div>
                                 @endif
-
-                                @if(isset($layoutArticles['column4']))
-                                    <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column4']; @endphp
-                                        <div class="card hover-effect h-100">
-                                            <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
-                                                <div class="mt-auto">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
-                                                        </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
-                                                            {{ __('articles.read_more') }}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         @endif
 
-                        <!-- Featured Article 3 (Horizontal) -->
-                        @if(isset($layoutArticles['horizontal3']))
+                        <!-- Featured Article 3 + 2 Recent -->
+                        @if($featuredArticles->count() >= 3)
                             <div class="row g-3 mb-4">
+                                <!-- Featured Article -->
                                 <div class="col-12">
-                                    @php $article = $layoutArticles['horizontal3']; @endphp
+                                    @php $featured3 = $featuredArticles->get(2); @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
-                                            @if($article->featured_image_url)
-                                                <img src="{{ $article->featured_image_url }}"
-                                                     class="card-img-top" style="height: 250px; object-fit: cover;"
-                                                     alt="{{ $article->title }}">
-                                            @else
-                                                {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                            @endif
+                                            @if($featured3->featured_image_url)
+                        <img src="{{ $featured3->featured_image_url }}"
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;"
+                                                 alt="{{ $featured3->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $featured3->slug)) !!}
+                    @endif
                                             <div class="position-absolute top-0 start-0 m-3">
                                                 <span class="badge bg-warning">
                                                     <i class="ph ph-star me-1"></i>{{ __('articles.featured') }}
@@ -332,67 +370,60 @@ use App\Helpers\PlaceholderHelper;
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $article->title }}</h5>
-                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($article->excerpt, 150) }}</p>
+                                            <h5 class="card-title f-s-18 f-w-600 mb-3">{{ $featured3->title }}</h5>
+                                            <p class="card-text f-s-14 text-muted mb-3">{{ Str::limit($featured3->excerpt, 150) }}</p>
+
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex gap-3 text-muted f-s-12">
-                                                    <span><i class="ph ph-user me-1"></i>{{ $article->user->name ?? 'N/A' }}</span>
-                                                    <span><i class="ph ph-calendar me-1"></i>{{ $article->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                    <x-social-like-button :content="$article" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                    <span><i class="ph ph-user me-1"></i>{{ $featured3->user->name ?? 'N/A' }}</span>
+                                                    <span><i class="ph ph-calendar me-1"></i>{{ $featured3->published_at->format('d/m/Y') }}</span>
+                                                    <x-social-view-counter :content="$featured3" type="article" size="sm" />
+                                                    <x-social-like-button :content="$featured3" type="article" size="sm" />
+                                                    <x-social-comment-button :content="$featured3" type="article" size="sm" />
                                                 </div>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-primary">
-                                                        {{ __('articles.read_more') }}
-                                                    </a>
-                                                    @auth
-                                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
-                                                                title="{{ __('articles.delete') }}">
-                                                            <i class="ph ph-trash f-s-12"></i>
-                                                        </button>
-                                                    @endauth
-                                                </div>
+                                                <a href="{{ route('articles.show', $featured3->slug) }}" class="btn btn-primary">
+                                                    {{ __('articles.read_more') }}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
 
-                        <!-- Column Articles 5 & 6 -->
-                        @if(isset($layoutArticles['column5']) || isset($layoutArticles['column6']))
-                            <div class="row g-3 mb-4">
-                                @if(isset($layoutArticles['column5']))
+                                <!-- 2 Recent Articles -->
+                                @if($recentArticles->count() >= 6)
                                     <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column5']; @endphp
+                                        @php $recent5 = $recentArticles->get(4); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
+                                                @if($recent5->featured_image_url)
+                        <img src="{{ $recent5->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent5->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent5->slug)) !!}
+                    @endif
+                                                @if($recent5->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent5->category->name }}</span>
+                                                </div>
                                                 @endif
                                             </div>
                                             <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent5->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent5->excerpt, 70) }}</p>
+
                                                 <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent5->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent5->published_at->format('d/m/Y') }}</span>
+                                                    </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                            <x-social-view-counter :content="$recent5" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent5" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent5" type="article" size="sm" />
                                                         </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                        <a href="{{ route('articles.show', $recent5->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
                                                         </a>
                                                     </div>
@@ -400,37 +431,40 @@ use App\Helpers\PlaceholderHelper;
                                             </div>
                                         </div>
                                     </div>
-                                @endif
 
-                                @if(isset($layoutArticles['column6']))
                                     <div class="col-12 col-sm-6">
-                                        @php $article = $layoutArticles['column6']; @endphp
+                                        @php $recent6 = $recentArticles->get(5); @endphp
                                         <div class="card hover-effect h-100">
                                             <div class="position-relative">
-                                                @if($article->featured_image_url)
-                                                    <img src="{{ $article->featured_image_url }}"
-                                                         class="card-img-top" style="height: 140px; object-fit: cover;"
-                                                         alt="{{ $article->title }}">
-                                                @else
-                                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
-                                                @endif
-                                                @if($article->category)
-                                                    <div class="position-absolute top-0 start-0 m-2">
-                                                        <span class="badge bg-primary">{{ $article->category->name }}</span>
-                                                    </div>
+                                                @if($recent6->featured_image_url)
+                        <img src="{{ $recent6->featured_image_url }}"
+                                                     class="card-img-top" style="height: 140px; object-fit: cover;"
+                                                     alt="{{ $recent6->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $recent6->slug)) !!}
+                    @endif
+                                                @if($recent6->category)
+                                                <div class="position-absolute top-0 start-0 m-2">
+                                                    <span class="badge bg-primary">{{ $recent6->category->name }}</span>
+                                                </div>
                                                 @endif
                                             </div>
                                             <div class="card-body d-flex flex-column">
-                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($article->title, 50) }}</h6>
-                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($article->excerpt, 70) }}</p>
+                                                <h6 class="card-title f-s-15 f-w-600 mb-2">{{ Str::limit($recent6->title, 50) }}</h6>
+                                                <p class="card-text f-s-13 text-muted mb-3">{{ Str::limit($recent6->excerpt, 70) }}</p>
+
                                                 <div class="mt-auto">
+                                                    <div class="d-flex justify-content-between align-items-center text-muted f-s-11 mb-2">
+                                                        <span><i class="ph ph-user me-1"></i>{{ $recent6->user->name ?? 'N/A' }}</span>
+                                                        <span><i class="ph ph-calendar me-1"></i>{{ $recent6->published_at->format('d/m/Y') }}</span>
+                                                    </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                            <x-social-like-button :content="$article" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                            <x-social-view-counter :content="$recent6" type="article" size="sm" />
+                                                            <x-social-like-button :content="$recent6" type="article" size="sm" />
+                                                            <x-social-comment-button :content="$recent6" type="article" size="sm" />
                                                         </div>
-                                                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-outline-primary btn-sm">
+                                                        <a href="{{ route('articles.show', $recent6->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
                                                         </a>
                                                     </div>
@@ -462,7 +496,61 @@ use App\Helpers\PlaceholderHelper;
                 <div class="row g-3">
                     @forelse($recentArticles as $article)
                         <div class="col-12 col-sm-6 col-lg-4">
-                            @include('articles.partials.article-card', ['article' => $article])
+                            <div class="card hover-effect h-100">
+                                <div class="position-relative">
+                                    @if($article->featured_image_url)
+                                        <img src="{{ $article->featured_image_url }}"
+                                             class="card-img-top" style="height: 200px; object-fit: cover;"
+                                             alt="{{ $article->title }}">
+                                    @else
+                                        {!! PlaceholderHelper::getArticlePlaceholderHtml(0, 200, 'card-img-top', route('articles.show', $article->slug)) !!}
+                                    @endif
+                                    @if($article->featured)
+                                        <div class="position-absolute top-0 start-0 m-2">
+                                            <span class="badge bg-warning">{{ __('articles.featured') }}</span>
+                                        </div>
+                                    @endif
+                                    @if($article->category)
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <span class="badge bg-primary">{{ $article->category->name }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title f-s-16 f-w-600 mb-2">{{ Str::limit($article->title, 60) }}</h5>
+                                    <p class="card-text f-s-14 text-muted mb-3 flex-grow-1">{{ Str::limit($article->excerpt, 100) }}</p>
+                                    
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-center text-muted f-s-12 mb-2">
+                                            <span><i class="ph ph-user me-1"></i>{{ $article->user->name ?? 'N/A' }}</span>
+                                            <span><i class="ph ph-calendar me-1"></i>{{ $article->published_at ? $article->published_at->format('d/m/Y') : $article->created_at->format('d/m/Y') }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex gap-2 text-muted f-s-12">
+                                                <x-social-view-counter :content="$article" type="article" size="sm" />
+                                                <x-social-like-button :content="$article" type="article" size="sm" />
+                                                <x-social-comment-button :content="$article" type="article" size="sm" />
+                                            </div>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ route('articles.show', $article) }}" class="btn btn-outline-primary">
+                                                    <i class="ph ph-eye"></i>
+                                                </a>
+                                                @can('update', $article)
+                                                    <a href="{{ route('articles.edit', $article) }}" class="btn btn-outline-secondary">
+                                                        <i class="ph ph-pencil"></i>
+                                                    </a>
+                                                @endcan
+                                                @if($article->canBeDeletedBy(auth()->user()))
+                                                    <button type="button" class="btn btn-outline-danger" 
+                                                            onclick="deleteArticle('{{ $article->slug }}')">
+                                                        <i class="ph ph-trash"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @empty
                         <div class="col-12">
@@ -542,16 +630,16 @@ use App\Helpers\PlaceholderHelper;
                     </h5>
                 </div>
                 <div class="card-body">
-                    @foreach($sidebarRecentArticles->take(10) as $sidebarArticle)
+                    @foreach($recentArticles->take(5) as $sidebarArticle)
                         <div class="d-flex align-items-start mb-3">
                             <div class="flex-shrink-0 me-3">
                                 @if($sidebarArticle->featured_image_url)
-                                    <img src="{{ $sidebarArticle->featured_image_url }}"
-                                         class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
-                                         alt="{{ $sidebarArticle->title }}">
-                                @else
-                                    {!! PlaceholderHelper::getArticlePlaceholderHtml(50, 50, 'rounded', route('articles.show', $sidebarArticle->slug)) !!}
-                                @endif
+                        <img src="{{ $sidebarArticle->featured_image_url }}"
+                                     class="rounded" style="width: 50px; height: 50px; object-fit: cover;"
+                                     alt="{{ $sidebarArticle->title }}">
+                    @else
+                        {!! PlaceholderHelper::getArticlePlaceholderHtml(50, 50, 'rounded', route('articles.show', $sidebarArticle->slug)) !!}
+                    @endif
                             </div>
                             <div class="flex-grow-1">
                                 <h6 class="mb-1 f-s-14 f-w-600">
@@ -560,7 +648,7 @@ use App\Helpers\PlaceholderHelper;
                                     </a>
                                 </h6>
                                 <small class="text-muted f-s-12">
-                                    {{ $sidebarArticle->published_at->format('d/m/Y') }}
+                                    {{ $sidebarArticle->published_at ? $sidebarArticle->published_at->format('d/m/Y') : $sidebarArticle->created_at->format('d/m/Y') }}
                                 </small>
                             </div>
                         </div>
@@ -612,6 +700,25 @@ use App\Helpers\PlaceholderHelper;
                     </div>
                 </div>
             @endif
+        </div>
+    </div>
+</div>
+
+<!-- Delete Article Modal -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteArticleModalLabel">{{ __('articles.delete_article') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('articles.delete_confirmation') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">{{ __('common.delete') }}</button>
+            </div>
         </div>
     </div>
 </div>
@@ -728,56 +835,58 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', adjustMobileLayout);
 });
 
-function deleteArticle(articleId, title) {
-    // Set the article title in the modal
-    const titleElement = document.getElementById('deleteArticleTitle');
-    if (titleElement) {
-        titleElement.textContent = title;
-    }
-
-    // Set the form action
-    const formElement = document.getElementById('deleteArticleForm');
-    if (formElement) {
-        formElement.action = `/articles/${articleId}`;
-    }
-
-    // Show the modal
-    const modalElement = document.getElementById('deleteArticleModal');
-    if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-    }
+// Delete Article Function with SweetAlert2
+function deleteArticle(articleSlug) {
+    Swal.fire({
+        title: '{{ __("articles.delete_article") }}',
+        text: '{{ __("articles.delete_confirmation") }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '{{ __("common.delete") }}',
+        cancelButtonText: '{{ __("common.cancel") }}'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/articles/${articleSlug}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: '{{ __("common.success") }}',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: '{{ __("common.error") }}',
+                        text: data.message || '{{ __("articles.delete_error") }}',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: '{{ __("common.error") }}',
+                    text: '{{ __("articles.delete_error") }}',
+                    icon: 'error'
+                });
+            });
+        }
+    });
 }
 </script>
 @endpush
-
-<!-- Delete Article Modal -->
-<div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="deleteArticleModalLabel">
-                    <i class="ph ph-warning me-2"></i>{{ __('articles.delete_article_title') }}
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{ __('articles.confirm_delete') }} <strong id="deleteArticleTitle"></strong>?</p>
-                <div class="alert alert-warning">
-                    <i class="ph ph-warning me-2"></i>
-                    <strong>{{ __('articles.warning') }}</strong> {{ __('articles.delete_action_warning') }}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('articles.cancel') }}</button>
-                <form id="deleteArticleForm" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="ph ph-trash me-2"></i>{{ __('articles.delete_permanently') }}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>

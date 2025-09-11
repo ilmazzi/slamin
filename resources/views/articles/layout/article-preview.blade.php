@@ -29,7 +29,7 @@
         <div class="flex-shrink-0">
             <button type="button" 
                     class="btn btn-sm btn-outline-danger" 
-                    onclick="removeArticleFromPosition('{{ $article->id }}')"
+                    onclick="removeArticleFromPosition('{{ $position ?? 'unknown' }}')"
                     title="Rimuovi articolo">
                 <i class="ph ph-x"></i>
             </button>
