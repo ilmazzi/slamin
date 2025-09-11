@@ -542,7 +542,7 @@ use App\Helpers\PlaceholderHelper;
                                                 @endcan
                                                 @if($article->canBeDeletedBy(auth()->user()))
                                                     <button type="button" class="btn btn-outline-danger" 
-                                                            onclick="deleteArticle('{{ $article->slug }}')">
+                                                            onclick="deleteArticle({{ json_encode($article->slug) }})">
                                                         <i class="ph ph-trash"></i>
                                                     </button>
                                                 @endif
@@ -837,18 +837,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Delete Article Function with SweetAlert2 (Global scope)
 window.deleteArticle = function(articleSlug) {
+    console.log('Deleting article:', articleSlug);
     Swal.fire({
-        title: '{{ __("articles.delete_article") }}',
-        text: '{{ __("articles.delete_confirmation") }}',
+        title: 'Elimina Articolo',
+        text: 'Sei sicuro di voler eliminare questo articolo?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: '{{ __("common.delete") }}',
-        cancelButtonText: '{{ __("common.cancel") }}'
-    }).then((result) => {
+        confirmButtonText: 'Elimina',
+        cancelButtonText: 'Annulla'
+    }).then(function(result) {
         if (result.isConfirmed) {
-            fetch(`/articles/${articleSlug}`, {
+            fetch('/articles/' + articleSlug, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -857,31 +858,33 @@ window.deleteArticle = function(articleSlug) {
                     'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
                 if (data.success) {
                     Swal.fire({
-                        title: '{{ __("common.success") }}',
+                        title: 'Successo',
                         text: data.message,
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false
-                    }).then(() => {
+                    }).then(function() {
                         location.reload();
                     });
                 } else {
                     Swal.fire({
-                        title: '{{ __("common.error") }}',
-                        text: data.message || '{{ __("articles.delete_error") }}',
+                        title: 'Errore',
+                        text: data.message || 'Errore durante l\'eliminazione',
                         icon: 'error'
                     });
                 }
             })
-            .catch(error => {
+            .catch(function(error) {
                 console.error('Error:', error);
                 Swal.fire({
-                    title: '{{ __("common.error") }}',
-                    text: '{{ __("articles.delete_error") }}',
+                    title: 'Errore',
+                    text: 'Errore durante l\'eliminazione',
                     icon: 'error'
                 });
             });

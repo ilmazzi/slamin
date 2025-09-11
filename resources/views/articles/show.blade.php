@@ -69,7 +69,7 @@ use App\Helpers\PlaceholderHelper;
                                 @endif
                                 @if(auth()->check() && $article->canBeDeletedBy(auth()->user()))
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteArticle('{{ $article->slug }}')">
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteArticle({{ json_encode($article->slug) }})">
                                         <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
                                     </a></li>
                                 @endif
@@ -400,7 +400,7 @@ function toggleFeatured(articleId) {
 
 function deleteArticle(articleSlug) {
     Swal.fire({
-        title: '{{ __("articles.confirm_delete_article") }}',
+        title: 'Conferma Eliminazione',
         text: 'Questa azione non può essere annullata!',
         icon: 'warning',
         showCancelButton: true,
@@ -408,46 +408,49 @@ function deleteArticle(articleSlug) {
         cancelButtonColor: '#3085d6',
         confirmButtonText: 'Sì, elimina!',
         cancelButtonText: 'Annulla'
-    }).then((result) => {
+    }).then(function(result) {
         if (result.isConfirmed) {
-            fetch(`/articles/${articleSlug}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: '{{ __("articles.article_deleted") }}',
-                    text: data.message,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '{{ route('articles.index') }}';
-                });
-            } else {
+            fetch('/articles/' + articleSlug, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Articolo Eliminato',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(function() {
+                        window.location.href = '{{ route('articles.index') }}';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message || 'Errore durante l\'eliminazione',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
                 Swal.fire({
                     title: 'Errore',
-                    text: data.message || 'Errore durante l\'eliminazione',
+                    text: 'Errore durante l\'eliminazione',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                title: 'Errore',
-                text: 'Errore durante l\'eliminazione',
-                icon: 'error',
-                confirmButtonText: 'OK'
             });
-        });
-    }
+        }
+    });
 }
 
 function showNotification(message, type) {
