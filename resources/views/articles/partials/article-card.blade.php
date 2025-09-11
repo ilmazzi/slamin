@@ -99,11 +99,15 @@
                     {{ __('articles.read_more') }}
                 </a>
                 
-                @auth
-                    <button class="btn btn-outline-danger btn-sm" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')" title="{{ __('articles.delete') }}">
-                        <i class="ph ph-trash f-s-12"></i>
-                    </button>
-                @endauth
+                @can('articles.manage.own')
+                    @if(Auth::user()->hasRole(['admin', 'editor', 'moderator']) || $article->user_id === Auth::id())
+                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')"
+                                title="{{ __('articles.delete') }}">
+                            <i class="ph ph-trash f-s-12"></i>
+                        </button>
+                    @endif
+                @endcan
             </div>
         </div>
     </div>

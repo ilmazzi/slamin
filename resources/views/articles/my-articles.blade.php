@@ -108,11 +108,15 @@
                                                             </button>
                                                         </li>
                                                         <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
-                                                            </button>
-                                                        </li>
+                                                        @can('articles.manage.own')
+                                                            @if(Auth::user()->hasRole(['admin', 'editor', 'moderator']) || $article->user_id === Auth::id())
+                                                                <li>
+                                                                    <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
+                                                                        <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
+                                                                    </button>
+                                                                </li>
+                                                            @endif
+                                                        @endcan
                                                     </ul>
                                                 </div>
                                             </div>
@@ -196,11 +200,15 @@
                                                             </button>
                                                         </li>
                                                         <li><hr class="dropdown-divider"></li>
-                                                        <li>
-                                                            <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
-                                                                <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
-                                                            </button>
-                                                        </li>
+                                                        @can('articles.manage.own')
+                                                            @if(Auth::user()->hasRole(['admin', 'editor', 'moderator']) || $article->user_id === Auth::id())
+                                                                <li>
+                                                                    <button class="dropdown-item text-danger" onclick="deleteArticle({{ $article->id }}, '{{ addslashes($article->title) }}')">
+                                                                        <i class="ti ti-trash me-2"></i> {{ __('articles.delete') }}
+                                                                    </button>
+                                                                </li>
+                                                            @endif
+                                                        @endcan
                                                     </ul>
                                                 </div>
                                             </div>
