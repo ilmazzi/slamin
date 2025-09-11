@@ -124,6 +124,12 @@ function loadConfiguration() {
 
     const textOption = getLocalStorageItem("text-option", "medium-text");
     $("body").attr("text", textOption);
+    
+    // Ripristina lo stato della sidebar (chiusa/aperta)
+    const sidebarState = getLocalStorageItem("sidebar-state", "open");
+    if (sidebarState === "closed") {
+        $("nav").addClass("semi-nav");
+    }
     $(".offcanvas-body > ul").find(`.${textOption}`).addClass("selected");
 
     const layoutOption = getLocalStorageItem("layout-option", "ltr");

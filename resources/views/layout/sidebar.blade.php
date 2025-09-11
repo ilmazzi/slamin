@@ -1,11 +1,9 @@
 <!-- Menu Navigation starts -->
-<nav class="vertical-sidebar">
+<nav>
     <div class="app-logo">
         <a class="logo d-inline-block" href="/">
-            <!-- Loghino per sidebar collassata -->
-            <img alt="{{ __('common.slam_in') }}" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}" class="logo-icon">
-            <!-- Logo orizzontale per sidebar espansa -->
-            <img alt="{{ __('common.slam_in') }}" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}" class="logo-full">
+            <img alt="{{ __('common.slam_in') }}" class="logo-full" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}">
+            <img alt="{{ __('common.slam_in') }}" class="logo-icon" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}">
         </a>
 
         <span class="bg-light-primary toggle-semi-nav d-flex-center">
@@ -14,37 +12,32 @@
 
         @auth
         <div class="d-flex align-items-center nav-profile p-3">
-            <a href="{{ route('profile.show') }}" class="text-decoration-none d-flex align-items-center flex-grow-1" style="cursor: pointer;">
-                <span class="h-45 w-45 d-flex-center b-r-10 position-relative m-auto">
-                    <img alt="avatar" class="img-fluid b-r-10" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}">
-                    <span
-                    class="position-absolute top-0 end-0 p-1 {{ auth()->user()->presence_class }} border border-light rounded-circle"
-                    title="{{ auth()->user()->presence_label }}">
-                </span>
-                </span>
-                <div class="flex-grow-1 ps-2">
-                    <h6 class="text-primary mb-0 text-truncate" style="max-width: 150px;">{{ auth()->user()->getDisplayName() }}</h6>
-                    <p class="text-muted f-s-12 mb-0 text-truncate" style="max-width: 150px;">
-                        @if(auth()->user()->getRoleNames()->count() > 0)
-                            @php
-                                $role = auth()->user()->getRoleNames()->first();
-                                $roleDisplay = match($role) {
-                                    'admin' => 'Amministratore',
-                                    'moderatore' => 'Moderatore',
-                                    'organizzatore' => __('events.organizer'),
-                                    'poeta' => 'Poeta',
-                                    'giudice' => 'Giudice',
-                                    'spettatore' => 'Spettatore',
-                                    default => ucfirst($role)
-                                };
-                            @endphp
-                            {{ $roleDisplay }}
-                        @else
-                            {{ __('sidebar.slam_in_user') }}
-                        @endif
-                    </p>
-                </div>
-            </a>
+            <span class="h-45 w-45 d-flex-center b-r-10 position-relative bg-danger m-auto">
+                <img alt="avatar" class="img-fluid b-r-10" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}">
+                <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+            </span>
+            <div class="flex-grow-1 ps-2">
+                <h6 class="text-primary mb-0">{{ auth()->user()->getDisplayName() }}</h6>
+                <p class="text-muted f-s-12 mb-0">
+                    @if(auth()->user()->getRoleNames()->count() > 0)
+                        @php
+                            $role = auth()->user()->getRoleNames()->first();
+                            $roleDisplay = match($role) {
+                                'admin' => 'Amministratore',
+                                'moderatore' => 'Moderatore',
+                                'organizzatore' => __('events.organizer'),
+                                'poeta' => 'Poeta',
+                                'giudice' => 'Giudice',
+                                'spettatore' => 'Spettatore',
+                                default => ucfirst($role)
+                            };
+                        @endphp
+                        {{ $roleDisplay }}
+                    @else
+                        {{ __('sidebar.slam_in_user') }}
+                    @endif
+                </p>
+            </div>
 
             <div class="dropdown profile-menu-dropdown">
                 <a aria-expanded="false" data-bs-auto-close="true" data-bs-placement="top" data-bs-toggle="dropdown" role="button">
@@ -384,4 +377,5 @@
     @if(auth()->user()?->hasRole('admin'))
     <div id="customizer"></div>
     @endif
+
 

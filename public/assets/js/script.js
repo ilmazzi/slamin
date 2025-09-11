@@ -116,122 +116,15 @@ function copyvalue() {
 
 // >>-- 04 Sidebar toggle js --<<
 $(document).on('click', '.header-toggle', function () {
-  const $nav = $("nav");
-  const $overlay = $(".sidebar-overlay");
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) {
-    // Su mobile, toggle della classe sidebar-open
-    $nav.toggleClass("sidebar-open");
-    $overlay.toggleClass("active");
-
-    // Previeni lo scroll della pagina quando la sidebar è aperta
-    if ($nav.hasClass("sidebar-open")) {
-      $("body").css("overflow", "hidden");
-      $("html").css("overflow", "hidden");
-
-      // Su mobile, disabilita SimpleBar e crea wrapper di scroll personalizzato
-      const simpleBarElement = document.getElementById('app-simple-bar');
-      if (simpleBarElement && simpleBarElement.SimpleBar) {
-        simpleBarElement.SimpleBar.unMount();
-      }
-
-      // Su mobile, crea un wrapper di scroll personalizzato
-      const navElement = document.querySelector('nav .app-nav');
-      if (navElement && !navElement.querySelector('.mobile-scroll-wrapper')) {
-        const content = navElement.querySelector('.simplebar-content');
-        if (content) {
-          // Crea wrapper di scroll con padding bottom per la barra degli indirizzi
-          const wrapper = document.createElement('div');
-          wrapper.className = 'mobile-scroll-wrapper';
-          wrapper.style.cssText = `
-            height: calc(100vh - 200px);
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 80px;
-          `;
-
-          // Sposta il contenuto nel wrapper
-          content.parentNode.insertBefore(wrapper, content);
-          wrapper.appendChild(content);
-
-          // Assicurati che tutte le voci del menu siano visibili su mobile
-          const menuItems = wrapper.querySelectorAll('li');
-          menuItems.forEach(item => {
-            if (item.classList.contains('d-none') && item.classList.contains('d-sm-block')) {
-              item.classList.remove('d-none', 'd-sm-block');
-              item.classList.add('d-block');
-            }
-          });
-        }
-      }
-    } else {
-      $("body").css("overflow", "");
-      $("html").css("overflow", "");
-
-      // Su mobile, riabilita SimpleBar e rimuovi wrapper personalizzato
-      const simpleBarElement = document.getElementById('app-simple-bar');
-      if (simpleBarElement && !simpleBarElement.SimpleBar) {
-        new SimpleBar(simpleBarElement, {
-          autoHide: true,
-          scrollbarMinSize: 40,
-          forceVisible: 'y'
-        });
-      }
-
-      // Su mobile, rimuovi wrapper di scroll personalizzato
-      const navElement = document.querySelector('nav .app-nav');
-      if (navElement) {
-        const wrapper = navElement.querySelector('.mobile-scroll-wrapper');
-        if (wrapper) {
-          const content = wrapper.querySelector('.simplebar-content');
-          if (content) {
-            // Riporta il contenuto alla posizione originale
-            wrapper.parentNode.insertBefore(content, wrapper);
-            wrapper.remove();
-          }
-        }
-      }
-    }
-  } else {
-    // Su desktop, toggle della classe semi-nav
-    $nav.toggleClass("semi-nav");
-
-    // Salva lo stato in localStorage
-    const isCollapsed = $nav.hasClass("semi-nav");
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
-
-    // Aggiorna l'icona del toggle
-    const $toggleIcon = $('.toggle-semi-nav i');
-    if (isCollapsed) {
-      $toggleIcon.removeClass('ti-chevron-right').addClass('ti-chevron-left');
-    } else {
-      $toggleIcon.removeClass('ti-chevron-left').addClass('ti-chevron-right');
-    }
-  }
+  $("nav").toggleClass("semi-nav");
+  // Salva lo stato della sidebar nel localStorage usando la stessa chiave del customizer
+  const isSemiNav = $("nav").hasClass("semi-nav");
+  localStorage.setItem("ki-admin-sidebar-state", isSemiNav ? "closed" : "open");
 });
-
-// Chiudi sidebar cliccando sull'overlay
-$(document).on('click', '.sidebar-overlay', function () {
-  const $nav = $("nav");
-  const $overlay = $(".sidebar-overlay");
-
-  $nav.removeClass("sidebar-open");
-  $overlay.removeClass("active");
-  $("body").css("overflow", "");
-  $("html").css("overflow", "");
-});
-
-// Previeni lo scroll della pagina quando si tocca la sidebar su mobile
-$(document).on('touchstart touchmove', 'nav.sidebar-open', function(e) {
-  e.stopPropagation();
-});
-
-// Previeni lo scroll della pagina quando si scrolla nella sidebar
-$(document).on('scroll', 'nav.sidebar-open .app-nav', function(e) {
-  e.stopPropagation();
+$(".toggle-semi-nav").on("click", function () {
+  $("nav").removeClass("semi-nav");
+  // Salva lo stato aperto nel localStorage
+  localStorage.setItem("ki-admin-sidebar-state", "open");
 });
 
 
@@ -241,53 +134,6 @@ const $window = $(window);
 const $nav = $('nav');
 const $contactListbox = $(".contact-listbox");
 
-// Aggiungi CSS per sovrascrivere le regole del template su tablet
-const tabletSidebarCSS = `
-<style>
-/* Su tablet (768px-1199px), non forzare automaticamente semi-nav */
-@media screen and (min-width: 768px) and (max-width: 1199px) {
-    .app-wrapper nav {
-        width: var(--sidebar-width) !important;
-    }
-
-    .app-wrapper nav .app-logo .logo-full {
-        display: inline-block !important;
-    }
-
-    .app-wrapper nav .app-logo .logo-icon {
-        display: none !important;
-    }
-
-    .app-wrapper nav .app-nav .menu-title span {
-        display: inline !important;
-        text-overflow: unset !important;
-        overflow: unset !important;
-        white-space: unset !important;
-        color: rgba(var(--dark), 1) !important;
-    }
-
-    /* Solo quando ha esplicitamente la classe semi-nav, allora comprimi */
-    .app-wrapper nav.semi-nav {
-        width: var(--semi-nav) !important;
-    }
-
-    .app-wrapper nav.semi-nav .app-logo .logo-full {
-        display: none !important;
-    }
-
-    .app-wrapper nav.semi-nav .app-logo .logo-icon {
-        display: inline-block !important;
-    }
-
-    .app-wrapper nav.semi-nav .app-nav .menu-title span {
-        display: none !important;
-    }
-}
-</style>
-`;
-
-// Inserisci il CSS nel head
-$('head').append(tabletSidebarCSS);
 
 // Event listener for click
 $contactListbox.on("click", function () {
@@ -295,63 +141,24 @@ $contactListbox.on("click", function () {
 });
 
 function resize() {
-    // Su mobile (< 768px) la sidebar è sempre nascosta
+    $nav.removeClass('semi-nav');
     if ($window.width() < 768) {
-        $nav.removeClass('semi-nav');
-        // Su mobile non salvare lo stato
-        localStorage.removeItem('sidebarCollapsed');
-    }
-    // Su tablet e desktop (>= 768px) ripristina lo stato salvato
-    else {
-        restoreSidebarState();
+    } else if ($window.width() < 1199) {
+        $nav.addClass('semi-nav');
     }
 }
 $(function () {
     resize();
-
-    // Ripristina lo stato della sidebar dal localStorage
-    setTimeout(function() {
-        restoreSidebarState();
-    }, 100);
 });
 
 window.addEventListener("resize", () => {
     resize();
 });
 
-// Funzione per ripristinare lo stato della sidebar
-function restoreSidebarState() {
-    try {
-        const savedState = localStorage.getItem('sidebarCollapsed');
-
-        if (savedState !== null) {
-            const isCollapsed = savedState === 'true';
-            const $nav = $('nav');
-            const $toggleIcon = $('.toggle-semi-nav i');
-
-            if ($nav.length && $toggleIcon.length) {
-                if (isCollapsed) {
-                    $nav.addClass('semi-nav');
-                    $toggleIcon.removeClass('ti-chevron-right').addClass('ti-chevron-left');
-                } else {
-                    $nav.removeClass('semi-nav');
-                    $toggleIcon.removeClass('ti-chevron-left').addClass('ti-chevron-right');
-                }
-            }
-        }
-    } catch (e) {
-        console.log('Errore nel ripristino sidebar:', e);
-    }
-}
-
 // >>-- 06 Sidebar scroll js --<<
 const myElement = document.getElementById('app-simple-bar');
 if (myElement) {
-    new SimpleBar(myElement, {
-        autoHide: false,
-        scrollbarMinSize: 40,
-        forceVisible: 'y'
-    });
+    new SimpleBar(myElement, { autoHide: true });
 }
 
 // Sidebar active class js

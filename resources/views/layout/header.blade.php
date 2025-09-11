@@ -1,61 +1,63 @@
 <!-- Header Section starts -->
 <header class="header-main">
+<style>
+/* Header spacing optimization */
+.header-main .header-left .header-searchbar {
+    max-width: 300px;
+    margin-right: 1rem;
+}
+
+.header-main .header-right ul {
+    gap: 0.5rem;
+}
+
+.header-main .header-right ul li .head-icon {
+    width: 35px;
+    height: 35px;
+    padding: 0.4rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .header-main .header-left .header-searchbar {
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 992px) {
+    .header-main .header-left .header-searchbar {
+        max-width: 200px;
+    }
+    
+    .header-main .header-right ul {
+        gap: 0.3rem;
+    }
+    
+    .header-main .header-right ul li .head-icon {
+        width: 32px;
+        height: 32px;
+        padding: 0.3rem;
+    }
+}
+</style>
     <div class="container-fluid">
-        <!-- Desktop Layout -->
-        <div class="row d-none d-md-flex">
-            <div class="col-3 d-flex align-items-center header-left p-0">
-                <span class="header-toggle">
+        <div class="row">
+            <div class="col-8 col-sm-6 d-flex align-items-center header-left p-0">
+                <span class="header-toggle ">
                     <i class="ph ph-squares-four"></i>
                 </span>
-            </div>
 
-            <!-- Global Search Bar - Desktop -->
-            <div class="col-6 d-flex align-items-center justify-content-center header-center p-0">
-                <div class="global-search-container position-relative w-100">
-                    <form action="{{ route('search.index') }}" method="GET" class="d-flex w-100" id="globalSearchForm">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="ph ph-magnifying-glass text-muted"></i>
-                            </span>
-                            <input type="text"
-                                   class="form-control border-start-0"
-                                   name="q"
-                                   id="globalSearchInput"
-                                   placeholder="{{ __('search.search_placeholder') }}"
-                                   autocomplete="off">
-                            <button class="btn btn-outline-secondary border-start-0" type="submit">
-                                <i class="ph ph-arrow-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Search Results Dropdown -->
-                        <div class="dropdown-menu w-100 search-results-dropdown" id="searchResultsDropdown" style="max-height: 400px; overflow-y: auto; position: absolute; top: 100%; left: 0; right: 0; z-index: 1050; display: none;">
-                            <div class="search-loading text-center p-3" id="searchLoading" style="display: none;">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">{{ __('search.loading') }}</span>
-                                </div>
-                                <span class="ms-2">{{ __('search.loading') }}</span>
-                            </div>
-
-                            <div class="search-results" id="searchResults" style="display: none;">
-                                <!-- Results will be populated here -->
-                            </div>
-
-                            <div class="search-empty text-center p-3" id="searchEmpty" style="display: none;">
-                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
-                                <p class="text-muted mb-0">{{ __('search.no_results') }}</p>
-                            </div>
-
-                            <div class="search-placeholder text-center p-3" id="searchPlaceholder">
-                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
-                                <p class="text-muted mb-0">{{ __('search.start_typing') }}</p>
-                            </div>
+                <div class="header-searchbar w-100">
+                    <form action="{{ route('search.index') }}" method="GET" class="mx-sm-3 app-form app-icon-form">
+                        <div class="position-relative">
+                            <input aria-label="Search" class="form-control" placeholder="{{ __('search.search_placeholder') }}" name="q" type="search">
+                            <i class="ti ti-search text-dark"></i>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="col-3 d-flex align-items-center justify-content-end header-right p-0">
+            <div class="col-4 col-sm-6 d-flex align-items-center justify-content-end header-right p-0">
                 <ul class="d-flex align-items-center">
 
                     @auth
@@ -264,182 +266,6 @@
             </div>
         </div>
 
-        <!-- Mobile Layout -->
-        <div class="row d-md-none">
-            <!-- Mobile Header Row 1: Toggle + Icons -->
-            <div class="col-12 d-flex align-items-center justify-content-between p-2">
-                <div class="d-flex align-items-center">
-                    <span class="header-toggle me-3">
-                        <i class="ph ph-squares-four"></i>
-                    </span>
-                </div>
-
-                <div class="d-flex align-items-center">
-                    @auth
-                    <!-- Dashboard -->
-                    <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 me-2"
-                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('dashboard.dashboard') }}">
-                        <i class="ph ph-gauge"></i>
-                    </a>
-
-                    <!-- Notifications -->
-                    <a aria-controls="notificationcanvasRight"
-                       class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2 me-2"
-                       data-bs-target="#notificationcanvasRight"
-                       data-bs-toggle="offcanvas"
-                       href="#"
-                       role="button"
-                       id="notificationTrigger"
-                       data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                        <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" style="width: 20px; height: 20px;">
-                        <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
-                    </a>
-                    @endauth
-
-                    <!-- Theme Toggle -->
-                    <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 me-2"
-                         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.dark_theme') }}">
-                        <i class="ph ph-moon-stars"></i>
-                    </div>
-                    <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 me-2"
-                         data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.light_theme') }}">
-                        <i class="ph ph-sun-dim"></i>
-                    </div>
-
-                    <!-- Language Selector -->
-                    <div class="flex-shrink-0 dropdown" id="lang_selector_mobile">
-                        <a aria-expanded="false" class="d-block head-icon ps-0"
-                           data-bs-toggle="dropdown"
-                           href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.language_selector') }}">
-                            <div class="lang-flag lang-{{ app()->getLocale() }}">
-                                <span class="flag rounded-circle overflow-hidden">
-                                    <i class="flag-icon flag-icon-{{ \App\Providers\LanguageServiceProvider::getFlagCode(app()->getLocale()) }}"></i>
-                                </span>
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu language-dropdown header-card border-0">
-                            @foreach($availableLanguages as $code => $name)
-                            <li class="lang lang-{{ $code }} {{ app()->getLocale() == $code ? 'selected' : '' }} dropdown-item p-2" data-bs-placement="top" data-bs-toggle="tooltip" title="{{ strtoupper($code) }}">
-                                <a href="{{ url()->current() }}?lang={{ $code }}" class="d-flex align-items-center text-decoration-none">
-                                    <i class="flag-icon flag-icon-{{ \App\Providers\LanguageServiceProvider::getFlagCode($code) }} flag-icon-squared rounded-circle f-s-20"></i>
-                                    <span class="ps-2">{{ $name }}</span>
-                                </a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile Header Row 2: Search Bar -->
-            <div class="col-12 px-2 pb-2">
-                <div class="global-search-container position-relative w-100">
-                    <form action="{{ route('search.index') }}" method="GET" class="d-flex w-100" id="globalSearchFormMobile">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="ph ph-magnifying-glass text-muted"></i>
-                            </span>
-                            <input type="text"
-                                   class="form-control border-start-0"
-                                   name="q"
-                                   id="globalSearchInputMobile"
-                                   placeholder="{{ __('search.search_placeholder') }}"
-                                   autocomplete="off">
-                            <button class="btn btn-outline-secondary border-start-0" type="submit">
-                                <i class="ph ph-arrow-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Search Results Dropdown - Mobile -->
-                        <div class="dropdown-menu w-100 search-results-dropdown" id="searchResultsDropdownMobile" style="max-height: 300px; overflow-y: auto; position: absolute; top: 100%; left: 0; right: 0; z-index: 1050; display: none;">
-                            <div class="search-loading text-center p-3" id="searchLoadingMobile" style="display: none;">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">{{ __('search.loading') }}</span>
-                                </div>
-                                <span class="ms-2">{{ __('search.loading') }}</span>
-                            </div>
-
-                            <div class="search-results" id="searchResultsMobile" style="display: none;">
-                                <!-- Results will be populated here -->
-                            </div>
-
-                            <div class="search-empty text-center p-3" id="searchEmptyMobile" style="display: none;">
-                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
-                                <p class="text-muted mb-0">{{ __('search.no_results') }}</p>
-                            </div>
-
-                            <div class="search-placeholder text-center p-3" id="searchPlaceholderMobile">
-                                <i class="ph ph-magnifying-glass display-6 text-muted mb-2"></i>
-                                <p class="text-muted mb-0">{{ __('search.start_typing') }}</p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
 </header>
 <!-- Header Section ends -->
-
-<!-- Mobile Header CSS Fixes -->
-<style>
-/* Fix mobile header icons to be perfectly circular */
-@media (max-width: 767.98px) {
-    .header-main .head-icon {
-        width: 40px !important;
-        height: 40px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        border-radius: 50% !important;
-        padding: 0 !important;
-    }
-
-    .header-main .head-icon i {
-        font-size: 20px !important;
-        line-height: 1 !important;
-    }
-
-    /* Fix search bar z-index and positioning */
-    .header-main .search-results-dropdown {
-        z-index: 1002 !important; /* Below sidebar (1005) but above header (1001) */
-        position: fixed !important;
-        top: 65px !important;
-        left: 10px !important;
-        right: 10px !important;
-        width: auto !important;
-        max-height: 50vh !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
-        border-radius: 8px !important;
-    }
-
-    /* Ensure header has proper z-index */
-    .header-main {
-        z-index: 1001 !important; /* Keep original header z-index */
-    }
-
-    /* Fix mobile header padding */
-    .header-main .container-fluid {
-        padding: 0.5rem 1rem !important;
-    }
-
-    /* Mobile search bar improvements */
-    .header-main .input-group {
-        border-radius: 8px !important;
-        overflow: hidden !important;
-    }
-
-    .header-main .input-group .form-control {
-        border-radius: 0 !important;
-        font-size: 16px !important; /* Prevent zoom on iOS */
-    }
-
-    .header-main .input-group-text {
-        border-radius: 0 !important;
-    }
-
-    .header-main .input-group .btn {
-        border-radius: 0 !important;
-    }
-}
-</style>

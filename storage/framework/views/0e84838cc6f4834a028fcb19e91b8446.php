@@ -34,11 +34,7 @@
 <!-- App css-->
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/app.css')); ?>">
 
-<!-- Icon sizes css-->
-<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/icon-sizes.css')); ?>">
 
-<!-- Sidebar scrollbar css-->
-<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/sidebar-scrollbar.css')); ?>">
 
 <!-- Toastify css-->
 <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendor/toastify/toastify.css')); ?>">
