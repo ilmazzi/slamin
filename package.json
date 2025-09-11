@@ -85,6 +85,7 @@
         "picomatch": "^2.3.1",
         "postcss": "^8.5.3",
         "proxy-from-env": "^1.1.0",
+        "quill": "^2.0.3",
         "readdirp": "^4.1.2",
         "require-directory": "^2.1.1",
         "rollup": "^4.38.0",

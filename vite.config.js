@@ -20,4 +20,9 @@ export default defineConfig({
             '@scss': path.resolve(__dirname, 'public/assets/scss'), // Modifica qui se serve la cartella
         },
     },
+    build: {
+        rollupOptions: {
+            external: [],
+        },
+    },
 });

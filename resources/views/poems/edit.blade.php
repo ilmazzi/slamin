@@ -115,9 +115,9 @@
                             <!-- Contenuto -->
                             <div class="col-12 mb-3">
                                 <label for="content" class="form-label">{{ __('poems.fields.content') }} <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('content') is-invalid @enderror"
-                                          id="content" name="content" rows="12"
-                                          placeholder="{{ __('poems.create.content_placeholder') }}" required>{{ old('content', $poem->content) }}</textarea>
+                                <div id="quill-editor" style="height: 300px;"></div>
+                                <textarea class="form-control @error('content') is-invalid @enderror d-none"
+                                          id="content" name="content" required>{{ old('content', $poem->content) }}</textarea>
                                 <small class="form-text text-muted">{{ __('poems.create.content_help') }}</small>
                                 @error('content')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -287,9 +287,71 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+/* Stili personalizzati per l'editor Quill delle poesie */
+.ql-editor {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    line-height: 1.8;
+    white-space: pre-wrap; /* Preserva spazi e interruzioni di riga */
+}
+
+/* Assicura che tutti gli elementi nell'editor preservino gli spazi */
+.ql-editor * {
+    white-space: pre-wrap !important;
+}
+
+.ql-editor p {
+    margin-bottom: 0.5em;
+}
+
+.ql-editor .ql-align-center {
+    text-align: center;
+}
+
+.ql-editor .ql-align-right {
+    text-align: right;
+}
+
+.ql-editor blockquote {
+    border-left: 4px solid #ccc;
+    margin: 1em 0;
+    padding-left: 1em;
+    font-style: italic;
+}
+
+/* Migliora l'aspetto della toolbar */
+.ql-toolbar {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.ql-container {
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+</style>
+@endpush
+
 @push('scripts')
+<script src="{{ asset('js/quill-editor.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Inizializza Quill.js per l'editor principale
+    const quill = window.initQuillEditor('#quill-editor', {
+        placeholder: '{{ __("poems.create.content_placeholder") }}'
+    });
+
+    // Sincronizza Quill con il textarea nascosto
+    window.syncQuillWithTextarea(quill, 'content');
+
+    // Sincronizza tutti gli editor prima dell'invio del form
+    window.syncAllQuillEditors('form');
+
     // Gestione del draft
     const draftCheckbox = document.getElementById('is_draft');
     const publicCheckbox = document.getElementById('is_public');

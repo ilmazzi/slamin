@@ -41,9 +41,9 @@
                             <!-- Testo (Contenuto) - OBBLIGATORIO -->
                             <div class="col-12 mb-3">
                                 <label for="content" class="form-label">{{ __('poems.fields.content') }} <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('content') is-invalid @enderror"
-                                          id="content" name="content" rows="12"
-                                          placeholder="{{ __('poems.create.content_placeholder') }}" required>{{ old('content') }}</textarea>
+                                <div id="quill-editor" style="height: 300px;"></div>
+                                <textarea class="form-control @error('content') is-invalid @enderror d-none"
+                                          id="content" name="content" required>{{ old('content') }}</textarea>
                                 <small class="form-text text-muted">{{ __('poems.create.content_help') }}</small>
                                 @error('content')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -276,9 +276,82 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+/* Stili personalizzati per l'editor Quill delle poesie */
+.ql-editor {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    line-height: 1.8;
+    white-space: pre-wrap; /* Preserva spazi e interruzioni di riga */
+}
+
+/* Assicura che tutti gli elementi nell'editor preservino gli spazi */
+.ql-editor * {
+    white-space: pre-wrap !important;
+}
+
+.ql-editor p {
+    margin-bottom: 0.5em;
+}
+
+.ql-editor .ql-align-center {
+    text-align: center;
+}
+
+.ql-editor .ql-align-right {
+    text-align: right;
+}
+
+.ql-editor blockquote {
+    border-left: 4px solid #ccc;
+    margin: 1em 0;
+    padding-left: 1em;
+    font-style: italic;
+}
+
+/* Migliora l'aspetto della toolbar */
+.ql-toolbar {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.ql-container {
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+
+/* Stile per le traduzioni */
+#translations-container .ql-editor {
+    font-size: 0.9em;
+    min-height: 150px;
+    white-space: pre-wrap; /* Preserva spazi anche nelle traduzioni */
+}
+
+#translations-container .ql-editor * {
+    white-space: pre-wrap !important;
+}
+</style>
+@endpush
+
 @push('scripts')
+<script src="{{ asset('js/quill-editor.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Inizializza Quill.js per l'editor principale
+    const quill = window.initQuillEditor('#quill-editor', {
+        placeholder: '{{ __("poems.create.content_placeholder") }}'
+    });
+
+    // Sincronizza Quill con il textarea nascosto
+    window.syncQuillWithTextarea(quill, 'content');
+
+    // Sincronizza tutti gli editor prima dell'invio del form
+    window.syncAllQuillEditors('form');
+
     // Gestione del draft
     const draftCheckbox = document.getElementById('is_draft');
     const publicCheckbox = document.getElementById('is_public');
@@ -494,8 +567,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="mb-3">
                         <label for="${translationId}_content" class="form-label">{{ __('poems.fields.content') }}</label>
-                        <textarea class="form-control" id="${translationId}_content"
-                                  name="translations[${translationCount}][content]" rows="8" required></textarea>
+                        <div id="${translationId}_quill" style="height: 200px;"></div>
+                        <textarea class="form-control d-none" id="${translationId}_content"
+                                  name="translations[${translationCount}][content]" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="${translationId}_description" class="form-label">{{ __('poems.fields.description') }}</label>
@@ -513,11 +587,24 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         translationsContainer.insertAdjacentHTML('beforeend', translationHtml);
+        
+        // Inizializza Quill.js per la traduzione
+        const translationQuill = window.initQuillEditor(`#${translationId}_quill`, {
+            placeholder: '{{ __("poems.create.content_placeholder") }}'
+        });
+
+        // Sincronizza Quill con il textarea nascosto
+        window.syncQuillWithTextarea(translationQuill, `${translationId}_content`);
     }
 
     function removeTranslation(translationId) {
         const element = document.getElementById(translationId);
         if (element) {
+            // Rimuovi l'istanza Quill se esiste
+            const quillElement = element.querySelector('[id$="_quill"]');
+            if (quillElement && quillElement.__quill) {
+                quillElement.__quill = null;
+            }
             element.remove();
         }
     }
@@ -536,6 +623,12 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector(`#translation_${translationCount}_content`).value = '{{ $translation["content"] ?? "" }}';
             document.querySelector(`#translation_${translationCount}_description`).value = '{{ $translation["description"] ?? "" }}';
             document.querySelector(`#translation_${translationCount}_notes`).value = '{{ $translation["notes"] ?? "" }}';
+            
+            // Carica il contenuto nel Quill editor della traduzione
+            const translationQuill = document.querySelector(`#translation_${translationCount}_quill`).__quill;
+            if (translationQuill && '{{ $translation["content"] ?? "" }}') {
+                translationQuill.root.innerHTML = '{{ $translation["content"] ?? "" }}';
+            }
         @endforeach
     @endif
 });

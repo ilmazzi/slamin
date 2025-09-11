@@ -1079,6 +1079,7 @@ Route::prefix('poems')->name('poems.')->group(function () {
 
     // Route dinamica DOPO le statiche
     Route::get('/{poem:slug}', [App\Http\Controllers\PoemController::class, 'show'])->name('show');
+    Route::get('/{poem:slug}/translations/{language}', [App\Http\Controllers\PoemController::class, 'getTranslation'])->name('translations.get');
 
     // Routes autenticate
     Route::middleware(['auth', 'verified'])->group(function () {

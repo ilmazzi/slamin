@@ -2,6 +2,74 @@
 
 @section('title', $poem->title)
 
+@push('styles')
+<style>
+/* Stili per la visualizzazione delle poesie con formattazione HTML */
+.poem-content {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    line-height: 1.8;
+    font-size: 1.1em;
+    white-space: pre-wrap; /* Preserva spazi e interruzioni di riga */
+}
+
+.poem-content p {
+    margin-bottom: 0.8em;
+    white-space: pre-wrap; /* Preserva spazi anche nei paragrafi */
+}
+
+.poem-content h1, .poem-content h2, .poem-content h3 {
+    margin-bottom: 1em;
+    font-weight: 600;
+    white-space: pre-wrap; /* Preserva spazi anche nei titoli */
+}
+
+.poem-content blockquote {
+    border-left: 4px solid #ccc;
+    margin: 1.5em 0;
+    padding-left: 1.5em;
+    font-style: italic;
+    color: #666;
+    white-space: pre-wrap; /* Preserva spazi anche nelle citazioni */
+}
+
+.poem-content ul, .poem-content ol {
+    margin-bottom: 1em;
+    padding-left: 2em;
+    white-space: pre-wrap; /* Preserva spazi anche nelle liste */
+}
+
+.poem-content li {
+    margin-bottom: 0.5em;
+    white-space: pre-wrap; /* Preserva spazi anche negli elementi delle liste */
+}
+
+.poem-content a {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+.poem-content a:hover {
+    text-decoration: underline;
+}
+
+/* Allineamento del testo */
+.poem-content .ql-align-center {
+    text-align: center;
+    white-space: pre-wrap; /* Preserva spazi anche con allineamento centrato */
+}
+
+.poem-content .ql-align-right {
+    text-align: right;
+    white-space: pre-wrap; /* Preserva spazi anche con allineamento destro */
+}
+
+.poem-content .ql-align-justify {
+    text-align: justify;
+    white-space: pre-wrap; /* Preserva spazi anche con allineamento giustificato */
+}
+</style>
+@endpush
+
 @section('main-content')
 <div class="container-fluid">
     <!-- Breadcrumb -->
@@ -136,7 +204,7 @@
                     @endif
 
                     <div class="poem-content mb-4">
-                        {!! nl2br(e($poem->content)) !!}
+                        {!! $poem->content !!}
                     </div>
 
                     <!-- Tags -->
@@ -430,13 +498,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 @endpush
 
-@push('styles')
-<style>
-.poem-content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    white-space: pre-line;
-}
-</style>
-@endpush
 @endsection

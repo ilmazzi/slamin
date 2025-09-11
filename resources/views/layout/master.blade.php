@@ -16,6 +16,16 @@
 
     <!-- css start !-->
     @include('layout.css')
+    
+    <!-- Quill.js CSS locale -->
+    <link href="{{ asset('css/quill.snow.css') }}" rel="stylesheet">
+    
+    <!-- CSS per preservare spazi nelle poesie -->
+    <style>
+    .poem-content, .poem-content * {
+        white-space: pre-wrap !important;
+    }
+    </style>
     <!-- css end !-->
 </head>
 
@@ -122,6 +132,9 @@
     @include('layout.search-config')
     <!-- scripts start-->
     @include('layout.script')
+    
+    <!-- Quill.js JavaScript locale -->
+    <script src="{{ asset('js/quill.min.js') }}"></script>
     <!-- scripts end-->
     <script>
 // Aggiorna stato utente (dot + label) quando arriva l'evento broadcast.

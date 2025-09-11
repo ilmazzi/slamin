@@ -211,6 +211,30 @@ class PoemController extends Controller
     }
 
     /**
+     * Get translation content for a specific language
+     */
+    public function getTranslation(Poem $poem, $language)
+    {
+        $translation = $poem->translations()
+            ->where('language', $language)
+            ->where('status', 'approved')
+            ->first();
+
+        if (!$translation) {
+            return response()->json([
+                'error' => 'Translation not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'title' => $translation->title,
+            'content' => $translation->content,
+            'description' => $translation->description,
+            'language' => $translation->language
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Poem $poem)
