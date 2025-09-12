@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-8 col-sm-6 d-flex align-items-center header-left p-0">
                 <span class="header-toggle ">
-                    <i class="ph ph-squares-four"></i>
+                    <i class="ph ph-list"></i>
                 </span>
 
                 <div class="header-searchbar w-100">
