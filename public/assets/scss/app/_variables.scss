@@ -154,6 +154,63 @@ nav.dark-sidebar,body.dark {
         border-color: #474a56;
     }
 
+    // Icon colors for dark mode
+    .ti, i.ti {
+        color: rgba(var(--dark), 0.8) !important;
+    }
+    
+    .ph, i.ph, [class*="ph-"] {
+        color: rgba(var(--dark), 0.8) !important;
+    }
+    
+    // Specific icon classes in navigation
+    .main-nav {
+        .ti, i.ti, .ph, i.ph, [class*="ph-"] {
+            color: rgba(var(--dark), 0.8) !important;
+        }
+    }
+    
+    // Header icons
+    .header-right {
+        .ti, i.ti, .ph, i.ph, [class*="ph-"] {
+            color: rgba(var(--dark), 0.8) !important;
+        }
+    }
+    
+    // Icon component generated icons
+    .icon-event, .icon-media, .icon-article, .icon-team, .icon-settings, .icon-payment,
+    .icon-poetry, .icon-admin, .icon-notification, .icon-dashboard, .icon-snap,
+    .icon-learn, .icon-gigs, .icon-news, .icon-profile, .icon-shortcuts, .icon-calendar,
+    .icon-edit-profile, .icon-picture, .icon-edit, .icon-activity, .icon-email,
+    .icon-like, .icon-wiki, .icon-forum, .icon-permissions, .icon-moderation,
+    .icon-peertube, .icon-kanban, .icon-logs {
+        color: rgba(var(--dark), 0.8) !important;
+    }
+    
+    // Images used as icons should have proper contrast
+    img[class*="icon-"] {
+        filter: brightness(0) saturate(100%) invert(85%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);
+    }
+    
+    // General icon styling for dark mode
+    i, .icon, [class*="icon-"] {
+        color: rgba(var(--dark), 0.8) !important;
+    }
+    
+    // Ensure all navigation icons are visible
+    nav {
+        i, .icon, [class*="icon-"], .ti, .ph, [class*="ph-"] {
+            color: rgba(var(--dark), 0.8) !important;
+        }
+    }
+    
+    // Header icons
+    .header, .header-right {
+        i, .icon, [class*="icon-"], .ti, .ph, [class*="ph-"] {
+            color: rgba(var(--dark), 0.8) !important;
+        }
+    }
+
 }
 body{
     &[text='small-text']{
