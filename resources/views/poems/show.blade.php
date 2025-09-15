@@ -80,7 +80,7 @@
                 <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
 
                     <div class="page-title-right">
-                        
+
                     </div>
                 </div>
             </div>
@@ -108,14 +108,15 @@
                             </div>
 
                             <!-- Selettore Lingue Disponibili -->
-                            @if($poem->available_languages->count() > 1)
+                            {{-- Temporaneamente commentato per debug
+                            @if(count($availableLanguages) > 1)
                             <div class="mb-3">
                                 <div class="d-flex align-items-center flex-wrap gap-2">
                                     <span class="text-muted small">
                                         <i class="ph ph-translate me-1"></i>{{ __('poems.available_languages') }}:
                                     </span>
                                     <div class="btn-group" role="group" id="language-selector">
-                                        @foreach($poem->available_languages as $lang)
+                                        @foreach($availableLanguages as $lang)
                                             <button type="button"
                                                     class="btn btn-sm {{ $lang['is_original'] ? 'btn-primary' : 'btn-outline-primary' }} language-btn"
                                                     data-language="{{ $lang['code'] }}"
@@ -135,6 +136,7 @@
                                 </div>
                             </div>
                             @endif
+                            --}}
                             <div class="d-flex align-items-center text-muted small">
                                 <i class="ph ph-user me-1"></i>
                                 <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Poem;
 use App\Models\PoemComment;
+use App\Models\PoemTranslation;
 use App\Models\Gig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -194,7 +195,10 @@ class PoemController extends Controller
         $poem->incrementViewIfNotOwner();
 
         // Carica relazioni
-        $poem->load(['user', 'comments.approved', 'likes', 'bookmarks']);
+        $poem->load(['user', 'approvedComments.user', 'likes', 'bookmarks']);
+
+        // Carica le lingue disponibili
+        $availableLanguages = $this->getAvailableLanguages($poem);
 
         // Poesie correlate
         $relatedPoems = Poem::published()
@@ -207,7 +211,7 @@ class PoemController extends Controller
             ->limit(4)
             ->get();
 
-        return view('poems.show', compact('poem', 'relatedPoems'));
+        return view('poems.show', compact('poem', 'relatedPoems', 'availableLanguages'));
     }
 
     /**
@@ -491,5 +495,68 @@ class PoemController extends Controller
         ]);
 
         return $gig;
+    }
+
+    /**
+     * Get available languages for a poem
+     */
+    private function getAvailableLanguages(Poem $poem)
+    {
+        $languages = [];
+
+        // Aggiungi la lingua originale
+        $originalLanguage = $poem->original_language ?: $poem->language ?: 'it';
+        $languages[] = [
+            'code' => $originalLanguage,
+            'name' => $this->getLanguageName($originalLanguage),
+            'is_original' => true,
+            'is_official' => true
+        ];
+
+        // Carica le traduzioni approvate dal database
+        try {
+            $translations = PoemTranslation::where('poem_id', $poem->id)
+                ->where('status', 'approved')
+                ->whereNotNull('completed_at')
+                ->get();
+
+            foreach ($translations as $translation) {
+                if (!empty($translation->language)) {
+                    $languages[] = [
+                        'code' => $translation->language,
+                        'name' => $this->getLanguageName($translation->language),
+                        'is_original' => false,
+                        'is_official' => true
+                    ];
+                }
+            }
+        } catch (\Exception $e) {
+            // Se c'è un errore con le traduzioni, continua con solo la lingua originale
+            \Log::warning('Errore nel caricamento delle traduzioni: ' . $e->getMessage());
+        }
+
+        // Rimuovi duplicati basati sul codice lingua
+        $uniqueLanguages = [];
+        $seenCodes = [];
+        foreach ($languages as $lang) {
+            if (!in_array($lang['code'], $seenCodes)) {
+                $uniqueLanguages[] = $lang;
+                $seenCodes[] = $lang['code'];
+            }
+        }
+
+        return $uniqueLanguages;
+    }
+
+    /**
+     * Get language name from code
+     */
+    private function getLanguageName($code)
+    {
+        $languages = config('poems.languages', []);
+        if (is_array($languages) && isset($languages[$code])) {
+            return $languages[$code];
+        }
+        return ucfirst($code);
     }
 }
