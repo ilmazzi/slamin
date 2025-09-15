@@ -194,7 +194,7 @@ class PoemController extends Controller
         $poem->incrementViewIfNotOwner();
 
         // Carica relazioni
-        $poem->load(['user', 'comments.approved', 'likes', 'bookmarks', 'poemTranslations']);
+        $poem->load(['user', 'comments.approved', 'likes', 'bookmarks']);
 
         // Poesie correlate
         $relatedPoems = Poem::published()

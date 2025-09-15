@@ -324,8 +324,8 @@ class Poem extends Model
         ]);
 
         // Carica le traduzioni approvate dal database
-        $translations = $this->poemTranslations()
-            ->approved()
+        $translations = PoemTranslation::where('poem_id', $this->id)
+            ->where('status', 'approved')
             ->whereNotNull('completed_at')
             ->get();
 
