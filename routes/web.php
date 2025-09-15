@@ -668,17 +668,28 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
-        // Admin Translation Management
+        // Admin Translation Management (Mixed System)
     Route::prefix('admin/translations')->name('admin.translations.')->middleware(['auth', 'admin'])->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\TranslationManagementController::class, 'create'])->name('create');
-        Route::post('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'store'])->name('store');
-        Route::get('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'show'])->name('show');
-        Route::post('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'update'])->name('update');
-        Route::delete('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'destroy'])->name('destroy');
-        Route::post('/sync', [App\Http\Controllers\Admin\TranslationManagementController::class, 'sync'])->name('sync');
-        Route::post('/{language}/copy-from-italian', [App\Http\Controllers\Admin\TranslationManagementController::class, 'copyFromItalian'])->name('copy-from-italian');
-        Route::post('/{language}/clear-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearAll'])->name('clear-all');
+        // ROTTE SPECIFICHE PRIMA (senza parametri)
+        Route::get('/', [App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\TranslationController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\TranslationController::class, 'store'])->name('store');
+
+        // Gestione coda traduzioni (ROTTE SPECIFICHE)
+        Route::get('/queue', [App\Http\Controllers\Admin\TranslationController::class, 'queue'])->name('queue');
+        Route::post('/queue/convert', [App\Http\Controllers\Admin\TranslationController::class, 'convertFromQueue'])->name('convert-from-queue');
+        Route::post('/queue/mark-processed', [App\Http\Controllers\Admin\TranslationController::class, 'markAsProcessed'])->name('mark-processed');
+        Route::post('/queue/clean-processed', [App\Http\Controllers\Admin\TranslationController::class, 'cleanProcessed'])->name('clean-processed');
+
+        // Sincronizzazione (ROTTE SPECIFICHE)
+        Route::post('/sync/from-file', [App\Http\Controllers\Admin\TranslationController::class, 'syncFromFile'])->name('sync-from-file');
+        Route::post('/sync/to-file', [App\Http\Controllers\Admin\TranslationController::class, 'syncToFile'])->name('sync-to-file');
+        Route::post('/clear-cache', [App\Http\Controllers\Admin\TranslationController::class, 'clearCache'])->name('clear-cache');
+
+        // ROTTE CON PARAMETRI ALLA FINE
+        Route::get('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'show'])->name('show');
+        Route::put('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'update'])->name('update');
+        Route::delete('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'destroy'])->name('destroy');
     });
 
         // Carousel Management (Admin only)
@@ -1430,7 +1441,7 @@ Route::prefix('articles')->name('articles.')->group(function () {
     // Routes pubbliche specifiche - DEVE ESSERE PRIMA della rotta generica
     Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('index');
     Route::get('/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
-    
+
     // Routes autenticate - DEVE ESSERE PRIMA della rotta generica
     Route::middleware('auth')->group(function () {
         Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('create');

@@ -29,8 +29,11 @@ use App\Observers\EventRequestObserver;
 use App\Observers\GroupInvitationObserver;
 use App\Observers\FollowObserver;
 use App\Services\LoggingService;
+use App\Helpers\TranslationHelper;
+use App\Helpers\AutoTranslationHelper;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -86,8 +89,53 @@ class AppServiceProvider extends ServiceProvider
         // Registra l'observer per i follow
         Follow::observe(FollowObserver::class);
 
+        // Registra le Blade Directives per le traduzioni
+        $this->registerTranslationDirectives();
+
+        // Configura il template di paginazione personalizzato
+        $this->configurePaginationView();
+
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();
+    }
+
+    /**
+     * Registra le Blade Directives per le traduzioni
+     */
+    private function registerTranslationDirectives(): void
+    {
+        // @t() - Traduzione mista (DB + File)
+        Blade::directive('t', function ($expression) {
+            return "<?php echo App\\Helpers\\TranslationHelper::get($expression); ?>";
+        });
+
+        // @auto() - Cattura automatica testi hardcoded
+        Blade::directive('auto', function ($expression) {
+            return "<?php echo App\\Helpers\\AutoTranslationHelper::capture($expression, 'blade_template'); ?>";
+        });
+
+        // @trans() - Alias per @t()
+        Blade::directive('trans', function ($expression) {
+            return "<?php echo App\\Helpers\\TranslationHelper::get($expression); ?>";
+        });
+
+        // @transChoice() - Traduzione con pluralizzazione
+        Blade::directive('transChoice', function ($expression) {
+            return "<?php echo trans_choice($expression); ?>";
+        });
+
+        // @transExists() - Verifica se esiste una traduzione
+        Blade::directive('transExists', function ($expression) {
+            return "<?php echo App\\Helpers\\TranslationHelper::getFromDatabase($expression) !== null ? 'true' : 'false'; ?>";
+        });
+    }
+
+    /**
+     * Configura il template di paginazione personalizzato
+     */
+    private function configurePaginationView(): void
+    {
+        \Illuminate\Pagination\Paginator::defaultView('vendor.pagination.app-pagination');
     }
 
     /**

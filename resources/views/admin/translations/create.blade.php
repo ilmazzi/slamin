@@ -1,14 +1,7 @@
-@extends('layout-master')
+@extends('layout.master')
 
 @section('main-content')
 <div class="container-fluid">
-    <!-- Breadcrumb -->
-    <div class="row mb-3">
-        <div class="col-12">
-            
-        </div>
-    </div>
-
     <!-- Header -->
     <div class="row mb-4">
         <div class="col-12">
@@ -16,9 +9,9 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-plus text-primary me-2"></i>
-                        {{ __('admin.add_language') }}
+                        {{ __('admin.add_translation') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.new_language_note') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin.add_translation_description') }}</p>
                 </div>
                 <div>
                     <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
@@ -37,100 +30,88 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-globe me-2"></i>
-                        {{ __('admin.create_language') }}
+                        {{ __('admin.create_translation') }}
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.translations.store') }}">
+                    <form id="translationForm">
                         @csrf
 
-                        <div class="mb-3">
-                            <label for="language_code" class="form-label">
-                                {{ __('admin.language_code') }}
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control @error('language_code') is-invalid @enderror"
-                                   id="language_code"
-                                   name="language_code"
-                                   value="{{ old('language_code') }}"
-                                   placeholder="es, fr, de, en"
-                                   maxlength="2"
-                                   required>
-                            <div class="form-text">{{ __('admin.language_code_help') }}</div>
-                            @error('language_code')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="group_name" class="form-label">
+                                    {{ __('admin.group_name') }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select id="group_name" name="group_name" class="form-select @error('group_name') is-invalid @enderror" required>
+                                    <option value="">{{ __('admin.select_group') }}</option>
+                                    @foreach($groups as $group)
+                                        <option value="{{ $group }}" {{ old('group_name') == $group ? 'selected' : '' }}>
+                                            {{ $group }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text">{{ __('admin.group_name_help') }}</div>
+                                @error('group_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <div class="mb-4">
-                            <label for="language_name" class="form-label">
-                                {{ __('admin.language_name') }}
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input type="text"
-                                   class="form-control @error('language_name') is-invalid @enderror"
-                                   id="language_name"
-                                   name="language_name"
-                                   value="{{ old('language_name') }}"
-                                   placeholder="Español, Français, Deutsch, English"
-                                   maxlength="50"
-                                   required>
-                            <div class="form-text">{{ __('admin.language_name_help') }}</div>
-                            @error('language_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                            <div class="col-md-6">
+                                <label for="locale" class="form-label">
+                                    {{ __('admin.locale') }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select id="locale" name="locale" class="form-select @error('locale') is-invalid @enderror" required>
+                                    <option value="">{{ __('admin.select_locale') }}</option>
+                                    @foreach($locales as $localeCode)
+                                        <option value="{{ $localeCode }}" {{ old('locale') == $localeCode ? 'selected' : '' }}>
+                                            {{ strtoupper($localeCode) }} - {{ __('admin.language_' . $localeCode) ?: ucfirst($localeCode) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('locale')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                        <!-- Information Card -->
-                        <div class="card card-light-info mb-4">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="flex-shrink-0">
-                                        <div class="h-40 w-40 d-flex-center rounded-circle bg-light-info">
-                                            <i class="ph-duotone ph-info f-s-16 text-info"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-2">{{ __('admin.information') }}</h6>
-                                        <p class="text-muted f-s-14 mb-0">{{ __('admin.new_language_note') }}</p>
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <label for="key_name" class="form-label">
+                                    {{ __('admin.key_name') }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" id="key_name" name="key_name"
+                                       class="form-control @error('key_name') is-invalid @enderror"
+                                       value="{{ old('key_name') }}"
+                                       placeholder="{{ __('admin.key_name_placeholder') }}"
+                                       maxlength="100" required>
+                                <div class="form-text">{{ __('admin.key_name_help') }}</div>
+                                @error('key_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label for="value" class="form-label">
+                                    {{ __('admin.translation_value') }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <textarea id="value" name="value"
+                                          class="form-control @error('value') is-invalid @enderror"
+                                          rows="4"
+                                          placeholder="{{ __('admin.translation_value_placeholder') }}"
+                                          required>{{ old('value') }}</textarea>
+                                <div class="form-text">{{ __('admin.translation_value_help') }}</div>
+                                @error('value')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
-                        <!-- Language Examples -->
-                        <div class="card card-light-secondary mb-4">
-                            <div class="card-header">
-                                <h6 class="card-title mb-0">
-                                    <i class="ph-duotone ph-list-bullets me-2"></i>
-                                    Esempi di Codici Lingua
-                                </h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li><strong>es</strong> - Español</li>
-                                            <li><strong>fr</strong> - Français</li>
-                                            <li><strong>de</strong> - Deutsch</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li><strong>en</strong> - English</li>
-                                            <li><strong>pt</strong> - Português</li>
-                                            <li><strong>ru</strong> - Русский</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-primary">
                                 <i class="ph-duotone ph-check me-1"></i>
-                                {{ __('admin.create_language') }}
+                                {{ __('admin.create_translation') }}
                             </button>
                             <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
                                 <i class="ph-duotone ph-x me-1"></i>
@@ -155,33 +136,63 @@
                     <div class="mb-3">
                         <h6 class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_use_reference') }}
+                            {{ __('admin.tip_group_naming') }}
                         </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_use_reference') }}</p>
+                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_group_naming_description') }}</p>
                     </div>
 
                     <div class="mb-3">
                         <h6 class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_maintain_length') }}
+                            {{ __('admin.tip_key_naming') }}
                         </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_maintain_length') }}</p>
+                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_key_naming_description') }}</p>
                     </div>
 
                     <div class="mb-3">
                         <h6 class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_check_grammar') }}
+                            {{ __('admin.tip_translation_quality') }}
                         </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_check_grammar') }}</p>
+                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_translation_quality_description') }}</p>
                     </div>
 
                     <div class="mb-0">
                         <h6 class="mb-2">
                             <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_save_often') }}
+                            {{ __('admin.tip_consistency') }}
                         </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_save_often') }}</p>
+                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_consistency_description') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Esempi di Gruppi -->
+            <div class="card hover-effect mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="ph-duotone ph-list-bullets me-2"></i>
+                        {{ __('admin.group_examples') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0 f-s-14">
+                                <li><code>admin</code> - {{ __('admin.admin_interface') }}</li>
+                                <li><code>auth</code> - {{ __('admin.authentication') }}</li>
+                                <li><code>common</code> - {{ __('admin.common_texts') }}</li>
+                                <li><code>dashboard</code> - {{ __('admin.dashboard') }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0 f-s-14">
+                                <li><code>events</code> - {{ __('admin.events') }}</li>
+                                <li><code>profile</code> - {{ __('admin.profile') }}</li>
+                                <li><code>videos</code> - {{ __('admin.videos') }}</li>
+                                <li><code>chat</code> - {{ __('admin.chat') }}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,57 +201,65 @@
 </div>
 
 <script>
-// Auto-format language code
-document.getElementById('language_code').addEventListener('input', function(e) {
-    e.target.value = e.target.value.toLowerCase().replace(/[^a-z]/g, '');
+document.getElementById('translationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('{{ route("admin.translations.store") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: '{{ __('admin.success') }}',
+                text: data.message,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = '{{ route("admin.translations.index") }}';
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: '{{ __('admin.error') }}',
+                text: data.message,
+                confirmButtonText: '{{ __('admin.ok') }}'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: '{{ __('admin.error') }}',
+            text: '{{ __('admin.unknown_error') }}',
+            confirmButtonText: '{{ __('admin.ok') }}'
+        });
+    });
 });
 
-// Auto-suggest language name based on code
-const languageNames = {
-    'es': 'Español',
-    'fr': 'Français',
-    'de': 'Deutsch',
-    'en': 'English',
-    'pt': 'Português',
-    'ru': 'Русский',
-    'it': 'Italiano',
-    'nl': 'Nederlands',
-    'pl': 'Polski',
-    'sv': 'Svenska',
-    'da': 'Dansk',
-    'no': 'Norsk',
-    'fi': 'Suomi',
-    'cs': 'Čeština',
-    'sk': 'Slovenčina',
-    'hu': 'Magyar',
-    'ro': 'Română',
-    'bg': 'Български',
-    'hr': 'Hrvatski',
-    'sl': 'Slovenščina',
-    'et': 'Eesti',
-    'lv': 'Latviešu',
-    'lt': 'Lietuvių',
-    'el': 'Ελληνικά',
-    'tr': 'Türkçe',
-    'ar': 'العربية',
-    'he': 'עברית',
-    'ja': '日本語',
-    'ko': '한국어',
-    'zh': '中文',
-    'hi': 'हिन्दी',
-    'th': 'ไทย',
-    'vi': 'Tiếng Việt',
-    'id': 'Bahasa Indonesia',
-    'ms': 'Bahasa Melayu',
-    'tl': 'Filipino'
-};
+// Auto-genera chiave basata su gruppo e valore
+document.getElementById('value').addEventListener('input', function() {
+    const group = document.getElementById('group_name').value;
+    const value = this.value.trim();
 
-document.getElementById('language_code').addEventListener('blur', function(e) {
-    const code = e.target.value;
-    const nameField = document.getElementById('language_name');
+    if (group && value && !document.getElementById('key_name').value) {
+        // Genera una chiave automatica
+        const key = value.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .replace(/\s+/g, '_')
+            .substring(0, 50);
 
-    if (code && languageNames[code] && !nameField.value) {
-        nameField.value = languageNames[code];
+        if (key) {
+            document.getElementById('key_name').value = key;
+        }
     }
 });
 </script>

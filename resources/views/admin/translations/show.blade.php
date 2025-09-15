@@ -12,7 +12,7 @@
                         @php echo __('admin.language_' . $language) ?: ucfirst($language); @endphp - {{ ucfirst($selectedFile) }}
                     </h4>
                     <small class="text-muted">
-                        {{ $stats['translated_keys'] }}/{{ $stats['total_keys'] }} tradotte
+                        {{ $stats['translated_keys'] }}/{{ $stats['total_keys'] }} {{ __('admin.translated_short') }}
                         ({{ round(($stats['translated_keys'] / $stats['total_keys']) * 100, 1) }}%)
                     </small>
                 </div>
@@ -232,12 +232,12 @@ function resetFilters() {
 // Copia da italiano
 function copyFromItalian() {
     Swal.fire({
-        title: 'Copia da Italiano',
+        title: '{{ __('admin.copy_from_italian') }}',
         text: '{{ __('admin.copy_confirm') }}',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Sì, copia',
-        cancelButtonText: 'Annulla',
+        confirmButtonText: '{{ __('admin.yes_copy') }}',
+        cancelButtonText: '{{ __('admin.cancel') }}',
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33'
     }).then((result) => {
@@ -253,8 +253,8 @@ function copyFromItalian() {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Copiato!',
-                text: 'Le traduzioni sono state copiate dall\'italiano',
+                title: '{{ __('admin.copied') }}!',
+                text: '{{ __('admin.copied_success') }}',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -265,12 +265,12 @@ function copyFromItalian() {
 // Svuota tutte le traduzioni
 function clearAllTranslations() {
     Swal.fire({
-        title: 'Svuota Tutte le Traduzioni',
+        title: '{{ __('admin.clear_all_translations') }}',
         text: '{{ __('admin.clear_confirm') }}',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sì, svuota',
-        cancelButtonText: 'Annulla',
+        confirmButtonText: '{{ __('admin.yes_clear') }}',
+        cancelButtonText: '{{ __('admin.cancel') }}',
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6'
     }).then((result) => {
@@ -285,8 +285,8 @@ function clearAllTranslations() {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Svuotato!',
-                text: 'Tutte le traduzioni sono state svuotate',
+                title: '{{ __('admin.cleared') }}!',
+                text: '{{ __('admin.cleared_success') }}',
                 timer: 2000,
                 showConfirmButton: false
             });
@@ -323,7 +323,7 @@ function saveTranslations() {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: 'Salvataggio Completato',
+                title: '{{ __('admin.save_completed') }}',
                 text: '{{ __('admin.save_success') }}',
                 timer: 2000,
                 showConfirmButton: false
@@ -333,9 +333,9 @@ function saveTranslations() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Errore nel Salvataggio',
-                text: '{{ __('admin.save_error') }}: ' + (data.message || 'Errore sconosciuto'),
-                confirmButtonText: 'OK'
+                title: '{{ __('admin.save_error_title') }}',
+                text: '{{ __('admin.save_error') }}: ' + (data.message || '{{ __('admin.unknown_error') }}'),
+                confirmButtonText: '{{ __('admin.ok') }}'
             });
         }
     })
@@ -343,9 +343,9 @@ function saveTranslations() {
         console.error('Error:', error);
         Swal.fire({
             icon: 'error',
-            title: 'Errore nel Salvataggio',
+            title: '{{ __('admin.save_error_title') }}',
             text: '{{ __('admin.save_error') }}',
-            confirmButtonText: 'OK'
+            confirmButtonText: '{{ __('admin.ok') }}'
         });
     });
 }
@@ -428,16 +428,16 @@ document.addEventListener('keydown', function(e) {
 // Funzione per aggiungere una nuova chiave
 function addNewKey() {
     Swal.fire({
-        title: 'Aggiungi Nuova Chiave',
+        title: '{{ __('admin.add_new_key') }}',
         input: 'text',
-        inputLabel: 'Nome della chiave',
-        inputPlaceholder: 'Inserisci il nome della chiave...',
+        inputLabel: '{{ __('admin.key_name') }}',
+        inputPlaceholder: '{{ __('admin.enter_key_name') }}',
         showCancelButton: true,
-        confirmButtonText: 'Aggiungi',
-        cancelButtonText: 'Annulla',
+        confirmButtonText: '{{ __('admin.add') }}',
+        cancelButtonText: '{{ __('admin.cancel') }}',
         inputValidator: (value) => {
             if (!value || value.trim() === '') {
-                return 'Il nome della chiave è obbligatorio!';
+                return '{{ __('admin.key_name_required') }}';
             }
             return null;
         }
@@ -450,9 +450,9 @@ function addNewKey() {
             if (existingRow) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Errore',
-                    text: 'Questa chiave esiste già!',
-                    confirmButtonText: 'OK'
+                    title: '{{ __('admin.error') }}',
+                    text: '{{ __('admin.key_already_exists') }}',
+                    confirmButtonText: '{{ __('admin.ok') }}'
                 });
                 return;
             }
@@ -490,7 +490,7 @@ function addKeyToTable(key) {
             <textarea class="form-control form-control-sm translation-input"
                       name="translations[${key}]"
                       rows="1"
-                      placeholder="Inserisci traduzione..."></textarea>
+                      placeholder="{{ __('admin.enter_translation') }}"></textarea>
         </td>
         <td class="text-center">
             <span class="status-icon" title="{{ __('admin.empty_tooltip') }}">✗</span>
@@ -523,8 +523,8 @@ function addKeyToTable(key) {
     // Mostra messaggio di successo
     Swal.fire({
         icon: 'success',
-        title: 'Chiave Aggiunta',
-        text: `La chiave "${key}" è stata aggiunta con successo!`,
+        title: '{{ __('admin.key_added') }}',
+        text: `{{ __('admin.key_added_success') }} "${key}"!`,
         timer: 2000,
         showConfirmButton: false
     });

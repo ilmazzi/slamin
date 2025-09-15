@@ -15,6 +15,7 @@ use App\Traits\HasLikes;
 use App\Traits\HasViews;
 use App\Traits\HasComments;
 use App\Helpers\PlaceholderHelper;
+use App\Models\PoemTranslation;
 
 class Poem extends Model
 {
@@ -90,6 +91,11 @@ class Poem extends Model
         return $this->hasMany(Poem::class, 'translated_from');
     }
 
+    public function poemTranslations(): HasMany
+    {
+        return $this->hasMany(PoemTranslation::class);
+    }
+
     public function gigs(): HasMany
     {
         return $this->hasMany(Gig::class);
@@ -161,7 +167,7 @@ class Poem extends Model
         if ($this->thumbnail_path) {
             return asset('storage/' . $this->thumbnail_path);
         }
-        
+
         // Restituisce null se non c'è immagine, così il template può gestire il placeholder
         return null;
     }
@@ -174,7 +180,7 @@ class Poem extends Model
         if ($this->thumbnail_path) {
             return '<img src="' . asset('storage/' . $this->thumbnail_path) . '" alt="' . htmlspecialchars($this->title) . '" class="img-fluid">';
         }
-        
+
         // Usa il placeholder HTML personalizzato
         return PlaceholderHelper::getPoemPlaceholderHtml();
     }
@@ -313,9 +319,24 @@ class Poem extends Model
         $languages->push([
             'code' => $this->original_language ?: $this->language,
             'name' => $this->getLanguageName($this->original_language ?: $this->language),
-            'is_original' => true
+            'is_original' => true,
+            'is_official' => true
         ]);
 
+        // Carica le traduzioni approvate dal database
+        $translations = $this->poemTranslations()
+            ->approved()
+            ->whereNotNull('completed_at')
+            ->get();
+
+        foreach ($translations as $translation) {
+            $languages->push([
+                'code' => $translation->language,
+                'name' => $this->getLanguageName($translation->language),
+                'is_original' => false,
+                'is_official' => true
+            ]);
+        }
 
         return $languages->unique('code')->values();
     }
