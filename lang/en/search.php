@@ -1,54 +1,42 @@
 <?php
 
-return [
-    'search' => 'Search',
-    'search_placeholder' => 'Search poems, events, videos...',
-    'search_results' => 'Search Results',
-    'results_for' => 'Results for',
-    'results_found' => 'results found',
-    'no_results' => 'No results found',
-    'no_results_found' => 'No results found',
-    'start_typing' => 'Start typing to search...',
-    'start_searching' => 'Start Searching',
-    'search_description' => 'Search through poems, events, videos, gigs and community users',
-    'loading' => 'Loading...',
-    'view_all' => 'View All',
-    'new_search' => 'New Search',
-    'try_different_keywords' => 'Try different keywords',
-
-    // Categories
-    'all' => 'All',
-    'poems' => 'Poems',
-    'events' => 'Events',
-    'videos' => 'Videos',
-    'gigs' => 'Gigs',
-    'users' => 'Users',
-
-    // Search types
-    'search_type_all' => 'All content',
-    'search_type_poems' => 'Poems only',
-    'search_type_events' => 'Events only',
-    'search_type_videos' => 'Videos only',
-    'search_type_gigs' => 'Gigs only',
-    'search_type_users' => 'Users only',
-
-    // Results
-    'results_count' => '{count} results',
-    'no_results_for_query' => 'No results for "{query}"',
-    'search_suggestions' => 'Search suggestions',
-    'refine_search' => 'Refine search',
-    'clear_search' => 'Clear search',
-
-    // Error messages
-    'search_error' => 'Search error',
-    'search_too_short' => 'Enter at least 2 characters to search',
-    'search_timeout' => 'Search timeout, please try again',
-
-    // Accessibility
-    'search_input_label' => 'Global search input',
-    'search_results_label' => 'Search results',
-    'search_category_label' => 'Category: {category}',
-    'search_result_label' => 'Result: {title}',
-];
-
-
+return array (
+  'search' => 'Search',
+  'search_placeholder' => '[en] Cerca poesie, eventi, video...',
+  'search_results' => '[en] Risultati di Ricerca',
+  'results_for' => '[en] Risultati per',
+  'results_found' => '[en] risultati trovati',
+  'no_results' => '[en] Nessun risultato trovato',
+  'no_results_found' => '[en] Nessun risultato trovato',
+  'start_typing' => '[en] Inizia a digitare per cercare...',
+  'start_searching' => '[en] Inizia a Cercare',
+  'search_description' => '[en] Cerca tra poesie, eventi, video, gig e utenti della community',
+  'loading' => '[en] Caricamento...',
+  'view_all' => '[en] Vedi Tutti',
+  'new_search' => '[en] Nuova Ricerca',
+  'try_different_keywords' => '[en] Prova con parole chiave diverse',
+  'all' => 'All',
+  'poems' => '[en] Poesie',
+  'events' => '[en] Eventi',
+  'videos' => '[en] Video',
+  'gigs' => '[en] Gig',
+  'users' => '[en] Utenti',
+  'search_type_all' => '[en] Tutti i contenuti',
+  'search_type_poems' => '[en] Solo poesie',
+  'search_type_events' => '[en] Solo eventi',
+  'search_type_videos' => '[en] Solo video',
+  'search_type_gigs' => '[en] Solo gig',
+  'search_type_users' => '[en] Solo utenti',
+  'results_count' => '[en] {count} risultati',
+  'no_results_for_query' => '[en] Nessun risultato per "{query}"',
+  'search_suggestions' => '[en] Suggerimenti di ricerca',
+  'refine_search' => '[en] Affina la ricerca',
+  'clear_search' => '[en] Cancella ricerca',
+  'search_error' => '[en] Errore durante la ricerca',
+  'search_too_short' => '[en] Inserisci almeno 2 caratteri per la ricerca',
+  'search_timeout' => '[en] Timeout della ricerca, riprova',
+  'search_input_label' => '[en] Campo di ricerca globale',
+  'search_results_label' => '[en] Risultati di ricerca',
+  'search_category_label' => '[en] Categoria: {category}',
+  'search_result_label' => '[en] Risultato: {title}',
+);

@@ -668,12 +668,34 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
-        // Admin Translation Management (Mixed System)
+        // Admin Translation Management (Simplified System)
     Route::prefix('admin/translations')->name('admin.translations.')->middleware(['auth', 'admin'])->group(function () {
         // ROTTE SPECIFICHE PRIMA (senza parametri)
-        Route::get('/', [App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\TranslationController::class, 'create'])->name('create');
-        Route::post('/', [App\Http\Controllers\Admin\TranslationController::class, 'store'])->name('store');
+        Route::get('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\TranslationManagementController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'store'])->name('store');
+        Route::post('/sync', [App\Http\Controllers\Admin\TranslationManagementController::class, 'sync'])->name('sync');
+        Route::post('/sync-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'syncAllLanguages'])->name('sync-all');
+        Route::post('/clear-cache', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearCache'])->name('clear-cache');
+
+           // ROTTE PER TESTI HARDCODED (DEVE ESSERE PRIMA DELLE ROTTE CON PARAMETRI)
+           Route::get('/hardcoded', [App\Http\Controllers\Admin\TranslationManagementController::class, 'hardcoded'])->name('hardcoded');
+           Route::post('/convert-to-key', [App\Http\Controllers\Admin\TranslationManagementController::class, 'convertToKey'])->name('convert-to-key');
+
+           // ROTTE PER API DI TRADUZIONE
+           Route::post('/api/test', [App\Http\Controllers\Admin\TranslationManagementController::class, 'testApi'])->name('api.test');
+           Route::post('/api/translate', [App\Http\Controllers\Admin\TranslationManagementController::class, 'translateWithApi'])->name('api.translate');
+           Route::post('/api/translate-page', [App\Http\Controllers\Admin\TranslationManagementController::class, 'translatePage'])->name('api.translate-page');
+           Route::get('/api/providers', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getProviders'])->name('api.providers');
+           Route::get('/api/files', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getAvailableFiles'])->name('api.files');
+           Route::get('/api/status', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getTranslationStatus'])->name('api.status');
+
+        // ROTTE CON PARAMETRI LINGUA
+        Route::get('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'show'])->name('show');
+        Route::post('/{language}/update', [App\Http\Controllers\Admin\TranslationManagementController::class, 'update'])->name('update');
+        Route::delete('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'destroy'])->name('destroy');
+        Route::post('/{language}/copy-from-italian', [App\Http\Controllers\Admin\TranslationManagementController::class, 'copyFromItalian'])->name('copy-from-italian');
+        Route::post('/{language}/clear-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearAll'])->name('clear-all');
 
         // Gestione coda traduzioni (ROTTE SPECIFICHE)
         Route::get('/queue', [App\Http\Controllers\Admin\TranslationController::class, 'queue'])->name('queue');
@@ -686,10 +708,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::post('/sync/to-file', [App\Http\Controllers\Admin\TranslationController::class, 'syncToFile'])->name('sync-to-file');
         Route::post('/clear-cache', [App\Http\Controllers\Admin\TranslationController::class, 'clearCache'])->name('clear-cache');
 
-        // ROTTE CON PARAMETRI ALLA FINE
-        Route::get('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'show'])->name('show');
-        Route::put('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'update'])->name('update');
-        Route::delete('/{translation}', [App\Http\Controllers\Admin\TranslationController::class, 'destroy'])->name('destroy');
+        // ROTTE CON PARAMETRI ALLA FINE (rimosse per evitare conflitti con il nuovo sistema)
     });
 
         // Carousel Management (Admin only)

@@ -1,20 +1,20 @@
 <?php
 
-return [
-    'welcome_text' => 'Willkommen in der italienischen Slam-Poesie-Community',
-    'login_to_your_account' => 'In Ihr Konto einloggen',
-    'enter_slam_in_and_discover_the_italian_slam_world' => 'Treten Sie Slam In bei und entdecken Sie die italienische Slam-Welt',
-    'enter_slam_in' => 'Slam In betreten',
-    'email' => 'E-Mail',
-    'email_placeholder' => 'Ihre E-Mail',
-    'password' => 'Passwort',
-    'password_placeholder' => 'Ihr Passwort',
-    'remember_me' => 'Angemeldet bleiben',
-    'no_account' => 'Haben Sie kein Konto?',
-    'register_here' => 'Hier registrieren',
-    'events_and_shows' => 'Veranstaltungen und Shows',
-    'poets_community' => 'Dichter-Community',
-    'share_your_performances' => 'Teilen Sie Ihre Auftritte',
-    'participate_in_competitions' => 'Nehmen Sie an Wettbewerben teil',
-    'remember_me_tooltip' => 'Sitzung auch nach dem Schließen des Browsers aktiv halten',
-];
+return array (
+  'welcome_text' => '[de] Benvenuto nella community della poesia slam italiana',
+  'login_to_your_account' => '[de] Accedi al tuo account',
+  'enter_slam_in_and_discover_the_italian_slam_world' => '[de] Entra in Slam In e scopri il mondo dello slam italiano',
+  'enter_slam_in' => '[de] Entra in Slam In',
+  'email' => 'E-Mail',
+  'email_placeholder' => '[de] La tua email',
+  'password' => 'Passwort',
+  'password_placeholder' => '[de] La tua password',
+  'remember_me' => '[de] Ricordami',
+  'remember_me_tooltip' => '[de] Mantieni la sessione attiva anche dopo la chiusura del browser',
+  'no_account' => '[de] Non hai un account?',
+  'register_here' => '[de] Registrati qui',
+  'events_and_shows' => '[de] Eventi e spettacoli',
+  'poets_community' => '[de] Community di poeti',
+  'share_your_performances' => '[de] Condividi le tue performance',
+  'participate_in_competitions' => '[de] Partecipa alle competizioni',
+);

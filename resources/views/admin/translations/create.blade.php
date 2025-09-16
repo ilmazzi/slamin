@@ -9,14 +9,14 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-plus text-primary me-2"></i>
-                        {{ __('admin.add_translation') }}
+                        {{ __('admin.add_language') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.add_translation_description') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin.add_language_description') }}</p>
                 </div>
                 <div>
                     <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
                         <i class="ph-duotone ph-arrow-left me-1"></i>
-                        {{ __('admin.back_to_list') }}
+                        {{ __('admin.back_to_languages') }}
                     </a>
                 </div>
             </div>
@@ -24,176 +24,116 @@
     </div>
 
     <!-- Form -->
-    <div class="row">
-        <div class="col-md-8 col-lg-6">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
             <div class="card hover-effect">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-globe me-2"></i>
-                        {{ __('admin.create_translation') }}
+                        {{ __('admin.language_details') }}
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form id="translationForm">
+                    <form method="POST" action="{{ route('admin.translations.store') }}">
                         @csrf
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="group_name" class="form-label">
-                                    {{ __('admin.group_name') }}
-                                    <span class="text-danger">*</span>
+                                <label for="language_code" class="form-label f-s-14">
+                                    {{ __('admin.language_code') }} <span class="text-danger">*</span>
                                 </label>
-                                <select id="group_name" name="group_name" class="form-select @error('group_name') is-invalid @enderror" required>
-                                    <option value="">{{ __('admin.select_group') }}</option>
-                                    @foreach($groups as $group)
-                                        <option value="{{ $group }}" {{ old('group_name') == $group ? 'selected' : '' }}>
-                                            {{ $group }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="form-text">{{ __('admin.group_name_help') }}</div>
-                                @error('group_name')
+                                <input type="text"
+                                       class="form-control @error('language_code') is-invalid @enderror"
+                                       id="language_code"
+                                       name="language_code"
+                                       value="{{ old('language_code') }}"
+                                       placeholder="es. en, fr, de, es"
+                                       maxlength="2"
+                                       required>
+                                @error('language_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <div class="form-text">{{ __('admin.language_code_help') }}</div>
                             </div>
 
                             <div class="col-md-6">
-                                <label for="locale" class="form-label">
-                                    {{ __('admin.locale') }}
-                                    <span class="text-danger">*</span>
+                                <label for="language_name" class="form-label f-s-14">
+                                    {{ __('admin.language_name') }} <span class="text-danger">*</span>
                                 </label>
-                                <select id="locale" name="locale" class="form-select @error('locale') is-invalid @enderror" required>
-                                    <option value="">{{ __('admin.select_locale') }}</option>
-                                    @foreach($locales as $localeCode)
-                                        <option value="{{ $localeCode }}" {{ old('locale') == $localeCode ? 'selected' : '' }}>
-                                            {{ strtoupper($localeCode) }} - {{ __('admin.language_' . $localeCode) ?: ucfirst($localeCode) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('locale')
+                                <input type="text"
+                                       class="form-control @error('language_name') is-invalid @enderror"
+                                       id="language_name"
+                                       name="language_name"
+                                       value="{{ old('language_name') }}"
+                                       placeholder="es. English, Français, Deutsch, Español"
+                                       maxlength="50"
+                                       required>
+                                @error('language_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-
-                            <div class="col-12">
-                                <label for="key_name" class="form-label">
-                                    {{ __('admin.key_name') }}
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" id="key_name" name="key_name"
-                                       class="form-control @error('key_name') is-invalid @enderror"
-                                       value="{{ old('key_name') }}"
-                                       placeholder="{{ __('admin.key_name_placeholder') }}"
-                                       maxlength="100" required>
-                                <div class="form-text">{{ __('admin.key_name_help') }}</div>
-                                @error('key_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-12">
-                                <label for="value" class="form-label">
-                                    {{ __('admin.translation_value') }}
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <textarea id="value" name="value"
-                                          class="form-control @error('value') is-invalid @enderror"
-                                          rows="4"
-                                          placeholder="{{ __('admin.translation_value_placeholder') }}"
-                                          required>{{ old('value') }}</textarea>
-                                <div class="form-text">{{ __('admin.translation_value_help') }}</div>
-                                @error('value')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="form-text">{{ __('admin.language_name_help') }}</div>
                             </div>
                         </div>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="ph-duotone ph-check me-1"></i>
-                                {{ __('admin.create_translation') }}
-                            </button>
+                        <!-- Info Box -->
+                        <div class="alert alert-info mt-4">
+                            <div class="d-flex">
+                                <i class="ph-duotone ph-info me-3 f-s-20 text-info"></i>
+                                <div>
+                                    <h6 class="alert-heading mb-2">{{ __('admin.what_happens_next') }}</h6>
+                                    <ul class="mb-0 f-s-14">
+                                        <li>{{ __('admin.language_creation_step1') }}</li>
+                                        <li>{{ __('admin.language_creation_step2') }}</li>
+                                        <li>{{ __('admin.language_creation_step3') }}</li>
+                                        <li>{{ __('admin.language_creation_step4') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Available Languages -->
+                        <div class="mt-4">
+                            <h6 class="mb-3">{{ __('admin.available_language_codes') }}</h6>
+                            <div class="row g-2">
+                                @php
+                                    $commonLanguages = [
+                                        'en' => 'English',
+                                        'fr' => 'Français',
+                                        'de' => 'Deutsch',
+                                        'es' => 'Español',
+                                        'pt' => 'Português',
+                                        'ru' => 'Русский',
+                                        'zh' => '中文',
+                                        'ja' => '日本語',
+                                        'ko' => '한국어',
+                                        'ar' => 'العربية'
+                                    ];
+                                @endphp
+                                @foreach($commonLanguages as $code => $name)
+                                    <div class="col-md-3 col-sm-4 col-6">
+                                        <button type="button"
+                                                class="btn btn-outline-primary btn-sm w-100 language-suggestion"
+                                                data-code="{{ $code }}"
+                                                data-name="{{ $name }}">
+                                            <strong>{{ strtoupper($code) }}</strong><br>
+                                            <small>{{ $name }}</small>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
-                                <i class="ph-duotone ph-x me-1"></i>
                                 {{ __('admin.cancel') }}
                             </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ph-duotone ph-plus me-1"></i>
+                                {{ __('admin.create_language') }}
+                            </button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-md-4 col-lg-6">
-            <div class="card hover-effect">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="ph-duotone ph-lightbulb me-2"></i>
-                        {{ __('admin.tips') }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h6 class="mb-2">
-                            <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_group_naming') }}
-                        </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_group_naming_description') }}</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <h6 class="mb-2">
-                            <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_key_naming') }}
-                        </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_key_naming_description') }}</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <h6 class="mb-2">
-                            <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_translation_quality') }}
-                        </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_translation_quality_description') }}</p>
-                    </div>
-
-                    <div class="mb-0">
-                        <h6 class="mb-2">
-                            <i class="ph-duotone ph-check-circle text-success me-1"></i>
-                            {{ __('admin.tip_consistency') }}
-                        </h6>
-                        <p class="text-muted f-s-14 mb-0">{{ __('admin.tip_consistency_description') }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Esempi di Gruppi -->
-            <div class="card hover-effect mt-3">
-                <div class="card-header">
-                    <h6 class="card-title mb-0">
-                        <i class="ph-duotone ph-list-bullets me-2"></i>
-                        {{ __('admin.group_examples') }}
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-unstyled mb-0 f-s-14">
-                                <li><code>admin</code> - {{ __('admin.admin_interface') }}</li>
-                                <li><code>auth</code> - {{ __('admin.authentication') }}</li>
-                                <li><code>common</code> - {{ __('admin.common_texts') }}</li>
-                                <li><code>dashboard</code> - {{ __('admin.dashboard') }}</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-unstyled mb-0 f-s-14">
-                                <li><code>events</code> - {{ __('admin.events') }}</li>
-                                <li><code>profile</code> - {{ __('admin.profile') }}</li>
-                                <li><code>videos</code> - {{ __('admin.videos') }}</li>
-                                <li><code>chat</code> - {{ __('admin.chat') }}</li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -201,66 +141,34 @@
 </div>
 
 <script>
-document.getElementById('translationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+// Auto-fill form when clicking on language suggestions
+document.querySelectorAll('.language-suggestion').forEach(button => {
+    button.addEventListener('click', function() {
+        document.getElementById('language_code').value = this.dataset.code;
+        document.getElementById('language_name').value = this.dataset.name;
 
-    const formData = new FormData(this);
+        // Visual feedback
+        this.classList.remove('btn-outline-primary');
+        this.classList.add('btn-primary');
 
-    fetch('{{ route("admin.translations.store") }}', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: '{{ __('admin.success') }}',
-                text: data.message,
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.href = '{{ route("admin.translations.index") }}';
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: '{{ __('admin.error') }}',
-                text: data.message,
-                confirmButtonText: '{{ __('admin.ok') }}'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: '{{ __('admin.error') }}',
-            text: '{{ __('admin.unknown_error') }}',
-            confirmButtonText: '{{ __('admin.ok') }}'
+        // Reset other buttons
+        document.querySelectorAll('.language-suggestion').forEach(btn => {
+            if (btn !== this) {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            }
         });
     });
 });
 
-// Auto-genera chiave basata su gruppo e valore
-document.getElementById('value').addEventListener('input', function() {
-    const group = document.getElementById('group_name').value;
-    const value = this.value.trim();
+// Auto-format language code
+document.getElementById('language_code').addEventListener('input', function() {
+    this.value = this.value.toLowerCase().replace(/[^a-z]/g, '');
+});
 
-    if (group && value && !document.getElementById('key_name').value) {
-        // Genera una chiave automatica
-        const key = value.toLowerCase()
-            .replace(/[^a-z0-9\s]/g, '')
-            .replace(/\s+/g, '_')
-            .substring(0, 50);
-
-        if (key) {
-            document.getElementById('key_name').value = key;
-        }
-    }
+// Auto-format language name
+document.getElementById('language_name').addEventListener('input', function() {
+    this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
 });
 </script>
 @endsection

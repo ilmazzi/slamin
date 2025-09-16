@@ -16,12 +16,16 @@
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.translations.create') }}" class="btn btn-primary">
                         <i class="ph-duotone ph-plus me-1"></i>
-                        {{ __('admin.add_translation') }}
+                        {{ __('admin.add_language') }}
                     </a>
-                    <a href="{{ route('admin.translations.queue') }}" class="btn btn-outline-info">
-                        <i class="ph-duotone ph-list-bullets me-1"></i>
-                        {{ __('admin.translation_queue') }}
+                    <a href="{{ route('admin.translations.hardcoded') }}" class="btn btn-outline-info">
+                        <i class="ph-duotone ph-code me-1"></i>
+                        {{ __('admin.hardcoded_texts') }}
                     </a>
+                    <button type="button" class="btn btn-success" onclick="syncAllLanguagesComplete()">
+                        <i class="ph-duotone ph-globe me-1"></i>
+                        Sincronizza Tutte le Lingue
+                    </button>
                     <button type="button" class="btn btn-outline-warning" onclick="clearCache()">
                         <i class="ph-duotone ph-trash me-1"></i>
                         {{ __('admin.clear_cache') }}
@@ -39,25 +43,25 @@
                     <div class="row text-center">
                         <div class="col-md-3">
                             <div class="border-end">
-                                <h4 class="mb-1 text-primary">{{ $stats['total'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.total_translations') }}</p>
+                                <h4 class="mb-1 text-primary">{{ $languageStats['total_keys'] ?? 0 }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.total_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
-                                <h4 class="mb-1 text-success">{{ $stats['groups'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.translation_groups') }}</p>
+                                <h4 class="mb-1 text-success">{{ $languageStats['total_translated'] ?? 0 }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.translated_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
-                                <h4 class="mb-1 text-info">{{ $stats['locales'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.available_locales') }}</p>
+                                <h4 class="mb-1 text-warning">{{ $languageStats['total_missing'] ?? 0 }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.missing_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <h4 class="mb-1 text-warning">{{ $stats['recent'] }}</h4>
-                            <p class="text-muted mb-0 f-s-14">{{ __('admin.recent_translations') }}</p>
+                            <h4 class="mb-1 text-info">{{ count($languages) }}</h4>
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin.available_languages') }}</p>
                         </div>
                     </div>
                 </div>
@@ -65,145 +69,160 @@
         </div>
     </div>
 
-    <!-- Filtri -->
+    <!-- API Translation Section -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card hover-effect">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="ph-duotone ph-robot me-2"></i>
+                        {{ __('admin.auto_translation') }}
+                    </h5>
+                </div>
                 <div class="card-body">
-                    <form method="GET" action="{{ route('admin.translations.index') }}" id="filterForm">
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label for="group" class="form-label f-s-14">{{ __('admin.group') }}</label>
-                                <select name="group" id="group" class="form-select form-select-sm">
-                                    <option value="">{{ __('admin.all_groups') }}</option>
-                                    @foreach($groups as $groupName)
-                                        <option value="{{ $groupName }}" {{ request('group') == $groupName ? 'selected' : '' }}>
-                                            {{ $groupName }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="locale" class="form-label f-s-14">{{ __('admin.locale') }}</label>
-                                <select name="locale" id="locale" class="form-select form-select-sm">
-                                    <option value="">{{ __('admin.all_locales') }}</option>
-                                    @foreach($locales as $localeCode)
-                                        <option value="{{ $localeCode }}" {{ request('locale') == $localeCode ? 'selected' : '' }}>
-                                            {{ strtoupper($localeCode) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="search" class="form-label f-s-14">{{ __('admin.search') }}</label>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text"><i class="ph-duotone ph-magnifying-glass f-s-12"></i></span>
-                                    <input type="text" name="search" id="search" class="form-control"
-                                           placeholder="{{ __('admin.search_translations') }}"
-                                           value="{{ request('search') }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="apiTranslationForm">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="apiLanguage" class="form-label">{{ __('admin.language') }}</label>
+                                    <select class="form-select" id="apiLanguage" name="language" required>
+                                        <option value="">{{ __('admin.select_locale') }}</option>
+                                        <option value="en">English</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="pt">Português</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label f-s-14">&nbsp;</label>
+                                <div class="mb-3">
+                                    <label for="apiFile" class="form-label">{{ __('admin.translation_files') }}</label>
+                                    <select class="form-select" id="apiFile" name="file" required>
+                                        <option value="">{{ __('admin.select_group') }}</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="apiProvider" class="form-label">{{ __('admin.translation_provider') }}</label>
+                                    <select class="form-select" id="apiProvider" name="provider" required>
+                                        <option value="">{{ __('admin.select_group') }}</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="apiKey" class="form-label">{{ __('admin.translation_api_key') }}</label>
+                                    <input type="text" class="form-control" id="apiKey" name="api_key" placeholder="Optional for LibreTranslate">
+                                    <div class="form-text">{{ __('admin.translation_api_key_help') }}</div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="forceTranslation" name="force">
+                                        <label class="form-check-label" for="forceTranslation">
+                                            {{ __('admin.force_translation') }}
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="ph-duotone ph-magnifying-glass me-1"></i>
-                                        {{ __('admin.filter') }}
+                                    <button type="button" class="btn btn-primary" onclick="testApiConnection()">
+                                        <i class="ph-duotone ph-check-circle me-1"></i>
+                                        {{ __('admin.test_connection') }}
                                     </button>
-                                    <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary btn-sm">
-                                        <i class="ph-duotone ph-arrow-clockwise me-1"></i>
-                                        {{ __('admin.reset') }}
-                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="ph-duotone ph-translate me-1"></i>
+                                        {{ __('admin.translate_page') }}
+                                    </button>
                                 </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="apiStatus" class="alert alert-info" style="display: none;">
+                                <i class="ph-duotone ph-info me-2"></i>
+                                <span id="apiStatusText">Ready to translate</span>
+                            </div>
+                            <div id="apiOutput" class="mt-3" style="display: none;">
+                                <h6>{{ __('admin.translation_output') }}</h6>
+                                <pre class="bg-light p-3 rounded" id="apiOutputText"></pre>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Tabella Traduzioni -->
+    <!-- Languages List -->
     <div class="row">
         <div class="col-12">
             <div class="card hover-effect">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="ph-duotone ph-list-bullets me-2"></i>
-                        {{ __('admin.translations_list') }}
+                        <i class="ph-duotone ph-globe me-2"></i>
+                        {{ __('admin.available_languages') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
-                    @if($translations && $translations->count() > 0)
+                    @if($languages && count($languages) > 0)
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 20%;">
-                                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'group_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}"
-                                               class="text-decoration-none text-dark">
-                                                {{ __('admin.group') }}
-                                                @if(request('sort') == 'group_name')
-                                                    <i class="ph-duotone ph-arrow-{{ request('direction') == 'asc' ? 'up' : 'down' }} f-s-12"></i>
-                                                @endif
-                                            </a>
-                                        </th>
-                                        <th style="width: 20%;">
-                                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'key_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}"
-                                               class="text-decoration-none text-dark">
-                                                {{ __('admin.key') }}
-                                                @if(request('sort') == 'key_name')
-                                                    <i class="ph-duotone ph-arrow-{{ request('direction') == 'asc' ? 'up' : 'down' }} f-s-12"></i>
-                                                @endif
-                                            </a>
-                                        </th>
-                                        <th style="width: 10%;">
-                                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'locale', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}"
-                                               class="text-decoration-none text-dark">
-                                                {{ __('admin.locale') }}
-                                                @if(request('sort') == 'locale')
-                                                    <i class="ph-duotone ph-arrow-{{ request('direction') == 'asc' ? 'up' : 'down' }} f-s-12"></i>
-                                                @endif
-                                            </a>
-                                        </th>
-                                        <th style="width: 35%;">{{ __('admin.value') }}</th>
-                                        <th style="width: 15%;">{{ __('admin.actions') }}</th>
+                                        <th style="width: 20%;">{{ __('admin.language') }}</th>
+                                        <th style="width: 15%;">{{ __('admin.code') }}</th>
+                                        <th style="width: 15%;">{{ __('admin.progress') }}</th>
+                                        <th style="width: 20%;">{{ __('admin.translated') }}</th>
+                                        <th style="width: 20%;">{{ __('admin.missing') }}</th>
+                                        <th style="width: 10%;">{{ __('admin.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($translations as $translation)
+                                    @foreach($languages as $language)
+                                    @php
+                                        $stats = $languageStats[$language] ?? ['total_keys' => 0, 'translated_keys' => 0, 'missing_keys' => 0, 'progress_percentage' => 0];
+                                    @endphp
                                     <tr>
                                         <td>
-                                            <code class="text-primary f-s-12">{{ $translation->group_name }}</code>
-                                        </td>
-                                        <td>
-                                            <code class="text-secondary f-s-12">{{ $translation->key_name }}</code>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-primary">{{ strtoupper($translation->locale) }}</span>
-                                        </td>
-                                        <td>
-                                            <div class="text-muted f-s-12" style="max-height: 60px; overflow-y: auto;">
-                                                {{ Str::limit($translation->value, 100) }}
+                                            <div class="d-flex align-items-center">
+                                                <i class="ph-duotone ph-flag me-2 text-primary"></i>
+                                                <strong>{{ ucfirst($language) }}</strong>
+                                                @if($language === 'it')
+                                                    <span class="badge bg-primary ms-2">{{ __('admin.reference') }}</span>
+                                                @endif
                                             </div>
                                         </td>
                                         <td>
+                                            <code class="text-secondary">{{ strtoupper($language) }}</code>
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar {{ $stats['progress_percentage'] == 100 ? 'bg-success' : ($stats['progress_percentage'] > 50 ? 'bg-warning' : 'bg-danger') }}"
+                                                     role="progressbar"
+                                                     style="width: {{ $stats['progress_percentage'] }}%"
+                                                     aria-valuenow="{{ $stats['progress_percentage'] }}"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100">
+                                                    {{ $stats['progress_percentage'] }}%
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">{{ $stats['translated_keys'] }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning">{{ $stats['missing_keys'] }}</span>
+                                        </td>
+                                        <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <button type="button" class="btn btn-outline-primary"
-                                                        onclick="editTranslation({{ $translation->id }})"
-                                                        title="{{ __('admin.edit') }}">
+                                                <a href="{{ route('admin.translations.show', $language) }}"
+                                                   class="btn btn-outline-primary"
+                                                   title="{{ __('admin.manage') }}">
                                                     <i class="ph-duotone ph-pencil f-s-14"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-outline-info"
-                                                        onclick="viewTranslation({{ $translation->id }})"
-                                                        title="{{ __('admin.view') }}">
-                                                    <i class="ph-duotone ph-eye f-s-14"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-outline-danger"
-                                                        onclick="deleteTranslation({{ $translation->id }})"
-                                                        title="{{ __('admin.delete') }}">
-                                                    <i class="ph-duotone ph-trash f-s-14"></i>
-                                                </button>
+                                                </a>
+                                                @if($language !== 'it')
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger"
+                                                            onclick="deleteLanguage('{{ $language }}')"
+                                                            title="{{ __('admin.delete') }}">
+                                                        <i class="ph-duotone ph-trash f-s-14"></i>
+                                                    </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -211,25 +230,14 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <!-- Paginazione -->
-                        <div class="d-flex justify-content-between align-items-center p-3 border-top">
-                            <div class="text-muted f-s-14">
-                                {{ __('admin.showing') }} {{ $translations->firstItem() }} {{ __('admin.to') }} {{ $translations->lastItem() }}
-                                {{ __('admin.of') }} {{ $translations->total() }} {{ __('admin.results') }}
-                            </div>
-                            <div>
-                                {{ $translations->appends(request()->query())->links() }}
-                            </div>
-                        </div>
                     @else
                         <div class="text-center py-5">
                             <i class="ph-duotone ph-translate f-s-48 text-muted mb-3"></i>
-                            <h5 class="text-muted">{{ __('admin.no_translations_found') }}</h5>
-                            <p class="text-muted">{{ __('admin.no_translations_description') }}</p>
+                            <h5 class="text-muted">{{ __('admin.no_languages_found') }}</h5>
+                            <p class="text-muted">{{ __('admin.no_languages_description') }}</p>
                             <a href="{{ route('admin.translations.create') }}" class="btn btn-primary">
                                 <i class="ph-duotone ph-plus me-1"></i>
-                                {{ __('admin.add_first_translation') }}
+                                {{ __('admin.add_first_language') }}
                             </a>
                         </div>
                     @endif
@@ -240,25 +248,151 @@
 </div>
 
 <!-- Modali -->
-@include('admin.translations.modals.edit')
-@include('admin.translations.modals.view')
 @include('admin.translations.modals.delete')
 
 <script>
-// Funzioni JavaScript per le azioni
-function editTranslation(id) {
-    // Implementazione modale di modifica
-    console.log('Edit translation:', id);
+function deleteLanguage(language) {
+    Swal.fire({
+        title: '{{ __('admin.confirm_delete') }}',
+        text: '{{ __('admin.delete_language_confirm') }}: ' + language.toUpperCase(),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '{{ __('admin.delete') }}',
+        cancelButtonText: '{{ __('admin.cancel') }}'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`{{ route('admin.translations.destroy', 'LANGUAGE_PLACEHOLDER') }}`.replace('LANGUAGE_PLACEHOLDER', language), {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+                    }
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '{{ __('admin.success') }}',
+                        text: data.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __('admin.error') }}',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{{ __('admin.error') }}',
+                    text: '{{ __('admin.unknown_error') }}'
+                });
+            });
+        }
+    });
 }
 
-function viewTranslation(id) {
-    // Implementazione modale di visualizzazione
-    console.log('View translation:', id);
-}
+function syncAllLanguagesComplete() {
+    Swal.fire({
+        title: 'Sincronizzazione Completa',
+        text: 'Vuoi sincronizzare tutte le lingue partendo dall\'italiano? Questa operazione potrebbe richiedere alcuni minuti.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sì, Sincronizza',
+        cancelButtonText: 'Annulla',
+        confirmButtonColor: '#28a745'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostra loading
+            Swal.fire({
+                title: 'Sincronizzazione in corso...',
+                text: 'Sto sincronizzando tutte le lingue, attendi...',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-function deleteTranslation(id) {
-    // Implementazione modale di eliminazione
-    console.log('Delete translation:', id);
+            fetch('{{ route("admin.translations.sync-all") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+                    }
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    let message = data.message + '\n\n';
+                    if (data.results) {
+                        message += 'Risultati per lingua:\n';
+                        Object.keys(data.results).forEach(lang => {
+                            const result = data.results[lang];
+                            message += `• ${lang.toUpperCase()}: ${result.files_processed} file, ${result.keys_added} chiavi aggiunte, ${result.keys_updated} chiavi aggiornate\n`;
+                            if (result.errors && result.errors.length > 0) {
+                                message += `  Errori: ${result.errors.join(', ')}\n`;
+                            }
+                        });
+                    }
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sincronizzazione Completata!',
+                        text: message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __('admin.error') }}',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{{ __('admin.error') }}',
+                    text: '{{ __('admin.unknown_error') }}'
+                });
+            });
+        }
+    });
 }
 
 function clearCache() {
@@ -270,7 +404,18 @@ function clearCache() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+                }
+            });
+        })
         .then(data => {
             if (data.success) {
                 Swal.fire({
@@ -298,13 +443,214 @@ function clearCache() {
     }
 }
 
-// Auto-submit del form quando cambiano i filtri
-document.getElementById('group').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
+// API Translation Functions
+let providers = [];
+let files = [];
+
+// Load providers and files on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadProviders();
+    loadFiles();
 });
 
-document.getElementById('locale').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
+function loadProviders() {
+    fetch('{{ route("admin.translations.api.providers") }}')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+                }
+            });
+        })
+        .then(data => {
+            providers = data.providers;
+            const select = document.getElementById('apiProvider');
+            select.innerHTML = '<option value="">{{ __('admin.select_group') }}</option>';
+
+            Object.keys(providers).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = providers[key].name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading providers:', error);
+            showApiStatus('Error loading providers: ' + error.message, 'error');
+        });
+}
+
+function loadFiles() {
+    fetch('{{ route("admin.translations.api.files") }}')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+                }
+            });
+        })
+        .then(data => {
+            files = data.files;
+            const select = document.getElementById('apiFile');
+            select.innerHTML = '<option value="">{{ __('admin.select_group') }}</option>';
+
+            files.forEach(file => {
+                const option = document.createElement('option');
+                option.value = file.name.replace('.php', '');
+                option.textContent = file.display_name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading files:', error);
+            showApiStatus('Error loading files: ' + error.message, 'error');
+        });
+}
+
+function testApiConnection() {
+    const provider = document.getElementById('apiProvider').value;
+    const apiKey = document.getElementById('apiKey').value;
+
+    if (!provider) {
+        showApiStatus('Please select a provider', 'warning');
+        return;
+    }
+
+    showApiStatus('Testing connection...', 'info');
+
+    fetch('{{ route("admin.translations.api.test") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            provider: provider,
+            api_key: apiKey
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text().then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+            }
+        });
+    })
+    .then(data => {
+        if (data.success) {
+            showApiStatus(data.message, 'success');
+        } else {
+            showApiStatus(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showApiStatus('Connection test failed: ' + error.message, 'error');
+    });
+}
+
+function translatePage() {
+    const form = document.getElementById('apiTranslationForm');
+    const formData = new FormData(form);
+
+    const data = {
+        language: formData.get('language'),
+        file: formData.get('file'),
+        provider: formData.get('provider'),
+        api_key: formData.get('api_key'),
+        force: formData.get('force') === 'on'
+    };
+
+    if (!data.language || !data.file || !data.provider) {
+        showApiStatus('Please fill all required fields', 'warning');
+        return;
+    }
+
+    showApiStatus('Translating...', 'info');
+    hideApiOutput();
+
+    fetch('{{ route("admin.translations.api.translate-page") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text().then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+            }
+        });
+    })
+    .then(data => {
+        if (data.success) {
+            showApiStatus('Translation completed successfully!', 'success');
+            showApiOutput(data.output);
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Translation Complete',
+                text: `File ${data.file}.php translated to ${data.language.toUpperCase()}`,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        } else {
+            showApiStatus('Translation failed: ' + data.message, 'error');
+            showApiOutput(data.output);
+        }
+    })
+    .catch(error => {
+        showApiStatus('Translation error: ' + error.message, 'error');
+    });
+}
+
+function showApiStatus(message, type) {
+    const statusDiv = document.getElementById('apiStatus');
+    const statusText = document.getElementById('apiStatusText');
+
+    statusDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'}`;
+    statusText.textContent = message;
+    statusDiv.style.display = 'block';
+}
+
+function showApiOutput(output) {
+    const outputDiv = document.getElementById('apiOutput');
+    const outputText = document.getElementById('apiOutputText');
+
+    outputText.textContent = output;
+    outputDiv.style.display = 'block';
+}
+
+function hideApiOutput() {
+    document.getElementById('apiOutput').style.display = 'none';
+}
+
+// Form submission
+document.getElementById('apiTranslationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    translatePage();
 });
 </script>
 @endsection

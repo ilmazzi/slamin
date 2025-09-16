@@ -2,89 +2,97 @@
 
 @section('main-content')
 <div class="container-fluid">
-    <!-- Header Compatto -->
-    <div class="row mb-3">
+    <!-- Header -->
+    <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h4 class="mb-0">
-                        <i class="ph-duotone ph-translate f-s-18 me-2"></i>
-                        @php echo __('admin.language_' . $language) ?: ucfirst($language); @endphp - {{ ucfirst($selectedFile) }}
-                    </h4>
-                    <small class="text-muted">
-                        {{ $stats['translated_keys'] }}/{{ $stats['total_keys'] }} {{ __('admin.translated_short') }}
-                        ({{ round(($stats['translated_keys'] / $stats['total_keys']) * 100, 1) }}%)
-                    </small>
+                    <h1 class="h3 mb-1">
+                        <i class="ph-duotone ph-flag text-primary me-2"></i>
+                        {{ __('admin.manage_translations') }} - {{ strtoupper($language) }}
+                    </h1>
+                    <p class="text-muted mb-0">{{ __('admin.manage_translations_description') }}</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="ph-duotone ph-arrow-left me-1"></i> {{ __('admin.back') }}
+                    <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
+                        <i class="ph-duotone ph-arrow-left me-1"></i>
+                        {{ __('admin.back_to_languages') }}
                     </a>
-                    <button type="button" class="btn btn-primary btn-sm" onclick="addNewKey()">
-                        <i class="ph-duotone ph-plus f-s-12 me-1"></i> {{ __('admin.add_key') }}
+                    <button type="button" class="btn btn-outline-warning" onclick="syncTranslations()">
+                        <i class="ph-duotone ph-arrow-clockwise me-1"></i>
+                        {{ __('admin.sync_with_italian') }}
                     </button>
-                    <button type="button" class="btn btn-warning btn-sm" onclick="copyFromItalian()">
-                        <i class="ph-duotone ph-copy f-s-12 me-1"></i> {{ __('admin.copy_from_it') }}
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="clearAllTranslations()">
-                        <i class="ph-duotone ph-trash f-s-12 me-1"></i> {{ __('admin.clear_all') }}
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm" onclick="saveTranslations()">
-                        <i class="ph-duotone ph-floppy-disk f-s-12 me-1"></i> {{ __('admin.save') }}
+                    <button type="button" class="btn btn-outline-info" onclick="copyFromItalian()">
+                        <i class="ph-duotone ph-copy me-1"></i>
+                        {{ __('admin.copy_from_italian') }}
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Filtri e Ricerca Compatti -->
-    <div class="row mb-3">
+    <!-- Statistics -->
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body py-2">
-                    <div class="row g-2">
+            <div class="card hover-effect">
+                <div class="card-body">
+                    <div class="row text-center">
                         <div class="col-md-3">
-                            <select id="fileSelect" class="form-select form-select-sm" onchange="changeFile()">
+                            <div class="border-end">
+                                <h4 class="mb-1 text-primary">{{ $stats['total_keys'] }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.total_keys') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h4 class="mb-1 text-success">{{ $stats['translated_keys'] }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.translated_keys') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h4 class="mb-1 text-warning">{{ $stats['missing_keys'] }}</h4>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin.missing_keys') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h4 class="mb-1 text-info">{{ $stats['progress_percentage'] }}%</h4>
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin.progress') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Selector -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card hover-effect">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="fileSelector" class="form-label f-s-14">{{ __('admin.translation_file') }}</label>
+                            <select name="file" id="fileSelector" class="form-select" onchange="changeFile()">
                                 @foreach($translationFiles as $fileKey => $fileDisplayName)
-                                    <option value="{{ $fileKey }}" {{ $fileKey === $selectedFile ? 'selected' : '' }}>
+                                    <option value="{{ $fileKey }}" {{ $selectedFile == $fileKey ? 'selected' : '' }}>
                                         {{ $fileDisplayName }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-3">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text"><i class="ph-duotone ph-magnifying-glass f-s-12"></i></span>
-                                <input type="text" id="searchInput" class="form-control" placeholder="{{ __('admin.search_key_or_text') }}" onkeyup="filterTranslations()">
+                        <div class="col-md-6">
+                            <label class="form-label f-s-14">{{ __('admin.actions') }}</label>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-primary" onclick="saveTranslations()">
+                                    <i class="ph-duotone ph-floppy-disk me-1"></i>
+                                    {{ __('admin.save_translations') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="clearAllTranslations()">
+                                    <i class="ph-duotone ph-trash me-1"></i>
+                                    {{ __('admin.clear_all') }}
+                                </button>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <select id="statusFilter" class="form-select form-select-sm" onchange="filterTranslations()">
-                                <option value="">{{ __('admin.all_statuses') }}</option>
-                                <option value="translated">{{ __('admin.translated_status') }}</option>
-                                <option value="missing">{{ __('admin.missing_status') }}</option>
-                                <option value="empty">{{ __('admin.empty_status') }}</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <select id="sortBy" class="form-select form-select-sm" onchange="sortTranslations()">
-                                <option value="key">{{ __('admin.sort_by_key') }}</option>
-                                <option value="reference">{{ __('admin.sort_by_reference') }}</option>
-                                <option value="status">{{ __('admin.sort_by_status') }}</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-outline-secondary btn-sm w-100" onclick="resetFilters()">
-                                <i class="ph-duotone ph-arrow-clockwise f-s-12"></i> {{ __('admin.reset_filters') }}
-                            </button>
-                        </div>
-                        <div class="col-md-2">
-                            <small class="text-muted d-flex align-items-center h-100">
-                                <span id="resultsCount">0</span> {{ __('admin.keys_found') }} |
-                                <span class="text-success" id="translatedCount">0</span>{{ __('admin.translated_short') }} |
-                                <span class="text-warning" id="missingCount">0</span>{{ __('admin.missing_short') }} |
-                                <span class="text-danger" id="emptyCount">0</span>{{ __('admin.empty_short') }}
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -92,55 +100,66 @@
         </div>
     </div>
 
-    <!-- Traduzioni in Tabella Compatta -->
+    <!-- Translations Table -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card hover-effect">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="ph-duotone ph-list-bullets me-2"></i>
+                        {{ __('admin.translations_for_file') }}: {{ $translationFiles[$selectedFile] ?? $selectedFile }}
+                    </h5>
+                </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 25%;">{{ __('admin.key_column') }}</th>
-                                    <th style="width: 30%;">{{ __('admin.reference_column') }}</th>
-                                    <th style="width: 40%;">{{ __('admin.translation_column') }}</th>
-                                    <th style="width: 5%;">{{ __('admin.status_column') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="translationsTable">
-                                @foreach($translationData as $key => $data)
-                                <tr class="translation-row" data-key="{{ $key }}" data-status="{{ $data['is_translated'] ? 'translated' : ($data['is_missing'] ? 'missing' : 'empty') }}">
-                                    <td>
-                                        <code class="text-primary f-s-12">{{ $key }}</code>
-                                    </td>
-                                    <td>
-                                        <div class="text-muted f-s-12" style="max-height: 60px; overflow-y: auto;">
-                                            {{ $data['reference'] }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <textarea
-                                            name="translations[{{ $key }}]"
-                                            class="form-control form-control-sm translation-input"
-                                            rows="2"
-                                            style="resize: vertical; min-height: 40px;"
-                                            data-key="{{ $key }}"
-                                        >{{ $data['translation'] }}</textarea>
-                                    </td>
-                                    <td class="text-center">
-                                        @if($data['is_translated'])
-                                            <i class="ph-duotone ph-check-circle text-success f-s-16" title="{{ __('admin.translated_tooltip') }}"></i>
-                                        @elseif($data['is_missing'])
-                                            <i class="ph-duotone ph-warning-circle text-warning f-s-16" title="{{ __('admin.missing_tooltip') }}"></i>
-                                        @else
-                                            <i class="ph-duotone ph-x-circle text-danger f-s-16" title="{{ __('admin.empty_tooltip') }}"></i>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    @if($translationData && count($translationData) > 0)
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 25%;">{{ __('admin.key') }}</th>
+                                        <th style="width: 35%;">{{ __('admin.italian_reference') }}</th>
+                                        <th style="width: 35%;">{{ __('admin.translation') }}</th>
+                                        <th style="width: 5%;">{{ __('admin.status') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($translationData as $key => $data)
+                                    <tr class="{{ $data['is_missing'] ? 'table-warning' : ($data['is_translated'] ? 'table-success' : '') }}">
+                                        <td>
+                                            <code class="text-primary f-s-12">{{ $key }}</code>
+                                        </td>
+                                        <td>
+                                            <div class="text-muted f-s-12" style="max-height: 60px; overflow-y: auto;">
+                                                {{ $data['reference'] }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control form-control-sm translation-input"
+                                                      data-key="{{ $key }}"
+                                                      rows="2"
+                                                      style="min-height: 40px;">{{ $data['translation'] }}</textarea>
+                                        </td>
+                                        <td class="text-center">
+                                            @if($data['is_missing'])
+                                                <i class="ph-duotone ph-warning text-warning" title="{{ __('admin.missing') }}"></i>
+                                            @elseif($data['is_translated'])
+                                                <i class="ph-duotone ph-check-circle text-success" title="{{ __('admin.translated') }}"></i>
+                                            @else
+                                                <i class="ph-duotone ph-minus text-muted" title="{{ __('admin.empty') }}"></i>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="ph-duotone ph-translate f-s-48 text-muted mb-3"></i>
+                            <h5 class="text-muted">{{ __('admin.no_translations_found') }}</h5>
+                            <p class="text-muted">{{ __('admin.no_translations_description') }}</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -148,183 +167,43 @@
 </div>
 
 <script>
-let allTranslations = @json($translationData);
-let currentFilter = '';
-let currentSort = 'key';
-
-// Filtra le traduzioni
-function filterTranslations() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const statusFilter = document.getElementById('statusFilter').value;
-    const rows = document.querySelectorAll('.translation-row');
-    let visibleCount = 0;
-    let translatedCount = 0;
-    let missingCount = 0;
-    let emptyCount = 0;
-
-    rows.forEach(row => {
-        const key = row.dataset.key.toLowerCase();
-        const reference = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        const translation = row.querySelector('textarea').value.toLowerCase();
-        const status = row.dataset.status;
-
-        const matchesSearch = key.includes(searchTerm) || reference.includes(searchTerm) || translation.includes(searchTerm);
-        const matchesStatus = !statusFilter || status === statusFilter;
-
-        if (matchesSearch && matchesStatus) {
-            row.style.display = '';
-            visibleCount++;
-
-            if (status === 'translated') translatedCount++;
-            else if (status === 'missing') missingCount++;
-            else if (status === 'empty') emptyCount++;
-        } else {
-            row.style.display = 'none';
-        }
-    });
-
-    // Aggiorna contatori
-    document.getElementById('resultsCount').textContent = visibleCount;
-    document.getElementById('translatedCount').textContent = translatedCount;
-    document.getElementById('missingCount').textContent = missingCount;
-    document.getElementById('emptyCount').textContent = emptyCount;
+function changeFile() {
+    const file = document.getElementById('fileSelector').value;
+    const url = new URL(window.location);
+    url.searchParams.set('file', file);
+    window.location.href = url.toString();
 }
 
-// Ordina le traduzioni
-function sortTranslations() {
-    const sortBy = document.getElementById('sortBy').value;
-    const tbody = document.getElementById('translationsTable');
-    const rows = Array.from(tbody.querySelectorAll('.translation-row'));
-
-    rows.sort((a, b) => {
-        let aVal, bVal;
-
-        switch(sortBy) {
-            case 'key':
-                aVal = a.dataset.key;
-                bVal = b.dataset.key;
-                break;
-            case 'reference':
-                aVal = a.querySelector('td:nth-child(2)').textContent.trim();
-                bVal = b.querySelector('td:nth-child(2)').textContent.trim();
-                break;
-            case 'status':
-                aVal = a.dataset.status;
-                bVal = b.dataset.status;
-                break;
-        }
-
-        return aVal.localeCompare(bVal);
-    });
-
-    // Riordina le righe
-    rows.forEach(row => tbody.appendChild(row));
-}
-
-// Reset filtri
-function resetFilters() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('statusFilter').value = '';
-    document.getElementById('sortBy').value = 'key';
-    filterTranslations();
-}
-
-// Copia da italiano
-function copyFromItalian() {
-    Swal.fire({
-        title: '{{ __('admin.copy_from_italian') }}',
-        text: '{{ __('admin.copy_confirm') }}',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '{{ __('admin.yes_copy') }}',
-        cancelButtonText: '{{ __('admin.cancel') }}',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const rows = document.querySelectorAll('.translation-row');
-            rows.forEach(row => {
-                const reference = row.querySelector('td:nth-child(2)').textContent.trim();
-                const textarea = row.querySelector('textarea');
-                textarea.value = reference;
-                updateRowStatus(row);
-            });
-            updateCounters();
-
-            Swal.fire({
-                icon: 'success',
-                title: '{{ __('admin.copied') }}!',
-                text: '{{ __('admin.copied_success') }}',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        }
-    });
-}
-
-// Svuota tutte le traduzioni
-function clearAllTranslations() {
-    Swal.fire({
-        title: '{{ __('admin.clear_all_translations') }}',
-        text: '{{ __('admin.clear_confirm') }}',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '{{ __('admin.yes_clear') }}',
-        cancelButtonText: '{{ __('admin.cancel') }}',
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const textareas = document.querySelectorAll('.translation-input');
-            textareas.forEach(textarea => {
-                textarea.value = '';
-                const row = textarea.closest('tr');
-                updateRowStatus(row);
-            });
-            updateCounters();
-
-            Swal.fire({
-                icon: 'success',
-                title: '{{ __('admin.cleared') }}!',
-                text: '{{ __('admin.cleared_success') }}',
-                timer: 2000,
-                showConfirmButton: false
-            });
-        }
-    });
-}
-
-// Salva traduzioni
 function saveTranslations() {
-    const formData = new FormData();
-    const textareas = document.querySelectorAll('.translation-input');
+    const translations = {};
+    const inputs = document.querySelectorAll('.translation-input');
 
-    // Aggiungi il file corrente
-    const currentFile = document.getElementById('fileSelect').value;
-    formData.append('file', currentFile);
-
-    textareas.forEach(textarea => {
-        // Usa il name della textarea invece di dataset.key
-        const name = textarea.getAttribute('name');
-        if (name) {
-            formData.append(name, textarea.value);
+    inputs.forEach(input => {
+        const key = input.dataset.key;
+        const value = input.value.trim();
+        if (key && value) {
+            translations[key] = value;
         }
     });
 
     fetch('{{ route("admin.translations.update", $language) }}', {
         method: 'POST',
-        body: formData,
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            file: '{{ $selectedFile }}',
+            translations: translations
+        })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: '{{ __('admin.save_completed') }}',
-                text: '{{ __('admin.save_success') }}',
+                title: '{{ __('admin.success') }}',
+                text: data.message,
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
@@ -333,201 +212,144 @@ function saveTranslations() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.save_error_title') }}',
-                text: '{{ __('admin.save_error') }}: ' + (data.message || '{{ __('admin.unknown_error') }}'),
-                confirmButtonText: '{{ __('admin.ok') }}'
+                title: '{{ __('admin.error') }}',
+                text: data.message
             });
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         Swal.fire({
             icon: 'error',
-            title: '{{ __('admin.save_error_title') }}',
-            text: '{{ __('admin.save_error') }}',
-            confirmButtonText: '{{ __('admin.ok') }}'
+            title: '{{ __('admin.error') }}',
+            text: '{{ __('admin.unknown_error') }}'
         });
     });
 }
 
-// Aggiorna stato della riga
-function updateRowStatus(row) {
-    const textarea = row.querySelector('textarea');
-    const statusIcon = row.querySelector('td:last-child i');
-    const value = textarea.value.trim();
-
-    if (value) {
-        row.dataset.status = 'translated';
-        statusIcon.className = 'ph-duotone ph-check-circle text-success f-s-16';
-        statusIcon.title = '{{ __('admin.translated_tooltip') }}';
-    } else {
-        const reference = row.querySelector('td:nth-child(2)').textContent.trim();
-        if (reference) {
-            row.dataset.status = 'missing';
-            statusIcon.className = 'ph-duotone ph-warning-circle text-warning f-s-16';
-            statusIcon.title = '{{ __('admin.missing_tooltip') }}';
-        } else {
-            row.dataset.status = 'empty';
-            statusIcon.className = 'ph-duotone ph-x-circle text-danger f-s-16';
-            statusIcon.title = '{{ __('admin.empty_tooltip') }}';
-        }
-    }
-}
-
-// Aggiorna contatori
-function updateCounters() {
-    const rows = document.querySelectorAll('.translation-row');
-    let translatedCount = 0;
-    let missingCount = 0;
-    let emptyCount = 0;
-
-    rows.forEach(row => {
-        const status = row.dataset.status;
-        if (status === 'translated') translatedCount++;
-        else if (status === 'missing') missingCount++;
-        else if (status === 'empty') emptyCount++;
-    });
-
-    document.getElementById('translatedCount').textContent = translatedCount;
-    document.getElementById('missingCount').textContent = missingCount;
-    document.getElementById('emptyCount').textContent = emptyCount;
-}
-
-// Event listeners per aggiornamento automatico dello stato
-document.addEventListener('DOMContentLoaded', function() {
-    const textareas = document.querySelectorAll('.translation-input');
-    textareas.forEach(textarea => {
-        textarea.addEventListener('input', function() {
-            const row = this.closest('tr');
-            updateRowStatus(row);
-            updateCounters();
-        });
-    });
-
-    // Inizializza contatori
-    updateCounters();
-    filterTranslations();
-});
-
-// Tasti di scelta rapida
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey || e.metaKey) {
-        switch(e.key) {
-            case 's':
-                e.preventDefault();
-                saveTranslations();
-                break;
-            case 'f':
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
-                break;
-        }
-    }
-});
-
-// Funzione per aggiungere una nuova chiave
-function addNewKey() {
-    Swal.fire({
-        title: '{{ __('admin.add_new_key') }}',
-        input: 'text',
-        inputLabel: '{{ __('admin.key_name') }}',
-        inputPlaceholder: '{{ __('admin.enter_key_name') }}',
-        showCancelButton: true,
-        confirmButtonText: '{{ __('admin.add') }}',
-        cancelButtonText: '{{ __('admin.cancel') }}',
-        inputValidator: (value) => {
-            if (!value || value.trim() === '') {
-                return '{{ __('admin.key_name_required') }}';
-            }
-            return null;
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const key = result.value.trim();
-
-            // Verifica se la chiave esiste già
-            const existingRow = document.querySelector(`tr[data-key="${key}"]`);
-            if (existingRow) {
+function syncTranslations() {
+    if (confirm('{{ __('admin.sync_confirm') }}')) {
+        fetch('{{ route("admin.translations.sync") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                language: '{{ $language }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('admin.success') }}',
+                    text: data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: '{{ __('admin.error') }}',
-                    text: '{{ __('admin.key_already_exists') }}',
-                    confirmButtonText: '{{ __('admin.ok') }}'
+                    text: data.message
                 });
-                return;
             }
-
-            addKeyToTable(key);
-        }
-    });
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: '{{ __('admin.error') }}',
+                text: '{{ __('admin.unknown_error') }}'
+            });
+        });
+    }
 }
 
-// Funzione per cambiare file di traduzione
-function changeFile() {
-    const selectedFile = document.getElementById('fileSelect').value;
-    const currentUrl = new URL(window.location);
-    currentUrl.searchParams.set('file', selectedFile);
-    window.location.href = currentUrl.toString();
+function copyFromItalian() {
+    if (confirm('{{ __('admin.copy_from_italian_confirm') }}')) {
+        fetch('{{ route("admin.translations.copy-from-italian", $language) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                file: '{{ $selectedFile }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('admin.success') }}',
+                    text: data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{{ __('admin.error') }}',
+                    text: data.message
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: '{{ __('admin.error') }}',
+                text: '{{ __('admin.unknown_error') }}'
+            });
+        });
+    }
 }
 
-// Funzione per aggiungere la chiave alla tabella
-function addKeyToTable(key) {
-    // Crea una nuova riga
-    const tbody = document.querySelector('tbody');
-    const newRow = document.createElement('tr');
-    newRow.className = 'translation-row';
-    newRow.dataset.key = key;
-    newRow.dataset.status = 'empty';
-
-    newRow.innerHTML = `
-        <td>
-            <code class="text-primary">${key}</code>
-        </td>
-        <td>
-            <span class="text-muted">-</span>
-        </td>
-        <td>
-            <textarea class="form-control form-control-sm translation-input"
-                      name="translations[${key}]"
-                      rows="1"
-                      placeholder="{{ __('admin.enter_translation') }}"></textarea>
-        </td>
-        <td class="text-center">
-            <span class="status-icon" title="{{ __('admin.empty_tooltip') }}">✗</span>
-        </td>
-    `;
-
-    // Aggiungi la riga alla tabella
-    tbody.appendChild(newRow);
-
-    // Aggiungi event listener per la nuova textarea
-    const textarea = newRow.querySelector('.translation-input');
-    textarea.addEventListener('input', function() {
-        const row = this.closest('tr');
-        updateRowStatus(row);
-        updateCounters();
-    });
-
-    // Aggiorna contatori
-    updateCounters();
-
-    // Evidenzia la nuova riga
-    newRow.style.backgroundColor = '#fff3cd';
-    setTimeout(() => {
-        newRow.style.backgroundColor = '';
-    }, 2000);
-
-    // Focus sulla textarea
-    textarea.focus();
-
-    // Mostra messaggio di successo
-    Swal.fire({
-        icon: 'success',
-        title: '{{ __('admin.key_added') }}',
-        text: `{{ __('admin.key_added_success') }} "${key}"!`,
-        timer: 2000,
-        showConfirmButton: false
-    });
+function clearAllTranslations() {
+    if (confirm('{{ __('admin.clear_all_confirm') }}')) {
+        fetch('{{ route("admin.translations.clear-all", $language) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                file: '{{ $selectedFile }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ __('admin.success') }}',
+                    text: data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{{ __('admin.error') }}',
+                    text: data.message
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: '{{ __('admin.error') }}',
+                text: '{{ __('admin.unknown_error') }}'
+            });
+        });
+    }
 }
 </script>
 @endsection

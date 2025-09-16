@@ -1,0 +1,14 @@
+== LANG AUDIT SUMMARY ==
+Paths:      resources/views/admin
+Locales:    it, en
+Primary:    it
+Extensions: php, blade.php, js, ts, vue
+
+Missing keys:   303
+Unused keys:    0
+Hardcoded strs: 318
+
+Report files:
+ - C:\xampp\htdocs\slamin\storage\lang_audit/missing.json
+ - C:\xampp\htdocs\slamin\storage\lang_audit/unused.json
+ - C:\xampp\htdocs\slamin\storage\lang_audit/hardcoded.json

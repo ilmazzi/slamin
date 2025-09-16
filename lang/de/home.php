@@ -1,13 +1,51 @@
 <?php
 
-return [
-
-    'carousel' => '',
-    'stats' => '',
-    'popular_videos' => '',
-    'recent_events' => '',
-    'top_poets' => '',
-    'cta' => '',
-    'fallback' => '',
-
-];
+return array (
+  'carousel' => 
+  array (
+    'previous' => 'Zurück',
+    'next' => '[de] Successivo',
+  ),
+  'stats' => 
+  array (
+    'total_videos' => '[de] Video Totali',
+    'total_views' => '[de] Visualizzazioni',
+    'total_events' => '[de] Eventi',
+    'total_users' => '[de] Utenti',
+  ),
+  'upcoming_events' => '[de] Prossimi Eventi',
+  'new_users' => '[de] Nuovi Utenti',
+  'poetry_section' => '[de] Poesia',
+  'articles_section' => '[de] Articoli',
+  'videos_section' => '[de] Video',
+  'no_videos_available' => '[de] Nessun video disponibile',
+  'no_videos_description' => '[de] Al momento non ci sono video popolari da mostrare.',
+  'upload_first_video' => '[de] Carica il primo video',
+  'login_to_upload' => '[de] Accedi per caricare video',
+  'details' => '[de] Dettagli',
+  'watch_video' => '[de] Guarda Video',
+  'create_poetry' => '[de] Crea poesia',
+  'view_all_poems' => '[de] Vedi tutte le poesie',
+  'upload_video' => '[de] Carica video',
+  'view_all_videos' => '[de] Vedi tutti i video',
+  'cancel' => 'Abbrechen',
+  'video_author' => '[de] Autore del video',
+  'location_not_specified' => '[de] Località non specificata',
+  'follower' => '[de] Follower',
+  'following' => '[de] Following',
+  'editorial' => '[de] Redazione',
+  'interactions' => '[de] Interazioni',
+  'views' => '[de] Visualizzazioni',
+  'likes' => '[de] Mi Piace',
+  'most_popular' => '[de] Più Popolare',
+  'video_player' => '[de] Video Player',
+  'loading_video' => '[de] Caricamento video...',
+  'video_loading_error' => '[de] Errore nel caricamento del video',
+  'preview_not_available' => '[de] Anteprima non disponibile',
+  'create_snap' => '[de] Crea snap',
+  'snap_title_optional' => '[de] Titolo (opzionale)',
+  'snap_description_optional' => '[de] Descrizione (opzionale)',
+  'timestamp' => '[de] Timestamp:',
+  'create_snap_button' => '[de] Crea Snap',
+  'new_videos' => '[de] Video Recenti',
+);

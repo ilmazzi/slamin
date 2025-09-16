@@ -1,0 +1,1214 @@
+[
+    {
+        "type": "keyed",
+        "key": "articles.categories_management"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.name"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.articles_count"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.created"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.actions"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_categories"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_categories_description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_first_category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.icon"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.icon_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.mark_as_featured"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.cancel"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.edit_category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.update"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.confirm_delete_category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.delete"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.category_deleted"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.delete_error"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.category_created"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_error"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.category_updated"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.update_error"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reports_management"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.pending_reports"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.refresh"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.all_statuses"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.pending"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reviewed"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.resolved"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.all_reasons"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.inappropriate"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.spam"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.copyright"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.misleading"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.other"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.filter_by_date"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.apply_filters"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.article"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reporter"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reason"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.status"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reported_at"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.by"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_reports"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_reports_description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.report_details"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.close"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.mark_reviewed"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.mark_resolved"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.reported_article"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.view_article"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.${report.reason}"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.details"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_details_provided"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.${report.status}"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.error_loading_report"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.confirm_mark_as"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.report_marked_as"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.review_error"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.tags_management"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_tag"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_tags"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.no_tags_description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_first_tag"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.edit_tag"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.confirm_delete_tag"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.tag_deleted"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.tag_created"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.tag_updated"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_new_article"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.back_to_dashboard"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.title"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.excerpt"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.excerpt_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.content"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.select_category"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.tags"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_image"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.image_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.max_size"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.formats"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.article_status"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.draft"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.published"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.archived"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.seo_settings"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_title"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_title_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_description_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_keywords"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.meta_keywords_help"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.save_draft"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.publish_now"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.manage_articles"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.create_article"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_management"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_limit_info"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_limit_description"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.current_featured"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_limit_reached"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.featured_slots_available"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.all_articles"
+    },
+    {
+        "type": "keyed",
+        "key": "common.all"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.not_featured"
+    },
+    {
+        "type": "keyed",
+        "key": "common.search"
+    },
+    {
+        "type": "keyed",
+        "key": "articles.search_articles"
+    },
+    {
+        "type": "keyed",
+        "key": "notifications.new"
+    },
+    {
+        "type": "keyed",
+        "key": "common.media_section"
+    },
+    {
+        "type": "keyed",
+        "key": "common.video"
+    },
+    {
+        "type": "keyed",
+        "key": "invitations.event"
+    },
+    {
+        "type": "keyed",
+        "key": "permissions.user"
+    },
+    {
+        "type": "keyed",
+        "key": "videos.send"
+    },
+    {
+        "type": "keyed",
+        "key": "permissions.modify"
+    },
+    {
+        "type": "keyed",
+        "key": "invitations.status"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.management"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.slides"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.slides_description"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.new_slide"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.image_header"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.title_header"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.status_header"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.dates_header"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.actions_header"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.active"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.inactive"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.from"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.to"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.edit"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.view"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.delete"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.no_slides"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.create_first_slide"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.create_first_slide_button"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.delete_confirmation_title"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.delete_confirmation_message"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.delete_confirmation_warning"
+    },
+    {
+        "type": "keyed",
+        "key": "carousel.cancel"
+    },
+    {
+        "type": "keyed",
+        "key": "common.kanban_board"
+    },
+    {
+        "type": "keyed",
+        "key": "common.loading_error"
+    },
+    {
+        "type": "keyed",
+        "key": "common.comments_section"
+    },
+    {
+        "type": "keyed",
+        "key": "invitations.actions"
+    },
+    {
+        "type": "keyed",
+        "key": "dashboard.dashboard"
+    },
+    {
+        "type": "keyed",
+        "key": "permissions.email"
+    },
+    {
+        "type": "keyed",
+        "key": "invitations.rejected_invitations"
+    },
+    {
+        "type": "keyed",
+        "key": "notifications.notifications"
+    },
+    {
+        "type": "keyed",
+        "key": "notifications.last_7_days"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.quick_navigation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.carousel_management"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.manage_carousel"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add_translation_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.back_to_list"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.create_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.group_name"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.select_group"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.group_name_help"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.locale"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.select_locale"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_name"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_name_placeholder"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_name_help"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_value"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_value_placeholder"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_value_help"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.cancel"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tips"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_group_naming"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_group_naming_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_key_naming"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_key_naming_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_translation_quality"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_translation_quality_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_consistency"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.tip_consistency_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.group_examples"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.admin_interface"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.authentication"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.common_texts"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.dashboard"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.events"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.profile"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.videos"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.chat"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.success"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.error"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.ok"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.unknown_error"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_management"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_management_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_queue"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clear_cache"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.total_translations"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_groups"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.available_locales"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.recent_translations"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.group"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.all_groups"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.all_locales"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.search"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.search_translations"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.filter"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.reset"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translations_list"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.value"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.actions"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.edit"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.view"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.delete"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.showing"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.to"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.of"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.results"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.no_translations_found"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.no_translations_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add_first_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clear_cache_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.convert_to_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.original_text"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.convert"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.delete_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.delete_translation_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.delete_translation_warning"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.edit_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.update"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.mark_as_processed"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.mark_as_processed_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.mark_as_processed_info"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.view_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.created_at"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.updated_at"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.close"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_queue_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.back_to_translations"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clean_processed"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.total_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.pending_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.processed_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.recent_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.status"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.all_statuses"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.pending"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.processed"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.context"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.search_by_context"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.search_in_texts"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.queue_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.file_location"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.no_queue_items"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.no_queue_items_description"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clean_processed_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translated_short"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.back"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add_key"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.copy_from_it"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clear_all"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.save"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.search_key_or_text"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translated_status"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.missing_status"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.empty_status"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.sort_by_key"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.sort_by_reference"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.sort_by_status"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.reset_filters"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.keys_found"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.missing_short"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.empty_short"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_column"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.reference_column"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translation_column"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.status_column"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.translated_tooltip"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.missing_tooltip"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.empty_tooltip"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.copy_from_italian"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.copy_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.yes_copy"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.copied"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.copied_success"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clear_all_translations"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.clear_confirm"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.yes_clear"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.cleared"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.cleared_success"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.save_completed"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.save_success"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.save_error_title"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.save_error"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add_new_key"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.enter_key_name"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.add"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_name_required"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_already_exists"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.enter_translation"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_added"
+    },
+    {
+        "type": "keyed",
+        "key": "admin.key_added_success"
+    }
+]

@@ -1,62 +1,51 @@
 <?php
 
-return [
-
-    'carousel' => [
-        'previous' => 'Previous',
-        'next' => 'Next',
-    ],
-    'stats' => [
-        'total_videos' => 'Total Videos',
-        'total_views' => 'Views',
-        'total_events' => 'Events',
-        'total_users' => 'Users',
-    ],
-
-    // Main sections
-    'upcoming_events' => 'Upcoming Events',
-    'new_users' => 'New Users',
-    'poetry_section' => 'Poetry',
-    'articles_section' => 'Articles',
-    'videos_section' => 'Videos',
-    'no_videos_available' => 'No videos available',
-    'no_videos_description' => 'There are currently no popular videos to show.',
-    'upload_first_video' => 'Upload first video',
-    'login_to_upload' => 'Login to upload videos',
-
-    // Actions and buttons
-    'details' => 'Details',
-    'watch_video' => 'Watch Video',
-    'create_poetry' => 'Create poetry',
-    'view_all_poems' => 'View all poems',
-    'upload_video' => 'Upload video',
-    'view_all_videos' => 'View all videos',
-    'cancel' => 'Cancel',
-
-    // User information
-    'video_author' => 'Video author',
-    'location_not_specified' => 'Location not specified',
-    'follower' => 'Follower',
-    'following' => 'Following',
-    'editorial' => 'Editorial',
-    'interactions' => 'Interactions',
-
-    // Statistics
-    'views' => 'Views',
-    'likes' => 'Likes',
-    'most_popular' => 'Most Popular',
-
-    // Video player
-    'video_player' => 'Video Player',
-    'loading_video' => 'Loading video...',
-    'video_loading_error' => 'Error loading video',
-    'preview_not_available' => 'Preview not available',
-
-    // Snap functionality
-    'create_snap' => 'Create snap',
-    'snap_title_optional' => 'Title (optional)',
-    'snap_description_optional' => 'Description (optional)',
-    'timestamp' => 'Timestamp:',
-    'create_snap_button' => 'Create Snap',
-
-];
+return array (
+  'carousel' => 
+  array (
+    'previous' => 'Previous',
+    'next' => '[en] Successivo',
+  ),
+  'stats' => 
+  array (
+    'total_videos' => '[en] Video Totali',
+    'total_views' => '[en] Visualizzazioni',
+    'total_events' => '[en] Eventi',
+    'total_users' => '[en] Utenti',
+  ),
+  'upcoming_events' => '[en] Prossimi Eventi',
+  'new_users' => '[en] Nuovi Utenti',
+  'poetry_section' => '[en] Poesia',
+  'articles_section' => '[en] Articoli',
+  'videos_section' => '[en] Video',
+  'no_videos_available' => '[en] Nessun video disponibile',
+  'no_videos_description' => '[en] Al momento non ci sono video popolari da mostrare.',
+  'upload_first_video' => '[en] Carica il primo video',
+  'login_to_upload' => '[en] Accedi per caricare video',
+  'details' => '[en] Dettagli',
+  'watch_video' => '[en] Guarda Video',
+  'create_poetry' => '[en] Crea poesia',
+  'view_all_poems' => '[en] Vedi tutte le poesie',
+  'upload_video' => '[en] Carica video',
+  'view_all_videos' => '[en] Vedi tutti i video',
+  'cancel' => 'Cancel',
+  'video_author' => '[en] Autore del video',
+  'location_not_specified' => '[en] Località non specificata',
+  'follower' => '[en] Follower',
+  'following' => '[en] Following',
+  'editorial' => '[en] Redazione',
+  'interactions' => '[en] Interazioni',
+  'views' => '[en] Visualizzazioni',
+  'likes' => '[en] Mi Piace',
+  'most_popular' => '[en] Più Popolare',
+  'video_player' => '[en] Video Player',
+  'loading_video' => '[en] Caricamento video...',
+  'video_loading_error' => '[en] Errore nel caricamento del video',
+  'preview_not_available' => '[en] Anteprima non disponibile',
+  'create_snap' => '[en] Crea snap',
+  'snap_title_optional' => '[en] Titolo (opzionale)',
+  'snap_description_optional' => '[en] Descrizione (opzionale)',
+  'timestamp' => '[en] Timestamp:',
+  'create_snap_button' => '[en] Crea Snap',
+  'new_videos' => '[en] Video Recenti',
+);

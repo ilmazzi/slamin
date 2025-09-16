@@ -1,20 +1,20 @@
 <?php
 
-return [
-    'welcome_text' => 'Welcome to the Italian slam poetry community',
-    'login_to_your_account' => 'Login to your account',
-    'enter_slam_in_and_discover_the_italian_slam_world' => 'Enter Slam In and discover the Italian slam world',
-    'enter_slam_in' => 'Enter Slam In',
-    'email' => 'Email',
-    'email_placeholder' => 'Your email',
-    'password' => 'Password',
-    'password_placeholder' => 'Your password',
-    'remember_me' => 'Remember me',
-    'no_account' => 'Don\'t have an account?',
-    'register_here' => 'Register here',
-    'events_and_shows' => 'Events and shows',
-    'poets_community' => 'Poets community',
-    'share_your_performances' => 'Share your performances',
-    'participate_in_competitions' => 'Participate in competitions',
-    'remember_me_tooltip' => 'Keep session active even after closing the browser',
-];
+return array (
+  'welcome_text' => '[en] Benvenuto nella community della poesia slam italiana',
+  'login_to_your_account' => '[en] Accedi al tuo account',
+  'enter_slam_in_and_discover_the_italian_slam_world' => '[en] Entra in Slam In e scopri il mondo dello slam italiano',
+  'enter_slam_in' => '[en] Entra in Slam In',
+  'email' => 'Email',
+  'email_placeholder' => '[en] La tua email',
+  'password' => 'Password',
+  'password_placeholder' => '[en] La tua password',
+  'remember_me' => '[en] Ricordami',
+  'remember_me_tooltip' => '[en] Mantieni la sessione attiva anche dopo la chiusura del browser',
+  'no_account' => '[en] Non hai un account?',
+  'register_here' => '[en] Registrati qui',
+  'events_and_shows' => '[en] Eventi e spettacoli',
+  'poets_community' => '[en] Community di poeti',
+  'share_your_performances' => '[en] Condividi le tue performance',
+  'participate_in_competitions' => '[en] Partecipa alle competizioni',
+);

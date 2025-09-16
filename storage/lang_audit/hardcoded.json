@@ -1,0 +1,1274 @@
+[
+    {
+        "text": "ti ti-news",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\article-categories\\index.blade.php"
+    },
+    {
+        "text": ": 2MB",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\articles\\create.blade.php"
+    },
+    {
+        "text": ": JPG, PNG, GIF, WebP",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\articles\\create.blade.php"
+    },
+    {
+        "text": "Nessun articolo trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\articles\\index.blade.php"
+    },
+    {
+        "text": "Crea il tuo primo articolo per iniziare!",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\articles\\index.blade.php"
+    },
+    {
+        "text": "Scopri di più",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Inizia a digitare per cercare...",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per usare il titolo originale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per usare la descrizione originale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per usare il link originale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Crea   Slide Carosello",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Carica File",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Contenuti Esistenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Titolo *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Immagine *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "URL Link",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Testo Link",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per sempre attivo",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Crea Slide",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Cerca Contenuto",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Risultati Ricerca",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Contenuto Selezionato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Titolo Personalizzato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "URL Link Personalizzato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Testo Link Personalizzato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\create.blade.php"
+    },
+    {
+        "text": "Scopri di più",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Slide Carosello",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Titolo *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Carica una nuova immagine personalizzata",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per mantenere l'immagine attuale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Immagine attuale:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Lascia vuoto per mantenere il video attuale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "URL Link",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Testo Link",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Slide Attiva",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Mostra questa slide nel carosello",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Quando iniziare a mostrare la slide",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Aggiorna Slide",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\edit.blade.php"
+    },
+    {
+        "text": "Contenuto referenziato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\index.blade.php"
+    },
+    {
+        "text": "Torna alla Lista",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "Il tuo browser non supporta la riproduzione video.",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "Anteprima Carosello",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "Testo Link:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "e Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "Non Visibile",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\carousels\\show.blade.php"
+    },
+    {
+        "text": "Statistiche Generali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Utenti Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Eventi Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Gig Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Pagamenti Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Statistiche Utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Nuovi Oggi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Questa Settimana",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Questo Mese",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Utenti Attivi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Statistiche Pagamenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Ricavi Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "In Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Gestione Sistema",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Impostazioni Upload",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Impostazioni Pagamenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Stripe e PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Gestione account utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Gestione Eventi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Eventi e gig",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Utenti Recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Nessun utente recente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Pagamenti Recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Nessun pagamento recente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\dashboard.blade.php"
+    },
+    {
+        "text": "Es: artist_poet",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Descrivi brevemente questa posizione...",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Nome Posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Nome visualizzato agli utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Chiave Unica",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Posizione Attiva",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Crea Posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\create.blade.php"
+    },
+    {
+        "text": "Es: artist_poet",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Descrivi brevemente questa posizione...",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Nome Posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Nome visualizzato agli utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Chiave Unica",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Posizione Attiva",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Aggiorna Posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\edit.blade.php"
+    },
+    {
+        "text": "Gestione Posizioni Ingaggi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\index.blade.php"
+    },
+    {
+        "text": "Nuova Posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\index.blade.php"
+    },
+    {
+        "text": "Crea la prima posizione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\gig-positions\\index.blade.php"
+    },
+    {
+        "text": "Task image",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "In Corso",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "In Review",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Nuovo Task",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "IN PROGRESS",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Titolo *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Priorità *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Seleziona priorità",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Categoria *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Seleziona categoria",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Bug Fix",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Assegnato a",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Seleziona utente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Ore stimate",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Status iniziale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "In Progress",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Puoi selezionare più file",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Creare Task",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Ore effettive",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Nuovi allegati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Salvare Modifiche",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\index.blade.php"
+    },
+    {
+        "text": "Aggiungi un commento...",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Elimina immagine",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Nessun commento ancora.",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Status & Priorità",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Assegnato a:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Non assegnato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Time Tracking",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Ore stimate:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Ore effettive:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\kanban\\task-details.blade.php"
+    },
+    {
+        "text": "Visualizza dettagli",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\activity.blade.php"
+    },
+    {
+        "text": "Totale Log",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\activity.blade.php"
+    },
+    {
+        "text": "log totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\activity.blade.php"
+    },
+    {
+        "text": "Nessun log trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\activity.blade.php"
+    },
+    {
+        "text": "Log per Categoria",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\activity.blade.php"
+    },
+    {
+        "text": "Ultima ora",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Ultime 6 ore",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Ultime 24 ore",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Ultima settimana",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Tutti i file",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Errori Totali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "File Analizzati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Nessun errore trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Non ci sono errori per i filtri selezionati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Riga Completa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\errors.blade.php"
+    },
+    {
+        "text": "Ultima ora",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Ultime 6 ore",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Ultime 24 ore",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Ultima settimana",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Log per Categoria",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Azioni Più Frequenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Log Recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Log Attività",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Log Errori",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Nessun log trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Non ci sono log per i filtri selezionati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\index.blade.php"
+    },
+    {
+        "text": "Informazioni Log",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "IP Address:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "User Agent:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "Torna ai Log",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "Visualizza Risorsa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "Errori oggi:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "Nessun log simile trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\show.blade.php"
+    },
+    {
+        "text": "Test Logs",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\test.blade.php"
+    },
+    {
+        "text": "Vai ai Log",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\logs\\test.blade.php"
+    },
+    {
+        "text": "Visualizza Contenuto",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Guida Moderazione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Contenuti in Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "in attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "in analisi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Cerca Contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Tutti i contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "In Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Ordina per",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Più recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Più vecchi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Nessun contenuto trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "in Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Vedi tutti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Segnalazioni Recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\index.blade.php"
+    },
+    {
+        "text": "Impostazioni Moderazione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Contenuti in Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Configurazione Auto-Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "- Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "I video verranno automaticamente approvati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Poesie - Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Le poesie verranno automaticamente approvate",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Eventi - Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Gli eventi verranno automaticamente approvati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Foto - Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Le foto verranno automaticamente approvate",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Articoli - Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Gli articoli verranno automaticamente approvati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Caroselli - Auto Approval",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "I caroselli verranno automaticamente approvati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "I commenti verranno automaticamente approvati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Notifica   per Contenuti in Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Abilita notifiche email",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "email agli admin quando ci sono contenuti in attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Limite Contenuti per Pagina",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Auto-Archiviazione Contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Archivia automaticamente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Statistiche Attuali",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Auto-Approval Attivo",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Come Funziona",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "I contenuti vengono automaticamente approvati senza intervento manuale",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Moderazione Manuale:",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\moderation\\settings.blade.php"
+    },
+    {
+        "text": "Totale Utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Stripe Attivi",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "PayPal Verificati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Azioni Rapide",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Verifica PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Problemi Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Account Stripe Connect",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "In Attesa",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Nessun account Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Account PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Email PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Nessun account PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Pagamenti Recenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Nessun pagamento recente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\payment-accounts\\index.blade.php"
+    },
+    {
+        "text": "Utenti PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Canali Creati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Server URL",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Configurazione Server PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Configura le credenziali per la connessione al server PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "URL Server PeerTube *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Username Admin *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Password Admin *",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Testa Connessione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Testa la connessione con le credenziali inserite",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Controlla che le credenziali admin siano valide",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Assicurati che il server PeerTube sia raggiungibile",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Verifica che l'account admin abbia i permessi necessari",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Gestione Utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Salva Configurazione",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\index.blade.php"
+    },
+    {
+        "text": "Totale Utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Con Account PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Senza Account PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Gestione Utente PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Seleziona Utente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "-- Seleziona un utente --",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "✓ PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "⚠ No PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "PeerTube User ID",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Username PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Channel ID",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Account ID",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Verifica Esistenza",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Crea Account",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Ricrea Account",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Collega Esistente",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Nessun log PeerTube recente trovato",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Aggiorna Log",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\peertube\\manage-users.blade.php"
+    },
+    {
+        "text": "Impostazioni Upload",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Impostazioni Pagamenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Configura Stripe e PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Impostazioni Placeholder",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Colori placeholder immagini",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Layout Articoli",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Gestisci posizioni articoli",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Gestione Traduzioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Configurazione PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Gestisci integrazione PeerTube",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Gestione account utenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\index.blade.php"
+    },
+    {
+        "text": "Client ID PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Client Secret PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Impostazioni Pagamenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Commissioni Traduzioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Commissione fissa in euro",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Configurazione Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Abilita pagamenti Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Chiave Pubblica Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Chiave pubblica per il frontend",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Chiave Segreta Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Chiave segreta per il backend",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Webhook Secret Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Chiave segreta per i webhook",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Modalità Stripe",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Configurazione PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Abilita pagamenti PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "PayPal Client ID",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "PayPal Client Secret",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Modalità PayPal",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Torna alle Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\payment.blade.php"
+    },
+    {
+        "text": "Impostazioni Placeholder",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Colori Placeholder",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Colore Placeholder Poesie",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Colore Placeholder Articoli",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Come funziona",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Lista poesie",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Pagina singola poesia",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Lista articoli",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Pagina singola articolo",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "Ricerca contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\placeholder.blade.php"
+    },
+    {
+        "text": "jpeg,jpg,png,gif,webp",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\upload.blade.php"
+    },
+    {
+        "text": "mp4,avi,mov,wmv,flv,webm",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\upload.blade.php"
+    },
+    {
+        "text": "Impostazioni Upload",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\upload.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\upload.blade.php"
+    },
+    {
+        "text": "Torna alle Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\settings\\upload.blade.php"
+    },
+    {
+        "text": "Impostazioni Social",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Configurazione Sistema Social",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Sistema Like",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Abilita sistema like",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Contenuti che possono essere likati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Sistema Commenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Abilita sistema commenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Approvazione automatica commenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Contenuti che possono essere commentati",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Sistema Visualizzazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Abilita sistema visualizzazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Contenuti tracciabili",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Sistema Notifiche",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Abilita notifiche social",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Like sui contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Commenti sui contenuti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Like sui commenti",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "Salva Impostazioni",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\social-settings.blade.php"
+    },
+    {
+        "text": "IT - Italiano",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\convert.blade.php"
+    },
+    {
+        "text": "EN - English",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\convert.blade.php"
+    },
+    {
+        "text": "ES - Español",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\convert.blade.php"
+    },
+    {
+        "text": "FR - Français",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\convert.blade.php"
+    },
+    {
+        "text": "PT - Português",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\convert.blade.php"
+    },
+    {
+        "text": "IT - Italiano",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\edit.blade.php"
+    },
+    {
+        "text": "EN - English",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\edit.blade.php"
+    },
+    {
+        "text": "ES - Español",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\edit.blade.php"
+    },
+    {
+        "text": "FR - Français",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\edit.blade.php"
+    },
+    {
+        "text": "PT - Português",
+        "file": "C:\\xampp\\htdocs\\slamin\\resources\\views\\admin\\translations\\modals\\edit.blade.php"
+    }
+]
