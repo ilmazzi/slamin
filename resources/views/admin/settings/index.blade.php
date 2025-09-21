@@ -93,7 +93,7 @@
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ route('admin.help.index', ['type' => 'faq']) }}" class="card card-light-info hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
-                                    <i class="ph-duotone ph-chat-circle-question f-s-30 text-info mb-2"></i>
+                                    <i class="ph-duotone ph-chat-circle f-s-30 text-info mb-2"></i>
                                     <h6 class="mb-1">Gestione FAQ</h6>
                                     <small class="text-muted">Gestisci domande frequenti</small>
                                 </div>

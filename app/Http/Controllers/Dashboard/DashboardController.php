@@ -301,7 +301,7 @@ class DashboardController extends Controller
         // 6. FAQ - per tutti gli utenti autenticati
         $actions[] = [
             'key' => 'faq',
-            'icon' => 'ph ph-chat-circle-question',
+            'icon' => 'ph ph-chat-circle',
             'color' => 'success',
             'url' => route('faq.index')
         ];

@@ -29,7 +29,7 @@
                                 </a>
                                 <a href="{{ route('admin.help.index', ['type' => 'faq']) }}"
                                    class="btn {{ $type === 'faq' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                    <i class="ph ph-chat-circle-question me-2"></i>
+                                    <i class="ph ph-chat-circle me-2"></i>
                                     {{ __('admin.faq_pages') }}
                                 </a>
                             </div>

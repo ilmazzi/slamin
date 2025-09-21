@@ -59,7 +59,7 @@
                                     </a>
                                 @else
                                     <a href="{{ route('faq.index') }}" class="btn btn-outline-info">
-                                        <i class="ph ph-chat-circle-question me-2"></i>
+                                        <i class="ph ph-chat-circle me-2"></i>
                                         {{ __('faq.title') }}
                                     </a>
                                 @endif

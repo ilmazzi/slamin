@@ -8,7 +8,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">
-                <i class="ph ph-chat-circle-question me-2"></i>
+                <i class="ph ph-chat-circle me-2"></i>
                 {{ __('faq.title') }}
             </h4>
         </div>
@@ -50,7 +50,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body text-center py-5">
-                        <i class="ph ph-chat-circle-question f-s-48 text-muted mb-3"></i>
+                        <i class="ph ph-chat-circle f-s-48 text-muted mb-3"></i>
                         <h5 class="text-muted">{{ __('faq.no_content') }}</h5>
                         <p class="text-muted">{{ __('faq.no_content_description') }}</p>
                     </div>
@@ -68,7 +68,7 @@
                     {{ __('help.title') }}
                 </a>
                 <a href="{{ route('faq.index') }}" class="btn btn-info">
-                    <i class="ph ph-chat-circle-question me-2"></i>
+                    <i class="ph ph-chat-circle me-2"></i>
                     {{ __('faq.title') }}
                 </a>
             </div>
