@@ -5871,6 +5871,15 @@ function addGigPosition() {
                         <label class="form-label">{{ __('events.max_travel_coverage') }}</label>
                         <input type="number" class="form-control" name="gig_positions[${gigPositionCounter}][travel_max]" min="0" step="0.01" placeholder="0.00">
                     </div>
+                    <div class="col-md-6" id="travel-currency-${gigPositionCounter}" style="display: none;">
+                        <label class="form-label">{{ __('events.travel_currency') }}</label>
+                        <select class="form-select" name="gig_positions[${gigPositionCounter}][travel_currency]">
+                            <option value="EUR">EUR (€)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="CHF">CHF (CHF)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Vitto e alloggio -->
@@ -5913,6 +5922,7 @@ function toggleCachetFields(positionNumber) {
 function toggleTravelFields(positionNumber) {
     const isChecked = document.getElementById(`travel-${positionNumber}`).checked;
     document.getElementById(`travel-max-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
+    document.getElementById(`travel-currency-${positionNumber}`).style.display = isChecked ? 'block' : 'none';
 }
 
 // Toggle campi vitto e alloggio

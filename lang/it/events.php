@@ -600,6 +600,7 @@ return [
     'amount' => 'Ammontare',
     'currency' => 'Valuta',
     'travel_expenses' => 'Spese di viaggio',
+    'travel_currency' => 'Valuta spese di viaggio',
     'max_travel_coverage' => 'Tetto massimo copertura biglietti',
     'accommodation' => 'Vitto e alloggio',
     'accommodation_details' => 'Dettagli vitto e alloggio',
