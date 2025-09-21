@@ -8,7 +8,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">{{ __('poems.create.title') }}</h4>
-            
+
         </div>
     </div>
     <!-- Breadcrumb end -->
@@ -131,39 +131,17 @@
                                 @enderror
                             </div>
 
-                            <!-- Opzioni di pubblicazione -->
+                            <!-- Opzioni di traduzione -->
                             <div class="col-12">
                                 <div class="card card-light-success">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="ph ph-gear text-info me-2"></i>
-                                            {{ __('poems.create.publication_options') }}
+                                            <i class="ph ph-translate text-info me-2"></i>
+                                            {{ __('poems.create.translation_options') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public" value="1"
-                                                           {{ old('is_public', true) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_public">
-                                                        {{ __('poems.fields.is_public') }}
-                                                    </label>
-                                                </div>
-                                                <small class="form-text text-muted">{{ __('poems.create.public_help') }}</small>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft" value="1"
-                                                           {{ old('is_draft') ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_draft">
-                                                        {{ __('poems.fields.is_draft') }}
-                                                    </label>
-                                                </div>
-                                                <small class="form-text text-muted">{{ __('poems.create.draft_help') }}</small>
-                                            </div>
-
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" id="translation_job_available" name="translation_job_available" value="1"
@@ -181,7 +159,7 @@
                                                     <span class="input-group-text">€</span>
                                                     <input type="number" class="form-control @error('translation_base_price') is-invalid @enderror"
                                                            id="translation_base_price" name="translation_base_price"
-                                                           value="{{ old('translation_base_price') }}" min="0" step="0.01">
+                                                           value="{{ old('translation_base_price') }}" min="0" step="0.01" disabled>
                                                 </div>
                                                 @error('translation_base_price')
                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -191,7 +169,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" id="translation_negotiable" name="translation_negotiable" value="1"
-                                                           {{ old('translation_negotiable', true) ? 'checked' : '' }}>
+                                                           {{ old('translation_negotiable', true) ? 'checked' : '' }} disabled>
                                                     <label class="form-check-label" for="translation_negotiable">
                                                         {{ __('poems.fields.translation_negotiable') }}
                                                     </label>
@@ -203,7 +181,7 @@
                                                 <label for="translation_instructions" class="form-label">{{ __('poems.fields.translation_instructions') }}</label>
                                                 <textarea class="form-control @error('translation_instructions') is-invalid @enderror"
                                                           id="translation_instructions" name="translation_instructions" rows="3"
-                                                          placeholder="{{ __('poems.create.translation_instructions_placeholder') }}">{{ old('translation_instructions') }}</textarea>
+                                                          placeholder="{{ __('poems.create.translation_instructions_placeholder') }}" disabled>{{ old('translation_instructions') }}</textarea>
                                                 @error('translation_instructions')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -258,7 +236,7 @@
                                     <div>
                                         <button type="submit" name="action" value="draft" class="btn btn-outline-primary me-2">
                                             <i class="ph ph-floppy-disk me-2"></i>
-                                            {{ __('poems.create.save_draft') }}
+                                            {{ __('poems.create.save_draft_private') }}
                                         </button>
 
                                         <button type="submit" name="action" value="publish" class="btn btn-primary">
@@ -334,6 +312,22 @@
 #translations-container .ql-editor * {
     white-space: pre-wrap !important;
 }
+
+/* Stili per campi traduzione disabilitati */
+.opacity-50 {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.opacity-50 .form-control,
+.opacity-50 .form-check-input,
+.opacity-50 .input-group {
+    pointer-events: none;
+}
+
+.opacity-50 .form-label {
+    color: #6c757d;
+}
 </style>
 @endpush
 
@@ -352,24 +346,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sincronizza tutti gli editor prima dell'invio del form
     window.syncAllQuillEditors('form');
 
-    // Gestione del draft
-    const draftCheckbox = document.getElementById('is_draft');
-    const publicCheckbox = document.getElementById('is_public');
+    // Gestione campi traduzione condizionali
+    const translationJobCheckbox = document.getElementById('translation_job_available');
+    const translationPriceInput = document.getElementById('translation_base_price');
+    const translationNegotiableCheckbox = document.getElementById('translation_negotiable');
+    const translationInstructionsTextarea = document.getElementById('translation_instructions');
 
-    if (draftCheckbox) {
-        draftCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                publicCheckbox.checked = false;
+    function toggleTranslationFields() {
+        const isEnabled = translationJobCheckbox.checked;
+
+        // Abilita/disabilita i campi di traduzione
+        translationPriceInput.disabled = !isEnabled;
+        translationNegotiableCheckbox.disabled = !isEnabled;
+        translationInstructionsTextarea.disabled = !isEnabled;
+
+        // Aggiungi classe visiva per indicare stato disabilitato
+        const fields = [translationPriceInput, translationNegotiableCheckbox, translationInstructionsTextarea];
+        fields.forEach(field => {
+            if (field) {
+                field.closest('.mb-3').classList.toggle('opacity-50', !isEnabled);
             }
         });
     }
 
-    if (publicCheckbox) {
-        publicCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                draftCheckbox.checked = false;
-            }
-        });
+    // Event listener per il toggle principale
+    if (translationJobCheckbox) {
+        translationJobCheckbox.addEventListener('change', toggleTranslationFields);
+        // Inizializza lo stato all'avvio
+        toggleTranslationFields();
     }
 
     // Preview del thumbnail
@@ -587,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         translationsContainer.insertAdjacentHTML('beforeend', translationHtml);
-        
+
         // Inizializza Quill.js per la traduzione
         const translationQuill = window.initQuillEditor(`#${translationId}_quill`, {
             placeholder: '{{ __("poems.create.content_placeholder") }}'
@@ -623,7 +627,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector(`#translation_${translationCount}_content`).value = '{{ $translation["content"] ?? "" }}';
             document.querySelector(`#translation_${translationCount}_description`).value = '{{ $translation["description"] ?? "" }}';
             document.querySelector(`#translation_${translationCount}_notes`).value = '{{ $translation["notes"] ?? "" }}';
-            
+
             // Carica il contenuto nel Quill editor della traduzione
             const translationQuill = document.querySelector(`#translation_${translationCount}_quill`).__quill;
             if (translationQuill && '{{ $translation["content"] ?? "" }}') {

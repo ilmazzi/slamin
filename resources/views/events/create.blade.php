@@ -543,6 +543,39 @@
                                                 <small class="text-muted">{{ __('events.availability_instructions_help') }}</small>
                                             </div>
                                         </div>
+
+                                        <!-- Sezione Date Multiple per Disponibilità -->
+                                        <div class="row mt-4">
+                                            <div class="col-12">
+                                                <div class="card border-success">
+                                                    <div class="card-header bg-light-success">
+                                                        <h6 class="mb-0">
+                                                            <i class="ph ph-calendar-plus me-2"></i>{{ __('events.availability_multiple_dates') }}
+                                                        </h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="text-muted mb-3">{{ __('events.availability_multiple_dates_help') }}</p>
+
+                                                        <!-- Lista opzioni di date -->
+                                                        <div id="availability-options-list">
+                                                            <!-- Le opzioni verranno aggiunte qui dinamicamente -->
+                                                        </div>
+
+                                                        <!-- Pulsante per aggiungere nuova data -->
+                                                        <div class="text-center mt-3">
+                                                            <button type="button" class="btn btn-outline-success" id="add-availability-option">
+                                                                <i class="ph ph-plus me-2"></i>{{ __('events.add_availability_option') }}
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="alert alert-info mt-3">
+                                                            <i class="ph ph-info me-2"></i>
+                                                            <strong>{{ __('events.availability_multiple_dates_notice') }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -679,6 +712,7 @@
                                 </div>
                             </div>
 
+
                             <div class="col-12 mb-3" id="map-info-banner-container">
                                 <div class="alert alert-info" id="map-info-banner">
                                     <i class="ph ph-info me-2"></i>
@@ -784,32 +818,72 @@
                                     <!-- DEBUG: Groups count: {{ isset($groups) ? $groups->count() : 'NOT SET' }} -->
                                     <!-- DEBUG: Groups data: {{ isset($groups) ? json_encode($groups->pluck('name', 'id')->toArray()) : 'NOT SET' }} -->
                                     <!-- DEBUG: Groups type: {{ isset($groups) ? get_class($groups) : 'NOT SET' }} -->
+
+                                    <!-- Campo di ricerca gruppi -->
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('events.select_groups') }}</label>
-                                        <div class="row">
-                                            @if(isset($groups) && $groups->count() > 0)
-                                                @foreach($groups as $group)
-                                                    <div class="col-md-6 col-lg-4 mb-2">
-                                                        <div class="form-check">
-                                                            <input type="checkbox"
-                                                                   name="group_ids[]"
-                                                                   id="group_{{ $group->id }}"
-                                                                   value="{{ $group->id }}"
-                                                                   class="form-check-input group-checkbox">
-                                                            <label for="group_{{ $group->id }}" class="form-check-label">
-                                                                <strong>{{ $group->name }}</strong>
-                                                                @if($group->description)
-                                                                    <br><small class="text-muted">{{ Str::limit($group->description, 50) }}</small>
-                                                                @endif
-                                                            </label>
+                                        <label class="form-label">{{ __('events.search_groups') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" id="groupSearchInput" class="form-control"
+                                                   placeholder="{{ __('events.search_groups_placeholder') }}"
+                                                   onkeydown="handleGroupSearchKeydown(event)">
+                                            <button type="button" class="btn btn-outline-primary" onclick="searchGroups()">
+                                                <i class="ph ph-magnifying-glass"></i>
+                                            </button>
+                                        </div>
+                                        <small class="text-muted">{{ __('events.search_groups_help') }}</small>
+                                    </div>
+
+                                    <!-- Risultati ricerca gruppi -->
+                                    <div id="groupSearchResults" class="mb-3" style="display: none;">
+                                        <h6>{{ __('events.search_results') }}</h6>
+                                        <div id="groupSearchResultsList" class="list-group">
+                                            <!-- Risultati ricerca qui -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Lista gruppi selezionati -->
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ __('events.selected_groups') }}</label>
+                                        <div id="selectedGroupsList" class="mb-3">
+                                            <p class="text-muted f-s-14">{{ __('events.no_groups_selected') }}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lista completa gruppi (nascosta di default) -->
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label mb-0">{{ __('events.all_groups') }}</label>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleAllGroups()">
+                                                <i class="ph ph-list" id="toggleGroupsIcon"></i>
+                                                <span id="toggleGroupsText">{{ __('events.show_all_groups') }}</span>
+                                            </button>
+                                        </div>
+                                        <div id="allGroupsList" style="display: none;">
+                                            <div class="row">
+                                                @if(isset($groups) && $groups->count() > 0)
+                                                    @foreach($groups as $group)
+                                                        <div class="col-md-6 col-lg-4 mb-2">
+                                                            <div class="form-check">
+                                                                <input type="checkbox"
+                                                                       name="group_ids[]"
+                                                                       id="group_{{ $group->id }}"
+                                                                       value="{{ $group->id }}"
+                                                                       class="form-check-input group-checkbox">
+                                                                <label for="group_{{ $group->id }}" class="form-check-label">
+                                                                    <strong>{{ $group->name }}</strong>
+                                                                    @if($group->description)
+                                                                        <br><small class="text-muted">{{ Str::limit($group->description, 50) }}</small>
+                                                                    @endif
+                                                                </label>
+                                                            </div>
                                                         </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="col-12">
+                                                        <p class="text-muted">Nessun gruppo disponibile</p>
                                                     </div>
-                                                @endforeach
-                                            @else
-                                                <div class="col-12">
-                                                    <p class="text-muted">Nessun gruppo disponibile</p>
-                                                </div>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                         <small class="text-muted">{{ __('events.groups_help') }}</small>
                                     </div>
@@ -1404,11 +1478,112 @@ document.addEventListener('DOMContentLoaded', function() {
                         recurrenceSettings.style.display = 'none';
                     }
                 });
+
+                // Gestione tipo di ricorrenza
+                const recurrenceType = document.getElementById('recurrence_type');
+                const weekdaysSelection = document.getElementById('weekdays-selection');
+                const monthdaySelection = document.getElementById('monthday-selection');
+
+                if (recurrenceType) {
+                    recurrenceType.addEventListener('change', function() {
+                        const type = this.value;
+
+                        // Nascondi tutte le sezioni specifiche
+                        if (weekdaysSelection) weekdaysSelection.style.display = 'none';
+                        if (monthdaySelection) monthdaySelection.style.display = 'none';
+
+                        // Mostra la sezione appropriata
+                        if (type === 'weekly' && weekdaysSelection) {
+                            weekdaysSelection.style.display = 'block';
+                        } else if (type === 'monthly' && monthdaySelection) {
+                            monthdaySelection.style.display = 'block';
+                        }
+
+                        updateRecurrencePreview();
+                    });
+                }
+
+                // Aggiorna anteprima quando cambiano i valori
+                const recurrenceInterval = document.getElementById('recurrence_interval');
+                const recurrenceCount = document.getElementById('recurrence_count');
+                const recurrenceMonthday = document.getElementById('recurrence_monthday');
+
+                [recurrenceInterval, recurrenceCount, recurrenceMonthday].forEach(element => {
+                    if (element) {
+                        element.addEventListener('input', updateRecurrencePreview);
+                    }
+                });
+
+                // Aggiorna anteprima quando cambiano i giorni della settimana
+                const weekdayCheckboxes = document.querySelectorAll('input[name="recurrence_weekdays[]"]');
+                weekdayCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', updateRecurrencePreview);
+                });
             } else {
                 // Gli elementi di ricorrenza potrebbero non esistere in tutte le pagine
                 // Non è un errore critico, quindi rimuoviamo il console.error
                 // console.error('Recurrence elements not found!');
             }
+
+            // ========================================
+            // GESTIONE AVAILABILITY OPTIONS
+            // ========================================
+
+            const availabilityBasedCheckbox = document.getElementById('is_availability_based');
+            const availabilityOptionsContainer = document.getElementById('availability-settings');
+            const addAvailabilityOptionBtn = document.getElementById('add-availability-option');
+            const availabilityOptionsList = document.getElementById('availability-options-list');
+
+            if (availabilityBasedCheckbox && availabilityOptionsContainer && addAvailabilityOptionBtn && availabilityOptionsList) {
+                // Aggiungi nuova opzione
+                addAvailabilityOptionBtn.addEventListener('click', function() {
+                    addAvailabilityOption();
+                });
+            }
+
+            // ========================================
+            // GESTIONE DATE MULTIPLE PER DISPONIBILITÀ
+            // ========================================
+
+            const availabilityRecurrenceType = document.getElementById('availability_recurrence_type');
+            const availabilityWeekdaysSelection = document.getElementById('availability-weekdays-selection');
+            const availabilityMonthdaySelection = document.getElementById('availability-monthday-selection');
+
+            if (availabilityRecurrenceType) {
+                availabilityRecurrenceType.addEventListener('change', function() {
+                    const type = this.value;
+
+                    // Nascondi tutte le sezioni specifiche
+                    if (availabilityWeekdaysSelection) availabilityWeekdaysSelection.style.display = 'none';
+                    if (availabilityMonthdaySelection) availabilityMonthdaySelection.style.display = 'none';
+
+                    // Mostra la sezione appropriata
+                    if (type === 'weekly' && availabilityWeekdaysSelection) {
+                        availabilityWeekdaysSelection.style.display = 'block';
+                    } else if (type === 'monthly' && availabilityMonthdaySelection) {
+                        availabilityMonthdaySelection.style.display = 'block';
+                    }
+
+                    updateAvailabilityRecurrencePreview();
+                });
+            }
+
+            // Aggiorna anteprima quando cambiano i valori per disponibilità
+            const availabilityRecurrenceInterval = document.getElementById('availability_recurrence_interval');
+            const availabilityRecurrenceCount = document.getElementById('availability_recurrence_count');
+            const availabilityRecurrenceMonthday = document.getElementById('availability_recurrence_monthday');
+
+            [availabilityRecurrenceInterval, availabilityRecurrenceCount, availabilityRecurrenceMonthday].forEach(element => {
+                if (element) {
+                    element.addEventListener('input', updateAvailabilityRecurrencePreview);
+                }
+            });
+
+            // Aggiorna anteprima quando cambiano i giorni della settimana per disponibilità
+            const availabilityWeekdayCheckboxes = document.querySelectorAll('input[name="availability_recurrence_weekdays[]"]');
+            availabilityWeekdayCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateAvailabilityRecurrencePreview);
+            });
 
             // ========================================
             // INIZIALIZZAZIONE EVENTI ONLINE
@@ -2075,9 +2250,7 @@ function setupEventListeners() {
     if (groupCheckboxes.length > 0) {
         groupCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
-                const selectedGroupIds = Array.from(groupCheckboxes)
-                    .filter(cb => cb.checked)
-                    .map(cb => cb.value);
+                updateSelectedGroupsList();
 
                 // Aggiorna l'anteprima se siamo nello step 5
                 if (typeof currentStep !== 'undefined' && currentStep === 5 && typeof updatePreview === 'function') {
@@ -2110,6 +2283,167 @@ function setupEventListeners() {
         isFestivalEvent.addEventListener('change', function() {
             festivalFields.style.display = this.checked ? 'block' : 'none';
         });
+    }
+}
+
+// ========================================
+// FUNZIONI GLOBALI PER GESTIONE GRUPPI
+// ========================================
+
+// Funzione per aggiornare la lista dei gruppi selezionati
+function updateSelectedGroupsList() {
+    const selectedGroups = Array.from(document.querySelectorAll('.group-checkbox:checked'));
+    const selectedGroupsList = document.getElementById('selectedGroupsList');
+
+    if (selectedGroups.length === 0) {
+        selectedGroupsList.innerHTML = '<p class="text-muted f-s-14">Nessun gruppo selezionato</p>';
+    } else {
+        let html = '<div class="list-group">';
+        selectedGroups.forEach(checkbox => {
+            const label = document.querySelector(`label[for="${checkbox.id}"]`);
+            const groupName = label ? label.querySelector('strong').textContent : 'Gruppo sconosciuto';
+            const groupDesc = label ? label.querySelector('small')?.textContent : '';
+
+            html += `
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${groupName}</strong>
+                        ${groupDesc ? `<br><small class="text-muted">${groupDesc}</small>` : ''}
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeGroup(${checkbox.value})">
+                        <i class="ph ph-x"></i>
+                    </button>
+                </div>
+            `;
+        });
+        html += '</div>';
+        selectedGroupsList.innerHTML = html;
+    }
+}
+
+// Funzione per rimuovere un gruppo dalla selezione
+function removeGroup(groupId) {
+    const checkbox = document.getElementById(`group_${groupId}`);
+    if (checkbox) {
+        checkbox.checked = false;
+        updateSelectedGroupsList();
+    }
+}
+
+// Funzione per gestire la pressione dei tasti nella ricerca gruppi
+function handleGroupSearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        searchGroups();
+    }
+}
+
+// Funzione per ricercare i gruppi
+function searchGroups() {
+    const searchTerm = document.getElementById('groupSearchInput').value.trim();
+    const searchResults = document.getElementById('groupSearchResults');
+    const searchResultsList = document.getElementById('groupSearchResultsList');
+
+    if (searchTerm.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+    }
+
+    // Mostra loading
+    searchResultsList.innerHTML = '<div class="list-group-item text-center"><i class="ph ph-spinner ph-spin"></i> Ricerca in corso...</div>';
+    searchResults.style.display = 'block';
+
+    // Simula ricerca (in produzione, fai una chiamata AJAX)
+    fetch(`/api/groups/search?q=${encodeURIComponent(searchTerm)}`)
+        .then(response => response.json())
+        .then(data => {
+            displayGroupSearchResults(data.groups || []);
+        })
+        .catch(error => {
+            console.error('Errore nella ricerca gruppi:', error);
+            // Fallback: ricerca locale nei gruppi esistenti
+            const localResults = searchGroupsLocally(searchTerm);
+            displayGroupSearchResults(localResults);
+        });
+}
+
+// Funzione per ricerca locale nei gruppi esistenti (fallback)
+function searchGroupsLocally(searchTerm) {
+    // Ottieni i gruppi dal DOM invece che dal JSON inline
+    const allGroups = [];
+    document.querySelectorAll('.group-checkbox').forEach(checkbox => {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+            const name = label.querySelector('strong').textContent;
+            const desc = label.querySelector('small')?.textContent || '';
+            allGroups.push({
+                id: checkbox.value,
+                name: name,
+                description: desc
+            });
+        }
+    });
+
+    const filtered = allGroups.filter(group =>
+        group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (group.description && group.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    return filtered;
+}
+
+// Funzione per mostrare i risultati della ricerca gruppi
+function displayGroupSearchResults(groups) {
+    const searchResultsList = document.getElementById('groupSearchResultsList');
+
+    if (groups.length === 0) {
+        searchResultsList.innerHTML = '<div class="list-group-item text-center text-muted">Nessun gruppo trovato</div>';
+    } else {
+        let html = '';
+        groups.forEach(group => {
+            const isSelected = document.getElementById(`group_${group.id}`)?.checked || false;
+            html += `
+                <div class="list-group-item d-flex justify-content-between align-items-center ${isSelected ? 'bg-light' : ''}">
+                    <div class="flex-grow-1">
+                        <strong>${group.name}</strong>
+                        ${group.description ? `<br><small class="text-muted">${group.description}</small>` : ''}
+                    </div>
+                    <button type="button" class="btn btn-sm ${isSelected ? 'btn-success' : 'btn-outline-primary'}"
+                            onclick="toggleGroupFromSearch(${group.id})">
+                        <i class="ph ph-${isSelected ? 'check' : 'plus'}"></i>
+                        ${isSelected ? 'Selezionato' : 'Seleziona'}
+                    </button>
+                </div>
+            `;
+        });
+        searchResultsList.innerHTML = html;
+    }
+}
+
+// Funzione per selezionare/deselezionare un gruppo dai risultati di ricerca
+function toggleGroupFromSearch(groupId) {
+    const checkbox = document.getElementById(`group_${groupId}`);
+    if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        updateSelectedGroupsList();
+        // Aggiorna i risultati di ricerca
+        searchGroups();
+    }
+}
+
+// Funzione per mostrare/nascondere tutti i gruppi
+function toggleAllGroups() {
+    const allGroupsList = document.getElementById('allGroupsList');
+    const toggleIcon = document.getElementById('toggleGroupsIcon');
+    const toggleText = document.getElementById('toggleGroupsText');
+
+    if (allGroupsList.style.display === 'none') {
+        allGroupsList.style.display = 'block';
+        toggleIcon.className = 'ph ph-eye-slash';
+        toggleText.textContent = 'Nascondi tutti';
+    } else {
+        allGroupsList.style.display = 'none';
+        toggleIcon.className = 'ph ph-list';
+        toggleText.textContent = 'Mostra tutti';
     }
 }
 
@@ -6152,6 +6486,71 @@ function clearFestivalValidationErrors() {
     if (searchInput) {
         searchInput.classList.remove('is-invalid');
         searchInput.style.borderColor = '';
+    }
+}
+
+// ========================================
+// FUNZIONI PER GESTIONE AVAILABILITY OPTIONS
+// ========================================
+
+let availabilityOptionCounter = 0;
+
+// Aggiungi nuova opzione di disponibilità
+function addAvailabilityOption() {
+    availabilityOptionCounter++;
+
+    const availabilityOptionsList = document.getElementById('availability-options-list');
+    if (!availabilityOptionsList) return;
+
+    const optionHtml = `
+        <div class="card border-light mb-3" id="availability-option-${availabilityOptionCounter}">
+            <div class="card-body">
+                <div class="row align-items-end">
+                    <div class="col-md-5 mb-2">
+                        <label class="form-label">{{ __('events.availability_option_datetime') }} *</label>
+                        <input type="text" name="availability_options[${availabilityOptionCounter}][datetime]"
+                               class="form-control availability-datetime-picker"
+                               placeholder="{{ __('events.availability_option_datetime') }}"
+                               required readonly>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">{{ __('events.availability_option_description') }}</label>
+                        <input type="text" name="availability_options[${availabilityOptionCounter}][description]"
+                               class="form-control"
+                               placeholder="{{ __('events.availability_option_description') }}">
+                    </div>
+                    <div class="col-md-1 mb-2">
+                        <button type="button" class="btn btn-outline-danger"
+                                onclick="removeAvailabilityOption(${availabilityOptionCounter})"
+                                title="{{ __('events.remove_availability_option') }}">
+                            <i class="ph ph-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    availabilityOptionsList.insertAdjacentHTML('beforeend', optionHtml);
+
+    // Inizializza flatpickr per il nuovo campo
+    const newInput = availabilityOptionsList.querySelector(`#availability-option-${availabilityOptionCounter} .availability-datetime-picker`);
+    if (newInput) {
+        flatpickr(newInput, {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: true,
+            minDate: "today",
+            locale: "it"
+        });
+    }
+}
+
+// Rimuovi opzione di disponibilità
+function removeAvailabilityOption(optionId) {
+    const optionElement = document.getElementById(`availability-option-${optionId}`);
+    if (optionElement) {
+        optionElement.remove();
     }
 }
 </script>

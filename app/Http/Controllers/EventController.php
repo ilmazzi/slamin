@@ -398,6 +398,9 @@ class EventController extends Controller
                 'is_availability_based' => 'nullable|boolean',
                 'availability_instructions' => 'nullable|string|max:1000',
                 'availability_deadline' => 'nullable|date_format:Y-m-d H:i',
+                'availability_options' => 'nullable|array',
+                'availability_options.*.datetime' => 'required|date_format:Y-m-d H:i',
+                'availability_options.*.description' => 'nullable|string|max:255',
                 // Festival fields
                 'festival_id' => 'nullable|exists:events,id',
                 'selected_festival_events' => 'nullable|string', // JSON string of selected events
@@ -696,6 +699,24 @@ class EventController extends Controller
 
             // Create the event
             $event = Event::create($validated);
+
+            // Save availability options if this is an availability-based event
+            if ($event->is_availability_based && !empty($validated['availability_options'])) {
+                foreach ($validated['availability_options'] as $index => $option) {
+                    \App\Models\EventAvailabilityOption::create([
+                        'event_id' => $event->id,
+                        'datetime' => $option['datetime'],
+                        'description' => $option['description'] ?? null,
+                        'sort_order' => $index + 1,
+                        'is_active' => true,
+                    ]);
+                }
+
+                Log::info('Availability options saved', [
+                    'event_id' => $event->id,
+                    'options_count' => count($validated['availability_options'])
+                ]);
+            }
 
             // Process groups if linked to groups
             if (!empty($groupIds) && is_array($groupIds)) {

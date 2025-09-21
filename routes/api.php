@@ -41,3 +41,36 @@ Route::post('/test-toggle-featured/{article}', function($article) {
     }
 })->name('api.test.toggle-featured');
 
+// Endpoint per ricerca gruppi
+Route::get('/groups/search', function(Request $request) {
+    try {
+        $query = $request->input('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Query troppo corta',
+                'groups' => []
+            ]);
+        }
+
+        $groups = \App\Models\Group::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->limit(10)
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'success' => true,
+            'groups' => $groups,
+            'query' => $query
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Errore nella ricerca: ' . $e->getMessage(),
+            'groups' => []
+        ], 500);
+    }
+})->name('api.groups.search');
+

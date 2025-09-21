@@ -10,7 +10,7 @@
             <div class="page-title-box d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">{{ __('poems.edit.title') }}</h4>
                 <div class="page-title-right">
-                    
+
                 </div>
             </div>
         </div>
@@ -148,38 +148,17 @@
                                 @enderror
                             </div>
 
-                            <!-- Opzioni di pubblicazione -->
+                            <!-- Opzioni di traduzione -->
                             <div class="col-12">
-                                <div class="card card-light">
+                                <div class="card card-light-success">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="ph ph-gear text-info me-2"></i>
-                                            {{ __('poems.create.publication_options') }}
+                                            <i class="ph ph-translate text-info me-2"></i>
+                                            {{ __('poems.create.translation_options') }}
                                         </h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public" value="1"
-                                                           {{ old('is_public', $poem->is_public) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_public">
-                                                        {{ __('poems.fields.is_public') }}
-                                                    </label>
-                                                </div>
-                                                <small class="form-text text-muted">{{ __('poems.create.public_help') }}</small>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="is_draft" name="is_draft" value="1"
-                                                           {{ old('is_draft', $poem->is_draft) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="is_draft">
-                                                        {{ __('poems.fields.is_draft') }}
-                                                    </label>
-                                                </div>
-                                                <small class="form-text text-muted">{{ __('poems.create.draft_help') }}</small>
-                                            </div>
 
                                             <div class="col-md-6 mb-3">
                                                 <div class="form-check form-switch">
@@ -197,9 +176,30 @@
                                                     <span class="input-group-text">€</span>
                                                     <input type="number" class="form-control @error('translation_price') is-invalid @enderror"
                                                            id="translation_price" name="translation_price"
-                                                           value="{{ old('translation_price', $poem->translation_price) }}" min="0" step="0.01">
+                                                           value="{{ old('translation_price', $poem->translation_price) }}" min="0" step="0.01" disabled>
                                                 </div>
                                                 @error('translation_price')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="translation_negotiable" name="translation_negotiable" value="1"
+                                                           {{ old('translation_negotiable', $poem->translation_negotiable) ? 'checked' : '' }} disabled>
+                                                    <label class="form-check-label" for="translation_negotiable">
+                                                        {{ __('poems.fields.translation_negotiable') }}
+                                                    </label>
+                                                </div>
+                                                <small class="form-text text-muted">{{ __('poems.create.translation_negotiable_help') }}</small>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="translation_instructions" class="form-label">{{ __('poems.fields.translation_instructions') }}</label>
+                                                <textarea class="form-control @error('translation_instructions') is-invalid @enderror"
+                                                          id="translation_instructions" name="translation_instructions" rows="3"
+                                                          placeholder="{{ __('poems.create.translation_instructions_placeholder') }}" disabled>{{ old('translation_instructions', $poem->translation_instructions) }}</textarea>
+                                                @error('translation_instructions')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -269,7 +269,7 @@
                                     <div>
                                         <button type="submit" name="action" value="draft" class="btn btn-outline-primary me-2">
                                             <i class="ph ph-floppy-disk me-2"></i>
-                                            {{ __('poems.edit.save_draft') }}
+                                            {{ __('poems.create.save_draft_private') }}
                                         </button>
 
                                         <button type="submit" name="action" value="publish" class="btn btn-primary">
@@ -334,6 +334,22 @@
     border-right: 1px solid #ccc;
     border-radius: 0 0 0.375rem 0.375rem;
 }
+
+/* Stili per campi traduzione disabilitati */
+.opacity-50 {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.opacity-50 .form-control,
+.opacity-50 .form-check-input,
+.opacity-50 .input-group {
+    pointer-events: none;
+}
+
+.opacity-50 .form-label {
+    color: #6c757d;
+}
 </style>
 @endpush
 
@@ -352,24 +368,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sincronizza tutti gli editor prima dell'invio del form
     window.syncAllQuillEditors('form');
 
-    // Gestione del draft
-    const draftCheckbox = document.getElementById('is_draft');
-    const publicCheckbox = document.getElementById('is_public');
+    // Gestione campi traduzione condizionali
+    const translationAvailableCheckbox = document.getElementById('translation_available');
+    const translationPriceInput = document.getElementById('translation_price');
+    const translationNegotiableCheckbox = document.getElementById('translation_negotiable');
+    const translationInstructionsTextarea = document.getElementById('translation_instructions');
 
-    if (draftCheckbox) {
-        draftCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                publicCheckbox.checked = false;
+    function toggleTranslationFields() {
+        const isEnabled = translationAvailableCheckbox.checked;
+
+        // Abilita/disabilita i campi di traduzione
+        translationPriceInput.disabled = !isEnabled;
+        translationNegotiableCheckbox.disabled = !isEnabled;
+        translationInstructionsTextarea.disabled = !isEnabled;
+
+        // Aggiungi classe visiva per indicare stato disabilitato
+        const fields = [translationPriceInput, translationNegotiableCheckbox, translationInstructionsTextarea];
+        fields.forEach(field => {
+            if (field) {
+                field.closest('.mb-3').classList.toggle('opacity-50', !isEnabled);
             }
         });
     }
 
-    if (publicCheckbox) {
-        publicCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                draftCheckbox.checked = false;
-            }
-        });
+    // Event listener per il toggle principale
+    if (translationAvailableCheckbox) {
+        translationAvailableCheckbox.addEventListener('change', toggleTranslationFields);
+        // Inizializza lo stato all'avvio
+        toggleTranslationFields();
     }
 
     // Gestione rimozione thumbnail
