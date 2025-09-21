@@ -44,6 +44,12 @@ class Article extends Model
         'meta_description',
         'meta_keywords',
         'published_at',
+        'language',
+        'original_language',
+        'is_news',
+        'needs_translation',
+        'translation_status',
+        'translated_at',
     ];
 
     protected $casts = [
@@ -57,6 +63,10 @@ class Article extends Model
         'is_public' => 'boolean',
         'published_at' => 'datetime',
         'moderated_at' => 'datetime',
+        'is_news' => 'boolean',
+        'needs_translation' => 'boolean',
+        'translation_status' => 'array',
+        'translated_at' => 'datetime',
     ];
 
     protected $dates = [
@@ -95,6 +105,11 @@ class Article extends Model
     public function layoutPositions(): HasMany
     {
         return $this->hasMany(ArticleLayout::class);
+    }
+
+    public function translations(): HasMany
+    {
+        return $this->hasMany(ArticleTranslation::class);
     }
 
     // Scopes
@@ -153,6 +168,26 @@ class Article extends Model
         $query->orderBy('views_count', 'desc')
               ->orderBy('likes_count', 'desc')
               ->orderBy('comments_count', 'desc');
+    }
+
+    public function scopeNews(Builder $query): void
+    {
+        $query->where('is_news', true);
+    }
+
+    public function scopeNeedsTranslation(Builder $query): void
+    {
+        $query->where('needs_translation', true);
+    }
+
+    public function scopeByLanguage(Builder $query, $language): void
+    {
+        $query->where('language', $language);
+    }
+
+    public function scopeByOriginalLanguage(Builder $query, $language): void
+    {
+        $query->where('original_language', $language);
     }
 
     public function scopeRecent(Builder $query): void
@@ -224,7 +259,7 @@ class Article extends Model
         if ($this->featured_image) {
             return '<img src="' . asset('storage/' . $this->featured_image) . '" alt="' . htmlspecialchars($this->title) . '" class="img-fluid">';
         }
-        
+
         // Usa il placeholder HTML personalizzato
         return PlaceholderHelper::getArticlePlaceholderHtml();
     }
@@ -264,7 +299,7 @@ class Article extends Model
     public function canBeDeletedBy($user)
     {
         if (!$user) return false;
-        
+
         return $user->id === $this->user_id ||
                $user->hasRole(['admin', 'editor', 'moderator', 'organizer']) ||
                $user->hasPermissionTo('articles.delete');
@@ -366,7 +401,7 @@ class Article extends Model
         if (!$user) {
             $user = \Illuminate\Support\Facades\Auth::user();
         }
-        
+
         if (!$user) {
             return false;
         }

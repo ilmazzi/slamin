@@ -61,6 +61,7 @@ class FixPermissionsSeeder extends Seeder
             'articles.moderate' => ['display_name' => 'Modera Articoli', 'group' => 'moderation'],
             'articles.manage_categories' => ['display_name' => 'Gestisce Categorie Articoli', 'group' => 'content'],
             'articles.manage_tags' => ['display_name' => 'Gestisce Tag Articoli', 'group' => 'content'],
+            'articles.manage_news' => ['display_name' => 'Gestisce Articoli News', 'group' => 'content'],
             'articles.view_reports' => ['display_name' => 'Visualizza Segnalazioni Articoli', 'group' => 'moderation'],
             'videos.upload' => ['display_name' => 'Carica Video', 'group' => 'content'],
             'videos.edit.own' => ['display_name' => 'Modifica Video Propri', 'group' => 'content'],

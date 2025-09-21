@@ -28,6 +28,17 @@ return [
     'no_articles_yet' => 'Nessun articolo ancora',
     'no_articles_description' => 'Inizia a scrivere il tuo primo articolo per condividere le tue idee con la comunità.',
     'edit_article' => 'Modifica Articolo',
+
+    // Campi lingua e News
+    'language' => 'Lingua',
+    'mark_as_news' => 'Marca come News',
+    'news_description' => 'Gli articoli News verranno tradotti automaticamente in tutte le lingue supportate',
+
+    // Traduzioni
+    'available_translations' => 'Traduzioni Disponibili',
+    'viewing_translation' => 'Visualizzando traduzione in',
+    'view_original' => 'Vedi Originale',
+    'translation_info' => 'Clicca su una lingua per leggere la traduzione dell\'articolo',
     'fill_required_fields' => 'Compila i campi obbligatori',
     'by' => 'di',
     'read_time' => ':minutes min',

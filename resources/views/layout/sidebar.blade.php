@@ -254,6 +254,29 @@
 
 
 
+                                @if(auth()->user()?->hasRole(['admin', 'moderator']) && auth()->user()?->can('articles.manage_news'))
+                                <!-- Editor Section - Per editor con permessi News -->
+                                <li class="menu-title">
+                                    <span>📝 Editor</span>
+                                </li>
+
+                                <!-- Article Translations - Per editor -->
+                                <li class="no-sub {{ request()->routeIs('admin.articles.translations.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.articles.translations.index') }}">
+                                        <i class="ph-duotone ph-translate f-s-20 me-2"></i>
+                                        Traduzioni Articoli
+                                        @php
+                                            $publishedArticles = \App\Models\Article::published()->count();
+                                        @endphp
+                                        @if($publishedArticles > 0)
+                                            <span class="badge bg-info badge-notification ms-2">
+                                                {{ $publishedArticles }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endif
+
                                 @if(auth()->user()?->hasRole(['admin', 'moderator']))
                                 <!-- Permissions Management Section - Solo per admin/moderator -->
                                 <li class="menu-title">
@@ -353,6 +376,7 @@
                                         {{ __('sidebar.system_logs') }}
                                     </a>
                                 </li>
+
                                 @endif
                                 @endauth
                             </ul>

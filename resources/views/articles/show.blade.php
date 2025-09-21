@@ -120,7 +120,7 @@ use App\Helpers\PlaceholderHelper;
                             <!-- View Counter (Sistema Unificato) -->
                             <x-social-view-counter :content="$article" type="article" />
 
-                          
+
 
                             <!-- Report Button (Sistema Unificato) -->
                             <x-report-button :content="$article" type="article" />
@@ -134,10 +134,77 @@ use App\Helpers\PlaceholderHelper;
 
                     <!-- Mobile-First Article Content -->
                     <div class="article-content mb-4">
-                        <div class="f-s-14 lh-base">
-                            {!! $article->content !!}
-                        </div>
+                        @if($translation)
+                            <!-- Mostra traduzione selezionata -->
+                            <div class="alert alert-info mb-3">
+                                <i class="ph-duotone ph-translate me-2"></i>
+                                <strong>{{ __('articles.viewing_translation') }}:</strong>
+                                @switch($translation->language)
+                                    @case('it') 🇮🇹 Italiano @break
+                                    @case('en') 🇬🇧 English @break
+                                    @case('fr') 🇫🇷 Français @break
+                                    @case('es') 🇪🇸 Español @break
+                                    @case('de') 🇩🇪 Deutsch @break
+                                    @case('pt') 🇵🇹 Português @break
+                                    @case('ru') 🇷🇺 Русский @break
+                                    @default {{ strtoupper($translation->language) }} @break
+                                @endswitch
+                                <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-sm btn-outline-secondary ms-2">
+                                    <i class="ph-duotone ph-arrow-left me-1"></i> {{ __('articles.view_original') }}
+                                </a>
+                            </div>
+                            <div class="f-s-14 lh-base">
+                                <h1 class="mb-3">{{ $translation->title }}</h1>
+                                @if($translation->excerpt)
+                                    <div class="lead mb-4 text-muted">{{ $translation->excerpt }}</div>
+                                @endif
+                                {!! $translation->content !!}
+                            </div>
+                        @else
+                            <!-- Mostra contenuto originale -->
+                            <div class="f-s-14 lh-base">
+                                {!! $article->content !!}
+                            </div>
+                        @endif
                     </div>
+
+                    <!-- Traduzioni Disponibili -->
+                    @if($article->translations->count() > 0)
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0 f-s-16 f-w-600">
+                                    <i class="ph-duotone ph-translate me-2"></i>
+                                    {{ __('articles.available_translations') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($article->translations as $translation)
+                                        <a href="{{ route('articles.show', $article->slug) }}?translation={{ $translation->language }}"
+                                           class="btn btn-outline-primary btn-sm text-decoration-none">
+                                            @switch($translation->language)
+                                                @case('it') 🇮🇹 Italiano @break
+                                                @case('en') 🇬🇧 English @break
+                                                @case('fr') 🇫🇷 Français @break
+                                                @case('es') 🇪🇸 Español @break
+                                                @case('de') 🇩🇪 Deutsch @break
+                                                @case('pt') 🇵🇹 Português @break
+                                                @case('ru') 🇷🇺 Русский @break
+                                                @default {{ strtoupper($translation->language) }} @break
+                                            @endswitch
+                                            <small class="ms-1 text-muted">({{ $translation->translated_at->format('d/m/Y') }})</small>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="ph-duotone ph-info me-1"></i>
+                                        {{ __('articles.translation_info') }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Mobile-First Author Section -->
                     <div class="card bg-light-success">

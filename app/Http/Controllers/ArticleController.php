@@ -160,6 +160,8 @@ class ArticleController extends Controller
             'meta_title' => 'nullable|string|max:60',
             'meta_description' => 'nullable|string|max:160',
             'meta_keywords' => 'nullable|string|max:255',
+            'language' => 'required|string|in:it,en,fr,es,de,pt,ru',
+            'is_news' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -171,6 +173,15 @@ class ArticleController extends Controller
 
         $data = $request->all();
         $data['user_id'] = Auth::id();
+
+        // Imposta lingua originale
+        $data['original_language'] = $data['language'];
+
+        // Se è un articolo News, imposta needs_translation
+        if ($data['is_news'] ?? false) {
+            $data['needs_translation'] = true;
+            $data['translation_status'] = ['it' => 'pending', 'en' => 'pending', 'fr' => 'pending', 'es' => 'pending', 'de' => 'pending', 'pt' => 'pending', 'ru' => 'pending'];
+        }
 
         // Handle featured image
         if ($request->hasFile('featured_image')) {
@@ -249,7 +260,7 @@ class ArticleController extends Controller
     /**
      * Display the specified article
      */
-    public function show(Article $article)
+    public function show(Article $article, Request $request)
     {
         // Check if user can view this article
         if (!$article->isPublished && !$this->canViewArticle($article)) {
@@ -264,10 +275,21 @@ class ArticleController extends Controller
             'user',
             'category',
             'tags',
+            'translations' => function ($query) {
+                $query->published()->with('translator');
+            },
             'comments' => function ($query) {
                 $query->approved()->whereNull('parent_id')->with(['user', 'replies.user']);
             }
         ]);
+
+        // Check if user requested a specific translation
+        $requestedLanguage = $request->get('translation');
+        $translation = null;
+
+        if ($requestedLanguage && $article->translations->count() > 0) {
+            $translation = $article->translations->where('language', $requestedLanguage)->first();
+        }
 
         // Get related articles
         $relatedArticles = $this->getRelatedArticles($article);
@@ -276,7 +298,7 @@ class ArticleController extends Controller
         $categories = ArticleCategory::active()->ordered()->get();
         $tags = ArticleTag::withCount('articles')->orderBy('articles_count', 'desc')->limit(10)->get();
 
-        return view('articles.show', compact('article', 'relatedArticles', 'categories', 'tags'));
+        return view('articles.show', compact('article', 'translation', 'requestedLanguage', 'relatedArticles', 'categories', 'tags'));
     }
 
     /**

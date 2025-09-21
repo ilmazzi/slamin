@@ -1536,6 +1536,18 @@ Route::prefix('admin/articles')->name('admin.articles.')->middleware(['auth', 'a
     Route::post('/{article}/reject', [App\Http\Controllers\Admin\ArticleController::class, 'reject'])->name('reject')->where('article', '[0-9]+');
     Route::post('/{article}/toggle-featured', [App\Http\Controllers\Admin\ArticleController::class, 'toggleFeatured'])->name('toggle-featured')->where('article', '[0-9]+');
 
+    // Translation routes - Solo per editor con permessi
+    Route::middleware('can:articles.manage_news')->group(function () {
+        Route::get('/translations', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'index'])->name('translations.index');
+        Route::get('/{article}/translations/create', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'create'])->name('translations.create');
+        Route::post('/{article}/translations', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'store'])->name('translations.store');
+        Route::get('/{article}/translations/{translation}/edit', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'edit'])->name('translations.edit')->where('translation', '[0-9]+');
+        Route::put('/{article}/translations/{translation}', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'update'])->name('translations.update')->where('translation', '[0-9]+');
+        Route::delete('/{article}/translations/{translation}', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'destroy'])->name('translations.destroy')->where('translation', '[0-9]+');
+        Route::post('/{article}/mark-for-translation', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'markForTranslation'])->name('mark-for-translation');
+        Route::post('/{article}/unmark-from-translation', [App\Http\Controllers\Admin\ArticleTranslationController::class, 'unmarkFromTranslation'])->name('unmark-from-translation');
+    });
+
     // Route di test temporanea
     Route::get('/test-toggle-featured/{article}', function($article) {
         return response()->json([

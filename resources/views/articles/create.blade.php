@@ -106,6 +106,24 @@
                                         <h6 class="mb-0">{{ __('articles.publishing_options') }}</h6>
                                     </div>
                                     <div class="card-body">
+                                        <!-- Lingua -->
+                                        <div class="mb-3">
+                                            <label for="language" class="form-label">{{ __('articles.language') }} *</label>
+                                            <select class="form-select @error('language') is-invalid @enderror"
+                                                    id="language" name="language" required>
+                                                <option value="it" {{ old('language', 'it') == 'it' ? 'selected' : '' }}>🇮🇹 Italiano</option>
+                                                <option value="en" {{ old('language') == 'en' ? 'selected' : '' }}>🇬🇧 English</option>
+                                                <option value="fr" {{ old('language') == 'fr' ? 'selected' : '' }}>🇫🇷 Français</option>
+                                                <option value="es" {{ old('language') == 'es' ? 'selected' : '' }}>🇪🇸 Español</option>
+                                                <option value="de" {{ old('language') == 'de' ? 'selected' : '' }}>🇩🇪 Deutsch</option>
+                                                <option value="pt" {{ old('language') == 'pt' ? 'selected' : '' }}>🇵🇹 Português</option>
+                                                <option value="ru" {{ old('language') == 'ru' ? 'selected' : '' }}>🇷🇺 Русский</option>
+                                            </select>
+                                            @error('language')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
                                         <!-- Stato -->
                                         <div class="mb-3">
                                             <label for="status" class="form-label">{{ __('articles.status') }}</label>
@@ -173,6 +191,17 @@
                                                 {{ __('articles.mark_as_featured') }}
                                             </label>
                                         </div>
+
+                                        @if(auth()->user()->can('articles.manage_news'))
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="is_news"
+                                                   name="is_news" value="1" {{ old('is_news') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_news">
+                                                📰 {{ __('articles.mark_as_news') }}
+                                                <small class="text-muted d-block">{{ __('articles.news_description') }}</small>
+                                            </label>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
