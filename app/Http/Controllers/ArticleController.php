@@ -18,7 +18,7 @@ class ArticleController extends Controller
 
     public function __construct()
     {
-        // Constructor
+        $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
     }
 
     /**
@@ -137,13 +137,23 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user can create articles
+        if (!Auth::check() || !Auth::user()->can('articles.create')) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Non hai i permessi per creare articoli'
+                ], 403);
+            }
+            abort(403, 'Non hai i permessi per creare articoli');
+        }
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|min:3|max:255',
             'content' => 'required|string|min:10',
             'excerpt' => 'nullable|string|max:500',
             'category_id' => 'nullable|exists:article_categories,id',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:article_tags,id',
+            'tags' => 'nullable',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
@@ -179,17 +189,46 @@ class ArticleController extends Controller
 
         $article = Article::create($data);
 
-        // Sync tags
+        // Handle tags - support both array of IDs and comma-separated strings
         if ($request->filled('tags')) {
-            $article->tags()->sync($request->tags);
-        }
-
-        // Increment tag usage
-        if ($request->filled('tags')) {
-            foreach ($request->tags as $tagId) {
-                $tag = ArticleTag::find($tagId);
-                if ($tag) {
-                    $tag->incrementUsage();
+            $tags = $request->tags;
+            
+            // If tags is a string, split by comma and create/find tags
+            if (is_string($tags)) {
+                $tagNames = array_map('trim', explode(',', $tags));
+                $tagIds = [];
+                
+                foreach ($tagNames as $tagName) {
+                    if (!empty($tagName)) {
+                        // Find or create tag
+                        $tag = ArticleTag::firstOrCreate(
+                            ['name' => $tagName],
+                            ['slug' => Str::slug($tagName), 'is_active' => true]
+                        );
+                        $tagIds[] = $tag->id;
+                    }
+                }
+                
+                $article->tags()->sync($tagIds);
+                
+                // Increment tag usage
+                foreach ($tagIds as $tagId) {
+                    $tag = ArticleTag::find($tagId);
+                    if ($tag) {
+                        $tag->incrementUsage();
+                    }
+                }
+            } 
+            // If tags is an array of IDs
+            elseif (is_array($tags)) {
+                $article->tags()->sync($tags);
+                
+                // Increment tag usage
+                foreach ($tags as $tagId) {
+                    $tag = ArticleTag::find($tagId);
+                    if ($tag) {
+                        $tag->incrementUsage();
+                    }
                 }
             }
         }

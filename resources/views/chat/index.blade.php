@@ -60,7 +60,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
         if (response.ok) {
             const data = await response.json();
             console.log('Notifiche chat marcate come lette:', data);
-            
+
             // Aggiorna il badge delle notifiche se esiste
             if (typeof notificationManager !== 'undefined') {
                 notificationManager.loadNotifications(true);
@@ -69,6 +69,112 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
     } catch (error) {
         console.error('Errore nel marcare le notifiche come lette:', error);
     }
+}
+
+// Gestione invio messaggi
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.querySelector('[data-chat-form]');
+    if (chatForm) {
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(chatForm);
+            const messageInput = document.querySelector('[data-chat-input]');
+            const submitBtn = chatForm.querySelector('button[type="submit"]');
+
+            if (!messageInput || !messageInput.value.trim()) {
+                return;
+            }
+
+            // Disabilita il form durante l'invio
+            submitBtn.disabled = true;
+            messageInput.disabled = true;
+
+            try {
+                const response = await fetch(chatForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Messaggio inviato con successo
+                    messageInput.value = '';
+
+                    // Ricarica i messaggi
+                    await loadMessages();
+                } else {
+                    console.error('Errore nell\'invio del messaggio');
+                }
+            } catch (error) {
+                console.error('Errore di rete:', error);
+            } finally {
+                // Riabilita il form
+                submitBtn.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            }
+        });
+    }
+});
+
+// Funzione per caricare i messaggi
+async function loadMessages() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('room');
+
+    if (!roomId) return;
+
+    try {
+        const response = await fetch(`/chat/${roomId}/messages`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            updateMessagesDisplay(data.messages);
+        }
+    } catch (error) {
+        console.error('Errore nel caricamento dei messaggi:', error);
+    }
+}
+
+// Funzione per aggiornare la visualizzazione dei messaggi
+function updateMessagesDisplay(messages) {
+    const messagesContainer = document.querySelector('[data-chat-messages]');
+    if (!messagesContainer) return;
+
+    // Pulisce i messaggi esistenti
+    messagesContainer.innerHTML = '';
+
+    // Aggiunge i nuovi messaggi
+    messages.forEach(message => {
+        const messageElement = createMessageElement(message);
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Scrolla in basso
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Funzione per creare un elemento messaggio
+function createMessageElement(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${message.sender_id === {{ auth()->id() }} ? 'sent' : 'received'}`;
+
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <p class="message-text">${message.content}</p>
+            <span class="message-time">${message.created_at}</span>
+        </div>
+    `;
+
+    return messageDiv;
 }
 </script>
         @endpush
@@ -156,30 +262,9 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newChatModal"><i class="ti ti-brand-hipchat"></i> <span
                                                 class="f-s-13">New Chat</span></a>
                                     </li>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                class="f-s-13">New Contact</span></a>
-                                    </li>
                                 </ul>
                             </div>
-                            
-                            <div class="btn-group dropdown-icon-none">
-                                <a role="button" data-bs-placement="top" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                    <i class="ti ti-settings fs-5"></i>
-                                </a>
-                                <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                        class="f-s-13">{{ __('chat.chat_settings') }}</span></a>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                                class="f-s-13">{{ __('chat.chat_settings') }}</span></a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                class="f-s-13">{{ __('chat.contact_settings') }}</span></a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                                class="f-s-13">{{ __('chat.settings') }}</span></a>
-                                    </li>
-                                </ul>
-                            </div>
+
                         </div>
                         <div class="close-togglebtn">
                             <a class="ms-2 toggle-btn" role="button">
@@ -192,8 +277,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                     <div class="chat-tab-wrapper">
                         <ul class="tabs chat-tabs">
                             <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>{{ __('chat.title') }}</li>
-                            <li class="tab-link" data-tab="2"><i class="ph-fill  ph-wechat-logo f-s-18 me-2"></i>{{ __('chat.updates') }}</li>
-                            <li class="tab-link" data-tab="3"><i class="ph-fill  ph-phone-call f-s-18 me-2"></i>{{ __('chat.contact') }}</li>
                         </ul>
                     </div>
                     <div class="content-wrapper">
@@ -210,11 +293,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                                     data-bs-target="#private-tab-pane" type="button" role="tab"
                                                     aria-controls="private-tab-pane" aria-selected="false"
                                                     tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>{{ __('chat.private') }}</button>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="groups-tab" data-bs-toggle="tab"
-                                                    data-bs-target="#groups-tab-pane" type="button" role="tab"
-                                                    aria-controls="groups-tab-pane" aria-selected="false" tabindex="-1"><i class="ph-fill  ph-users-three me-2"></i>{{ __('chat.group') }}</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="BasicContent">
@@ -410,9 +488,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                                                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newChatModal"><i class="ti ti-brand-hipchat"></i> <span
                                                                 class="f-s-13">New Chat</span></a>
                                                     </li>
-                                                    <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                                class="f-s-13">New Contact</span></a>
-                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -422,313 +497,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                         </div>
 
                         <!-- tab 2 -->
-
-                        <div id="tab-2" class="tabs-content">
-                            <div class="chat-contact tabcontent">
-                                <div class="updates-box">
-                                    <div class="b-2-success b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/16.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Bette Hagenes</span>
-                                        <p class="f-s-12 text-secondary mb-0">2:30AM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/6.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Jessica</span>
-                                        <p class="f-s-12 text-secondary mb-0">2min</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-dark">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/5.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Jerry Ladies</span>
-                                        <p class="f-s-12 text-secondary mb-0">7:00AM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-success b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/4.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Emery McKenzie</span>
-                                        <p class="f-s-12 text-secondary mb-0">5:26PM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-success b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/3.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Mark Walsh</span>
-                                        <p class="f-s-12 text-secondary mb-0">1:26PM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-dark">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/2.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Noah Davis</span>
-                                        <p class="f-s-12 text-secondary mb-0">6:22PM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-primary">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/1.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                        <span>
-                          Isla White</span>
-                                        <p class="f-s-12 text-secondary mb-0">6:10PM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-secondary">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/10.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Fleta Walsh</span>
-                                        <p class="f-s-12 text-secondary mb-0">5:26PM</p>
-                                    </div>
-                                </div>
-                                <div class="updates-box">
-                                    <div class="b-2-secondary b-r-50 p-1">
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-secondary">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/11.png" alt="" class="img-fluid b-r-50">
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 text-start ps-2">
-                                        <span>Pete Sakes</span>
-                                        <p class="f-s-12 text-secondary mb-0">3:26PM</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end mt-3">
-                                <div class="btn-group dropdown-icon-none">
-                                    <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
-                                            data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                        <i class="ti ti-plus"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newChatModal"><i class="ti ti-brand-hipchat"></i> <span
-                                                    class="f-s-13">New Chat</span></a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                    class="f-s-13">New Contact</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- tab 3 -->
-
-                        <div id="tab-3" class="tabs-content">
-                            <div class="chat-contact tabcontent chat-contact-list">
-                                <div class=" d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-info">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/13.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Bette Hagenes</p>
-                                        <p class="mb-0 text-secondary f-s-13">+978356479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-danger">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/12.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Fleta Walsh</p>
-                                        <p class="mb-0 text-secondary f-s-13">+988456479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/11.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Lenora Bogisich</p>
-                                        <p class="mb-0 text-secondary f-s-13">+4583546479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-success">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/10.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-secondary border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Emery McKenzie</p>
-                                        <p class="mb-0 text-secondary f-s-13">+378356479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-danger">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/08.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Elmer</p>
-                                        <p class="mb-0 text-secondary f-s-13">+678356270</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-success">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/09.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Mark Walsh</p>
-                                        <p class="mb-0 text-secondary f-s-13">+780356479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center py-3">
-                                    <div>
-                        <span class="h-40 w-40 d-flex-center b-r-50 position-relative bg-warning">
-                          <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/avatar/07.png" alt="" class="img-fluid b-r-50">
-                          <span
-                              class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
-                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ps-2">
-                                        <p class="contact-name text-dark mb-0 f-w-500">Sue Flay</p>
-                                        <p class="mb-0 text-secondary f-s-13">+780356479</p>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-success d-flex-center b-r-50">
-                          <i class="ti ti-phone-call"></i>
-                        </span>
-                                    </div>
-                                    <div>
-                        <span class="h-35 w-35 text-outline-primary d-flex-center b-r-50 ms-1">
-                          <i class="ti ti-video"></i>
-                        </span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="d-flex justify-content-end mt-3">
-                                <div class="btn-group dropdown-icon-none">
-                                    <button class="btn btn-primary icon-btn b-r-22 dropdown-toggle active" type="button"
-                                            data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                        <i class="ti ti-plus"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newChatModal"><i class="ti ti-brand-hipchat"></i> <span
-                                                    class="f-s-13">New Chat</span></a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                                    class="f-s-13">New Contact</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -736,7 +504,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
     </div>
     <div class="col-lg-8 col-xxl-9 box-col-7">
         <div class="card chat-container-content-box" data-chat-room="{{ $selectedRoom?->id }}">
-            <div class="card-header bg-white border-bottom" style="z-index: 1020;">
+            <div class="card-header bg-white border-bottom">
                 <div class="chat-header d-flex align-items-center">
                     <div class="d-lg-none">
                         <a class="me-3 toggle-btn" role="button" data-bs-toggle="offcanvas" data-bs-target="#chatListOffcanvas" aria-controls="chatListOffcanvas">
@@ -773,84 +541,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                             <div class="fs-6">Seleziona una chat</div>
                             <div class="text-muted f-s-12">Clicca su un contatto per iniziare</div>
                         @endif
-                    </div>
-                    <button type="button" class="btn btn-success h-45 w-45 icon-btn b-r-22 me-sm-2"
-                            data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i class="ti ti-phone-call f-s-20"></i>
-                    </button>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-body p-0">
-                                <div class="call">
-                                    <div class="call-div">
-                                        <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/profile-app/32.jpg" class="w-100" alt="">
-                                        <div class="call-caption">
-                                            <h2 class="text-white">Jerry Ladies</h2>
-                                            <div class="d-flex justify-content-center">
-                            <span
-                                class="bg-success h-40 w-40 d-flex-center b-r-50 animate__animated animate__1 animate__shakeY animate__infinite call-btn pointer-events-auto" data-bs-dismiss="modal">
-                              <i class="ti ti-phone-call "></i>
-                            </span>
-                                                <span class="bg-danger h-40 w-40 d-flex-center b-r-50 ms-4 call-btn pointer-events-auto" data-bs-dismiss="modal">
-                              <i class="ti ti-phone"></i>
-                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-primary h-45 w-45 icon-btn b-r-22 me-sm-2"
-                            data-bs-toggle="modal" data-bs-target="#exampleModal1">
-                        <i class="ti ti-video f-s-20"></i>
-                    </button>
-                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-body p-0">
-                                <div class="call">
-                                    <div class="call-div pointer-events-auto">
-                                        <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/profile-app/25.jpg" class="w-100" alt="">
-
-                                        <div class="call-caption">
-                                            <div class="d-flex justify-content-center align-items-center">
-
-                            <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
-                              <i class="ti ti-microphone text-dark"></i>
-                            </span>
-                                                <span data-bs-dismiss="modal"
-                                                      class="bg-danger h-45 w-45 d-flex-center b-r-50 ms-4 animate__pulse animate__animated animate__infinite animate__faster call-btn pointer-events-auto">
-                              <i class="ti ti-phone"></i>
-                            </span>
-                                                <span class="bg-white h-35 w-35 d-flex-center b-r-50 ms-4">
-                              <i class="ti ti-phone-pause text-dark"></i>
-                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="video-div">
-                                        <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/profile-app/31.jpg" class="w-100 rounded" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-secondary h-45 w-45 icon-btn b-r-22 me-sm-2"
-                                data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                            <i class="ti ti-settings f-s-20"></i>
-                        </button>
-                        <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-brand-hipchat"></i> <span
-                                        class="f-s-13">Chat Settings</span></a>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-phone-call"></i> <span
-                                        class="f-s-13">Contact Settings</span></a>
-                            </li>
-                            <li><a class="dropdown-item" href="#"><i class="ti ti-settings"></i> <span
-                                        class="f-s-13">Settings</span></a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -930,7 +620,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
                 </div>
             </div>
 
-            <div class="card-footer bg-white border-top" style="z-index: 1010;">
+            <div class="card-footer bg-white border-top">
                 @if(!$selectedRoom)
                     <div class="text-center text-muted py-3">
                         <i class="ti ti-message-circle f-s-18 me-2"></i>
@@ -981,33 +671,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
 
 
                             <button class="btn btn-sm btn-primary ms-2 me-2 b-r-4" type="submit"><i class="ti ti-send"></i> <span>Send</span></button>
-                        </div>
-                    </div>
-                    <div class="d-none d-sm-block">
-                        <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Microphone">
-                            <i class="ti ti-microphone f-s-18"></i>
-                        </a>
-                    </div>
-                    <div class="d-none d-sm-block">
-                        <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Camera">
-                            <i class="ti ti-camera-plus f-s-18"></i>
-                        </a>
-                    </div>
-                    <div class="d-none d-sm-block">
-                        <a class="bg-secondary h-50 w-50 d-flex-center b-r-10 ms-1" role="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Paperclip">
-                            <i class="ti ti-paperclip f-s-18"></i>
-                        </a>
-                    </div>
-                    <div>
-                        <div class="btn-group dropdown-icon-none d-sm-none">
-                            <a class="h-35 w-35 d-flex-center ms-1" role="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                <i class="ti ti-dots-vertical"></i>
-                            </a>
-                            <ul class="dropdown-menu" data-popper-placement="bottom-start">
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-microphone"></i> <span class="f-s-13">Microphone</span></a></li>
-                                <li><a class="dropdown-item" href="#"> <i class="ti ti-camera-plus"></i> <span class="f-s-13">camera</span></a></li>
-                                <li><a class="dropdown-item" href="#"><i class="ti ti-paperclip"></i> <span class="f-s-13">paperclip</span></a></li>
-                            </ul>
                         </div>
                     </div>
                 </form>
@@ -1119,29 +782,6 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
 @endsection
 
 <style>
-/* CSS minimo per header e footer fissi su mobile */
-@media (max-width: 991.98px) {
-    .card-header {
-        position: fixed !important;
-        top: 60px;
-        left: 0;
-        right: 0;
-        z-index: 1020;
-        background: white;
-        border-bottom: 1px solid #dee2e6;
-        padding: 15px;
-    }
-
-    .card-footer {
-        position: fixed !important;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 1010;
-        background: white;
-        border-top: 1px solid #dee2e6;
-        padding: 15px;
-    }
 
     /* Prevenire zoom su input focus */
     input, textarea {
@@ -1183,61 +823,7 @@ async function markChatNotificationsAsRead(chatRoomId = null) {
     }
 }
 
-/* Miglioramenti per desktop - pulsanti + sempre visibili */
-@media (min-width: 992px) {
-    /* Assicura che i pulsanti + siano sempre visibili su desktop */
-    .d-flex.justify-content-end.mt-3 {
-        position: sticky !important;
-        bottom: 10px !important;
-        z-index: 100 !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 10px !important;
-        padding: 10px 0 !important;
-        margin: 10px 0 !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-    }
 
-    .d-flex.justify-content-end.mt-3 .btn-group.dropdown-icon-none .btn {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-        border: 2px solid white !important;
-        min-width: 45px !important;
-        min-height: 45px !important;
-    }
-
-    /* Assicura che il contenuto sia scrollabile */
-    .chat-contact {
-        padding-bottom: 60px !important;
-    }
-
-    .content-wrapper {
-        padding-bottom: 20px !important;
-    }
-
-    /* Pulsante + nell'header su desktop */
-    .d-flex.align-items-center.gap-2 .btn-group.dropdown-icon-none .btn {
-        min-width: 35px !important;
-        min-height: 35px !important;
-        border-radius: 6px !important;
-        font-size: 16px !important;
-    }
-
-    /* Migliora la visibilità del dropdown */
-    .dropdown-menu {
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-        border: none !important;
-        border-radius: 10px !important;
-        min-width: 200px !important;
-    }
-
-    /* Assicura che il contenuto sia scrollabile */
-    .chat-contact {
-        padding-bottom: 80px !important;
-    }
-
-    .content-wrapper {
-        padding-bottom: 20px !important;
-    }
 }
 </style>
 
@@ -1262,7 +848,7 @@ class TypingManager {
     }
 
     init() {
-      
+
 
         if (!this.chatInput) {
             console.error('TypingManager.init() - Chat input not found!');
@@ -1277,7 +863,7 @@ class TypingManager {
 
         // Ottieni room ID corrente
         this.currentRoom = this.getCurrentRoomId();
-    
+
 
         if (!this.currentRoom) {
             console.error('TypingManager.init() - No room ID found! Typing indicator will not work.');
@@ -1312,18 +898,18 @@ class TypingManager {
     }
 
     handleInput() {
-        
+
 
         if (!this.currentRoom) {
-            
+
             return;
         }
 
         if (!this.isTyping) {
-            
+
             this.startTyping();
         } else {
-            
+
         }
 
         // Reset timeout
@@ -1366,16 +952,16 @@ class TypingManager {
     }
 
     async sendTypingEvent(action) {
-        
+
 
         if (!this.currentRoom) {
-            
+
             return;
         }
 
         try {
             const url = `/chat/${this.currentRoom}/typing/${action}`;
-            
+
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -1385,21 +971,21 @@ class TypingManager {
                 }
             });
 
-            
+
 
             if (!response.ok) {
-                
+
             } else {
-                
+
             }
         } catch (error) {
-            
+
         }
     }
 
     listenToTypingEvents() {
 
-        
+
 
         if (!window.Echo || !this.currentRoom) {
             console.error('TypingManager.listenToTypingEvents() - Echo or room ID missing');
@@ -1408,39 +994,39 @@ class TypingManager {
             return;
         }
 
-        
+
 
         // Ascolta canale privato per la room
         const channelName = `chat.room.${this.currentRoom}`;
-        
+
 
         const channel = window.Echo.private(channelName);
-        
+
 
         channel
             .subscribed(() => {
-                
+
             })
             .error((err) => {
-                
+
             })
             .listen('.typing.started', (e) => {
-                
+
                 this.handleTypingStarted(e);
             })
             .listen('.typing.stopped', (e) => {
-                
+
                 this.handleTypingStopped(e);
             });
 
-        
+
     }
 
     handleTypingStarted(event) {
-        
+
 
         if (event.user_id === {{ auth()->id() }}) {
-            
+
             return; // Ignora i propri eventi
         }
 
@@ -1456,10 +1042,10 @@ class TypingManager {
     }
 
     handleTypingStopped(event) {
-        
-        
+
+
         if (event.user_id === {{ auth()->id() }}) {
-            
+
             return; // Ignora i propri eventi
         }
 
@@ -1558,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         typingManager = new TypingManager();
 
     } else {
-        
+
     }
 
     // Verifica che l'offcanvas sia presente
@@ -1566,10 +1152,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (offcanvas) {
 
     } else {
-        
+
     }
 
-    
+
 
         // Gestione click sui contatti nell'offcanvas
     const contactItems = document.querySelectorAll('#chatListOffcanvas .contact-item');
@@ -1719,12 +1305,12 @@ function closeEmojiPicker(buttonId) {
 
 function searchEmojis(query, buttonId) {
     // Implementazione della ricerca emoji
-    
+
 }
 
 function showEmojiCategory(category, buttonId) {
     // Implementazione della visualizzazione categoria emoji
-    
+
 }
 
 function updateCharCount(input) {

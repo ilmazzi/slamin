@@ -107,6 +107,8 @@ return [
     'no_message' => 'Nessun messaggio',
     'typing' => 'sta scrivendo...',
     'no_contacts_found' => 'Nessun contatto trovato',
+    'no_contacts' => 'Nessun contatto',
+    'no_contacts_description' => 'Non hai ancora nessun contatto. Crea una nuova chat per iniziare a conversare.',
     'send' => 'Invia',
     'type_message_placeholder' => 'Scrivi un messaggio...',
     'message_sent_success' => 'Messaggio inviato con successo',
