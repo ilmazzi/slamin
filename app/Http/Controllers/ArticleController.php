@@ -192,12 +192,12 @@ class ArticleController extends Controller
         // Handle tags - support both array of IDs and comma-separated strings
         if ($request->filled('tags')) {
             $tags = $request->tags;
-            
+
             // If tags is a string, split by comma and create/find tags
             if (is_string($tags)) {
                 $tagNames = array_map('trim', explode(',', $tags));
                 $tagIds = [];
-                
+
                 foreach ($tagNames as $tagName) {
                     if (!empty($tagName)) {
                         // Find or create tag
@@ -208,9 +208,9 @@ class ArticleController extends Controller
                         $tagIds[] = $tag->id;
                     }
                 }
-                
+
                 $article->tags()->sync($tagIds);
-                
+
                 // Increment tag usage
                 foreach ($tagIds as $tagId) {
                     $tag = ArticleTag::find($tagId);
@@ -218,11 +218,11 @@ class ArticleController extends Controller
                         $tag->incrementUsage();
                     }
                 }
-            } 
+            }
             // If tags is an array of IDs
             elseif (is_array($tags)) {
                 $article->tags()->sync($tags);
-                
+
                 // Increment tag usage
                 foreach ($tags as $tagId) {
                     $tag = ArticleTag::find($tagId);
