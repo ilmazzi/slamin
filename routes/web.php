@@ -82,6 +82,11 @@ Route::prefix('admin/settings')->name('admin.settings.')->middleware(['auth'])->
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Public Help and FAQ Routes
+Route::get('/help', [App\Http\Controllers\HelpController::class, 'help'])->name('help.index');
+Route::get('/faq', [App\Http\Controllers\HelpController::class, 'faq'])->name('faq.index');
+Route::get('/help/{help}', [App\Http\Controllers\HelpController::class, 'show'])->name('help.show');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Test route for debugging gigs issue
@@ -201,7 +206,6 @@ Route::view('error_404', 'error_404')->name('error_404');
 Route::view('error_500', 'error_500')->name('error_500');
 Route::view('error_503', 'error_503')->name('error_503');
 
-Route::view('faq', 'faq')->name('faq');
 Route::view('file_manager', 'file_manager')->name('file_manager');
 Route::view('file_upload', 'file_upload')->name('file_upload');
 Route::view('flag_icons', 'flag_icons')->name('flag_icons');
@@ -798,6 +802,10 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::put('/peertube/change-user-email', [App\Http\Controllers\Admin\PeerTubeController::class, 'changeUserEmail'])->name('peertube.change-user-email');
         Route::delete('/peertube/delete-user', [App\Http\Controllers\Admin\PeerTubeController::class, 'deletePeerTubeUser'])->name('peertube.delete-user');
 
+        // Help and FAQ Management Routes
+        Route::resource('help', App\Http\Controllers\Admin\HelpController::class)->names('help');
+        Route::patch('/help/{help}/toggle', [App\Http\Controllers\Admin\HelpController::class, 'toggle'])->name('help.toggle');
+
         // User Management Routes
         Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
         Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');
@@ -901,7 +909,7 @@ Route::prefix('premium')->name('premium.')->middleware(['auth', 'verified'])->gr
         Route::post('/cancel/{subscription}', [App\Http\Controllers\PremiumController::class, 'cancel'])->name('cancel');
         Route::post('/renew/{subscription}', [App\Http\Controllers\PremiumController::class, 'renew'])->name('renew');
         Route::get('/compare', [App\Http\Controllers\PremiumController::class, 'compare'])->name('compare');
-        Route::get('/faq', [App\Http\Controllers\PremiumController::class, 'faq'])->name('faq');
+        Route::get('/faq', [App\Http\Controllers\PremiumController::class, 'faq'])->name('premium.faq');
     });
 
     // Public Profile Routes (accessibili a tutti)

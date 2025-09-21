@@ -152,4 +152,5 @@ return [
     'upload_error' => 'Errore durante il caricamento',
     'please_wait' => 'Attendere prego...',
     'processing' => 'Elaborazione in corso...',
+    'shortcuts' => 'Scorciatoie',
 ];

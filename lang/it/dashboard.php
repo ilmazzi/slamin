@@ -45,6 +45,10 @@ return [
     'upload_performance_desc' => 'Condividi il tuo talento',
     'write_article' => 'Scrivi Articolo',
     'write_article_desc' => 'Pubblica un articolo',
+    'help' => 'Guida',
+    'help_desc' => 'Guida e aiuto',
+    'faq' => 'FAQ',
+    'faq_desc' => 'Domande frequenti',
 
     // Wishlist
     'my_wishlist' => 'La Mia Wishlist',

@@ -290,6 +290,22 @@ class DashboardController extends Controller
             ];
         }
 
+        // 5. Help - per tutti gli utenti autenticati
+        $actions[] = [
+            'key' => 'help',
+            'icon' => 'ph ph-question',
+            'color' => 'info',
+            'url' => route('help.index')
+        ];
+
+        // 6. FAQ - per tutti gli utenti autenticati
+        $actions[] = [
+            'key' => 'faq',
+            'icon' => 'ph ph-chat-circle-question',
+            'color' => 'success',
+            'url' => route('faq.index')
+        ];
+
         return $actions;
     }
 
