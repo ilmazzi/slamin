@@ -286,7 +286,7 @@ class DashboardController extends Controller
                 'key' => 'write_article',
                 'icon' => 'ph ph-newspaper',
                 'color' => 'primary',
-                'url' => '#' // TODO: Creare route per articles.create
+                'url' => route('articles.create')
             ];
         }
 

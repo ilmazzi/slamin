@@ -114,7 +114,7 @@
                                 <!-- 4. Scrivi Articolo - per organizer, venue_owner e admin -->
                                 @can('articles.create')
                                 <li class="dropdown-item">
-                                    <a href="#" class="d-flex align-items-center text-decoration-none">
+                                    <a href="{{ route('articles.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <x-icon name="article" size="20" class="me-2 text-primary" />
                                         <span>{{ __('dashboard.write_article') }}</span>
                                     </a>
