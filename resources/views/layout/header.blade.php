@@ -28,11 +28,11 @@
     .header-main .header-left .header-searchbar {
         max-width: 200px;
     }
-    
+
     .header-main .header-right ul {
         gap: 0.3rem;
     }
-    
+
     .header-main .header-right ul li .head-icon {
         width: 32px;
         height: 32px;
