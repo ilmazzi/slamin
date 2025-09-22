@@ -170,17 +170,17 @@ use App\Helpers\PlaceholderHelper;
                 max-width: 90% !important;
                 padding: 1rem !important;
             }
-
+            
             .carousel-caption h5 {
                 font-size: 1.1rem !important;
                 margin-bottom: 0.5rem !important;
             }
-
+            
             .carousel-caption p {
                 font-size: 0.9rem !important;
                 margin-bottom: 0.75rem !important;
             }
-
+            
             .carousel-caption .btn {
                 font-size: 0.8rem !important;
                 padding: 0.5rem 1rem !important;
@@ -360,8 +360,8 @@ use App\Helpers\PlaceholderHelper;
                             <div class="card-header">
                                 <h5 class="mb-0">
                                     <a href="{{ route('events.index') }}" class="text-decoration-none text-white hover-effect d-flex align-items-center">
-                                        <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                        {{ __('home.upcoming_events') }}
+                                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
+                                    {{ __('home.upcoming_events') }}
                                         <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
                                     </a>
                                 </h5>
@@ -594,8 +594,8 @@ use App\Helpers\PlaceholderHelper;
                     <div class="col-12">
                         <h5 class="text-primary mb-3">
                             <span class="d-flex align-items-center">
-                                <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                                {{ __('home.new_users') }}
+                            <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
+                            {{ __('home.new_users') }}
                             </span>
                         </h5>
                     </div>
@@ -644,8 +644,8 @@ use App\Helpers\PlaceholderHelper;
                             class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <a href="{{ route('poems.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
-                                    <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
-                                    {{ __('home.poetry_section') }}
+                                <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
+                                {{ __('home.poetry_section') }}
                                     <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
                                 </a>
                             </h5>
@@ -816,8 +816,8 @@ use App\Helpers\PlaceholderHelper;
                             class="card-header bg-gradient-warning text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
                                 <a href="{{ route('articles.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
-                                    <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
-                                    {{ __('home.articles_section') }}
+                                <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
+                                {{ __('home.articles_section') }}
                                     <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
                                 </a>
                             </h5>
@@ -849,14 +849,6 @@ use App\Helpers\PlaceholderHelper;
                                                                         <img src="{{ $article->featured_image_url }}"
                                                                             alt="{{ $article->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                        <div
-                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                        </div>
-                                                                        <div
-                                                                            class="position-absolute top-50 start-50 translate-middle">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
-                                                                        </div>
                                                                     @else
                                                                         {!! article_placeholder_html(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
@@ -935,14 +927,6 @@ use App\Helpers\PlaceholderHelper;
                                                                         <img src="{{ $article->featured_image_url }}"
                                                                             alt="{{ $article->title }}" class="w-100 h-100"
                                                                             style="object-fit: cover;">
-                                                                        <div
-                                                                            class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark opacity-20">
-                                                                        </div>
-                                                                        <div
-                                                                            class="position-absolute top-50 start-50 translate-middle">
-                                                                            <i
-                                                                                class="ph-duotone ph-newspaper f-s-12 text-white"></i>
-                                                                        </div>
                                                                     @else
                                                                         {!! article_placeholder_html(60, 60, 'w-100 h-100', route('articles.show', $article->slug)) !!}
                                                                     @endif
@@ -1694,7 +1678,7 @@ use App\Helpers\PlaceholderHelper;
             .finally(() => {
                 // Riabilita i pulsanti
                 if (messageButton) messageButton.disabled = false;
-            });
+                });
         };
 
         // Funzione per mostrare messaggio di successo
