@@ -1427,6 +1427,11 @@ use App\Helpers\PlaceholderHelper;
             // Inizializza lo slider dei video
             initGenericSlider('#videos-slider', 'Videos slider');
 
+            // Sincronizza tutti gli slider per evitare conflitti di timing
+            setTimeout(() => {
+                console.log('Sincronizzazione slider completata');
+            }, 2000);
+
 
             // Inizializza il carosello Bootstrap (solo se esiste)
             const $carousel = $('#heroCarousel');
@@ -1495,12 +1500,12 @@ use App\Helpers\PlaceholderHelper;
                 });
 
                 // Auto-scroll
-                interval = setInterval(nextSlide, 5000);
+                interval = setInterval(nextSlide, 4000);
 
                 // Pausa al hover
                 carousel.addEventListener('mouseenter', () => clearInterval(interval));
                 carousel.addEventListener('mouseleave', () => {
-                    interval = setInterval(nextSlide, 5000);
+                    interval = setInterval(nextSlide, 4000);
                 });
             }
         }

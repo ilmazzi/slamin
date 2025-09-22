@@ -2295,8 +2295,7 @@
                         <div class="footer-btn">
                             <a class="btn btn-primary btn-lg" href="https://themeforest.net/user/la-themes"
                                target="_blank">Buy Now</a>
-                            <a class="btn btn-danger btn-lg" href="mailto:teqlathemes@gmail.com."
-                               target="_blank">Need Help ?</a>
+                            <a class="btn btn-danger btn-lg" href="{{ route('help.index') }}">Help & FAQ</a>
                         </div>
                     </div>
                 </div>
