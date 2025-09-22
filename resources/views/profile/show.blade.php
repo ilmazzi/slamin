@@ -153,7 +153,7 @@
     <div class="row m-1">
         <div class="col-12">
             <h4 class="main-title">{{ $user->getDisplayName() }}</h4>
-            
+
         </div>
     </div>
 
@@ -224,10 +224,14 @@
                             </div>
 
                             @if(!$isOwnProfile)
-                            <div class="my-2">
+                            <div class="my-2 d-flex gap-2">
                                 <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})" id="followButtonMobile">
                                     <i class="ti ti-user"></i>
                                     {{ $user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow') }}
+                                </button>
+                                <button type="button" class="btn btn-success b-r-22" onclick="startChat({{ $user->id }})" id="messageButtonMobile">
+                                    <i class="ti ti-message-circle"></i>
+                                    {{ __('profile.send_message_button') }}
                                 </button>
                             </div>
                             @endif
@@ -756,10 +760,14 @@
                                             </div>
                                         </div>
                                         @if(!$isOwnProfile)
-                                        <div class="my-2">
+                                        <div class="my-2 d-flex gap-2">
                                             <button type="button" class="btn btn-primary b-r-22" onclick="followUser({{ $user->id }})" id="followButton">
                                                 <i class="ti ti-user"></i>
                                                 {{ $user->is_followed_by_current_user ?? false ? __('profile.following') : __('profile.follow') }}
+                                            </button>
+                                            <button type="button" class="btn btn-success b-r-22" onclick="startChat({{ $user->id }})" id="messageButton">
+                                                <i class="ti ti-message-circle"></i>
+                                                {{ __('profile.send_message_button') }}
                                             </button>
                                         </div>
                                         @endif
@@ -1661,9 +1669,59 @@ function followUser(userId) {
     });
 }
 
-function sendMessage(userId) {
-    // Implementazione messaggi
-    Swal.fire('Info', '{{ __('profile.messages_development') }}', 'info');
+function startChat(userId) {
+    // Verifica se l'utente è autenticato
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+    if (!isAuthenticated) {
+        window.location.href = '{{ route("login") }}';
+        return;
+    }
+
+    // Disabilita i pulsanti durante la richiesta
+    const messageButton = document.getElementById('messageButton');
+    const messageButtonMobile = document.getElementById('messageButtonMobile');
+
+    if (messageButton) messageButton.disabled = true;
+    if (messageButtonMobile) messageButtonMobile.disabled = true;
+
+    // Mostra loading
+    Swal.fire({
+        title: 'Creazione chat...',
+        text: 'Sto creando la chat con questo utente',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Crea o accede alla chat privata
+    fetch('{{ route("chat.create-private", ":userId") }}'.replace(':userId', userId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Reindirizza alla chat
+            window.location.href = '{{ route("chat.index") }}';
+        } else {
+            Swal.fire('Errore', data.message || 'Errore durante la creazione della chat', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Errore creazione chat:', error);
+        Swal.fire('Errore', 'Errore durante la creazione della chat', 'error');
+    })
+    .finally(() => {
+        // Riabilita i pulsanti
+        if (messageButton) messageButton.disabled = false;
+        if (messageButtonMobile) messageButtonMobile.disabled = false;
+    });
 }
 
 function uploadProfilePhoto(input) {

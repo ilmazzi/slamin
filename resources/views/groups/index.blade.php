@@ -138,58 +138,11 @@
                 <div class="card-body">
                     <div class="row">
                         @forelse($users as $user)
-                        <div class="col-12 col-md-6 col-lg-4 mb-3">
-                            <div class="card hover-effect equal-card">
-                                <div class="card-body text-center pa-20">
-                                    <!-- Avatar -->
-                                    <div class="mb-3">
-                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                             alt="{{ $user->getDisplayName() }}"
-                                             class="rounded-circle"
-                                             style="width: 80px; height: 80px; object-fit: cover;">
-                                    </div>
-
-                                    <!-- Nome e ruolo -->
-                                    <h6 class="f-w-600 mb-1">{{ $user->getDisplayName() }}</h6>
-                                    <div class="mb-3">
-                                        @foreach($user->roles as $role)
-                                            <span class="badge bg-{{ $role->name == 'poet' ? 'success' : ($role->name == 'organizer' ? 'warning' : 'info') }} me-1">
-                                                {{ ucfirst($role->name) }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-
-                                    <!-- Bio -->
-                                    @if($user->bio)
-                                    <p class="text-muted f-s-12 mb-3">
-                                        {{ Str::limit($user->bio, 80) }}
-                                    </p>
-                                    @endif
-
-                                    <!-- Statistiche -->
-                                    <div class="row text-center mb-3">
-                                        <div class="col-4">
-                                            <div class="text-primary f-w-600">{{ $user->poems()->count() }}</div>
-                                            <small class="text-muted">{{ __('poems.title') }}</small>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="text-success f-w-600">{{ $user->videos()->count() }}</div>
-                                            <small class="text-muted">{{ __('videos.title') }}</small>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="text-info f-w-600">{{ $user->groups()->count() }}</div>
-                                            <small class="text-muted">{{ __('groups.title') }}</small>
-                                        </div>
-                                    </div>
-
-                                    <!-- Azioni -->
-                                    <a href="{{ route('user.show', $user) }}" class="btn btn-primary btn-sm w-100">
-                                        <i class="ph-duotone ph-eye me-1"></i>
-                                        {{ __('common.view') }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                            <x-user-card
+                                :user="$user"
+                                card-class="col-12 col-md-6 col-lg-4 mb-3"
+                                :show-follow-button="true"
+                                :show-message-button="true" />
                         @empty
                         <div class="col-12">
                             <div class="text-center py-4">
@@ -379,4 +332,7 @@
         </div>
     </div>
 </div>
+
+<x-user-card-scripts />
+
 @endsection

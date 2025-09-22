@@ -9,7 +9,7 @@
         <div class="row m-1">
             <div class="col-12">
                 <h4 class="main-title">{{ __('profile.following') }} - {{ $user->getDisplayName() }}</h4>
-                
+
             </div>
         </div>
 
@@ -40,72 +40,11 @@
         <!-- Lista Following -->
         <div class="row">
             @forelse($following as $followedUser)
-            <div class="col-12 col-sm-6 col-lg-4 mb-4">
-                <div class="card hover-effect h-100">
-                    <div class="card-body text-center">
-                        <!-- Avatar -->
-                        <div class="mb-3">
-                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($followedUser) }}"
-                                 alt="{{ $followedUser->getDisplayName() }}"
-                                 class="rounded-circle"
-                                 width="80"
-                                 height="80"
-                                 style="object-fit: cover;">
-                        </div>
-
-                        <!-- Nome e Info -->
-                        <h5 class="card-title f-w-600 mb-2">
-                            <a href="{{ route('user.show', $followedUser) }}" class="text-decoration-none">
-                                {{ $followedUser->getDisplayName() }}
-                            </a>
-                        </h5>
-
-                        @if($followedUser->nickname && $followedUser->nickname !== $followedUser->name)
-                        <p class="text-muted f-s-14 mb-2">{{ $followedUser->nickname }}</p>
-                        @endif
-
-                        <!-- Statistiche -->
-                        <div class="row text-center mb-3">
-                            <div class="col-4">
-                                <div class="f-s-12 text-muted">{{ __('profile.videos_label') }}</div>
-                                <div class="fw-bold">{{ $followedUser->videos_count }}</div>
-                            </div>
-                            <div class="col-4">
-                                <div class="f-s-12 text-muted">{{ __('profile.photos_label') }}</div>
-                                <div class="fw-bold">{{ $followedUser->photos_count }}</div>
-                            </div>
-                            <div class="col-4">
-                                <div class="f-s-12 text-muted">{{ __('profile.poems_label') }}</div>
-                                <div class="fw-bold">{{ $followedUser->poems_count }}</div>
-                            </div>
-                        </div>
-
-                        <!-- Azioni -->
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ route('user.show', $followedUser) }}" class="btn btn-primary btn-sm">
-                                <i class="ph-duotone ph-user me-1"></i>
-                                Profilo
-                            </a>
-                            @auth
-                            <button type="button"
-                                    class="btn {{ $followedUser->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-outline-primary' }} btn-sm"
-                                    onclick="followUser({{ $followedUser->id }})"
-                                    id="followBtn{{ $followedUser->id }}">
-                                <i class="ti {{ $followedUser->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }} me-1"></i>
-                                <span id="followText{{ $followedUser->id }}">
-                                    {{ $followedUser->is_followed_by_current_user ?? false ? __('profile.following_label') : __('profile.follow_label') }}
-                                </span>
-                            </button>
-                            @else
-                            <div class="btn btn-outline-secondary btn-sm" style="opacity: 0.6;">
-                                <i class="ti ti-user me-1"></i>
-                                Follow
-                            </div>
-                            @endauth
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <x-user-card
+                    :user="$followedUser"
+                    card-class="col-12 col-sm-6 col-lg-4 mb-4"
+                    :show-follow-button="true"
+                    :show-message-button="true" />
             @empty
             <div class="col-12">
                 <div class="card">
@@ -198,6 +137,60 @@ function followUser(userId) {
         button.disabled = false;
     });
 }
+
+function startChat(userId) {
+    // Verifica se l'utente è autenticato
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+    if (!isAuthenticated) {
+        window.location.href = '{{ route("login") }}';
+        return;
+    }
+
+    // Disabilita i pulsanti durante la richiesta
+    const messageButton = document.getElementById('messageBtn' + userId);
+
+    if (messageButton) messageButton.disabled = true;
+
+    // Mostra loading
+    Swal.fire({
+        title: 'Creazione chat...',
+        text: 'Sto creando la chat con questo utente',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Crea o accede alla chat privata
+    fetch('{{ route("chat.create-private", ":userId") }}'.replace(':userId', userId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Reindirizza alla chat
+            window.location.href = '{{ route("chat.index") }}';
+        } else {
+            Swal.fire('Errore', data.message || 'Errore durante la creazione della chat', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Errore creazione chat:', error);
+        Swal.fire('Errore', 'Errore durante la creazione della chat', 'error');
+    })
+    .finally(() => {
+        // Riabilita i pulsanti
+        if (messageButton) messageButton.disabled = false;
+    });
+}
 </script>
 @endpush
 @endsection
+
+<x-user-card-scripts />

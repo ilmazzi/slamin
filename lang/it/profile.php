@@ -37,6 +37,7 @@ return [
     'no_participated_events' => 'Nessun evento partecipato',
     'follow' => 'Segui',
     'send_message' => 'Messaggio',
+    'send_message_button' => 'Invia messaggio',
     'modify_profile' => 'Modifica Profilo',
     'my_videos' => 'I Miei Media',
     'my_activities' => 'Le Mie Attività',
@@ -109,12 +110,12 @@ return [
     'view_my_activities' => 'Vedi le mie attività',
     'follow_development' => 'Funzionalità follow in sviluppo',
     'messages_development' => 'Funzionalità messaggi in sviluppo',
-    'following' => 'Following',
-    'followers' => 'Followers',
+    'following' => 'Seguito',
+    'followers' => 'Follower',
     'no_following' => 'Non stai seguendo nessuno',
     'no_followers' => 'Nessun follower',
-    'view_all_following' => 'Vedi tutti i following',
-    'view_all_followers' => 'Vedi tutti i followers',
+    'view_all_following' => 'Vedi tutti i seguiti',
+    'view_all_followers' => 'Vedi tutti i follower',
     'posts' => 'Post',
 
     // Chiavi per testi hardcoded
@@ -138,8 +139,8 @@ return [
     'events' => 'Eventi',
     'articles' => 'Articoli',
     'venues' => 'Luoghi',
-    'following_label' => 'Following',
-    'follow_label' => 'Follow',
+    'following_label' => 'Seguito',
+    'follow_label' => 'Segui',
     'no_followers_message' => 'Questo utente non ha ancora followers.',
 
     // Chiavi per la pagina following

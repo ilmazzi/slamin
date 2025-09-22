@@ -600,91 +600,10 @@ use App\Helpers\PlaceholderHelper;
                         </h5>
                     </div>
                     @foreach ($newUsers->take(3) as $user)
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="profile-container"
-                                        onclick="window.location.href='{{ route('user.show', $user) }}'"
-                                        style="cursor: pointer;">
-                                        <div class="image-details">
-                                            <div class="profile-image">
-                                                <img src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1') }}"
-                                                    alt="{{ $user->name }}" class="w-100 h-100"
-                                                    style="object-fit: cover;">
-                                            </div>
-                                            <div class="profile-pic">
-                                                <div class="avatar-upload">
-                                                    <div class="avatar-preview">
-                                                        <div id="imgPreview">
-
-                                                            <img src="{{ $user->profile_photo_url }}"
-                                                                alt="{{ $user->name }}" class="w-100 h-100"
-                                                                style="object-fit: cover;">
-
-                                                            <div
-                                                                class="bg-gradient-success rounded-circle d-flex align-items-center justify-content-center w-100 h-100">
-                                                                <span
-                                                                    class="text-white fw-bold f-s-20">{{ strtoupper(substr(trim($user->name), 0, 2)) ?: 'U' }}</span>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="person-details">
-                                            <h4 class="f-w-600 mb-1">{{ $user->name }}
-                                                @if ($user->nickname)
-                                                    <span class="text-muted f-s-14 fw-normal">({{ $user->nickname }})</span>
-                                                @endif
-                                                @if ($user->verified)
-                                                    <img src="https://phplaravel-1384472-5380003.cloudwaysapps.com/../assets/images/profile-app/01.png"
-                                                        class="w-20 h-20" alt="instagram-check-mark">
-                                                @endif
-                                            </h4>
-                                            <p class="f-s-12 mb-3">{{ $user->city ?? __('home.location_not_specified') }}</p>
-                                            <div class="details">
-                                                <div>
-                                                    <h4 class="text-primary">{{ $user->poems_count }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('common.poems') }}</p>
-                                                </div>
-                                                <div>
-                                                    <h4 class="text-primary">{{ $user->articles_count }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('common.articles') }}</p>
-                                                </div>
-                                                <div>
-                                                    <h4 class="text-primary">{{ number_format($user->total_interactions) }}</h4>
-                                                    <p class="text-secondary f-s-12">{{ __('home.interactions') }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="my-2">
-                                                @auth
-                                                    <button type="button"
-                                                        class="btn {{ $user->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-primary' }} b-r-22"
-                                                        onclick="event.stopPropagation(); followUser({{ $user->id }})"
-                                                        id="followBtn{{ $user->id }}">
-                                                        <i
-                                                            class="ti {{ $user->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }}"></i>
-                                                        <span
-                                                            id="followText{{ $user->id }}">{{ $user->is_followed_by_current_user ?? false ? 'Following' : 'Follow' }}</span>
-                                                    </button>
-                                                @else
-                                                    <div class="text-center">
-                                                        <div class="social-counter"
-                                                            style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border-radius: 8px;">
-                                                            <i class="ti ti-user f-s-24 text-muted" style="opacity: 0.6;"></i>
-                                                            <span class="text-secondary f-s-12">Follow</span>
-                                                        </div>
-                                                    </div>
-                                                @endauth
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
+                        <x-user-card
+                            :user="$user"
+                            :show-follow-button="true"
+                            :show-message-button="true" />
                     @endforeach
 
                 </div>
@@ -838,21 +757,29 @@ use App\Helpers\PlaceholderHelper;
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <h6 class="card-title f-w-600 f-s-14 mb-1 text-primary">
-                                                                {{ Str::limit($poem->title, 40) }}</h6>
+                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ $poem->title ?: 'Poesia senza titolo' }}
+                                                                </a>
+                                                            </h6>
                                                             <p class="text-muted f-s-12 mb-1">
                                                                 <a href="{{ route('user.show', $poem->user) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
                                                             </p>
-                                                            <div class="d-flex align-items-center">
-                                                                <small class="text-muted f-s-11 me-3">
-                                                                    <i
-                                                                        class="ph-duotone ph-eye f-s-10 me-1"></i>{{ number_format($poem->views_count) }}
-                                                                </small>
+                                                            <p class="text-muted f-s-11 mb-2">
+                                                                <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none hover-effect">
+                                                                    {{ Str::limit(strip_tags($poem->content), 100) }}
+                                                                </a>
+                                                            </p>
+                                                            @if($poem->category)
+                                                                <span class="badge bg-light-info f-s-10 mb-2">{{ $poem->category }}</span>
+                                                            @endif
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <x-social-view-counter :content="$poem" type="poem" size="sm" />
                                                                 <small class="text-muted f-s-11">
                                                                     <i
-                                                                        class="ph-duotone ph-thumbs-up f-s-10 me-1"></i>{{ number_format($poem->likes_count) }}
+                                                                        class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $poem->created_at->diffForHumans() }}
                                                                 </small>
                                                             </div>
                                                         </div>
@@ -1712,6 +1639,59 @@ use App\Helpers\PlaceholderHelper;
                 });
         };
 
+        // Funzione per iniziare una chat
+        window.startChat = function(userId) {
+            // Verifica se l'utente è autenticato
+            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+            if (!isAuthenticated) {
+                window.location.href = '{{ route("login") }}';
+                return;
+            }
+
+            // Disabilita i pulsanti durante la richiesta
+            const messageButton = document.getElementById('messageBtn' + userId);
+
+            if (messageButton) messageButton.disabled = true;
+
+            // Mostra loading
+            Swal.fire({
+                title: 'Creazione chat...',
+                text: 'Sto creando la chat con questo utente',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Crea o accede alla chat privata
+            fetch('{{ route("chat.create-private", ":userId") }}'.replace(':userId', userId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reindirizza alla chat
+                    window.location.href = '{{ route("chat.index") }}';
+                } else {
+                    Swal.fire('Errore', data.message || 'Errore durante la creazione della chat', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Errore creazione chat:', error);
+                Swal.fire('Errore', 'Errore durante la creazione della chat', 'error');
+            })
+            .finally(() => {
+                // Riabilita i pulsanti
+                if (messageButton) messageButton.disabled = false;
+            });
+        };
+
         // Funzione per mostrare messaggio di successo
         window.showSuccessMessage = function(message) {
             const successDiv = document.createElement('div');
@@ -1763,4 +1743,7 @@ use App\Helpers\PlaceholderHelper;
             }
         });
     </script>
+
+    <!-- User Card Scripts -->
+    <x-user-card-scripts />
 @endpush
