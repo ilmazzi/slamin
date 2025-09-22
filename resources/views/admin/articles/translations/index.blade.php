@@ -55,9 +55,9 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-xs me-2">
-                                                        <img src="{{ $article->user->avatar ?? '/assets/images/default-avatar.png' }}" alt="{{ $article->user->name }}" class="rounded-circle">
+                                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}" alt="{{ $article->user->getDisplayName() }}" class="rounded-circle">
                                                     </div>
-                                                    <span>{{ $article->user->name }}</span>
+                                                    <span>{{ $article->user->getDisplayName() }}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -96,17 +96,11 @@
                                                                 $status = 'completed';
                                                             }
                                                         @endphp
-                                                        <span class="badge {{ $status === 'completed' ? 'bg-success' : ($hasTranslation ? 'bg-warning' : 'bg-secondary') }}" title="{{ strtoupper($lang) }}: {{ ucfirst($status) }} {{ $hasTranslation ? '(Traduzione esistente)' : '' }} | Debug: Status={{ $status }}, HasTrans={{ $hasTranslation ? 'Sì' : 'No' }}, ArtID={{ $article->id }}">
+                                                        <span class="badge {{ $status === 'completed' ? 'bg-success' : ($hasTranslation ? 'bg-warning' : 'bg-secondary') }}" title="{{ strtoupper($lang) }}: {{ ucfirst($status) }} {{ $hasTranslation ? '(Traduzione esistente)' : '' }}">
                                                             {{ strtoupper($lang) }}
                                                         </span>
                                                     @endforeach
                                                 </div>
-                                                <!-- DEBUG TEMPORANEO -->
-                                                <small class="text-muted">
-                                                    ArtID: {{ $article->id }} |
-                                                    Trans: {{ $article->translations->count() }} |
-                                                    Status: {{ json_encode($article->translation_status) }}
-                                                </small>
                                             </td>
                                             <td>
                                                 <small class="text-muted">{{ $article->created_at->format('d/m/Y H:i') }}</small>
