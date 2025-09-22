@@ -1,5 +1,17 @@
 // >>-- 06 Footer css start --<<
 
+// Assicura che il body abbia padding-bottom per il footer fisso
+body {
+    padding-bottom: 80px !important;
+}
+
+// Assicura che il footer sia sempre visibile
+footer {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 div{
 >footer{
     position: fixed;
