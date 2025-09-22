@@ -55,7 +55,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-xs me-2">
-                                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}" alt="{{ $article->user->getDisplayName() }}" class="rounded-circle">
+                                                        <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}" alt="{{ $article->user->getDisplayName() }}" class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;">
                                                     </div>
                                                     <span>{{ $article->user->getDisplayName() }}</span>
                                                 </div>
