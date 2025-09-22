@@ -170,17 +170,17 @@ use App\Helpers\PlaceholderHelper;
                 max-width: 90% !important;
                 padding: 1rem !important;
             }
-            
+
             .carousel-caption h5 {
                 font-size: 1.1rem !important;
                 margin-bottom: 0.5rem !important;
             }
-            
+
             .carousel-caption p {
                 font-size: 0.9rem !important;
                 margin-bottom: 0.75rem !important;
             }
-            
+
             .carousel-caption .btn {
                 font-size: 0.8rem !important;
                 padding: 0.5rem 1rem !important;
@@ -359,8 +359,11 @@ use App\Helpers\PlaceholderHelper;
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="mb-0">
-                                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                    {{ __('home.upcoming_events') }}
+                                    <a href="{{ route('events.index') }}" class="text-decoration-none text-white hover-effect d-flex align-items-center">
+                                        <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
+                                        {{ __('home.upcoming_events') }}
+                                        <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
+                                    </a>
                                 </h5>
                             </div>
                             <div class="card-body">
@@ -450,7 +453,13 @@ use App\Helpers\PlaceholderHelper;
                     <div class="col-12">
                     <div class="card equal-card">
                         <div class="card-header">
-                            <h5>{{ __('home.new_videos') }}</h5>
+                            <h5 class="mb-0">
+                                <a href="{{ route('media.index') }}" class="text-decoration-none text-dark hover-effect d-flex align-items-center">
+                                    <i class="ph-duotone ph-video-camera f-s-16 me-2"></i>
+                                    {{ __('home.new_videos') }}
+                                    <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
+                                </a>
+                            </h5>
                             </div>
                             <div class="card-body">
                             <div class="events-slider app-arrow" id="videos-slider">
@@ -584,8 +593,10 @@ use App\Helpers\PlaceholderHelper;
                 <div class="row mb-4">
                     <div class="col-12">
                         <h5 class="text-primary mb-3">
-                            <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                            {{ __('home.new_users') }}
+                            <span class="d-flex align-items-center">
+                                <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
+                                {{ __('home.new_users') }}
+                            </span>
                         </h5>
                     </div>
                     @foreach ($newUsers->take(3) as $user)
@@ -713,8 +724,11 @@ use App\Helpers\PlaceholderHelper;
                         <div
                             class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
-                                <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
-                                {{ __('home.poetry_section') }}
+                                <a href="{{ route('poems.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
+                                    <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
+                                    {{ __('home.poetry_section') }}
+                                    <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
+                                </a>
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="poetryToggleLabelLeft"
@@ -874,8 +888,11 @@ use App\Helpers\PlaceholderHelper;
                         <div
                             class="card-header bg-gradient-warning text-white d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">
-                                <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
-                                {{ __('home.articles_section') }}
+                                <a href="{{ route('articles.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
+                                    <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
+                                    {{ __('home.articles_section') }}
+                                    <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
+                                </a>
                             </h5>
                             <div class="d-flex align-items-center justify-content-center">
                                 <span id="articlesToggleLabelLeft"

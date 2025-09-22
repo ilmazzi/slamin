@@ -16,7 +16,7 @@ return [
     // Sezioni principali
     'upcoming_events' => 'Prossimi Eventi',
     'new_users' => 'Nuovi Utenti',
-    'poetry_section' => 'Poesia',
+    'poetry_section' => 'Poesie',
     'articles_section' => 'Articoli',
     'videos_section' => 'Video',
     'no_videos_available' => 'Nessun video disponibile',
