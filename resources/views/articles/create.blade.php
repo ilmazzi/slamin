@@ -178,7 +178,7 @@
                                         <!-- Opzioni avanzate -->
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="allow_comments"
-                                                   name="allow_comments" value="1" {{ old('allow_comments') ? 'checked' : '' }}>
+                                                   name="allow_comments" value="1" {{ old('allow_comments', true) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="allow_comments">
                                                 {{ __('articles.allow_comments') }}
                                             </label>

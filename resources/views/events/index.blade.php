@@ -52,6 +52,21 @@
         padding: 0.25rem;
     }
 
+    /* Map controls visibility */
+    .map-controls {
+        z-index: 1001 !important;
+    }
+
+    .map-controls .btn {
+        z-index: 1002 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .map-controls .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+    }
+
     /* Event card mobile optimization */
     .card.h-100 {
         min-height: auto;
@@ -128,14 +143,15 @@
             <div class="card">
                 <div class="card-body p-0">
                     <div id="eventsMap" style="height: 300px; border-radius: 10px; overflow: hidden; position: relative;">
-                        <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1000;">
-                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}">
-                                <i class="ph ph-crosshairs f-s-14"></i>
+                        <!-- Map Controls Overlay -->
+                        <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1001; pointer-events: auto;">
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}" style="z-index: 1002;">
+                                <i class="ph ph-map-pin f-s-14"></i>
                             </button>
-                            <button class="btn btn-light btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}">
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}" style="z-index: 1002;">
                                 <i class="ph ph-arrow-clockwise f-s-14"></i>
                             </button>
-                            <button class="btn btn-light btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}">
+                            <button class="btn btn-primary btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}" style="z-index: 1002;">
                                 <i class="ph ph-globe f-s-14"></i>
                             </button>
                         </div>

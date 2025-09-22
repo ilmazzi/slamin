@@ -24,6 +24,22 @@
     overflow-y: auto;
 }
 
+/* Map Controls Styles */
+.leaflet-control-zoom {
+    z-index: 1000 !important;
+}
+
+.leaflet-control-zoom a {
+    background-color: white !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+    font-weight: bold !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background-color: #f4f4f4 !important;
+}
+
 .autocomplete-header {
     padding: 0.5rem 0.75rem;
     background-color: #f8f9fa;
@@ -426,6 +442,84 @@
                                 <div class="error-feedback" id="end_datetime-error"></div>
                             </div>
 
+                            <!-- Availability-Based Event Option -->
+                            <div class="col-12 mb-3">
+                                <div class="card border-warning">
+                                    <div class="card-header bg-light-warning">
+                                        <div class="form-check">
+                                                    <input type="checkbox" name="is_availability_based"
+                                                        id="is_availability_based" class="form-check-input"
+                                                        value="1">
+                                            <label for="is_availability_based" class="form-check-label f-w-600">
+                                                        <i
+                                                            class="ph ph-calendar-check me-2"></i>{{ __('events.availability_based_event') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="availability-settings" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                            <input type="text" name="availability_deadline"
+                                                                id="availability_deadline"
+                                                                class="form-control flatpickr-input"
+                                                                placeholder="Seleziona scadenza risposte..." readonly>
+                                                            <label
+                                                                for="availability_deadline">{{ __('events.availability_deadline') }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="form-floating">
+                                                            <textarea name="availability_instructions" id="availability_instructions" class="form-control" rows="3"
+                                                                placeholder="{{ __('events.availability_instructions_placeholder') }}"></textarea>
+                                                            <label
+                                                                for="availability_instructions">{{ __('events.availability_instructions') }}</label>
+                                                </div>
+                                                        <small
+                                                            class="text-muted">{{ __('events.availability_instructions_help') }}</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Sezione Date Multiple per Disponibilità -->
+                                        <div class="row mt-4">
+                                            <div class="col-12">
+                                                <div class="card border-success">
+                                                    <div class="card-header bg-light-success">
+                                                        <h6 class="mb-0">
+                                                                    <i
+                                                                        class="ph ph-calendar-plus me-2"></i>{{ __('events.availability_multiple_dates') }}
+                                                        </h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                                <p class="text-muted mb-3">
+                                                                    {{ __('events.availability_multiple_dates_help') }}</p>
+
+                                                        <!-- Lista opzioni di date -->
+                                                        <div id="availability-options-list">
+                                                            <!-- Le opzioni verranno aggiunte qui dinamicamente -->
+                                                        </div>
+
+                                                        <!-- Pulsante per aggiungere nuova data -->
+                                                        <div class="text-center mt-3">
+                                                                    <button type="button" class="btn btn-outline-success"
+                                                                        id="add-availability-option">
+                                                                        <i
+                                                                            class="ph ph-plus me-2"></i>{{ __('events.add_availability_option') }}
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="alert alert-info mt-3">
+                                                            <i class="ph ph-info me-2"></i>
+                                                            <strong>{{ __('events.availability_multiple_dates_notice') }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Online Event Option -->
                             <div class="col-12 mb-3">
                                 <div class="card border-info">
@@ -583,84 +677,6 @@
                                         <div class="alert alert-info">
                                             <i class="ph ph-info me-2"></i>
                                             <strong>{{ __('events.online_event_notice') }}</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Availability-Based Event Option -->
-                            <div class="col-12 mb-3">
-                                <div class="card border-warning">
-                                    <div class="card-header bg-light-warning">
-                                        <div class="form-check">
-                                                    <input type="checkbox" name="is_availability_based"
-                                                        id="is_availability_based" class="form-check-input"
-                                                        value="1">
-                                            <label for="is_availability_based" class="form-check-label f-w-600">
-                                                        <i
-                                                            class="ph ph-calendar-check me-2"></i>{{ __('events.availability_based_event') }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="card-body" id="availability-settings" style="display: none;">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                            <input type="text" name="availability_deadline"
-                                                                id="availability_deadline"
-                                                                class="form-control flatpickr-input"
-                                                                placeholder="Seleziona scadenza risposte..." readonly>
-                                                            <label
-                                                                for="availability_deadline">{{ __('events.availability_deadline') }}</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mt-3">
-                                                <div class="form-floating">
-                                                            <textarea name="availability_instructions" id="availability_instructions" class="form-control" rows="3"
-                                                                placeholder="{{ __('events.availability_instructions_placeholder') }}"></textarea>
-                                                            <label
-                                                                for="availability_instructions">{{ __('events.availability_instructions') }}</label>
-                                                </div>
-                                                        <small
-                                                            class="text-muted">{{ __('events.availability_instructions_help') }}</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Sezione Date Multiple per Disponibilità -->
-                                        <div class="row mt-4">
-                                            <div class="col-12">
-                                                <div class="card border-success">
-                                                    <div class="card-header bg-light-success">
-                                                        <h6 class="mb-0">
-                                                                    <i
-                                                                        class="ph ph-calendar-plus me-2"></i>{{ __('events.availability_multiple_dates') }}
-                                                        </h6>
-                                                    </div>
-                                                    <div class="card-body">
-                                                                <p class="text-muted mb-3">
-                                                                    {{ __('events.availability_multiple_dates_help') }}</p>
-
-                                                        <!-- Lista opzioni di date -->
-                                                        <div id="availability-options-list">
-                                                            <!-- Le opzioni verranno aggiunte qui dinamicamente -->
-                                                        </div>
-
-                                                        <!-- Pulsante per aggiungere nuova data -->
-                                                        <div class="text-center mt-3">
-                                                                    <button type="button" class="btn btn-outline-success"
-                                                                        id="add-availability-option">
-                                                                        <i
-                                                                            class="ph ph-plus me-2"></i>{{ __('events.add_availability_option') }}
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="alert alert-info mt-3">
-                                                            <i class="ph ph-info me-2"></i>
-                                                            <strong>{{ __('events.availability_multiple_dates_notice') }}</strong>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2225,11 +2241,21 @@ function initializeMap() {
     }
 
 
-    map = L.map('locationMap').setView([41.9028, 12.4964], 10);
+    map = L.map('locationMap', {
+        zoomControl: true
+    }).setView([41.9028, 12.4964], 10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+
+    // Assicurati che i controlli di zoom siano visibili
+    map.zoomControl.setPosition('topright');
+
+    // Aggiungi controlli aggiuntivi se disponibili
+    if (L.control.scale) {
+        L.control.scale().addTo(map);
+    }
 
     map.on('click', function(e) {
         setMapLocation(e.latlng.lat, e.latlng.lng);

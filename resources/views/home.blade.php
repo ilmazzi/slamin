@@ -1382,7 +1382,7 @@ use App\Helpers\PlaceholderHelper;
                                     slidesToShow: 2,
                                     slidesToScroll: 1,
                                     autoplay: true,
-                                    autoplaySpeed: 3000,
+                                    autoplaySpeed: 4000,
                                     arrows: true,
                                     dots: false,
                                     infinite: true,
@@ -1433,7 +1433,7 @@ use App\Helpers\PlaceholderHelper;
             if ($carousel.length > 0) {
                 try {
                     const bsCarousel = new bootstrap.Carousel($carousel[0], {
-                        interval: 5000, // 5 secondi
+                        interval: 4000, // 4 secondi
                         ride: 'carousel', // Avvia automaticamente
                         wrap: true, // Loop infinito
                         keyboard: true, // Controlli da tastiera
