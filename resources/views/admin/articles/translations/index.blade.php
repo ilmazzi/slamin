@@ -39,7 +39,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-sm me-3">
                                                         @if($article->featured_image)
-                                                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" class="rounded">
+                                                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;">
                                                         @else
                                                             <div class="avatar-title bg-primary text-white rounded">
                                                                 <i class="ph ph-newspaper"></i>
