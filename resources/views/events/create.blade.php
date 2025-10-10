@@ -2851,6 +2851,14 @@ function showStep(step) {
     if (stepTipElement) {
         stepTipElement.textContent = stepTips[step];
     }
+
+    // Call updatePreview when reaching step 5
+    if (step === 5) {
+        console.log('showStep: reached step 5, calling updatePreview');
+        setTimeout(() => {
+            updatePreview();
+        }, 100); // Small delay to ensure DOM is ready
+    }
 }
 
 function updateProgress() {
@@ -3556,7 +3564,7 @@ function updatePreview() {
     }
 
     console.log('updatePreview: about to generate preview template');
-    
+
     // Add a simple test to see if we can generate any HTML
     const preview = `
         <div class="alert alert-success">
@@ -3566,407 +3574,37 @@ function updatePreview() {
             <p><strong>Data:</strong> ${startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT') : 'Non specificato'}</p>
         </div>
     `;
-    
+
     console.log('updatePreview: simple template generated');
-    
-    // Original complex template (commented out for testing)
-    /*
-    const preview = `
-        <!-- Hero Section -->
-        <div class="position-relative overflow-hidden bg-primary" style="height: 300px;">
-            ${imageHtml}
-
-            <!-- Status Badges -->
-            <div class="position-absolute top-0 start-0 m-3" style="z-index: 3;">
-                <span class="badge bg-light-primary me-2">
-                    <i class="ph ph-tag me-1"></i>${categoryText || 'Categoria non specificata'}
-                </span>
-                ${isFestival ? '<span class="badge bg-warning"><i class="ph ph-trophy me-1"></i>Festival</span>' : ''}
-            </div>
-
-            <span class="badge ${isPublic ? 'bg-light-success' : 'bg-light-warning'} position-absolute top-0 end-0 m-3" style="z-index: 3;">
-                <i class="ph ph-${isPublic ? 'globe' : 'lock'} me-1"></i>
-                ${isPublic ? 'Pubblico' : 'Privato'}
-            </span>
-
-            <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 3;">
-                <h2 class="fw-bold mb-3 text-white">${title}</h2>
-                <!-- Gruppi selezionati -->
-                ${isLinkedToGroup && selectedGroupNames.length > 0 ? `
-                    <div class="mb-2">
-                        ${selectedGroupNames.map(name => `<span class=\"badge bg-light-primary me-2\">${name}</span>`).join(' ')}
-                    </div>
-                ` : ''}
-                <div class="d-flex align-items-center mb-2">
-                    <i class="ph ph-calendar-check me-2 fs-5"></i>
-                    <span class="fs-5">${formatDate(startDateTime)}</span>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <i class="ph ph-map-pin me-2 fs-5"></i>
-                    <span class="fs-5">
-                        ${isOnline ?
-                            '<i class="ph ph-globe me-1"></i>Evento Online' + (onlineUrl ? ` - ${onlineUrl}` : '') :
-                            `${venueName ? venueName + ', ' : ''}${city}${country ? ', ' + country : ''}`
-                        }
-                    </span>
-                </div>
-                ${isOnline && timezone ? `
-                    <div class="d-flex align-items-center">
-                        <i class="ph ph-clock me-2 fs-5"></i>
-                        <span class="fs-5">Fuso orario: ${timezone}</span>
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-
-        <!-- Event Details -->
-        <div class="p-4">
-            <!-- Description -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-file-text me-2"></i>Descrizione Evento</h6>
-                </div>
-                <div class="card-body">
-                    <p class="mb-0">${description}</p>
-                    ${requirements ? `
-                        <hr>
-                        <h6 class="text-primary">Requisiti:</h6>
-                        <p class="mb-0">${requirements}</p>
-                    ` : ''}
-                </div>
-            </div>
-
-            <!-- Timeline -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-clock me-2"></i>Cronologia Evento</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="border-start border-success border-4 ps-3">
-                                <h6 class="mb-1 text-success">Inizio Evento</h6>
-                                <p class="mb-0">${formatDate(startDateTime)}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="border-start border-danger border-4 ps-3">
-                                <h6 class="mb-1 text-danger">Fine Evento</h6>
-                                <p class="mb-0">${formatDate(endDateTime)}</p>
-                            </div>
-                        </div>
-                        ${duration ? `
-                            <div class="col-12">
-                                <div class="border-start border-info border-4 ps-3">
-                                    <h6 class="mb-1 text-info">Durata</h6>
-                                    <p class="mb-0">${duration}</p>
-                                </div>
-                            </div>
-                        ` : ''}
-                        ${registrationDeadline ? `
-                            <div class="col-md-6">
-                                <div class="border-start border-warning border-4 ps-3">
-                                    <h6 class="mb-1 text-warning">Scadenza Iscrizioni</h6>
-                                    <p class="mb-0">${formatDateOnly(registrationDeadline)}</p>
-                                </div>
-                            </div>
-                        ` : ''}
-                        ${invitationDeadline ? `
-                            <div class="col-md-6">
-                                <div class="border-start border-warning border-4 ps-3">
-                                    <h6 class="mb-1 text-warning">Scadenza Inviti</h6>
-                                    <p class="mb-0">${formatDateOnly(invitationDeadline)}</p>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Location Details -->
-            ${!isOnline ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-map-pin me-2"></i>Dettagli Luogo</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            ${venueName ? `
-                                <div class="col-md-6">
-                                    <strong>Venue:</strong> ${venueName}
-                                </div>
-                            ` : ''}
-                            ${venueAddress ? `
-                                <div class="col-md-6">
-                                    <strong>Indirizzo:</strong> ${venueAddress}
-                                </div>
-                            ` : ''}
-                            ${city ? `
-                                <div class="col-md-4">
-                                    <strong>Città:</strong> ${city}
-                                </div>
-                            ` : ''}
-                            ${postcode ? `
-                                <div class="col-md-4">
-                                    <strong>CAP:</strong> ${postcode}
-                                </div>
-                            ` : ''}
-                            ${country ? `
-                                <div class="col-md-4">
-                                    <strong>Paese:</strong> ${country}
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Event Settings -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="ph ph-gear me-2"></i>Impostazioni Evento</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <div class="border-start border-primary border-4 ps-3">
-                                <h6 class="mb-1 text-primary">Costo Ingresso</h6>
-                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="border-start border-info border-4 ps-3">
-                                <h6 class="mb-1 text-info">Tipo Evento</h6>
-                                <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="border-start border-success border-4 ps-3">
-                                <h6 class="mb-1 text-success">Stato</h6>
-                                <p class="mb-0">${status === 'published' ? 'Pubblicato' : 'Bozza'}</p>
-                            </div>
-                        </div>
-                        ${maxParticipants ? `
-                            <div class="col-md-4">
-                                <div class="border-start border-warning border-4 ps-3">
-                                    <h6 class="mb-1 text-warning">Max Partecipanti</h6>
-                                    <p class="mb-0">${maxParticipants}</p>
-                                </div>
-                            </div>
-                        ` : ''}
-                        <div class="col-md-4">
-                            <div class="border-start border-secondary border-4 ps-3">
-                                <h6 class="mb-1 text-secondary">Richieste</h6>
-                                <p class="mb-0">${allowRequests ? 'Accettate' : 'Non accettate'}</p>
-                            </div>
-                        </div>
-                        ${isRecurring ? `
-                            <div class="col-md-4">
-                                <div class="border-start border-purple border-4 ps-3">
-                                    <h6 class="mb-1 text-purple">Ricorrenza</h6>
-                                    <p class="mb-0">${recurrenceType} - ${recurrenceCount} volte</p>
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Group Association -->
-            ${isLinkedToGroup && selectedGroupName ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-users me-2 text-success"></i>Gruppo Associato</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <i class="ph ph-users text-success me-3 f-s-24"></i>
-                            <div>
-                                <h6 class="mb-1 text-success">${selectedGroupName}</h6>
-                                <small class="text-muted">Questo evento è associato a questo gruppo</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Festival Information -->
-            ${isFestival && festivalEvents.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Eventi del Festival</h6>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted mb-3">Questo festival include ${festivalEvents.length} evento${festivalEvents.length === 1 ? '' : 'i'}:</p>
-                        <div class="row g-2">
-                            ${festivalEvents.map(event => `
-                                <div class="col-md-6">
-                                    <div class="card card-light-primary border-0">
-                                        <div class="card-body p-2">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ph ph-calendar me-2 text-primary"></i>
-                                                <div>
-                                                    <strong>${event.title}</strong>
-                                                    <br><small class="text-muted">${event.date} - ${event.venue}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            ${isPartOfFestival && festivalId ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-trophy me-2"></i>Parte di un Festival</h6>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">Questo evento fa parte di un festival più grande.</p>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Gig Positions -->
-            ${gigPositions.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-briefcase me-2"></i>Posizioni d'Ingaggio Aperte</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            ${gigPositions.map(position => `
-                                <div class="col-md-6">
-                                    <div class="card card-light-success border-0">
-                                        <div class="card-body p-2">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ph ph-user-circle me-2 text-success"></i>
-                                                <div>
-                                                    <strong>${position.type}</strong>
-                                                    <br><small class="text-muted">${position.quantity} posizione${position.quantity === 1 ? '' : 'i'}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Invitations -->
-            ${invitations.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-user-plus me-2"></i>Inviti Specifici</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            ${invitations.map(invitation => `
-                                <div class="col-md-6">
-                                    <div class="card card-light-info border-0">
-                                        <div class="card-body p-2">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ph ph-user me-2 text-info"></i>
-                                                <div>
-                                                    <strong>${invitation.user_name}</strong>
-                                                    <br><small class="text-muted">${invitation.role}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Private Event Invitations -->
-            ${!isPublic && privateInvitedUsers.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-users me-2"></i>Utenti Invitati</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            ${privateInvitedUsers.map(user => `
-                                <div class="col-md-6">
-                                    <div class="card card-light-warning border-0">
-                                        <div class="card-body p-2">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ph ph-user me-2 text-warning"></i>
-                                                <div>
-                                                    <strong>${user.name}</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Tags -->
-            ${tags.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-tag me-2"></i>Tags</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap gap-1">
-                            ${tags.map(tag => `<span class="badge bg-light-primary rounded px-3 py-1">#${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-
-            <!-- Artist Invitations -->
-            ${artistInvitedUsers.length > 0 ? `
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="ph ph-user-circle-plus me-2"></i>Artisti Invitati</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-2">
-                            ${artistInvitedUsers.map(user => `
-                                <div class="col-md-6">
-                                    <div class="card card-light-primary border-0">
-                                        <div class="card-body p-2">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ph ph-user-circle me-2 text-primary"></i>
-                                                <div>
-                                                    <strong>${user.name}</strong>
-                                                    <br><small class="text-muted">${user.role || 'Artista'}</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            ` : ''}
-        </div>
-    `;
 
     const eventPreviewElement = document.getElementById('eventPreview');
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
+        console.log('updatePreview: preview HTML set successfully');
     } else {
-        // L'elemento eventPreview potrebbe non esistere in tutte le pagine
-        // Non è un errore critico, quindi rimuoviamo il console.error
-        // console.error('eventPreview element not found');
+        console.error('updatePreview: eventPreview element not found');
     }
 }
 
+function updatePreviewWithImage(imageSrc) {
+    // Simple version - just call updatePreview
+    updatePreview();
+}
+
+// Disable form submission on Enter key
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+    });
+
+// Update preview with image function
 function updatePreviewWithImage(imageSrc) {
     if (currentStep !== 5) return;
 
@@ -4484,19 +4122,6 @@ function updatePreviewWithImage(imageSrc) {
         // console.error('eventPreview element not found');
     }
 }
-
-    // Disable form submission on Enter key
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-        }
-    });
 
     // Search users for invitations
     function searchUsers() {
