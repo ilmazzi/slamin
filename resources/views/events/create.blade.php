@@ -2770,7 +2770,7 @@ function nextStep() {
                 console.log('nextStep: reached step 5, calling updatePreview');
                 // Add a small delay to ensure DOM is updated
                 setTimeout(() => {
-                    updatePreview();
+                updatePreview();
                 }, 100);
             }
         } else {
@@ -3507,12 +3507,12 @@ function updatePreview() {
     }
 
     // Use fallback image for preview
-    imageHtml = `
-        <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
-        <div class="position-absolute top-50 start-50 translate-middle text-center w-100" style="z-index: 2;">
-            <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
-        </div>
-    `;
+        imageHtml = `
+            <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
+            <div class="position-absolute top-50 start-50 translate-middle text-center w-100" style="z-index: 2;">
+                <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
+            </div>
+        `;
     console.log('updatePreview: imageHtml set, now generating preview HTML');
 
     console.log('updatePreview: about to define format functions');
@@ -3572,10 +3572,23 @@ function updatePreview() {
     const eventPreviewElement = document.getElementById('eventPreview');
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
+        
+        // Force visibility with inline styles
+        eventPreviewElement.style.display = 'block';
+        eventPreviewElement.style.visibility = 'visible';
+        eventPreviewElement.style.opacity = '1';
+        eventPreviewElement.style.minHeight = '200px';
+        eventPreviewElement.style.backgroundColor = '#ff0000'; // RED DEBUG
+        eventPreviewElement.style.padding = '20px';
+        eventPreviewElement.style.border = '5px solid yellow'; // YELLOW DEBUG
+        eventPreviewElement.style.zIndex = '9999';
+        
         console.log('updatePreview: preview HTML set successfully');
         console.log('updatePreview: element visibility:', window.getComputedStyle(eventPreviewElement).display);
         console.log('updatePreview: element innerHTML length:', eventPreviewElement.innerHTML.length);
         console.log('updatePreview: parent element:', eventPreviewElement.parentElement);
+        console.log('updatePreview: element offsetHeight:', eventPreviewElement.offsetHeight);
+        console.log('updatePreview: element scrollHeight:', eventPreviewElement.scrollHeight);
     } else {
         console.error('updatePreview: eventPreview element not found');
     }
