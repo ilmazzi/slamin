@@ -3516,6 +3516,29 @@ function updatePreview() {
     console.log('updatePreview: imageHtml set, now generating preview HTML');
 
     console.log('updatePreview: about to define format functions');
+    
+    // Get additional form data for rich preview
+    const requirements = document.getElementById('requirements')?.value || '';
+    const isOnline = document.getElementById('is_online')?.checked || false;
+    const onlineUrl = document.getElementById('online_url')?.value || '';
+    const timezone = document.getElementById('timezone')?.value || '';
+    const entryFee = document.getElementById('ticket_price')?.value || '0';
+    const maxParticipants = document.getElementById('max_participants')?.value || '';
+    const isPublicRadio = document.querySelector('input[name="is_public"]:checked');
+    const isPublic = isPublicRadio ? isPublicRadio.value === '1' : true;
+    const allowRequests = document.getElementById('allow_requests')?.checked || false;
+    const statusRadio = document.querySelector('input[name="status"]:checked');
+    const status = statusRadio ? statusRadio.value : 'published';
+    
+    // Registration deadline from new fields
+    const hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
+    const registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
+    const registrationDeadlineTime = document.getElementById('registrationDeadlineTime')?.value || '';
+    const registrationDeadline = hasRegistrationDeadline && registrationDeadlineDate && registrationDeadlineTime ?
+        registrationDeadlineDate + ' ' + registrationDeadlineTime : '';
+
+    const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
+
     // Format dates
     const formatDate = (dateString) => {
         if (!dateString) return 'Non specificato';
@@ -3557,49 +3580,199 @@ function updatePreview() {
 
     console.log('updatePreview: about to generate preview template');
 
-    // Generate real preview template
+    // Use fallback image for preview (no actual image upload yet)
+    const imageHtml = `
+        <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
+        <div class="position-absolute top-50 start-50 translate-middle text-center w-100" style="z-index: 2;">
+            <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
+        </div>
+    `;
+
+    // Generate the RICH preview template (like the original)
     const preview = `
-        <div class="alert alert-success mb-4">
-            <h4 class="mb-3">
-                <i class="ph ph-eye me-2"></i>{{ __('events.event_preview') }}
-            </h4>
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="border-start border-primary border-4 ps-3">
-                        <h6 class="mb-1 text-primary">{{ __('events.title_event') }}</h6>
-                        <p class="mb-0 fw-bold">${title || '{{ __('events.title_placeholder') }}'}</p>
-                    </div>
+        <!-- Hero Section with Image -->
+        <div class="position-relative overflow-hidden" style="height: 300px;">
+            ${imageHtml}
+
+            <!-- Status Badges -->
+            <div class="position-absolute top-0 start-0 m-3" style="z-index: 3;">
+                <span class="badge bg-light-primary me-2">
+                    <i class="ph ph-tag me-1"></i>${categoryText || 'Categoria non specificata'}
+                </span>
+            </div>
+
+            <span class="badge ${isPublic ? 'bg-light-success' : 'bg-light-warning'} position-absolute top-0 end-0 m-3" style="z-index: 3;">
+                <i class="ph ph-${isPublic ? 'globe' : 'lock'} me-1"></i>
+                ${isPublic ? 'Pubblico' : 'Privato'}
+            </span>
+
+            <div class="position-absolute bottom-0 start-0 text-white p-4 w-100" style="z-index: 3;">
+                <h2 class="fw-bold mb-3 text-white">${title}</h2>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="ph ph-calendar-check me-2 fs-5"></i>
+                    <span class="fs-5">${formatDate(startDateTime)}</span>
                 </div>
-                <div class="col-12">
-                    <div class="border-start border-info border-4 ps-3">
-                        <h6 class="mb-1 text-info">{{ __('events.description_event') }}</h6>
-                        <p class="mb-0">${description || '{{ __('events.description_placeholder') }}'}</p>
-                    </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="ph ph-map-pin me-2 fs-5"></i>
+                    <span class="fs-5">
+                        ${isOnline ?
+                            '<i class="ph ph-globe me-1"></i>Evento Online' + (onlineUrl ? ` - ${onlineUrl}` : '') :
+                            `${venueName ? venueName + ', ' : ''}${city}${country ? ', ' + country : ''}`
+                        }
+                    </span>
                 </div>
-                ${startDateTime ? `
-                <div class="col-md-6">
-                    <div class="border-start border-success border-4 ps-3">
-                        <h6 class="mb-1 text-success">{{ __('events.start_date') }}</h6>
-                        <p class="mb-0">${formatDate(startDateTime)}</p>
+                ${isOnline && timezone ? `
+                    <div class="d-flex align-items-center">
+                        <i class="ph ph-clock me-2 fs-5"></i>
+                        <span class="fs-5">Fuso orario: ${timezone}</span>
                     </div>
-                </div>
                 ` : ''}
-                ${endDateTime ? `
-                <div class="col-md-6">
-                    <div class="border-start border-warning border-4 ps-3">
-                        <h6 class="mb-1 text-warning">{{ __('events.end_date') }}</h6>
-                        <p class="mb-0">${formatDate(endDateTime)}</p>
+            </div>
+        </div>
+
+        <!-- Event Details -->
+        <div class="p-4">
+            <!-- Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-file-text me-2"></i>Descrizione Evento</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">${description}</p>
+                    ${requirements ? `
+                        <hr>
+                        <h6 class="text-primary">Requisiti:</h6>
+                        <p class="mb-0">${requirements}</p>
+                    ` : ''}
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-clock me-2"></i>Cronologia Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Inizio Evento</h6>
+                                <p class="mb-0">${formatDate(startDateTime)}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="border-start border-danger border-4 ps-3">
+                                <h6 class="mb-1 text-danger">Fine Evento</h6>
+                                <p class="mb-0">${formatDate(endDateTime)}</p>
+                            </div>
+                        </div>
+                        ${duration ? `
+                            <div class="col-12">
+                                <div class="border-start border-info border-4 ps-3">
+                                    <h6 class="mb-1 text-info">Durata</h6>
+                                    <p class="mb-0">${duration}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${registrationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Iscrizioni</h6>
+                                    <p class="mb-0">${formatDateOnly(registrationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${invitationDeadline ? `
+                            <div class="col-md-6">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Scadenza Inviti</h6>
+                                    <p class="mb-0">${formatDateOnly(invitationDeadline)}</p>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
-                ` : ''}
-                ${venueName || city ? `
-                <div class="col-12">
-                    <div class="border-start border-secondary border-4 ps-3">
-                        <h6 class="mb-1 text-secondary">{{ __('events.venue') }}</h6>
-                        <p class="mb-0">${venueName || ''}${venueName && city ? ', ' : ''}${city || ''}</p>
+            </div>
+
+            <!-- Location Details -->
+            ${!isOnline ? `
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="ph ph-map-pin me-2"></i>Dettagli Luogo</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            ${venueName ? `
+                                <div class="col-md-6">
+                                    <strong>Venue:</strong> ${venueName}
+                                </div>
+                            ` : ''}
+                            ${venueAddress ? `
+                                <div class="col-md-6">
+                                    <strong>Indirizzo:</strong> ${venueAddress}
+                                </div>
+                            ` : ''}
+                            ${city ? `
+                                <div class="col-md-4">
+                                    <strong>Città:</strong> ${city}
+                                </div>
+                            ` : ''}
+                            ${postcode ? `
+                                <div class="col-md-4">
+                                    <strong>CAP:</strong> ${postcode}
+                                </div>
+                            ` : ''}
+                            ${country ? `
+                                <div class="col-md-4">
+                                    <strong>Paese:</strong> ${country}
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
-                ` : ''}
+            ` : ''}
+
+            <!-- Event Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="ph ph-gear me-2"></i>Impostazioni Evento</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="border-start border-primary border-4 ps-3">
+                                <h6 class="mb-1 text-primary">Costo Ingresso</h6>
+                                <p class="mb-0">${entryFee == 0 ? '{{ __('common.free') }}' : '€' + entryFee}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-info border-4 ps-3">
+                                <h6 class="mb-1 text-info">Tipo Evento</h6>
+                                <p class="mb-0">${isPublic ? 'Aperto a tutti' : 'Solo su invito'}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border-start border-success border-4 ps-3">
+                                <h6 class="mb-1 text-success">Stato</h6>
+                                <p class="mb-0">${status === 'published' ? 'Pubblicato' : 'Bozza'}</p>
+                            </div>
+                        </div>
+                        ${maxParticipants ? `
+                            <div class="col-md-4">
+                                <div class="border-start border-warning border-4 ps-3">
+                                    <h6 class="mb-1 text-warning">Max Partecipanti</h6>
+                                    <p class="mb-0">${maxParticipants}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="col-md-4">
+                            <div class="border-start border-secondary border-4 ps-3">
+                                <h6 class="mb-1 text-secondary">Richieste</h6>
+                                <p class="mb-0">${allowRequests ? 'Accettate' : 'Non accettate'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     `;
@@ -3660,32 +3833,35 @@ function updatePreview() {
         // FIX STEP-4 - it's a parent of step-5 (bad HTML structure)
         const step4 = document.getElementById('step-4');
         if (step4) {
-            // Make step-4 invisible but still rendered so step-5 inside it is visible
+            // Make step-4 invisible but keep it rendered so step-5 inside is visible
             step4.style.cssText = `
                 display: block !important;
                 visibility: hidden !important;
-                height: auto !important;
-                min-height: 500px !important;
+                height: 0 !important;
+                min-height: 0 !important;
                 overflow: visible !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 border: none !important;
                 position: relative !important;
             `;
-            console.log('updatePreview: STEP-4 MADE INVISIBLE BUT RENDERED!');
+            console.log('updatePreview: STEP-4 INVISIBLE BUT RENDERED!');
         }
 
-        // Make step-5 SUPER visible
+        // Make step-5 SUPER visible and positioned
         if (step5) {
-            step5.style.visibility = 'visible !important';
-            step5.style.position = 'relative !important';
-            step5.style.zIndex = '10000 !important';
-
-            // SCROLL TO IT!
-            setTimeout(() => {
-                step5.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                console.log('updatePreview: SCROLLED TO STEP-5!');
-            }, 200);
+            step5.style.cssText = `
+                display: block !important;
+                visibility: visible !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                z-index: 10000 !important;
+                background: white !important;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+            `;
+            console.log('updatePreview: STEP-5 ABSOLUTE POSITIONED!');
         }
 
         console.log('updatePreview: preview HTML set successfully');
