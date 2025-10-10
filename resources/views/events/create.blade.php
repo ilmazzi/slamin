@@ -2767,7 +2767,11 @@ function nextStep() {
             showStep(currentStep);
             updateProgress();
             if (currentStep === 5) {
-                updatePreview();
+                console.log('nextStep: reached step 5, calling updatePreview');
+                // Add a small delay to ensure DOM is updated
+                setTimeout(() => {
+                    updatePreview();
+                }, 100);
             }
         } else {
 
@@ -2798,6 +2802,9 @@ function showStep(step) {
     const currentStepElement = document.getElementById(`step-${step}`);
     if (currentStepElement) {
         currentStepElement.classList.remove('d-none');
+        console.log(`showStep: step ${step} shown`);
+    } else {
+        console.error(`showStep: step ${step} element not found`);
     }
 
     // Initialize map when reaching step 2
@@ -3400,7 +3407,11 @@ function previewImage() {
 }
 
 function updatePreview() {
-    if (currentStep !== 5) return;
+    console.log('updatePreview called, currentStep:', currentStep);
+    if (currentStep !== 5) {
+        console.log('updatePreview: not step 5, returning');
+        return;
+    }
 
     // Get all form values with safe element access
     const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
@@ -3489,16 +3500,16 @@ function updatePreview() {
             updatePreviewWithImage(e.target.result);
         };
         reader.readAsDataURL(imageInput.files[0]);
-        return; // Will be called again with image
-    } else {
-        // Use fallback image
-        imageHtml = `
-            <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
-            <div class="position-absolute top-50 start-50 translate-middle text-center w-100" style="z-index: 2;">
-                <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
-            </div>
-        `;
+        // Don't return here - continue with fallback preview
     }
+    
+    // Use fallback image for preview
+    imageHtml = `
+        <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
+        <div class="position-absolute top-50 start-50 translate-middle text-center w-100" style="z-index: 2;">
+            <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
+        </div>
+    `;
 
     // Format dates
     const formatDate = (dateString) => {
