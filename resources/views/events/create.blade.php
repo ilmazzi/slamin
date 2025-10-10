@@ -3515,6 +3515,7 @@ function updatePreview() {
     `;
     console.log('updatePreview: imageHtml set, now generating preview HTML');
 
+    console.log('updatePreview: about to define format functions');
     // Format dates
     const formatDate = (dateString) => {
         if (!dateString) return 'Non specificato';
@@ -3554,6 +3555,7 @@ function updatePreview() {
         duration = `${diffHours} ${diffHours === 1 ? 'ora' : 'ore'}`;
     }
 
+    console.log('updatePreview: about to generate preview template');
     const preview = `
         <!-- Hero Section -->
         <div class="position-relative overflow-hidden bg-primary" style="height: 300px;">
