@@ -3557,13 +3557,50 @@ function updatePreview() {
 
     console.log('updatePreview: about to generate preview template');
 
-    // Add a simple test to see if we can generate any HTML
+    // Generate real preview template
     const preview = `
-        <div class="alert alert-success">
-            <h4>Anteprima Evento</h4>
-            <p><strong>Titolo:</strong> ${title}</p>
-            <p><strong>Descrizione:</strong> ${description}</p>
-            <p><strong>Data:</strong> ${startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT') : 'Non specificato'}</p>
+        <div class="alert alert-success mb-4">
+            <h4 class="mb-3">
+                <i class="ph ph-eye me-2"></i>{{ __('events.event_preview') }}
+            </h4>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="border-start border-primary border-4 ps-3">
+                        <h6 class="mb-1 text-primary">{{ __('events.title_event') }}</h6>
+                        <p class="mb-0 fw-bold">${title || '{{ __('events.title_placeholder') }}'}</p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="border-start border-info border-4 ps-3">
+                        <h6 class="mb-1 text-info">{{ __('events.description_event') }}</h6>
+                        <p class="mb-0">${description || '{{ __('events.description_placeholder') }}'}</p>
+                    </div>
+                </div>
+                ${startDateTime ? `
+                <div class="col-md-6">
+                    <div class="border-start border-success border-4 ps-3">
+                        <h6 class="mb-1 text-success">{{ __('events.start_date') }}</h6>
+                        <p class="mb-0">${formatDate(startDateTime)}</p>
+                    </div>
+                </div>
+                ` : ''}
+                ${endDateTime ? `
+                <div class="col-md-6">
+                    <div class="border-start border-warning border-4 ps-3">
+                        <h6 class="mb-1 text-warning">{{ __('events.end_date') }}</h6>
+                        <p class="mb-0">${formatDate(endDateTime)}</p>
+                    </div>
+                </div>
+                ` : ''}
+                ${venueName || city ? `
+                <div class="col-12">
+                    <div class="border-start border-secondary border-4 ps-3">
+                        <h6 class="mb-1 text-secondary">{{ __('events.venue') }}</h6>
+                        <p class="mb-0">${venueName || ''}${venueName && city ? ', ' : ''}${city || ''}</p>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
         </div>
     `;
 
@@ -3572,23 +3609,86 @@ function updatePreview() {
     const eventPreviewElement = document.getElementById('eventPreview');
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
-        
-        // Force visibility with inline styles
-        eventPreviewElement.style.display = 'block';
-        eventPreviewElement.style.visibility = 'visible';
-        eventPreviewElement.style.opacity = '1';
-        eventPreviewElement.style.minHeight = '200px';
-        eventPreviewElement.style.backgroundColor = '#ff0000'; // RED DEBUG
-        eventPreviewElement.style.padding = '20px';
-        eventPreviewElement.style.border = '5px solid yellow'; // YELLOW DEBUG
-        eventPreviewElement.style.zIndex = '9999';
-        
+
+        // Force visibility with minimal styles
+        eventPreviewElement.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            min-height: 200px !important;
+            overflow: visible !important;
+        `;
+
+        // Also fix parent if needed
+        const parent = eventPreviewElement.parentElement;
+        if (parent) {
+            parent.style.cssText = `
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                height: auto !important;
+                min-height: 300px !important;
+                overflow: visible !important;
+            `;
+        }
+
+        // Fix step-5 container
+        const step5 = document.getElementById('step-5');
+        if (step5) {
+            step5.style.cssText = `
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                height: auto !important;
+                min-height: 400px !important;
+            `;
+        }
+
+        // FIX THE FORM - THIS IS THE REAL CULPRIT!
+        const form = document.getElementById('eventForm');
+        if (form) {
+            form.style.cssText = `
+                display: block !important;
+                height: auto !important;
+                min-height: 600px !important;
+                overflow: visible !important;
+            `;
+            console.log('updatePreview: FORM HEIGHT FIXED!');
+        }
+
+        // FIX STEP-4 - it's a parent of step-5 (bad HTML structure)
+        const step4 = document.getElementById('step-4');
+        if (step4) {
+            // Make step-4 invisible but still rendered so step-5 inside it is visible
+            step4.style.cssText = `
+                display: block !important;
+                visibility: hidden !important;
+                height: auto !important;
+                min-height: 500px !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                position: relative !important;
+            `;
+            console.log('updatePreview: STEP-4 MADE INVISIBLE BUT RENDERED!');
+        }
+
+        // Make step-5 SUPER visible
+        if (step5) {
+            step5.style.visibility = 'visible !important';
+            step5.style.position = 'relative !important';
+            step5.style.zIndex = '10000 !important';
+
+            // SCROLL TO IT!
+            setTimeout(() => {
+                step5.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                console.log('updatePreview: SCROLLED TO STEP-5!');
+            }, 200);
+        }
+
         console.log('updatePreview: preview HTML set successfully');
-        console.log('updatePreview: element visibility:', window.getComputedStyle(eventPreviewElement).display);
-        console.log('updatePreview: element innerHTML length:', eventPreviewElement.innerHTML.length);
-        console.log('updatePreview: parent element:', eventPreviewElement.parentElement);
-        console.log('updatePreview: element offsetHeight:', eventPreviewElement.offsetHeight);
-        console.log('updatePreview: element scrollHeight:', eventPreviewElement.scrollHeight);
     } else {
         console.error('updatePreview: eventPreview element not found');
     }
@@ -6606,3 +6706,4 @@ function removeAvailabilityOption(optionId) {
 <!-- Flatpickr JS -->
     <script src="{{ asset('assets/vendor/datepikar/flatpickr.js') }}"></script>
 @endpush
+
