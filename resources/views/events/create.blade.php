@@ -3407,15 +3407,19 @@ function previewImage() {
 }
 
 function updatePreview() {
-    console.log('updatePreview called, currentStep:', currentStep);
-    if (currentStep !== 5) {
-        console.log('updatePreview: not step 5, returning');
-        return;
-    }
+    try {
+        console.log('updatePreview called, currentStep:', currentStep);
+        if (currentStep !== 5) {
+            console.log('updatePreview: not step 5, returning');
+            return;
+        }
 
     // Get all form values with safe element access
+    console.log('updatePreview: getting form values');
+    console.log('updatePreview: document ready state:', document.readyState);
     const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
     const description = document.getElementById('description')?.value || 'Descrizione evento...';
+    console.log('updatePreview: title =', title, 'description =', description);
     const requirements = document.getElementById('requirements')?.value || '';
     const category = document.getElementById('category')?.value || '';
     const categoryText = category && document.getElementById('category')?.options ?
@@ -3502,7 +3506,7 @@ function updatePreview() {
         reader.readAsDataURL(imageInput.files[0]);
         // Don't return here - continue with fallback preview
     }
-    
+
     // Use fallback image for preview
     imageHtml = `
         <div class="position-absolute w-100 h-100 bg-primary" style="opacity: 0.9;"></div>
@@ -3510,6 +3514,7 @@ function updatePreview() {
             <i class="ph ph-microphone-stage display-1 mb-3 opacity-50"></i>
         </div>
     `;
+    console.log('updatePreview: imageHtml set, now generating preview HTML');
 
     // Format dates
     const formatDate = (dateString) => {
