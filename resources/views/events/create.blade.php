@@ -1485,7 +1485,6 @@
                                             <span id="selectedUserInitials"></span>
                                         </div>
                                         <h5 id="selectedUserName" class="mb-1"></h5>
-                                        <small class="text-muted" id="selectedUserEmail"></small>
                                     </div>
                                 </div>
 
@@ -3871,7 +3870,6 @@ function updatePreview() {
                                                 <i class="ph ph-user me-2 text-warning"></i>
                                                 <div>
                                                     <strong>${user.name}</strong>
-                                                    <br><small class="text-muted">${user.email}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -4390,7 +4388,6 @@ function updatePreviewWithImage(imageSrc) {
                                                 <i class="ph ph-user me-2 text-warning"></i>
                                                 <div>
                                                     <strong>${user.name}</strong>
-                                                    <br><small class="text-muted">${user.email}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -4500,27 +4497,23 @@ function updatePreviewWithImage(imageSrc) {
                     const demoUsers = [{
                             id: 1,
                             name: 'Marco Poeta',
-                            email: 'marco@poetry.it',
                             roles: ['poet'],
                             avatar: null
                         },
                         {
                             id: 2,
                             name: 'Sofia Judge',
-                            email: 'sofia@slam.it',
                             roles: ['judge'],
                             avatar: null
                         },
                         {
                             id: 3,
                             name: 'Alex Tech',
-                            email: 'alex@tech.it',
                             roles: ['technician'],
                             avatar: null
                         }
             ].filter(user =>
-                user.name.toLowerCase().includes(query.toLowerCase()) ||
-                user.email.toLowerCase().includes(query.toLowerCase())
+                user.name.toLowerCase().includes(query.toLowerCase())
             );
             displaySearchResults(demoUsers);
         });
@@ -4541,12 +4534,11 @@ function displaySearchResults(users) {
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="mb-1">${user.name}</h6>
-                    <small class="text-muted">${user.email}</small>
                     <div class="mt-1">
                         ${user.roles.map(role => `<span class="badge bg-secondary me-1">${getRoleDisplayName(role)}</span>`).join('')}
                     </div>
                 </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addInvitation(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', ['${user.roles.join("','")}'])">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addInvitation(${user.id}, '${user.name.replace(/'/g, "\\'")}', ['${user.roles.join("','")}'])">
                     <i class="ph ph-plus"></i> Invita
                 </button>
             </div>
@@ -4569,7 +4561,7 @@ function getRoleDisplayName(role) {
 
 let pendingInvitation = null;
 
-function addInvitation(userId, userName, userEmail, userRoles) {
+function addInvitation(userId, userName, userRoles) {
     // Check if user is already invited
     if (selectedInvitations.find(inv => inv.user_id === userId)) {
         Swal.fire({
@@ -4585,13 +4577,11 @@ function addInvitation(userId, userName, userEmail, userRoles) {
     pendingInvitation = {
         user_id: userId,
         name: userName,
-        email: userEmail,
         roles: userRoles
     };
 
     // Populate modal with user data
     document.getElementById('selectedUserName').textContent = userName;
-    document.getElementById('selectedUserEmail').textContent = userEmail;
             document.getElementById('selectedUserInitials').textContent = userName.split(' ').map(n => n[0]).join('')
                 .toUpperCase();
 
@@ -4611,7 +4601,6 @@ function confirmInvitation() {
     const invitation = {
         user_id: pendingInvitation.user_id,
         name: pendingInvitation.name,
-        email: pendingInvitation.email,
         role: selectedRole,
                 message: message ||
                     `Ciao ${pendingInvitation.name}, sei invitato al nostro evento Poetry Slam come ${getRoleDisplayName(selectedRole)}!`
@@ -4691,7 +4680,6 @@ function updateInvitationsList() {
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h6 class="card-title mb-1">${inv.name}</h6>
-                            <small class="text-muted">${inv.email}</small>
                             <div class="mt-2">
                                 <span class="badge bg-primary">${getRoleDisplayName(inv.role)}</span>
                             </div>
@@ -5084,10 +5072,9 @@ function displayPrivateSuggestedUsers() {
                         </a>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium txt-ellipsis-1">${user.name}</div>
-                            <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')"
+                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -5123,10 +5110,9 @@ function displayArtistSuggestedUsers() {
                         </a>
                         <div class="flex-grow-1 ps-2">
                             <div class="fw-medium txt-ellipsis-1">${user.name}</div>
-                            <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                         </div>
                         <button type="button" class="btn btn-light-primary icon-btn b-r-4"
-                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')"
+                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.avatar_url}')"
                                 title="{{ __('events.invite_user') }}">
                             <i class="ph ph-plus f-s-12"></i>
                         </button>
@@ -5202,11 +5188,10 @@ function displayPrivateSearchResults(users) {
                     </a>
                     <div class="flex-grow-1">
                         <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
-                        <small class="text-muted f-s-12">${user.email}</small>
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')">
+                                onclick="invitePrivateUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -5241,11 +5226,10 @@ function displayArtistSearchResults(users) {
                     </a>
                     <div class="flex-grow-1">
                         <h6 class="mb-1 f-s-14 f-w-600 text-dark">${user.name}</h6>
-                        <small class="text-muted f-s-12">${user.email}</small>
                     </div>
                     <div class="flex-shrink-0">
                         <button type="button" class="btn btn-primary btn-sm hover-effect"
-                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}', '${user.avatar_url}')">
+                                onclick="inviteArtistUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.avatar_url}')">
                             <i class="ph ph-plus f-s-12"></i> {{ __('events.invite_user') }}
                         </button>
                     </div>
@@ -5258,7 +5242,7 @@ function displayArtistSearchResults(users) {
 }
 
 // Invita utente per eventi privati
-function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
+function invitePrivateUser(userId, userName, userAvatarUrl) {
 
 
     // Controlla se l'utente è già stato invitato
@@ -5270,7 +5254,6 @@ function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
     const user = {
         id: userId,
         name: userName,
-        email: userEmail,
         avatar_url: userAvatarUrl
     };
 
@@ -5299,7 +5282,7 @@ function invitePrivateUser(userId, userName, userEmail, userAvatarUrl) {
 }
 
 // Invita artista
-function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
+function inviteArtistUser(userId, userName, userAvatarUrl) {
 
 
     // Controlla se l'utente è già stato invitato
@@ -5311,7 +5294,6 @@ function inviteArtistUser(userId, userName, userEmail, userAvatarUrl) {
     const user = {
         id: userId,
         name: userName,
-        email: userEmail,
         avatar_url: userAvatarUrl
     };
 
@@ -5400,7 +5382,6 @@ function updatePrivateInvitedUsersDisplay() {
                             </div>
                             <div class="flex-grow-1 ps-2">
                                 <div class="fw-medium txt-ellipsis-1">${user.name}</div>
-                                <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                             </div>
                             <button type="button" class="btn btn-light-danger icon-btn b-r-4"
                                     onclick="removePrivateInvite(${user.id})" title="Rimuovi invito">
@@ -5456,7 +5437,6 @@ function updateArtistInvitedUsersDisplay() {
                             </div>
                             <div class="flex-grow-1 ps-2">
                                 <div class="fw-medium txt-ellipsis-1">${user.name}</div>
-                                <div class="text-muted f-s-12 txt-ellipsis-1">${user.email}</div>
                                 <div class="text-muted f-s-10 txt-ellipsis-1">${user.role || 'performer'}</div>
                             </div>
                             <button type="button" class="btn btn-light-danger icon-btn b-r-4"

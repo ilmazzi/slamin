@@ -1022,7 +1022,6 @@ class EventController extends Controller
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
-                    'email' => $user->email,
                     'roles' => $user->roles->pluck('name')->toArray(),
                     'avatar_url' => \App\Helpers\AvatarHelper::getUserAvatarUrl($user),
                 ];
