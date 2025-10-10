@@ -4,7 +4,7 @@ return array (
   'title' => 'Gedichte',
   'poems' => 'Gedichte',
   'untitled' => 'Kein Titel',
-  'my_poems' => 
+  'my_poems' =>
   array (
     'title' => 'Meine Gedichte',
     'total_poems' => 'Insgesamt Gedichte',
@@ -20,7 +20,7 @@ return array (
     'no_poems_description' => 'Schreiben und Teilen Sie Ihre Gedichte mit der Community',
     'create_first_poem' => 'Erstellen Sie Ihr erstes Gedicht',
   ),
-  'fields' => 
+  'fields' =>
   array (
     'title' => 'Titel',
     'content' => 'Inhalt',
@@ -46,7 +46,7 @@ return array (
     'like_count' => 'Mir gefällt es',
     'comment_count' => 'Bemerkungen',
   ),
-  'actions' => 
+  'actions' =>
   array (
     'create' => 'Poesie erstellen',
     'like' => 'Mir gefällt es',
@@ -56,7 +56,7 @@ return array (
     'request_translation' => 'Übersetzung anfordern',
     'available_languages' => 'Verfügbare Sprachen',
   ),
-  'create' => 
+  'create' =>
   array (
     'title' => 'Neues Gedicht erstellen',
     'subtitle' => 'Schreiben und teilen Sie Ihr Gedicht',
@@ -83,7 +83,7 @@ return array (
     'translation_negotiable_help' => 'Erlauben Sie Übersetzern, einen anderen Preis vorzuschlagen',
     'translation_instructions_placeholder' => 'Spezifische Anweisungen für Übersetzer (z.B. Schritt halten, verwenden Sie einen formalen Ton, etc.)',
   ),
-  'edit' => 
+  'edit' =>
   array (
     'title' => 'Poesie bearbeiten',
     'subtitle' => 'Bearbeiten Sie die Details Ihres Gedichts',
@@ -92,7 +92,7 @@ return array (
     'save_draft' => 'Sparen Sie den Entwurf',
     'update' => 'Poesie aktualisieren',
   ),
-  'drafts' => 
+  'drafts' =>
   array (
     'title' => 'Meine Entwürfe',
     'total_drafts' => 'Insgesamt',
@@ -119,7 +119,7 @@ return array (
     'create_first_draft' => 'Erstellen Sie Ihren ersten Entwurf',
     'view_published_poems' => 'Veröffentlichte Gedichte anzeigen',
   ),
-  'bookmarks' => 
+  'bookmarks' =>
   array (
     'title' => 'Meine Lesezeichen',
     'total_bookmarks' => 'Gesamte Lesezeichen',
@@ -140,7 +140,7 @@ return array (
     'no_bookmarks_description' => 'Speichern Sie die Gedichte, die Sie gerne finden sie leicht',
     'view_liked_poems' => 'Wunschgedichte ansehen',
   ),
-  'liked' => 
+  'liked' =>
   array (
     'title' => 'Gedichte mögen',
     'total_liked' => 'Gedichte mögen',
@@ -158,7 +158,7 @@ return array (
     'no_liked_poems' => 'Ich mag kein Gedicht',
     'no_liked_poems_description' => 'Entdecken Sie die Gedichte und legen Sie es Mir gefällt, was Sie mögen',
   ),
-  'filters' => 
+  'filters' =>
   array (
     'recent' => 'Vor kurzem',
     'popular' => 'Beliebtheit',
@@ -172,18 +172,17 @@ return array (
     'sort' => 'Sortieren nach',
     'oldest' => 'Alter',
     'alphabetical' => 'Alphabetisch',
-    'sort_options' => 
-    array (
-      'recent' => 'Neuheit',
-      'oldest' => 'Alter',
-      'popular' => 'Am meisten beliebt',
-      'title' => 'Pro Titel',
-      'author' => 'Von Autor',
-      'likes' => 'Mir gefällt es',
-      'views' => 'Für Ausblicke',
-    ),
+    'sort_options' => [
+      'recent' => 'Neueste',
+      'oldest' => 'Älteste',
+      'popular' => 'Beliebteste',
+      'alphabetical' => 'Nach Titel',
+      'author' => 'Nach Autor',
+      'likes' => 'Nach Likes',
+      'views' => 'Nach Aufrufen',
+    ],
   ),
-  'status' => 
+  'status' =>
   array (
     'draft' => 'Bozza',
     'published' => 'Veröffentlicht',
@@ -192,7 +191,7 @@ return array (
     'bookmarked' => 'In Lesezeichen',
     'liked' => 'Angemeldet',
   ),
-  'categories' => 
+  'categories' =>
   array (
     'love' => 'Liebe',
     'nature' => 'Natur',
@@ -216,7 +215,7 @@ return array (
     'justice' => 'Gerichtshof',
     'other' => 'Sonstige',
   ),
-  'poem_types' => 
+  'poem_types' =>
   array (
     'sonnet' => 'Samen',
     'haiku' => 'Haiku',
@@ -235,7 +234,7 @@ return array (
     'sestina' => 'Land',
     'other' => 'Sonstige',
   ),
-  'languages' => 
+  'languages' =>
   array (
     'italian' => 'Italienisch',
     'english' => 'Englisch',
@@ -259,20 +258,20 @@ return array (
   'translation_confirm' => 'Bist du sicher, dass du eine Übersetzung dieses Gedichts anfordern willst?',
   'translation_requested' => 'Antrag auf Übersetzung erfolgreich gesendet!',
   'translation_error' => 'Fehler beim Senden der Übersetzungsanfrage',
-  'stats' => 
+  'stats' =>
   array (
     'views' => 'Ansichten',
     'likes' => 'Mir gefällt es',
     'comments' => 'Bemerkungen',
     'bookmarks' => 'Lesezeichen',
   ),
-  'placeholders' => 
+  'placeholders' =>
   array (
     'search' => 'Suche nach Titel, Inhalt, Autor..',
   ),
   'no_poems_found' => 'Keine Gedichte gefunden',
   'no_poems_description' => 'Es gibt keine Gedichte, die Ihren Suchkriterien entsprechen.',
-  'tooltips' => 
+  'tooltips' =>
   array (
     'comment_placeholder' => 'Schreibe deinen Kommentar. .',
     'post_comment' => 'Öffentlicher Kommentar',

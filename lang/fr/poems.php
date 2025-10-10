@@ -4,7 +4,7 @@ return array (
   'title' => 'Poèmes',
   'poems' => 'Poèmes',
   'untitled' => 'Pas de titre',
-  'my_poems' => 
+  'my_poems' =>
   array (
     'title' => 'Mes poèmes',
     'total_poems' => 'Total des poèmes',
@@ -20,7 +20,7 @@ return array (
     'no_poems_description' => 'Commencez à écrire et à partager vos poèmes avec la communauté',
     'create_first_poem' => 'Créez votre premier poème',
   ),
-  'fields' => 
+  'fields' =>
   array (
     'title' => 'Titre',
     'content' => 'Contenu',
@@ -46,7 +46,7 @@ return array (
     'like_count' => 'J\'aime ça',
     'comment_count' => 'Commentaires',
   ),
-  'actions' => 
+  'actions' =>
   array (
     'create' => 'Créer de la poésie',
     'like' => 'J\'aime ça',
@@ -56,7 +56,7 @@ return array (
     'request_translation' => 'Demande de traduction',
     'available_languages' => 'Langues disponibles',
   ),
-  'create' => 
+  'create' =>
   array (
     'title' => 'Créer un nouveau poème',
     'subtitle' => 'Écrivez et partagez votre poème',
@@ -83,7 +83,7 @@ return array (
     'translation_negotiable_help' => 'Permettre aux traducteurs de proposer un prix différent',
     'translation_instructions_placeholder' => 'Instructions spécifiques pour les traducteurs (p. ex. suivre le rythme, utiliser un ton formel, etc.)',
   ),
-  'edit' => 
+  'edit' =>
   array (
     'title' => 'Modifier la poésie',
     'subtitle' => 'Modifier les détails de votre poème',
@@ -92,7 +92,7 @@ return array (
     'save_draft' => 'Enregistrer le projet',
     'update' => 'Mettre à jour la poésie',
   ),
-  'drafts' => 
+  'drafts' =>
   array (
     'title' => 'Mes projets',
     'total_drafts' => 'Total général',
@@ -119,7 +119,7 @@ return array (
     'create_first_draft' => 'Créez votre première ébauche',
     'view_published_poems' => 'Voir les poèmes publiés',
   ),
-  'bookmarks' => 
+  'bookmarks' =>
   array (
     'title' => 'Mes signets',
     'total_bookmarks' => 'Total des signets',
@@ -140,7 +140,7 @@ return array (
     'no_bookmarks_description' => 'Sauvez les poèmes que vous aimez les trouver facilement',
     'view_liked_poems' => 'Voir les poèmes souhaités',
   ),
-  'liked' => 
+  'liked' =>
   array (
     'title' => 'Les poèmes ont aimé',
     'total_liked' => 'Les poèmes ont aimé',
@@ -158,7 +158,7 @@ return array (
     'no_liked_poems' => 'Tu n\'as pas encore mis en place de poèmes',
     'no_liked_poems_description' => 'Explorer les poèmes et le dire J\'aime ce que vous aimez',
   ),
-  'filters' => 
+  'filters' =>
   array (
     'recent' => 'Récent',
     'popular' => 'Populaire',
@@ -172,18 +172,17 @@ return array (
     'sort' => 'Trier par',
     'oldest' => 'Plus vieux',
     'alphabetical' => 'Alphabétique',
-    'sort_options' => 
-    array (
+    'sort_options' => [
       'recent' => 'Plus récent',
       'oldest' => 'Plus vieux',
       'popular' => 'Les plus populaires',
-      'title' => 'Par titre',
+      'alphabetical' => 'Par titre',
       'author' => 'Par auteur',
-      'likes' => 'J\'aime ça',
-      'views' => 'Pour les vues',
-    ),
+      'likes' => 'Par j\'aime',
+      'views' => 'Par vues',
+    ],
   ),
-  'status' => 
+  'status' =>
   array (
     'draft' => 'Bozza',
     'published' => 'Publié',
@@ -192,7 +191,7 @@ return array (
     'bookmarked' => 'Dans les signets',
     'liked' => 'Appliquée',
   ),
-  'categories' => 
+  'categories' =>
   array (
     'love' => 'Amour',
     'nature' => 'Nature',
@@ -216,7 +215,7 @@ return array (
     'justice' => 'Justice',
     'other' => 'Autres',
   ),
-  'poem_types' => 
+  'poem_types' =>
   array (
     'sonnet' => 'Sol',
     'haiku' => 'Haïku',
@@ -235,7 +234,7 @@ return array (
     'sestina' => 'Pays',
     'other' => 'Autres',
   ),
-  'languages' => 
+  'languages' =>
   array (
     'italian' => 'Italien',
     'english' => 'Changements climatiques',
@@ -259,20 +258,20 @@ return array (
   'translation_confirm' => 'Voulez-vous vraiment demander une traduction de ce poème ?',
   'translation_requested' => 'Demande de traduction envoyée avec succès!',
   'translation_error' => 'Erreur lors de l\'envoi de la demande de traduction',
-  'stats' => 
+  'stats' =>
   array (
     'views' => 'Vues',
     'likes' => 'J\'aime ça',
     'comments' => 'Commentaires',
     'bookmarks' => 'Signets',
   ),
-  'placeholders' => 
+  'placeholders' =>
   array (
     'search' => 'Recherche par titre, contenu, auteur..',
   ),
   'no_poems_found' => 'Aucun poème trouvé',
   'no_poems_description' => 'Aucun poème ne correspond à vos critères de recherche.',
-  'tooltips' => 
+  'tooltips' =>
   array (
     'comment_placeholder' => 'Écrivez votre commentaire. . .',
     'post_comment' => 'Commentaire du public',

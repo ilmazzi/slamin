@@ -4,7 +4,7 @@ return array (
   'title' => 'Poems',
   'poems' => 'Poems',
   'untitled' => 'No title',
-  'my_poems' => 
+  'my_poems' =>
   array (
     'title' => 'My poems',
     'total_poems' => 'Total poems',
@@ -20,7 +20,7 @@ return array (
     'no_poems_description' => 'Start writing and sharing your poems with the community',
     'create_first_poem' => 'Create your first poem',
   ),
-  'fields' => 
+  'fields' =>
   array (
     'title' => 'Title',
     'content' => 'Content',
@@ -46,7 +46,7 @@ return array (
     'like_count' => 'I like it',
     'comment_count' => 'Comments',
   ),
-  'actions' => 
+  'actions' =>
   array (
     'create' => 'Create poetry',
     'like' => 'I like it',
@@ -56,7 +56,7 @@ return array (
     'request_translation' => 'Request translation',
     'available_languages' => 'Languages available',
   ),
-  'create' => 
+  'create' =>
   array (
     'title' => 'Create new poem',
     'subtitle' => 'Write and share your poem',
@@ -83,7 +83,7 @@ return array (
     'translation_negotiable_help' => 'Allow translators to propose a different price',
     'translation_instructions_placeholder' => 'Specific instructions for translators (e.g. keep pace, use a formal tone, etc.)',
   ),
-  'edit' => 
+  'edit' =>
   array (
     'title' => 'Edit poetry',
     'subtitle' => 'Edit the details of your poem',
@@ -92,7 +92,7 @@ return array (
     'save_draft' => 'Save the draft',
     'update' => 'Update poetry',
   ),
-  'drafts' => 
+  'drafts' =>
   array (
     'title' => 'My drafts',
     'total_drafts' => 'Total',
@@ -119,7 +119,7 @@ return array (
     'create_first_draft' => 'Create your first draft',
     'view_published_poems' => 'View published poems',
   ),
-  'bookmarks' => 
+  'bookmarks' =>
   array (
     'title' => 'My bookmarks',
     'total_bookmarks' => 'Total bookmarks',
@@ -140,7 +140,7 @@ return array (
     'no_bookmarks_description' => 'Save the poems you like to find them easily',
     'view_liked_poems' => 'View desired poems',
   ),
-  'liked' => 
+  'liked' =>
   array (
     'title' => 'Poems liked',
     'total_liked' => 'Poems liked',
@@ -158,7 +158,7 @@ return array (
     'no_liked_poems' => 'You haven\'t put up yet I like no poem',
     'no_liked_poems_description' => 'Explore the poems and put it I like what you like',
   ),
-  'filters' => 
+  'filters' =>
   array (
     'recent' => 'Recent',
     'popular' => 'Popular',
@@ -172,18 +172,17 @@ return array (
     'sort' => 'Sort by',
     'oldest' => 'Older',
     'alphabetical' => 'Alphabetical',
-    'sort_options' => 
-    array (
-      'recent' => 'Newer',
-      'oldest' => 'Older',
+    'sort_options' => [
+      'recent' => 'Recent',
+      'oldest' => 'Oldest',
       'popular' => 'Most popular',
-      'title' => 'Per title',
+      'alphabetical' => 'By title',
       'author' => 'By author',
-      'likes' => 'I like it',
-      'views' => 'For views',
-    ),
+      'likes' => 'By likes',
+      'views' => 'By views',
+    ],
   ),
-  'status' => 
+  'status' =>
   array (
     'draft' => 'Bozza',
     'published' => 'Published',
@@ -192,7 +191,7 @@ return array (
     'bookmarked' => 'In bookmarks',
     'liked' => 'Applied',
   ),
-  'categories' => 
+  'categories' =>
   array (
     'love' => 'Love',
     'nature' => 'Nature',
@@ -216,7 +215,7 @@ return array (
     'justice' => 'Justice',
     'other' => 'Other',
   ),
-  'poem_types' => 
+  'poem_types' =>
   array (
     'sonnet' => 'Soil',
     'haiku' => 'Haiku',
@@ -235,7 +234,7 @@ return array (
     'sestina' => 'Country',
     'other' => 'Other',
   ),
-  'languages' => 
+  'languages' =>
   array (
     'italian' => 'Italian',
     'english' => 'English',
@@ -259,20 +258,20 @@ return array (
   'translation_confirm' => 'Are you sure you want to request a translation of this poem?',
   'translation_requested' => 'Request for translation sent successfully!',
   'translation_error' => 'Error when sending the translation request',
-  'stats' => 
+  'stats' =>
   array (
     'views' => 'Views',
     'likes' => 'I like it',
     'comments' => 'Comments',
     'bookmarks' => 'Bookmarks',
   ),
-  'placeholders' => 
+  'placeholders' =>
   array (
     'search' => 'Search by title, content, author.. .',
   ),
   'no_poems_found' => 'No poems found',
   'no_poems_description' => 'There are no poems that match your search criteria.',
-  'tooltips' => 
+  'tooltips' =>
   array (
     'comment_placeholder' => 'Write your comment. . .',
     'post_comment' => 'Public comment',

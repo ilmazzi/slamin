@@ -168,7 +168,7 @@ return [
             'recent' => 'Più recenti',
             'oldest' => 'Più vecchie',
             'popular' => 'Più popolari',
-            'title' => 'Per titolo',
+            'alphabetical' => 'Per titolo',
             'author' => 'Per autore',
             'likes' => 'Per mi piace',
             'views' => 'Per visualizzazioni',
