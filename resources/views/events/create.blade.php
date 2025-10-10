@@ -3556,6 +3556,21 @@ function updatePreview() {
     }
 
     console.log('updatePreview: about to generate preview template');
+    
+    // Add a simple test to see if we can generate any HTML
+    const preview = `
+        <div class="alert alert-success">
+            <h4>Anteprima Evento</h4>
+            <p><strong>Titolo:</strong> ${title}</p>
+            <p><strong>Descrizione:</strong> ${description}</p>
+            <p><strong>Data:</strong> ${startDateTime ? new Date(startDateTime).toLocaleDateString('it-IT') : 'Non specificato'}</p>
+        </div>
+    `;
+    
+    console.log('updatePreview: simple template generated');
+    
+    // Original complex template (commented out for testing)
+    /*
     const preview = `
         <!-- Hero Section -->
         <div class="position-relative overflow-hidden bg-primary" style="height: 300px;">
