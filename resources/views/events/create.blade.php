@@ -3407,12 +3407,11 @@ function previewImage() {
 }
 
 function updatePreview() {
-    try {
-        console.log('updatePreview called, currentStep:', currentStep);
-        if (currentStep !== 5) {
-            console.log('updatePreview: not step 5, returning');
-            return;
-        }
+    console.log('updatePreview called, currentStep:', currentStep);
+    if (currentStep !== 5) {
+        console.log('updatePreview: not step 5, returning');
+        return;
+    }
 
     // Get all form values with safe element access
     console.log('updatePreview: getting form values');
