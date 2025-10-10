@@ -2851,14 +2851,6 @@ function showStep(step) {
     if (stepTipElement) {
         stepTipElement.textContent = stepTips[step];
     }
-
-    // Call updatePreview when reaching step 5
-    if (step === 5) {
-        console.log('showStep: reached step 5, calling updatePreview');
-        setTimeout(() => {
-            updatePreview();
-        }, 100); // Small delay to ensure DOM is ready
-    }
 }
 
 function updateProgress() {
@@ -3581,14 +3573,12 @@ function updatePreview() {
     if (eventPreviewElement) {
         eventPreviewElement.innerHTML = preview;
         console.log('updatePreview: preview HTML set successfully');
+        console.log('updatePreview: element visibility:', window.getComputedStyle(eventPreviewElement).display);
+        console.log('updatePreview: element innerHTML length:', eventPreviewElement.innerHTML.length);
+        console.log('updatePreview: parent element:', eventPreviewElement.parentElement);
     } else {
         console.error('updatePreview: eventPreview element not found');
     }
-}
-
-function updatePreviewWithImage(imageSrc) {
-    // Simple version - just call updatePreview
-    updatePreview();
 }
 
 // Disable form submission on Enter key
