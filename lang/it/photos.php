@@ -51,5 +51,13 @@ return [
 
     // Info
     'converted_to_webp' => 'Tutte le immagini vengono automaticamente convertite in formato WebP per ridurre le dimensioni',
+
+    // Stats
+    'total_photos' => 'Foto Totali',
+    'approved_photos' => 'Foto Approvate',
+    'pending_photos' => 'In Attesa',
+    'pending' => 'In Attesa',
+    'approved' => 'Approvata',
+    'rejected' => 'Rifiutata',
 ];
 
