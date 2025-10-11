@@ -36,8 +36,9 @@
 
                                 <div class="mb-4">
                                     <label for="content" class="form-label">{{ __('admin.content') }} <span class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('content') is-invalid @enderror"
-                                              id="content" name="content" rows="10" required>{{ old('content', $help->content) }}</textarea>
+                                    <div id="quill-editor" style="height: 400px;"></div>
+                                    <textarea class="form-control d-none @error('content') is-invalid @enderror"
+                                              id="content" name="content" required>{{ old('content', $help->content) }}</textarea>
                                     @error('content')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -116,15 +117,39 @@
     </div>
 </div>
 
-<!-- Include TinyMCE or similar rich text editor -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Quill Editor (Free, No API Key Required) -->
 <script>
-    tinymce.init({
-        selector: '#content',
-        height: 400,
-        plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }'
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Quill editor
+    const quill = new Quill('#quill-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link', 'image'],
+                ['clean']
+            ]
+        },
+        placeholder: '{{ __("admin.content_help") }}'
+    });
+
+    // Load existing content
+    const existingContent = {!! json_encode(old('content', $help->content)) !!};
+    if (existingContent) {
+        quill.root.innerHTML = existingContent;
+    }
+
+    // Sync Quill content with hidden textarea
+    quill.on('text-change', function() {
+        document.getElementById('content').value = quill.root.innerHTML;
+    });
+
+    // Sync on form submit
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('content').value = quill.root.innerHTML;
     });
 </script>
 @endsection
