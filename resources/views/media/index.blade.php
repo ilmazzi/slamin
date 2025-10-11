@@ -1489,7 +1489,7 @@ function initializeSearchViewCounters() {
         const viewCountSpan = counter.querySelector('.view-count');
 
         // Incrementa le visualizzazioni
-        fetch('/views/increment', {
+        fetch('/api/social/views/increment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
