@@ -49,10 +49,15 @@ return new class extends Migration
     private function indexExists(string $table, string $index): bool
     {
         $connection = Schema::getConnection();
-        $indexes = $connection->getDoctrineSchemaManager()
-            ->listTableIndexes($table);
+        $databaseName = $connection->getDatabaseName();
         
-        return isset($indexes[strtolower($index)]);
+        $result = $connection->select(
+            "SELECT COUNT(*) as count FROM information_schema.statistics 
+             WHERE table_schema = ? AND table_name = ? AND index_name = ?",
+            [$databaseName, $table, $index]
+        );
+        
+        return $result[0]->count > 0;
     }
 
     /**
