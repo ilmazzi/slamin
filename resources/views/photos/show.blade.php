@@ -158,6 +158,29 @@
                 </div>
             </div>
 
+            <!-- Actions (Edit/Delete) -->
+            @can('update', $photo)
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="ph ph-gear me-2"></i>{{ __('common.actions') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('photos.edit', $photo) }}" class="btn btn-light">
+                            <i class="ph ph-pencil-simple me-2"></i>{{ __('photos.edit_photo') }}
+                        </a>
+                        @can('delete', $photo)
+                        <button type="button" class="btn btn-danger" onclick="deletePhoto()">
+                            <i class="ph ph-trash me-2"></i>{{ __('photos.delete_photo') }}
+                        </button>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+            @endcan
+
             <!-- Related Photos -->
             @if($relatedPhotos->count() > 0)
             <div class="card">
@@ -192,6 +215,36 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+async function deletePhoto() {
+    if (!confirm('{{ __("photos.confirm_delete") }}')) {
+        return;
+    }
+
+    try {
+        const response = await fetch('{{ route("photos.destroy", $photo) }}', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            window.location.href = '{{ route("profile.show") }}';
+        } else {
+            alert(result.message || '{{ __("photos.delete_error") }}');
+        }
+    } catch (error) {
+        alert('{{ __("photos.delete_error") }}');
+    }
+}
+</script>
+@endpush
 
 @push('scripts')
 <script>

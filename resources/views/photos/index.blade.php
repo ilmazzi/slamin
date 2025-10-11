@@ -68,6 +68,21 @@
                                 @endif
                             </div>
                         @endif
+
+                        @can('delete', $photo)
+                            <div class="card-footer p-2 bg-light">
+                                <div class="d-flex gap-1">
+                                    <a href="{{ route('photos.edit', $photo) }}" class="btn btn-sm btn-light flex-grow-1">
+                                        <i class="ph ph-pencil-simple"></i>
+                                    </a>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-danger" 
+                                            onclick="deletePhoto({{ $photo->id }})">
+                                        <i class="ph ph-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        @endcan
                     </div>
                 </div>
             @endforeach
@@ -119,6 +134,34 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(script);
     }
 });
+
+// Delete photo function
+async function deletePhoto(photoId) {
+    if (!confirm('{{ __("photos.confirm_delete") }}')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/photos/${photoId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Reload the page to update the gallery
+            window.location.reload();
+        } else {
+            alert(result.message || '{{ __("photos.delete_error") }}');
+        }
+    } catch (error) {
+        alert('{{ __("photos.delete_error") }}');
+    }
+}
 </script>
 @endpush
 
