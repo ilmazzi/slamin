@@ -564,6 +564,41 @@ class ProfileController extends Controller
     }
 
     /**
+     * Mostra la gestione delle foto
+     */
+    public function photos()
+    {
+        $user = Auth::user();
+        $photos = $user->photos()->latest()->paginate(24);
+
+        return view('profile.photos', compact('user', 'photos'));
+    }
+
+    /**
+     * Elimina una foto
+     */
+    public function deletePhoto($photoId)
+    {
+        try {
+            $user = Auth::user();
+            $photo = $user->photos()->findOrFail($photoId);
+
+            // Usa il PhotoController per eliminare (gestisce anche i file)
+            $photoController = app(\App\Http\Controllers\PhotoController::class);
+            return $photoController->destroy($photo);
+
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione foto dal profilo', [
+                'photo_id' => $photoId,
+                'user_id' => $user->id ?? null,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json(['success' => false, 'message' => 'Errore durante l\'eliminazione della foto.'], 500);
+        }
+    }
+
+    /**
      * Mostra le attività dell'utente
      */
     public function activity()

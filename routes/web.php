@@ -840,6 +840,8 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
         Route::get('/videos', [App\Http\Controllers\ProfileController::class, 'videos'])->name('videos');
         Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
+        Route::get('/photos', [App\Http\Controllers\ProfileController::class, 'photos'])->name('photos');
+        Route::delete('/photos/{photo}', [App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('photos.delete');
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
         Route::get('/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('followers');
         Route::get('/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('following');
