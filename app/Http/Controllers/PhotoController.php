@@ -100,7 +100,8 @@ class PhotoController extends Controller
             return response()->json([
                 'success' => true,
                 'photo' => $photo->load('user'),
-                'message' => 'Foto caricata con successo'
+                'message' => 'Foto caricata con successo',
+                'redirect' => route('photos.show', $photo)
             ]);
 
         } catch (\Exception $e) {
