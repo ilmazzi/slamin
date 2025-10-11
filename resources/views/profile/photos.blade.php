@@ -160,10 +160,10 @@ async function deletePhoto(photoId) {
     button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
 
     try {
-        const response = await fetch(`{{ route('profile.photos.delete', '') }}/${photoId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        const response = await fetch(`/profile/photos/${photoId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'Accept': 'application/json'
             }
         });
