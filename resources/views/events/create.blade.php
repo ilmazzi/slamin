@@ -218,9 +218,9 @@
 
 @section('main-content')
 <div class="container-fluid">
-        <div class="row">
+        <div class="row" style="display: flex; flex-wrap: nowrap;">
             <!-- Main Content -->
-            <div class="col-md-8">
+            <div class="col-md-8" style="flex: 0 0 66.666667%; max-width: 66.666667%;">
     <!-- Page Header -->
     <div class="card mb-4">
         <div class="card-body">
@@ -1630,7 +1630,7 @@
                 </form>
             </div>
             <!-- Sidebar -->
-            <div class="col-md-4">
+            <div class="col-md-4" style="flex: 0 0 33.333333%; max-width: 33.333333%;">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="mb-0">
@@ -1696,6 +1696,18 @@
 
 let currentStep = 1;
 let map = null;
+
+// Variables for preview functions
+let title, description, requirements, category, categoryText;
+let startDateTime, endDateTime, hasRegistrationDeadline, registrationDeadlineDate, registrationDeadlineTime, registrationDeadline, invitationDeadline;
+let venueName, venueAddress, city, postcode, country, isOnline, onlineUrl, timezone;
+let isAvailabilityBased, availabilityDeadline, availabilityInstructions;
+let entryFee, maxParticipants, isPublicRadio, isPublic, allowRequests, statusRadio, status;
+let isFestival, selectedFestivalEventsData, festivalEvents, isPartOfFestival, festivalId;
+let isRecurring, recurrenceType, recurrenceInterval, recurrenceCount;
+let gigPositionsData, gigPositions;
+let isLinkedToGroup, groupCheckboxes, selectedGroupNames;
+let privateInvitedUsersData, privateInvitedUsers, artistInvitedUsersData, artistInvitedUsers, invitationsData, invitations;
 let marker = null;
 let tags = [];
 let selectedInvitations = [];
@@ -3516,7 +3528,7 @@ function updatePreview() {
     console.log('updatePreview: imageHtml set, now generating preview HTML');
 
     console.log('updatePreview: about to define format functions');
-    
+
     // Get additional form data for rich preview
     const requirements = document.getElementById('requirements')?.value || '';
     const isOnline = document.getElementById('is_online')?.checked || false;
@@ -3529,7 +3541,7 @@ function updatePreview() {
     const allowRequests = document.getElementById('allow_requests')?.checked || false;
     const statusRadio = document.querySelector('input[name="status"]:checked');
     const status = statusRadio ? statusRadio.value : 'published';
-    
+
     // Registration deadline from new fields
     const hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
     const registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
@@ -3771,10 +3783,10 @@ function updatePreview() {
                                 <p class="mb-0">${allowRequests ? 'Accettate' : 'Non accettate'}</p>
                             </div>
                         </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
-            </div>
-        </div>
     `;
 
     console.log('updatePreview: simple template generated');
@@ -3888,83 +3900,83 @@ function updatePreviewWithImage(imageSrc) {
     if (currentStep !== 5) return;
 
     // Get all form values with safe element access (same as updatePreview)
-    const title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
-    const description = document.getElementById('description')?.value || 'Descrizione evento...';
-    const requirements = document.getElementById('requirements')?.value || '';
-    const category = document.getElementById('category')?.value || '';
-    const categoryText = category && document.getElementById('category')?.options ?
+    title = document.getElementById('title')?.value || 'Titolo {{ __('invitations.event') }}';
+    description = document.getElementById('description')?.value || 'Descrizione evento...';
+    requirements = document.getElementById('requirements')?.value || '';
+    category = document.getElementById('category')?.value || '';
+    categoryText = category && document.getElementById('category')?.options ?
                 document.getElementById('category').options[document.getElementById('category').selectedIndex]?.text || '' :
                 '';
 
     // Date and time
-    const startDateTime = document.getElementById('start_datetime')?.value || '';
-    const endDateTime = document.getElementById('end_datetime')?.value || '';
+    startDateTime = document.getElementById('start_datetime')?.value || '';
+    endDateTime = document.getElementById('end_datetime')?.value || '';
 
     // Registration deadline from new fields
-    const hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
-    const registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
-    const registrationDeadlineTime = document.getElementById('registrationDeadlineTime')?.value || '';
-    const registrationDeadline = hasRegistrationDeadline && registrationDeadlineDate && registrationDeadlineTime ?
+    hasRegistrationDeadline = document.getElementById('has_deadline')?.checked || false;
+    registrationDeadlineDate = document.getElementById('registrationDeadlineDate')?.value || '';
+    registrationDeadlineTime = document.getElementById('registrationDeadlineTime')?.value || '';
+    registrationDeadline = hasRegistrationDeadline && registrationDeadlineDate && registrationDeadlineTime ?
         registrationDeadlineDate + ' ' + registrationDeadlineTime : '';
 
-    const invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
+    invitationDeadline = document.getElementById('invitation_deadline')?.value || '';
 
     // Location
-    const venueName = document.getElementById('venue_name')?.value || '';
-    const venueAddress = document.getElementById('venue_address')?.value || '';
-    const city = document.getElementById('city')?.value || '';
-    const postcode = document.getElementById('postcode')?.value || '';
-    const country = document.getElementById('country')?.value || '';
-    const isOnline = document.getElementById('is_online')?.checked || false;
-    const onlineUrl = document.getElementById('online_url')?.value || '';
-    const timezone = document.getElementById('timezone')?.value || '';
+    venueName = document.getElementById('venue_name')?.value || '';
+    venueAddress = document.getElementById('venue_address')?.value || '';
+    city = document.getElementById('city')?.value || '';
+    postcode = document.getElementById('postcode')?.value || '';
+    country = document.getElementById('country')?.value || '';
+    isOnline = document.getElementById('is_online')?.checked || false;
+    onlineUrl = document.getElementById('online_url')?.value || '';
+    timezone = document.getElementById('timezone')?.value || '';
 
     // Availability settings
-    const isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
-    const availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
-    const availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
+    isAvailabilityBased = document.getElementById('is_availability_based')?.checked || false;
+    availabilityDeadline = document.getElementById('availability_deadline')?.value || '';
+    availabilityInstructions = document.getElementById('availability_instructions')?.value || '';
 
     // Event settings
-    const entryFee = document.getElementById('ticket_price')?.value || '0';
-    const maxParticipants = document.getElementById('max_participants')?.value || '';
-    const isPublicRadio = document.querySelector('input[name="is_public"]:checked');
-    const isPublic = isPublicRadio ? isPublicRadio.value === '1' : true;
-    const allowRequests = document.getElementById('allow_requests')?.checked || false;
-    const statusRadio = document.querySelector('input[name="status"]:checked');
-    const status = statusRadio ? statusRadio.value : 'published';
+    entryFee = document.getElementById('ticket_price')?.value || '0';
+    maxParticipants = document.getElementById('max_participants')?.value || '';
+    isPublicRadio = document.querySelector('input[name="is_public"]:checked');
+    isPublic = isPublicRadio ? isPublicRadio.value === '1' : true;
+    allowRequests = document.getElementById('allow_requests')?.checked || false;
+    statusRadio = document.querySelector('input[name="status"]:checked');
+    status = statusRadio ? statusRadio.value : 'published';
 
     // Festival data
-    const isFestival = category === 'festival';
-    const selectedFestivalEventsData = document.getElementById('selectedFestivalEventsData');
-    const festivalEvents = selectedFestivalEventsData ? JSON.parse(selectedFestivalEventsData.value || '[]') : [];
-    const isPartOfFestival = document.getElementById('is_festival_event')?.checked || false;
-    const festivalId = document.getElementById('festival_id')?.value || '';
+    isFestival = category === 'festival';
+    selectedFestivalEventsData = document.getElementById('selectedFestivalEventsData');
+    festivalEvents = selectedFestivalEventsData ? JSON.parse(selectedFestivalEventsData.value || '[]') : [];
+    isPartOfFestival = document.getElementById('is_festival_event')?.checked || false;
+    festivalId = document.getElementById('festival_id')?.value || '';
 
     // Recurrence
-    const isRecurring = document.getElementById('is_recurring')?.checked || false;
-    const recurrenceType = document.getElementById('recurrence_type')?.value || '';
-    const recurrenceInterval = document.getElementById('recurrence_interval')?.value || '';
-    const recurrenceCount = document.getElementById('recurrence_count')?.value || '';
+    isRecurring = document.getElementById('is_recurring')?.checked || false;
+    recurrenceType = document.getElementById('recurrence_type')?.value || '';
+    recurrenceInterval = document.getElementById('recurrence_interval')?.value || '';
+    recurrenceCount = document.getElementById('recurrence_count')?.value || '';
 
     // Gig positions
-    const gigPositionsData = document.getElementById('gigPositionsData');
-    const gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
+    gigPositionsData = document.getElementById('gigPositionsData');
+    gigPositions = gigPositionsData ? JSON.parse(gigPositionsData.value || '[]') : [];
 
     // Group association
-    const isLinkedToGroup = document.getElementById('is_linked_to_group')?.checked || false;
-    const groupCheckboxes = document.querySelectorAll('.group-checkbox:checked');
-    const selectedGroupNames = Array.from(groupCheckboxes).map(cb => {
+    isLinkedToGroup = document.getElementById('is_linked_to_group')?.checked || false;
+    groupCheckboxes = document.querySelectorAll('.group-checkbox:checked');
+    selectedGroupNames = Array.from(groupCheckboxes).map(cb => {
         const label = document.querySelector(`label[for="${cb.id}"]`);
         return label ? label.textContent.trim() : '';
     }).filter(name => name);
 
     // Invitations
-    const privateInvitedUsersData = document.getElementById('privateInvitedUsersData');
-    const privateInvitedUsers = privateInvitedUsersData ? JSON.parse(privateInvitedUsersData.value || '[]') : [];
-    const artistInvitedUsersData = document.getElementById('artistInvitedUsersData');
-    const artistInvitedUsers = artistInvitedUsersData ? JSON.parse(artistInvitedUsersData.value || '[]') : [];
-    const invitationsData = document.getElementById('invitationsData');
-    const invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
+    privateInvitedUsersData = document.getElementById('privateInvitedUsersData');
+    privateInvitedUsers = privateInvitedUsersData ? JSON.parse(privateInvitedUsersData.value || '[]') : [];
+    artistInvitedUsersData = document.getElementById('artistInvitedUsersData');
+    artistInvitedUsers = artistInvitedUsersData ? JSON.parse(artistInvitedUsersData.value || '[]') : [];
+    invitationsData = document.getElementById('invitationsData');
+    invitations = invitationsData ? JSON.parse(invitationsData.value || '[]') : [];
 
     // Format dates
     const formatDate = (dateString) => {

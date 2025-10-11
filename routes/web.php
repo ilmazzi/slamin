@@ -42,6 +42,16 @@ Route::prefix('profile/payment-accounts')->name('profile.payment-accounts.')->mi
     Route::get('/stripe/onboarding', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'createStripeOnboardingLink'])->name('stripe-onboarding');
 });
 
+// Livewire Event Creation - NUOVA IMPLEMENTAZIONE
+Route::get('/events/create-livewire', function () {
+    return view('events.create-livewire');
+})->middleware('auth')->name('events.create-livewire');
+
+// Test Livewire Component
+Route::get('/test-livewire', App\Livewire\TestEventCreation::class)
+    ->middleware('auth')
+    ->name('test.livewire');
+
 // Admin Payment Accounts Routes
 Route::prefix('admin/payment-accounts')->name('admin.payment-accounts.')->middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'index'])->name('index');

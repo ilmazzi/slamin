@@ -136,6 +136,14 @@ return [
     'title_placeholder' => 'Titolo evento',
     'description_event_help' => 'Aggiungi una descrizione per il tuo evento',
     'create_event_help' => 'Segui i passaggi per creare il tuo evento',
+    'description_placeholder' => 'Descrivi il tuo evento...',
+    'requirements_placeholder' => 'Es: esperienza minima, età, materiale necessario...',
+
+    // Sottotitolo
+    'subtitle' => 'Sottotitolo',
+    'add_subtitle' => 'Aggiungi sottotitolo',
+    'subtitle_active' => 'Sottotitolo attivo',
+    'subtitle_placeholder' => 'Sottotitolo evento (opzionale)',
 
     // Step del form
     'step_1' => 'Informazioni Base',
@@ -147,9 +155,89 @@ return [
     'step_2_short' => 'Data',
     'step_3_short' => 'Dettagli',
     'step_4_short' => 'Inviti',
-    'step_5_short' => 'Preview',
     'step_basic_info' => 'Informazioni Base',
-    'step_event_details' => 'Dettagli Evento',
+    'step_date_location' => 'Data e Luogo',
+    'step_details' => 'Dettagli',
+    'step_invitations' => 'Inviti e Impostazioni',
+    'step_preview' => 'Anteprima',
+
+    // Date e orari - Step 2
+    'date_and_time' => 'Data e Orario',
+    'start_datetime_placeholder' => 'Seleziona data e ora inizio...',
+    'end_datetime_placeholder' => 'Seleziona data e ora fine...',
+    'registration_deadline' => 'Scadenza Registrazione',
+    'registration_deadline_placeholder' => 'Seleziona scadenza registrazione...',
+    'registration_deadline_help' => 'Ultimo giorno per registrarsi all\'evento',
+    'invitation_deadline' => 'Scadenza Inviti',
+    'invitation_deadline_placeholder' => 'Seleziona scadenza inviti...',
+    'invitation_deadline_help' => 'Ultimo giorno per inviare inviti',
+    'availability_based_event' => 'Evento basato su disponibilità',
+    'availability_based_help' => 'Gli utenti possono indicare la loro disponibilità per diverse date/orari',
+    'availability_deadline' => 'Scadenza disponibilità',
+    'availability_deadline_placeholder' => 'Seleziona scadenza risposte...',
+    'availability_instructions' => 'Istruzioni disponibilità',
+    'availability_instructions_placeholder' => 'Es: indica le tue preferenze di orario...',
+    'availability_multiple_dates' => 'Date Multiple per Disponibilità',
+    'availability_multiple_dates_help' => 'Aggiungi le diverse date/orari tra cui gli utenti possono scegliere la loro disponibilità.',
+    'availability_multiple_dates_notice' => 'Gli utenti potranno indicare la loro preferenza per ogni data proposta.',
+    'add_availability_option' => 'Aggiungi Data/Orario',
+    'availability_option_datetime' => 'Data e Ora',
+    'availability_option_description' => 'Descrizione (opzionale)',
+    'remove_availability_option' => 'Rimuovi opzione',
+    'no_availability_options' => 'Nessuna data/orario aggiunta',
+
+    // Luogo - Step 2
+    'in_person' => 'Presenziale',
+    'online' => 'Online',
+    'country' => 'Paese',
+
+    // Ricorrenza - Step 2
+    'recurrence' => 'Ricorrenza',
+    'recurring_event' => 'Evento ricorrente',
+    'recurrence_type' => 'Tipo ricorrenza',
+    'recurrence_interval' => 'Intervallo',
+    'recurrence_count' => 'Numero occorrenze',
+    'recurrence_weekdays' => 'Giorni della settimana',
+    'recurrence_monthday' => 'Giorno del mese',
+    'recurrence_interval_help' => 'Ogni N giorni/settimane/mesi',
+    'recurrence_count_help' => 'Quante volte ripetere (max 100)',
+    'recurrence_monthday_help' => 'Giorno del mese (1-31)',
+    'daily' => 'Giornaliera',
+    'weekly' => 'Settimanale',
+    'monthly' => 'Mensile',
+    'yearly' => 'Annuale',
+
+    // Mappa
+    'map_placeholder' => 'Mappa interattiva',
+    'map_placeholder_help' => 'La mappa sarà disponibile dopo aver inserito l\'indirizzo',
+    'map_auto_positioning_help' => 'Clicca sulla mappa per impostare la posizione esatta',
+    'auto_positioning_title' => 'Posizionamento Automatico',
+    'auto_positioning_description' => 'La posizione verrà aggiornata automaticamente quando inserisci l\'indirizzo',
+    'auto_positioning_status' => 'Ricerca posizione in corso...',
+
+    // Giorni della settimana
+    'weekday_1' => 'Lun',
+    'weekday_2' => 'Mar',
+    'weekday_3' => 'Mer',
+    'weekday_4' => 'Gio',
+    'weekday_5' => 'Ven',
+    'weekday_6' => 'Sab',
+    'weekday_7' => 'Dom',
+
+    // Contatori e progresso
+    'characters' => 'caratteri',
+    'step' => 'Step',
+    'step_of' => 'di',
+    'step_info' => 'Step :current di :total',
+    'progress_percentage' => ':percentage%',
+
+    // Help text per step
+    'help_text_step_1' => 'Inserisci le informazioni base del tuo evento',
+    'help_text_step_2' => 'Imposta data, ora e luogo dell\'evento',
+    'help_text_step_3' => 'Aggiungi dettagli e impostazioni avanzate',
+    'help_text_step_4' => 'Gestisci inviti e pubblicazione',
+    'help_text_step_5' => 'Rivedi e conferma il tuo evento',
+    'in_implementation' => 'in implementazione',
 
     // Pubblicazione
     'publish_immediately' => 'Pubblica Immediatamente',
