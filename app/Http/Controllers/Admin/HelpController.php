@@ -44,7 +44,6 @@ class HelpController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean'
         ]);
 
         \Log::info('Help/FAQ Store - Validated data:', $validated);
@@ -54,14 +53,14 @@ class HelpController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'order' => $request->order ?? 0,
-            'is_active' => $request->has('is_active')
+            'is_active' => $request->has('is_active') && $request->is_active === 'on'
         ]);
 
         \Log::info('Help/FAQ Store - Created:', ['id' => $help->id, 'title' => $help->title]);
 
         return redirect()
             ->route('admin.help.index', ['type' => $help->type])
-            ->with('success', __('admin.help.created_successfully'));
+            ->with('success', 'FAQ/Help creato con successo!');
     }
 
     /**
