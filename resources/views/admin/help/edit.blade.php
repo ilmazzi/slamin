@@ -99,11 +99,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between">
-                                    <a href="{{ route('admin.help.index', ['type' => $help->type]) }}" class="btn btn-secondary">
+                                    <a href="{{ route('admin.help.index', ['type' => $help->type]) }}" class="btn btn-light">
                                         <i class="ph ph-arrow-left me-2"></i>
                                         {{ __('admin.cancel') }}
                                     </a>
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-primary btn-lg">
                                         <i class="ph ph-check me-2"></i>
                                         {{ __('admin.save') }}
                                     </button>

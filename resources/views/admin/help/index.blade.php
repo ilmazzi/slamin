@@ -21,21 +21,21 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <div class="btn-group" role="group">
+                            <div class="d-flex gap-2">
                                 <a href="{{ route('admin.help.index', ['type' => 'help']) }}"
-                                   class="btn {{ $type === 'help' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                   class="btn {{ $type === 'help' ? 'btn-primary' : 'btn-light-primary' }}">
                                     <i class="ph ph-question me-2"></i>
                                     {{ __('admin.help_pages') }}
                                 </a>
                                 <a href="{{ route('admin.help.index', ['type' => 'faq']) }}"
-                                   class="btn {{ $type === 'faq' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                   class="btn {{ $type === 'faq' ? 'btn-primary' : 'btn-light-primary' }}">
                                     <i class="ph ph-chat-circle me-2"></i>
                                     {{ __('admin.faq_pages') }}
                                 </a>
                             </div>
                         </div>
                         <div class="col-md-6 text-end">
-                            <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-success">
+                            <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-primary">
                                 <i class="ph ph-plus me-2"></i>
                                 {{ __('admin.add_new') }}
                             </a>
@@ -89,32 +89,30 @@
                                                 {{ $help->created_at->format('d/m/Y H:i') }}
                                             </td>
                                             <td>
-                                                <div class="btn-group btn-group-sm" role="group">
+                                                <div class="d-flex gap-1">
                                                     <a href="{{ route('admin.help.show', $help) }}"
-                                                       class="btn btn-outline-info" title="{{ __('admin.view') }}">
+                                                       class="btn btn-sm btn-light-info" title="{{ __('admin.view') }}">
                                                         <i class="ph ph-eye"></i>
                                                     </a>
                                                     <a href="{{ route('admin.help.edit', $help) }}"
-                                                       class="btn btn-outline-primary" title="{{ __('admin.edit') }}">
+                                                       class="btn btn-sm btn-light-primary" title="{{ __('admin.edit') }}">
                                                         <i class="ph ph-pencil"></i>
                                                     </a>
                                                     <form action="{{ route('admin.help.toggle', $help) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit"
-                                                                class="btn btn-outline-{{ $help->is_active ? 'warning' : 'success' }}"
+                                                                class="btn btn-sm btn-light-{{ $help->is_active ? 'warning' : 'success' }}"
                                                                 title="{{ $help->is_active ? __('admin.deactivate') : __('admin.activate') }}">
                                                             <i class="ph ph-{{ $help->is_active ? 'pause' : 'play' }}"></i>
                                                         </button>
                                                     </form>
-                                                    <form action="{{ route('admin.help.destroy', $help) }}" method="POST" class="d-inline"
-                                                          onsubmit="return confirm('{{ __('admin.confirm_delete') }}')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-outline-danger" title="{{ __('admin.delete') }}">
-                                                            <i class="ph ph-trash"></i>
-                                                        </button>
-                                                    </form>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-light-danger" 
+                                                            onclick="deleteHelp({{ $help->id }})"
+                                                            title="{{ __('admin.delete') }}">
+                                                        <i class="ph ph-trash"></i>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -132,7 +130,7 @@
                             <i class="ph ph-{{ $type === 'faq' ? 'chat-circle-question' : 'question' }} f-s-48 text-muted mb-3"></i>
                             <h5 class="text-muted">{{ __('admin.no_content_found') }}</h5>
                             <p class="text-muted">{{ $type === 'faq' ? __('admin.no_faq_description') : __('admin.no_help_description') }}</p>
-                            <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-primary">
+                            <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-primary btn-lg">
                                 <i class="ph ph-plus me-2"></i>
                                 {{ __('admin.add_first') }}
                             </a>
@@ -144,3 +142,41 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function deleteHelp(helpId) {
+    Swal.fire({
+        title: '{{ __("common.are_you_sure") }}',
+        text: '{{ __("admin.confirm_delete") }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '{{ __("common.yes_delete") }}',
+        cancelButtonText: '{{ __("common.cancel") }}'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/admin/help/${helpId}`;
+            
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            
+            form.appendChild(csrfInput);
+            form.appendChild(methodInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+</script>
+@endpush
