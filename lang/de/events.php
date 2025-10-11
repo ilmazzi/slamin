@@ -103,6 +103,8 @@ return array (
   'recent_venues_help' => 'Die beliebtesten Orte in der Gemeinde. Klicken Sie, um schnell Daten hochzuladen.',
   'venue_suggestions' => 'Tipps Orte',
   'select_recent_venue' => 'Wählen Sie einen neuen Ort',
+  'times' => 'mal',
+  'users' => 'Benutzer',
   'venue_name_placeholder' => 'Name des Ortes oder des Ortes..',
   'venue_address_placeholder' => 'Vollständige Adresse.',
   'city_placeholder' => 'Städte',

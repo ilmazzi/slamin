@@ -296,39 +296,10 @@ class EventController extends Controller
 
     /**
      * Show the form for creating a new event
+     * DEPRECATED: Now using Livewire component (resources/views/events/create-livewire.blade.php)
+     * Route: /events/create
      */
-    public function create(): View
-    {
-        // Debug log all'inizio
-        Log::info('EventController::create method started');
-
-        // Controlla se l'utente può creare eventi usando Spatie
-        if (!Auth::check() || (!Auth::user()->can('events.create.public') && !Auth::user()->can('events.create.private'))) {
-            abort(403, 'Non hai i permessi per creare eventi');
-        }
-
-        Log::info('User permissions check passed');
-
-        $venueOwners = User::whereHas('roles', function ($query) {
-            $query->where('name', 'venue_owner');
-        })->get();
-
-        Log::info('Venue owners loaded', ['count' => $venueOwners->count()]);
-
-        // Ottieni i gruppi pubblici per la selezione
-        $groups = \App\Models\Group::public()->get();
-        Log::info('Groups collection created', ['count' => $groups->count(), 'groups' => $groups->pluck('name', 'id')->toArray()]);
-
-        // Ottieni i luoghi popolari di tutti gli utenti
-        $recentVenues = RecentVenue::getPopularVenues(8);
-
-        Log::info('About to return view with groups', ['groups_count' => $groups->count(), 'groups_data' => $groups->pluck('name', 'id')->toArray()]);
-
-        // Debug: verifica che la variabile sia passata correttamente
-        Log::info('Variables being passed to view', ['venueOwners_count' => $venueOwners->count(), 'recentVenues_count' => $recentVenues->count(), 'groups_count' => $groups->count()]);
-
-        return view('events.create', compact('venueOwners', 'recentVenues', 'groups'));
-    }
+    // Removed - using Livewire EventCreation component instead
 
     /**
      * Store a newly created event
@@ -1164,34 +1135,31 @@ class EventController extends Controller
 
     /**
      * Show the form for editing the event
+     * NOTA: Questo metodo non è più utilizzato - la modifica eventi ora usa Livewire (EventEdit component)
+     * La route events.edit ora punta direttamente al componente Livewire
      */
-    public function edit(Event $event): View
-    {
-        // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
-            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
-            abort(403, 'Non hai i permessi per modificare questo evento');
-        }
+    // public function edit(Event $event): View
+    // {
+    //     // Controlla se l'utente può modificare questo evento usando Spatie
+    //     if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
+    //         (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+    //         abort(403, 'Non hai i permessi per modificare questo evento');
+    //     }
 
-        // Load festival relationships if this is a festival
-        if ($event->isFestival()) {
-            $event->load(['getFestivalEventModels']);
-        }
+    //     $venueOwners = User::whereHas('roles', function ($query) {
+    //         $query->where('name', 'venue_owner');
+    //     })->get();
 
-        $venueOwners = User::whereHas('roles', function ($query) {
-            $query->where('name', 'venue_owner');
-        })->get();
+    //     // Ottieni i gruppi pubblici per la selezione
+    //     try {
+    //         $groups = \App\Models\Group::public()->get();
+    //     } catch (\Exception $e) {
+    //         // Fallback: ottieni tutti i gruppi se la query public() fallisce
+    //         $groups = \App\Models\Group::all();
+    //     }
 
-        // Ottieni i gruppi pubblici per la selezione
-        try {
-            $groups = \App\Models\Group::public()->get();
-        } catch (\Exception $e) {
-            // Fallback: ottieni tutti i gruppi se la query public() fallisce
-            $groups = \App\Models\Group::all();
-        }
-
-        return view('events.edit', compact('event', 'venueOwners', 'groups'));
-    }
+    //     return view('events.edit', compact('event', 'venueOwners', 'groups'));
+    // }
 
     /**
      * Update the specified event

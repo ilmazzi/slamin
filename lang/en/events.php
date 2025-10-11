@@ -103,6 +103,8 @@ return array (
   'recent_venues_help' => 'Most popular places in the community. Click to quickly upload data.',
   'venue_suggestions' => 'Tips places',
   'select_recent_venue' => 'Select a recent place',
+  'times' => 'times',
+  'users' => 'users',
   'venue_name_placeholder' => 'Name of the venue or place.. .',
   'venue_address_placeholder' => 'Full address.. .',
   'city_placeholder' => 'Cities',

@@ -48,6 +48,19 @@ return [
     'media_section' => 'Media',
     'kanban_board' => 'Kanban Board',
     'popular' => 'Popolari',
+    
+    // Languages
+    'italian' => 'Italiano',
+    'english' => 'Inglese',
+    'french' => 'Francese',
+    'german' => 'Tedesco',
+    'spanish' => 'Spagnolo',
+    'portuguese' => 'Portoghese',
+    
+    // General
+    'currency' => 'Valuta',
+    'name' => 'Nome',
+    'email' => 'Email',
     'new' => 'Nuovi',
     'didactic' => 'Didattica',
     'forum' => 'Forum',

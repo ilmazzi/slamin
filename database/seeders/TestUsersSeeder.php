@@ -45,8 +45,8 @@ class TestUsersSeeder extends Seeder
         if (!$user2->hasRole('organizer')) {
             $user2->assignRole('organizer');
         }
-        if (!$user2->hasRole('host')) {
-            $user2->assignRole('host');
+        if (!$user2->hasRole('judge')) {
+            $user2->assignRole('judge');
         }
 
         // Test User 3 - Utente per richieste

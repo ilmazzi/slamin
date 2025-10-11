@@ -6,9 +6,9 @@
             <div class="card mb-3">
                 <div class="card-body text-center">
                         <h2 class="mb-2">
-                            <i class="ph ph-calendar-plus me-2"></i>{{ __('events.create_event') }}
+                            <i class="ph ph-pencil-simple me-2"></i>{{ __('events.edit_event') }}
                         </h2>
-                    <p class="text-secondary mb-0">{{ __('events.create_event_help') }}</p>
+                    <p class="text-secondary mb-0">{{ __('events.edit_event_help') }}</p>
                 </div>
                     </div>
 
@@ -665,6 +665,13 @@
                                                          class="img-thumbnail" 
                                                          style="max-height: 150px">
                                                 </div>
+                                            @elseif ($existing_image_url)
+                                                <div class="mt-2">
+                                                    <p class="text-muted small mb-1">{{ __('events.current_image') }}:</p>
+                                                    <img src="{{ $existing_image_url }}" 
+                                                         class="img-thumbnail" 
+                                                         style="max-height: 150px">
+                                                </div>
                                             @endif
                                         </div>
 
@@ -1314,6 +1321,12 @@
                                                          class="img-fluid rounded border"
                                                          alt="Event preview">
                                                 </div>
+                                            @elseif($existing_image_url)
+                                                <div class="col-md-4">
+                                                    <img src="{{ $existing_image_url }}" 
+                                                         class="img-fluid rounded border"
+                                                         alt="Event preview">
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -1741,7 +1754,7 @@
                                 <button type="button"
                                         wire:click="save"
                                         class="btn btn-success btn-lg">
-                                    <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event_button') }}
+                                    <i class="ph ph-check-circle me-2"></i>{{ __('events.save_changes') }}
                                 </button>
                             @endif
 

@@ -4,12 +4,15 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\On;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\RecentVenue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\LoggingService;
+use Illuminate\Support\Facades\Log;
 
 class EventCreation extends Component
 {
@@ -111,9 +114,20 @@ class EventCreation extends Component
     public $private_invited_users = [];
     public $artist_invited_users = [];
     public $invitations = [];
+    
+    // User search for invitations
+    public $userSearchQuery = '';
+    public $searchResults = [];
+    public $searching = false;
 
     // Tags
     public $tags = [];
+
+    // ========================================
+    // RECENT VENUES
+    // ========================================
+    public $recentVenues = [];
+    public $selectedRecentVenue = '';
 
     // ========================================
     // STEP 5: PREVIEW (auto-generated)
@@ -201,6 +215,9 @@ class EventCreation extends Component
         $this->ticket_currency = 'EUR';
         $this->invitation_role = 'performer';
 
+        // Load recent venues - convert to array for Livewire compatibility
+        $this->recentVenues = RecentVenue::getPopularVenues(8)->toArray();
+
         // Check permissions - simplified for testing
         $user = Auth::user();
         if (!$user) {
@@ -276,12 +293,24 @@ class EventCreation extends Component
                     'availability_deadline' => 'nullable|date|after:now',
                     'availability_instructions' => 'nullable|string|max:500',
                     'is_recurring' => 'boolean',
-                    'recurrence_type' => 'required_if:is_recurring,true|nullable|string|in:daily,weekly,monthly,yearly',
-                    'recurrence_interval' => 'required_if:is_recurring,true|nullable|integer|min:1|max:365',
-                    'recurrence_count' => 'nullable|integer|min:1|max:100',
-                    'recurrence_weekdays' => 'required_if:recurrence_type,weekly|nullable|array|min:1',
-                    'recurrence_monthday' => 'required_if:recurrence_type,monthly|nullable|integer|min:1|max:31',
                 ];
+
+                // Only validate recurrence fields if recurring is enabled
+                if ($this->is_recurring) {
+                    $rules['recurrence_type'] = 'required|string|in:daily,weekly,monthly,yearly';
+                    $rules['recurrence_interval'] = 'required|integer|min:1|max:365';
+                    $rules['recurrence_count'] = 'nullable|integer|min:1|max:100';
+                    
+                    // Validate weekdays only if recurrence type is weekly
+                    if ($this->recurrence_type === 'weekly') {
+                        $rules['recurrence_weekdays'] = 'required|array|min:1';
+                    }
+                    
+                    // Validate monthday only if recurrence type is monthly
+                    if ($this->recurrence_type === 'monthly') {
+                        $rules['recurrence_monthday'] = 'required|integer|min:1|max:31';
+                    }
+                }
 
                 if ($this->is_availability_based) {
                     $rules['start_datetime'] = 'nullable|date';
@@ -330,6 +359,163 @@ class EventCreation extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
+        
+        // Emit event when is_online changes
+        if ($propertyName === 'is_online') {
+            $this->dispatch('location-mode-changed', isOnline: $this->is_online);
+        }
+    }
+
+    #[On('map-clicked')]
+    public function handleMapClick($latitude, $longitude, $city, $address, $postcode, $country)
+    {
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->city = $city;
+        $this->venue_address = $address;
+        $this->postcode = $postcode;
+        $this->country = $country;
+    }
+
+    // Load a recent venue from select dropdown
+    public function loadRecentVenueFromSelect()
+    {
+        if (empty($this->selectedRecentVenue) || $this->selectedRecentVenue === '') {
+            return;
+        }
+
+        $venueIndex = (int) $this->selectedRecentVenue;
+        
+        if (!isset($this->recentVenues[$venueIndex])) {
+            return;
+        }
+
+        $venue = $this->recentVenues[$venueIndex];
+        
+        // Populate venue fields (venue is now an array)
+        $this->venue_name = $venue['venue_name'] ?? '';
+        $this->venue_address = $venue['venue_address'] ?? '';
+        $this->city = $venue['city'] ?? '';
+        $this->postcode = $venue['postcode'] ?? '';
+        $this->country = $venue['country'] ?? 'IT';
+        $this->latitude = $venue['latitude'] ?? '';
+        $this->longitude = $venue['longitude'] ?? '';
+
+        // Dispatch event to update map
+        if ($this->latitude && $this->longitude) {
+            $this->dispatch('update-map-location', 
+                latitude: floatval($this->latitude), 
+                longitude: floatval($this->longitude)
+            );
+        }
+
+        // Show success message
+        session()->flash('success', 'Luogo caricato con successo!');
+    }
+
+    // ========================================
+    // USER SEARCH & INVITATIONS
+    // ========================================
+    public function updatedUserSearchQuery()
+    {
+        if (strlen($this->userSearchQuery) < 2) {
+            $this->searchResults = [];
+            return;
+        }
+
+        $this->searching = true;
+
+        $this->searchResults = User::where(function ($q) {
+                $q->where('name', 'like', "%{$this->userSearchQuery}%")
+                  ->orWhere('email', 'like', "%{$this->userSearchQuery}%")
+                  ->orWhere('nickname', 'like', "%{$this->userSearchQuery}%");
+            })
+            ->where('id', '!=', Auth::id())
+            ->whereNotIn('id', collect($this->invitations)->pluck('user_id'))
+            ->limit(10)
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'nickname' => $user->nickname,
+                    'avatar' => $user->avatar_url ?? null,
+                ];
+            })
+            ->toArray();
+
+        $this->searching = false;
+    }
+
+    public function addInvitation($userId, $role = 'performer')
+    {
+        // Check if user already invited
+        if (collect($this->invitations)->contains('user_id', $userId)) {
+            session()->flash('warning', 'Utente già invitato');
+            return;
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return;
+        }
+
+        $this->invitations[] = [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $role,
+        ];
+
+        // Clear search
+        $this->userSearchQuery = '';
+        $this->searchResults = [];
+
+        session()->flash('success', "Invito aggiunto per {$user->name}");
+    }
+
+    public function removeInvitation($index)
+    {
+        if (isset($this->invitations[$index])) {
+            $userName = $this->invitations[$index]['name'];
+            unset($this->invitations[$index]);
+            $this->invitations = array_values($this->invitations); // Re-index array
+            session()->flash('success', "Invito rimosso per {$userName}");
+        }
+    }
+
+    public function updateInvitationRole($index, $role)
+    {
+        if (isset($this->invitations[$index])) {
+            $this->invitations[$index]['role'] = $role;
+        }
+    }
+
+    // Gig Positions Management
+    public function addGigPosition()
+    {
+        $this->gig_positions[] = [
+            'type' => '',
+            'quantity' => 1,
+            'language' => '',
+            'has_cachet' => false,
+            'cachet_amount' => '',
+            'cachet_currency' => 'EUR',
+            'has_travel' => false,
+            'travel_max' => '',
+            'travel_currency' => 'EUR',
+            'has_accommodation' => false,
+            'accommodation_details' => '',
+        ];
+    }
+
+    public function removeGigPosition($index)
+    {
+        if (isset($this->gig_positions[$index])) {
+            unset($this->gig_positions[$index]);
+            $this->gig_positions = array_values($this->gig_positions); // Re-index
+        }
     }
 
     // ========================================
@@ -337,10 +523,9 @@ class EventCreation extends Component
     // ========================================
     public function save()
     {
-        // Final validation
-        $this->validate();
-
         try {
+            // Final validation
+            $this->validate();
             // Handle image upload
             $imagePath = null;
             if ($this->event_image) {
@@ -390,11 +575,11 @@ class EventCreation extends Component
 
                 // Recurrence
                 'is_recurring' => $this->is_recurring,
-                'recurrence_type' => $this->recurrence_type,
-                'recurrence_interval' => $this->recurrence_interval,
-                'recurrence_count' => $this->recurrence_count,
-                'recurrence_weekdays' => !empty($this->recurrence_weekdays) ? $this->recurrence_weekdays : null,
-                'recurrence_monthday' => $this->recurrence_monthday,
+                'recurrence_type' => $this->is_recurring && $this->recurrence_type ? $this->recurrence_type : null,
+                'recurrence_interval' => $this->is_recurring ? $this->recurrence_interval : null,
+                'recurrence_count' => $this->is_recurring && $this->recurrence_count ? $this->recurrence_count : null,
+                'recurrence_weekdays' => $this->is_recurring && !empty($this->recurrence_weekdays) ? $this->recurrence_weekdays : null,
+                'recurrence_monthday' => $this->is_recurring && $this->recurrence_monthday ? $this->recurrence_monthday : null,
 
                 // Details
                 'image_url' => $imagePath ? Storage::url($imagePath) : null,
@@ -420,9 +605,42 @@ class EventCreation extends Component
                 $event->groups()->attach($this->selected_groups);
             }
 
-            // TODO: Handle invitations
-            // TODO: Handle availability options
-            // TODO: Generate recurring events
+            // Handle invitations
+            if (!empty($this->invitations)) {
+                foreach ($this->invitations as $invitation) {
+                    $event->invitations()->create([
+                        'invited_user_id' => $invitation['user_id'],
+                        'inviter_id' => Auth::id(),
+                        'role' => $invitation['role'],
+                        'status' => 'pending',
+                    ]);
+                }
+            }
+
+            // Handle availability options
+            if ($this->is_availability_based && !empty($this->availability_options)) {
+                foreach ($this->availability_options as $option) {
+                    if (is_array($option) && !empty($option['datetime'])) {
+                        $event->availabilityOptions()->create([
+                            'datetime' => $option['datetime'],
+                            'description' => $option['description'] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            // Save recent venue if it's a physical event
+            if (!$this->is_online && $this->venue_name) {
+                \App\Models\RecentVenue::saveRecentVenue([
+                    'venue_name' => $this->venue_name,
+                    'venue_address' => $this->venue_address,
+                    'city' => $this->city,
+                    'postcode' => $this->postcode,
+                    'country' => $this->country,
+                    'latitude' => $this->latitude,
+                    'longitude' => $this->longitude,
+                ]);
+            }
 
             // Log event creation
             LoggingService::logEvent('create', [
@@ -435,8 +653,17 @@ class EventCreation extends Component
             session()->flash('success', 'Evento creato con successo!');
             return redirect()->route('events.show', $event->id);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Validation errors - let Livewire handle them
+            throw $e;
         } catch (\Exception $e) {
-            LoggingService::logError('validation_failed', [
+            Log::error('Event creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+            ]);
+
+            LoggingService::logError('event_creation_failed', [
                 'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
             ]);
