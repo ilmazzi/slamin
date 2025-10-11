@@ -2092,5 +2092,11 @@ async function submitComment() {
         submitBtn.innerHTML = '<i class="ph-duotone ph-paper-plane-right me-1"></i>Invia commento';
     }
 }
+
+// Declare functions globally to be accessible from onclick handlers
+window.openVideoModal = openVideoModal;
+window.openPhotoModal = openPhotoModal;
+window.closeVideoModal = closeVideoModal;
+window.closePhotoModal = closePhotoModal;
 </script>
 @endpush

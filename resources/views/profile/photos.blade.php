@@ -150,39 +150,46 @@
 
 @push('scripts')
 <script>
-async function deletePhoto(photoId) {
-    if (!confirm('{{ __("photos.confirm_delete") }}')) {
-        return;
-    }
-
-    const button = event.target.closest('button');
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
-
-    try {
-        const response = await fetch(`/profile/photos/${photoId}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            // Reload the page to update the list
-            window.location.reload();
-        } else {
-            alert(result.message || '{{ __("photos.delete_error") }}');
-            button.disabled = false;
-            button.innerHTML = '<i class="ph ph-trash"></i>';
+function deletePhoto(photoId) {
+    Swal.fire({
+        title: 'Sei sicuro?',
+        text: "{{ __('photos.confirm_delete') }}",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/profile/photos/${photoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Eliminata!', data.message, 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Errore!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Errore eliminazione foto:', error);
+                Swal.fire('Errore!', '{{ __("photos.delete_error") }}', 'error');
+            });
         }
-    } catch (error) {
-        alert('{{ __("photos.delete_error") }}');
-        button.disabled = false;
-        button.innerHTML = '<i class="ph ph-trash"></i>';
-    }
+    });
 }
 </script>
 @endpush
