@@ -29,7 +29,7 @@
                                 {!! Str::limit(strip_tags($help->content), 150) !!}
                             </div>
                             <div class="mt-3">
-                                <a href="{{ route('help.show', $help) }}" class="btn btn-outline-primary btn-sm">
+                                <a href="{{ route('help.show', $help) }}" class="btn btn-sm btn-light-primary">
                                     <i class="ph ph-arrow-right me-2"></i>
                                     {{ __('help.read_more') }}
                                 </a>
@@ -53,29 +53,23 @@
 
     <!-- Navigation -->
     <div class="row mt-4">
-        <div class="col-12 text-center">
-            <div class="btn-group" role="group">
-                <a href="{{ route('help.index') }}" class="btn btn-primary">
-                    <i class="ph ph-question me-2"></i>
-                    {{ __('help.title') }}
-                </a>
-                <a href="{{ route('faq.index') }}" class="btn btn-outline-info">
-                    <i class="ph ph-chat-circle me-2"></i>
-                    {{ __('faq.title') }}
-                </a>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="d-flex gap-2 justify-content-center">
+                        <a href="{{ route('help.index') }}" class="btn btn-primary">
+                            <i class="ph ph-question me-2"></i>
+                            {{ __('help.title') }}
+                        </a>
+                        <a href="{{ route('faq.index') }}" class="btn btn-light-primary">
+                            <i class="ph ph-chat-circle me-2"></i>
+                            {{ __('faq.title') }}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-.help-preview {
-    color: #666;
-    line-height: 1.5;
-}
-
-.help-preview p {
-    margin-bottom: 0.5rem;
-}
-</style>
 @endsection
