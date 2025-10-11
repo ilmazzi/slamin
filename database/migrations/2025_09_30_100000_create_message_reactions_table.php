@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Check if table already exists (renamed migration, table may exist in production)
+        if (Schema::hasTable('message_reactions')) {
+            return;
+        }
+
         Schema::create('message_reactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('message_id')->constrained('chat_messages')->onDelete('cascade');
