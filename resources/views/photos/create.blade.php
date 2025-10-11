@@ -203,7 +203,11 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         if (!photoInput.files.length) {
-            alert('{{ __("photos.please_select_image") }}');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Attenzione',
+                text: '{{ __("photos.please_select_image") }}'
+            });
             return;
         }
 
@@ -224,12 +228,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (result.success) {
-                window.location.href = result.redirect;
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Caricata!',
+                    text: '{{ __("photos.photo_uploaded") }}',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = result.redirect;
+                });
             } else {
                 throw new Error(result.message || '{{ __("photos.upload_error") }}');
             }
         } catch (error) {
-            alert(error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Errore',
+                text: error.message
+            });
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="ph ph-upload me-2"></i>{{ __("photos.upload_button") }}';
         }

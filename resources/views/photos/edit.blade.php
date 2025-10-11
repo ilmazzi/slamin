@@ -119,30 +119,41 @@
 
 @push('scripts')
 <script>
-async function deletePhoto() {
-    if (!confirm('{{ __("photos.confirm_delete") }}')) {
-        return;
-    }
-
-    try {
-        const response = await fetch('{{ route("photos.destroy", $photo) }}', {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            window.location.href = '{{ route("profile.show") }}';
-        } else {
-            alert(result.message || '{{ __("photos.delete_error") }}');
+function deletePhoto() {
+    Swal.fire({
+        title: 'Sei sicuro?',
+        text: "{{ __('photos.confirm_delete') }}",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('{{ route("photos.destroy", $photo) }}', {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Eliminata!', data.message, 'success').then(() => {
+                        window.location.href = '{{ route("profile.photos") }}';
+                    });
+                } else {
+                    Swal.fire('Errore!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Errore eliminazione foto:', error);
+                Swal.fire('Errore!', '{{ __("photos.delete_error") }}', 'error');
+            });
         }
-    } catch (error) {
-        alert('{{ __("photos.delete_error") }}');
-    }
+    });
 }
 </script>
 @endpush
