@@ -359,9 +359,9 @@ use App\Helpers\PlaceholderHelper;
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="mb-0">
-                                    <a href="{{ route('events.index') }}" class="text-decoration-none text-white hover-effect d-flex align-items-center">
-                                    <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                                    {{ __('home.upcoming_events') }}
+                                    <a href="{{ route('events.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
+                                        <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
+                                        {{ __('home.upcoming_events') }}
                                         <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
                                     </a>
                                 </h5>
@@ -592,11 +592,12 @@ use App\Helpers\PlaceholderHelper;
 
                 <div class="row mb-4">
                     <div class="col-12">
-                        <h5 class="text-primary mb-3">
-                            <span class="d-flex align-items-center">
-                            <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                            {{ __('home.new_users') }}
-                            </span>
+                        <h5 class="mb-3">
+                            <a href="{{ route('groups.index') }}" class="text-decoration-none text-primary hover-effect d-flex align-items-center">
+                                <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
+                                {{ __('home.new_users') }}
+                                <i class="ph-duotone ph-arrow-right f-s-14 ms-2"></i>
+                            </a>
                         </h5>
                     </div>
                     @foreach ($newUsers->take(3) as $user)
