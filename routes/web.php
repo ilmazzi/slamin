@@ -278,24 +278,26 @@ Route::view('product_list', 'product_list')->name('product_list');
 Route::view('profile', 'profile')->name('profile');
 Route::view('progress', 'progress')->name('progress');
 
+// Photo Routes - AUTHENTICATED (management and interactions) - MUST BE FIRST!
+Route::prefix('photos')->name('photos.')->middleware('auth')->group(function () {
+    // Upload and management - specific routes BEFORE {photo} parameter
+    Route::get('/create', [App\Http\Controllers\PhotoController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\PhotoController::class, 'store'])->name('store');
+});
+
 // Photo Routes - PUBLIC (viewing only)
 Route::prefix('photos')->name('photos.')->group(function () {
     // Public photo viewing - anyone can see photos
     Route::get('/', [App\Http\Controllers\PhotoController::class, 'index'])->name('index');
-    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'show'])->name('show');
     Route::get('/user/{userId}', [App\Http\Controllers\PhotoController::class, 'getUserPhotos'])->name('user');
+    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'show'])->name('show');
 });
 
-// Photo Routes - AUTHENTICATED (management and interactions)
+// Photo Routes - AUTHENTICATED (edit/delete) - After public routes
 Route::prefix('photos')->name('photos.')->middleware('auth')->group(function () {
-    // Upload and management
-    Route::get('/create', [App\Http\Controllers\PhotoController::class, 'create'])->name('create');
-    Route::post('/', [App\Http\Controllers\PhotoController::class, 'store'])->name('store');
     Route::get('/{photo}/edit', [App\Http\Controllers\PhotoController::class, 'edit'])->name('edit');
     Route::put('/{photo}', [App\Http\Controllers\PhotoController::class, 'update'])->name('update');
     Route::delete('/{photo}', [App\Http\Controllers\PhotoController::class, 'destroy'])->name('destroy');
-    
-    // Interactions (likes, comments) - handled by separate routes below
 });
 Route::view('project_app', 'project_app')->name('project_app');
 Route::view('project_details', 'project_details')->name('project_details');
