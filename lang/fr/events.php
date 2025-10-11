@@ -103,6 +103,8 @@ return array (
   'recent_venues_help' => 'Les endroits les plus populaires de la communauté. Cliquez pour télécharger rapidement les données.',
   'venue_suggestions' => 'Conseils endroits',
   'select_recent_venue' => 'Sélectionnez un endroit récent',
+  'times' => 'fois',
+  'users' => 'utilisateurs',
   'venue_name_placeholder' => 'Nom du lieu ou du lieu..',
   'venue_address_placeholder' => 'Adresse complète...',
   'city_placeholder' => 'Villes',

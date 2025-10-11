@@ -42,6 +42,12 @@ Route::prefix('profile/payment-accounts')->name('profile.payment-accounts.')->mi
     Route::get('/stripe/onboarding', [App\Http\Controllers\Profile\PaymentAccountsController::class, 'createStripeOnboardingLink'])->name('stripe-onboarding');
 });
 
+// Event Creation with Livewire
+Route::get('/events/create', function () {
+    return view('events.create-livewire');
+})->middleware('auth')->name('events.create');
+
+
 // Admin Payment Accounts Routes
 Route::prefix('admin/payment-accounts')->name('admin.payment-accounts.')->middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\PaymentAccountsController::class, 'index'])->name('index');
@@ -416,9 +422,6 @@ Route::get('/test-simple-view', function () {
     return view('dashboard.index', ['stats' => []]);
 })->name('test-simple-view');
 
-// IMPORTANTE: events/create DEVE stare PRIMA di events/{event} per evitare conflitti!
-Route::get('/events/create', [EventController::class, 'create'])->name('events.create')->middleware('auth');
-
 // Route per i luoghi recenti (pubblica)
 Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');
 Route::get('/events/search-venues', [EventController::class, 'searchVenues'])->name('events.search-venues');
@@ -478,23 +481,17 @@ Route::get('/test/error/500', function () {
     abort(500, 'Test 500');
 })->name('test.500');
 
-// TEST: Route identica ma con URL diverso
-Route::get('/create-event-test', [EventController::class, 'create'])->name('create-event-test');
-
-// TEST: Route con closure semplice per bypassare controller
-Route::get('/test-simple-create', function () {
-    $venueOwners = App\Models\User::whereHas('roles', function ($query) {
-        $query->where('name', 'venue_owner');
-    })->get();
-
-    return view('events.create', compact('venueOwners'));
-})->name('test-simple-create');
 
 // Protected event routes
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // Event Edit with Livewire
+    Route::get('/events/{event}/edit', function (\App\Models\Event $event) {
+        return view('events.edit-livewire', compact('event'));
+    })->middleware('auth')->name('events.edit');
+
     // Event management (organizers) - SENZA CREATE PER TEST
-    Route::resource('events', EventController::class)->except(['index', 'show', 'create', 'store']);
+    Route::resource('events', EventController::class)->except(['index', 'show', 'create', 'store', 'edit']);
     Route::get('/events/{event}/manage', [EventController::class, 'manage'])->name('events.manage');
     Route::post('/events/{event}/apply', [EventController::class, 'apply'])->name('events.apply');
     Route::get('/api/events/calendar', [EventController::class, 'calendar'])->name('events.calendar');
@@ -962,38 +959,6 @@ if (app()->environment('local')) {
     });
 }
 
-// DEBUG: Simula esattamente la route events.create
-Route::get('/debug-simulate-create', function () {
-    try {
-        $controller = new App\Http\Controllers\EventController();
-
-        // Simula esattamente quello che fa il metodo create
-        Log::info('Debug: Iniziando simulazione create');
-
-        $venueOwners = App\Models\User::whereHas('roles', function ($query) {
-            $query->where('name', 'venue_owner');
-        })->get();
-
-        Log::info('Debug: VenueOwners trovati', ['count' => $venueOwners->count()]);
-
-        return view('events.create', compact('venueOwners'));
-
-    } catch (Exception $e) {
-        Log::error('Debug: Errore nella simulazione', [
-            'error' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString()
-        ]);
-
-        return response()->json([
-            'error' => 'Errore nella simulazione create',
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine()
-        ], 500);
-    }
-})->name('debug-simulate-create');
 
 // Test route per upload
 Route::get('/test-upload', function () {

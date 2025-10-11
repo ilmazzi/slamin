@@ -27,13 +27,13 @@ return new class extends Migration
 
             // Campi per metadati video (solo se non esistono)
             if (!Schema::hasColumn('videos', 'duration')) {
-                $table->integer('duration')->nullable()->after('moderation_notes');
+                $table->integer('duration')->nullable();
             }
             if (!Schema::hasColumn('videos', 'resolution')) {
-                $table->string('resolution')->nullable()->after('duration');
+                $table->string('resolution')->nullable();
             }
             if (!Schema::hasColumn('videos', 'file_size')) {
-                $table->bigInteger('file_size')->nullable()->after('resolution');
+                $table->bigInteger('file_size')->nullable();
             }
 
             // Campi per statistiche (solo se non esistono)

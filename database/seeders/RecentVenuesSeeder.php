@@ -65,9 +65,9 @@ class RecentVenuesSeeder extends Seeder
             'last_used_at' => now()->subDays(10),
         ]);
 
-        // Crea luoghi recenti per l'utente "il mazzi" (ID 4)
+        // Crea luoghi recenti per l'utente 3
         RecentVenue::create([
-            'user_id' => 4,
+            'user_id' => 3,
             'venue_name' => 'Sala Slam Poetry',
             'venue_address' => 'Via della Poesia 15',
             'city' => 'Milano',
@@ -80,7 +80,7 @@ class RecentVenuesSeeder extends Seeder
         ]);
 
         RecentVenue::create([
-            'user_id' => 4,
+            'user_id' => 3,
             'venue_name' => 'Circolo Culturale',
             'venue_address' => 'Piazza delle Arti 8',
             'city' => 'Roma',
@@ -93,7 +93,7 @@ class RecentVenuesSeeder extends Seeder
         ]);
 
         RecentVenue::create([
-            'user_id' => 4,
+            'user_id' => 1,
             'venue_name' => 'Teatro Underground',
             'venue_address' => 'Via Sotterranea 42',
             'city' => 'Firenze',
@@ -106,7 +106,7 @@ class RecentVenuesSeeder extends Seeder
         ]);
 
         RecentVenue::create([
-            'user_id' => 4,
+            'user_id' => 1,
             'venue_name' => 'Caffè Letterario',
             'venue_address' => 'Via dei Poeti 27',
             'city' => 'Bologna',

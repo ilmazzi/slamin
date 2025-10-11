@@ -14,26 +14,26 @@ return new class extends Migration
         Schema::table('videos', function (Blueprint $table) {
             // Campi PeerTube mancanti
             if (!Schema::hasColumn('videos', 'peertube_short_uuid')) {
-                $table->string('peertube_short_uuid')->nullable()->after('peertube_uuid');
+                $table->string('peertube_short_uuid')->nullable();
             }
             if (!Schema::hasColumn('videos', 'peertube_status')) {
-                $table->string('peertube_status')->default('processing')->after('peertube_tags');
+                $table->string('peertube_status')->default('processing');
             }
             if (!Schema::hasColumn('videos', 'peertube_uploaded_at')) {
-                $table->timestamp('peertube_uploaded_at')->nullable()->after('peertube_status');
+                $table->timestamp('peertube_uploaded_at')->nullable();
             }
             if (!Schema::hasColumn('videos', 'peertube_processed_at')) {
-                $table->timestamp('peertube_processed_at')->nullable()->after('peertube_uploaded_at');
+                $table->timestamp('peertube_processed_at')->nullable();
             }
 
-            // Indici per performance (solo se non esistono)
-            if (!Schema::hasIndex('videos', 'videos_peertube_video_id_index')) {
+            // Indici per performance (solo se le colonne e indici non esistono)
+            if (Schema::hasColumn('videos', 'peertube_video_id') && !Schema::hasIndex('videos', 'videos_peertube_video_id_index')) {
                 $table->index(['peertube_video_id']);
             }
-            if (!Schema::hasIndex('videos', 'videos_peertube_uuid_index')) {
+            if (Schema::hasColumn('videos', 'peertube_uuid') && !Schema::hasIndex('videos', 'videos_peertube_uuid_index')) {
                 $table->index(['peertube_uuid']);
             }
-            if (!Schema::hasIndex('videos', 'videos_peertube_status_index')) {
+            if (Schema::hasColumn('videos', 'peertube_status') && !Schema::hasIndex('videos', 'videos_peertube_status_index')) {
                 $table->index(['peertube_status']);
             }
         });
