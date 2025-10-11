@@ -733,10 +733,10 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::resource('carousels', App\Http\Controllers\Admin\CarouselController::class)->names('carousels');
         Route::post('/carousels/order', [App\Http\Controllers\Admin\CarouselController::class, 'updateOrder'])->name('carousels.order');
 
-        // System Settings
-        Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
-        Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
-        Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+        // System Settings - Moved to lines 71-73 to avoid duplicate route names
+        // Route::get('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'index'])->name('settings.index');
+        // Route::put('/settings', [App\Http\Controllers\Admin\SystemSettingsController::class, 'update'])->name('settings.update');
+        // Route::post('/settings/reset', [App\Http\Controllers\Admin\SystemSettingsController::class, 'reset'])->name('settings.reset');
 
                 // System Logs
         Route::prefix('logs')->name('logs.')->group(function () {
