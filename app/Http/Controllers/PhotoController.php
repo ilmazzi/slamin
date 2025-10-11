@@ -16,7 +16,7 @@ class PhotoController extends Controller
     public function __construct(ImageService $imageService)
     {
         $this->imageService = $imageService;
-        $this->middleware('auth')->except(['index', 'show', 'getComments']);
+        $this->middleware('auth')->except(['index', 'show', 'getComments', 'getPhotoData', 'getUserPhotos']);
     }
 
     /**
