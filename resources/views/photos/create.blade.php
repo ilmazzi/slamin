@@ -225,7 +225,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers.get('content-type'));
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server error response:', errorText);
+                throw new Error(`Server error (${response.status})`);
+            }
+
             const result = await response.json();
+            console.log('Upload result:', result);
 
             if (result.success) {
                 Swal.fire({
@@ -238,13 +248,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = result.redirect;
                 });
             } else {
+                // Gestisci errori di validazione
+                if (result.errors) {
+                    const errorMessages = Object.values(result.errors).flat().join('\n');
+                    throw new Error(errorMessages);
+                }
                 throw new Error(result.message || '{{ __("photos.upload_error") }}');
             }
         } catch (error) {
+            console.error('Upload error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Errore',
-                text: error.message
+                text: error.message || '{{ __("photos.upload_error") }}'
             });
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="ph ph-upload me-2"></i>{{ __("photos.upload_button") }}';
