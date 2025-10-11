@@ -70,7 +70,7 @@ class MediaController extends Controller
 
         // Query base per foto
         $photosQuery = Photo::with(['user', 'likes', 'comments'])
-            ->where('moderation_status', 'approved');
+            ->where('status', 'approved');
 
         // Foto più popolare (somma di like, commenti e views usando withCount per efficienza)
         $mostPopularPhoto = $photosQuery->withCount([
