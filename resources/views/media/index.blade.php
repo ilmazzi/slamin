@@ -1624,17 +1624,10 @@ function displaySearchResults(results, total) {
                     <!-- Social Actions -->
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                                                    <div class="d-flex gap-2">
-                                            ${createSocialLikeButton('video', video.id, video.likes_count || 0)}
+                            <div class="d-flex gap-2">
+                                ${createSocialLikeButton('video', video.id, video.likes_count || 0)}
                                 ${createSocialViewCounter('video', video.id, video.view_count || video.views || 0)}
-                                            ${createSocialCommentButton('video', video.id, video.comments_count || 0)}
-                                            ` : `
-                                            <div class="social-comment-counter"
-                                                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-                                                <i class="ph-duotone ph-chat-circle f-s-24 text-muted" style="opacity: 0.6;"></i>
-                                                <span class="text-secondary comment-count f-s-12 comment-count-${video.id}">${video.comments_count || 0}</span>
-                                            </div>
-                                            `}
+                                ${createSocialCommentButton('video', video.id, video.comments_count || 0)}
                             </div>
                             <span class="badge bg-info f-s-11">Video</span>
                         </div>
@@ -1687,18 +1680,10 @@ function displaySearchResults(results, total) {
                     <!-- Social Actions -->
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                                                    <div class="d-flex gap-2">
-                                            ${createSocialLikeButton('photo', photo.id, photo.likes_count || 0)}
+                            <div class="d-flex gap-2">
+                                ${createSocialLikeButton('photo', photo.id, photo.likes_count || 0)}
                                 ${createSocialViewCounter('photo', photo.id, photo.view_count || photo.views || 0)}
-                                            ${isAuthenticated ? `
-                                            ${createSocialCommentButton('photo', photo.id, photo.comments_count || 0)}
-                                            ` : `
-                                            <div class="social-comment-counter"
-                                                 style="display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px; border-radius: 8px;">
-                                                <i class="ph-duotone ph-chat-circle f-s-24 text-muted" style="opacity: 0.6;"></i>
-                                                <span class="text-secondary comment-count f-s-12 comment-count-${photo.id}">${photo.comments_count || 0}</span>
-                                            </div>
-                                            `}
+                                ${createSocialCommentButton('photo', photo.id, photo.comments_count || 0)}
                             </div>
                             <span class="badge bg-success f-s-11">Foto</span>
                         </div>
