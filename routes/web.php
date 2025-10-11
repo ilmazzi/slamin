@@ -855,7 +855,14 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
     Route::get('/user/{user}/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('user.followers');
     Route::get('/user/{user}/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('user.following');
 
-    // Video Routes
+    // Video Routes - PUBLIC (viewing only)
+    Route::prefix('videos')->name('videos.')->group(function () {
+        // Public video viewing - anyone can watch videos
+        Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
+        Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
+    });
+
+    // Video Routes - AUTHENTICATED (management and interactions)
     Route::prefix('videos')->name('videos.')->middleware('auth')->group(function () {
         Route::get('/', function() {
             return redirect()->route('profile.videos');
@@ -870,13 +877,10 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         // Video upload processing
         Route::post('/upload', [App\Http\Controllers\ProfileController::class, 'uploadVideo'])->name('store');
 
-        // Video playback and views
-        Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'show'])->name('show');
-        Route::post('/{video}/views', [App\Http\Controllers\VideoController::class, 'incrementViews'])->name('increment-views');
+        // Download requires auth
         Route::get('/{video}/download', [App\Http\Controllers\VideoController::class, 'download'])->name('download');
 
-
-        // Video interactions (comments, likes, snaps)
+        // Video interactions (comments, likes, snaps) - REQUIRE AUTHENTICATION
         Route::post('/{video}/comments', [App\Http\Controllers\VideoController::class, 'addComment'])->name('add-comment');
         Route::post('/{video}/like', [App\Http\Controllers\VideoController::class, 'toggleLike'])->name('toggle-like');
         Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('add-snap');
