@@ -11,25 +11,48 @@ return new class extends Migration
      */
     public function up(): void
     {
-                Schema::table('photos', function (Blueprint $table) {
+        Schema::table('photos', function (Blueprint $table) {
             if (!Schema::hasColumn('photos', 'moderation_status')) {
                 $table->enum('moderation_status', ['pending', 'approved', 'rejected'])->default('pending')->after('status');
             }
+            
+            if (!Schema::hasColumn('photos', 'moderation_notes')) {
+                $table->text('moderation_notes')->nullable()->after('moderation_status');
+            }
+            
             if (!Schema::hasColumn('photos', 'moderated_by')) {
                 $table->foreignId('moderated_by')->nullable()->constrained('users')->onDelete('set null')->after('moderation_notes');
             }
+            
             if (!Schema::hasColumn('photos', 'moderated_at')) {
                 $table->timestamp('moderated_at')->nullable()->after('moderated_by');
             }
-
-            // Indici per performance
-            if (!Schema::hasIndex('photos', 'photos_moderation_status_index')) {
-                $table->index(['moderation_status']);
-            }
-            if (!Schema::hasIndex('photos', 'photos_moderated_by_index')) {
-                $table->index(['moderated_by']);
-            }
         });
+
+        // Add indexes separately
+        if (!$this->indexExists('photos', 'photos_moderation_status_index')) {
+            Schema::table('photos', function (Blueprint $table) {
+                $table->index(['moderation_status']);
+            });
+        }
+        
+        if (!$this->indexExists('photos', 'photos_moderated_by_index')) {
+            Schema::table('photos', function (Blueprint $table) {
+                $table->index(['moderated_by']);
+            });
+        }
+    }
+
+    /**
+     * Check if an index exists on a table
+     */
+    private function indexExists(string $table, string $index): bool
+    {
+        $connection = Schema::getConnection();
+        $indexes = $connection->getDoctrineSchemaManager()
+            ->listTableIndexes($table);
+        
+        return isset($indexes[strtolower($index)]);
     }
 
     /**

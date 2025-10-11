@@ -12,15 +12,47 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('carousels', function (Blueprint $table) {
-            $table->enum('moderation_status', ['pending', 'approved', 'rejected'])->default('pending')->after('is_active');
-            $table->text('moderation_notes')->nullable()->after('moderation_status');
-            $table->foreignId('moderated_by')->nullable()->constrained('users')->onDelete('set null')->after('moderation_notes');
-            $table->timestamp('moderated_at')->nullable()->after('moderated_by');
-
-            // Indici per performance
-            $table->index(['moderation_status']);
-            $table->index(['moderated_by']);
+            if (!Schema::hasColumn('carousels', 'moderation_status')) {
+                $table->enum('moderation_status', ['pending', 'approved', 'rejected'])->default('pending')->after('is_active');
+            }
+            
+            if (!Schema::hasColumn('carousels', 'moderation_notes')) {
+                $table->text('moderation_notes')->nullable()->after('moderation_status');
+            }
+            
+            if (!Schema::hasColumn('carousels', 'moderated_by')) {
+                $table->foreignId('moderated_by')->nullable()->constrained('users')->onDelete('set null')->after('moderation_notes');
+            }
+            
+            if (!Schema::hasColumn('carousels', 'moderated_at')) {
+                $table->timestamp('moderated_at')->nullable()->after('moderated_by');
+            }
         });
+
+        // Add indexes separately
+        if (!$this->indexExists('carousels', 'carousels_moderation_status_index')) {
+            Schema::table('carousels', function (Blueprint $table) {
+                $table->index(['moderation_status']);
+            });
+        }
+        
+        if (!$this->indexExists('carousels', 'carousels_moderated_by_index')) {
+            Schema::table('carousels', function (Blueprint $table) {
+                $table->index(['moderated_by']);
+            });
+        }
+    }
+
+    /**
+     * Check if an index exists on a table
+     */
+    private function indexExists(string $table, string $index): bool
+    {
+        $connection = Schema::getConnection();
+        $indexes = $connection->getDoctrineSchemaManager()
+            ->listTableIndexes($table);
+        
+        return isset($indexes[strtolower($index)]);
     }
 
     /**
