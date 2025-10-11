@@ -37,13 +37,17 @@ class HelpController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        \Log::info('Help/FAQ Store - Request data:', $request->all());
+
+        $validated = $request->validate([
             'type' => 'required|in:help,faq',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean'
         ]);
+
+        \Log::info('Help/FAQ Store - Validated data:', $validated);
 
         $help = Help::create([
             'type' => $request->type,
@@ -52,6 +56,8 @@ class HelpController extends Controller
             'order' => $request->order ?? 0,
             'is_active' => $request->has('is_active')
         ]);
+
+        \Log::info('Help/FAQ Store - Created:', ['id' => $help->id, 'title' => $help->title]);
 
         return redirect()
             ->route('admin.help.index', ['type' => $help->type])
