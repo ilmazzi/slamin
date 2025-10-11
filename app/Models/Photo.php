@@ -79,7 +79,7 @@ class Photo extends Model
      */
     public function isApproved(): bool
     {
-        return $this->moderation_status === 'approved';
+        return $this->status === 'approved';
     }
 
     /**
