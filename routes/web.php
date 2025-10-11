@@ -1281,10 +1281,14 @@ Route::prefix('groups/{group}/requests')->name('groups.requests.')->middleware('
 
 // ===== ROUTE API PUBBLICHE (fuori da qualsiasi middleware) =====
 
-// API routes for videos (completamente pubbliche)
+// API routes for videos - PUBLIC (read only)
 Route::prefix('api/videos')->group(function () {
     Route::get('/{video}', [App\Http\Controllers\VideoController::class, 'getVideoData'])->name('api.videos.get');
     Route::get('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'getVideoSnaps'])->name('api.videos.snaps');
+});
+
+// API routes for videos - AUTHENTICATED (interactions)
+Route::prefix('api/videos')->middleware('auth')->group(function () {
     Route::post('/{video}/snaps', [App\Http\Controllers\VideoController::class, 'addSnap'])->name('api.videos.add-snap');
 });
 
