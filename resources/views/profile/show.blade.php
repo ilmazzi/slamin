@@ -495,6 +495,9 @@
                         <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
                             <i class="ti ti-video-camera me-2"></i>{{ __('profile.manage_videos') }}
                         </a>
+                        <a href="{{ route('profile.photos') }}" class="btn btn-info hover-effect">
+                            <i class="ph ph-images me-2"></i>{{ __('photos.my_photos') }}
+                        </a>
                         <a href="{{ route('articles.create') }}" class="btn btn-warning hover-effect">
                             <i class="ph ph-newspaper me-2"></i>{{ __('articles.create_article') }}
                         </a>
@@ -629,6 +632,9 @@
                         </a>
                         <a href="{{ route('profile.videos') }}" class="btn btn-success hover-effect">
                             <i class="ti ti-video-camera me-2"></i>{{ __('profile.manage_videos') }}
+                        </a>
+                        <a href="{{ route('profile.photos') }}" class="btn btn-info hover-effect">
+                            <i class="ph ph-images me-2"></i>{{ __('photos.my_photos') }}
                         </a>
                         <a href="{{ route('articles.create') }}" class="btn btn-warning hover-effect">
                             <i class="ph ph-newspaper me-2"></i>{{ __('articles.create_article') }}
@@ -991,11 +997,16 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ __('profile.my_videos') }}</h5>
+                                <h5 class="mb-0">{{ __('profile.my_media') }}</h5>
                                 @if($isOwnProfile)
-                                <a href="{{ route('profile.videos') }}" class="btn btn-sm btn-warning hover-effect">
-                                    {{ __('profile.manage_videos') }}
-                                </a>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('profile.videos') }}" class="btn btn-sm btn-success hover-effect">
+                                        <i class="ph ph-video me-1"></i>{{ __('profile.manage_videos') }}
+                                    </a>
+                                    <a href="{{ route('profile.photos') }}" class="btn btn-sm btn-info hover-effect">
+                                        <i class="ph ph-images me-1"></i>{{ __('photos.my_photos') }}
+                                    </a>
+                                </div>
                                 @endif
                             </div>
                         </div>
@@ -1355,6 +1366,20 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <div class="card card-light-info hover-effect">
+                                        <div class="card-body text-center">
+                                            <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
+                                                <i class="ph ph-images f-s-24 text-info"></i>
+                                            </div>
+                                            <h6 class="mb-2">{{ __('photos.my_photos') }}</h6>
+                                            <p class="text-muted f-s-12 mb-3">{{ __('profile.manage_photos_desc') }}</p>
+                                            <a href="{{ route('profile.photos') }}" class="btn btn-info btn-sm">
+                                                <i class="ph ph-images me-1"></i>{{ __('photos.my_photos') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card card-light-warning hover-effect">
                                         <div class="card-body text-center">
                                             <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-3">
                                                 <i class="ti ti-activity f-s-24 text-info"></i>
