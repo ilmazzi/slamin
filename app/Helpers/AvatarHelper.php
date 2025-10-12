@@ -51,4 +51,84 @@ class AvatarHelper
         $userName = $user->name ?? 'User';
         return "<img src=\"{$avatarUrl}\" alt=\"{$userName}\" class=\"img-fluid\">";
     }
+
+    /**
+     * Get user's top 3 badges HTML (to display before username)
+     */
+    public static function getUserBadgesHtml($user, $limit = 3, $size = '20')
+    {
+        if (!$user || !is_object($user)) {
+            return '';
+        }
+
+        // Get top badges (ordered by badge order and earned_at)
+        $badges = $user->badges()
+            ->orderBy('badges.order')
+            ->orderByDesc('user_badges.earned_at')
+            ->limit($limit)
+            ->get();
+
+        if ($badges->isEmpty()) {
+            return '';
+        }
+
+        $html = '';
+        foreach ($badges as $badge) {
+            $iconUrl = $badge->icon_url;
+            $badgeName = htmlspecialchars($badge->name);
+            $badgeDescription = htmlspecialchars($badge->description ?? '');
+            
+            $html .= "<img src=\"{$iconUrl}\" 
+                          alt=\"{$badgeName}\" 
+                          title=\"{$badgeName}: {$badgeDescription}\" 
+                          class=\"badge-icon me-1\" 
+                          style=\"width: {$size}px; height: {$size}px; vertical-align: middle;\" 
+                          data-bs-toggle=\"tooltip\" 
+                          data-bs-placement=\"top\">";
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get user display name with badges
+     */
+    public static function getUserNameWithBadges($user, $badgeSize = '20')
+    {
+        if (!$user || !is_object($user)) {
+            return 'User';
+        }
+
+        $badges = self::getUserBadgesHtml($user, 3, $badgeSize);
+        $userName = $user->getDisplayName();
+
+        return $badges ? "{$badges} {$userName}" : $userName;
+    }
+
+    /**
+     * Get user level badge HTML
+     */
+    public static function getUserLevelHtml($user)
+    {
+        if (!$user || !is_object($user) || !method_exists($user, 'userPoints')) {
+            return '';
+        }
+
+        $userPoints = $user->userPoints;
+        if (!$userPoints) {
+            return '<span class="badge bg-light-secondary">Livello 1</span>';
+        }
+
+        $level = $userPoints->level;
+        $levelName = $userPoints->current_level->name ?? "Livello {$level}";
+
+        $colorClass = match(true) {
+            $level >= 7 => 'bg-gradient-danger',
+            $level >= 5 => 'bg-gradient-warning',
+            $level >= 3 => 'bg-gradient-info',
+            default => 'bg-light-primary'
+        };
+
+        return "<span class=\"badge {$colorClass}\" data-bs-toggle=\"tooltip\" title=\"{$levelName}\">{$levelName}</span>";
+    }
 }

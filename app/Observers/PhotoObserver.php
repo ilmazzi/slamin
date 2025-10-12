@@ -4,9 +4,17 @@ namespace App\Observers;
 
 use App\Models\Photo;
 use App\Services\ActivityService;
+use App\Services\BadgeService;
 
 class PhotoObserver
 {
+    protected $badgeService;
+
+    public function __construct(BadgeService $badgeService)
+    {
+        $this->badgeService = $badgeService;
+    }
+
     /**
      * Handle the Photo "created" event.
      */
@@ -15,6 +23,9 @@ class PhotoObserver
         // Log activity
         if ($photo->user) {
             ActivityService::logCreate($photo->user, $photo, request());
+            
+            // Check and award badges for photos
+            $this->badgeService->checkAndAwardBadge($photo->user, 'photos', $photo);
         }
     }
 

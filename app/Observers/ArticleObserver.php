@@ -4,9 +4,17 @@ namespace App\Observers;
 
 use App\Models\Article;
 use App\Services\ActivityService;
+use App\Services\BadgeService;
 
 class ArticleObserver
 {
+    protected $badgeService;
+
+    public function __construct(BadgeService $badgeService)
+    {
+        $this->badgeService = $badgeService;
+    }
+
     /**
      * Handle the Article "created" event.
      */
@@ -15,6 +23,9 @@ class ArticleObserver
         // Log activity
         if ($article->user) {
             ActivityService::logCreate($article->user, $article, request());
+            
+            // Check and award badges for articles
+            $this->badgeService->checkAndAwardBadge($article->user, 'articles', $article);
         }
     }
 

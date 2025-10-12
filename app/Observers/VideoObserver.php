@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Video;
 use App\Services\ThumbnailService;
 use App\Services\ActivityService;
+use App\Services\BadgeService;
 use App\Jobs\GenerateVideoThumbnailJob;
 use App\Jobs\UpdatePeerTubeVideoStatusJob;
 use Illuminate\Support\Facades\Log;
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Log;
 class VideoObserver
 {
     protected $thumbnailService;
+    protected $badgeService;
 
-    public function __construct(ThumbnailService $thumbnailService)
+    public function __construct(ThumbnailService $thumbnailService, BadgeService $badgeService)
     {
         $this->thumbnailService = $thumbnailService;
+        $this->badgeService = $badgeService;
     }
 
         /**
@@ -28,6 +31,9 @@ class VideoObserver
         // Log activity
         if ($video->user) {
             ActivityService::logCreate($video->user, $video, request());
+            
+            // Check and award badges for videos
+            $this->badgeService->checkAndAwardBadge($video->user, 'videos', $video);
         }
 
         // Se è un video PeerTube in elaborazione, lancia il job di controllo

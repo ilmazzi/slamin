@@ -71,6 +71,27 @@ Route::prefix('admin/forum')->name('admin.forum.')->middleware(['auth', 'role:ad
     Route::get('/subreddits', App\Livewire\Admin\SubredditManagement::class)->name('subreddits');
 });
 
+// Admin Gamification Routes
+Route::prefix('admin/gamification')->name('admin.gamification.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/badges', App\Livewire\Admin\Gamification\BadgeManagement::class)->name('badges');
+    Route::get('/levels', App\Livewire\Admin\Gamification\LevelManagement::class)->name('levels');
+    Route::get('/leaderboards', App\Livewire\Admin\Gamification\LeaderboardsDashboard::class)->name('leaderboards');
+});
+
+// Event Scoring Routes (for organizers)
+Route::prefix('events/{event}/scoring')->name('events.scoring.')->middleware('auth')->group(function () {
+    Route::get('/', [App\Http\Controllers\EventScoringController::class, 'dashboard'])->name('dashboard');
+    Route::get('/participants', [App\Http\Controllers\EventScoringController::class, 'participants'])->name('participants');
+    Route::get('/scores', [App\Http\Controllers\EventScoringController::class, 'scores'])->name('scores');
+    Route::get('/rankings', [App\Http\Controllers\EventScoringController::class, 'rankings'])->name('rankings');
+});
+
+// User Profile Badges & Gamification
+Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
+    Route::get('/{user}/badges', [App\Http\Controllers\ProfileController::class, 'badges'])->name('badges');
+    Route::get('/{user}/achievements', [App\Http\Controllers\ProfileController::class, 'achievements'])->name('achievements');
+});
+
 // Moderator Forum Routes
 Route::prefix('forum/moderate')->name('forum.moderate.')->middleware('auth')->group(function () {
     Route::get('/', App\Livewire\Moderator\ModerationQueue::class)->name('queue');

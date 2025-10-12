@@ -937,4 +937,56 @@ class Event extends Model
 
         return now()->isAfter($this->availability_deadline);
     }
+
+    // ========================================
+    // RELAZIONI GAMIFICATION & SCORING
+    // ========================================
+
+    /**
+     * Participants in this event (registered users + guests)
+     */
+    public function participants()
+    {
+        return $this->hasMany(EventParticipant::class);
+    }
+
+    /**
+     * Rounds configured for this event
+     */
+    public function rounds()
+    {
+        return $this->hasMany(EventRound::class)->ordered();
+    }
+
+    /**
+     * All scores for this event
+     */
+    public function scores()
+    {
+        return $this->hasMany(EventScore::class);
+    }
+
+    /**
+     * Rankings for this event
+     */
+    public function rankings()
+    {
+        return $this->hasMany(EventRanking::class)->ordered();
+    }
+
+    /**
+     * Check if event has scoring enabled
+     */
+    public function hasScoringEnabled(): bool
+    {
+        return $this->category === self::CATEGORY_POETRY_SLAM && $this->rounds()->exists();
+    }
+
+    /**
+     * Check if event has completed rankings
+     */
+    public function hasRankings(): bool
+    {
+        return $this->rankings()->exists();
+    }
 }

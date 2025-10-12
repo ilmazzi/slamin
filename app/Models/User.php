@@ -1177,6 +1177,118 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
+
+    // ========================================
+    // RELAZIONI GAMIFICATION
+    // ========================================
+
+    /**
+     * Badges earned by this user
+     */
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot(['earned_at', 'metadata', 'progress', 'awarded_by', 'admin_notes'])
+            ->withTimestamps()
+            ->orderByDesc('user_badges.earned_at');
+    }
+
+    /**
+     * User badge pivot records
+     */
+    public function userBadges()
+    {
+        return $this->hasMany(UserBadge::class);
+    }
+
+    /**
+     * User points record
+     */
+    public function userPoints()
+    {
+        return $this->hasOne(UserPoints::class);
+    }
+
+    /**
+     * Point transactions history
+     */
+    public function pointTransactions()
+    {
+        return $this->hasMany(PointTransaction::class);
+    }
+
+    /**
+     * Event participations
+     */
+    public function eventParticipations()
+    {
+        return $this->hasMany(EventParticipant::class);
+    }
+
+    /**
+     * Forum posts created by this user
+     */
+    public function forumPosts()
+    {
+        return $this->hasMany(ForumPost::class);
+    }
+
+    /**
+     * Event scores given (as judge)
+     */
+    public function eventScoresGiven()
+    {
+        return $this->hasMany(EventScore::class, 'judge_id');
+    }
+
+    /**
+     * Event rankings
+     */
+    public function eventRankings()
+    {
+        return $this->hasManyThrough(
+            EventRanking::class,
+            EventParticipant::class,
+            'user_id',
+            'participant_id'
+        );
+    }
+
+    /**
+     * Get top 3 badges for display
+     */
+    public function getTop3BadgesAttribute()
+    {
+        return $this->badges()
+            ->orderBy('badges.order')
+            ->orderByDesc('user_badges.earned_at')
+            ->limit(3)
+            ->get();
+    }
+
+    /**
+     * Get user level
+     */
+    public function getLevelAttribute(): int
+    {
+        return $this->userPoints ? $this->userPoints->level : 1;
+    }
+
+    /**
+     * Get total points
+     */
+    public function getTotalPointsAttribute(): int
+    {
+        return $this->userPoints ? $this->userPoints->total_points : 0;
+    }
+
+    /**
+     * Get badges count
+     */
+    public function getBadgesCountAttribute(): int
+    {
+        return $this->badges()->count();
+    }
 }
 
 

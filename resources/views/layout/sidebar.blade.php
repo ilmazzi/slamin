@@ -306,6 +306,14 @@
                                         Forum Admin
                                     </a>
                                 </li>
+
+                                <!-- Gamification Admin - Solo per admin -->
+                                <li class="no-sub {{ request()->routeIs('admin.gamification.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.gamification.badges') }}">
+                                        <i class="ph-duotone ph-trophy f-s-20 me-2"></i>
+                                        {{ __('gamification.admin_title') }}
+                                    </a>
+                                </li>
                                 @endif
 
                                 <li class="no-sub {{ request()->routeIs('permissions.*') ? 'active' : '' }}">

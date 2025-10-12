@@ -4,9 +4,17 @@ namespace App\Observers;
 
 use App\Models\Poem;
 use App\Services\ActivityService;
+use App\Services\BadgeService;
 
 class PoemObserver
 {
+    protected $badgeService;
+
+    public function __construct(BadgeService $badgeService)
+    {
+        $this->badgeService = $badgeService;
+    }
+
     /**
      * Handle the Poem "created" event.
      */
@@ -15,6 +23,9 @@ class PoemObserver
         // Log activity
         if ($poem->user) {
             ActivityService::logCreate($poem->user, $poem, request());
+            
+            // Check and award badges for poems
+            $this->badgeService->checkAndAwardBadge($poem->user, 'poems', $poem);
         }
     }
 

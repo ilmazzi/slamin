@@ -15,6 +15,9 @@ use App\Models\EventInvitation;
 use App\Models\EventRequest;
 use App\Models\GroupInvitation;
 use App\Models\Follow;
+use App\Models\Like;
+use App\Models\Comment;
+use App\Models\ForumPost;
 use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
 use App\Observers\GigApplicationObserver;
@@ -28,6 +31,9 @@ use App\Observers\EventInvitationObserver;
 use App\Observers\EventRequestObserver;
 use App\Observers\GroupInvitationObserver;
 use App\Observers\FollowObserver;
+use App\Observers\LikeObserver;
+use App\Observers\CommentObserver;
+use App\Observers\ForumPostObserver;
 use App\Services\LoggingService;
 use App\Helpers\TranslationHelper;
 use App\Helpers\AutoTranslationHelper;
@@ -88,6 +94,15 @@ class AppServiceProvider extends ServiceProvider
 
         // Registra l'observer per i follow
         Follow::observe(FollowObserver::class);
+
+        // Registra l'observer per i like (gamification)
+        Like::observe(LikeObserver::class);
+
+        // Registra l'observer per i commenti (gamification)
+        Comment::observe(CommentObserver::class);
+
+        // Registra l'observer per i post del forum (gamification)
+        ForumPost::observe(ForumPostObserver::class);
 
         // Registra le Blade Directives per le traduzioni
         $this->registerTranslationDirectives();
