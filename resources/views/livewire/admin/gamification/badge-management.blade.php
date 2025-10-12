@@ -224,10 +224,81 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">User ID *</label>
-                            <input type="number" wire:model="userId" class="form-control" required>
-                            <small class="text-muted">Inserisci l'ID dell'utente</small>
+                            <label class="form-label">Cerca Utente *</label>
+                            
+                            @if($selectedUser)
+                                {{-- Selected User Display --}}
+                                <div class="card border">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $selectedUser['avatar'] }}" 
+                                                     alt="{{ $selectedUser['display_name'] }}" 
+                                                     class="rounded-circle me-3" 
+                                                     style="width: 48px; height: 48px; object-fit: cover;">
+                                                <div>
+                                                    <h6 class="mb-0">{{ $selectedUser['display_name'] }}</h6>
+                                                    <small class="text-muted">{{ $selectedUser['email'] }}</small>
+                                                </div>
+                                            </div>
+                                            <button type="button" wire:click="clearSelectedUser" class="btn btn-sm btn-light-danger">
+                                                <i class="ph ph-x"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                {{-- Search Input --}}
+                                <div class="position-relative">
+                                    <input type="text" 
+                                           wire:model.live.debounce.300ms="userSearch" 
+                                           class="form-control" 
+                                           placeholder="Cerca per nome, nickname o email..."
+                                           autocomplete="off">
+                                    <div class="position-absolute top-50 end-0 translate-middle-y me-3">
+                                        @if(strlen($userSearch) > 0)
+                                            <button type="button" wire:click="$set('userSearch', '')" class="btn btn-sm p-0">
+                                                <i class="ph ph-x text-muted"></i>
+                                            </button>
+                                        @else
+                                            <i class="ph ph-magnifying-glass text-muted"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                @if(strlen($userSearch) >= 2)
+                                    {{-- Search Results --}}
+                                    @if(count($searchResults) > 0)
+                                        <div class="list-group mt-2" style="max-height: 300px; overflow-y: auto;">
+                                            @foreach($searchResults as $result)
+                                                <button type="button" 
+                                                        wire:click="selectUser({{ $result['id'] }})" 
+                                                        class="list-group-item list-group-item-action">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{ $result['avatar'] }}" 
+                                                             alt="{{ $result['display_name'] }}" 
+                                                             class="rounded-circle me-3" 
+                                                             style="width: 40px; height: 40px; object-fit: cover;">
+                                                        <div>
+                                                            <h6 class="mb-0">{{ $result['display_name'] }}</h6>
+                                                            <small class="text-muted">{{ $result['email'] }}</small>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="alert alert-light mt-2 mb-0">
+                                            <i class="ph ph-magnifying-glass me-2"></i>
+                                            Nessun utente trovato per "{{ $userSearch }}"
+                                        </div>
+                                    @endif
+                                @elseif(strlen($userSearch) > 0 && strlen($userSearch) < 2)
+                                    <small class="text-muted d-block mt-2">Digita almeno 2 caratteri per cercare...</small>
+                                @endif
+                            @endif
                         </div>
+                        
                         <div class="mb-3">
                             <label class="form-label">Note</label>
                             <textarea wire:model="assignNotes" class="form-control" rows="3" 
@@ -238,7 +309,10 @@
                         <button type="button" class="btn btn-light-secondary" wire:click="$set('showAssignModal', false)">
                             {{ __('gamification.cancel') }}
                         </button>
-                        <button type="button" class="btn btn-primary" wire:click="assignBadgeToUser">
+                        <button type="button" 
+                                class="btn btn-primary" 
+                                wire:click="assignBadgeToUser"
+                                @if(!$selectedUser) disabled @endif>
                             <i class="ph ph-check me-2"></i>
                             {{ __('gamification.assign_badge') }}
                         </button>

@@ -36,6 +36,9 @@ class BadgeManagement extends Component
     public $showAssignModal = false;
     public $selectedBadgeId;
     public $userId;
+    public $userSearch = '';
+    public $searchResults = [];
+    public $selectedUser = null;
     public $assignNotes;
 
     protected $rules = [
@@ -158,8 +161,62 @@ class BadgeManagement extends Component
     {
         $this->selectedBadgeId = $badgeId;
         $this->userId = null;
+        $this->userSearch = '';
+        $this->searchResults = [];
+        $this->selectedUser = null;
         $this->assignNotes = '';
         $this->showAssignModal = true;
+    }
+
+    public function updatedUserSearch()
+    {
+        if (strlen($this->userSearch) >= 2) {
+            $this->searchResults = User::where(function($query) {
+                $query->where('name', 'like', '%' . $this->userSearch . '%')
+                      ->orWhere('nickname', 'like', '%' . $this->userSearch . '%')
+                      ->orWhere('email', 'like', '%' . $this->userSearch . '%');
+            })
+            ->limit(10)
+            ->get()
+            ->map(function($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'nickname' => $user->nickname,
+                    'email' => $user->email,
+                    'display_name' => $user->getDisplayName(),
+                    'avatar' => $user->profile_photo_url ?? asset('assets/images/avatar/default-avatar.webp'),
+                ];
+            });
+        } else {
+            $this->searchResults = [];
+        }
+    }
+
+    public function selectUser($userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $this->selectedUser = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'display_name' => $user->getDisplayName(),
+                'avatar' => $user->profile_photo_url ?? asset('assets/images/avatar/default-avatar.webp'),
+            ];
+            $this->userId = $user->id;
+            $this->userSearch = $user->getDisplayName();
+            $this->searchResults = [];
+        }
+    }
+
+    public function clearSelectedUser()
+    {
+        $this->selectedUser = null;
+        $this->userId = null;
+        $this->userSearch = '';
+        $this->searchResults = [];
     }
 
     public function assignBadgeToUser()
@@ -183,11 +240,12 @@ class BadgeManagement extends Component
         }
 
         $this->showAssignModal = false;
+        $this->clearSelectedUser();
     }
 
     private function resetForm()
     {
-        $this->reset(['name', 'description', 'category', 'criteria_value', 'points', 'order', 'icon', 'existing_icon', 'assignNotes', 'userId']);
+        $this->reset(['name', 'description', 'category', 'criteria_value', 'points', 'order', 'icon', 'existing_icon', 'assignNotes', 'userId', 'userSearch', 'searchResults', 'selectedUser']);
         $this->type = 'portal';
         $this->criteria_type = 'count';
         $this->is_active = true;
