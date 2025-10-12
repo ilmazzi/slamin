@@ -404,13 +404,11 @@
                                 / {{ $event->max_participants }}
                             @endif
                         </span>
-                        @auth
-                            @if($event->organizer_id === auth()->id())
-                                <a href="{{ route('events.manage', $event) }}" class="btn btn-sm btn-light-primary">
-                                    <i class="ph ph-gear me-1"></i>Gestisci
-                                </a>
-                            @endif
-                        @endauth
+                        @can('manage', $event)
+                            <a href="{{ route('events.manage', $event) }}" class="btn btn-sm btn-light-primary">
+                                <i class="ph ph-gear me-1"></i>Gestisci
+                            </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
@@ -1040,49 +1038,44 @@
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        @auth
-                            @if($event->organizer_id === auth()->id() || auth()->user()->hasAnyRole(['admin', 'moderator']))
-                                <!-- Organizer/Admin Actions -->
-                                @if($event->organizer_id === auth()->id())
-                                    <a href="{{ route('events.manage', $event) }}" class="btn btn-light-primary w-100 mb-2">
-                                        <i class="ph ph-gear me-2"></i>{{ __('events.manage_event_action') }}
-                                    </a>
-                                    @if($event->is_availability_based)
-                                        <a href="{{ route('events.availability.show', $event) }}" class="btn btn-light-info w-100 mb-2">
-                                            <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_options') }}
-                                        </a>
-                                    @endif
-                                    @if($event->category === 'poetry_slam')
-                                        <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light-warning w-100 mb-2">
-                                            <i class="ph ph-trophy me-2"></i>Gestione Punteggi & Classifica
-                                        </a>
-                                    @endif
-                                    @if($event->status !== 'completed')
-                                        <form action="{{ route('events.complete', $event) }}" method="POST" class="mb-2">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-light-success w-100" onclick="return confirm('Chiudere questo evento e segnarlo come completato?')">
-                                                <i class="ph ph-check-circle me-2"></i>Segna come Completato
-                                            </button>
-                                        </form>
-                                    @else
-                                        <div class="alert alert-success mb-2">
-                                            <i class="ph ph-check-circle me-2"></i>Evento Completato
-                                        </div>
-                                    @endif
-                                    <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
-                                        <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
-                                    </a>
-                                @endif
-                                @can('events.manage.own')
-                                    @if(Auth::user()->hasRole(['admin', 'moderator']) || $event->organizer_id === Auth::id())
-                                        <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                            <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}
-                                        </button>
-                                    @endif
-                                @endcan
-
-                            @elseif($hasInvitation)
+                        @can('manage', $event)
+                            <!-- Organizer/Admin Actions -->
+                            <a href="{{ route('events.manage', $event) }}" class="btn btn-light-primary w-100 mb-2">
+                                <i class="ph ph-gear me-2"></i>{{ __('events.manage_event_action') }}
+                            </a>
+                            @if($event->is_availability_based)
+                                <a href="{{ route('events.availability.show', $event) }}" class="btn btn-light-info w-100 mb-2">
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_options') }}
+                                </a>
+                            @endif
+                            @if($event->category === 'poetry_slam')
+                                <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light-warning w-100 mb-2">
+                                    <i class="ph ph-trophy me-2"></i>Gestione Punteggi & Classifica
+                                </a>
+                            @endif
+                            @if($event->status !== 'completed')
+                                <form action="{{ route('events.complete', $event) }}" method="POST" class="mb-2">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-light-success w-100" onclick="return confirm('Chiudere questo evento e segnarlo come completato?')">
+                                        <i class="ph ph-check-circle me-2"></i>Segna come Completato
+                                    </button>
+                                </form>
+                            @else
+                                <div class="alert alert-success mb-2">
+                                    <i class="ph ph-check-circle me-2"></i>Evento Completato
+                                </div>
+                            @endif
+                            <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
+                                <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
+                            </a>
+                            @can('delete', $event)
+                                <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}
+                                </button>
+                            @endcan
+                        @else
+                            @if($hasInvitation)
                                 <!-- User has invitation -->
                                 @if($userInvitation->status === 'pending')
                                     <div class="alert alert-info mb-3">
@@ -1166,8 +1159,9 @@
 
                             <!-- Report Button -->
                             <x-report-button :content="$event" type="event" class="w-100 mt-2" />
+                        @endcan
 
-                        @else
+                        @guest
                             <!-- Not logged in -->
                             <div class="alert alert-info mb-3">
                                 <i class="ph ph-sign-in me-2"></i>{{ __('auth.login') }} per partecipare a questo evento
@@ -1175,7 +1169,7 @@
                             <a href="{{ route('login') }}" class="btn btn-light-primary w-100">
                                 <i class="ph ph-sign-in me-2"></i>{{ __('auth.login') }}
                             </a>
-                        @endauth
+                        @endguest
                     </div>
                 </div>
             </div>

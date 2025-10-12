@@ -1170,9 +1170,10 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event): RedirectResponse
     {
-        // Controlla se l'utente può modificare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
-            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+        // Admin e moderator hanno accesso completo, altrimenti controlla ownership e permessi
+        if (!Auth::check() || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && 
+             (!Auth::user()->can('events.manage.own') || $event->organizer_id !== Auth::id()))) {
             abort(403, 'Non hai i permessi per modificare questo evento');
         }
 
@@ -1348,9 +1349,10 @@ class EventController extends Controller
      */
     public function destroy(Event $event): RedirectResponse
     {
-        // Controlla se l'utente può eliminare questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
-            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+        // Admin e moderator hanno accesso completo, altrimenti controlla ownership e permessi
+        if (!Auth::check() || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && 
+             (!Auth::user()->can('events.manage.own') || $event->organizer_id !== Auth::id()))) {
             abort(403, 'Non hai i permessi per eliminare questo evento');
         }
 
@@ -1433,9 +1435,10 @@ class EventController extends Controller
      */
     public function manage(Event $event): View
     {
-        // Controlla se l'utente può gestire questo evento usando Spatie
-        if (!Auth::check() || !Auth::user()->can('events.manage.own') ||
-            (!Auth::user()->hasRole(['admin', 'moderator']) && $event->organizer_id !== Auth::id())) {
+        // Admin e moderator hanno accesso completo, altrimenti controlla ownership e permessi
+        if (!Auth::check() || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && 
+             (!Auth::user()->can('events.manage.own') || $event->organizer_id !== Auth::id()))) {
             abort(403, 'Non hai i permessi per gestire questo evento');
         }
 

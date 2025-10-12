@@ -456,14 +456,12 @@ footer {
                                 <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm flex-fill">
                                     <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
                                 </a>
-                                @can('events.manage.own')
-                                    @if(Auth::user()->hasRole(['admin', 'moderator']) || ($event->organizer_id === Auth::id() && $event->start_datetime && $event->start_datetime >= now()))
-                                        <button type="button" class="btn btn-light-danger btn-sm"
-                                                onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
-                                                title="{{ __('events.delete_event') }}">
-                                            <i class="ti ti-trash"></i>
-                                        </button>
-                                    @endif
+                                @can('delete', $event)
+                                    <button type="button" class="btn btn-light-danger btn-sm"
+                                            onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
+                                            title="{{ __('events.delete_event') }}">
+                                        <i class="ti ti-trash"></i>
+                                    </button>
                                 @endcan
                             </div>
                         </div>
