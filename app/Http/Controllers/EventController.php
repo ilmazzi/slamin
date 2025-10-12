@@ -43,7 +43,14 @@ class EventController extends Controller
 
         // Apply upcoming filter only if not filtering for past events or invitations
         if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
-            $query->upcoming();
+            $query->where(function ($q) {
+                $q->where(function ($subQ) {
+                    $subQ->where('start_datetime', '>', Carbon::now())
+                         ->orWhere('is_availability_based', true);
+                })
+                // Include completed events
+                ->orWhere('status', 'completed');
+            });
         }
 
         // Filter by search term
@@ -1503,7 +1510,14 @@ class EventController extends Controller
 
             // Apply upcoming filter only if not filtering for past events or invitations
             if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
-                $query->upcoming();
+                $query->where(function ($q) {
+                    $q->where(function ($subQ) {
+                        $subQ->where('start_datetime', '>', Carbon::now())
+                             ->orWhere('is_availability_based', true);
+                    })
+                    // Include completed events
+                    ->orWhere('status', 'completed');
+                });
                 Log::info('After upcoming() - Count: ' . $query->count());
             }
 
@@ -1759,7 +1773,14 @@ class EventController extends Controller
 
         // Apply upcoming filter only if not filtering for past events or invitations
         if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
-            $query->upcoming();
+            $query->where(function ($q) {
+                $q->where(function ($subQ) {
+                    $subQ->where('start_datetime', '>', Carbon::now())
+                         ->orWhere('is_availability_based', true);
+                })
+                // Include completed events
+                ->orWhere('status', 'completed');
+            });
         }
 
         // Filter by search term

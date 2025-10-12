@@ -425,7 +425,7 @@ footer {
 
                         <div class="mt-auto">
                             <!-- Event Info -->
-                            <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+                            <div class="d-flex flex-wrap align-items-center gap-1 mb-3">
                                 @if($event->entry_fee > 0)
                                     <span class="badge bg-warning f-s-10">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
                                 @else
@@ -434,42 +434,43 @@ footer {
                                 @if($event->max_participants)
                                     <small class="text-muted f-s-10">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
                                 @endif
-                            </div>
-
-                            <!-- Social Actions & Action Buttons -->
-                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                                <!-- Social Actions -->
-                                @if(Auth::check())
-                                    <div class="d-flex align-items-center gap-2">
-                                        <x-social-like-button :content="$event" type="event" />
-                                        <x-social-view-counter :content="$event" type="event" />
-                                        <x-social-comment-button :content="$event" type="event" />
-                                        <x-report-button :content="$event" type="event" />
-                                    </div>
-                                @else
-                                    <div></div>
+                                @if($event->status === 'completed')
+                                    <span class="badge bg-light-success f-s-10">
+                                        <i class="ph ph-check-circle me-1"></i>Completato
+                                    </span>
                                 @endif
-
-                                <!-- Action Buttons -->
-                                <div class="d-flex gap-1">
-                                    <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm">
-                                        <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
-                                    </a>
-                                    @can('events.manage.own')
-                                        @if(Auth::user()->hasRole(['admin', 'moderator']) || ($event->organizer_id === Auth::id() && $event->start_datetime && $event->start_datetime >= now()))
-                                            <button type="button" class="btn btn-light btn-sm"
-                                                    onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
-                                                    title="{{ __('events.delete_event') }}">
-                                                <i class="ti ti-trash"></i>
-                                            </button>
-                                        @endif
-                                    @endcan
-                                </div>
                             </div>
-                                            </div>
-                                        </div>
-                                            </div>
-                                        </div>
+
+                            <!-- Social Actions -->
+                            @if(Auth::check())
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <x-social-like-button :content="$event" type="event" />
+                                    <x-social-view-counter :content="$event" type="event" />
+                                    <x-social-comment-button :content="$event" type="event" />
+                                    <x-report-button :content="$event" type="event" />
+                                </div>
+                            @endif
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm flex-fill">
+                                    <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
+                                </a>
+                                @can('events.manage.own')
+                                    @if(Auth::user()->hasRole(['admin', 'moderator']) || ($event->organizer_id === Auth::id() && $event->start_datetime && $event->start_datetime >= now()))
+                                        <button type="button" class="btn btn-light-danger btn-sm"
+                                                onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
+                                                title="{{ __('events.delete_event') }}">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    @endif
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @empty
             <div class="col-12">
                 <div class="card">

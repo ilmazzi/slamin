@@ -43,58 +43,81 @@
         @if($canCalculate || $rankings->count() > 0)
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card {{ $event->status === 'completed' ? 'bg-light-success' : 'bg-light' }}">
-                    <div class="card-body">
-                        @if($event->status === 'completed')
-                            {{-- Event Completed --}}
-                            <div class="text-center">
-                                <i class="ph-duotone ph-check-circle f-s-48 text-success mb-2"></i>
-                                <h5 class="text-success mb-2">Evento Completato</h5>
-                                <p class="text-muted mb-0">
-                                    Classifica finale pubblicata e badge assegnati ai vincitori!
-                                </p>
-                            </div>
-                        @else
-                            {{-- Active Event Actions --}}
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                        <div>
-                                            <h6 class="mb-1">Azioni Classifica</h6>
-                                            <small class="text-muted">
-                                                <i class="ph ph-users me-1"></i>{{ $stats['with_scores'] }}/{{ $stats['total_participants'] }} con punteggi
-                                                <span class="mx-2">•</span>
-                                                <i class="ph ph-trophy me-1"></i>{{ $stats['badges_awarded'] }} badge assegnati
-                                            </small>
-                                        </div>
+                @if($event->status === 'completed')
+                    {{-- Event Completed --}}
+                    <div class="card border-success">
+                        <div class="card-body text-center py-4">
+                            <i class="ph-duotone ph-check-circle f-s-60 text-success mb-3"></i>
+                            <h4 class="text-success mb-2">🎊 Evento Completato</h4>
+                            <p class="text-muted mb-0">
+                                Classifica finale pubblicata e badge assegnati ai vincitori!
+                            </p>
+                        </div>
+                    </div>
+                @else
+                    {{-- Active Event Actions --}}
+                    <div class="card">
+                        <div class="card-body">
+                            {{-- Stats Info --}}
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <div class="p-3 bg-light-info rounded text-center">
+                                        <i class="ph-duotone ph-users f-s-30 text-info mb-2"></i>
+                                        <h5 class="mb-0">{{ $stats['with_scores'] }}/{{ $stats['total_participants'] }}</h5>
+                                        <small class="text-muted">Con Punteggi</small>
                                     </div>
                                 </div>
-                                
+                                <div class="col-6">
+                                    <div class="p-3 bg-light-success rounded text-center">
+                                        <i class="ph-duotone ph-trophy f-s-30 text-success mb-2"></i>
+                                        <h5 class="mb-0">{{ $stats['badges_awarded'] }}</h5>
+                                        <small class="text-muted">Badge Assegnati</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Action Buttons --}}
+                            <div class="row g-3">
                                 <div class="col-12 col-md-6">
                                     @if($canCalculate)
-                                        <button wire:click="calculatePartialRankings" class="btn btn-light-warning w-100">
-                                            <i class="ph ph-calculator me-2"></i>
-                                            Classifica Parziale
-                                        </button>
-                                        <small class="text-muted d-block mt-1">Aggiorna classifica senza chiudere evento</small>
+                                        <div class="card bg-light-warning h-100">
+                                            <div class="card-body text-center">
+                                                <i class="ph-duotone ph-calculator f-s-40 text-warning mb-2"></i>
+                                                <h6 class="mb-2">Classifica Parziale</h6>
+                                                <p class="text-muted small mb-3">Aggiorna classifica senza chiudere evento</p>
+                                                <button wire:click="calculatePartialRankings" class="btn btn-warning w-100">
+                                                    <i class="ph ph-calculator me-2"></i>Calcola Parziale
+                                                </button>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     @if($canCalculate && $stats['with_scores'] > 0)
-                                        <button wire:click="finalizeEvent" 
-                                                class="btn btn-success w-100"
-                                                onclick="return confirm('Generare la classifica finale, assegnare i badge e CHIUDERE l\'evento?\n\nQuesta azione:\n✅ Calcola classifica finale\n✅ Assegna badge ai vincitori\n✅ Chiude l\'evento\n✅ Pubblica risultati')">
-                                            <i class="ph ph-trophy me-2"></i>
-                                            Genera Classifica Finale e Termina Evento
-                                        </button>
-                                        <small class="text-muted d-block mt-1">Classifica + Badge + Chiusura</small>
+                                        <div class="card bg-light-success h-100">
+                                            <div class="card-body text-center">
+                                                <i class="ph-duotone ph-trophy f-s-40 text-success mb-2"></i>
+                                                <h6 class="mb-2">Finalizza Evento</h6>
+                                                <p class="text-muted small mb-3">Classifica + Badge + Chiusura in 1 click</p>
+                                                <button onclick="confirmFinalize()" class="btn btn-success w-100">
+                                                    <i class="ph ph-check-circle me-2"></i>Termina Evento
+                                                </button>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
-                        @endif
+
+                            @if(!$canCalculate || $stats['with_scores'] === 0)
+                                <div class="alert alert-light-info mt-3 mb-0">
+                                    <i class="ph ph-info me-2"></i>
+                                    Inserisci i punteggi prima di generare la classifica.
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
         @endif
@@ -280,6 +303,35 @@
 
     @script
     <script>
+        function confirmFinalize() {
+            Swal.fire({
+                title: 'Finalizzare l\'Evento?',
+                html: `
+                    <div class="text-start">
+                        <p class="mb-3">Questa azione completerà definitivamente l'evento:</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="ph ph-check text-success me-2"></i> Calcola classifica finale</li>
+                            <li class="mb-2"><i class="ph ph-trophy text-warning me-2"></i> Assegna badge ai vincitori</li>
+                            <li class="mb-2"><i class="ph ph-lock text-info me-2"></i> Chiude l'evento</li>
+                            <li class="mb-2"><i class="ph ph-eye text-primary me-2"></i> Pubblica risultati</li>
+                        </ul>
+                        <p class="text-danger mb-0"><strong>Attenzione:</strong> Non potrai più modificare i punteggi!</p>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sì, Finalizza!',
+                cancelButtonText: 'Annulla',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-light-secondary',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.call('finalizeEvent');
+                }
+            });
+        }
+
         Livewire.on('swal:success', (data) => {
             Swal.fire({
                 icon: 'success',
