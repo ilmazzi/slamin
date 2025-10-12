@@ -321,4 +321,30 @@
             </div>
         </div>
     @endif
+
+    {{-- Toast Scripts --}}
+    @script
+    <script>
+        Livewire.on('swal:success', (data) => {
+            Swal.fire({
+                icon: 'success',
+                title: data[0].title || 'Successo!',
+                text: data[0].text || '',
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'btn btn-primary',
+                timer: 3000
+            });
+        });
+
+        Livewire.on('swal:warning', (data) => {
+            Swal.fire({
+                icon: 'warning',
+                title: data[0].title || 'Attenzione',
+                text: data[0].text || '',
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'btn btn-warning'
+            });
+        });
+    </script>
+    @endscript
 </div>

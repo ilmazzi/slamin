@@ -121,10 +121,10 @@ class BadgeManagement extends Component
 
         if ($this->isEditing) {
             $this->badge->update($data);
-            $this->dispatch('toast', ['message' => 'Badge aggiornato con successo!', 'type' => 'success']);
+            $this->dispatch('swal:success', ['title' => 'Successo!', 'text' => 'Badge aggiornato con successo!']);
         } else {
             Badge::create($data);
-            $this->dispatch('toast', ['message' => 'Badge creato con successo!', 'type' => 'success']);
+            $this->dispatch('swal:success', ['title' => 'Successo!', 'text' => 'Badge creato con successo!']);
         }
 
         $this->loadBadges();
@@ -143,7 +143,7 @@ class BadgeManagement extends Component
         
         $badge->delete();
         
-        $this->dispatch('toast', ['message' => 'Badge eliminato con successo!', 'type' => 'success']);
+        $this->dispatch('swal:success', ['title' => 'Successo!', 'text' => 'Badge eliminato con successo!']);
         $this->loadBadges();
     }
 
@@ -154,7 +154,7 @@ class BadgeManagement extends Component
         $badge->save();
         
         $this->loadBadges();
-        $this->dispatch('toast', ['message' => 'Stato badge aggiornato!', 'type' => 'success']);
+        $this->dispatch('swal:success', ['title' => 'Successo!', 'text' => 'Stato badge aggiornato!']);
     }
 
     public function openAssignModal($badgeId)
@@ -234,9 +234,9 @@ class BadgeManagement extends Component
         $result = $badgeService->manuallyAwardBadge($user, $badge, $admin, $this->assignNotes);
 
         if ($result) {
-            $this->dispatch('toast', ['message' => "Badge assegnato a {$user->getDisplayName()}!", 'type' => 'success']);
+            $this->dispatch('swal:success', ['title' => 'Badge Assegnato!', 'text' => "Badge assegnato con successo a {$user->getDisplayName()}!"]);
         } else {
-            $this->dispatch('toast', ['message' => 'L\'utente ha già questo badge!', 'type' => 'warning']);
+            $this->dispatch('swal:warning', ['title' => 'Attenzione', 'text' => 'L\'utente ha già questo badge!']);
         }
 
         $this->showAssignModal = false;
