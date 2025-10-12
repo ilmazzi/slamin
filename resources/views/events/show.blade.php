@@ -188,6 +188,147 @@
                 </div>
             </div>
 
+            <!-- Final Rankings (Poetry Slam) -->
+            @if($event->category === 'poetry_slam' && $event->rankings()->exists())
+            <div class="card mb-4 border-warning">
+                <div class="card-header bg-light-warning">
+                    <h5 class="mb-0">
+                        <i class="ph-duotone ph-ranking me-2 text-warning"></i>🏆 Classifica Finale
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @php
+                        $publicRankings = $event->rankings()
+                            ->with(['participant.user', 'badge'])
+                            ->ordered()
+                            ->get();
+                    @endphp
+
+                    {{-- Mobile View --}}
+                    <div class="d-lg-none">
+                        <div class="row g-3">
+                            @foreach($publicRankings as $ranking)
+                                <div class="col-12">
+                                    <div class="card {{ $ranking->position <= 3 ? 'border-warning' : 'border' }}">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="badge {{ $ranking->position <= 3 ? 'bg-gradient-warning' : 'bg-light-secondary' }} rounded-circle flex-shrink-0"
+                                                     style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                                                    {{ $ranking->medal ?: $ranking->position }}
+                                                </div>
+                                                
+                                                @if($ranking->participant)
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        @if($ranking->participant->user)
+                                                            <img src="{{ $ranking->participant->user->profile_photo_url ?? asset('assets/images/avatar/default-avatar.webp') }}" 
+                                                                 alt="{{ $ranking->participant->display_name }}"
+                                                                 class="rounded-circle me-2"
+                                                                 style="width: 35px; height: 35px; object-fit: cover;">
+                                                        @endif
+                                                        <div>
+                                                            <strong>{{ $ranking->participant->display_name }}</strong>
+                                                            @if($ranking->participant->isGuest())
+                                                                <span class="badge bg-light-secondary ms-1">Ospite</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2 align-items-center">
+                                                        <span class="badge bg-gradient-warning">
+                                                            <i class="ph ph-star-four me-1"></i>{{ number_format($ranking->total_score, 1) }}
+                                                        </span>
+                                                        @if($ranking->badge)
+                                                            <small class="text-muted">{{ $ranking->badge->name }}</small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Desktop Table --}}
+                    <div class="table-responsive d-none d-lg-block">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Pos.</th>
+                                    <th>Artista</th>
+                                    <th style="width: 150px;">Punteggio</th>
+                                    <th>Riconoscimento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($publicRankings as $ranking)
+                                    <tr class="{{ $ranking->position <= 3 ? 'table-warning' : '' }}">
+                                        <td>
+                                            <div class="badge {{ $ranking->position <= 3 ? 'bg-gradient-warning' : 'bg-light-secondary' }} rounded-circle"
+                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                                                {{ $ranking->medal ?: $ranking->position }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if($ranking->participant)
+                                                <div class="d-flex align-items-center">
+                                                    @if($ranking->participant->user)
+                                                        <img src="{{ $ranking->participant->user->profile_photo_url ?? asset('assets/images/avatar/default-avatar.webp') }}" 
+                                                             alt="{{ $ranking->participant->display_name }}"
+                                                             class="rounded-circle me-2"
+                                                             style="width: 40px; height: 40px; object-fit: cover;">
+                                                    @else
+                                                        <div class="bg-light-secondary rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                                             style="width: 40px; height: 40px;">
+                                                            <i class="ph ph-user text-secondary"></i>
+                                                        </div>
+                                                    @endif
+                                                    <div>
+                                                        <strong>{{ $ranking->participant->display_name }}</strong>
+                                                        @if($ranking->participant->isGuest())
+                                                            <span class="badge bg-light-secondary ms-2">Ospite</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <h5 class="mb-0">
+                                                <span class="badge bg-gradient-warning">
+                                                    {{ number_format($ranking->total_score, 1) }}
+                                                </span>
+                                            </h5>
+                                        </td>
+                                        <td>
+                                            @if($ranking->badge)
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{ $ranking->badge->icon_url }}" 
+                                                         alt="{{ $ranking->badge->name }}"
+                                                         style="width: 28px; height: 28px;"
+                                                         class="me-2">
+                                                    <span>{{ $ranking->badge->name }}</span>
+                                                </div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if($event->organizer_id === auth()->id())
+                        <div class="text-center mt-3 pt-3 border-top">
+                            <a href="{{ route('events.scoring.rankings', $event) }}" class="btn btn-sm btn-light-primary">
+                                <i class="ph ph-gear me-2"></i>Gestisci Classifica
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+
             <!-- Requirements -->
             @if($event->requirements)
             <div class="card mb-4">
