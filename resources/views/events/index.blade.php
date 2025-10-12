@@ -470,7 +470,6 @@ footer {
                     </div>
                 </div>
             </div>
-        </div>
         @empty
             <div class="col-12">
                 <div class="card">
