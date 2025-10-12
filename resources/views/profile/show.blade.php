@@ -235,6 +235,57 @@
                                 </button>
                             </div>
                             @endif
+
+                            {{-- Badges Section Mobile --}}
+                            @php
+                                $userBadgesMobile = $user->badges()
+                                    ->wherePivot('is_featured', true)
+                                    ->orderBy('user_badges.display_order')
+                                    ->orderBy('badges.order')
+                                    ->limit(3)
+                                    ->get();
+                            @endphp
+                            
+                            @if($userBadgesMobile->count() > 0)
+                            <div class="mt-3 pt-3 border-top">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h6 class="mb-0 f-s-14">
+                                        <i class="ph-duotone ph-trophy me-1 text-warning"></i>
+                                        {{ __('gamification.badges') }}
+                                    </h6>
+                                    @if($isOwnProfile)
+                                    <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-light-primary">
+                                        <i class="ph ph-gear"></i>
+                                    </a>
+                                    @endif
+                                </div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($userBadgesMobile as $badge)
+                                    <div class="position-relative">
+                                        <img src="{{ $badge->icon_url }}" 
+                                             alt="{{ $badge->name }}"
+                                             style="width: 40px; height: 40px;"
+                                             class="rounded"
+                                             data-bs-toggle="tooltip"
+                                             title="{{ $badge->name }}">
+                                        <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 8px;">
+                                            {{ $badge->points }}
+                                        </span>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @elseif($isOwnProfile)
+                            <div class="mt-3 pt-3 border-top">
+                                <div class="text-center py-2">
+                                    <i class="ph-duotone ph-trophy f-s-30 text-muted mb-1"></i>
+                                    <p class="text-muted small mb-1">Inizia a guadagnare badge!</p>
+                                    <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-light-primary">
+                                        <i class="ph ph-trophy me-1"></i>Scopri i Badge
+                                    </a>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -775,6 +826,55 @@
                                                 <i class="ti ti-message-circle"></i>
                                                 {{ __('profile.send_message_button') }}
                                             </button>
+                                        </div>
+                                        @endif
+
+                                        {{-- Badges Section --}}
+                                        @php
+                                            $userBadges = $user->badges()
+                                                ->wherePivot('is_featured', true)
+                                                ->orderBy('user_badges.display_order')
+                                                ->orderBy('badges.order')
+                                                ->limit(3)
+                                                ->get();
+                                        @endphp
+                                        
+                                        @if($userBadges->count() > 0)
+                                        <div class="mt-3 pt-3 border-top">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <h6 class="mb-0">
+                                                    <i class="ph-duotone ph-trophy me-2 text-warning"></i>
+                                                    {{ __('gamification.badges') }}
+                                                </h6>
+                                                @if($isOwnProfile)
+                                                <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-light-primary">
+                                                    <i class="ph ph-gear me-1"></i>{{ __('common.manage') }}
+                                                </a>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @foreach($userBadges as $badge)
+                                                <div class="position-relative" data-bs-toggle="tooltip" title="{{ $badge->name }}: {{ $badge->description }}">
+                                                    <img src="{{ $badge->icon_url }}" 
+                                                         alt="{{ $badge->name }}"
+                                                         style="width: 48px; height: 48px; cursor: help;"
+                                                         class="rounded">
+                                                    <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 9px;">
+                                                        {{ $badge->points }}
+                                                    </span>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @elseif($isOwnProfile)
+                                        <div class="mt-3 pt-3 border-top">
+                                            <div class="text-center py-3">
+                                                <i class="ph-duotone ph-trophy f-s-40 text-muted mb-2"></i>
+                                                <p class="text-muted small mb-2">Inizia a guadagnare badge!</p>
+                                                <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-light-primary">
+                                                    <i class="ph ph-trophy me-1"></i>Scopri i Badge
+                                                </a>
+                                            </div>
                                         </div>
                                         @endif
                                     </div>
