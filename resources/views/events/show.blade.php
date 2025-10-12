@@ -1057,6 +1057,19 @@
                                             <i class="ph ph-trophy me-2"></i>Gestione Punteggi & Classifica
                                         </a>
                                     @endif
+                                    @if($event->status !== 'completed')
+                                        <form action="{{ route('events.complete', $event) }}" method="POST" class="mb-2">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-light-success w-100" onclick="return confirm('Chiudere questo evento e segnarlo come completato?')">
+                                                <i class="ph ph-check-circle me-2"></i>Segna come Completato
+                                            </button>
+                                        </form>
+                                    @else
+                                        <div class="alert alert-success mb-2">
+                                            <i class="ph ph-check-circle me-2"></i>Evento Completato
+                                        </div>
+                                    @endif
                                     <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
                                         <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
                                     </a>

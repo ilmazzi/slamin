@@ -365,6 +365,26 @@ footer {
                                 @if($event->subtitle)
                                     <h6 class="text-muted mb-2 f-s-12">{{ Str::limit($event->subtitle, 40) }}</h6>
                                 @endif
+                                
+                                {{-- Winner Display for Completed Poetry Slam --}}
+                                @if($event->category === 'poetry_slam' && $event->status === 'completed' && $event->rankings()->exists())
+                                    @php
+                                        $winner = $event->rankings()->where('position', 1)->with(['participant.user', 'badge'])->first();
+                                    @endphp
+                                    @if($winner && $winner->participant)
+                                        <div class="mb-2 p-2 bg-light-warning rounded">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-gradient-warning">🥇</span>
+                                                <div class="flex-grow-1">
+                                                    <strong class="d-block f-s-12">Vincitore:</strong>
+                                                    <span class="f-s-11">{{ $winner->participant->display_name }}</span>
+                                                    <span class="badge bg-light-secondary f-s-10 ms-1">{{ number_format($winner->total_score, 1) }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
                                 <p class="text-muted mb-2 f-s-12">
                                     {{ Str::limit($event->description, 60) }}
                                 </p>

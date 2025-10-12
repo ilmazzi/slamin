@@ -549,6 +549,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('events.edit-livewire', compact('event'));
     })->middleware('auth')->name('events.edit');
 
+    // Event Complete
+    Route::patch('/events/{event}/complete', [App\Http\Controllers\EventController::class, 'complete'])->middleware('auth')->name('events.complete');
+
     // Event management (organizers) - SENZA CREATE PER TEST
     Route::resource('events', EventController::class)->except(['index', 'show', 'create', 'store', 'edit']);
     Route::get('/events/{event}/manage', [EventController::class, 'manage'])->name('events.manage');

@@ -43,31 +43,56 @@
         @if($canCalculate || $rankings->count() > 0)
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card bg-light">
+                <div class="card {{ $event->status === 'completed' ? 'bg-light-success' : 'bg-light' }}">
                     <div class="card-body">
-                        <div class="d-flex gap-2 flex-wrap">
-                            @if($canCalculate)
-                                <button wire:click="calculateRankings" class="btn btn-warning">
-                                    <i class="ph ph-calculator me-2"></i>
-                                    {{ $rankings->count() > 0 ? 'Ricalcola' : 'Calcola' }} Classifica
-                                </button>
-                            @endif
-                            
-                            @if($rankings->count() > 0)
-                                <button wire:click="awardBadges" class="btn btn-success">
-                                    <i class="ph ph-trophy me-2"></i>Assegna Badge Vincitori
-                                </button>
-                            @endif
-
-                            <div class="ms-auto">
-                                <span class="badge bg-light-info me-2">
-                                    <i class="ph ph-users me-1"></i>{{ $stats['with_scores'] }}/{{ $stats['total_participants'] }} con punteggi
-                                </span>
-                                <span class="badge bg-light-success">
-                                    <i class="ph ph-trophy me-1"></i>{{ $stats['badges_awarded'] }} badge assegnati
-                                </span>
+                        @if($event->status === 'completed')
+                            {{-- Event Completed --}}
+                            <div class="text-center">
+                                <i class="ph-duotone ph-check-circle f-s-48 text-success mb-2"></i>
+                                <h5 class="text-success mb-2">Evento Completato</h5>
+                                <p class="text-muted mb-0">
+                                    Classifica finale pubblicata e badge assegnati ai vincitori!
+                                </p>
                             </div>
-                        </div>
+                        @else
+                            {{-- Active Event Actions --}}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="mb-1">Azioni Classifica</h6>
+                                            <small class="text-muted">
+                                                <i class="ph ph-users me-1"></i>{{ $stats['with_scores'] }}/{{ $stats['total_participants'] }} con punteggi
+                                                <span class="mx-2">•</span>
+                                                <i class="ph ph-trophy me-1"></i>{{ $stats['badges_awarded'] }} badge assegnati
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-md-6">
+                                    @if($canCalculate)
+                                        <button wire:click="calculatePartialRankings" class="btn btn-light-warning w-100">
+                                            <i class="ph ph-calculator me-2"></i>
+                                            Classifica Parziale
+                                        </button>
+                                        <small class="text-muted d-block mt-1">Aggiorna classifica senza chiudere evento</small>
+                                    @endif
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    @if($canCalculate && $stats['with_scores'] > 0)
+                                        <button wire:click="finalizeEvent" 
+                                                class="btn btn-success w-100"
+                                                onclick="return confirm('Generare la classifica finale, assegnare i badge e CHIUDERE l\'evento?\n\nQuesta azione:\n✅ Calcola classifica finale\n✅ Assegna badge ai vincitori\n✅ Chiude l\'evento\n✅ Pubblica risultati')">
+                                            <i class="ph ph-trophy me-2"></i>
+                                            Genera Classifica Finale e Termina Evento
+                                        </button>
+                                        <small class="text-muted d-block mt-1">Classifica + Badge + Chiusura</small>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -236,8 +261,8 @@
                                 
                                 @if($canCalculate)
                                     <p class="text-muted mb-3">Hai {{ $stats['with_scores'] }} partecipanti con punteggi. Calcola la classifica!</p>
-                                    <button wire:click="calculateRankings" class="btn btn-warning">
-                                        <i class="ph ph-calculator me-2"></i>Calcola Classifica
+                                    <button wire:click="calculatePartialRankings" class="btn btn-warning">
+                                        <i class="ph ph-calculator me-2"></i>Calcola Classifica Parziale
                                     </button>
                                 @else
                                     <p class="text-muted mb-3">Inserisci i punteggi prima di calcolare la classifica.</p>
@@ -272,6 +297,12 @@
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-danger'
             });
+        });
+
+        Livewire.on('redirect-after-delay', (data) => {
+            setTimeout(() => {
+                window.location.href = data[0].url;
+            }, data[0].delay || 3000);
         });
     </script>
     @endscript

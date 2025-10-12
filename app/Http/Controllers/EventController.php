@@ -2135,4 +2135,21 @@ class EventController extends Controller
             ]);
         }
     }
+
+    /**
+     * Mark event as completed
+     */
+    public function complete(Event $event)
+    {
+        // Check authorization
+        if (!Auth::check() || ($event->organizer_id !== Auth::id() && !Auth::user()->hasRole(['admin', 'moderator']))) {
+            abort(403, 'Non hai i permessi per completare questo evento');
+        }
+
+        $event->status = Event::STATUS_COMPLETED;
+        $event->save();
+
+        return redirect()->route('events.show', $event)
+            ->with('success', 'Evento segnato come completato!');
+    }
 }

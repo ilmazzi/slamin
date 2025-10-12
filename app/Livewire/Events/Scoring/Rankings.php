@@ -40,29 +40,45 @@ class Rankings extends Component
         ];
     }
 
-    public function calculateRankings()
+    public function calculatePartialRankings()
     {
         try {
             $scoringService = app(EventScoringService::class);
             $scoringService->calculateRankings($this->event);
             
             $this->loadRankings();
-            $this->dispatch('swal:success', ['title' => 'Classifica Calcolata!', 'text' => 'La classifica è stata calcolata con successo!']);
+            $this->dispatch('swal:success', ['title' => 'Classifica Parziale!', 'text' => 'Classifica aggiornata. L\'evento resta aperto.']);
         } catch (\Exception $e) {
-            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Errore nel calcolo della classifica: ' . $e->getMessage()]);
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Errore nel calcolo: ' . $e->getMessage()]);
         }
     }
 
-    public function awardBadges()
+    public function finalizeEvent()
     {
         try {
             $scoringService = app(EventScoringService::class);
+            
+            // 1. Calculate final rankings
+            $scoringService->calculateRankings($this->event);
+            
+            // 2. Award badges to winners
             $badgesAwarded = $scoringService->awardBadgesToWinners($this->event);
             
+            // 3. Mark event as completed
+            $this->event->status = \App\Models\Event::STATUS_COMPLETED;
+            $this->event->save();
+            
             $this->loadRankings();
-            $this->dispatch('swal:success', ['title' => 'Badge Assegnati!', 'text' => "{$badgesAwarded} badge assegnati ai vincitori!"]);
+            $this->dispatch('swal:success', [
+                'title' => 'Evento Completato!', 
+                'text' => "Classifica finale generata, {$badgesAwarded} badge assegnati e evento chiuso!"
+            ]);
+            
+            // Redirect to event page after 3 seconds
+            $this->dispatch('redirect-after-delay', ['url' => route('events.show', $this->event), 'delay' => 3000]);
+            
         } catch (\Exception $e) {
-            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Errore nell\'assegnazione badge: ' . $e->getMessage()]);
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Errore: ' . $e->getMessage()]);
         }
     }
 
