@@ -3,28 +3,20 @@
         {{-- Navigation Tabs --}}
         <div class="row mb-3">
             <div class="col-12">
-                <ul class="nav nav-pills bg-light p-2 rounded">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.gamification.badges') }}">
-                            <i class="ph ph-trophy me-2"></i>Badge
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('admin.gamification.user-badges') }}">
-                            <i class="ph ph-users-three me-2"></i>Badge Utenti
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.gamification.levels') }}">
-                            <i class="ph ph-chart-line me-2"></i>Livelli
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.gamification.leaderboards') }}">
-                            <i class="ph ph-ranking me-2"></i>Classifiche
-                        </a>
-                    </li>
-                </ul>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{{ route('admin.gamification.badges') }}" class="btn btn-light-primary">
+                        <i class="ph ph-trophy me-2"></i>Badge
+                    </a>
+                    <a href="{{ route('admin.gamification.user-badges') }}" class="btn btn-primary">
+                        <i class="ph ph-users-three me-2"></i>Badge Utenti
+                    </a>
+                    <a href="{{ route('admin.gamification.levels') }}" class="btn btn-light-primary">
+                        <i class="ph ph-chart-line me-2"></i>Livelli
+                    </a>
+                    <a href="{{ route('admin.gamification.leaderboards') }}" class="btn btn-light-primary">
+                        <i class="ph ph-ranking me-2"></i>Classifiche
+                    </a>
+                </div>
             </div>
         </div>
 
