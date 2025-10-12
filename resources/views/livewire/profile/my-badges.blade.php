@@ -157,6 +157,14 @@
                 confirmButtonClass: 'btn btn-warning'
             });
         });
+
+        // Refresh sidebar when badges change
+        Livewire.on('refresh-sidebar', () => {
+            // Reload the page after a short delay to show the toast first
+            setTimeout(() => {
+                window.location.reload();
+            }, 2500);
+        });
     </script>
     @endscript
 </div>

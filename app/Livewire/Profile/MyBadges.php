@@ -55,6 +55,9 @@ class MyBadges extends Component
             
             $message = $userBadge->show_in_sidebar ? 'Badge visibile nella sidebar!' : 'Badge rimosso dalla sidebar!';
             $this->dispatch('swal:success', ['title' => 'Aggiornato!', 'text' => $message]);
+            
+            // Refresh sidebar badges
+            $this->dispatch('refresh-sidebar');
         }
     }
 
@@ -81,6 +84,9 @@ class MyBadges extends Component
             $userBadge->sidebar_order = (int) $newOrder;
             $userBadge->save();
             $this->loadBadges();
+            
+            // Refresh sidebar badges
+            $this->dispatch('refresh-sidebar');
         }
     }
 

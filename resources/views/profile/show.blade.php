@@ -293,16 +293,17 @@
                                     </div>
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach($profileBadgesMobile as $badge)
-                                        <div class="position-relative">
-                                            <img src="{{ $badge->icon_url }}" 
-                                                 alt="{{ $badge->name }}"
-                                                 style="width: 40px; height: 40px;"
-                                                 class="rounded"
-                                                 data-bs-toggle="tooltip"
-                                                 title="{{ $badge->name }}">
-                                            <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 8px;">
-                                                {{ $badge->points }}
-                                            </span>
+                                        <div class="text-center" style="max-width: 60px;">
+                                            <div class="position-relative mb-1" data-bs-toggle="tooltip" title="{{ $badge->description }}">
+                                                <img src="{{ $badge->icon_url }}" 
+                                                     alt="{{ $badge->name }}"
+                                                     style="width: 44px; height: 44px; cursor: help;"
+                                                     class="rounded">
+                                                <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 8px;">
+                                                    {{ $badge->points }}
+                                                </span>
+                                            </div>
+                                            <small class="text-muted d-block" style="font-size: 10px; line-height: 1.2;">{{ Str::limit($badge->name, 15) }}</small>
                                         </div>
                                         @endforeach
                                     </div>
@@ -918,16 +919,19 @@
                                                     </a>
                                                     @endif
                                                 </div>
-                                                <div class="d-flex flex-wrap gap-2">
+                                                <div class="d-flex flex-wrap gap-3">
                                                     @foreach($profileBadges as $badge)
-                                                    <div class="position-relative" data-bs-toggle="tooltip" title="{{ $badge->name }}: {{ $badge->description }}">
-                                                        <img src="{{ $badge->icon_url }}" 
-                                                             alt="{{ $badge->name }}"
-                                                             style="width: 48px; height: 48px; cursor: help;"
-                                                             class="rounded">
-                                                        <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 9px;">
-                                                            {{ $badge->points }}
-                                                        </span>
+                                                    <div class="text-center" style="max-width: 80px;">
+                                                        <div class="position-relative mb-1" data-bs-toggle="tooltip" title="{{ $badge->description }}">
+                                                            <img src="{{ $badge->icon_url }}" 
+                                                                 alt="{{ $badge->name }}"
+                                                                 style="width: 56px; height: 56px; cursor: help;"
+                                                                 class="rounded">
+                                                            <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-gradient-warning" style="font-size: 9px;">
+                                                                {{ $badge->points }}
+                                                            </span>
+                                                        </div>
+                                                        <small class="text-muted d-block" style="font-size: 11px; line-height: 1.2;">{{ Str::limit($badge->name, 20) }}</small>
                                                     </div>
                                                     @endforeach
                                                 </div>
