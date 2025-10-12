@@ -29,19 +29,19 @@
                 {{-- Post Type Selection --}}
                 <div class="mb-4">
                     <label class="form-label">{{ __('forum.post_type') }} <span class="text-danger">*</span></label>
-                    <div class="btn-group w-100" role="group">
+                    <div class="d-flex gap-2">
                         <input type="radio" wire:model.live="postType" value="text" class="btn-check" id="type-text" autocomplete="off" checked>
-                        <label class="btn btn-light-primary" for="type-text">
+                        <label class="btn {{ $postType === 'text' ? 'btn-primary' : 'btn-light-primary' }} flex-fill" for="type-text">
                             <i class="ph ph-text-aa me-2"></i>{{ __('forum.text_post') }}
                         </label>
 
                         <input type="radio" wire:model.live="postType" value="link" class="btn-check" id="type-link" autocomplete="off">
-                        <label class="btn btn-light-primary" for="type-link">
+                        <label class="btn {{ $postType === 'link' ? 'btn-primary' : 'btn-light-primary' }} flex-fill" for="type-link">
                             <i class="ph ph-link me-2"></i>{{ __('forum.link_post') }}
                         </label>
 
                         <input type="radio" wire:model.live="postType" value="image" class="btn-check" id="type-image" autocomplete="off">
-                        <label class="btn btn-light-primary" for="type-image">
+                        <label class="btn {{ $postType === 'image' ? 'btn-primary' : 'btn-light-primary' }} flex-fill" for="type-image">
                             <i class="ph ph-image me-2"></i>{{ __('forum.image_post') }}
                         </label>
                     </div>
