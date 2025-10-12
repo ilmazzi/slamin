@@ -74,6 +74,7 @@ Route::prefix('admin/forum')->name('admin.forum.')->middleware(['auth', 'role:ad
 // Admin Gamification Routes
 Route::prefix('admin/gamification')->name('admin.gamification.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/badges', App\Livewire\Admin\Gamification\BadgeManagement::class)->name('badges');
+    Route::get('/user-badges', App\Livewire\Admin\Gamification\UserBadges::class)->name('user-badges');
     Route::get('/levels', App\Livewire\Admin\Gamification\LevelManagement::class)->name('levels');
     Route::get('/leaderboards', App\Livewire\Admin\Gamification\LeaderboardsDashboard::class)->name('leaderboards');
 });
@@ -88,8 +89,7 @@ Route::prefix('events/{event}/scoring')->name('events.scoring.')->middleware('au
 
 // User Profile Badges & Gamification
 Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
-    Route::get('/{user}/badges', [App\Http\Controllers\ProfileController::class, 'badges'])->name('badges');
-    Route::get('/{user}/achievements', [App\Http\Controllers\ProfileController::class, 'achievements'])->name('achievements');
+    Route::get('/my-badges', App\Livewire\Profile\MyBadges::class)->name('my-badges');
 });
 
 // Moderator Forum Routes

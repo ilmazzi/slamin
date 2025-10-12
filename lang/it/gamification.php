@@ -4,6 +4,7 @@ return [
     // Admin
     'admin_title' => 'Gamification',
     'badges_management' => 'Gestione Badge',
+    'user_badges_management' => 'Badge Utenti',
     'levels_management' => 'Gestione Livelli',
     'leaderboards' => 'Classifiche',
     

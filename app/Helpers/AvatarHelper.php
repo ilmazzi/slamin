@@ -61,8 +61,10 @@ class AvatarHelper
             return '';
         }
 
-        // Get top badges (ordered by badge order and earned_at)
+        // Get featured badges only (ordered by user's choice, then badge order)
         $badges = $user->badges()
+            ->wherePivot('is_featured', true)
+            ->orderBy('user_badges.display_order')
             ->orderBy('badges.order')
             ->orderByDesc('user_badges.earned_at')
             ->limit($limit)
