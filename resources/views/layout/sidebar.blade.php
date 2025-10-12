@@ -53,6 +53,11 @@
                         </a>
                     </li>
                     <li class="dropdown-item">
+                        <a class="f-w-500" href="{{ route('profile.my-badges') }}">
+                            <i class="ph-duotone ph-trophy pe-1 f-s-20"></i> {{ __('gamification.my_badges') }}
+                        </a>
+                    </li>
+                    <li class="dropdown-item">
                         <a class="f-w-500" href="{{ route('profile.payment-accounts.index') }}">
                             <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
                         </a>
