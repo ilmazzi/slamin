@@ -39,9 +39,9 @@
                     </div>
 
                     <div class="card-body">
-                        {{-- Filters --}}
-                        <div class="row mb-4">
-                            <div class="col-md-4">
+                        {{-- Filters - Mobile First --}}
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 col-md-4">
                                 <label class="form-label">Filtra per Badge</label>
                                 <select wire:model.live="filterBadge" class="form-select">
                                     <option value="">Tutti i badge</option>
@@ -50,20 +50,99 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-md-4">
                                 <label class="form-label">Cerca Utente</label>
                                 <input type="text" wire:model.live.debounce.300ms="filterUser" class="form-control" 
                                        placeholder="Nome, nickname o email...">
                             </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button wire:click="$set('filterBadge', ''); $set('filterUser', '')" class="btn btn-light-secondary">
+                            <div class="col-12 col-md-4 d-flex align-items-end">
+                                <button wire:click="$set('filterBadge', ''); $set('filterUser', '')" class="btn btn-light-secondary w-100">
                                     <i class="ph ph-x me-2"></i>Pulisci Filtri
                                 </button>
                             </div>
                         </div>
 
                         @if($userBadges && $userBadges->count() > 0)
-                            <div class="table-responsive">
+                            {{-- Mobile Card View --}}
+                            <div class="d-lg-none">
+                                <div class="row g-3">
+                                    @foreach($userBadges as $userBadge)
+                                        <div class="col-12">
+                                            <div class="card border">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-start gap-3">
+                                                        {{-- User Avatar --}}
+                                                        @if($userBadge->user)
+                                                        <img src="{{ $userBadge->user->profile_photo_url ?? asset('assets/images/avatar/default-avatar.webp') }}" 
+                                                             alt="{{ $userBadge->user->getDisplayName() }}" 
+                                                             class="rounded-circle flex-shrink-0" 
+                                                             style="width: 50px; height: 50px; object-fit: cover;">
+                                                        @endif
+
+                                                        <div class="flex-grow-1">
+                                                            {{-- User Info --}}
+                                                            @if($userBadge->user)
+                                                                <h6 class="mb-1">{{ $userBadge->user->getDisplayName() }}</h6>
+                                                                <p class="text-muted small mb-2">{{ $userBadge->user->email }}</p>
+                                                            @else
+                                                                <p class="text-muted">Utente eliminato</p>
+                                                            @endif
+
+                                                            {{-- Badge Info --}}
+                                                            @if($userBadge->badge)
+                                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                                    <img src="{{ $userBadge->badge->icon_url }}" 
+                                                                         alt="{{ $userBadge->badge->name }}" 
+                                                                         style="width: 32px; height: 32px;">
+                                                                    <div>
+                                                                        <strong class="d-block">{{ $userBadge->badge->name }}</strong>
+                                                                        <small class="text-muted">
+                                                                            <i class="ph ph-star-four me-1"></i>{{ $userBadge->badge->points }} punti
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+
+                                                            {{-- Meta Info --}}
+                                                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                                                <span class="badge {{ $userBadge->is_featured ? 'bg-light-success' : 'bg-light-secondary' }}">
+                                                                    <i class="ph {{ $userBadge->is_featured ? 'ph-eye' : 'ph-eye-slash' }} me-1"></i>
+                                                                    {{ $userBadge->is_featured ? 'Visibile' : 'Nascosto' }}
+                                                                </span>
+                                                                @if($userBadge->awardedBy)
+                                                                    <span class="badge bg-light-warning">
+                                                                        <i class="ph ph-user me-1"></i>{{ Str::limit($userBadge->awardedBy->getDisplayName(), 15) }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="badge bg-light-info">
+                                                                        <i class="ph ph-robot me-1"></i>Automatico
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+
+                                                            <small class="text-muted d-block">
+                                                                <i class="ph ph-calendar me-1"></i>
+                                                                {{ $userBadge->earned_at->format('d/m/Y H:i') }}
+                                                                ({{ $userBadge->earned_at->diffForHumans() }})
+                                                            </small>
+
+                                                            {{-- Remove Button --}}
+                                                            <button wire:click="removeBadge({{ $userBadge->id }})" 
+                                                                    class="btn btn-light-danger w-100 mt-3"
+                                                                    onclick="return confirm('Sei sicuro di voler rimuovere questo badge da {{ $userBadge->user?->getDisplayName() }}?')">
+                                                                <i class="ph ph-trash me-2"></i>Rimuovi Badge
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            {{-- Desktop Table View --}}
+                            <div class="table-responsive d-none d-lg-block">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -132,7 +211,7 @@
                                                 </td>
                                                 <td>
                                                     @if($userBadge->is_featured)
-                                                        <span class="badge bg-success">
+                                                        <span class="badge bg-light-success">
                                                             <i class="ph ph-eye me-1"></i>Visibile
                                                         </span>
                                                     @else
@@ -144,7 +223,7 @@
                                                 <td>
                                                     @if($userBadge->awardedBy)
                                                         <span class="badge bg-light-warning">
-                                                            <i class="ph ph-user me-1"></i>{{ $userBadge->awardedBy->getDisplayName() }}
+                                                            <i class="ph ph-user me-1"></i>{{ Str::limit($userBadge->awardedBy->getDisplayName(), 15) }}
                                                         </span>
                                                     @else
                                                         <span class="badge bg-light-info">
@@ -154,7 +233,7 @@
                                                 </td>
                                                 <td>
                                                     <button wire:click="removeBadge({{ $userBadge->id }})" 
-                                                            class="btn btn-sm btn-light-danger"
+                                                            class="btn btn-light-danger"
                                                             onclick="return confirm('Sei sicuro di voler rimuovere questo badge da {{ $userBadge->user?->getDisplayName() }}?')">
                                                         <i class="ph ph-trash"></i>
                                                     </button>
