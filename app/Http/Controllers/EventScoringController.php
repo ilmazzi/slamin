@@ -10,7 +10,7 @@ class EventScoringController extends Controller
     /**
      * Check if user can manage event scoring
      */
-    protected function authorize($event)
+    protected function checkAccess($event)
     {
         $user = auth()->user();
         
@@ -25,7 +25,7 @@ class EventScoringController extends Controller
      */
     public function dashboard(Event $event)
     {
-        $this->authorize($event);
+        $this->checkAccess($event);
         
         return view('events.scoring.dashboard', compact('event'));
     }
@@ -35,7 +35,7 @@ class EventScoringController extends Controller
      */
     public function participants(Event $event)
     {
-        $this->authorize($event);
+        $this->checkAccess($event);
         
         return view('events.scoring.participants', compact('event'));
     }
@@ -45,7 +45,7 @@ class EventScoringController extends Controller
      */
     public function scores(Event $event)
     {
-        $this->authorize($event);
+        $this->checkAccess($event);
         
         return view('events.scoring.scores', compact('event'));
     }
@@ -55,7 +55,7 @@ class EventScoringController extends Controller
      */
     public function rankings(Event $event)
     {
-        $this->authorize($event);
+        $this->checkAccess($event);
         
         return view('events.scoring.rankings', compact('event'));
     }
