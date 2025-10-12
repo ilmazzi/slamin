@@ -208,6 +208,14 @@
                                 </li>
                                 @endif
 
+                                <!-- Forum Section -->
+                                <li class="no-sub {{ request()->routeIs('forum.*') && !request()->routeIs('forum.moderate.*') && !request()->routeIs('admin.forum.*') ? 'active' : '' }}">
+                                    <a href="{{ route('forum.index') }}">
+                                        <i class="ph-duotone ph-chats-circle f-s-20 me-2"></i>
+                                        {{ __('common.forum') }}
+                                    </a>
+                                </li>
+
 
                                 <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
 
