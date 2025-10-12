@@ -257,7 +257,7 @@ class EventEdit extends EventCreation
             // Validation errors - let Livewire handle them
             throw $e;
         } catch (\Exception $e) {
-            \Log::error('Event update failed', [
+            Log::error('Event update failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'user_id' => Auth::id(),

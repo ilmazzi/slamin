@@ -222,15 +222,6 @@
                                 </li>
                                 @endauth
                                 @auth
-                                <!-- {{ __('common.forum') }} Section - DISABILITATO (non implementato) -->
-                                <li class="no-sub nav-item disabled d-none d-lg-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
-                                        <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.forum') }}</span>
-                                    </a>
-                                </li>
-                                @endauth
-                                @auth
                                 <!-- {{ __('common.fan_support') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
@@ -283,12 +274,28 @@
                                     <span>{{ __('sidebar.administration') }}</span>
                                 </li>
 
+                                <!-- Forum Moderation - Per moderatori e admin -->
+                                <li class="no-sub {{ request()->routeIs('forum.moderate.*') ? 'active' : '' }}">
+                                    <a href="{{ route('forum.moderate.queue') }}">
+                                        <i class="ph-duotone ph-shield-check f-s-20 me-2"></i>
+                                        Moderazione Forum
+                                    </a>
+                                </li>
+
                                 <!-- Admin Dashboard - Solo per admin -->
                                 @if(auth()->user()?->hasRole('admin'))
                                 <li class="no-sub {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('admin.dashboard') }}">
                                         <x-icon name="dashboard" size="20" class="me-2" />
                                         Dashboard Admin
+                                    </a>
+                                </li>
+
+                                <!-- Forum Admin - Solo per admin -->
+                                <li class="no-sub {{ request()->routeIs('admin.forum.*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.forum.dashboard') }}">
+                                        <i class="ph-duotone ph-chats-circle f-s-20 me-2"></i>
+                                        Forum Admin
                                     </a>
                                 </li>
                                 @endif

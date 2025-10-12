@@ -47,6 +47,36 @@ Route::get('/events/create', function () {
     return view('events.create-livewire');
 })->middleware('auth')->name('events.create');
 
+// Forum Routes (Reddit-like system)
+Route::prefix('forum')->name('forum.')->group(function () {
+    // Homepage
+    Route::get('/', App\Livewire\ForumIndex::class)->name('index');
+    
+    // Create Post (requires auth)
+    Route::get('/post/create/{subreddit?}', App\Livewire\ForumPostCreate::class)
+        ->middleware('auth')
+        ->name('post.create');
+    
+    // Subreddit routes
+    Route::get('/r/{subreddit:slug}', App\Livewire\SubredditShow::class)->name('subreddit.show');
+    
+    // Post routes
+    Route::get('/r/{subreddit:slug}/post/{post}', App\Livewire\ForumPostShow::class)->name('post.show');
+});
+
+// Admin Forum Routes
+Route::prefix('admin/forum')->name('admin.forum.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', App\Livewire\Admin\ForumDashboard::class)->name('dashboard');
+    Route::get('/settings', App\Livewire\Admin\ForumSettings::class)->name('settings');
+    Route::get('/subreddits', App\Livewire\Admin\SubredditManagement::class)->name('subreddits');
+});
+
+// Moderator Forum Routes
+Route::prefix('forum/moderate')->name('forum.moderate.')->middleware('auth')->group(function () {
+    Route::get('/', App\Livewire\Moderator\ModerationQueue::class)->name('queue');
+    Route::get('/reports', App\Livewire\Moderator\ReportsManagement::class)->name('reports');
+});
+
 
 // Admin Payment Accounts Routes
 Route::prefix('admin/payment-accounts')->name('admin.payment-accounts.')->middleware(['auth'])->group(function () {
