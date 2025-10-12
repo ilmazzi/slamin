@@ -170,5 +170,20 @@ return [
     'no_participants' => 'Nessun partecipante',
     'no_scores' => 'Nessun punteggio inserito',
     'no_rankings' => 'Classifica non ancora disponibile',
+    
+    // Event Scoring - Additional
+    'add_round' => 'Aggiungi Turno',
+    'edit_round' => 'Modifica Turno',
+    'delete_round' => 'Elimina Turno',
+    'save_round' => 'Salva Turno',
+    'save_scores' => 'Salva Punteggi',
+    'save_all_scores' => 'Salva Tutti i Punteggi',
+    'round_saved' => 'Turno salvato con successo!',
+    'score_saved' => 'Punteggio salvato!',
+    'participant_added' => 'Partecipante aggiunto!',
+    'participant_removed' => 'Partecipante rimosso!',
+    'status_updated' => 'Stato aggiornato!',
+    'rankings_calculated' => 'Classifica calcolata con successo!',
+    'badges_awarded' => 'Badge assegnati ai vincitori!',
 ];
 
