@@ -39,7 +39,7 @@ class ParticipantManagement extends Component
     {
         $this->participants = $this->event->participants()
             ->with(['user', 'ranking'])
-            ->orderByPerformance()
+            ->orderBy('performance_order')
             ->get();
     }
 

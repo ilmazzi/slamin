@@ -36,7 +36,7 @@ class ScoreEntry extends Component
         $this->rounds = $this->event->rounds()->ordered()->get();
         $this->participants = $this->event->participants()
             ->whereIn('status', ['confirmed', 'performed'])
-            ->orderByPerformance()
+            ->orderBy('performance_order')
             ->get();
         
         // Load existing scores for selected round
