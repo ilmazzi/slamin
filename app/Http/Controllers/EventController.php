@@ -38,18 +38,15 @@ class EventController extends Controller
             'invitations.invitedUser',
             'requests.user'
         ])
-                     ->published()
+                     ->whereIn('status', [Event::STATUS_PUBLISHED, Event::STATUS_COMPLETED])
                      ->orderByRaw('CASE WHEN start_datetime IS NULL THEN 1 ELSE 0 END, start_datetime');
 
         // Apply upcoming filter only if not filtering for past events or invitations
         if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
             $query->where(function ($q) {
-                $q->where(function ($subQ) {
-                    $subQ->where('start_datetime', '>', Carbon::now())
-                         ->orWhere('is_availability_based', true);
-                })
-                // Include completed events
-                ->orWhere('status', 'completed');
+                $q->where('start_datetime', '>', Carbon::now())
+                  ->orWhere('is_availability_based', true)
+                  ->orWhere('status', Event::STATUS_COMPLETED);
             });
         }
 
@@ -1504,19 +1501,16 @@ class EventController extends Controller
             // Base query
             $query = Event::whereNotNull('latitude')
                           ->whereNotNull('longitude')
-                          ->published();
+                          ->whereIn('status', [Event::STATUS_PUBLISHED, Event::STATUS_COMPLETED]);
 
-            Log::info('After published() - Count: ' . $query->count());
+            Log::info('After status filter - Count: ' . $query->count());
 
             // Apply upcoming filter only if not filtering for past events or invitations
             if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
                 $query->where(function ($q) {
-                    $q->where(function ($subQ) {
-                        $subQ->where('start_datetime', '>', Carbon::now())
-                             ->orWhere('is_availability_based', true);
-                    })
-                    // Include completed events
-                    ->orWhere('status', 'completed');
+                    $q->where('start_datetime', '>', Carbon::now())
+                      ->orWhere('is_availability_based', true)
+                      ->orWhere('status', Event::STATUS_COMPLETED);
                 });
                 Log::info('After upcoming() - Count: ' . $query->count());
             }
@@ -1769,17 +1763,14 @@ class EventController extends Controller
         Log::info('Events API request params: ', $request->all());
 
         $query = Event::with(['organizer'])
-                     ->published();
+                     ->whereIn('status', [Event::STATUS_PUBLISHED, Event::STATUS_COMPLETED]);
 
         // Apply upcoming filter only if not filtering for past events or invitations
         if (!$request->filled('filter') || ($request->filter !== 'past' && $request->filter !== 'invitations')) {
             $query->where(function ($q) {
-                $q->where(function ($subQ) {
-                    $subQ->where('start_datetime', '>', Carbon::now())
-                         ->orWhere('is_availability_based', true);
-                })
-                // Include completed events
-                ->orWhere('status', 'completed');
+                $q->where('start_datetime', '>', Carbon::now())
+                  ->orWhere('is_availability_based', true)
+                  ->orWhere('status', Event::STATUS_COMPLETED);
             });
         }
 
