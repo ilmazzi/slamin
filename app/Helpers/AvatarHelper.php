@@ -53,7 +53,7 @@ class AvatarHelper
     }
 
     /**
-     * Get user's top 3 badges HTML (to display before username)
+     * Get user's top 3 badges HTML for sidebar (to display before username)
      */
     public static function getUserBadgesHtml($user, $limit = 3, $size = '20')
     {
@@ -61,10 +61,10 @@ class AvatarHelper
             return '';
         }
 
-        // Get featured badges only (ordered by user's choice, then badge order)
+        // Get sidebar badges only (max 3, ordered by user's choice)
         $badges = $user->badges()
-            ->wherePivot('is_featured', true)
-            ->orderBy('user_badges.display_order')
+            ->wherePivot('show_in_sidebar', true)
+            ->orderBy('user_badges.sidebar_order')
             ->orderBy('badges.order')
             ->orderByDesc('user_badges.earned_at')
             ->limit($limit)

@@ -15,68 +15,84 @@
                 <div class="row g-3">
                     @foreach($badges as $userBadge)
                         @if($userBadge->badge)
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card h-100 {{ $userBadge->is_featured ? 'border-primary' : 'border' }}">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card h-100 {{ ($userBadge->show_in_sidebar || $userBadge->show_in_profile) ? 'border-primary' : 'border' }}">
                                     <div class="card-body">
-                                        <div class="d-flex align-items-start justify-content-between mb-3">
+                                        <div class="text-center mb-3">
                                             <img src="{{ $userBadge->badge->icon_url }}" 
                                                  alt="{{ $userBadge->badge->name }}"
-                                                 style="width: 64px; height: 64px;">
-                                            
-                                            {{-- Toggle Featured --}}
-                                            <div class="form-check form-switch">
-                                                <input type="checkbox" 
-                                                       class="form-check-input" 
-                                                       id="featured_{{ $userBadge->id }}"
-                                                       wire:change="toggleFeatured({{ $userBadge->id }})"
-                                                       {{ $userBadge->is_featured ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="featured_{{ $userBadge->id }}">
-                                                    <small>{{ $userBadge->is_featured ? 'Visibile' : 'Nascosto' }}</small>
-                                                </label>
-                                            </div>
+                                                 style="width: 80px; height: 80px;">
                                         </div>
 
-                                        <h6 class="card-title mb-2">{{ $userBadge->badge->name }}</h6>
+                                        <h6 class="card-title text-center mb-2">{{ $userBadge->badge->name }}</h6>
                                         
                                         @if($userBadge->badge->description)
-                                            <p class="text-muted small mb-2">{{ $userBadge->badge->description }}</p>
+                                            <p class="text-muted small text-center mb-3">{{ $userBadge->badge->description }}</p>
                                         @endif
 
-                                        <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
-                                            <div>
-                                                <span class="badge bg-gradient-warning">
-                                                    <i class="ph ph-star-four me-1"></i>{{ $userBadge->badge->points }} punti
-                                                </span>
-                                            </div>
+                                        <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+                                            <span class="badge bg-gradient-warning">
+                                                <i class="ph ph-star-four me-1"></i>{{ $userBadge->badge->points }} punti
+                                            </span>
                                             <div class="text-end">
-                                                <small class="text-muted d-block">
-                                                    <i class="ph ph-calendar me-1"></i>
-                                                    {{ $userBadge->earned_at->format('d/m/Y') }}
-                                                </small>
-                                                <small class="text-muted">
-                                                    {{ $userBadge->earned_at->diffForHumans() }}
-                                                </small>
+                                                <small class="text-muted d-block">{{ $userBadge->earned_at->format('d/m/Y') }}</small>
+                                                <small class="text-muted">{{ $userBadge->earned_at->diffForHumans() }}</small>
                                             </div>
                                         </div>
 
-                                        {{-- Display Order (only for featured badges) --}}
-                                        @if($userBadge->is_featured)
-                                            <div class="mt-3 pt-2 border-top">
-                                                <label class="form-label small mb-1">Ordine di visualizzazione</label>
-                                                <input type="number" 
-                                                       wire:model.blur="displayOrders.{{ $userBadge->id }}"
-                                                       wire:change="updateDisplayOrder({{ $userBadge->id }}, $event.target.value)"
-                                                       class="form-control form-control-sm" 
-                                                       min="0" 
-                                                       placeholder="0">
-                                                <small class="text-muted">Numeri più bassi appaiono per primi</small>
+                                        {{-- Sidebar Toggle --}}
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <label class="form-label small mb-0">
+                                                    <i class="ph ph-sidebar me-1"></i>Mostra in Sidebar
+                                                    <span class="badge bg-light-secondary ms-1">Max 3</span>
+                                                </label>
+                                                <div class="form-check form-switch">
+                                                    <input type="checkbox" 
+                                                           class="form-check-input" 
+                                                           id="sidebar_{{ $userBadge->id }}"
+                                                           wire:change="toggleSidebar({{ $userBadge->id }})"
+                                                           {{ $userBadge->show_in_sidebar ? 'checked' : '' }}>
+                                                </div>
                                             </div>
-                                        @endif
+                                            @if($userBadge->show_in_sidebar)
+                                                <input type="number" 
+                                                       wire:model.blur="sidebarOrders.{{ $userBadge->id }}"
+                                                       wire:change="updateSidebarOrder({{ $userBadge->id }}, $event.target.value)"
+                                                       class="form-control form-control-sm mt-2" 
+                                                       min="0" 
+                                                       placeholder="Ordine sidebar">
+                                            @endif
+                                        </div>
+
+                                        {{-- Profile Toggle --}}
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <label class="form-label small mb-0">
+                                                    <i class="ph ph-user me-1"></i>Mostra nel Profilo
+                                                </label>
+                                                <div class="form-check form-switch">
+                                                    <input type="checkbox" 
+                                                           class="form-check-input" 
+                                                           id="profile_{{ $userBadge->id }}"
+                                                           wire:change="toggleProfile({{ $userBadge->id }})"
+                                                           {{ $userBadge->show_in_profile ? 'checked' : '' }}>
+                                                </div>
+                                            </div>
+                                            @if($userBadge->show_in_profile)
+                                                <input type="number" 
+                                                       wire:model.blur="profileOrders.{{ $userBadge->id }}"
+                                                       wire:change="updateProfileOrder({{ $userBadge->id }}, $event.target.value)"
+                                                       class="form-control form-control-sm mt-2" 
+                                                       min="0" 
+                                                       placeholder="Ordine profilo">
+                                            @endif
+                                        </div>
 
                                         {{-- Manually Awarded Badge Info --}}
                                         @if($userBadge->awarded_by)
                                             <div class="mt-2">
-                                                <span class="badge bg-light-warning">
+                                                <span class="badge bg-light-warning w-100">
                                                     <i class="ph ph-user me-1"></i>
                                                     Assegnato da {{ $userBadge->awardedBy->getDisplayName() }}
                                                 </span>
@@ -96,10 +112,11 @@
                         <div>
                             <strong>Come funziona?</strong>
                             <ul class="mb-0 mt-2">
-                                <li>Attiva il toggle per mostrare un badge nella tua sidebar e profilo</li>
-                                <li>Puoi mostrare fino a 3 badge contemporaneamente</li>
-                                <li>Usa "Ordine di visualizzazione" per decidere quale appare per primo</li>
-                                <li>I numeri più bassi hanno priorità (0 appare prima di 1, ecc.)</li>
+                                <li><strong>Sidebar:</strong> Massimo 3 badge. Appaiono accanto al tuo nome nella sidebar</li>
+                                <li><strong>Profilo:</strong> Tutti i badge che vuoi. Appaiono nella tua pagina profilo pubblica</li>
+                                <li>Puoi scegliere badge diversi per sidebar e profilo</li>
+                                <li>Usa i numeri "Ordine" per decidere quale appare per primo (0 prima di 1)</li>
+                                <li>Toggle ON/OFF per attivare o nascondere i badge</li>
                             </ul>
                         </div>
                     </div>
@@ -128,6 +145,16 @@
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false
+            });
+        });
+
+        Livewire.on('swal:warning', (data) => {
+            Swal.fire({
+                icon: 'warning',
+                title: data[0].title || 'Attenzione',
+                text: data[0].text || '',
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'btn btn-warning'
             });
         });
     </script>

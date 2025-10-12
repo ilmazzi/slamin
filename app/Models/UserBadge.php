@@ -18,16 +18,20 @@ class UserBadge extends Model
         'progress',
         'awarded_by',
         'admin_notes',
-        'is_featured',
-        'display_order',
+        'show_in_sidebar',
+        'show_in_profile',
+        'sidebar_order',
+        'profile_order',
     ];
 
     protected $casts = [
         'earned_at' => 'datetime',
         'metadata' => 'array',
         'progress' => 'integer',
-        'is_featured' => 'boolean',
-        'display_order' => 'integer',
+        'show_in_sidebar' => 'boolean',
+        'show_in_profile' => 'boolean',
+        'sidebar_order' => 'integer',
+        'profile_order' => 'integer',
     ];
 
     /**

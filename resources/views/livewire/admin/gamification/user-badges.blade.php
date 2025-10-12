@@ -97,10 +97,21 @@
 
                                                             {{-- Meta Info --}}
                                                             <div class="d-flex flex-wrap gap-2 mb-2">
-                                                                <span class="badge {{ $userBadge->is_featured ? 'bg-light-success' : 'bg-light-secondary' }}">
-                                                                    <i class="ph {{ $userBadge->is_featured ? 'ph-eye' : 'ph-eye-slash' }} me-1"></i>
-                                                                    {{ $userBadge->is_featured ? 'Visibile' : 'Nascosto' }}
-                                                                </span>
+                                                                @if($userBadge->show_in_sidebar)
+                                                                    <span class="badge bg-light-primary">
+                                                                        <i class="ph ph-sidebar me-1"></i>Sidebar
+                                                                    </span>
+                                                                @endif
+                                                                @if($userBadge->show_in_profile)
+                                                                    <span class="badge bg-light-success">
+                                                                        <i class="ph ph-user me-1"></i>Profilo
+                                                                    </span>
+                                                                @endif
+                                                                @if(!$userBadge->show_in_sidebar && !$userBadge->show_in_profile)
+                                                                    <span class="badge bg-light-secondary">
+                                                                        <i class="ph ph-eye-slash me-1"></i>Nascosto
+                                                                    </span>
+                                                                @endif
                                                                 @if($userBadge->awardedBy)
                                                                     <span class="badge bg-light-warning">
                                                                         <i class="ph ph-user me-1"></i>{{ Str::limit($userBadge->awardedBy->getDisplayName(), 15) }}
@@ -157,7 +168,7 @@
                                                     <i class="ph ph-caret-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
                                                 @endif
                                             </th>
-                                            <th>Visibile</th>
+                                            <th>Dove Visibile</th>
                                             <th>Assegnato Da</th>
                                             <th style="width: 100px;">Azioni</th>
                                         </tr>
@@ -202,15 +213,23 @@
                                                     <br><small class="text-muted">{{ $userBadge->earned_at->diffForHumans() }}</small>
                                                 </td>
                                                 <td>
-                                                    @if($userBadge->is_featured)
-                                                        <span class="badge bg-light-success">
-                                                            <i class="ph ph-eye me-1"></i>Visibile
-                                                        </span>
-                                                    @else
-                                                        <span class="badge bg-light-secondary">
-                                                            <i class="ph ph-eye-slash me-1"></i>Nascosto
-                                                        </span>
-                                                    @endif
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        @if($userBadge->show_in_sidebar)
+                                                            <span class="badge bg-light-primary">
+                                                                <i class="ph ph-sidebar me-1"></i>Sidebar
+                                                            </span>
+                                                        @endif
+                                                        @if($userBadge->show_in_profile)
+                                                            <span class="badge bg-light-success">
+                                                                <i class="ph ph-user me-1"></i>Profilo
+                                                            </span>
+                                                        @endif
+                                                        @if(!$userBadge->show_in_sidebar && !$userBadge->show_in_profile)
+                                                            <span class="badge bg-light-secondary">
+                                                                <i class="ph ph-eye-slash me-1"></i>Nascosto
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     @if($userBadge->awardedBy)

@@ -9,8 +9,10 @@ class MyBadges extends Component
 {
     public $user;
     public $badges;
-    public $featuredBadgeIds = [];
-    public $displayOrders = [];
+    public $sidebarBadgeIds = [];
+    public $profileBadgeIds = [];
+    public $sidebarOrders = [];
+    public $profileOrders = [];
 
     public function mount()
     {
@@ -25,50 +27,72 @@ class MyBadges extends Component
             ->orderBy('earned_at', 'desc')
             ->get();
         
-        // Load current featured states and display orders
-        $this->featuredBadgeIds = $this->badges->where('is_featured', true)->pluck('id')->toArray();
-        $this->displayOrders = $this->badges->pluck('display_order', 'id')->toArray();
+        // Load current states
+        $this->sidebarBadgeIds = $this->badges->where('show_in_sidebar', true)->pluck('id')->toArray();
+        $this->profileBadgeIds = $this->badges->where('show_in_profile', true)->pluck('id')->toArray();
+        $this->sidebarOrders = $this->badges->pluck('sidebar_order', 'id')->toArray();
+        $this->profileOrders = $this->badges->pluck('profile_order', 'id')->toArray();
     }
 
-    public function toggleFeatured($userBadgeId)
+    public function toggleSidebar($userBadgeId)
     {
         $userBadge = $this->user->userBadges()->find($userBadgeId);
         
         if ($userBadge) {
-            $userBadge->is_featured = !$userBadge->is_featured;
+            // Check if we're trying to enable and already have 3 in sidebar
+            if (!$userBadge->show_in_sidebar) {
+                $sidebarCount = $this->user->userBadges()->where('show_in_sidebar', true)->count();
+                if ($sidebarCount >= 3) {
+                    $this->dispatch('swal:warning', ['title' => 'Limite Raggiunto', 'text' => 'Puoi mostrare massimo 3 badge nella sidebar!']);
+                    return;
+                }
+            }
+
+            $userBadge->show_in_sidebar = !$userBadge->show_in_sidebar;
             $userBadge->save();
             
             $this->loadBadges();
             
-            $message = $userBadge->is_featured ? 'Badge ora visibile!' : 'Badge nascosto!';
+            $message = $userBadge->show_in_sidebar ? 'Badge visibile nella sidebar!' : 'Badge rimosso dalla sidebar!';
             $this->dispatch('swal:success', ['title' => 'Aggiornato!', 'text' => $message]);
         }
     }
 
-    public function updateDisplayOrder($userBadgeId, $newOrder)
+    public function toggleProfile($userBadgeId)
     {
         $userBadge = $this->user->userBadges()->find($userBadgeId);
         
         if ($userBadge) {
-            $userBadge->display_order = (int) $newOrder;
+            $userBadge->show_in_profile = !$userBadge->show_in_profile;
             $userBadge->save();
             
+            $this->loadBadges();
+            
+            $message = $userBadge->show_in_profile ? 'Badge visibile nel profilo!' : 'Badge rimosso dal profilo!';
+            $this->dispatch('swal:success', ['title' => 'Aggiornato!', 'text' => $message]);
+        }
+    }
+
+    public function updateSidebarOrder($userBadgeId, $newOrder)
+    {
+        $userBadge = $this->user->userBadges()->find($userBadgeId);
+        
+        if ($userBadge) {
+            $userBadge->sidebar_order = (int) $newOrder;
+            $userBadge->save();
             $this->loadBadges();
         }
     }
 
-    public function saveOrders()
+    public function updateProfileOrder($userBadgeId, $newOrder)
     {
-        foreach ($this->displayOrders as $userBadgeId => $order) {
-            $userBadge = $this->user->userBadges()->find($userBadgeId);
-            if ($userBadge) {
-                $userBadge->display_order = (int) $order;
-                $userBadge->save();
-            }
-        }
+        $userBadge = $this->user->userBadges()->find($userBadgeId);
         
-        $this->dispatch('swal:success', ['title' => 'Salvato!', 'text' => 'Ordine badge aggiornato!']);
-        $this->loadBadges();
+        if ($userBadge) {
+            $userBadge->profile_order = (int) $newOrder;
+            $userBadge->save();
+            $this->loadBadges();
+        }
     }
 
     public function render()
