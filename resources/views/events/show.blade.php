@@ -911,6 +911,11 @@
                                             <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_options') }}
                                         </a>
                                     @endif
+                                    @if($event->category === 'poetry_slam')
+                                        <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light-warning w-100 mb-2">
+                                            <i class="ph ph-trophy me-2"></i>Gestione Punteggi & Classifica
+                                        </a>
+                                    @endif
                                     <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
                                         <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
                                     </a>
