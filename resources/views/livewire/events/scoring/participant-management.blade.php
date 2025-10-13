@@ -49,17 +49,14 @@
                                 <i class="ph-duotone ph-users me-2"></i>
                                 Partecipanti ({{ $participants->count() }})
                             </h5>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button wire:click="importRegisteredUsers" class="btn btn-light-info" 
-                                        data-bs-toggle="tooltip" 
-                                        title="Importa automaticamente gli utenti che hanno già accettato inviti o richieste">
-                                    <i class="ph ph-download me-2"></i>Importa Iscritti
-                                </button>
-                                <button wire:click="openAddModal" class="btn btn-primary">
-                                    <i class="ph ph-plus me-2"></i>Aggiungi
-                                </button>
-                            </div>
+                            <button wire:click="openAddModal" class="btn btn-primary">
+                                <i class="ph ph-plus me-2"></i>Aggiungi
+                            </button>
                         </div>
+                        <p class="text-muted small mb-0 mt-2">
+                            <i class="ph ph-info me-1"></i>
+                            Gli utenti vengono aggiunti automaticamente quando accettano inviti o richieste per questo evento Poetry Slam.
+                        </p>
                     </div>
 
                     <div class="card-body">

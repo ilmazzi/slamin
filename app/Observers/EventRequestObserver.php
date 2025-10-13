@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\EventRequest;
+use App\Models\EventParticipant;
 use App\Services\ActivityService;
 
 class EventRequestObserver
@@ -59,6 +60,26 @@ class EventRequestObserver
                     ],
                     request()
                 );
+            }
+
+            // Auto-add to event participants if Poetry Slam event and request accepted
+            if ($eventRequest->status === 'accepted' && 
+                $eventRequest->event && 
+                $eventRequest->event->category === 'poetry_slam') {
+                
+                // Check if participant doesn't already exist
+                $exists = EventParticipant::where('event_id', $eventRequest->event_id)
+                    ->where('user_id', $eventRequest->user_id)
+                    ->exists();
+
+                if (!$exists) {
+                    EventParticipant::create([
+                        'event_id' => $eventRequest->event_id,
+                        'user_id' => $eventRequest->user_id,
+                        'registration_type' => 'request',
+                        'status' => 'confirmed',
+                    ]);
+                }
             }
         }
     }
