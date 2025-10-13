@@ -118,6 +118,6 @@ class PoemCreate extends Component
     public function render()
     {
         return view('livewire.poems.poem-create')
-            ->layout('components.layouts.app');
+            ->layout('components.layouts.master');
     }
 }

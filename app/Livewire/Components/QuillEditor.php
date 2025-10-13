@@ -62,13 +62,13 @@ class QuillEditor extends Component
                 ['clean']
             ],
             'full' => [
-                [{ 'header': [1, 2, 3, false] }],
+                [['header' => [1, 2, 3, false]]],
                 ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'align': ['', 'center', 'right'] }],
+                [['list' => 'ordered'], ['list' => 'bullet']],
+                [['align' => ['', 'center', 'right']]],
                 ['blockquote', 'code-block'],
                 ['link', 'image'],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                [['indent' => '-1'], ['indent' => '+1']],
                 ['clean']
             ],
             'minimal' => [
@@ -77,7 +77,7 @@ class QuillEditor extends Component
             ],
             'poetry' => [
                 ['bold', 'italic'],
-                [{ 'align': ['', 'center', 'right'] }],
+                [['align' => ['', 'center', 'right']]],
                 ['blockquote'],
                 ['clean']
             ]

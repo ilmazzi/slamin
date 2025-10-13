@@ -63,10 +63,10 @@
             </span>
         </div>
 
-        <!-- Chat Widget -->
+        <!-- Chat Widget - Updated to use Livewire Chat -->
         @auth
         <div class="chat-widget position-fixed" style="bottom: 20px; right: 140px; z-index: 1050;">
-            <a href="{{ route('chat.index') }}" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
+            <a href="{{ route('chat.livewire.index') }}" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
                data-chat-badge-container
                style="width: 60px; height: 60px; transition: all 0.3s ease;"
                title="{{ __('chat_general.title') }}">
