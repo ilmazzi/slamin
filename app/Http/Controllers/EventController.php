@@ -2156,13 +2156,31 @@ class EventController extends Controller
      */
     public function complete(Event $event)
     {
-        // Check authorization
-        if (!Auth::check() || ($event->organizer_id !== Auth::id() && !Auth::user()->hasRole(['admin', 'moderator']))) {
+        Log::info('Complete event called', [
+            'event_id' => $event->id,
+            'user_id' => Auth::id(),
+            'is_admin' => Auth::user()->hasRole(['admin', 'moderator']),
+            'is_organizer' => $event->organizer_id === Auth::id(),
+        ]);
+
+        // Admin e moderator hanno accesso completo, altrimenti controlla ownership e permessi
+        if (!Auth::check() || 
+            (!Auth::user()->hasRole(['admin', 'moderator']) && 
+             (!Auth::user()->can('events.manage.own') || $event->organizer_id !== Auth::id()))) {
+            Log::warning('Unauthorized attempt to complete event', [
+                'event_id' => $event->id,
+                'user_id' => Auth::id(),
+            ]);
             abort(403, 'Non hai i permessi per completare questo evento');
         }
 
         $event->status = Event::STATUS_COMPLETED;
         $event->save();
+
+        Log::info('Event completed successfully', [
+            'event_id' => $event->id,
+            'event_title' => $event->title,
+        ]);
 
         return redirect()->route('events.show', $event)
             ->with('success', 'Evento segnato come completato!');

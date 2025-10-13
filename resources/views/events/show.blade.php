@@ -1054,10 +1054,10 @@
                                 </a>
                             @endif
                             @if($event->status !== 'completed')
-                                <form action="{{ route('events.complete', $event) }}" method="POST" class="mb-2">
+                                <form action="{{ route('events.complete', $event) }}" method="POST" class="mb-2" id="completeEventForm">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-light-success w-100" onclick="return confirm('Chiudere questo evento e segnarlo come completato?')">
+                                    <button type="button" class="btn btn-light-success w-100" onclick="confirmCompleteEvent()">
                                         <i class="ph ph-check-circle me-2"></i>Segna come Completato
                                     </button>
                                 </form>
@@ -1759,6 +1759,28 @@ function incrementEventView() {
     })
     .catch(error => {
         console.error('Errore incremento visualizzazioni:', error);
+    });
+}
+</script>
+
+<script>
+// Confirm complete event with SweetAlert
+function confirmCompleteEvent() {
+    Swal.fire({
+        title: 'Segnare come Completato?',
+        text: "L'evento verrà chiuso e segnato come completato. Questa azione non può essere annullata.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="ph ph-check me-1"></i> Sì, completa evento',
+        cancelButtonText: '<i class="ph ph-x me-1"></i> Annulla',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+            // Submit the form
+            document.getElementById('completeEventForm').submit();
+        },
+        allowOutsideClick: () => !Swal.isLoading()
     });
 }
 </script>
