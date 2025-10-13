@@ -47,6 +47,7 @@ class ChatRoom extends Component
         $this->messages = ChatMessage::with(['sender'])
             ->where('chat_room_id', $this->roomId)
             ->orderBy('created_at', 'asc')
+            ->take(100) // Limit to last 100 messages
             ->get();
     }
 
@@ -59,6 +60,22 @@ class ChatRoom extends Component
             ->filter()
             ->unique('id')
             ->values();
+    }
+
+    public function getOtherUserProperty()
+    {
+        if ($this->room->isPrivate() && $this->users->count() > 0) {
+            return $this->users->firstWhere('id', '!=', Auth::id());
+        }
+        return null;
+    }
+
+    public function getChatTitleProperty()
+    {
+        if ($this->room->isPrivate() && $this->otherUser) {
+            return $this->otherUser->getDisplayName();
+        }
+        return $this->room->name ?? __('chat_general.private_chat');
     }
 
     public function sendMessage()
