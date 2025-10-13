@@ -1,21 +1,10 @@
 <?php
 
 return [
-
-    'carousel' => [
-        'previous' => 'Precedente',
-        'next' => 'Successivo',
-    ],
-    'stats' => [
-        'total_videos' => 'Video Totali',
-        'total_views' => 'Visualizzazioni',
-        'total_events' => 'Eventi',
-        'total_users' => 'Utenti',
-    ],
-
-    // Sezioni principali
-    'upcoming_events' => 'Prossimi Eventi',
-    'new_users' => 'Nuovi Utenti',
+    'carousel' => '{\"previous\":\"Indietro\",\"next\":\"Avanti\"}',
+    'stats' => '{\"total_videos\":\"Video totali\",\"total_views\":\"Visualizzazioni\",\"total_events\":\"Eventi\",\"total_users\":\"Utenze\"}',
+    'upcoming_events' => 'Prossimi eventi',
+    'new_users' => 'Nuove utenze',
     'poetry_section' => 'Poesie',
     'articles_section' => 'Articoli',
     'videos_section' => 'Video',
@@ -23,40 +12,31 @@ return [
     'no_videos_description' => 'Al momento non ci sono video popolari da mostrare.',
     'upload_first_video' => 'Carica il primo video',
     'login_to_upload' => 'Accedi per caricare video',
-
-    // Azioni e pulsanti
     'details' => 'Dettagli',
-    'watch_video' => 'Guarda Video',
+    'watch_video' => 'Guarda video',
     'create_poetry' => 'Crea poesia',
     'view_all_poems' => 'Vedi tutte le poesie',
     'upload_video' => 'Carica video',
     'view_all_videos' => 'Vedi tutti i video',
     'cancel' => 'Annulla',
-
-    // Informazioni utente
-    'video_author' => 'Autore del video',
+    'video_author' => 'Autrice/Autore del video',
     'location_not_specified' => 'Località non specificata',
     'follower' => 'Follower',
     'following' => 'Following',
     'editorial' => 'Redazione',
     'interactions' => 'Interazioni',
-
-    // Statistiche
     'views' => 'Visualizzazioni',
-    'likes' => 'Mi Piace',
-    'most_popular' => 'Più Popolare',
-
-    // Video player
-    'video_player' => 'Video Player',
+    'likes' => 'Mi piace',
+    'most_popular' => 'Più popolare',
+    'video_player' => 'Video player',
     'loading_video' => 'Caricamento video...',
     'video_loading_error' => 'Errore nel caricamento del video',
     'preview_not_available' => 'Anteprima non disponibile',
-
-    // Snap functionality
     'create_snap' => 'Crea snap',
     'snap_title_optional' => 'Titolo (opzionale)',
     'snap_description_optional' => 'Descrizione (opzionale)',
     'timestamp' => 'Timestamp:',
-    'create_snap_button' => 'Crea Snap',
-    'new_videos' => 'Video Recenti',
+    'create_snap_button' => 'Crea snap',
+    'new_videos' => 'Video recenti',
+
 ];

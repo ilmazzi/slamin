@@ -1,34 +1,27 @@
 <?php
 
 return [
-    // General
     'forum_title' => 'Forum',
     'forum_subtitle' => 'Unisciti alle discussioni sulla poesia',
-    'subreddit' => 'Subreddit',
-    'subreddits' => 'Subreddit',
-    'popular_subreddits' => 'Subreddit Popolari',
-    'about_subreddit' => 'Info Subreddit',
-    'subreddit_rules' => 'Regole del Subreddit',
-    'forum_rules' => 'Regole del Forum',
-    
-    // Posts
+    'subreddit' => 'Sottocategoria',
+    'subreddits' => 'Sottocategoria',
+    'popular_subreddits' => 'Sottocategorie popolari',
+    'about_subreddit' => 'Info sottocategoria',
+    'subreddit_rules' => 'Regole della sottocategoria',
+    'forum_rules' => 'Regole del forum',
     'post' => 'Pubblica',
     'posts' => 'Post',
-    'create_post' => 'Crea Post',
-    'create_first_post' => 'Crea il Primo Post',
+    'create_post' => 'Crea post',
+    'create_first_post' => 'Crea il primo post',
     'post_created_successfully' => 'Post creato con successo!',
     'no_posts_found' => 'Nessun post trovato',
-    'no_posts_in_subreddit' => 'Nessun post in questo subreddit',
+    'no_posts_in_subreddit' => 'Nessun post in questa sottocategoria',
     'posted_by' => 'Pubblicato da',
     'posting' => 'Pubblicazione in corso',
-    
-    // Post Types
-    'post_type' => 'Tipo di Post',
+    'post_type' => 'Tipo di post',
     'text_post' => 'Testo',
     'link_post' => 'Link',
     'image_post' => 'Immagine',
-    
-    // Post Fields
     'title' => 'Titolo',
     'enter_title' => 'Inserisci un titolo accattivante',
     'title_hint' => 'Il titolo deve essere chiaro e descrivere il contenuto del post',
@@ -37,26 +30,22 @@ return [
     'url' => 'URL',
     'image' => 'Immagine',
     'image_hint' => 'Massimo 5MB, verrà convertita in formato WebP',
-    'select_subreddit' => 'Seleziona Subreddit',
-    'choose_subreddit' => 'Scegli un subreddit...',
-    
-    // Comments
+    'select_subreddit' => 'Seleziona sottocategoria',
+    'choose_subreddit' => 'Scegli una sottocategoria...',
     'comments' => 'Commenti',
     'comment' => 'Commenta',
-    'no_comments_yet' => 'Nessun commento ancora',
-    'be_first_to_comment' => 'Sii il primo a commentare!',
+    'no_comments_yet' => 'Ancora nessun commento',
+    'be_first_to_comment' => 'Sii la prima persona a commentare!',
     'write_comment' => 'Scrivi un commento...',
-    'post_comment' => 'Pubblica Commento',
+    'post_comment' => 'Pubblica commento',
     'comment_added' => 'Commento aggiunto!',
     'reply' => 'Rispondi',
     'write_reply' => 'Scrivi una risposta...',
-    'post_reply' => 'Pubblica Risposta',
+    'post_reply' => 'Pubblica risposta',
     'reply_added' => 'Risposta aggiunta!',
     'comment_deleted' => 'Commento eliminato',
-    'confirm_delete_comment' => 'Sei sicuro di voler eliminare questo commento?',
+    'confirm_delete_comment' => 'Si ha la certezza di voler eliminare questo commento?',
     'max_comment_depth_reached' => 'Massimo livello di annidamento commenti raggiunto',
-    
-    // Sorting
     'sort_hot' => 'Hot',
     'sort_new' => 'Nuovi',
     'sort_top' => 'Top',
@@ -64,66 +53,46 @@ return [
     'top' => 'Top',
     'new' => 'Nuovi',
     'old' => 'Vecchi',
-    
-    // Timeframes
     'today' => 'Oggi',
     'this_week' => 'Settimana',
     'this_month' => 'Mese',
     'this_year' => 'Anno',
     'all_time' => 'Sempre',
-    
-    // Voting
-    'upvote' => 'Voto Positivo',
-    'downvote' => 'Voto Negativo',
+    'upvote' => 'Voto positivo',
+    'downvote' => 'Voto negativo',
     'score' => 'Punteggio',
-    
-    // Subscription
     'subscribe' => 'Iscriviti',
-    'unsubscribe' => 'Annulla Iscrizione',
-    'subscribed_to_subreddit' => 'Iscritto al subreddit!',
+    'unsubscribe' => 'Annulla iscrizione',
+    'subscribed_to_subreddit' => 'Iscritto alla sottocategoria!',
     'unsubscribed_from_subreddit' => 'Iscrizione annullata!',
-    'subscribers' => 'Iscritti',
-    'login_to_subscribe' => 'Accedi per Iscriverti',
-    
-    // Stats
+    'subscribers' => 'Iscrizioni',
+    'login_to_subscribe' => 'Accedi per iscriverti',
     'views' => 'Visualizzazioni',
     'created' => 'Creato',
-    
-    // Moderation
     'post_locked' => 'Questo post è bloccato e non accetta nuovi commenti',
     'deleted' => 'Eliminato',
     'delete' => 'Elimina',
-    
-    // Auth
-    'login_to_post' => 'Accedi per Postare',
+    'login_to_post' => 'Accedi per pubblicare un post',
     'login' => 'Accedi',
     'register' => 'Registrati',
     'or' => 'o',
     'to_comment' => 'per commentare',
-    
-    // Navigation
-    'back_to_subreddit' => 'Torna al Subreddit',
+    'back_to_subreddit' => 'Torna alla sottocategoria',
     'cancel' => 'Annulla',
     'search_posts' => 'Cerca post...',
-    
-    // Rules (example)
-    'rule_1' => 'Sii rispettoso con tutti gli utenti',
+    'rule_1' => 'Rispetto verso chiunque',
     'rule_2' => 'Niente spam o contenuti promozionali',
-    'rule_3' => 'Condividi solo contenuti attinenti alla poesia',
+    'rule_3' => 'Condividi contenuti (quanto più possibile) attinenti alla poesia',
     'rule_4' => 'Usa titoli chiari e descrittivi',
-    
-    // Errors
-    'unauthorized_action' => 'Non sei autorizzato a compiere questa azione',
-    
-    // Reports
+    'unauthorized_action' => 'Non si ha l\'autorizzazione a compiere questa azione',
     'report' => 'Segnala',
-    'report_content' => 'Segnala Contenuto',
-    'report_reason' => 'Motivo Segnalazione',
+    'report_content' => 'Segnala contenuto',
+    'report_reason' => 'Motivo segnalazione',
     'select_reason' => 'Seleziona un motivo...',
     'report_description' => 'Descrizione',
     'report_description_hint' => 'Fornisci dettagli sulla violazione...',
-    'report_info' => 'Le segnalazioni sono anonime e verranno revisionate dai moderatori',
-    'submit_report' => 'Invia Segnalazione',
+    'report_info' => 'Le segnalazioni sono anonime e verranno revisionate da chi modera',
+    'submit_report' => 'Invia segnalazione',
     'report_submitted' => 'Segnalazione inviata! Grazie per il tuo contributo.',
-];
 
+];

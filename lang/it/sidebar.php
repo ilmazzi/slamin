@@ -1,25 +1,19 @@
 <?php
 
 return [
-    // Profilo utente
-    'slam_in_user' => 'Utente Slamin',
-    'my_profile' => 'Il Mio Profilo',
+    'slam_in_user' => 'Utenza Slam In',
+    'my_profile' => 'Il mio profilo',
     'settings' => 'Impostazioni',
-    'private_mode' => 'Modalità Privata',
-    'add_account' => 'Aggiungi Account',
+    'private_mode' => 'Modalità privata',
+    'add_account' => 'Aggiungi account',
     'logout_button' => 'Logout',
-
-    // Menu guest
-    'guest_menu_title' => 'Slamin',
+    'guest_menu_title' => 'Slam In',
     'login' => 'Accedi',
-
-    // Amministrazione
     'administration' => 'Amministrazione',
-    'permissions_management' => 'Gestione Permessi',
+    'permissions_management' => 'Gestione permessi',
     'moderation' => 'Moderazione',
     'moderation_tooltip' => 'Gestisci contenuti e segnalazioni',
-    'system_logs' => 'Log di Sistema',
-
-    // Chat
+    'system_logs' => 'Log di sistema',
     'chat' => 'Chat',
+
 ];

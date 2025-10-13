@@ -1,13 +1,10 @@
 <?php
 
 return [
-    // Titoli e descrizioni principali
     'register' => 'Registrati',
     'create_account' => 'Crea il tuo account',
     'complete_profile' => 'Completa il tuo profilo in pochi passaggi',
     'join_slam_in' => 'Unisciti a Slam In',
-
-    // Campi del form
     'full_name' => 'Nome completo',
     'full_name_placeholder' => 'Inserisci il tuo nome completo',
     'nickname' => 'Nickname',
@@ -18,55 +15,41 @@ return [
     'password_min_characters' => '(minimo 8 caratteri)',
     'confirm_password' => 'Conferma password',
     'preferred_language' => 'Lingua preferita',
-    'language_tip' => 'Potrai sempre cambiare la lingua in seguito nelle impostazioni del tuo profilo.',
+    'language_tip' => 'Potrai sempre cambiare la lingua in seguito, nelle impostazioni del tuo profilo.',
     'changing_language' => 'Cambiando lingua',
     'home_for_poetry' => 'Una casa per la poesia',
     'flexible_roles' => 'Ruoli flessibili',
     'and' => 'e',
     'optional' => '(opzionale)',
-
-    // Ruoli e selezione
     'choose_role' => 'Scegli il tuo ruolo',
     'choose_role_description' => 'Seleziona uno o più ruoli che ti rappresentano meglio nella community di Slam In.',
     'four_main_roles' => 'I quattro ruoli principali sono',
     'roles' => 'Ruoli',
     'poet' => 'Poeta',
-    'venue_owner' => 'Proprietario di venue',
+    'venue_owner' => 'Proprietaria/o di luogo',
     'audience' => 'Pubblico',
-
-    // Statistiche della piattaforma
-    'poets' => 'Poeti',
+    'poets' => 'Poete/i',
     'events' => 'Eventi',
-    'venues' => 'Venue',
+    'venues' => 'Luoghi',
     'community' => 'Community',
-    'platform_description' => 'La piattaforma completa per la poesia slam in Italia',
-
-    // Link e navigazione
+    'platform_description' => 'La piattaforma completa per la poesia mondiale',
     'already_have_account' => 'Hai già un account?',
     'login' => 'Accedi',
-
-    // Sezione informativa
     'why_join_slam_in' => 'Perché unirsi a Slam In?',
     'fast_registration' => 'Registrazione veloce',
     'only_essential_data' => 'Solo i dati essenziali per iniziare',
     'complete_ecosystem' => 'Ecosistema completo',
-    'artists' => 'Artisti',
-    'organizers' => 'Organizzatori',
-    'venues' => 'Venue',
-    'audience' => 'Pubblico',
-
-    // Nomi dei ruoli
-    'role_admin_name' => 'Amministratore',
-    'role_moderator_name' => 'Community Manager',
+    'artists' => 'Artiste/i',
+    'organizers' => 'Organizzatrici/Organizzatori',
+    'role_admin_name' => 'Amministratrice/Amministratore',
+    'role_moderator_name' => 'Community manager',
     'role_poet_name' => 'Poeta/Artista',
-    'role_organizer_name' => 'Event Manager',
-    'role_judge_name' => 'Giudice Competizioni',
-    'role_venue_owner_name' => 'Proprietario Venue',
-    'role_technician_name' => 'Tecnico Professionista',
+    'role_organizer_name' => 'Event manager',
+    'role_judge_name' => 'Giudice competizioni',
+    'role_venue_owner_name' => 'Proprietaria/o luogo',
+    'role_technician_name' => 'Supporto tecnico professionale',
     'role_audience_name' => 'Pubblico/Fan',
-
-    // Descrizioni dei ruoli
-    'role_admin_description' => 'Controllo completo della piattaforma Slamin',
+    'role_admin_description' => 'Controllo completo della piattaforma Slam In',
     'role_moderator_description' => 'Moderazione contenuti e gestione community',
     'role_poet_description' => 'Partecipazione eventi, pubblicazione contenuti artistici',
     'role_organizer_description' => 'Creazione e gestione eventi slam',
@@ -75,4 +58,5 @@ return [
     'role_technician_description' => 'Supporto tecnico audio/video per eventi',
     'role_audience_description' => 'Partecipazione come pubblico, votazioni e interazioni',
     'role_special_description' => 'Ruolo speciale per la community',
+
 ];

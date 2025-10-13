@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'management' => 'Gestione carosello',
+
+    'management' => 'Gestione Carosello',
     'breadcrumb' => 'Carosello',
     'dashboard' => 'Dashboard',
-    'new_slide' => 'Nuova slide',
+    'new_slide' => 'Nuova Slide',
     'edit' => 'Modifica',
     'view' => 'Visualizza',
     'delete' => 'Elimina',
@@ -17,13 +18,13 @@ return [
     'dates_header' => 'Date',
     'actions_header' => 'Azioni',
     'no_slides' => 'Nessuna slide del carosello trovata',
-    'delete_confirmation_title' => 'Conferma eliminazione',
-    'delete_confirmation_message' => 'Si ha la certezza di voler eliminare questa slide del carosello?',
+    'delete_confirmation_title' => 'Conferma Eliminazione',
+    'delete_confirmation_message' => 'Sei sicuro di voler eliminare questa slide del carosello?',
     'delete_confirmation_warning' => 'Questa azione non può essere annullata.',
     'slides_description' => 'Gestisci le slide del carosello della home page',
     'create_first_slide' => 'Crea la tua prima slide per il carosello della home page',
-    'create_first_slide_button' => 'Crea prima slide',
-    'slides' => 'Slide del carosello',
+    'create_first_slide_button' => 'Crea Prima Slide',
+    'slides' => 'Slide del Carosello',
     'from' => 'Da',
     'to' => 'A',
 

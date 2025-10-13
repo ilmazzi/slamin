@@ -7,7 +7,8 @@ return [
     'event' => 'Evento',
     'role' => 'Ruolo',
     'expired' => 'Scaduto',
-    'total_invitations' => 'Inviti Totali',
+    'total_invitations' => 'Inviti totali',
     'accepted_invitations' => 'Accettati',
     'status' => 'Stato',
+
 ];
