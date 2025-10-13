@@ -15,7 +15,6 @@ class ChatsPanelProvider extends PanelProvider
         return $panel
              ->id('chats')
              ->path('chats')
-             ->userModel(User::class)
              ->middleware(['web','auth'])
              ->default()
              // Enable chat actions
