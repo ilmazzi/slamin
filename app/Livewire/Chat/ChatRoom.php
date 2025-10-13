@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Chat;
 
-use App\Models\ChatRoom;
+use App\Models\ChatRoom as ChatRoomModel;
 use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ChatRoomComponent extends Component
+class ChatRoom extends Component
 {
     use WithPagination;
 
@@ -38,7 +38,7 @@ class ChatRoomComponent extends Component
 
     public function loadRoom()
     {
-        $this->room = ChatRoom::with(['participants.user'])
+        $this->room = ChatRoomModel::with(['participants.user'])
             ->findOrFail($this->roomId);
     }
 

@@ -3,7 +3,7 @@
 namespace App\Livewire\Chat;
 
 use App\Models\User;
-use App\Models\ChatRoom;
+use App\Models\ChatRoom as ChatRoomModel;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,19 +52,19 @@ class ChatSearch extends Component
     {
         try {
             // Check if a private chat already exists between these users
-            $existingRoom = ChatRoom::whereHas('participants', function ($query) use ($userId) {
+            $existingRoom = ChatRoomModel::whereHas('participants', function ($query) use ($userId) {
                 $query->where('user_id', Auth::id());
             })->whereHas('participants', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->where('type', 'private')->first();
 
             if ($existingRoom) {
-                // Redirect to existing chat
-                return redirect()->route('chat.room', $existingRoom->id);
+                // Redirect to existing chat using Livewire redirect
+                return $this->redirect(route('chat.room', $existingRoom->id), navigate: true);
             }
 
             // Create new private chat room
-            $room = ChatRoom::create([
+            $room = ChatRoomModel::create([
                 'name' => 'Chat Privata',
                 'type' => 'private',
                 'created_by' => Auth::id()
@@ -76,11 +76,16 @@ class ChatSearch extends Component
                 ['user_id' => $userId]
             ]);
 
-            // Redirect to new chat
-            return redirect()->route('chat.room', $room->id);
+            // Redirect to new chat using Livewire redirect
+            return $this->redirect(route('chat.room', $room->id), navigate: true);
 
         } catch (\Exception $e) {
             session()->flash('error', 'Errore nella creazione della chat: ' . $e->getMessage());
+            \Log::error('ChatSearch::startChat error', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 
