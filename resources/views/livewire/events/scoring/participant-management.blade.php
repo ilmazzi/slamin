@@ -43,14 +43,23 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="ph-duotone ph-users me-2"></i>
-                            Partecipanti ({{ $participants->count() }})
-                        </h5>
-                        <button wire:click="openAddModal" class="btn btn-primary">
-                            <i class="ph ph-plus me-2"></i>Aggiungi
-                        </button>
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0">
+                                <i class="ph-duotone ph-users me-2"></i>
+                                Partecipanti ({{ $participants->count() }})
+                            </h5>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button wire:click="importRegisteredUsers" class="btn btn-light-info" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Importa automaticamente gli utenti che hanno già accettato inviti o richieste">
+                                    <i class="ph ph-download me-2"></i>Importa Iscritti
+                                </button>
+                                <button wire:click="openAddModal" class="btn btn-primary">
+                                    <i class="ph ph-plus me-2"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-body">

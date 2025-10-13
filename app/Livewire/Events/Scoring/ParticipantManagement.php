@@ -169,6 +169,78 @@ class ParticipantManagement extends Component
         $this->dispatch('swal:success', ['title' => 'Rimosso!', 'text' => 'Partecipante rimosso con successo!']);
     }
 
+    public function importRegisteredUsers()
+    {
+        $imported = 0;
+        $skipped = 0;
+
+        // Get users with accepted invitations
+        $acceptedInvitations = $this->event->invitations()
+            ->where('status', 'accepted')
+            ->with('invitedUser')
+            ->get();
+
+        foreach ($acceptedInvitations as $invitation) {
+            if ($invitation->invitedUser) {
+                // Check if already added as participant
+                $exists = EventParticipant::where('event_id', $this->event->id)
+                    ->where('user_id', $invitation->invitedUser->id)
+                    ->exists();
+
+                if (!$exists) {
+                    EventParticipant::create([
+                        'event_id' => $this->event->id,
+                        'user_id' => $invitation->invitedUser->id,
+                        'registration_type' => 'invitation',
+                        'status' => 'confirmed',
+                    ]);
+                    $imported++;
+                } else {
+                    $skipped++;
+                }
+            }
+        }
+
+        // Get users with accepted requests
+        $acceptedRequests = $this->event->requests()
+            ->where('status', 'accepted')
+            ->with('user')
+            ->get();
+
+        foreach ($acceptedRequests as $request) {
+            if ($request->user) {
+                // Check if already added as participant
+                $exists = EventParticipant::where('event_id', $this->event->id)
+                    ->where('user_id', $request->user->id)
+                    ->exists();
+
+                if (!$exists) {
+                    EventParticipant::create([
+                        'event_id' => $this->event->id,
+                        'user_id' => $request->user->id,
+                        'registration_type' => 'request',
+                        'status' => 'confirmed',
+                    ]);
+                    $imported++;
+                } else {
+                    $skipped++;
+                }
+            }
+        }
+
+        $this->loadParticipants();
+
+        if ($imported > 0) {
+            $message = "Importati {$imported} partecipanti!";
+            if ($skipped > 0) {
+                $message .= " ({$skipped} già presenti)";
+            }
+            $this->dispatch('swal:success', ['title' => 'Importazione Completata!', 'text' => $message]);
+        } else {
+            $this->dispatch('swal:warning', ['title' => 'Nessun nuovo partecipante', 'text' => 'Tutti gli utenti iscritti sono già stati aggiunti o non ci sono utenti iscritti.']);
+        }
+    }
+
     private function resetForm()
     {
         $this->reset(['userSearch', 'searchResults', 'selectedUser', 'guest_name', 'guest_email', 'guest_phone', 'guest_bio', 'performance_order', 'notes']);
