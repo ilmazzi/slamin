@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\EventInvitation;
 use App\Models\EventParticipant;
 use App\Services\ActivityService;
+use App\Notifications\EventInvitationNotification;
 
 class EventInvitationObserver
 {
@@ -29,6 +30,11 @@ class EventInvitationObserver
                 ],
                 request()
             );
+        }
+
+        // Send notification to invited user
+        if ($eventInvitation->invitedUser && $eventInvitation->event) {
+            $eventInvitation->invitedUser->notify(new EventInvitationNotification($eventInvitation));
         }
     }
 
