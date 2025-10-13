@@ -6,6 +6,7 @@ use Wirechat\Wirechat\Panel;
 use Wirechat\Wirechat\PanelProvider;
 use Wirechat\Wirechat\Http\Resources\WireChatUserResource;
 use Wirechat\Wirechat\Support\Color;
+use App\Models\User;
 
 class ChatsPanelProvider extends PanelProvider
 {
@@ -14,6 +15,7 @@ class ChatsPanelProvider extends PanelProvider
         return $panel
              ->id('chats')
              ->path('chats')
+             ->userModel(User::class)
              ->middleware(['web','auth'])
              ->default()
              // Enable chat actions
