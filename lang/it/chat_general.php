@@ -311,4 +311,32 @@ return [
     'private' => 'Privato',
     'title' => 'Titolo',
 
+    // New Livewire Chat System
+    'private_chat' => 'Chat Privata',
+    'add_emoji' => 'Aggiungi emoji',
+    'emoji_picker' => 'Selettore Emoji',
+    'search_emojis' => 'Cerca emoji...',
+    'categories' => [
+        'smileys' => 'Faccine',
+        'animals' => 'Animali',
+        'food' => 'Cibo',
+        'activities' => 'Attività',
+        'travel' => 'Viaggi',
+        'objects' => 'Oggetti',
+        'symbols' => 'Simboli',
+        'flags' => 'Bandiere',
+    ],
+    'no_emojis_found' => 'Nessuna emoji trovata',
+    'emoji_picker_footer' => 'Clicca su un\'emoji per inserirla',
+    'search_users' => 'Cerca utenti...',
+    'clear_search' => 'Cancella ricerca',
+    'searching' => 'Ricerca in corso...',
+    'search_results' => 'Risultati ricerca',
+    'start_chat' => 'Avvia Chat',
+    'creating' => 'Creazione...',
+    'no_users_found' => 'Nessun utente trovato',
+    'no_users_found_desc' => 'Prova con un termine di ricerca diverso',
+    'recent_chats' => 'Chat Recenti',
+    'no_recent_chats' => 'Nessuna chat recente',
+
 ];

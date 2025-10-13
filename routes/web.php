@@ -1468,9 +1468,19 @@ Route::post('/test-broadcast', function () {
 
 // ===== ROUTES PER CHAT =====
 Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
+    // Legacy routes (to be replaced by Livewire)
     Route::get('/', [App\Http\Controllers\ChatController::class, 'index'])->name('index');
     Route::get('/search-users', [App\Http\Controllers\ChatController::class, 'searchUsers'])->name('search-users');
     Route::post('/create-private/{userId}', [App\Http\Controllers\ChatController::class, 'createPrivateChat'])->name('create-private');
+    
+    // New Livewire Chat Routes
+    Route::get('/livewire', function () {
+        return view('chat.livewire-index');
+    })->name('livewire.index');
+    
+    Route::get('/room/{roomId}', function ($roomId) {
+        return view('chat.livewire-room', compact('roomId'));
+    })->name('room');
 
     // Chat notifications routes
     Route::prefix('notifications')->name('notifications.')->group(function () {
