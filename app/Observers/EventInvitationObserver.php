@@ -14,6 +14,9 @@ class EventInvitationObserver
      */
     public function created(EventInvitation $eventInvitation): void
     {
+        // Load relationships to ensure they're available
+        $eventInvitation->load(['invitedUser', 'inviter', 'event']);
+
         // Log activity for the inviter
         if ($eventInvitation->inviter) {
             ActivityService::log(
@@ -34,6 +37,13 @@ class EventInvitationObserver
 
         // Send notification to invited user
         if ($eventInvitation->invitedUser && $eventInvitation->event) {
+            \Log::info('Sending invitation notification', [
+                'invitation_id' => $eventInvitation->id,
+                'event_id' => $eventInvitation->event_id,
+                'invited_user_id' => $eventInvitation->invited_user_id,
+                'event_title' => $eventInvitation->event->title,
+            ]);
+            
             $eventInvitation->invitedUser->notify(new EventInvitationNotification($eventInvitation));
         }
     }
