@@ -1,11 +1,13 @@
 <?php
 
 return [
-    'title' => 'Guida e aiuto',
-    'no_content' => 'Nessuna guida disponibile',
-    'no_content_description' => 'Al momento non ci sono guide di aiuto disponibili. Controlla di nuovo più tardi.',
-    'read_more' => 'Leggi tutto',
-    'back' => 'Indietro',
     'last_updated' => 'Ultimo aggiornamento',
+
+
+    'back' => 'Indietro',
+    'no_content' => 'Nessun contenuto',
+    'no_content_description' => 'Nessun contenuto disponibile',
+    'read_more' => 'Leggi di più',
+    'title' => 'Titolo',
 
 ];

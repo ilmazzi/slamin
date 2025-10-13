@@ -115,18 +115,18 @@ class TranslationController extends Controller
             if ($result) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('admin.translation_created_success')
+                    'message' => __('admin_general.translation_created_success')
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => __('admin.translation_created_error')
+                    'message' => __('admin_general.translation_created_error')
                 ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translation_created_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translation_created_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -190,18 +190,18 @@ class TranslationController extends Controller
             if ($result) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('admin.translation_updated_success')
+                    'message' => __('admin_general.translation_updated_success')
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => __('admin.translation_updated_error')
+                    'message' => __('admin_general.translation_updated_error')
                 ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translation_updated_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translation_updated_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -217,18 +217,18 @@ class TranslationController extends Controller
             if ($result) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('admin.translation_deleted_success')
+                    'message' => __('admin_general.translation_deleted_success')
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => __('admin.translation_deleted_error')
+                    'message' => __('admin_general.translation_deleted_error')
                 ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translation_deleted_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translation_deleted_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -261,7 +261,7 @@ class TranslationController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translations_synced_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translations_synced_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -290,18 +290,18 @@ class TranslationController extends Controller
             if ($result) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('admin.translations_synced_to_file_success')
+                    'message' => __('admin_general.translations_synced_to_file_success')
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => __('admin.translations_synced_to_file_error')
+                    'message' => __('admin_general.translations_synced_to_file_error')
                 ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translations_synced_to_file_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translations_synced_to_file_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -368,18 +368,18 @@ class TranslationController extends Controller
             if ($result) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('admin.translation_converted_success')
+                    'message' => __('admin_general.translation_converted_success')
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => __('admin.translation_converted_error')
+                    'message' => __('admin_general.translation_converted_error')
                 ], 500);
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.translation_converted_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.translation_converted_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -394,12 +394,12 @@ class TranslationController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.cache_cleared_success')
+                'message' => __('admin_general.cache_cleared_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.cache_cleared_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.cache_cleared_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }

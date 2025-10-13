@@ -1,20 +1,13 @@
 <?php
 
 return [
-    'title' => 'Lingue conosciute',
-    'add_language' => 'Aggiungi lingua',
     'edit_language' => 'Modifica lingua',
     'update_language' => 'Aggiorna lingua',
-    'add_first_language' => 'Aggiungi la prima lingua',
-    'language' => 'Lingua',
     'language_placeholder' => 'Inserisci il nome della lingua...',
     'language_help' => 'Inizia a digitare per cercare una lingua',
-    'language_code' => 'Codice lingua',
-    'language_code_help' => 'Codice ISO della lingua (es. it per Italiano, en per English)',
     'select_language' => 'Seleziona una lingua',
     'select_language_help' => 'Scegli una lingua dal menu a tendina',
     'competence_type' => 'Tipo di competenza',
-    'level' => 'Livello',
     'native' => 'Madrelingua',
     'spoken' => 'Parlato',
     'written' => 'Scritto',
@@ -22,12 +15,8 @@ return [
     'good' => 'Medio',
     'poor' => 'Scarso',
     'added_successfully' => 'Lingua aggiunta con successo!',
-    'updated_successfully' => 'Lingua aggiornata con successo!',
-    'deleted_successfully' => 'Lingua eliminata con successo!',
     'already_exists' => 'Questa combinazione di lingua e competenza esiste già.',
-    'delete_confirm' => 'Si ha la certezza di voler eliminare questa competenza linguistica?',
     'no_languages' => 'Nessuna lingua aggiunta',
-    'no_languages_description' => 'Aggiungi le lingue che conosci per mostrare le tue competenze linguistiche.',
     'help_title' => 'Guida',
     'native_description' => 'La tua lingua madre o una lingua che parli fluentemente dalla nascita.',
     'spoken_description' => 'La tua capacità di parlare e comprendere questa lingua.',
@@ -40,5 +29,16 @@ return [
     'written_excellent' => 'Scritto ottimo',
     'written_good' => 'Scritto medio',
     'written_poor' => 'Scritto scarso',
+
+
+    'add_first_language' => 'Aggiungi prima lingua',
+    'add_language' => 'Aggiungi lingua',
+    'delete_confirm' => 'Conferma eliminazione',
+    'deleted_successfully' => 'Eliminato con successo',
+    'language' => 'Lingua',
+    'level' => 'Livello',
+    'no_languages_description' => 'Nessuna lingua disponibile',
+    'title' => 'Titolo',
+    'updated_successfully' => 'Aggiornato con successo',
 
 ];

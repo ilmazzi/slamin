@@ -5,49 +5,49 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph-duotone ph-eye me-2"></i>
-                    {{ __('admin.view_translation') }}
+                    {{ __('admin_general.view_translation') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">{{ __('admin.group_name') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.group_name') }}</label>
                         <div class="form-control-plaintext">
                             <code id="viewGroupName" class="text-primary"></code>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">{{ __('admin.locale') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.locale') }}</label>
                         <div class="form-control-plaintext">
                             <span id="viewLocale" class="badge bg-primary"></span>
                         </div>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-bold">{{ __('admin.key_name') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.key_name') }}</label>
                         <div class="form-control-plaintext">
                             <code id="viewKeyName" class="text-secondary"></code>
                         </div>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-bold">{{ __('admin.translation_value') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.translation_value') }}</label>
                         <div class="form-control-plaintext">
                             <div id="viewValue" class="p-3 bg-light rounded border" style="min-height: 100px; white-space: pre-wrap;"></div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">{{ __('admin.created_at') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.created_at') }}</label>
                         <div class="form-control-plaintext">
                             <span id="viewCreatedAt" class="text-muted"></span>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">{{ __('admin.updated_at') }}</label>
+                        <label class="form-label fw-bold">{{ __('admin_general.updated_at') }}</label>
                         <div class="form-control-plaintext">
                             <span id="viewUpdatedAt" class="text-muted"></span>
                         </div>
@@ -56,11 +56,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    {{ __('admin.close') }}
+                    {{ __('admin_general.close') }}
                 </button>
                 <button type="button" class="btn btn-primary" onclick="editFromView()">
                     <i class="ph-duotone ph-pencil me-1"></i>
-                    {{ __('admin.edit') }}
+                    {{ __('admin_general.edit') }}
                 </button>
             </div>
         </div>

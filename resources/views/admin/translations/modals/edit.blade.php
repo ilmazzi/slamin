@@ -5,7 +5,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph-duotone ph-pencil me-2"></i>
-                    {{ __('admin.edit_translation') }}
+                    {{ __('admin_general.edit_translation') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -18,11 +18,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="editGroupName" class="form-label">
-                                {{ __('admin.group_name') }}
+                                {{ __('admin_general.group_name') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <select id="editGroupName" name="group_name" class="form-select" required>
-                                <option value="">{{ __('admin.select_group') }}</option>
+                                <option value="">{{ __('admin_general.select_group') }}</option>
                                 <option value="admin">admin</option>
                                 <option value="common">common</option>
                                 <option value="auth">auth</option>
@@ -36,11 +36,11 @@
 
                         <div class="col-md-6">
                             <label for="editLocale" class="form-label">
-                                {{ __('admin.locale') }}
+                                {{ __('admin_general.locale') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <select id="editLocale" name="locale" class="form-select" required>
-                                <option value="">{{ __('admin.select_locale') }}</option>
+                                <option value="">{{ __('admin_general.select_locale') }}</option>
                                 <option value="it">IT - Italiano</option>
                                 <option value="en">EN - English</option>
                                 <option value="es">ES - Español</option>
@@ -52,31 +52,31 @@
 
                         <div class="col-12">
                             <label for="editKeyName" class="form-label">
-                                {{ __('admin.key_name') }}
+                                {{ __('admin_general.key_name') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <input type="text" id="editKeyName" name="key_name" class="form-control"
-                                   placeholder="{{ __('admin.key_name_placeholder') }}" required>
+                                   placeholder="{{ __('admin_general.key_name_placeholder') }}" required>
                         </div>
 
                         <div class="col-12">
                             <label for="editValue" class="form-label">
-                                {{ __('admin.translation_value') }}
+                                {{ __('admin_general.translation_value') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <textarea id="editValue" name="value" class="form-control"
-                                      rows="4" placeholder="{{ __('admin.translation_value_placeholder') }}" required></textarea>
+                                      rows="4" placeholder="{{ __('admin_general.translation_value_placeholder') }}" required></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    {{ __('admin.cancel') }}
+                    {{ __('admin_general.cancel') }}
                 </button>
                 <button type="button" class="btn btn-primary" onclick="submitEdit()">
                     <i class="ph-duotone ph-check me-1"></i>
-                    {{ __('admin.update') }}
+                    {{ __('admin_general.update') }}
                 </button>
             </div>
         </div>
@@ -100,7 +100,7 @@ function submitEdit() {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: '{{ __('admin.success') }}',
+                title: '{{ __('admin_general.success') }}',
                 text: data.message,
                 timer: 2000,
                 showConfirmButton: false
@@ -110,7 +110,7 @@ function submitEdit() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
+                title: '{{ __('admin_general.error') }}',
                 text: data.message
             });
         }
@@ -118,8 +118,8 @@ function submitEdit() {
     .catch(error => {
         Swal.fire({
             icon: 'error',
-            title: '{{ __('admin.error') }}',
-            text: '{{ __('admin.unknown_error') }}'
+            title: '{{ __('admin_general.error') }}',
+            text: '{{ __('admin_general.unknown_error') }}'
         });
     });
 }

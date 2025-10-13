@@ -23,15 +23,15 @@
                         <div>
                             <h5 class="mb-0">{{ $help->title }}</h5>
                             <small class="text-muted">
-                                {{ $help->type === 'faq' ? __('admin.faq') : __('admin.help') }} •
-                                {{ __('admin.order') }}: {{ $help->order }}
+                                {{ $help->type === 'faq' ? __('admin_general.faq') : __('admin_general.help') }} •
+                                {{ __('admin_general.order') }}: {{ $help->order }}
                             </small>
                         </div>
                         <div>
                             @if($help->is_active)
-                                <span class="badge bg-success">{{ __('admin.active') }}</span>
+                                <span class="badge bg-success">{{ __('admin_general.active') }}</span>
                             @else
-                                <span class="badge bg-secondary">{{ __('admin.inactive') }}</span>
+                                <span class="badge bg-secondary">{{ __('admin_general.inactive') }}</span>
                             @endif
                         </div>
                     </div>
@@ -45,19 +45,19 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <small class="text-muted">
-                                <strong>{{ __('admin.created_at') }}:</strong> {{ $help->created_at->format('d/m/Y H:i') }}<br>
-                                <strong>{{ __('admin.updated_at') }}:</strong> {{ $help->updated_at->format('d/m/Y H:i') }}
+                                <strong>{{ __('admin_general.created_at') }}:</strong> {{ $help->created_at->format('d/m/Y H:i') }}<br>
+                                <strong>{{ __('admin_general.updated_at') }}:</strong> {{ $help->updated_at->format('d/m/Y H:i') }}
                             </small>
                         </div>
                         <div class="col-md-6 text-end">
                             <div class="btn-group" role="group">
                                 <a href="{{ route('admin.help.edit', $help) }}" class="btn btn-primary">
                                     <i class="ph ph-pencil me-2"></i>
-                                    {{ __('admin.edit') }}
+                                    {{ __('admin_general.edit') }}
                                 </a>
                                 <a href="{{ route('admin.help.index', ['type' => $help->type]) }}" class="btn btn-secondary">
                                     <i class="ph ph-arrow-left me-2"></i>
-                                    {{ __('admin.back_to_list') }}
+                                    {{ __('admin_general.back_to_list') }}
                                 </a>
                             </div>
                         </div>

@@ -9,18 +9,18 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-translate text-primary me-2"></i>
-                        {{ __('admin.translation_management') }}
+                        {{ __('admin_general.translation_management') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.translation_management_description') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin_general.translation_management_description') }}</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.translations.create') }}" class="btn btn-primary">
                         <i class="ph-duotone ph-plus me-1"></i>
-                        {{ __('admin.add_language') }}
+                        {{ __('admin_general.add_language') }}
                     </a>
                     <a href="{{ route('admin.translations.hardcoded') }}" class="btn btn-outline-info">
                         <i class="ph-duotone ph-code me-1"></i>
-                        {{ __('admin.hardcoded_texts') }}
+                        {{ __('admin_general.hardcoded_texts') }}
                     </a>
                     <button type="button" class="btn btn-success" onclick="syncAllLanguagesComplete()">
                         <i class="ph-duotone ph-globe me-1"></i>
@@ -28,7 +28,7 @@
                     </button>
                     <button type="button" class="btn btn-outline-warning" onclick="clearCache()">
                         <i class="ph-duotone ph-trash me-1"></i>
-                        {{ __('admin.clear_cache') }}
+                        {{ __('admin_general.clear_cache') }}
                     </button>
                 </div>
             </div>
@@ -44,24 +44,24 @@
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-primary">{{ $languageStats['total_keys'] ?? 0 }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.total_keys') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.total_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-success">{{ $languageStats['total_translated'] ?? 0 }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.translated_keys') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.translated_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-warning">{{ $languageStats['total_missing'] ?? 0 }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.missing_keys') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.missing_keys') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <h4 class="mb-1 text-info">{{ count($languages) }}</h4>
-                            <p class="text-muted mb-0 f-s-14">{{ __('admin.available_languages') }}</p>
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin_general.available_languages') }}</p>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-robot me-2"></i>
-                        {{ __('admin.auto_translation') }}
+                        {{ __('admin_general.auto_translation') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -85,9 +85,9 @@
                             <form id="apiTranslationForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="apiLanguage" class="form-label">{{ __('admin.language') }}</label>
+                                    <label for="apiLanguage" class="form-label">{{ __('admin_general.language') }}</label>
                                     <select class="form-select" id="apiLanguage" name="language" required>
-                                        <option value="">{{ __('admin.select_locale') }}</option>
+                                        <option value="">{{ __('admin_general.select_locale') }}</option>
                                         <option value="en">English</option>
                                         <option value="es">Español</option>
                                         <option value="fr">Français</option>
@@ -96,38 +96,38 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="apiFile" class="form-label">{{ __('admin.translation_files') }}</label>
+                                    <label for="apiFile" class="form-label">{{ __('admin_general.translation_files') }}</label>
                                     <select class="form-select" id="apiFile" name="file" required>
-                                        <option value="">{{ __('admin.select_group') }}</option>
+                                        <option value="">{{ __('admin_general.select_group') }}</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="apiProvider" class="form-label">{{ __('admin.translation_provider') }}</label>
+                                    <label for="apiProvider" class="form-label">{{ __('admin_general.translation_provider') }}</label>
                                     <select class="form-select" id="apiProvider" name="provider" required>
-                                        <option value="">{{ __('admin.select_group') }}</option>
+                                        <option value="">{{ __('admin_general.select_group') }}</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="apiKey" class="form-label">{{ __('admin.translation_api_key') }}</label>
+                                    <label for="apiKey" class="form-label">{{ __('admin_general.translation_api_key') }}</label>
                                     <input type="text" class="form-control" id="apiKey" name="api_key" placeholder="Optional for LibreTranslate">
-                                    <div class="form-text">{{ __('admin.translation_api_key_help') }}</div>
+                                    <div class="form-text">{{ __('admin_general.translation_api_key_help') }}</div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="forceTranslation" name="force">
                                         <label class="form-check-label" for="forceTranslation">
-                                            {{ __('admin.force_translation') }}
+                                            {{ __('admin_general.force_translation') }}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-primary" onclick="testApiConnection()">
                                         <i class="ph-duotone ph-check-circle me-1"></i>
-                                        {{ __('admin.test_connection') }}
+                                        {{ __('admin_general.test_connection') }}
                                     </button>
                                     <button type="submit" class="btn btn-success">
                                         <i class="ph-duotone ph-translate me-1"></i>
-                                        {{ __('admin.translate_page') }}
+                                        {{ __('admin_general.translate_page') }}
                                     </button>
                                 </div>
                             </form>
@@ -138,7 +138,7 @@
                                 <span id="apiStatusText">Ready to translate</span>
                             </div>
                             <div id="apiOutput" class="mt-3" style="display: none;">
-                                <h6>{{ __('admin.translation_output') }}</h6>
+                                <h6>{{ __('admin_general.translation_output') }}</h6>
                                 <pre class="bg-light p-3 rounded" id="apiOutputText"></pre>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-globe me-2"></i>
-                        {{ __('admin.available_languages') }}
+                        {{ __('admin_general.available_languages') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -164,12 +164,12 @@
                             <table class="table table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 20%;">{{ __('admin.language') }}</th>
-                                        <th style="width: 15%;">{{ __('admin.code') }}</th>
-                                        <th style="width: 15%;">{{ __('admin.progress') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.translated') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.missing') }}</th>
-                                        <th style="width: 10%;">{{ __('admin.actions') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.language') }}</th>
+                                        <th style="width: 15%;">{{ __('admin_general.code') }}</th>
+                                        <th style="width: 15%;">{{ __('admin_general.progress') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.translated') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.missing') }}</th>
+                                        <th style="width: 10%;">{{ __('admin_general.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -183,7 +183,7 @@
                                                 <i class="ph-duotone ph-flag me-2 text-primary"></i>
                                                 <strong>{{ ucfirst($language) }}</strong>
                                                 @if($language === 'it')
-                                                    <span class="badge bg-primary ms-2">{{ __('admin.reference') }}</span>
+                                                    <span class="badge bg-primary ms-2">{{ __('admin_general.reference') }}</span>
                                                 @endif
                                             </div>
                                         </td>
@@ -209,17 +209,17 @@
                                             <span class="badge bg-warning">{{ $stats['missing_keys'] }}</span>
                                         </td>
                                         <td>
-                                            <div class="btn-group btn-group-sm" role="group">
-                                                <a href="{{ route('admin.translations.show', $language) }}"
-                                                   class="btn btn-outline-primary"
-                                                   title="{{ __('admin.manage') }}">
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ route('admin.translations.smart', $language) }}"
+                                                   class="btn btn-sm btn-primary"
+                                                   title="Gestisci Traduzioni">
                                                     <i class="ph-duotone ph-pencil f-s-14"></i>
                                                 </a>
                                                 @if($language !== 'it')
                                                     <button type="button"
                                                             class="btn btn-outline-danger"
                                                             onclick="deleteLanguage('{{ $language }}')"
-                                                            title="{{ __('admin.delete') }}">
+                                                            title="{{ __('admin_general.delete') }}">
                                                         <i class="ph-duotone ph-trash f-s-14"></i>
                                                     </button>
                                                 @endif
@@ -233,11 +233,11 @@
                     @else
                         <div class="text-center py-5">
                             <i class="ph-duotone ph-translate f-s-48 text-muted mb-3"></i>
-                            <h5 class="text-muted">{{ __('admin.no_languages_found') }}</h5>
-                            <p class="text-muted">{{ __('admin.no_languages_description') }}</p>
+                            <h5 class="text-muted">{{ __('admin_general.no_languages_found') }}</h5>
+                            <p class="text-muted">{{ __('admin_general.no_languages_description') }}</p>
                             <a href="{{ route('admin.translations.create') }}" class="btn btn-primary">
                                 <i class="ph-duotone ph-plus me-1"></i>
-                                {{ __('admin.add_first_language') }}
+                                {{ __('admin_general.add_first_language') }}
                             </a>
                         </div>
                     @endif
@@ -253,14 +253,14 @@
 <script>
 function deleteLanguage(language) {
     Swal.fire({
-        title: '{{ __('admin.confirm_delete') }}',
-        text: '{{ __('admin.delete_language_confirm') }}: ' + language.toUpperCase(),
+        title: '{{ __('admin_general.confirm_delete') }}',
+        text: '{{ __('admin_general.delete_language_confirm') }}: ' + language.toUpperCase(),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: '{{ __('admin.delete') }}',
-        cancelButtonText: '{{ __('admin.cancel') }}'
+        confirmButtonText: '{{ __('admin_general.delete') }}',
+        cancelButtonText: '{{ __('admin_general.cancel') }}'
     }).then((result) => {
         if (result.isConfirmed) {
             fetch(`{{ route('admin.translations.destroy', 'LANGUAGE_PLACEHOLDER') }}`.replace('LANGUAGE_PLACEHOLDER', language), {
@@ -286,7 +286,7 @@ function deleteLanguage(language) {
                 if (data.success) {
                     Swal.fire({
                         icon: 'success',
-                        title: '{{ __('admin.success') }}',
+                        title: '{{ __('admin_general.success') }}',
                         text: data.message,
                         timer: 2000,
                         showConfirmButton: false
@@ -296,7 +296,7 @@ function deleteLanguage(language) {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: '{{ __('admin.error') }}',
+                        title: '{{ __('admin_general.error') }}',
                         text: data.message
                     });
                 }
@@ -304,8 +304,8 @@ function deleteLanguage(language) {
             .catch(error => {
                 Swal.fire({
                     icon: 'error',
-                    title: '{{ __('admin.error') }}',
-                    text: '{{ __('admin.unknown_error') }}'
+                    title: '{{ __('admin_general.error') }}',
+                    text: '{{ __('admin_general.unknown_error') }}'
                 });
             });
         }
@@ -379,7 +379,7 @@ function syncAllLanguagesComplete() {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: '{{ __('admin.error') }}',
+                        title: '{{ __('admin_general.error') }}',
                         text: data.message
                     });
                 }
@@ -387,8 +387,8 @@ function syncAllLanguagesComplete() {
             .catch(error => {
                 Swal.fire({
                     icon: 'error',
-                    title: '{{ __('admin.error') }}',
-                    text: '{{ __('admin.unknown_error') }}'
+                    title: '{{ __('admin_general.error') }}',
+                    text: '{{ __('admin_general.unknown_error') }}'
                 });
             });
         }
@@ -396,7 +396,7 @@ function syncAllLanguagesComplete() {
 }
 
 function clearCache() {
-    if (confirm('{{ __('admin.clear_cache_confirm') }}')) {
+    if (confirm('{{ __('admin_general.clear_cache_confirm') }}')) {
         fetch('{{ route("admin.translations.clear-cache") }}', {
             method: 'POST',
             headers: {
@@ -420,7 +420,7 @@ function clearCache() {
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: '{{ __('admin.success') }}',
+                    title: '{{ __('admin_general.success') }}',
                     text: data.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -428,7 +428,7 @@ function clearCache() {
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: '{{ __('admin.error') }}',
+                    title: '{{ __('admin_general.error') }}',
                     text: data.message
                 });
             }
@@ -436,8 +436,8 @@ function clearCache() {
         .catch(error => {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
-                text: '{{ __('admin.unknown_error') }}'
+                title: '{{ __('admin_general.error') }}',
+                text: '{{ __('admin_general.unknown_error') }}'
             });
         });
     }
@@ -470,7 +470,7 @@ function loadProviders() {
         .then(data => {
             providers = data.providers;
             const select = document.getElementById('apiProvider');
-            select.innerHTML = '<option value="">{{ __('admin.select_group') }}</option>';
+            select.innerHTML = '<option value="">{{ __('admin_general.select_group') }}</option>';
 
             Object.keys(providers).forEach(key => {
                 const option = document.createElement('option');
@@ -502,7 +502,7 @@ function loadFiles() {
         .then(data => {
             files = data.files;
             const select = document.getElementById('apiFile');
-            select.innerHTML = '<option value="">{{ __('admin.select_group') }}</option>';
+            select.innerHTML = '<option value="">{{ __('admin_general.select_group') }}</option>';
 
             files.forEach(file => {
                 const option = document.createElement('option');

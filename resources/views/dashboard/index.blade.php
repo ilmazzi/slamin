@@ -38,6 +38,58 @@
         background-color: #ff6b6b !important;
         border-color: #ff5252 !important;
     }
+    
+    /* Quick Actions Card Styling */
+    .quick-action-card {
+        transition: all 0.3s ease;
+        background: white !important;
+        border: 2px solid #e9ecef !important;
+        border-radius: 12px !important;
+    }
+    
+    .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+        border-color: #dee2e6 !important;
+    }
+    
+    .quick-action-card .card-body {
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1.5rem !important;
+    }
+    
+    .quick-action-card h6 {
+        color: #212529 !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .quick-action-card small {
+        color: #6c757d !important;
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+        .quick-action-card .card-body {
+            min-height: 140px;
+            padding: 1.25rem !important;
+        }
+        
+        .quick-action-card h6 {
+            font-size: 14px !important;
+        }
+        
+        .quick-action-card small {
+            font-size: 12px !important;
+        }
+    }
 </style>
 @endsection
 
@@ -258,13 +310,13 @@
             <!-- Quick Actions dinamiche dal controller -->
             @foreach($quickActions as $action)
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="{{ $action['url'] }}" class="card hover-effect h-100 text-decoration-none">
-                        <div class="card-body text-center pa-15">
-                            <div class="bg-light-{{ $action['color'] }} h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                <i class="{{ $action['icon'] }} text-{{ $action['color'] }} f-s-18"></i>
+                    <a href="{{ $action['url'] }}" class="card quick-action-card h-100 text-decoration-none">
+                        <div class="card-body text-center">
+                            <div class="bg-light-{{ $action['color'] }} h-60 w-60 d-flex-center rounded-circle m-auto mb-3">
+                                <i class="{{ $action['icon'] }} text-{{ $action['color'] }}" style="font-size: 28px;"></i>
                             </div>
-                            <h6 class="mb-1 fw-bold text-dark f-s-13">{{ __('dashboard.' . $action['key']) }}</h6>
-                            <small class="text-muted f-s-11">{{ __('dashboard.' . $action['key'] . '_desc') }}</small>
+                            <h6>{{ __('dashboard.' . $action['key']) }}</h6>
+                            <small>{{ __('dashboard.' . $action['key'] . '_desc') }}</small>
                         </div>
                     </a>
                 </div>

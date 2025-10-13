@@ -22,7 +22,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph ph-navigation-arrow me-2"></i>
-                        {{ __('admin.quick_navigation') }}
+                        {{ __('admin_general.quick_navigation') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -49,8 +49,8 @@
                             <a href="{{ route('admin.carousels.index') }}" class="card card-light-info hover-effect text-decoration-none">
                                 <div class="card-body text-center py-3">
                                     <i class="ph-duotone ph-squares-four f-s-30 text-info mb-2"></i>
-                                    <h6 class="mb-1">{{ __('admin.carousel_management') }}</h6>
-                                    <small class="text-muted">{{ __('admin.manage_carousel') }}</small>
+                                    <h6 class="mb-1">{{ __('admin_general.carousel_management') }}</h6>
+                                    <small class="text-muted">{{ __('admin_general.manage_carousel') }}</small>
                                 </div>
                             </a>
                         </div>

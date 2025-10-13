@@ -9,18 +9,18 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-list-bullets text-primary me-2"></i>
-                        {{ __('admin.translation_queue') }}
+                        {{ __('admin_general.translation_queue') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.translation_queue_description') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin_general.translation_queue_description') }}</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
                         <i class="ph-duotone ph-arrow-left me-1"></i>
-                        {{ __('admin.back_to_translations') }}
+                        {{ __('admin_general.back_to_translations') }}
                     </a>
                     <button type="button" class="btn btn-outline-warning" onclick="cleanProcessed()">
                         <i class="ph-duotone ph-trash me-1"></i>
-                        {{ __('admin.clean_processed') }}
+                        {{ __('admin_general.clean_processed') }}
                     </button>
                 </div>
             </div>
@@ -36,24 +36,24 @@
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-primary">{{ $stats['total'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.total_items') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.total_items') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-warning">{{ $stats['pending'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.pending_items') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.pending_items') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-success">{{ $stats['processed'] }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.processed_items') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.processed_items') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <h4 class="mb-1 text-info">{{ $stats['recent'] }}</h4>
-                            <p class="text-muted mb-0 f-s-14">{{ __('admin.recent_items') }}</p>
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin_general.recent_items') }}</p>
                         </div>
                     </div>
                 </div>
@@ -69,29 +69,29 @@
                     <form method="GET" action="{{ route('admin.translations.queue') }}" id="filterForm">
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <label for="status" class="form-label f-s-14">{{ __('admin.status') }}</label>
+                                <label for="status" class="form-label f-s-14">{{ __('admin_general.status') }}</label>
                                 <select name="status" id="status" class="form-select form-select-sm">
-                                    <option value="">{{ __('admin.all_statuses') }}</option>
+                                    <option value="">{{ __('admin_general.all_statuses') }}</option>
                                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
-                                        {{ __('admin.pending') }}
+                                        {{ __('admin_general.pending') }}
                                     </option>
                                     <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>
-                                        {{ __('admin.processed') }}
+                                        {{ __('admin_general.processed') }}
                                     </option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label for="context" class="form-label f-s-14">{{ __('admin.context') }}</label>
+                                <label for="context" class="form-label f-s-14">{{ __('admin_general.context') }}</label>
                                 <input type="text" name="context" id="context" class="form-control form-control-sm"
-                                       placeholder="{{ __('admin.search_by_context') }}"
+                                       placeholder="{{ __('admin_general.search_by_context') }}"
                                        value="{{ request('context') }}">
                             </div>
                             <div class="col-md-4">
-                                <label for="search" class="form-label f-s-14">{{ __('admin.search') }}</label>
+                                <label for="search" class="form-label f-s-14">{{ __('admin_general.search') }}</label>
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text"><i class="ph-duotone ph-magnifying-glass f-s-12"></i></span>
                                     <input type="text" name="search" id="search" class="form-control"
-                                           placeholder="{{ __('admin.search_in_texts') }}"
+                                           placeholder="{{ __('admin_general.search_in_texts') }}"
                                            value="{{ request('search') }}">
                                 </div>
                             </div>
@@ -100,11 +100,11 @@
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-primary btn-sm">
                                         <i class="ph-duotone ph-magnifying-glass me-1"></i>
-                                        {{ __('admin.filter') }}
+                                        {{ __('admin_general.filter') }}
                                     </button>
                                     <a href="{{ route('admin.translations.queue') }}" class="btn btn-outline-secondary btn-sm">
                                         <i class="ph-duotone ph-arrow-clockwise me-1"></i>
-                                        {{ __('admin.reset') }}
+                                        {{ __('admin_general.reset') }}
                                     </a>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-list-bullets me-2"></i>
-                        {{ __('admin.queue_items') }}
+                        {{ __('admin_general.queue_items') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -131,12 +131,12 @@
                             <table class="table table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 5%;">{{ __('admin.status') }}</th>
-                                        <th style="width: 40%;">{{ __('admin.original_text') }}</th>
-                                        <th style="width: 15%;">{{ __('admin.context') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.file_location') }}</th>
-                                        <th style="width: 10%;">{{ __('admin.created_at') }}</th>
-                                        <th style="width: 10%;">{{ __('admin.actions') }}</th>
+                                        <th style="width: 5%;">{{ __('admin_general.status') }}</th>
+                                        <th style="width: 40%;">{{ __('admin_general.original_text') }}</th>
+                                        <th style="width: 15%;">{{ __('admin_general.context') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.file_location') }}</th>
+                                        <th style="width: 10%;">{{ __('admin_general.created_at') }}</th>
+                                        <th style="width: 10%;">{{ __('admin_general.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -145,10 +145,10 @@
                                         <td class="text-center">
                                             @if($item->isProcessed())
                                                 <i class="ph-duotone ph-check-circle text-success f-s-16"
-                                                   title="{{ __('admin.processed') }}"></i>
+                                                   title="{{ __('admin_general.processed') }}"></i>
                                             @else
                                                 <i class="ph-duotone ph-clock text-warning f-s-16"
-                                                   title="{{ __('admin.pending') }}"></i>
+                                                   title="{{ __('admin_general.pending') }}"></i>
                                             @endif
                                         </td>
                                         <td>
@@ -177,17 +177,17 @@
                                                 <div class="btn-group btn-group-sm" role="group">
                                                     <button type="button" class="btn btn-outline-primary"
                                                             onclick="convertToTranslation({{ $item->id }})"
-                                                            title="{{ __('admin.convert_to_translation') }}">
+                                                            title="{{ __('admin_general.convert_to_translation') }}">
                                                         <i class="ph-duotone ph-arrow-right f-s-14"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-outline-success"
                                                             onclick="markAsProcessed({{ $item->id }})"
-                                                            title="{{ __('admin.mark_as_processed') }}">
+                                                            title="{{ __('admin_general.mark_as_processed') }}">
                                                         <i class="ph-duotone ph-check f-s-14"></i>
                                                     </button>
                                                 </div>
                                             @else
-                                                <span class="text-muted f-s-12">{{ __('admin.processed') }}</span>
+                                                <span class="text-muted f-s-12">{{ __('admin_general.processed') }}</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -199,8 +199,8 @@
                         <!-- Paginazione -->
                         <div class="d-flex justify-content-between align-items-center p-3 border-top">
                             <div class="text-muted f-s-14">
-                                {{ __('admin.showing') }} {{ $queue->firstItem() }} {{ __('admin.to') }} {{ $queue->lastItem() }}
-                                {{ __('admin.of') }} {{ $queue->total() }} {{ __('admin.results') }}
+                                {{ __('admin_general.showing') }} {{ $queue->firstItem() }} {{ __('admin_general.to') }} {{ $queue->lastItem() }}
+                                {{ __('admin_general.of') }} {{ $queue->total() }} {{ __('admin_general.results') }}
                             </div>
                             <div>
                                 {{ $queue->appends(request()->query())->links() }}
@@ -209,8 +209,8 @@
                     @else
                         <div class="text-center py-5">
                             <i class="ph-duotone ph-list-bullets f-s-48 text-muted mb-3"></i>
-                            <h5 class="text-muted">{{ __('admin.no_queue_items') }}</h5>
-                            <p class="text-muted">{{ __('admin.no_queue_items_description') }}</p>
+                            <h5 class="text-muted">{{ __('admin_general.no_queue_items') }}</h5>
+                            <p class="text-muted">{{ __('admin_general.no_queue_items_description') }}</p>
                         </div>
                     @endif
                 </div>
@@ -235,7 +235,7 @@ function convertToTranslation(id) {
 }
 
 function markAsProcessed(id) {
-    if (confirm('{{ __('admin.mark_as_processed_confirm') }}')) {
+    if (confirm('{{ __('admin_general.mark_as_processed_confirm') }}')) {
         fetch('{{ route("admin.translations.mark-processed") }}', {
             method: 'POST',
             headers: {
@@ -249,7 +249,7 @@ function markAsProcessed(id) {
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: '{{ __('admin.success') }}',
+                    title: '{{ __('admin_general.success') }}',
                     text: data.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -259,7 +259,7 @@ function markAsProcessed(id) {
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: '{{ __('admin.error') }}',
+                    title: '{{ __('admin_general.error') }}',
                     text: data.message
                 });
             }
@@ -267,15 +267,15 @@ function markAsProcessed(id) {
         .catch(error => {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
-                text: '{{ __('admin.unknown_error') }}'
+                title: '{{ __('admin_general.error') }}',
+                text: '{{ __('admin_general.unknown_error') }}'
             });
         });
     }
 }
 
 function cleanProcessed() {
-    if (confirm('{{ __('admin.clean_processed_confirm') }}')) {
+    if (confirm('{{ __('admin_general.clean_processed_confirm') }}')) {
         fetch('{{ route("admin.translations.clean-processed") }}', {
             method: 'POST',
             headers: {
@@ -288,7 +288,7 @@ function cleanProcessed() {
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: '{{ __('admin.success') }}',
+                    title: '{{ __('admin_general.success') }}',
                     text: data.message,
                     timer: 2000,
                     showConfirmButton: false
@@ -298,7 +298,7 @@ function cleanProcessed() {
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: '{{ __('admin.error') }}',
+                    title: '{{ __('admin_general.error') }}',
                     text: data.message
                 });
             }
@@ -306,8 +306,8 @@ function cleanProcessed() {
         .catch(error => {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
-                text: '{{ __('admin.unknown_error') }}'
+                title: '{{ __('admin_general.error') }}',
+                text: '{{ __('admin_general.unknown_error') }}'
             });
         });
     }

@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', __('events.edit_event'))
+@section('title', __('events_general.edit_event'))
 
 @section('css')
 <!-- Leaflet CSS is loaded by EventMap component -->

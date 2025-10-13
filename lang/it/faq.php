@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'title' => 'Domande frequenti',
-    'no_content' => 'Nessuna domanda frequente disponibile',
-    'no_content_description' => 'Al momento non ci sono domande frequenti disponibili. Controlla di nuovo più tardi.',
+
+
+    'no_content' => 'Nessun contenuto',
+    'no_content_description' => 'Nessun contenuto disponibile',
+    'title' => 'Titolo',
 
 ];

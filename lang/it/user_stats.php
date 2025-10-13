@@ -1,19 +1,10 @@
 <?php
 
 return [
-    'title' => 'Statistiche personali',
-    'subtitle' => 'Analisi dettagliata delle attività di :name',
     '1_month' => '1 mese',
     '3_months' => '3 mesi',
     '12_months' => '12 mesi',
-    'all_time' => 'Sempre',
     'content_statistics' => 'Statistiche contenuti',
-    'poems' => 'Poesie',
-    'videos' => 'Video',
-    'articles' => 'Articoli',
-    'published' => 'Pubblicati',
-    'drafts' => 'Bozze',
-    'private' => 'Privati',
     'total_views' => 'Visualizzazioni totali',
     'engagement_statistics' => 'Statistiche engagement',
     'likes_received' => 'Like ricevuti',
@@ -32,14 +23,12 @@ return [
     'unique_venues' => 'Luoghi unici',
     'unique_cities' => 'Città uniche',
     'top_locations' => 'Luoghi più visitati',
-    'events' => 'Eventi',
     'no_locations' => 'Nessun luogo visitato',
     'group_statistics' => 'Statistiche gruppi',
     'members' => 'Membri',
     'this_period' => 'Questo periodo',
     'role_admin' => 'Amministratrice/Amministratore',
     'role_moderator' => 'Moderatrice/Moderatore',
-    'role_member' => 'Membro',
     'performance_statistics' => 'Statistiche performance',
     'slam_wins' => 'Vittorie Poetry slam',
     'second_places' => 'Secondi posti',
@@ -50,5 +39,16 @@ return [
     'content_creation' => 'Creazione contenuti',
     'engagement_over_time' => 'Engagement nel tempo',
     'event_participation' => 'Partecipazione eventi',
+
+
+    'all_time' => 'Tutti i tempi',
+    'articles' => 'Articoli',
+    'drafts' => 'Bozze',
+    'events_general' => 'Eventi',
+    'poems' => 'Poesie',
+    'private' => 'Privato',
+    'published' => 'Pubblicato',
+    'title' => 'Titolo',
+    'videos' => 'Video',
 
 ];

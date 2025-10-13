@@ -9,18 +9,18 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-code text-primary me-2"></i>
-                        {{ __('admin.hardcoded_texts') }}
+                        {{ __('admin_general.hardcoded_texts') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.hardcoded_texts_description') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin_general.hardcoded_texts_description') }}</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
                         <i class="ph-duotone ph-arrow-left me-1"></i>
-                        {{ __('admin.back_to_translations') }}
+                        {{ __('admin_general.back_to_translations') }}
                     </a>
                     <button type="button" class="btn btn-outline-info" onclick="refreshHardcodedTexts()">
                         <i class="ph-duotone ph-arrow-clockwise me-1"></i>
-                        {{ __('admin.refresh_scan') }}
+                        {{ __('admin_general.refresh_scan') }}
                     </button>
                 </div>
             </div>
@@ -36,24 +36,24 @@
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-warning">{{ count($hardcodedTexts) }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.hardcoded_found') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.hardcoded_found') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-info">{{ count(array_unique(array_column($hardcodedTexts, 'file'))) }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.files_affected') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.files_affected') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="border-end">
                                 <h4 class="mb-1 text-success">{{ count($languages) }}</h4>
-                                <p class="text-muted mb-0 f-s-14">{{ __('admin.available_languages') }}</p>
+                                <p class="text-muted mb-0 f-s-14">{{ __('admin_general.available_languages') }}</p>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <h4 class="mb-1 text-primary">{{ __('admin.ready_to_convert') }}</h4>
-                            <p class="text-muted mb-0 f-s-14">{{ __('admin.convert_to_keys') }}</p>
+                            <h4 class="mb-1 text-primary">{{ __('admin_general.ready_to_convert') }}</h4>
+                            <p class="text-muted mb-0 f-s-14">{{ __('admin_general.convert_to_keys') }}</p>
                         </div>
                     </div>
                 </div>
@@ -68,29 +68,29 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label for="fileFilter" class="form-label f-s-14">{{ __('admin.filter_by_file') }}</label>
+                            <label for="fileFilter" class="form-label f-s-14">{{ __('admin_general.filter_by_file') }}</label>
                             <select name="file" id="fileFilter" class="form-select form-select-sm" onchange="filterByFile()">
-                                <option value="">{{ __('admin.all_files') }}</option>
+                                <option value="">{{ __('admin_general.all_files') }}</option>
                                 @foreach(array_unique(array_column($hardcodedTexts, 'file')) as $file)
                                     <option value="{{ $file }}">{{ $file }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="searchText" class="form-label f-s-14">{{ __('admin.search_text') }}</label>
+                            <label for="searchText" class="form-label f-s-14">{{ __('admin_general.search_text') }}</label>
                             <input type="text" id="searchText" class="form-control form-control-sm"
-                                   placeholder="{{ __('admin.search_placeholder') }}" onkeyup="filterByText()">
+                                   placeholder="{{ __('admin_general.search_placeholder') }}" onkeyup="filterByText()">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label f-s-14">{{ __('admin.actions') }}</label>
+                            <label class="form-label f-s-14">{{ __('admin_general.actions') }}</label>
                             <div class="d-flex gap-2">
                                 <button type="button" class="btn btn-primary btn-sm" onclick="convertAllVisible()">
                                     <i class="ph-duotone ph-check-circle me-1"></i>
-                                    {{ __('admin.convert_all_visible') }}
+                                    {{ __('admin_general.convert_all_visible') }}
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearFilters()">
                                     <i class="ph-duotone ph-x me-1"></i>
-                                    {{ __('admin.clear_filters') }}
+                                    {{ __('admin_general.clear_filters') }}
                                 </button>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-list-bullets me-2"></i>
-                        {{ __('admin.hardcoded_texts_list') }}
+                        {{ __('admin_general.hardcoded_texts_list') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -119,11 +119,11 @@
                                         <th style="width: 5%;">
                                             <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
                                         </th>
-                                        <th style="width: 35%;">{{ __('admin.text') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.file') }}</th>
-                                        <th style="width: 10%;">{{ __('admin.line') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.suggested_key') }}</th>
-                                        <th style="width: 10%;">{{ __('admin.actions') }}</th>
+                                        <th style="width: 35%;">{{ __('admin_general.text') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.file') }}</th>
+                                        <th style="width: 10%;">{{ __('admin_general.line') }}</th>
+                                        <th style="width: 20%;">{{ __('admin_general.suggested_key') }}</th>
+                                        <th style="width: 10%;">{{ __('admin_general.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -150,12 +150,12 @@
                                             <div class="btn-group btn-group-sm" role="group">
                                                 <button type="button" class="btn btn-outline-primary"
                                                         onclick="convertSingle({{ $index }})"
-                                                        title="{{ __('admin.convert') }}">
+                                                        title="{{ __('admin_general.convert') }}">
                                                     <i class="ph-duotone ph-arrow-right f-s-14"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-outline-info"
                                                         onclick="previewText({{ $index }})"
-                                                        title="{{ __('admin.preview') }}">
+                                                        title="{{ __('admin_general.preview') }}">
                                                     <i class="ph-duotone ph-eye f-s-14"></i>
                                                 </button>
                                             </div>
@@ -168,8 +168,8 @@
                     @else
                         <div class="text-center py-5">
                             <i class="ph-duotone ph-check-circle f-s-48 text-success mb-3"></i>
-                            <h5 class="text-success">{{ __('admin.no_hardcoded_found') }}</h5>
-                            <p class="text-muted">{{ __('admin.no_hardcoded_description') }}</p>
+                            <h5 class="text-success">{{ __('admin_general.no_hardcoded_found') }}</h5>
+                            <p class="text-muted">{{ __('admin_general.no_hardcoded_description') }}</p>
                         </div>
                     @endif
                 </div>
@@ -185,23 +185,23 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="convertModalLabel">
                     <i class="ph-duotone ph-arrow-right text-primary me-2"></i>
-                    {{ __('admin.convert_to_translation') }}
+                    {{ __('admin_general.convert_to_translation') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="convertForm">
                     <div class="mb-3">
-                        <label class="form-label f-s-14">{{ __('admin.original_text') }}</label>
+                        <label class="form-label f-s-14">{{ __('admin_general.original_text') }}</label>
                         <div class="form-control-plaintext bg-light p-2 rounded" id="originalText"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="translationKey" class="form-label f-s-14">{{ __('admin.translation_key') }}</label>
+                        <label for="translationKey" class="form-label f-s-14">{{ __('admin_general.translation_key') }}</label>
                         <input type="text" class="form-control" id="translationKey" required>
-                        <div class="form-text">{{ __('admin.key_help') }}</div>
+                        <div class="form-text">{{ __('admin_general.key_help') }}</div>
                     </div>
                     <div class="mb-3">
-                        <label for="translationFile" class="form-label f-s-14">{{ __('admin.translation_file') }}</label>
+                        <label for="translationFile" class="form-label f-s-14">{{ __('admin_general.translation_file') }}</label>
                         <select class="form-select" id="translationFile" required>
                             @foreach($languages as $language)
                                 <optgroup label="{{ strtoupper($language) }}">
@@ -213,18 +213,18 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="translationValue" class="form-label f-s-14">{{ __('admin.translation_value') }}</label>
+                        <label for="translationValue" class="form-label f-s-14">{{ __('admin_general.translation_value') }}</label>
                         <textarea class="form-control" id="translationValue" rows="3" required></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    {{ __('admin.cancel') }}
+                    {{ __('admin_general.cancel') }}
                 </button>
                 <button type="button" class="btn btn-primary" onclick="confirmConvert()">
                     <i class="ph-duotone ph-check me-1"></i>
-                    {{ __('admin.convert') }}
+                    {{ __('admin_general.convert') }}
                 </button>
             </div>
         </div>
@@ -317,7 +317,7 @@ function confirmConvert() {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: '{{ __('admin.success') }}',
+                title: '{{ __('admin_general.success') }}',
                 text: data.message,
                 timer: 2000,
                 showConfirmButton: false
@@ -327,7 +327,7 @@ function confirmConvert() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
+                title: '{{ __('admin_general.error') }}',
                 text: data.message
             });
         }
@@ -335,8 +335,8 @@ function confirmConvert() {
     .catch(error => {
         Swal.fire({
             icon: 'error',
-            title: '{{ __('admin.error') }}',
-            text: '{{ __('admin.unknown_error') }}'
+            title: '{{ __('admin_general.error') }}',
+            text: '{{ __('admin_general.unknown_error') }}'
         });
     });
 }
@@ -346,8 +346,8 @@ function convertAllVisible() {
     if (checkedBoxes.length === 0) {
         Swal.fire({
             icon: 'warning',
-            title: '{{ __('admin.no_selection') }}',
-            text: '{{ __('admin.select_texts_to_convert') }}'
+            title: '{{ __('admin_general.no_selection') }}',
+            text: '{{ __('admin_general.select_texts_to_convert') }}'
         });
         return;
     }
@@ -355,26 +355,26 @@ function convertAllVisible() {
     // Implementa la conversione di massa
     Swal.fire({
         icon: 'info',
-        title: '{{ __('admin.bulk_convert') }}',
-        text: '{{ __('admin.bulk_convert_description') }}'
+        title: '{{ __('admin_general.bulk_convert') }}',
+        text: '{{ __('admin_general.bulk_convert_description') }}'
     });
 }
 
 function previewText(index) {
     const item = hardcodedTexts[index];
     Swal.fire({
-        title: '{{ __('admin.text_preview') }}',
+        title: '{{ __('admin_general.text_preview') }}',
         html: `
             <div class="text-start">
-                <p><strong>{{ __('admin.text') }}:</strong> "${item.text}"</p>
-                <p><strong>{{ __('admin.file') }}:</strong> <code>${item.file}</code></p>
-                <p><strong>{{ __('admin.line') }}:</strong> <span class="badge bg-secondary">${item.line}</span></p>
-                <p><strong>{{ __('admin.suggested_key') }}:</strong> <code>${item.suggested_key}</code></p>
+                <p><strong>{{ __('admin_general.text') }}:</strong> "${item.text}"</p>
+                <p><strong>{{ __('admin_general.file') }}:</strong> <code>${item.file}</code></p>
+                <p><strong>{{ __('admin_general.line') }}:</strong> <span class="badge bg-secondary">${item.line}</span></p>
+                <p><strong>{{ __('admin_general.suggested_key') }}:</strong> <code>${item.suggested_key}</code></p>
             </div>
         `,
         showCancelButton: true,
-        confirmButtonText: '{{ __('admin.convert') }}',
-        cancelButtonText: '{{ __('admin.close') }}'
+        confirmButtonText: '{{ __('admin_general.convert') }}',
+        cancelButtonText: '{{ __('admin_general.close') }}'
     }).then((result) => {
         if (result.isConfirmed) {
             convertSingle(index);
@@ -384,8 +384,8 @@ function previewText(index) {
 
 function refreshHardcodedTexts() {
     Swal.fire({
-        title: '{{ __('admin.refreshing') }}',
-        text: '{{ __('admin.scanning_files') }}',
+        title: '{{ __('admin_general.refreshing') }}',
+        text: '{{ __('admin_general.scanning_files') }}',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();

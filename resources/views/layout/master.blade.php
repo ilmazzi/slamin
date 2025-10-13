@@ -69,7 +69,7 @@
             <a href="{{ route('chat.index') }}" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
                data-chat-badge-container
                style="width: 60px; height: 60px; transition: all 0.3s ease;"
-               title="{{ __('chat.title') }}">
+               title="{{ __('chat_general.title') }}">
                 <i class="ph-duotone ph-chat f-s-24"></i>
                 @if(auth()->user()->unreadChatNotifications()->count() > 0)
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger chat-notification-badge"

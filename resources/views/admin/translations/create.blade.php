@@ -9,14 +9,14 @@
                 <div>
                     <h1 class="h3 mb-1">
                         <i class="ph-duotone ph-plus text-primary me-2"></i>
-                        {{ __('admin.add_language') }}
+                        {{ __('admin_general.add_language') }}
                     </h1>
-                    <p class="text-muted mb-0">{{ __('admin.add_language_description') }}</p>
+                    <p class="text-muted mb-0">{{ __('admin_general.add_language_description') }}</p>
                 </div>
                 <div>
                     <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
                         <i class="ph-duotone ph-arrow-left me-1"></i>
-                        {{ __('admin.back_to_languages') }}
+                        {{ __('admin_general.back_to_languages') }}
                     </a>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="ph-duotone ph-globe me-2"></i>
-                        {{ __('admin.language_details') }}
+                        {{ __('admin_general.language_details') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -40,7 +40,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="language_code" class="form-label f-s-14">
-                                    {{ __('admin.language_code') }} <span class="text-danger">*</span>
+                                    {{ __('admin_general.language_code') }} <span class="text-danger">*</span>
                                 </label>
                                 <input type="text"
                                        class="form-control @error('language_code') is-invalid @enderror"
@@ -53,12 +53,12 @@
                                 @error('language_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div class="form-text">{{ __('admin.language_code_help') }}</div>
+                                <div class="form-text">{{ __('admin_general.language_code_help') }}</div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="language_name" class="form-label f-s-14">
-                                    {{ __('admin.language_name') }} <span class="text-danger">*</span>
+                                    {{ __('admin_general.language_name') }} <span class="text-danger">*</span>
                                 </label>
                                 <input type="text"
                                        class="form-control @error('language_name') is-invalid @enderror"
@@ -71,7 +71,7 @@
                                 @error('language_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div class="form-text">{{ __('admin.language_name_help') }}</div>
+                                <div class="form-text">{{ __('admin_general.language_name_help') }}</div>
                             </div>
                         </div>
 
@@ -80,12 +80,12 @@
                             <div class="d-flex">
                                 <i class="ph-duotone ph-info me-3 f-s-20 text-info"></i>
                                 <div>
-                                    <h6 class="alert-heading mb-2">{{ __('admin.what_happens_next') }}</h6>
+                                    <h6 class="alert-heading mb-2">{{ __('admin_general.what_happens_next') }}</h6>
                                     <ul class="mb-0 f-s-14">
-                                        <li>{{ __('admin.language_creation_step1') }}</li>
-                                        <li>{{ __('admin.language_creation_step2') }}</li>
-                                        <li>{{ __('admin.language_creation_step3') }}</li>
-                                        <li>{{ __('admin.language_creation_step4') }}</li>
+                                        <li>{{ __('admin_general.language_creation_step1') }}</li>
+                                        <li>{{ __('admin_general.language_creation_step2') }}</li>
+                                        <li>{{ __('admin_general.language_creation_step3') }}</li>
+                                        <li>{{ __('admin_general.language_creation_step4') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
 
                         <!-- Available Languages -->
                         <div class="mt-4">
-                            <h6 class="mb-3">{{ __('admin.available_language_codes') }}</h6>
+                            <h6 class="mb-3">{{ __('admin_general.available_language_codes') }}</h6>
                             <div class="row g-2">
                                 @php
                                     $commonLanguages = [
@@ -126,11 +126,11 @@
                         <!-- Submit Buttons -->
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ route('admin.translations.index') }}" class="btn btn-outline-secondary">
-                                {{ __('admin.cancel') }}
+                                {{ __('admin_general.cancel') }}
                             </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="ph-duotone ph-plus me-1"></i>
-                                {{ __('admin.create_language') }}
+                                {{ __('admin_general.create_language') }}
                             </button>
                         </div>
                     </form>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Services\TranslationApiService;
+use App\Models\TranslationReview;
 
 class TranslationManagementController extends Controller
 {
@@ -64,7 +65,7 @@ class TranslationManagementController extends Controller
 
         // Verifica che la lingua non esista già
         if ($this->languageExists($languageCode)) {
-            return back()->withErrors(['language_code' => __('admin.language_exists_error')]);
+            return back()->withErrors(['language_code' => __('admin_general.language_exists_error')]);
         }
 
         // Crea la directory della lingua
@@ -87,7 +88,7 @@ class TranslationManagementController extends Controller
         }
 
         return redirect()->route('admin.translations.index')
-            ->with('success', __('admin.language_created_success'));
+            ->with('success', __('admin_general.language_created_success'));
     }
 
     /**
@@ -96,7 +97,7 @@ class TranslationManagementController extends Controller
     public function show($language)
     {
         if (!$this->languageExists($language)) {
-            abort(404, __('admin.language_not_found_error'));
+            abort(404, __('admin_general.language_not_found_error'));
         }
 
         $translationFiles = $this->getTranslationFiles();
@@ -160,7 +161,7 @@ class TranslationManagementController extends Controller
     public function update(Request $request, $language)
     {
         if (!$this->languageExists($language)) {
-            abort(404, __('admin.language_not_found_error'));
+            abort(404, __('admin_general.language_not_found_error'));
         }
 
         $file = $request->input('file', 'admin');
@@ -171,12 +172,12 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.translations_saved_success')
+                'message' => __('admin_general.translations_saved_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.save_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.save_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -187,11 +188,11 @@ class TranslationManagementController extends Controller
     public function destroy($language)
     {
         if ($language === 'it') {
-            return back()->withErrors(['error' => __('admin.cannot_delete_italian')]);
+            return back()->withErrors(['error' => __('admin_general.cannot_delete_italian')]);
         }
 
         if (!$this->languageExists($language)) {
-            abort(404, __('admin.language_not_found_error'));
+            abort(404, __('admin_general.language_not_found_error'));
         }
 
         $languagePath = lang_path($language);
@@ -200,7 +201,7 @@ class TranslationManagementController extends Controller
         }
 
         return redirect()->route('admin.translations.index')
-            ->with('success', __('admin.language_deleted_success'));
+            ->with('success', __('admin_general.language_deleted_success'));
     }
 
     /**
@@ -213,7 +214,7 @@ class TranslationManagementController extends Controller
         if ($language && !$this->languageExists($language)) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.language_not_found_error')
+                'message' => __('admin_general.language_not_found_error')
             ], 404);
         }
 
@@ -228,7 +229,7 @@ class TranslationManagementController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('admin.sync_completed'),
+            'message' => __('admin_general.sync_completed'),
             'files_updated' => $updatedFiles
         ]);
     }
@@ -267,7 +268,7 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.translations.sync_all_success'),
+                'message' => __('admin_general.translations.sync_all_success'),
                 'results' => $results
             ]);
 
@@ -285,7 +286,7 @@ class TranslationManagementController extends Controller
     public function copyFromItalian(Request $request, $language)
     {
         if (!$this->languageExists($language)) {
-            abort(404, __('admin.language_not_found_error'));
+            abort(404, __('admin_general.language_not_found_error'));
         }
 
         $file = $request->input('file', 'admin');
@@ -296,12 +297,12 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.copy_from_italian') . ' ' . __('admin.completed')
+                'message' => __('admin_general.copy_from_italian') . ' ' . __('admin_general.completed')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.save_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.save_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -312,7 +313,7 @@ class TranslationManagementController extends Controller
     public function clearAll(Request $request, $language)
     {
         if (!$this->languageExists($language)) {
-            abort(404, __('admin.language_not_found_error'));
+            abort(404, __('admin_general.language_not_found_error'));
         }
 
         $file = $request->input('file', 'admin');
@@ -322,12 +323,12 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.clear_all') . ' ' . __('admin.completed')
+                'message' => __('admin_general.clear_all') . ' ' . __('admin_general.completed')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.save_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.save_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -388,13 +389,13 @@ class TranslationManagementController extends Controller
     private function getFileDisplayName($filename)
     {
         $displayNames = [
-            'admin' => __('admin.file_admin'),
-            'auth' => __('admin.file_auth'),
-            'common' => __('admin.file_common'),
-            'dashboard' => __('admin.file_dashboard'),
-            'events' => __('admin.file_events'),
-            'videos' => __('admin.file_videos'),
-            'carousel' => __('admin.file_carousel'),
+            'admin' => __('admin_general.file_admin'),
+            'auth' => __('admin_general.file_auth'),
+            'common' => __('admin_general.file_common'),
+            'dashboard' => __('admin_general.file_dashboard'),
+            'events' => __('admin_general.file_events'),
+            'videos' => __('admin_general.file_videos'),
+            'carousel' => __('admin_general.file_carousel'),
             'home' => 'Home',
             'poems' => 'Poems',
             'profile' => 'Profile',
@@ -677,12 +678,12 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.cache_cleared_success')
+                'message' => __('admin_general.cache_cleared_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.cache_clear_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.cache_clear_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -721,13 +722,13 @@ class TranslationManagementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.hardcoded_converted_success'),
+                'message' => __('admin_general.hardcoded_converted_success'),
                 'key' => $suggestedKey
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.hardcoded_convert_error') . ': ' . $e->getMessage()
+                'message' => __('admin_general.hardcoded_convert_error') . ': ' . $e->getMessage()
             ], 500);
         }
     }
@@ -1318,5 +1319,791 @@ class TranslationManagementController extends Controller
             // If all else fails, return cleaned text
             return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $text);
         }
+    }
+
+    /**
+     * Segna una chiave come revisionata
+     */
+    public function markAsReviewed(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|string',
+            'file' => 'required|string',
+            'key' => 'required|string',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $review = TranslationReview::updateOrCreate(
+            [
+                'language' => $request->language,
+                'file' => $request->file,
+                'key' => $request->key,
+            ],
+            [
+                'is_reviewed' => true,
+                'reviewed_by' => auth()->id(),
+                'reviewed_at' => now(),
+                'notes' => $request->notes,
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => __('admin_general.key_marked_as_reviewed'),
+            'review' => $review,
+        ]);
+    }
+
+    /**
+     * Rimuovi la revisione da una chiave
+     */
+    public function unmarkAsReviewed(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|string',
+            'file' => 'required|string',
+            'key' => 'required|string',
+        ]);
+
+        $review = TranslationReview::where('language', $request->language)
+            ->where('file', $request->file)
+            ->where('key', $request->key)
+            ->first();
+
+        if ($review) {
+            $review->unmarkAsReviewed();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => __('admin_general.key_unmarked_as_reviewed'),
+        ]);
+    }
+
+    /**
+     * Auto-save di una traduzione
+     */
+    public function autoSave(Request $request)
+    {
+        $request->validate([
+            'language' => 'required|string',
+            'file' => 'required|string',
+            'key' => 'required|string',
+            'value' => 'nullable|string',
+        ]);
+
+        try {
+            // Ottieni le traduzioni esistenti
+            $translations = $this->getTranslations($request->language, $request->file);
+            
+            // Aggiorna la chiave specifica
+            $translations[$request->key] = $request->value;
+            
+            // Salva
+            $this->saveTranslations($request->language, $request->file, $translations);
+
+            return response()->json([
+                'success' => true,
+                'message' => __('admin_general.translation_auto_saved'),
+                'timestamp' => now()->toIso8601String(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('admin_general.auto_save_error') . ': ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Ottieni statistiche dettagliate per una lingua e file
+     */
+    public function getDetailedStats(Request $request)
+    {
+        $language = $request->get('language');
+        $file = $request->get('file');
+
+        if (!$this->languageExists($language)) {
+            return response()->json(['error' => 'Language not found'], 404);
+        }
+
+        $referenceTranslations = $this->getTranslations('it', $file);
+        $translations = $this->getTranslations($language, $file);
+        
+        // Ottieni le revisioni
+        $reviews = TranslationReview::forLanguageAndFile($language, $file)->get()->keyBy('key');
+
+        $stats = [
+            'total_keys' => count($referenceTranslations),
+            'translated_keys' => count(array_filter($translations, fn($v) => !empty($v))),
+            'missing_keys' => count($referenceTranslations) - count(array_filter($translations, fn($v) => !empty($v))),
+            'reviewed_keys' => $reviews->where('is_reviewed', true)->count(),
+            'not_reviewed_keys' => count($referenceTranslations) - $reviews->where('is_reviewed', true)->count(),
+            'progress_percentage' => count($referenceTranslations) > 0 
+                ? round((count(array_filter($translations, fn($v) => !empty($v))) / count($referenceTranslations)) * 100, 1) 
+                : 0,
+            'review_percentage' => count($referenceTranslations) > 0 
+                ? round(($reviews->where('is_reviewed', true)->count() / count($referenceTranslations)) * 100, 1) 
+                : 0,
+        ];
+
+        return response()->json($stats);
+    }
+
+    /**
+     * Mostra l'interfaccia smart per le traduzioni
+     */
+    public function showSmart($language)
+    {
+        if (!$this->languageExists($language)) {
+            abort(404, __('admin_general.language_not_found_error'));
+        }
+
+        $translationFiles = $this->getTranslationFiles();
+        $selectedFile = request('file', 'admin');
+
+        // Ottieni tutte le chiavi italiane come riferimento
+        $referenceTranslations = $this->getTranslations('it', $selectedFile);
+        $translations = $this->getTranslations($language, $selectedFile);
+
+        // Ottieni le revisioni
+        $reviews = TranslationReview::forLanguageAndFile($language, $selectedFile)
+            ->get()
+            ->keyBy('key');
+
+        // Prepara i dati
+        $translationData = [];
+        foreach ($referenceTranslations as $key => $referenceValue) {
+            $translationValue = $translations[$key] ?? '';
+            $review = $reviews->get($key);
+
+            // Converti array in JSON per visualizzazione
+            if (is_array($referenceValue)) {
+                $referenceValue = json_encode($referenceValue, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            }
+            if (is_array($translationValue)) {
+                $translationValue = json_encode($translationValue, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            }
+
+            $translationData[$key] = [
+                'reference' => $referenceValue,
+                'translation' => $translationValue,
+                'is_translated' => !empty($translations[$key]),
+                'is_missing' => empty($translations[$key]),
+                'is_reviewed' => $review ? $review->is_reviewed : false,
+                'reviewed_at' => $review ? $review->reviewed_at?->format('d/m/Y H:i') : null,
+                'reviewed_by_name' => $review && $review->reviewer ? $review->reviewer->getDisplayName() : null,
+                'notes' => $review ? $review->notes : null,
+            ];
+        }
+
+        // Statistiche
+        $stats = [
+            'total_keys' => count($referenceTranslations),
+            'translated_keys' => count(array_filter($translationData, fn($item) => $item['is_translated'])),
+            'missing_keys' => count(array_filter($translationData, fn($item) => $item['is_missing'])),
+            'reviewed_keys' => count(array_filter($translationData, fn($item) => $item['is_reviewed'])),
+            'not_reviewed_keys' => count($referenceTranslations) - count(array_filter($translationData, fn($item) => $item['is_reviewed'])),
+            'progress_percentage' => count($referenceTranslations) > 0 
+                ? round((count(array_filter($translationData, fn($item) => $item['is_translated'])) / count($referenceTranslations)) * 100, 1) 
+                : 0,
+            'review_percentage' => count($referenceTranslations) > 0 
+                ? round((count(array_filter($translationData, fn($item) => $item['is_reviewed'])) / count($referenceTranslations)) * 100, 1) 
+                : 0,
+        ];
+
+        return view('admin.translations.smart', compact(
+            'language',
+            'translationFiles',
+            'selectedFile',
+            'translationData',
+            'stats'
+        ));
+    }
+
+    /**
+     * Trova dove viene utilizzata una chiave di traduzione
+     */
+    public function findKeyUsage(Request $request)
+    {
+        $request->validate([
+            'key' => 'required|string',
+            'file' => 'required|string',
+        ]);
+
+        $key = $request->key;
+        $file = $request->file;
+        $usage = [];
+        $foundPositions = []; // Per evitare duplicati
+
+        try {
+            // Cerca nei file Blade
+            $bladeFiles = glob(resource_path('views/**/*.blade.php'));
+            foreach ($bladeFiles as $bladeFile) {
+                $content = file_get_contents($bladeFile);
+                $relativePath = str_replace(resource_path('views/'), '', $bladeFile);
+                
+                // Cerca pattern più flessibili
+                $searchPattern = $file . '.' . $key;
+                
+                // Pattern per __('file.key'), __("file.key"), trans('file.key'), etc.
+                $patterns = [
+                    "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                    "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                    "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                    "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                    "@lang\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                    "@lang\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                    "{{\s*__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)\s*}}",
+                    "{{\s*__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                    "{{\s*trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)\s*}}",
+                    "{{\s*trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                ];
+
+                foreach ($patterns as $pattern) {
+                    if (preg_match_all('/' . $pattern . '/i', $content, $matches, PREG_OFFSET_CAPTURE)) {
+                        foreach ($matches[0] as $match) {
+                            $line = substr_count(substr($content, 0, $match[1]), "\n") + 1;
+                            
+                            // Crea una chiave unica per evitare duplicati
+                            $uniqueKey = $relativePath . ':' . $line;
+                            
+                            if (!in_array($uniqueKey, $foundPositions)) {
+                                $foundPositions[] = $uniqueKey;
+                                $usage[] = [
+                                    'file' => $relativePath,
+                                    'line' => $line,
+                                    'type' => 'blade',
+                                    'context' => $this->getLineContext($content, $match[1])
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Cerca nei file PHP
+            $phpFiles = array_merge(
+                glob(app_path('**/*.php')),
+                glob(config_path('*.php'))
+            );
+            
+            foreach ($phpFiles as $phpFile) {
+                $content = file_get_contents($phpFile);
+                $relativePath = str_replace(base_path() . '/', '', $phpFile);
+                
+                // Cerca pattern più flessibili per PHP
+                $searchPattern = $file . '.' . $key;
+                
+                $patterns = [
+                    "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                    "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                ];
+
+                foreach ($patterns as $pattern) {
+                    if (preg_match_all('/' . $pattern . '/i', $content, $matches, PREG_OFFSET_CAPTURE)) {
+                        foreach ($matches[0] as $match) {
+                            $line = substr_count(substr($content, 0, $match[1]), "\n") + 1;
+                            
+                            // Crea una chiave unica per evitare duplicati
+                            $uniqueKey = $relativePath . ':' . $line;
+                            
+                            if (!in_array($uniqueKey, $foundPositions)) {
+                                $foundPositions[] = $uniqueKey;
+                                $usage[] = [
+                                    'file' => $relativePath,
+                                    'line' => $line,
+                                    'type' => 'php',
+                                    'context' => $this->getLineContext($content, $match[1])
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'usage' => $usage,
+                'count' => count($usage)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la ricerca: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Ottieni il contesto della linea (3 righe prima e dopo)
+     */
+    private function getLineContext($content, $position)
+    {
+        $lines = explode("\n", $content);
+        $lineNumber = substr_count(substr($content, 0, $position), "\n");
+        
+        $start = max(0, $lineNumber - 3);
+        $end = min(count($lines) - 1, $lineNumber + 3);
+        
+        $context = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $context[] = [
+                'number' => $i + 1,
+                'content' => $lines[$i],
+                'highlight' => $i === $lineNumber
+            ];
+        }
+        
+        return $context;
+    }
+
+    /**
+     * Trova tutte le chiavi non utilizzate in un file
+     */
+    public function findUnusedKeys(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|string',
+        ]);
+
+        $file = $request->file;
+        $unusedKeys = [];
+
+        try {
+            // Ottieni tutte le chiavi dal file di traduzione
+            $translations = $this->getTranslations('it', $file);
+            
+            foreach ($translations as $key => $value) {
+                // Cerca l'utilizzo di questa chiave
+                $usage = $this->searchKeyUsage($file, $key);
+                
+                if (empty($usage)) {
+                    $unusedKeys[] = [
+                        'key' => $key,
+                        'value' => $value,
+                        'file' => $file
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'unused_keys' => $unusedKeys,
+                'count' => count($unusedKeys),
+                'total_keys' => count($translations)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la ricerca: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Cerca l'utilizzo di una singola chiave
+     */
+    private function searchKeyUsage($file, $key)
+    {
+        $usage = [];
+        $searchPattern = $file . '.' . $key;
+
+        // Cerca nei file Blade
+        $bladeFiles = glob(resource_path('views/**/*.blade.php'));
+        foreach ($bladeFiles as $bladeFile) {
+            $content = file_get_contents($bladeFile);
+            $relativePath = str_replace(resource_path('views/'), '', $bladeFile);
+            
+            $patterns = [
+                "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                "@lang\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                "@lang\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                "{{\s*__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)\s*}}",
+                "{{\s*__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+                "{{\s*trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)\s*}}",
+                "{{\s*trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*,\s*\[",  // Con parametri
+            ];
+
+            foreach ($patterns as $pattern) {
+                if (preg_match('/' . $pattern . '/i', $content)) {
+                    $usage[] = [
+                        'file' => $relativePath,
+                        'type' => 'blade'
+                    ];
+                    break; // Trovata almeno un'occorrenza, passa alla prossima chiave
+                }
+            }
+        }
+
+        // Cerca nei file PHP
+        $phpFiles = array_merge(
+            glob(app_path('**/*.php')),
+            glob(config_path('*.php'))
+        );
+        
+        foreach ($phpFiles as $phpFile) {
+            $content = file_get_contents($phpFile);
+            $relativePath = str_replace(base_path() . '/', '', $phpFile);
+            
+            $patterns = [
+                "__\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+                "trans\s*\(\s*['\"]" . preg_quote($searchPattern, '/') . "['\"]\s*\)",
+            ];
+
+            foreach ($patterns as $pattern) {
+                if (preg_match('/' . $pattern . '/i', $content)) {
+                    $usage[] = [
+                        'file' => $relativePath,
+                        'type' => 'php'
+                    ];
+                    break; // Trovata almeno un'occorrenza, passa alla prossima chiave
+                }
+            }
+        }
+
+        return $usage;
+    }
+
+    /**
+     * Crea un backup delle chiavi prima della rimozione
+     */
+    private function createBackup($file, $keysToRemove)
+    {
+        $translations = $this->getTranslations('it', $file);
+        $removedKeys = [];
+        
+        foreach ($keysToRemove as $key) {
+            if (isset($translations[$key])) {
+                $removedKeys[$key] = $translations[$key];
+            }
+        }
+        
+        if (!empty($removedKeys)) {
+            $backupDir = storage_path('app/translation-backups');
+            if (!file_exists($backupDir)) {
+                mkdir($backupDir, 0755, true);
+            }
+            
+            $backupFile = $backupDir . '/' . $file . '_removed_' . date('Y-m-d_H-i-s') . '.json';
+            file_put_contents($backupFile, json_encode($removedKeys, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        }
+    }
+
+    /**
+     * Rimuove le chiavi non utilizzate
+     */
+    public function removeUnusedKeys(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|string',
+            'keys' => 'required|array',
+        ]);
+
+        $file = $request->file;
+        $keysToRemove = $request->keys;
+
+        try {
+            // Crea un backup prima della rimozione
+            $this->createBackup($file, $keysToRemove);
+            
+            // Ottieni le traduzioni attuali
+            $translations = $this->getTranslations('it', $file);
+            
+            // Rimuovi le chiavi specificate
+            foreach ($keysToRemove as $key) {
+                unset($translations[$key]);
+            }
+            
+            // Salva le traduzioni aggiornate
+            $this->saveTranslations('it', $file, $translations);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Chiavi rimosse con successo',
+                'removed_count' => count($keysToRemove)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la rimozione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Crea una nuova chiave di traduzione
+     */
+    public function createKey(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|string',
+            'key' => 'required|string',
+            'value' => 'required|string',
+        ]);
+
+        $file = $request->file;
+        $key = $request->key;
+        $value = $request->value;
+
+        try {
+            // Ottieni le traduzioni attuali
+            $translations = $this->getTranslations('it', $file);
+            
+            // Aggiungi la nuova chiave
+            $translations[$key] = $value;
+            
+            // Salva le traduzioni aggiornate
+            $this->saveTranslations('it', $file, $translations);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Chiave creata con successo',
+                'key' => $key,
+                'value' => $value
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la creazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Trova chiavi mancanti nel codice
+     */
+    public function findMissingKeys(Request $request)
+    {
+        $request->validate([
+            'file' => 'nullable|string',
+        ]);
+
+        $file = $request->file;
+        $missingKeys = [];
+
+        try {
+            if ($file) {
+                // Cerca solo per un file specifico
+                $existingKeys = array_keys($this->getTranslations('it', $file));
+                $usedKeys = $this->findUsedKeysInCode($file);
+                
+                foreach ($usedKeys as $key) {
+                    if (!in_array($key, $existingKeys)) {
+                        $missingKeys[] = [
+                            'key' => $key,
+                            'file' => $file,
+                            'suggested_value' => $this->generateSuggestedValue($key)
+                        ];
+                    }
+                }
+            } else {
+                // Cerca in TUTTI i file
+                $allUsedKeys = $this->findAllUsedKeysInCode();
+                
+                foreach ($allUsedKeys as $fullKey) {
+                    // Salta chiavi dinamiche (con concatenazione)
+                    if (strpos($fullKey, ' . ') !== false || strpos($fullKey, '.\'') !== false) {
+                        continue;
+                    }
+                    
+                    // Dividi file.key
+                    $parts = explode('.', $fullKey, 2);
+                    if (count($parts) !== 2) {
+                        continue;
+                    }
+                    
+                    list($keyFile, $key) = $parts;
+                    
+                    // Verifica se il file esiste
+                    if (!$this->languageExists('it') || !in_array($keyFile, $this->getTranslationFiles())) {
+                        continue;
+                    }
+                    
+                    // Verifica se la chiave esiste
+                    $translations = $this->getTranslations('it', $keyFile);
+                    if (!isset($translations[$key])) {
+                        $missingKeys[] = [
+                            'key' => $key,
+                            'file' => $keyFile,
+                            'full_key' => $fullKey,
+                            'suggested_value' => $this->generateSuggestedValue($key)
+                        ];
+                    }
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'missing_keys' => $missingKeys,
+                'count' => count($missingKeys)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante la ricerca: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Trova TUTTE le chiavi utilizzate in TUTTO il codice
+     */
+    private function findAllUsedKeysInCode()
+    {
+        $allKeys = [];
+        
+        // Cerca nei file Blade
+        $bladeFiles = glob(resource_path('views/**/*.blade.php'));
+        foreach ($bladeFiles as $bladeFile) {
+            $content = file_get_contents($bladeFile);
+            
+            // Pattern per trovare QUALSIASI chiave di traduzione
+            $patterns = [
+                "/__\s*\(\s*['\"]([a-zA-Z0-9_]+\.[a-zA-Z0-9_\.]+)['\",\s\)]/",
+                "/trans\s*\(\s*['\"]([a-zA-Z0-9_]+\.[a-zA-Z0-9_\.]+)['\",\s\)]/",
+                "/@lang\s*\(\s*['\"]([a-zA-Z0-9_]+\.[a-zA-Z0-9_\.]+)['\",\s\)]/",
+            ];
+            
+            foreach ($patterns as $pattern) {
+                if (preg_match_all($pattern, $content, $matches)) {
+                    foreach ($matches[1] as $fullKey) {
+                        $allKeys[] = $fullKey;
+                    }
+                }
+            }
+        }
+        
+        // Cerca nei file PHP
+        $phpFiles = array_merge(
+            glob(app_path('**/*.php')),
+            glob(config_path('*.php'))
+        );
+        
+        foreach ($phpFiles as $phpFile) {
+            $content = file_get_contents($phpFile);
+            
+            $patterns = [
+                "/__\s*\(\s*['\"]([a-zA-Z0-9_]+\.[a-zA-Z0-9_\.]+)['\",\s\)]/",
+                "/trans\s*\(\s*['\"]([a-zA-Z0-9_]+\.[a-zA-Z0-9_\.]+)['\",\s\)]/",
+            ];
+            
+            foreach ($patterns as $pattern) {
+                if (preg_match_all($pattern, $content, $matches)) {
+                    foreach ($matches[1] as $fullKey) {
+                        $allKeys[] = $fullKey;
+                    }
+                }
+            }
+        }
+        
+        return array_unique($allKeys);
+    }
+
+    /**
+     * Trova tutte le chiavi utilizzate nel codice per un file specifico
+     */
+    private function findUsedKeysInCode($file)
+    {
+        $usedKeys = [];
+        
+        // Cerca nei file Blade
+        $bladeFiles = glob(resource_path('views/**/*.blade.php'));
+        foreach ($bladeFiles as $bladeFile) {
+            $content = file_get_contents($bladeFile);
+            
+            // Pattern per trovare tutte le chiavi utilizzate
+            $patterns = [
+                "/__\s*\(\s*['\"]" . preg_quote($file, '/') . "\.([^'\"\\s,)]+)/",
+                "/trans\s*\(\s*['\"]" . preg_quote($file, '/') . "\.([^'\"\\s,)]+)/",
+                "/@lang\s*\(\s*['\"]" . preg_quote($file, '/') . "\.([^'\"\\s,)]+)/",
+            ];
+            
+            foreach ($patterns as $pattern) {
+                if (preg_match_all($pattern, $content, $matches)) {
+                    foreach ($matches[1] as $key) {
+                        $usedKeys[] = $key;
+                    }
+                }
+            }
+        }
+        
+        // Cerca nei file PHP
+        $phpFiles = array_merge(
+            glob(app_path('**/*.php')),
+            glob(config_path('*.php'))
+        );
+        
+        foreach ($phpFiles as $phpFile) {
+            $content = file_get_contents($phpFile);
+            
+            $patterns = [
+                "/__\s*\(\s*['\"]" . preg_quote($file, '/') . "\.([^'\"\\s,)]+)/",
+                "/trans\s*\(\s*['\"]" . preg_quote($file, '/') . "\.([^'\"\\s,)]+)/",
+            ];
+            
+            foreach ($patterns as $pattern) {
+                if (preg_match_all($pattern, $content, $matches)) {
+                    foreach ($matches[1] as $key) {
+                        $usedKeys[] = $key;
+                    }
+                }
+            }
+        }
+        
+        return array_unique($usedKeys);
+    }
+
+    /**
+     * Genera un valore suggerito per una chiave
+     */
+    private function generateSuggestedValue($key)
+    {
+        // Converti la chiave in un valore leggibile
+        $value = str_replace('_', ' ', $key);
+        $value = ucwords($value);
+        
+        // Alcune sostituzioni comuni
+        $replacements = [
+            'welcome' => 'Benvenuto',
+            'title' => 'Titolo',
+            'description' => 'Descrizione',
+            'name' => 'Nome',
+            'email' => 'Email',
+            'password' => 'Password',
+            'save' => 'Salva',
+            'cancel' => 'Annulla',
+            'delete' => 'Elimina',
+            'edit' => 'Modifica',
+            'create' => 'Crea',
+            'update' => 'Aggiorna',
+            'view' => 'Visualizza',
+            'search' => 'Cerca',
+            'filter' => 'Filtra',
+            'sort' => 'Ordina',
+            'back' => 'Indietro',
+            'next' => 'Avanti',
+            'previous' => 'Precedente',
+            'submit' => 'Invia',
+            'confirm' => 'Conferma',
+            'success' => 'Successo',
+            'error' => 'Errore',
+            'warning' => 'Avviso',
+            'info' => 'Informazione',
+        ];
+        
+        foreach ($replacements as $search => $replace) {
+            $value = str_ireplace($search, $replace, $value);
+        }
+        
+        return $value;
     }
 }

@@ -10,7 +10,7 @@
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events.events') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events_general.events') }}</a></li>
 <li class="breadcrumb-item active">{{ $event->title }}</li>
 @endsection
 
@@ -34,11 +34,11 @@
                 @endif
                 @if($event->is_public)
                     <span class="badge bg-success position-absolute top-0 end-0 m-2 f-s-10">
-                        <i class="ph ph-globe me-1"></i> {{ __('events.event_public_badge') }}
+                        <i class="ph ph-globe me-1"></i> {{ __('events_general.event_public_badge') }}
                     </span>
                 @else
                     <span class="badge bg-warning position-absolute top-0 end-0 m-2 f-s-10">
-                        <i class="ph ph-lock me-1"></i> {{ __('events.event_private_badge') }}
+                        <i class="ph ph-lock me-1"></i> {{ __('events_general.event_private_badge') }}
                     </span>
                 @endif
 
@@ -57,7 +57,7 @@
                     @if($event->groups && $event->groups->count())
                         <div class="mb-2">
                             <small class="text-white mb-1 d-block f-s-10">
-                                <i class="ph ph-link me-1"></i>{{ __('events.associated_groups') }}:
+                                <i class="ph ph-link me-1"></i>{{ __('events_general.associated_groups') }}:
                             </small>
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach($event->groups as $group)
@@ -74,9 +74,9 @@
                             @if($event->start_datetime)
                                 {{ $event->start_datetime->format('d/m/Y, H:i') }}
                             @elseif($event->is_availability_based)
-                                {{ __('events.availability_based_event') }}
+                                {{ __('events_general.availability_based_event') }}
                             @else
-                                {{ __('events.not_specified') }}
+                                {{ __('events_general.not_specified') }}
                             @endif
                         </span>
                     </div>
@@ -84,9 +84,9 @@
                         <i class="ph ph-map-pin me-1 f-s-12"></i>
                         <span class="f-s-12">
                             @if($event->is_online)
-                                <i class="ph ph-globe me-1"></i>{{ __('events.online_event') }}
+                                <i class="ph ph-globe me-1"></i>{{ __('events_general.online_event') }}
                                 @if($event->online_url)
-                                    - <a href="{{ $event->online_url }}" target="_blank" class="text-white text-decoration-underline f-s-10">{{ __('events.join_online') }}</a>
+                                    - <a href="{{ $event->online_url }}" target="_blank" class="text-white text-decoration-underline f-s-10">{{ __('events_general.join_online') }}</a>
                                 @endif
                             @else
                                 {{ Str::limit($event->venue_name, 25) }}, {{ $event->city }}
@@ -95,7 +95,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="ph ph-user me-1 f-s-12"></i>
-                        <span class="f-s-12">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
+                        <span class="f-s-12">{{ __('events_general.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
                     </div>
                 </div>
             </div>
@@ -112,8 +112,8 @@
                     <div class="d-flex align-items-center">
                         <i class="ph ph-info-circle me-3 fs-4"></i>
                         <div>
-                            <h6 class="mb-1">{{ __('events.private_event_notice_title') }}</h6>
-                            <p class="mb-0">{{ __('events.private_event_notice_text') }}</p>
+                            <h6 class="mb-1">{{ __('events_general.private_event_notice_title') }}</h6>
+                            <p class="mb-0">{{ __('events_general.private_event_notice_text') }}</p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-info me-2"></i>{{ __('events.event_information') }}
+                        <i class="ph ph-info me-2"></i>{{ __('events_general.event_information') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -133,7 +133,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="ph ph-tag me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block f-s-12">{{ __('events.category') }}</small>
+                                    <small class="text-muted d-block f-s-12">{{ __('events_general.category') }}</small>
                                     <span class="badge {{ $event->category_color_class }} f-s-12">{{ __('events.category_' . $event->category) }}</span>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="ph ph-currency-eur me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block f-s-12">{{ __('events.entry_fee') }}</small>
+                                    <small class="text-muted d-block f-s-12">{{ __('events_general.entry_fee') }}</small>
                                     <span class="fw-semibold f-s-14">{{ number_format($event->entry_fee, 2) }}€</span>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="ph ph-currency-eur me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block f-s-12">{{ __('events.entry_fee') }}</small>
+                                    <small class="text-muted d-block f-s-12">{{ __('events_general.entry_fee') }}</small>
                                     <span class="badge bg-success f-s-12">{{ __('common.free') }}</span>
                                 </div>
                             </div>
@@ -169,7 +169,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-file-text me-2"></i>{{ __('events.description_event') }}
+                        <i class="ph ph-file-text me-2"></i>{{ __('events_general.description_event') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -334,7 +334,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-list-checks me-2"></i>{{ __('events.requirements') }}
+                        <i class="ph ph-list-checks me-2"></i>{{ __('events_general.requirements') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -349,43 +349,43 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-clock me-2"></i>{{ __('events.timeline_event') }}
+                        <i class="ph ph-clock me-2"></i>{{ __('events_general.timeline_event') }}
                     </h5>
                 </div>
                 <div class="card-body">
                     @if($event->registration_deadline)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.deadline_registration') }}</h6>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events_general.deadline_registration') }}</h6>
                         <p class="text-muted mb-0 f-s-12">{{ $event->registration_deadline->format('d/m/Y, H:i') }}</p>
                     </div>
                     @endif
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.start_event') }}</h6>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events_general.start_event') }}</h6>
                         <p class="text-muted mb-0 f-s-12">
                             @if($event->start_datetime)
                                 {{ $event->start_datetime->format('d/m/Y, H:i') }}
                             @elseif($event->is_availability_based)
-                                {{ __('events.availability_based_event') }}
+                                {{ __('events_general.availability_based_event') }}
                             @else
-                                {{ __('events.not_specified') }}
+                                {{ __('events_general.not_specified') }}
                             @endif
                         </p>
                     </div>
 
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events.end_event') }}</h6>
+                        <h6 class="mb-1 f-s-14" style="color: rgb(15, 98, 106);">{{ __('events_general.end_event') }}</h6>
                         <p class="text-muted mb-0 f-s-12">
                             @if($event->end_datetime)
                                 {{ $event->end_datetime->format('d/m/Y, H:i') }}
                             @elseif($event->is_availability_based)
-                                {{ __('events.availability_based_event') }}
+                                {{ __('events_general.availability_based_event') }}
                             @else
-                                {{ __('events.not_specified') }}
+                                {{ __('events_general.not_specified') }}
                             @endif
                         </p>
                         @if($event->start_datetime && $event->end_datetime)
-                            <small class="text-muted f-s-10">{{ __('events.duration') }}: {{ $event->duration }} {{ __('events.duration_hours') }}</small>
+                            <small class="text-muted f-s-10">{{ __('events_general.duration') }}: {{ $event->duration }} {{ __('events_general.duration_hours') }}</small>
                         @endif
                     </div>
                 </div>
@@ -395,7 +395,7 @@
             <div class="card mb-4">
                 <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                     <h5 class="mb-0">
-                        <i class="ph ph-users me-2"></i>{{ __('events.participants') }}
+                        <i class="ph ph-users me-2"></i>{{ __('events_general.participants') }}
                     </h5>
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-light-primary f-s-12">
@@ -423,7 +423,7 @@
                     @if($acceptedInvitations->count() + $acceptedRequests->count() > 0)
                         <div class="mb-4">
                             <h6 class="mb-3 text-success">
-                                <i class="ph ph-check-circle me-2"></i>{{ __('events.confirmed_participants') }}
+                                <i class="ph ph-check-circle me-2"></i>{{ __('events_general.confirmed_participants') }}
                             </h6>
                             <div class="row">
                                 <!-- Invited Participants -->
@@ -447,7 +447,7 @@
                                                         </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
                                                             <span class="badge bg-light-success f-s-10">{{ ucfirst($invitation->role) }}</span>
-                                                            <span class="badge bg-light-secondary">{{ __('events.participant_invited') }}</span>
+                                                            <span class="badge bg-light-secondary">{{ __('events_general.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->compensation)
                                                             <small class="text-muted">
@@ -482,7 +482,7 @@
                                                         </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
                                                             <span class="badge bg-success f-s-10">{{ ucfirst($request->requested_role) }}</span>
-                                                            <span class="badge bg-light-warning f-s-10">{{ __('events.participant_applied') }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ __('events_general.participant_applied') }}</span>
                                                         </div>
                                                         @if($request->experience)
                                                             <small class="text-muted f-s-10">
@@ -503,7 +503,7 @@
                     @if($pendingInvitations->count() + $pendingRequests->count() > 0)
                         <div class="mb-4">
                             <h6 class="mb-3 text-warning">
-                                <i class="ph ph-clock me-2"></i>{{ __('events.pending_participants') }}
+                                <i class="ph ph-clock me-2"></i>{{ __('events_general.pending_participants') }}
                             </h6>
                             <div class="row">
                                 <!-- Pending Invitations -->
@@ -527,7 +527,7 @@
                                                         </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
                                                             <span class="badge bg-light-warning f-s-10">{{ ucfirst($invitation->role) }}</span>
-                                                            <span class="badge bg-light-secondary f-s-10">{{ __('events.participant_invited') }}</span>
+                                                            <span class="badge bg-light-secondary f-s-10">{{ __('events_general.participant_invited') }}</span>
                                                         </div>
                                                         @if($invitation->expires_at)
                                                             <small class="text-muted f-s-10">
@@ -562,7 +562,7 @@
                                                         </h6>
                                                         <div class="d-flex align-items-center gap-2 mb-1">
                                                             <span class="badge bg-light-warning f-s-10">{{ ucfirst($request->requested_role) }}</span>
-                                                            <span class="badge bg-light-warning f-s-10">{{ __('events.participant_applied') }}</span>
+                                                            <span class="badge bg-light-warning f-s-10">{{ __('events_general.participant_applied') }}</span>
                                                         </div>
                                                         @if($request->message)
                                                             <small class="text-muted f-s-10">
@@ -583,11 +583,11 @@
                     @if($acceptedInvitations->count() + $acceptedRequests->count() + $pendingInvitations->count() + $pendingRequests->count() === 0)
                         <div class="text-center py-4">
                             <i class="ph ph-users-three display-4 text-muted mb-3"></i>
-                            <p class="text-muted mb-3">{{ __('events.no_participants') }}</p>
+                            <p class="text-muted mb-3">{{ __('events_general.no_participants') }}</p>
                             @auth
                                 @if($canApply)
                                     <button class="btn btn-light-success" data-bs-toggle="modal" data-bs-target="#applyModal">
-                                        <i class="ph ph-hand-waving me-2"></i>{{ __('events.first_participant') }}
+                                        <i class="ph ph-hand-waving me-2"></i>{{ __('events_general.first_participant') }}
                                     </button>
                                 @endif
                             @endauth
@@ -597,7 +597,7 @@
                     <!-- Role Statistics -->
                     @if($event->invitations->count() + $event->requests->count() > 0)
                         <div class="mt-4 pt-3 border-top">
-                            <h6 class="mb-3">{{ __('events.participant_stats') }}</h6>
+                            <h6 class="mb-3">{{ __('events_general.participant_stats') }}</h6>
                             <div class="row g-2">
                                 @php
                                     $roleStats = collect();
@@ -624,7 +624,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-trophy me-2"></i>{{ __('events.festival_info') }}
+                            <i class="ph ph-trophy me-2"></i>{{ __('events_general.festival_info') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -632,7 +632,7 @@
                             <!-- Questo è un festival - mostra gli eventi collegati -->
                             <div class="mb-3">
                                 <h6 class="mb-3 text-primary">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.festival_events_list') }}
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.festival_events_list') }}
                                 </h6>
                                 @php
                                     $festivalEvents = $event->getFestivalEventModels();
@@ -654,7 +654,7 @@
                                                                         @if($festivalEvent->start_datetime)
                                                                             {{ $festivalEvent->start_datetime->format('d/m/Y') }}
                                                                         @else
-                                                                            {{ __('events.not_specified') }}
+                                                                            {{ __('events_general.not_specified') }}
                                                                         @endif
                                                                     </span>
                                                                     <span class="badge bg-light-secondary">{{ $festivalEvent->city }}</span>
@@ -665,7 +665,7 @@
                                                             </div>
                                                             <div class="ms-auto">
                                                                 <a href="{{ route('events.show', $festivalEvent) }}" class="btn btn-sm btn-light-primary">
-                                                                    <i class="ph ph-eye me-1"></i>{{ __('events.view') }}
+                                                                    <i class="ph ph-eye me-1"></i>{{ __('events_general.view') }}
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -677,7 +677,7 @@
                                 @else
                                     <div class="text-center py-3">
                                         <i class="ph ph-calendar-x display-4 text-muted mb-3"></i>
-                                        <p class="text-muted mb-0">{{ __('events.no_festival_events') }}</p>
+                                        <p class="text-muted mb-0">{{ __('events_general.no_festival_events') }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -685,7 +685,7 @@
                             <!-- Questo evento fa parte di un festival - mostra il festival -->
                             <div class="mb-3">
                                 <h6 class="mb-3 text-primary">
-                                    <i class="ph ph-trophy me-2"></i>{{ __('events.part_of_festival') }}
+                                    <i class="ph ph-trophy me-2"></i>{{ __('events_general.part_of_festival') }}
                                 </h6>
                                 @php
                                     $festival = $event->festival;
@@ -704,7 +704,7 @@
                                                             @if($festival->start_datetime)
                                                                 {{ $festival->start_datetime->format('d/m/Y') }}
                                                             @else
-                                                                {{ __('events.not_specified') }}
+                                                                {{ __('events_general.not_specified') }}
                                                             @endif
                                                         </span>
                                                         <span class="badge bg-light-secondary">{{ $festival->city }}</span>
@@ -715,7 +715,7 @@
                                                 </div>
                                                 <div class="ms-auto">
                                                     <a href="{{ route('events.show', $festival) }}" class="btn btn-sm btn-light-primary">
-                                                        <i class="ph ph-eye me-1"></i>{{ __('events.view_festival') }}
+                                                        <i class="ph ph-eye me-1"></i>{{ __('events_general.view_festival') }}
                                                     </a>
                                                 </div>
                                             </div>
@@ -867,7 +867,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-globe me-2"></i>{{ __('events.online_event') }}
+                        <i class="ph ph-globe me-2"></i>{{ __('events_general.online_event') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -877,9 +877,9 @@
                             <div class="d-flex align-items-center">
                                 <i class="ph ph-link me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block f-s-12">{{ __('events.online_url') }}</small>
+                                    <small class="text-muted d-block f-s-12">{{ __('events_general.online_url') }}</small>
                                     <a href="{{ $event->online_url }}" target="_blank" class="text-decoration-none f-s-14">
-                                        {{ __('events.join_online') }}
+                                        {{ __('events_general.join_online') }}
                                     </a>
                                 </div>
                             </div>
@@ -890,7 +890,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="ph ph-clock me-2 text-muted f-s-14"></i>
                                 <div>
-                                    <small class="text-muted d-block f-s-12">{{ __('events.timezone') }}</small>
+                                    <small class="text-muted d-block f-s-12">{{ __('events_general.timezone') }}</small>
                                     <span class="fw-semibold f-s-14">{{ $event->timezone }}</span>
                                 </div>
                             </div>
@@ -899,7 +899,7 @@
                     </div>
                     <div class="alert alert-info">
                         <i class="ph ph-info me-2"></i>
-                        <strong>{{ __('events.online_event_notice') }}</strong>
+                        <strong>{{ __('events_general.online_event_notice') }}</strong>
                     </div>
                 </div>
             </div>
@@ -907,7 +907,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-map-pin me-2"></i>{{ __('events.location') }}
+                        <i class="ph ph-map-pin me-2"></i>{{ __('events_general.location') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -963,7 +963,7 @@
                             <div class="mt-3">
                                 <button class="btn btn-sm btn-success w-100" onclick="contactOrganizer('{{ $event->organizer->email }}', 'Posizioni d\'Ingaggio')">
                                     <i class="ph ph-envelope me-1"></i>
-                                    Contatta {{ __('events.organizer') }}
+                                    Contatta {{ __('events_general.organizer') }}
                                 </button>
                             </div>
                             @endif
@@ -1041,11 +1041,11 @@
                         @can('manage', $event)
                             <!-- Organizer/Admin Actions -->
                             <a href="{{ route('events.manage', $event) }}" class="btn btn-light-primary w-100 mb-2">
-                                <i class="ph ph-gear me-2"></i>{{ __('events.manage_event_action') }}
+                                <i class="ph ph-gear me-2"></i>{{ __('events_general.manage_event_action') }}
                             </a>
                             @if($event->is_availability_based)
                                 <a href="{{ route('events.availability.show', $event) }}" class="btn btn-light-info w-100 mb-2">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_options') }}
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.availability_options') }}
                                 </a>
                             @endif
                             @if($event->category === 'poetry_slam')
@@ -1067,11 +1067,11 @@
                                 </div>
                             @endif
                             <a href="{{ route('events.edit', $event) }}" class="btn btn-light-secondary w-100 mb-2">
-                                <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
+                                <i class="ph ph-pencil me-2"></i>{{ __('events_general.edit_event_action') }}
                             </a>
                             @can('delete', $event)
                                 <button class="btn btn-light-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                    <i class="ph ph-trash me-2"></i>{{ __('events.delete_event_action') }}
+                                    <i class="ph ph-trash me-2"></i>{{ __('events_general.delete_event_action') }}
                                 </button>
                             @endcan
                         @else
@@ -1134,10 +1134,10 @@
                                 </button>
                                 @if($event->is_availability_based)
                                     <a href="{{ route('events.availability.respond', $event) }}" class="btn btn-light-info w-100 mb-2">
-                                        <i class="ph ph-calendar-check me-2"></i>{{ __('events.respond_to_availability') }}
+                                        <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.respond_to_availability') }}
                                     </a>
                                 @endif
-                                <small class="text-muted">{{ __('events.accepts_requests') }}</small>
+                                <small class="text-muted">{{ __('events_general.accepts_requests') }}</small>
 
                             @else
                                 <!-- Cannot apply -->
@@ -1178,45 +1178,45 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-info me-2"></i>{{ __('events.event_info') }}
+                        <i class="ph ph-info me-2"></i>{{ __('events_general.event_info') }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.date_time') }}</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events_general.date_time') }}</h6>
                         @if($event->start_datetime && $event->end_datetime)
                             <p class="mb-0">{{ $event->start_datetime->format('d F Y') }}</p>
                             <small class="text-muted">{{ $event->start_datetime->format('H:i') }} - {{ $event->end_datetime->format('H:i') }}</small>
                         @elseif($event->is_availability_based)
-                            <p class="mb-0">{{ __('events.availability_based_event') }}</p>
-                            <small class="text-muted">{{ __('events.availability_based_event_description') }}</small>
+                            <p class="mb-0">{{ __('events_general.availability_based_event') }}</p>
+                            <small class="text-muted">{{ __('events_general.availability_based_event_description') }}</small>
                         @else
-                            <p class="mb-0">{{ __('events.not_specified') }}</p>
+                            <p class="mb-0">{{ __('events_general.not_specified') }}</p>
                         @endif
                     </div>
 
                     @if($event->start_datetime && $event->end_datetime)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.duration') }}</h6>
-                        <p class="mb-0">{{ $event->duration }} {{ __('events.duration_hours') }}</p>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events_general.duration') }}</h6>
+                        <p class="mb-0">{{ $event->duration }} {{ __('events_general.duration_hours') }}</p>
                     </div>
                     @endif
 
                     @if($event->entry_fee > 0)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.cost') }}</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events_general.cost') }}</h6>
                         <p class="mb-0">€{{ number_format($event->entry_fee, 2) }}</p>
                     </div>
                     @else
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(40, 167, 69) !important;">
-                        <h6 class="mb-1" style="color: rgb(40, 167, 69);">{{ __('events.free') }}</h6>
-                        <p class="mb-0">{{ __('events.no_fee') }}</p>
+                        <h6 class="mb-1" style="color: rgb(40, 167, 69);">{{ __('events_general.free') }}</h6>
+                        <p class="mb-0">{{ __('events_general.no_fee') }}</p>
                     </div>
                     @endif
 
                     @if($event->max_participants)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.participants') }}</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events_general.participants') }}</h6>
                         <p class="mb-0">
                             {{ $event->invitations->where('status', 'accepted')->count() + $event->requests->where('status', 'accepted')->count() }} / {{ $event->max_participants }}
                         </p>
@@ -1228,12 +1228,12 @@
 
                     @if($event->registration_deadline)
                     <div class="border-start border-4 ps-3 mb-3" style="border-color: rgb(15, 98, 106) !important;">
-                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events.deadline_registration') }}</h6>
+                        <h6 class="mb-1" style="color: rgb(15, 98, 106);">{{ __('events_general.deadline_registration') }}</h6>
                         <p class="mb-0">{{ $event->registration_deadline->format('d F Y, H:i') }}</p>
                         @if($event->registration_deadline > now())
                             <small style="color: rgb(40, 167, 69);">{{ $event->registration_deadline->diffForHumans() }}</small>
                         @else
-                            <small style="color: rgb(220, 53, 69);">{{ __('events.expired') }}</small>
+                            <small style="color: rgb(220, 53, 69);">{{ __('events_general.expired') }}</small>
                         @endif
                     </div>
                     @endif
@@ -1253,7 +1253,7 @@
                         </div>
                         <div>
                             <h6 class="mb-0 text-white">{{ $event->organizer->getDisplayName() }}</h6>
-                            <small class="text-white-50">{{ __('events.organizer') }}</small>
+                            <small class="text-white-50">{{ __('events_general.organizer') }}</small>
                         </div>
                     </div>
                     @if($event->organizer->bio)
@@ -1263,7 +1263,7 @@
                     @auth
                         @if($event->organizer_id !== auth()->id())
                             <button class="btn btn-light btn-sm w-100">
-                                <i class="ph ph-chat-circle me-2"></i>Contatta {{ __('events.organizer') }}
+                                <i class="ph ph-chat-circle me-2"></i>Contatta {{ __('events_general.organizer') }}
                             </button>
                         @endif
                     @endauth
@@ -1276,7 +1276,7 @@
                     <div class="card">
                         <div class="card-body text-center bg-light-primary">
                             <div class="fs-5 fw-bold">{{ $event->invitations->count() }}</div>
-                            <small>{{ __('events.invitations_sent') }}</small>
+                            <small>{{ __('events_general.invitations_sent') }}</small>
                         </div>
                     </div>
                 </div>
@@ -1284,7 +1284,7 @@
                     <div class="card">
                         <div class="card-body text-center bg-light-success">
                             <div class="fs-5 fw-bold">{{ $event->requests->count() }}</div>
-                            <small>{{ __('events.requests_received') }}</small>
+                            <small>{{ __('events_general.requests_received') }}</small>
                         </div>
                     </div>
                 </div>
@@ -1301,7 +1301,7 @@
         <div class="modal-content">
             <div class="modal-header bg-light-success">
                 <h5 class="modal-title text-success">
-                    <i class="ph ph-hand-waving me-2"></i>{{ __('events.participant_apply_title') }}
+                    <i class="ph ph-hand-waving me-2"></i>{{ __('events_general.participant_apply_title') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -1319,14 +1319,14 @@
                                     @if($event->start_datetime)
                                         {{ $event->start_datetime->format('d F Y, H:i') }}
                                     @elseif($event->is_availability_based)
-                                        {{ __('events.availability_based_event') }}
+                                        {{ __('events_general.availability_based_event') }}
                                     @else
-                                        {{ __('events.not_specified') }}
+                                        {{ __('events_general.not_specified') }}
                                     @endif
                                     <br>
                                     <i class="ph ph-map-pin me-1"></i>
                                     @if($event->is_online)
-                                        <i class="ph ph-globe me-1"></i>{{ __('events.online_event') }}
+                                        <i class="ph ph-globe me-1"></i>{{ __('events_general.online_event') }}
                                     @else
                                         {{ $event->venue_name }}, {{ $event->city }}
                                     @endif
@@ -1338,10 +1338,10 @@
                     <!-- Role Selection -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">
-                            <i class="ph ph-user-circle me-2"></i>{{ __('events.participant_apply_role') }} *
+                            <i class="ph ph-user-circle me-2"></i>{{ __('events_general.participant_apply_role') }} *
                         </label>
                         <select name="requested_role" class="form-select form-select-lg" required>
-                            <option value="">{{ __('events.participant_apply_role_help') }}</option>
+                            <option value="">{{ __('events_general.participant_apply_role_help') }}</option>
                             @if(auth()->user()->hasRole('poet'))
                                 <option value="performer" data-description="Interpreterai le tue poesie o quelle di altri artisti">
                                     🎭 Performer
@@ -1367,31 +1367,31 @@
                     <!-- Personal Message -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">
-                            <i class="ph ph-chat-circle-text me-2"></i>{{ __('events.participant_apply_message') }} *
+                            <i class="ph ph-chat-circle-text me-2"></i>{{ __('events_general.participant_apply_message') }} *
                         </label>
                         <textarea name="message" class="form-control" rows="4"
-                                  placeholder="{{ __('events.participant_apply_message_help') }}" required></textarea>
+                                  placeholder="{{ __('events_general.participant_apply_message_help') }}" required></textarea>
                         <div class="form-text">
-                            <i class="ph ph-lightbulb me-1"></i>{{ __('events.participant_apply_message_suggestion') }}
+                            <i class="ph ph-lightbulb me-1"></i>{{ __('events_general.participant_apply_message_suggestion') }}
                         </div>
                     </div>
 
                     <!-- Experience -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">
-                            <i class="ph ph-star me-2"></i>{{ __('events.participant_apply_experience') }}
+                            <i class="ph ph-star me-2"></i>{{ __('events_general.participant_apply_experience') }}
                         </label>
                         <textarea name="experience" class="form-control" rows="3"
-                                  placeholder="{{ __('events.participant_apply_experience_help') }}"></textarea>
+                                  placeholder="{{ __('events_general.participant_apply_experience_help') }}"></textarea>
                         <div class="form-text">
-                            <i class="ph ph-info me-1"></i>{{ __('events.participant_apply_experience_optional') }}
+                            <i class="ph ph-info me-1"></i>{{ __('events_general.participant_apply_experience_optional') }}
                         </div>
                     </div>
 
                     <!-- Portfolio Links -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">
-                            <i class="ph ph-link me-2"></i>{{ __('events.participant_links') }} (Opzionale)
+                            <i class="ph ph-link me-2"></i>{{ __('events_general.participant_links') }} (Opzionale)
                         </label>
                         <div id="portfolioLinks">
                             <div class="input-group mb-2">
@@ -1399,14 +1399,14 @@
                                     <i class="ph ph-link"></i>
                                 </span>
                                 <input type="url" name="portfolio_links[]" class="form-control"
-                                       placeholder="{{ __('events.participant_links_placeholder') }}">
+                                       placeholder="{{ __('events_general.participant_links_placeholder') }}">
                                 <button type="button" class="btn btn-outline-secondary" onclick="addPortfolioLink()">
                                     <i class="ph ph-plus"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="form-text">
-                            <i class="ph ph-video-camera me-1"></i>{{ __('events.participant_links_help') }}
+                            <i class="ph ph-video-camera me-1"></i>{{ __('events_general.participant_links_help') }}
                         </div>
                     </div>
 
@@ -1416,7 +1416,7 @@
                             <input class="form-check-input" type="checkbox" id="termsAccepted" required>
                             <label class="form-check-label" for="termsAccepted">
                                                                 <small>
-                                    {{ __('events.participant_terms_accept') }}
+                                    {{ __('events_general.participant_terms_accept') }}
                                 </small>
                             </label>
                         </div>
@@ -1424,10 +1424,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="ph ph-x me-2"></i>{{ __('events.participant_apply_cancel') }}
+                        <i class="ph ph-x me-2"></i>{{ __('events_general.participant_apply_cancel') }}
                     </button>
                     <button type="submit" class="btn btn-light-success" id="submitBtn">
-                        <i class="ph ph-paper-plane me-2"></i>{{ __('events.participant_apply_send') }}
+                        <i class="ph ph-paper-plane me-2"></i>{{ __('events_general.participant_apply_send') }}
                     </button>
                 </div>
             </form>
@@ -1584,25 +1584,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         if (!role) {
                 e.preventDefault();
-                showNotification('{{ __("events.participant_apply_validation_role") }}', 'error');
+                showNotification('{{ __('events_general.participant_apply_validation_role') }}', 'error');
                 return;
             }
 
             if (message.length < 10) {
                 e.preventDefault();
-                showNotification('{{ __("events.participant_apply_validation_message") }}', 'error');
+                showNotification('{{ __('events_general.participant_apply_validation_message') }}', 'error');
                 return;
             }
 
             if (!terms) {
                 e.preventDefault();
-                showNotification('{{ __("events.participant_apply_validation_terms") }}', 'error');
+                showNotification('{{ __('events_general.participant_apply_validation_terms') }}', 'error');
                 return;
             }
 
             // Disable submit button to prevent double submission
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin me-2"></i>{{ __("events.participant_apply_sending") }}';
+            submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin me-2"></i>{{ __('events_general.participant_apply_sending') }}';
         });
     }
 });
@@ -1617,7 +1617,7 @@ function addPortfolioLink() {
             <i class="ph ph-link"></i>
         </span>
                                         <input type="url" name="portfolio_links[]" class="form-control"
-                                       placeholder="{{ __('events.participant_links_placeholder') }}">
+                                       placeholder="{{ __('events_general.participant_links_placeholder') }}">
         <button type="button" class="btn btn-outline-danger" onclick="removePortfolioLink(this)">
             <i class="ph ph-minus"></i>
         </button>

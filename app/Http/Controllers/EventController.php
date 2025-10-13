@@ -880,7 +880,7 @@ class EventController extends Controller
             'end_datetime' => $event->end_datetime,
         ], 'Event', $event->id);
 
-        $successMessage = __('events.event_created_success');
+        $successMessage = __('events_general.event_created_success');
 
         if ($invitationCount > 0) {
             $successMessage .= ' ' . __('events.invitations_sent_success', ['count' => $invitationCount]);

@@ -38,7 +38,7 @@
                     <div>
                         <a href="{{ route('events.create') }}" class="btn btn-primary">
                             <i class="ph ph-plus me-2"></i>
-                            {{ __('events.create_new_event') }}
+                            {{ __('events_general.create_new_event') }}
                         </a>
                     </div>
                 </div>

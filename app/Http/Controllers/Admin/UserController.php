@@ -67,7 +67,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('admin.user_updated_successfully')
+            'message' => __('admin_general.user_updated_successfully')
         ]);
     }
 
@@ -81,7 +81,7 @@ class UserController extends Controller
         if ($user->hasRole('admin') && !$isSuperAdmin && User::role('admin')->count() <= 1) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.cannot_delete_last_admin')
+                'message' => __('admin_general.cannot_delete_last_admin')
             ], 400);
         }
         
@@ -89,7 +89,7 @@ class UserController extends Controller
         if ($user->hasRole('super-admin') && !$isSuperAdmin && User::role('super-admin')->count() <= 1) {
             return response()->json([
                 'success' => false,
-                'message' => __('admin.cannot_delete_last_super_admin')
+                'message' => __('admin_general.cannot_delete_last_super_admin')
             ], 400);
         }
 
@@ -107,7 +107,7 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('admin.user_deleted_successfully')
+                'message' => __('admin_general.user_deleted_successfully')
             ]);
 
         } catch (\Exception $e) {
@@ -146,7 +146,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => __('admin.bulk_assignment_completed')
+            'message' => __('admin_general.bulk_assignment_completed')
         ]);
     }
 

@@ -753,7 +753,20 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
            Route::get('/api/files', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getAvailableFiles'])->name('api.files');
            Route::get('/api/status', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getTranslationStatus'])->name('api.status');
 
+           // ROTTE PER SISTEMA SMART DI REVISIONE
+           Route::post('/mark-reviewed', [App\Http\Controllers\Admin\TranslationManagementController::class, 'markAsReviewed'])->name('mark-reviewed');
+           Route::post('/unmark-reviewed', [App\Http\Controllers\Admin\TranslationManagementController::class, 'unmarkAsReviewed'])->name('unmark-reviewed');
+           Route::post('/auto-save', [App\Http\Controllers\Admin\TranslationManagementController::class, 'autoSave'])->name('auto-save');
+           Route::get('/detailed-stats', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getDetailedStats'])->name('detailed-stats');
+           Route::post('/find-usage', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findKeyUsage'])->name('find-usage');
+           Route::post('/find-unused', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findUnusedKeys'])->name('find-unused');
+           Route::post('/remove-unused', [App\Http\Controllers\Admin\TranslationManagementController::class, 'removeUnusedKeys'])->name('remove-unused');
+           Route::post('/create-key', [App\Http\Controllers\Admin\TranslationManagementController::class, 'createKey'])->name('create-key');
+           Route::post('/find-missing', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findMissingKeys'])->name('find-missing');
+           Route::post('/find-all-missing', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findMissingKeys'])->name('find-all-missing');
+
         // ROTTE CON PARAMETRI LINGUA
+        Route::get('/{language}/smart', [App\Http\Controllers\Admin\TranslationManagementController::class, 'showSmart'])->name('smart');
         Route::get('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'show'])->name('show');
         Route::post('/{language}/update', [App\Http\Controllers\Admin\TranslationManagementController::class, 'update'])->name('update');
         Route::delete('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'destroy'])->name('destroy');

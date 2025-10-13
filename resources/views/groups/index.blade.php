@@ -98,7 +98,7 @@
                                     </option>
                                 </optgroup>
                                 @if(auth()->user()->hasRole('admin'))
-                                <optgroup label="{{ __('groups.admin') }}">
+                                <optgroup label="{{ __('groups.admin_general') }}">
                                     <option value="admin" {{ request('filter') == 'admin' ? 'selected' : '' }}>
                                         {{ __('groups.filter_admin') }}
                                     </option>

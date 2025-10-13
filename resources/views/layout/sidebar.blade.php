@@ -28,7 +28,7 @@
                             $roleDisplay = match($role) {
                                 'admin' => 'Amministratore',
                                 'moderatore' => 'Moderatore',
-                                'organizzatore' => __('events.organizer'),
+                                'organizzatore' => __('events_general.organizer'),
                                 'poeta' => 'Poeta',
                                 'giudice' => 'Giudice',
                                 'spettatore' => 'Spettatore',
@@ -125,7 +125,7 @@
                                 <li class="no-sub {{ request()->routeIs('events.*') ? 'active' : '' }}">
                                     <a href="{{ route('events.index') }}">
                                         <x-icon name="event" size="20" class="me-2" />
-                                        {{ __('events.events') }}
+                                        {{ __('events_general.events') }}
                                         @auth
                                         @if(auth()->user()->organizedEvents()->where('start_datetime', '>', now())->count() > 0)
                                             <span class="badge bg-primary badge-notification ms-2">
@@ -188,7 +188,7 @@
                                 <li class="no-sub {{ request()->routeIs('poems.*') ? 'active' : '' }}">
                                     <a href="{{ route('poems.index') }}">
                                         <x-icon name="poetry" size="20" class="me-2" />
-                                        {{ __('poems.title') }}
+                                        {{ __('poems.poems') }}
                                         @auth
                                         @if(auth()->user()->poems()->drafts()->count() > 0)
                                             <span class="badge bg-warning badge-notification ms-2">

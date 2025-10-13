@@ -239,7 +239,7 @@
                         <div class="col-3">
                             <div class="feature-icon">
                                 <h3>🎪</h3>
-                                <small>{{ __('register.events') }}</small>
+                                <small>{{ __('register.events_general') }}</small>
                             </div>
                         </div>
                         <div class="col-3">
@@ -365,7 +365,7 @@
                             </label>
                             <p class="text-muted small mb-3">
                                 {{ __('register.choose_role_description') }}
-                                <br><strong>💡 {{ __('register.four_main_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}
+                                <br><strong>💡 {{ __('register.four_main_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events_general.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}
                             </p>
 
 
@@ -423,8 +423,8 @@
                             <h6>🌟 {{ __('register.why_join_slam_in') }}</h6>
                             <ul class="list-unstyled mb-0 small">
                                 <li>• <strong>{{ __('register.fast_registration') }}:</strong> {{ __('register.only_essential_data') }}</li>
-                                <li>• <strong>{{ __('register.flexible_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}</li>
-                                <li>• <strong>{{ __('register.complete_ecosystem') }}:</strong> {{ __('register.artists') }}, {{ __('events.organizers') }}, {{ __('register.venues') }} {{ __('register.and') }} {{ __('register.audience') }}</li>
+                                <li>• <strong>{{ __('register.flexible_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events_general.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}</li>
+                                <li>• <strong>{{ __('register.complete_ecosystem') }}:</strong> {{ __('register.artists') }}, {{ __('events_general.organizers') }}, {{ __('register.venues') }} {{ __('register.and') }} {{ __('register.audience') }}</li>
                             </ul>
                         </div>
                     </div>

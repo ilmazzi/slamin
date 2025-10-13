@@ -5,7 +5,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph-duotone ph-arrow-right me-2"></i>
-                    {{ __('admin.convert_to_translation') }}
+                    {{ __('admin_general.convert_to_translation') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -17,11 +17,11 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="convertGroup" class="form-label">
-                                {{ __('admin.group_name') }}
+                                {{ __('admin_general.group_name') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <select id="convertGroup" name="group" class="form-select" required>
-                                <option value="">{{ __('admin.select_group') }}</option>
+                                <option value="">{{ __('admin_general.select_group') }}</option>
                                 <option value="admin">admin</option>
                                 <option value="common">common</option>
                                 <option value="auth">auth</option>
@@ -35,11 +35,11 @@
 
                         <div class="col-md-6">
                             <label for="convertLocale" class="form-label">
-                                {{ __('admin.locale') }}
+                                {{ __('admin_general.locale') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <select id="convertLocale" name="locale" class="form-select" required>
-                                <option value="">{{ __('admin.select_locale') }}</option>
+                                <option value="">{{ __('admin_general.select_locale') }}</option>
                                 <option value="it">IT - Italiano</option>
                                 <option value="en">EN - English</option>
                                 <option value="es">ES - Español</option>
@@ -51,16 +51,16 @@
 
                         <div class="col-12">
                             <label for="convertKey" class="form-label">
-                                {{ __('admin.key_name') }}
+                                {{ __('admin_general.key_name') }}
                                 <span class="text-danger">*</span>
                             </label>
                             <input type="text" id="convertKey" name="key" class="form-control"
-                                   placeholder="{{ __('admin.key_name_placeholder') }}" required>
-                            <div class="form-text">{{ __('admin.key_name_help') }}</div>
+                                   placeholder="{{ __('admin_general.key_name_placeholder') }}" required>
+                            <div class="form-text">{{ __('admin_general.key_name_help') }}</div>
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label">{{ __('admin.original_text') }}</label>
+                            <label class="form-label">{{ __('admin_general.original_text') }}</label>
                             <div class="alert alert-light" id="originalTextPreview">
                                 <!-- Il testo originale verrà inserito qui via JavaScript -->
                             </div>
@@ -70,11 +70,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    {{ __('admin.cancel') }}
+                    {{ __('admin_general.cancel') }}
                 </button>
                 <button type="button" class="btn btn-primary" onclick="submitConvert()">
                     <i class="ph-duotone ph-check me-1"></i>
-                    {{ __('admin.convert') }}
+                    {{ __('admin_general.convert') }}
                 </button>
             </div>
         </div>
@@ -97,7 +97,7 @@ function submitConvert() {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: '{{ __('admin.success') }}',
+                title: '{{ __('admin_general.success') }}',
                 text: data.message,
                 timer: 2000,
                 showConfirmButton: false
@@ -107,7 +107,7 @@ function submitConvert() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: '{{ __('admin.error') }}',
+                title: '{{ __('admin_general.error') }}',
                 text: data.message
             });
         }
@@ -115,8 +115,8 @@ function submitConvert() {
     .catch(error => {
         Swal.fire({
             icon: 'error',
-            title: '{{ __('admin.error') }}',
-            text: '{{ __('admin.unknown_error') }}'
+            title: '{{ __('admin_general.error') }}',
+            text: '{{ __('admin_general.unknown_error') }}'
         });
     });
 }

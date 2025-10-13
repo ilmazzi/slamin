@@ -52,7 +52,6 @@ return [
     'toggle_active' => 'Attiva/Disattiva',
     'save_badge' => 'Salva Badge',
     'delete_badge' => 'Elimina Badge',
-    'cancel' => 'Annulla',
     
     // Messages
     'badge_earned' => 'Badge Guadagnato!',
@@ -65,7 +64,6 @@ return [
     'user_already_has_badge' => 'L\'utente ha già questo badge',
     
     // Levels
-    'level' => 'Livello',
     'level_name' => 'Nome Livello',
     'level_description' => 'Descrizione',
     'required_points' => 'Punti Richiesti',
@@ -102,20 +100,16 @@ return [
     'my_achievements' => 'I Miei Traguardi',
     'badges_unlocked' => 'Badge Sbloccati',
     'badges_locked' => 'Badge Bloccati',
-    'progress' => 'Progresso',
     'earned_on' => 'Guadagnato il',
     'not_earned_yet' => 'Non ancora guadagnato',
     
     // Event Scoring
     'event_scoring' => 'Punteggi Evento',
     'scoring_dashboard' => 'Dashboard Punteggi',
-    'participants' => 'Partecipanti',
-    'add_participant' => 'Aggiungi Partecipante',
     'participant_name' => 'Nome Partecipante',
     'guest_participant' => 'Partecipante Ospite',
     'registered_user' => 'Utente Registrato',
     'performance_order' => 'Ordine Esibizione',
-    'status' => 'Stato',
     'confirmed' => 'Confermato',
     'performed' => 'Esibito',
     'disqualified' => 'Squalificato',
@@ -124,10 +118,8 @@ return [
     // Rounds
     'rounds' => 'Turni',
     'round' => 'Turno',
-    'add_round' => 'Aggiungi Turno',
     'round_name' => 'Nome Turno',
     'round_number' => 'Numero Turno',
-    'max_participants' => 'Max Partecipanti',
     'scoring_type' => 'Tipo Punteggio',
     'scoring_average' => 'Media',
     'scoring_sum' => 'Somma',
@@ -136,9 +128,7 @@ return [
     
     // Scores
     'scores' => 'Punteggi',
-    'score' => 'Punteggio',
     'enter_score' => 'Inserisci Punteggio',
-    'judge' => 'Giudice',
     'scored_at' => 'Data Punteggio',
     'average_score' => 'Punteggio Medio',
     'total_score' => 'Punteggio Totale',
@@ -167,12 +157,10 @@ return [
     // Empty States
     'no_badges' => 'Nessun badge disponibile',
     'no_badges_earned' => 'Non hai ancora guadagnato badge',
-    'no_participants' => 'Nessun partecipante',
     'no_scores' => 'Nessun punteggio inserito',
     'no_rankings' => 'Classifica non ancora disponibile',
     
     // Event Scoring - Additional
-    'add_round' => 'Aggiungi Turno',
     'edit_round' => 'Modifica Turno',
     'delete_round' => 'Elimina Turno',
     'save_round' => 'Salva Turno',
@@ -185,5 +173,8 @@ return [
     'status_updated' => 'Stato aggiornato!',
     'rankings_calculated' => 'Classifica calcolata con successo!',
     'badges_awarded' => 'Badge assegnati ai vincitori!',
-];
 
+    'cancel' => 'Annulla',
+    'level' => 'Livello',
+
+];

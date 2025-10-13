@@ -32,7 +32,7 @@
                                 </a>
                                 <a href="{{ route('search.index', ['q' => $query, 'type' => 'events']) }}"
                                    class="btn {{ $type === 'events' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
-                                    {{ __('search.events') }}
+                                    {{ __('search.events_general') }}
                                 </a>
                                 <a href="{{ route('search.index', ['q' => $query, 'type' => 'videos']) }}"
                                    class="btn {{ $type === 'videos' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">

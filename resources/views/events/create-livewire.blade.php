@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', __('events.create_event'))
+@section('title', __('events_general.create_event'))
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/datepikar/flatpickr.min.css') }}">
@@ -47,7 +47,7 @@ function initializeFlatpickr() {
             }
         }
     });
-    
+
     // End datetime
     flatpickr("#end_datetime", {
         enableTime: true,
@@ -61,7 +61,7 @@ function initializeFlatpickr() {
             }
         }
     });
-    
+
     // Availability deadline
     flatpickr("#availability_deadline", {
         enableTime: true,
@@ -75,7 +75,7 @@ function initializeFlatpickr() {
             }
         }
     });
-    
+
     console.log('✅ Flatpickr initialized');
 }
 

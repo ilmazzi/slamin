@@ -1,14 +1,19 @@
 <?php
 
 return [
-    'accept' => 'Accetta',
-    'decline' => 'Rifiuta',
-    'actions' => 'Azioni',
     'event' => 'Evento',
-    'role' => 'Ruolo',
-    'expired' => 'Scaduto',
     'total_invitations' => 'Inviti totali',
     'accepted_invitations' => 'Accettati',
+
+
+    'accept' => 'Accetta',
+    'actions' => 'Azioni',
+    'decline' => 'Rifiuta',
+    'expired' => 'Scaduto',
+    'no_invitations' => 'Nessun invito',
+    'pending_invitations' => 'Inviti in sospeso',
+    'rejected_invitations' => 'Inviti rifiutati',
+    'role' => 'Ruolo',
     'status' => 'Stato',
 
 ];

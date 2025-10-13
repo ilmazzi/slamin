@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', __('admin.help_management'))
+@section('title', __('admin_general.help_management'))
 
 @section('main-content')
 <div class="container-fluid">
@@ -9,7 +9,7 @@
         <div class="col-12">
             <h4 class="main-title">
                 <i class="ph ph-{{ $type === 'faq' ? 'chat-circle-question' : 'question' }} me-2"></i>
-                {{ $type === 'faq' ? __('admin.faq_management') : __('admin.help_management') }}
+                {{ $type === 'faq' ? __('admin_general.faq_management') : __('admin_general.help_management') }}
             </h4>
         </div>
     </div>
@@ -25,19 +25,19 @@
                                 <a href="{{ route('admin.help.index', ['type' => 'help']) }}"
                                    class="btn {{ $type === 'help' ? 'btn-primary' : 'btn-light-primary' }}">
                                     <i class="ph ph-question me-2"></i>
-                                    {{ __('admin.help_pages') }}
+                                    {{ __('admin_general.help_pages') }}
                                 </a>
                                 <a href="{{ route('admin.help.index', ['type' => 'faq']) }}"
                                    class="btn {{ $type === 'faq' ? 'btn-primary' : 'btn-light-primary' }}">
                                     <i class="ph ph-chat-circle me-2"></i>
-                                    {{ __('admin.faq_pages') }}
+                                    {{ __('admin_general.faq_pages') }}
                                 </a>
                             </div>
                         </div>
                         <div class="col-md-6 text-end">
                             <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-primary">
                                 <i class="ph ph-plus me-2"></i>
-                                {{ __('admin.add_new') }}
+                                {{ __('admin_general.add_new') }}
                             </a>
                         </div>
                     </div>
@@ -56,12 +56,12 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>{{ __('admin.title') }}</th>
-                                        <th>{{ __('admin.type') }}</th>
-                                        <th>{{ __('admin.order') }}</th>
-                                        <th>{{ __('admin.status') }}</th>
-                                        <th>{{ __('admin.created_at') }}</th>
-                                        <th>{{ __('admin.actions') }}</th>
+                                        <th>{{ __('admin_general.title') }}</th>
+                                        <th>{{ __('admin_general.type') }}</th>
+                                        <th>{{ __('admin_general.order') }}</th>
+                                        <th>{{ __('admin_general.status') }}</th>
+                                        <th>{{ __('admin_general.created_at') }}</th>
+                                        <th>{{ __('admin_general.actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,7 +72,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge bg-{{ $help->type === 'faq' ? 'info' : 'primary' }}">
-                                                    {{ $help->type === 'faq' ? __('admin.faq') : __('admin.help') }}
+                                                    {{ $help->type === 'faq' ? __('admin_general.faq') : __('admin_general.help') }}
                                                 </span>
                                             </td>
                                             <td>
@@ -80,9 +80,9 @@
                                             </td>
                                             <td>
                                                 @if($help->is_active)
-                                                    <span class="badge bg-success">{{ __('admin.active') }}</span>
+                                                    <span class="badge bg-success">{{ __('admin_general.active') }}</span>
                                                 @else
-                                                    <span class="badge bg-secondary">{{ __('admin.inactive') }}</span>
+                                                    <span class="badge bg-secondary">{{ __('admin_general.inactive') }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -91,11 +91,11 @@
                                             <td>
                                                 <div class="d-flex gap-1">
                                                     <a href="{{ route('admin.help.show', $help) }}"
-                                                       class="btn btn-sm btn-light-info" title="{{ __('admin.view') }}">
+                                                       class="btn btn-sm btn-light-info" title="{{ __('admin_general.view') }}">
                                                         <i class="ph ph-eye"></i>
                                                     </a>
                                                     <a href="{{ route('admin.help.edit', $help) }}"
-                                                       class="btn btn-sm btn-light-primary" title="{{ __('admin.edit') }}">
+                                                       class="btn btn-sm btn-light-primary" title="{{ __('admin_general.edit') }}">
                                                         <i class="ph ph-pencil"></i>
                                                     </a>
                                                     <form action="{{ route('admin.help.toggle', $help) }}" method="POST" class="d-inline">
@@ -103,14 +103,14 @@
                                                         @method('PATCH')
                                                         <button type="submit"
                                                                 class="btn btn-sm btn-light-{{ $help->is_active ? 'warning' : 'success' }}"
-                                                                title="{{ $help->is_active ? __('admin.deactivate') : __('admin.activate') }}">
+                                                                title="{{ $help->is_active ? __('admin_general.deactivate') : __('admin_general.activate') }}">
                                                             <i class="ph ph-{{ $help->is_active ? 'pause' : 'play' }}"></i>
                                                         </button>
                                                     </form>
                                                     <button type="button" 
                                                             class="btn btn-sm btn-light-danger" 
                                                             onclick="deleteHelp({{ $help->id }})"
-                                                            title="{{ __('admin.delete') }}">
+                                                            title="{{ __('admin_general.delete') }}">
                                                         <i class="ph ph-trash"></i>
                                                     </button>
                                                 </div>
@@ -128,11 +128,11 @@
                     @else
                         <div class="text-center py-5">
                             <i class="ph ph-{{ $type === 'faq' ? 'chat-circle-question' : 'question' }} f-s-48 text-muted mb-3"></i>
-                            <h5 class="text-muted">{{ __('admin.no_content_found') }}</h5>
-                            <p class="text-muted">{{ $type === 'faq' ? __('admin.no_faq_description') : __('admin.no_help_description') }}</p>
+                            <h5 class="text-muted">{{ __('admin_general.no_content_found') }}</h5>
+                            <p class="text-muted">{{ $type === 'faq' ? __('admin_general.no_faq_description') : __('admin_general.no_help_description') }}</p>
                             <a href="{{ route('admin.help.create', ['type' => $type]) }}" class="btn btn-primary btn-lg">
                                 <i class="ph ph-plus me-2"></i>
-                                {{ __('admin.add_first') }}
+                                {{ __('admin_general.add_first') }}
                             </a>
                         </div>
                     @endif
@@ -148,7 +148,7 @@
 function deleteHelp(helpId) {
     Swal.fire({
         title: '{{ __("common.are_you_sure") }}',
-        text: '{{ __("admin.confirm_delete") }}',
+        text: '{{ __('admin_general.confirm_delete') }}',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',

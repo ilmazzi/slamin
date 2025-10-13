@@ -438,7 +438,7 @@
                                         <i class="ti ti-calendar-plus f-s-18 text-success"></i>
                                     </div>
                                     <h4 class="text-success mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events') }}</p>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events_general') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -493,14 +493,14 @@
                                                     @if($event->start_datetime)
                                                     {{ $event->start_datetime->format('d/m/Y H:i') }}
                                                 @elseif($event->is_availability_based)
-                                                    {{ __('events.availability_based_event') }}
+                                                    {{ __('events_general.availability_based_event') }}
                                                 @else
-                                                    {{ __('events.not_specified') }}
+                                                    {{ __('events_general.not_specified') }}
                                                 @endif
                                                 @elseif($event->is_availability_based)
-                                                    {{ __('events.availability_based_event') }}
+                                                    {{ __('events_general.availability_based_event') }}
                                                 @else
-                                                    {{ __('events.not_specified') }}
+                                                    {{ __('events_general.not_specified') }}
                                                 @endif
                                             </small>
                                         </div>
@@ -542,9 +542,9 @@
                                             <small class="text-muted f-s-12">@if($participation->event->start_datetime)
                                                     {{ $participation->event->start_datetime->format('d/m/Y H:i') }}
                                                 @elseif($participation->event->is_availability_based)
-                                                    {{ __('events.availability_based_event') }}
+                                                    {{ __('events_general.availability_based_event') }}
                                                 @else
-                                                    {{ __('events.not_specified') }}
+                                                    {{ __('events_general.not_specified') }}
                                                 @endif</small>
                                         </div>
                                     </td>
@@ -1126,7 +1126,7 @@
                                         <div class="card-body">
                                             <h6 class="card-title fw-semibold">{{ Str::limit($event->title, 30) }}</h6>
                                             <p class="card-text text-muted f-s-13">
-                                                <i class="ti ti-calendar"></i> {{ $event->date ? $event->date->format('d/m/Y') : __('events.date_not_set') }}<br>
+                                                <i class="ti ti-calendar"></i> {{ $event->date ? $event->date->format('d/m/Y') : __('events_general.date_not_set') }}<br>
                                                 <i class="ti ti-map-pin"></i> {{ Str::limit($event->venue_name, 25) }}
                                             </p>
                                             <div class="d-flex justify-content-between align-items-center">
@@ -1626,7 +1626,7 @@
                                         <i class="ti ti-calendar-plus f-s-18 text-success"></i>
                                     </div>
                                     <h4 class="text-success mb-1 f-w-600">{{ $stats['total_events'] }}</h4>
-                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events') }}</p>
+                                    <p class="f-w-500 text-dark f-s-12 mb-0">{{ __('profile.events_general') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1674,9 +1674,9 @@
                                             <small class="text-muted f-s-12">@if($participation->event->start_datetime)
                                                     {{ $participation->event->start_datetime->format('d/m/Y H:i') }}
                                                 @elseif($participation->event->is_availability_based)
-                                                    {{ __('events.availability_based_event') }}
+                                                    {{ __('events_general.availability_based_event') }}
                                                 @else
-                                                    {{ __('events.not_specified') }}
+                                                    {{ __('events_general.not_specified') }}
                                                 @endif</small>
                                         </div>
                                     </td>

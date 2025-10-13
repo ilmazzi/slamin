@@ -102,7 +102,7 @@ class HelpController extends Controller
 
         return redirect()
             ->route('admin.help.index', ['type' => $help->type])
-            ->with('success', __('admin.help.updated_successfully'));
+            ->with('success', __('admin_general.help.updated_successfully'));
     }
 
     /**
@@ -115,7 +115,7 @@ class HelpController extends Controller
 
         return redirect()
             ->route('admin.help.index', ['type' => $type])
-            ->with('success', __('admin.help.deleted_successfully'));
+            ->with('success', __('admin_general.help.deleted_successfully'));
     }
 
     /**

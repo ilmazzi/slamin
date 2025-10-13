@@ -3,7 +3,7 @@
 
 
 
-@section('title', __('chat.page_title'))
+@section('title', __('chat_general.page_title'))
 
 @section('main-content')
 <meta name="current-user-id" content="{{ auth()->id() }}">
@@ -276,7 +276,7 @@ function createMessageElement(message) {
                 <div class="card-body">
                     <div class="chat-tab-wrapper">
                         <ul class="tabs chat-tabs">
-                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>{{ __('chat.title') }}</li>
+                            <li class="tab-link active" data-tab="1"><i class="ph-fill  ph-chat-circle-text f-s-18 me-2"></i>{{ __('chat_general.title') }}</li>
                         </ul>
                     </div>
                     <div class="content-wrapper">
@@ -292,7 +292,7 @@ function createMessageElement(message) {
                                             <button class="nav-link active" id="private-tab" data-bs-toggle="tab"
                                                     data-bs-target="#private-tab-pane" type="button" role="tab"
                                                     aria-controls="private-tab-pane" aria-selected="false"
-                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>{{ __('chat.private') }}</button>
+                                                    tabindex="-1"><i class="ph-fill  ph-lock-key-open me-2"></i>{{ __('chat_general.private') }}</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="BasicContent">
@@ -317,12 +317,12 @@ function createMessageElement(message) {
                                                     <div class="flex-grow-1 text-start mg-s-50">
                                                         <p class="mb-0 f-w-500 text-dark txt-ellipsis-1">{{ $contact['name'] }}</p>
                                                         <p class="text-secondary mb-0 f-s-12 mb-0 chat-message">
-                                                            <i class="ti ti-checks"></i> {{ $contact['last_message'] ?: __('chat.no_message') }}
+                                                            <i class="ti ti-checks"></i> {{ $contact['last_message'] ?: __('chat_general.no_message') }}
                                                         </p>
                                                         <!-- Typing indicator -->
                                                         <div class="typing-indicator-contact d-none" data-room-id="{{ $contact['chat_room_id'] }}">
                                                             <small class="text-info">
-                                                                <i class="ti ti-pencil me-1"></i>{{ __('chat.typing') }}
+                                                                <i class="ti ti-pencil me-1"></i>{{ __('chat_general.typing') }}
                                                             </small>
                                                         </div>
                                                     </div>
@@ -347,7 +347,7 @@ function createMessageElement(message) {
                                                 </a>
                                                 @empty
                                                 <div class="text-center py-4">
-                                                    <p class="text-muted">{{ __('chat.no_contacts_found') }}</p>
+                                                    <p class="text-muted">{{ __('chat_general.no_contacts_found') }}</p>
                                                     </div>
                                                 @endforelse
                                             </div>

@@ -1,14 +1,7 @@
 <?php
 
 return [
-    'management' => 'Gestione carosello',
-    'breadcrumb' => 'Carosello',
-    'dashboard' => 'Dashboard',
     'new_slide' => 'Nuova slide',
-    'edit' => 'Modifica',
-    'view' => 'Visualizza',
-    'delete' => 'Elimina',
-    'cancel' => 'Annulla',
     'active' => 'Attivo',
     'inactive' => 'Inattivo',
     'image_header' => 'Immagine',
@@ -26,5 +19,12 @@ return [
     'slides' => 'Slide del carosello',
     'from' => 'Da',
     'to' => 'A',
+
+
+    'cancel' => 'Annulla',
+    'delete' => 'Elimina',
+    'edit' => 'Modifica',
+    'management' => 'Gestione',
+    'view' => 'Visualizza',
 
 ];

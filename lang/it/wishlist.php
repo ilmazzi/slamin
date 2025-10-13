@@ -2,7 +2,6 @@
 
 return [
     'wishlist' => 'Lista desideri',
-    'my_wishlist' => 'La mia lista desideri',
     'add_to_wishlist' => 'Aggiungi alla lista desideri',
     'remove_from_wishlist' => 'Rimuovi dalla lista desideri',
     'wishlist_empty' => 'La tua lista desideri è vuota',

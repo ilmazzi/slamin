@@ -123,7 +123,7 @@
                                         <tr>
                                             <th>{{ __('invitations.event') }}</th>
                                             <th>{{ __('invitations.role') }}</th>
-                                            <th>{{ __('events.organizer') }}</th>
+                                            <th>{{ __('events_general.organizer') }}</th>
                                             <th>Data {{ __('invitations.event') }}</th>
                                             <th>{{ __('invitations.status') }}</th>
                                             <th>{{ __('invitations.actions') }}</th>
