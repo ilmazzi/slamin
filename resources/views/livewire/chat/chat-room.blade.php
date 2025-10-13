@@ -251,35 +251,54 @@ function chatRoom() {
         },
 
         listenToEcho() {
-            if (window.Echo) {
-                // Listen for new messages
-                window.Echo.private(`chat.room.${@this.roomId}`)
-                    .listen('.chat.message', (e) => {
-                        @this.dispatch('messageReceived', e);
-                    });
+            if (typeof window.Echo !== 'undefined' && window.Echo) {
+                try {
+                    // Listen for new messages
+                    window.Echo.private(`chat.room.${@this.roomId}`)
+                        .listen('.chat.message', (e) => {
+                            @this.dispatch('messageReceived', e);
+                        })
+                        .error((error) => {
+                            console.warn('Echo error on chat.message:', error);
+                        });
 
-                // Listen for typing events
-                window.Echo.private(`chat.room.${@this.roomId}`)
-                    .listen('.user.typing', (e) => {
-                        this.handleUserTyping(e.user_id);
-                    });
+                    // Listen for typing events
+                    window.Echo.private(`chat.room.${@this.roomId}`)
+                        .listen('.user.typing', (e) => {
+                            this.handleUserTyping(e.user_id);
+                        })
+                        .error((error) => {
+                            console.warn('Echo error on user.typing:', error);
+                        });
 
-                window.Echo.private(`chat.room.${@this.roomId}`)
-                    .listen('.user.stopped.typing', (e) => {
-                        this.handleUserStoppedTyping(e.user_id);
-                    });
+                    window.Echo.private(`chat.room.${@this.roomId}`)
+                        .listen('.user.stopped.typing', (e) => {
+                            this.handleUserStoppedTyping(e.user_id);
+                        })
+                        .error((error) => {
+                            console.warn('Echo error on user.stopped.typing:', error);
+                        });
 
-                // Listen for presence updates
-                window.Echo.join(`chat.room.${@this.roomId}`)
-                    .here((users) => {
-                        this.onlineUsers = users.map(user => user.id);
-                    })
-                    .joining((user) => {
-                        this.onlineUsers.push(user.id);
-                    })
-                    .leaving((user) => {
-                        this.onlineUsers = this.onlineUsers.filter(id => id !== user.id);
-                    });
+                    // Listen for presence updates
+                    window.Echo.join(`chat.room.${@this.roomId}`)
+                        .here((users) => {
+                            this.onlineUsers = users.map(user => user.id);
+                        })
+                        .joining((user) => {
+                            this.onlineUsers.push(user.id);
+                        })
+                        .leaving((user) => {
+                            this.onlineUsers = this.onlineUsers.filter(id => id !== user.id);
+                        })
+                        .error((error) => {
+                            console.warn('Echo error on presence channel:', error);
+                        });
+                } catch (error) {
+                    console.warn('Echo initialization failed:', error);
+                    console.info('Chat will work without real-time features. Messages will refresh on page reload.');
+                }
+            } else {
+                console.info('Echo not available. Chat will work without real-time features.');
             }
         },
 

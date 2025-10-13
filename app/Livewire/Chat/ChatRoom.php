@@ -77,8 +77,14 @@ class ChatRoom extends Component
         // Reset input
         $this->newMessage = '';
 
-        // Broadcast the message
-        broadcast(new \App\Events\ChatMessageSent($message))->toOthers();
+        // Broadcast the message (only if Echo is configured)
+        try {
+            if (config('broadcasting.default') !== 'null') {
+                broadcast(new \App\Events\ChatMessageSent($message))->toOthers();
+            }
+        } catch (\Exception $e) {
+            \Log::warning('Broadcasting failed', ['error' => $e->getMessage()]);
+        }
 
         // Refresh messages
         $this->loadMessages();
@@ -115,15 +121,22 @@ class ChatRoom extends Component
     {
         if (!$this->isTyping) {
             $this->isTyping = true;
-            $user = Auth::user();
-            $currentTypingUsers = $this->typingUsers;
             
-            broadcast(new \App\Events\UserStartedTyping(
-                $this->roomId, 
-                $user->id, 
-                $user->getDisplayName(),
-                array_merge($currentTypingUsers, [$user->id])
-            ))->toOthers();
+            try {
+                if (config('broadcasting.default') !== 'null') {
+                    $user = Auth::user();
+                    $currentTypingUsers = $this->typingUsers;
+                    
+                    broadcast(new \App\Events\UserStartedTyping(
+                        $this->roomId, 
+                        $user->id, 
+                        $user->getDisplayName(),
+                        array_merge($currentTypingUsers, [$user->id])
+                    ))->toOthers();
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Broadcasting typing event failed', ['error' => $e->getMessage()]);
+            }
         }
     }
 
@@ -131,15 +144,22 @@ class ChatRoom extends Component
     {
         if ($this->isTyping) {
             $this->isTyping = false;
-            $user = Auth::user();
-            $currentTypingUsers = array_filter($this->typingUsers, fn($id) => $id != $user->id);
             
-            broadcast(new \App\Events\UserStoppedTyping(
-                $this->roomId, 
-                $user->id, 
-                $user->getDisplayName(),
-                $currentTypingUsers
-            ))->toOthers();
+            try {
+                if (config('broadcasting.default') !== 'null') {
+                    $user = Auth::user();
+                    $currentTypingUsers = array_filter($this->typingUsers, fn($id) => $id != $user->id);
+                    
+                    broadcast(new \App\Events\UserStoppedTyping(
+                        $this->roomId, 
+                        $user->id, 
+                        $user->getDisplayName(),
+                        $currentTypingUsers
+                    ))->toOthers();
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Broadcasting typing event failed', ['error' => $e->getMessage()]);
+            }
         }
     }
 
