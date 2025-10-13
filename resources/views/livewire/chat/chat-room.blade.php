@@ -157,6 +157,7 @@
     </div>
 </div>
 
+@push('styles')
 <style>
 .chat-container {
     height: 100vh;
@@ -225,7 +226,9 @@
     }
 }
 </style>
+@endpush
 
+@push('scripts')
 <script>
 function chatRoom() {
     return {
@@ -374,3 +377,4 @@ function messageInput() {
     }
 }
 </script>
+@endpush

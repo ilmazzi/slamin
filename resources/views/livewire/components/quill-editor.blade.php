@@ -16,6 +16,7 @@
     @endif
 </div>
 
+@push('styles')
 <style>
 .quill-editor-container {
     border: 1px solid #dee2e6;
@@ -88,7 +89,9 @@
     }
 }
 </style>
+@endpush
 
+@push('scripts')
 <script>
 function quillEditor() {
     return {
@@ -197,3 +200,4 @@ document.addEventListener('livewire:init', () => {
     });
 });
 </script>
+@endpush

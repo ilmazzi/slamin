@@ -127,6 +127,7 @@
     </div>
 </div>
 
+@push('styles')
 <style>
 .emoji-picker-container {
     max-width: 320px;
@@ -189,7 +190,9 @@
     }
 }
 </style>
+@endpush
 
+@push('scripts')
 <script>
 function emojiPicker() {
     return {
@@ -230,3 +233,4 @@ document.addEventListener('livewire:init', () => {
     });
 });
 </script>
+@endpush

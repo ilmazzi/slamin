@@ -133,6 +133,7 @@
     @endif
 </div>
 
+@push('styles')
 <style>
 .chat-search-container {
     max-height: 70vh;
@@ -203,7 +204,9 @@
     }
 }
 </style>
+@endpush
 
+@push('scripts')
 <script>
 function chatSearch() {
     return {
@@ -225,3 +228,4 @@ document.addEventListener('livewire:init', () => {
     });
 });
 </script>
+@endpush
