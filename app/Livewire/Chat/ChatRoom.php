@@ -115,7 +115,15 @@ class ChatRoom extends Component
     {
         if (!$this->isTyping) {
             $this->isTyping = true;
-            broadcast(new \App\Events\UserStartedTyping($this->roomId, Auth::id()))->toOthers();
+            $user = Auth::user();
+            $currentTypingUsers = $this->typingUsers;
+            
+            broadcast(new \App\Events\UserStartedTyping(
+                $this->roomId, 
+                $user->id, 
+                $user->getDisplayName(),
+                array_merge($currentTypingUsers, [$user->id])
+            ))->toOthers();
         }
     }
 
@@ -123,7 +131,15 @@ class ChatRoom extends Component
     {
         if ($this->isTyping) {
             $this->isTyping = false;
-            broadcast(new \App\Events\UserStoppedTyping($this->roomId, Auth::id()))->toOthers();
+            $user = Auth::user();
+            $currentTypingUsers = array_filter($this->typingUsers, fn($id) => $id != $user->id);
+            
+            broadcast(new \App\Events\UserStoppedTyping(
+                $this->roomId, 
+                $user->id, 
+                $user->getDisplayName(),
+                $currentTypingUsers
+            ))->toOthers();
         }
     }
 
