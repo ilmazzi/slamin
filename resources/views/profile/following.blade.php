@@ -147,47 +147,9 @@ function startChat(userId) {
         return;
     }
 
-    // Disabilita i pulsanti durante la richiesta
-    const messageButton = document.getElementById('messageBtn' + userId);
-
-    if (messageButton) messageButton.disabled = true;
-
-    // Mostra loading
-    Swal.fire({
-        title: 'Creazione chat...',
-        text: 'Sto creando la chat con questo utente',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    // Crea o accede alla chat privata
-    fetch('{{ route("chat.create-private", ":userId") }}'.replace(':userId', userId), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Reindirizza alla chat
-            window.location.href = '{{ route("chat.index") }}';
-        } else {
-            Swal.fire('Errore', data.message || 'Errore durante la creazione della chat', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Errore creazione chat:', error);
-        Swal.fire('Errore', 'Errore durante la creazione della chat', 'error');
-    })
-    .finally(() => {
-        // Riabilita i pulsanti
-        if (messageButton) messageButton.disabled = false;
-    });
+    // Con Wirechat, reindirizziamo direttamente alla chat
+    // Wirechat gestirà automaticamente la creazione della chat privata
+    window.location.href = '{{ route("chat.index") }}';
 }
 </script>
 @endpush
