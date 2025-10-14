@@ -27,7 +27,7 @@ class VerifyAdminRoles extends Command
      * IMPORTANTE: Modifica questi ID con quelli reali degli admin del tuo sito
      */
     protected $requiredAdmins = [
-        1, // ID del primo admin (modifica con il tuo ID reale)
+        36, // davide.mazzitelli84@gmail.com
         // Aggiungi qui gli altri ID admin se necessari
     ];
 
