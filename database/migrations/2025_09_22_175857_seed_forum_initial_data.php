@@ -142,10 +142,15 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
+     * 
+     * ATTENZIONE: Non eseguiamo truncate per evitare di perdere dati importanti
+     * Se necessario, eliminare manualmente i dati seed dal database
      */
     public function down(): void
     {
-        DB::table('forum_settings')->truncate();
-        DB::table('subreddits')->whereIn('slug', ['poetry', 'poetry-slam', 'poetry-critique'])->delete();
+        // NON fare truncate o delete - potrebbe causare perdita di dati critici
+        // Se necessario rollback, eliminare manualmente:
+        // DB::table('forum_settings')->whereIn('key', [...])->delete();
+        // DB::table('subreddits')->whereIn('slug', ['poetry', 'poetry-slam', 'poetry-critique'])->delete();
     }
 };
