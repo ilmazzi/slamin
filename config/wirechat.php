@@ -29,14 +29,49 @@ return [
     |
     */
     'table_prefix' => 'wirechat_',
-'morph_map' => [
-        // attori tipici
-        'user'         => \App\Models\User::class,          // <- modifica se necessario
-        // entità Wirechat
+    'models' => [
+        'user'         => \App\Models\User::class,
         'conversation' => \Wirechat\Wirechat\Models\Conversation::class,
         'message'      => \Wirechat\Wirechat\Models\Message::class,
         'participant'  => \Wirechat\Wirechat\Models\Participant::class,
+
+        // tuoi modelli di dominio usati nelle relazioni polimorfiche
+        'video'        => \App\Models\Video::class,
+        'poem'         => \App\Models\Poem::class,
+        'article'      => \App\Models\Article::class,
+        'photo'        => \App\Models\Photo::class,
+        'gig'          => \App\Models\Gig::class,
+        'event'        => \App\Models\Event::class,
+        'group'        => \App\Models\Group::class,
+        'comment'      => \App\Models\Comment::class, // <— AGGIUNTO
+        'badge'        => \App\Models\Badge::class,   // <— AGGIUNTO
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Morph map (alias salvato nel DB -> classe Eloquent)
+    |--------------------------------------------------------------------------
+    | Le CHIAVI sono gli alias che DEVONO comparire nelle colonne *_type.
+    */
+    'morph_map' => [
+        // attori tipici / wirechat
+        'user'         => \App\Models\User::class,
+        'conversation' => \Wirechat\Wirechat\Models\Conversation::class,
+        'message'      => \Wirechat\Wirechat\Models\Message::class,
+        'participant'  => \Wirechat\Wirechat\Models\Participant::class,
+
+        // dominio applicativo
+        'video'        => \App\Models\Video::class,
+        'poem'         => \App\Models\Poem::class,
+        'article'      => \App\Models\Article::class,
+        'photo'        => \App\Models\Photo::class,
+        'gig'          => \App\Models\Gig::class,
+        'event'        => \App\Models\Event::class,
+        'group'        => \App\Models\Group::class,
+        'comment'      => \App\Models\Comment::class,
+        'badge'        => \App\Models\Badge::class,
+    ],
+
     /*
      |--------------------------------------------------------------------------
      | Storage
