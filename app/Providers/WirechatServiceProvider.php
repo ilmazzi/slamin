@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 class WirechatServiceProvider extends ServiceProvider
@@ -18,11 +17,6 @@ class WirechatServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'user' => User::class,
         ]);
-        
-        // Configura anche il morph map globale
-        Model::morphMap([
-            'user' => User::class,
-        ]);
     }
 
     /**
@@ -32,11 +26,6 @@ class WirechatServiceProvider extends ServiceProvider
     {
         // Assicurati che il morph map sia configurato
         Relation::enforceMorphMap([
-            'user' => User::class,
-        ]);
-        
-        // Configura anche il morph map globale
-        Model::morphMap([
             'user' => User::class,
         ]);
     }
