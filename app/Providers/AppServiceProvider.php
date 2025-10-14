@@ -6,7 +6,6 @@ use App\Models\Video;
 use App\Models\Group;
 use App\Models\GigApplication;
 use App\Models\Event;
-use App\Models\ChatMessage;
 use App\Models\Poem;
 use App\Models\Article;
 use App\Models\Photo;
@@ -22,7 +21,6 @@ use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
 use App\Observers\GigApplicationObserver;
 use App\Observers\EventObserver;
-use App\Observers\ChatMessageObserver;
 use App\Observers\PoemObserver;
 use App\Observers\ArticleObserver;
 use App\Observers\PhotoObserver;
@@ -56,6 +54,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configura i morph maps per Wirechat
+        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
+            'user' => \App\Models\User::class,
+        ]);
+
         // Registra l'observer per i video
         Video::observe(VideoObserver::class);
 
@@ -69,7 +72,6 @@ class AppServiceProvider extends ServiceProvider
         Event::observe(EventObserver::class);
 
         // Registra l'observer per i messaggi chat
-        ChatMessage::observe(ChatMessageObserver::class);
 
         // Registra l'observer per le poesie
         Poem::observe(PoemObserver::class);
@@ -211,6 +213,5 @@ class AppServiceProvider extends ServiceProvider
             }
         });
     }
-
 
 }

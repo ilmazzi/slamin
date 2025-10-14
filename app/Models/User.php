@@ -16,11 +16,14 @@ use App\Models\SystemSetting;
 use App\Models\UserLanguage;
 use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\DB;
+use Wirechat\Wirechat\Contracts\WirechatUser;
+use Wirechat\Wirechat\Panel;
+use Wirechat\Wirechat\Traits\InteractsWithWirechat;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, WirechatUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, InteractsWithWirechat;
 
     /**
      * The attributes that are mass assignable.
@@ -1288,6 +1291,50 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getBadgesCountAttribute(): int
     {
         return $this->badges()->count();
+    }
+    // ========================================
+    // WIRECHAT IMPLEMENTATION
+    // ========================================
+
+    /**
+     * Determine if the user can access Wirechat panel
+     */
+    public function canAccessWirechatPanel(Panel $panel): bool
+    {
+        return $this->hasVerifiedEmail() && $this->isActive();
+    }
+
+    /**
+     * Control whether this user is allowed to create 1-to-1 chats in Wirechat.
+     * Note: This is different from the canCreateGroups() method for app groups.
+     */
+    public function canCreateChats(): bool
+    {
+        return $this->hasVerifiedEmail() && $this->isActive() && $this->hasAnyRole(['admin', 'moderator', 'organizer', 'poet', 'judge', 'venue_owner', 'technician']);
+    }
+
+    /**
+     * Get the user's display name for Wirechat
+     */
+    public function getWirechatNameAttribute(): string
+    {
+        return $this->getDisplayName();
+    }
+
+    /**
+     * Get the user's avatar URL for Wirechat
+     */
+    public function getWirechatAvatarUrlAttribute(): string
+    {
+        return $this->profile_photo_url;
+    }
+
+    /**
+     * Get the user's profile URL for Wirechat
+     */
+    public function getWirechatProfileUrlAttribute(): string
+    {
+        return route('profile.show', $this->id);
     }
 }
 

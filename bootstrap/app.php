@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetTimezone::class,
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\ExceptionLoggingMiddleware::class,
-            \App\Http\Middleware\LoggingMiddleware::class,
+            // \App\Http\Middleware\LoggingMiddleware::class, // Temporaneamente disabilitato per debug
             \App\Http\Middleware\CustomErrorPages::class,
             \App\Http\Middleware\UpdateUserActivity::class,
 
@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.access' => \App\Http\Middleware\AdminAccess::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'logging' => \App\Http\Middleware\LoggingMiddleware::class,
+            // 'logging' => \App\Http\Middleware\LoggingMiddleware::class, // Temporaneamente disabilitato per debug
             // Spatie Permission middleware
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
@@ -38,16 +38,24 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         // Log all exceptions for better debugging
         $exceptions->reportable(function (\Throwable $e) {
-            // Log to our custom logging service
-            \App\Services\LoggingService::logError('unhandled_exception', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-                'request_url' => request()->fullUrl(),
-                'request_method' => request()->method(),
-                'user_id' => \Illuminate\Support\Facades\Auth::user()?->id,
-            ]);
+            try {
+                // Log to our custom logging service
+                \App\Services\LoggingService::logError('unhandled_exception', [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                    'request_url' => request()->fullUrl(),
+                    'request_method' => request()->method(),
+                    'user_id' => \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : null,
+                ]);
+            } catch (\Throwable $loggingException) {
+                // Fallback to basic logging if our custom logging fails
+                \Illuminate\Support\Facades\Log::error('Exception logging failed', [
+                    'original_exception' => $e->getMessage(),
+                    'logging_exception' => $loggingException->getMessage(),
+                ]);
+            }
         });
     })
     ->withProviders([

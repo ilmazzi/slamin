@@ -27,6 +27,13 @@
     }
     </style>
     <!-- css end !-->
+    
+    @livewireStyles
+    
+    <!-- Tailwind CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    @stack('styles')
 </head>
 
 <body>
@@ -63,21 +70,13 @@
             </span>
         </div>
 
-        <!-- Chat Widget -->
+        <!-- Chat Widget - Updated to use Livewire Chat -->
         @auth
         <div class="chat-widget position-fixed" style="bottom: 20px; right: 140px; z-index: 1050;">
             <a href="{{ route('chat.index') }}" class="btn btn-primary btn-lg rounded-circle shadow-lg d-flex align-items-center justify-content-center chat-widget-btn"
-               data-chat-badge-container
                style="width: 60px; height: 60px; transition: all 0.3s ease;"
-               title="{{ __('chat_general.title') }}">
+               title="Chat">
                 <i class="ph-duotone ph-chat f-s-24"></i>
-                @if(auth()->user()->unreadChatNotifications()->count() > 0)
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger chat-notification-badge"
-                          id="chat-notification-badge"
-                          style="font-size: 0.7rem; animation: pulse 2s infinite;">
-                        {{ auth()->user()->unreadChatNotifications()->count() }}
-                    </span>
-                @endif
             </a>
         </div>
 
@@ -87,15 +86,6 @@
             box-shadow: 0 8px 25px rgba(0,123,255,0.3) !important;
         }
 
-        .chat-notification-badge {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
 
             /* Mobile responsive */
             @media (max-width: 768px) {
@@ -335,59 +325,7 @@ function initGlobalChatBadge() {
     window.notificationAPICalls = new Set();
   }
 
-    // Cerca il badge generale nella sidebar
-  const badgeContainer = document.querySelector('[data-chat-badge-container]');
 
-  const badgeElement = badgeContainer?.querySelector('#chat-notification-badge');
-
-  let currentCount = 0;
-  if (badgeElement) {
-    currentCount = parseInt(badgeElement.textContent) || 0;
-  }
-
-    // Funzione per aggiornare il badge
-  function updateBadge(count) {
-    currentCount = Math.max(0, count);
-
-    if (badgeElement) {
-      if (currentCount > 0) {
-        badgeElement.textContent = currentCount;
-        badgeElement.style.display = 'inline-block';
-      } else {
-        badgeElement.style.display = 'none';
-      }
-    } else if (badgeContainer && currentCount > 0) {
-      // Controlla se esiste già un badge
-      const existingBadge = badgeContainer.querySelector('#chat-notification-badge');
-      if (existingBadge) {
-        existingBadge.textContent = currentCount;
-        existingBadge.style.display = 'inline-block';
-        return;
-      }
-
-      // Crea il badge se non esiste
-      const newBadge = document.createElement('span');
-      newBadge.id = 'chat-notification-badge';
-      newBadge.className = 'badge bg-danger badge-notification ms-2';
-      newBadge.textContent = currentCount;
-      badgeContainer.appendChild(newBadge);
-    }
-
-    // Emetti evento per i sistemi locali
-    document.dispatchEvent(new CustomEvent('globalBadgeUpdated', {
-      detail: { count: currentCount }
-    }));
-  }
-
-  // Funzione per incrementare il badge
-  function incrementBadge() {
-    updateBadge(currentCount + 1);
-  }
-
-  // Funzione per decrementare il badge
-  function decrementBadge() {
-    updateBadge(currentCount - 1);
-  }
 
       // Funzione per configurare i listener Echo
   function setupEchoListeners() {
@@ -508,36 +446,6 @@ function initGlobalChatBadge() {
   }
 
   // Gestisce il click sul pulsante chat per nascondere il badge
-  if (badgeContainer) {
-    badgeContainer.addEventListener('click', () => {
-      updateBadge(0);
-
-      // Marka le notifiche chat come lette via API
-      markChatNotificationsAsRead();
-    });
-  }
-
-  // Funzione per markare le notifiche come lette
-  async function markChatNotificationsAsRead() {
-    try {
-      const response = await fetch('/chat/notifications/mark-all-read', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      });
-
-      if (response.ok) {
-        // Chat notifications marked as read
-      } else {
-        // Failed to mark notifications as read
-      }
-    } catch (error) {
-      // Error marking notifications as read
-    }
-  }
 
   // Funzioni per gestire badge individuali in background
   function updateIndividualBadgeInBackground(roomId, count) {
@@ -599,7 +507,10 @@ function initGlobalChatBadge() {
 
     </script>
 
-
+    @livewireScripts
+    
+    @stack('scripts')
+    
 </body>
 
 
