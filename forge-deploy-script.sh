@@ -30,14 +30,14 @@ npm run build
 
 # Database and cache management
 if [ -f artisan ]; then
-    echo "🗄️ Running migrations..."
-    $FORGE_PHP artisan migrate --force
-    
-    echo "⚡ Clearing caches..."
+    echo "⚡ Clearing caches BEFORE migrations..."
     $FORGE_PHP artisan config:clear
     $FORGE_PHP artisan cache:clear
     $FORGE_PHP artisan route:clear
     $FORGE_PHP artisan view:clear
+    
+    echo "🗄️ Running migrations..."
+    $FORGE_PHP artisan migrate --force
     
     echo "🔑 Clearing permission cache..."
     $FORGE_PHP artisan permission:cache-reset
