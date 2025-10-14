@@ -67,9 +67,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [
-                "wirechat/wirechat"
-            ]
+            "dont-discover": []
         }
     },
     "config": {
