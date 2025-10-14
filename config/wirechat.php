@@ -29,7 +29,14 @@ return [
     |
     */
     'table_prefix' => 'wirechat_',
-
+'morph_map' => [
+        // attori tipici
+        'user'         => \App\Models\User::class,          // <- modifica se necessario
+        // entità Wirechat
+        'conversation' => \Wirechat\Wirechat\Models\Conversation::class,
+        'message'      => \Wirechat\Wirechat\Models\Message::class,
+        'participant'  => \Wirechat\Wirechat\Models\Participant::class,
+    ],
     /*
      |--------------------------------------------------------------------------
      | Storage
