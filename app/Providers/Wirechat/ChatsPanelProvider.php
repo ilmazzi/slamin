@@ -17,8 +17,6 @@ class ChatsPanelProvider extends PanelProvider
              ->path('chats')
              ->middleware(['web','auth'])
              ->default()
-             // Specifica il modello User PRIMA di tutto il resto
-             ->authProvider(User::class)
              // Enable chat actions
              ->createChatAction()
              ->createGroupAction()
