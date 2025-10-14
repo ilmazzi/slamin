@@ -1,12 +1,10 @@
 <?php
 
 return [
-    App\Providers\WirechatServiceProvider::class,
     App\Providers\AppServiceProvider::class,
     App\Providers\AuthServiceProvider::class,
     App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\LanguageServiceProvider::class,
     App\Providers\Wirechat\ChatsPanelProvider::class,
-    
 ];

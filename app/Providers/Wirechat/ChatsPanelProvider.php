@@ -4,26 +4,16 @@ namespace App\Providers\Wirechat;
 
 use Wirechat\Wirechat\Panel;
 use Wirechat\Wirechat\PanelProvider;
-use Wirechat\Wirechat\Http\Resources\WireChatUserResource;
-use Wirechat\Wirechat\Support\Color;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class ChatsPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        // Configura il morph map direttamente qui per sicurezza
-        Relation::enforceMorphMap([
-            'user' => User::class,
-        ]);
-        
         return $panel
              ->id('chats')
              ->path('chats')
              ->middleware(['web','auth'])
              ->default()
-             // Enable chat actions
              ->createChatAction()
              ->createGroupAction()
              ->deleteChatAction()
@@ -35,14 +25,6 @@ class ChatsPanelProvider extends PanelProvider
              ->mediaMimes(['png', 'jpg', 'jpeg', 'gif', 'mov', 'mp4', 'mp3', 'webp'])
              ->fileMimes(['zip', 'rar', 'txt', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])
              ->fileMaxUploadSize(5000) // 5 MB
-             ->emojiPicker()
-             ->colors([
-                 'primary' => Color::Cyan,
-                 'danger' => Color::Rose,
-                 'gray' => Color::Zinc,
-                 'info' => Color::Blue,
-                 'success' => Color::Emerald,
-                 'warning' => Color::Orange,
-             ]);
+             ->emojiPicker();
       }
 }

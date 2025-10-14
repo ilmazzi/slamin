@@ -23,15 +23,7 @@ use Wirechat\Wirechat\Traits\InteractsWithWirechat;
 class User extends Authenticatable implements MustVerifyEmail, WirechatUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, InteractsWithWirechat;
-
-    /**
-     * Get the morph type for Wirechat
-     */
-    public static function getMorphType(): string
-    {
-        return 'user';
-    }
+    use HasFactory, Notifiable, HasRoles,InteractsWithWirechat;
 
     /**
      * The attributes that are mass assignable.
@@ -1016,34 +1008,7 @@ class User extends Authenticatable implements MustVerifyEmail, WirechatUser
         return $this->last_seen_at ? $this->last_seen_at->diffForHumans() : 'Mai';
     }
 
-    /**
-     * Relazione con le partecipazioni alle chat
-     */
-    public function chatParticipants()
-    {
-        return $this->hasMany(ChatParticipant::class);
-    }
-
-    /**
-     * Relazione con le chat rooms dell'utente
-     */
-    public function chatRooms()
-    {
-        return $this->belongsToMany(ChatRoom::class, 'chat_participants');
-    }
-
-    /**
-     * Ottieni le chat private attive dell'utente
-     */
-    public function activeChatRooms()
-    {
-        return $this->belongsToMany(ChatRoom::class, 'chat_participants')
-            ->where('type', 'private')
-            ->where('is_active', true)
-            ->whereHas('messages') // Solo chat con messaggi
-            ->orderBy('last_message_at', 'desc')
-            ->withTimestamps();
-    }
+  
 
     /**
      * Get user's articles
@@ -1309,7 +1274,11 @@ class User extends Authenticatable implements MustVerifyEmail, WirechatUser
      */
     public function canAccessWirechatPanel(Panel $panel): bool
     {
-        return $this->hasVerifiedEmail() && $this->isActive();
+        if ($panel->getId() === 'admin') {
+            return $this->is_admin && $this->hasVerifiedEmail();
+        }
+
+        return true;
     }
 
     /**
