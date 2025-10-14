@@ -46,4 +46,16 @@ return [
             'attachments' => 'attachments',
         ],
     ],
+
+    /*
+     |--------------------------------------------------------------------------
+     | Morph Map
+     |--------------------------------------------------------------------------
+     |
+     | Configuration for polymorphic relationships used by Wirechat.
+     |
+     */
+    'morph_map' => [
+        'user' => \App\Models\User::class,
+    ],
 ];

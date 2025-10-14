@@ -26,6 +26,14 @@ class User extends Authenticatable implements MustVerifyEmail, WirechatUser
     use HasFactory, Notifiable, HasRoles, InteractsWithWirechat;
 
     /**
+     * Get the morph type for Wirechat
+     */
+    public static function getMorphType(): string
+    {
+        return 'user';
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
