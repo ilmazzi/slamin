@@ -48,7 +48,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // Configura i morph maps per Wirechat PRIMA del boot
         // Questo DEVE essere in register() perché WirechatServiceProvider lo usa nel boot()
-        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
+        // Usiamo morphMap() invece di enforceMorphMap() per permettere fallback
+        \Illuminate\Database\Eloquent\Relations\Relation::morphMap([
             'user' => \App\Models\User::class,
         ]);
     }
