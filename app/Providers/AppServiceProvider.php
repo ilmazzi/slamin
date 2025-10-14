@@ -47,7 +47,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->register(\App\Providers\WirechatBridgeServiceProvider::class);// Morph maps ora gestiti da WirechatServiceProvider
+        // Configura morph maps PRIMA di qualsiasi provider Wirechat
+        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
+            'user' => \App\Models\User::class,
+            'video' => \App\Models\Video::class,
+            'poem' => \App\Models\Poem::class,
+            'article' => \App\Models\Article::class,
+            'photo' => \App\Models\Photo::class,
+            'gig' => \App\Models\Gig::class,
+            'event' => \App\Models\Event::class,
+            'group' => \App\Models\Group::class,
+        ]);
+        
+        $this->app->register(\App\Providers\WirechatBridgeServiceProvider::class);
     }
 
     /**
