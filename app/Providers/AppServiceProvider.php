@@ -46,7 +46,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Configura i morph maps per Wirechat PRIMA del boot
+        // Questo DEVE essere in register() perché WirechatServiceProvider lo usa nel boot()
+        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
+            'user' => \App\Models\User::class,
+        ]);
     }
 
     /**
@@ -54,10 +58,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configura i morph maps per Wirechat
-        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
-            'user' => \App\Models\User::class,
-        ]);
 
         // Registra l'observer per i video
         Video::observe(VideoObserver::class);
