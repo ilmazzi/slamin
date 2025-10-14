@@ -23,7 +23,6 @@ class ScanMorphTypes extends Command
             return self::FAILURE;
         }
 
-        // Recupera elenco tabelle e colonne
         $columns = $this->getTypeColumns($driver, $connection->getDatabaseName());
 
         if (empty($columns)) {
@@ -31,7 +30,7 @@ class ScanMorphTypes extends Command
             return self::SUCCESS;
         }
 
-        $filters = (array)$this->option('like');
+        $filters = (array) $this->option('like');
         $hasFilter = !empty($filters);
 
         $foundAny = false;
@@ -41,6 +40,7 @@ class ScanMorphTypes extends Command
             $column = $item['column'];
 
             try {
+                // prendi solo valori non null
                 $rows = DB::table($table)
                     ->select($column . ' as type', DB::raw('COUNT(*) as cnt'))
                     ->whereNotNull($column)
@@ -52,26 +52,26 @@ class ScanMorphTypes extends Command
                     continue;
                 }
 
-                // Applica filtro opzionale
+                // eventuale filtro
                 if ($hasFilter) {
-                    $filtered = $rows->filter(function ($r) use ($filters) {
+                    $rows = $rows->filter(function ($r) use ($filters) {
                         foreach ($filters as $f) {
                             if (Str::contains((string) $r->type, $f)) {
                                 return true;
                             }
                         }
                         return false;
-                    });
-                    if ($filtered->isEmpty()) {
+                    })->values();
+
+                    if ($rows->isEmpty()) {
                         continue;
                     }
-                    $rows = $filtered->values();
                 }
 
                 $foundAny = true;
                 $this->line('');
                 $this->info("Tabella: {$table}  |  Colonna: {$column}");
-                $this->table(['type', 'count'], $rows->map(fn ($r) => [(string)$r->type, (int)$r->cnt])->toArray());
+                $this->table(['type', 'count'], $rows->map(fn ($r) => [(string) $r->type, (int) $r->cnt])->toArray());
             } catch (\Throwable $e) {
                 $this->error("Errore leggendo {$table}.{$column}: {$e->getMessage()}");
             }
@@ -94,11 +94,12 @@ class ScanMorphTypes extends Command
         switch ($driver) {
             case 'mysql':
             case 'mariadb':
+                // Evita ESCAPE: usa RIGHT(col, 5) = '_type'
                 $rows = DB::select("
                     SELECT TABLE_NAME as tbl, COLUMN_NAME as col
                     FROM INFORMATION_SCHEMA.COLUMNS
                     WHERE TABLE_SCHEMA = ?
-                      AND COLUMN_NAME LIKE '%\\_type' ESCAPE '\\'
+                      AND RIGHT(COLUMN_NAME, 5) = '_type'
                     ORDER BY TABLE_NAME, COLUMN_NAME
                 ", [$database]);
                 foreach ($rows as $r) {
@@ -111,7 +112,7 @@ class ScanMorphTypes extends Command
                     SELECT table_name as tbl, column_name as col
                     FROM information_schema.columns
                     WHERE table_catalog = ?
-                      AND column_name LIKE '%_type'
+                      AND RIGHT(column_name, 5) = '_type'
                     ORDER BY table_name, column_name
                 ", [$database]);
                 foreach ($rows as $r) {
@@ -120,7 +121,7 @@ class ScanMorphTypes extends Command
                 break;
 
             case 'sqlite':
-                // Per sqlite non c'è information_schema: facciamo best effort interrogando PRAGMA
+                // Per sqlite: best effort via PRAGMA
                 $tables = DB::select("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
                 foreach ($tables as $t) {
                     $cols = DB::select("PRAGMA table_info({$t->name})");
