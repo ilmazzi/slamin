@@ -7,11 +7,17 @@ use Wirechat\Wirechat\PanelProvider;
 use Wirechat\Wirechat\Http\Resources\WireChatUserResource;
 use Wirechat\Wirechat\Support\Color;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class ChatsPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        // Configura il morph map direttamente qui per sicurezza
+        Relation::enforceMorphMap([
+            'user' => User::class,
+        ]);
+        
         return $panel
              ->id('chats')
              ->path('chats')
