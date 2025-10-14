@@ -58,8 +58,6 @@ class AppServiceProvider extends ServiceProvider
             'event' => \App\Models\Event::class,
             'group' => \App\Models\Group::class,
         ]);
-        
-        $this->app->register(\App\Providers\WirechatBridgeServiceProvider::class);
     }
 
     /**
