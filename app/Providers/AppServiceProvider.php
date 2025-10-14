@@ -47,8 +47,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Configura morph maps PRIMA di qualsiasi provider Wirechat
-        \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap([
+        // Nulla qui - morph maps nel boot()
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        // Configura morph maps secondo la documentazione Laravel
+        Relation::enforceMorphMap([
             'user' => \App\Models\User::class,
             'video' => \App\Models\Video::class,
             'poem' => \App\Models\Poem::class,
@@ -58,13 +66,7 @@ class AppServiceProvider extends ServiceProvider
             'event' => \App\Models\Event::class,
             'group' => \App\Models\Group::class,
         ]);
-    }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
         // Registra l'observer per i video
         Video::observe(VideoObserver::class);
 
