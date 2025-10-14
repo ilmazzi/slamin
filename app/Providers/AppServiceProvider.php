@@ -35,6 +35,7 @@ use App\Observers\ForumPostObserver;
 use App\Services\LoggingService;
 use App\Helpers\TranslationHelper;
 use App\Helpers\AutoTranslationHelper;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Blade;
@@ -46,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Morph maps ora gestiti da WirechatServiceProvider
+        $this->app->register(\App\Providers\WirechatBridgeServiceProvider::class);// Morph maps ora gestiti da WirechatServiceProvider
     }
 
     /**
@@ -109,6 +110,11 @@ class AppServiceProvider extends ServiceProvider
 
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();
+        
+        $morphMap = config('wirechat.morph_map', []);
+        if (!empty($morphMap) && is_array($morphMap)) {
+            Relation::enforceMorphMap($morphMap);
+        }
     }
 
     /**
