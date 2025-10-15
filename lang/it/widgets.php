@@ -5,7 +5,7 @@ return [
     // chat component
     'wirechat' => [
         'messages' => [
-            'welcome' => 'Select a conversation to start messaging',
+            'welcome' => 'Seleziona una conversazione per iniziare a chattare',
 
         ],
     ],

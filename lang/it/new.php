@@ -5,73 +5,73 @@ return [
     // new-chat component
     'chat' => [
         'labels' => [
-            'heading' => ' New Chat',
-            'you' => 'You',
+            'heading' => ' Nuova Chat',
+            'you' => 'Tu',
 
         ],
 
         'inputs' => [
             'search' => [
-                'label' => 'Search Conversations',
-                'placeholder' => 'Search',
+                'label' => 'Cerca conversazioni',
+                'placeholder' => 'Cerca',
             ],
         ],
 
         'actions' => [
             'new_group' => [
-                'label' => 'New group',
+                'label' => 'Nuovo gruppo',
             ],
 
         ],
 
         'messages' => [
 
-            'empty_search_result' => 'No users found matching your search.',
+            'empty_search_result' => 'Nessun utente trovato che corrisponde alla tua ricerca.',
         ],
     ],
 
     // new-group component
     'group' => [
         'labels' => [
-            'heading' => ' New Chat',
-            'add_members' => ' Add Members',
+            'heading' => ' Nuovo Gruppo',
+            'add_members' => ' Aggiungi Membri',
 
         ],
 
         'inputs' => [
             'name' => [
-                'label' => 'Group Name',
-                'placeholder' => 'Enter Name',
+                'label' => 'Nome Gruppo',
+                'placeholder' => 'Inserisci Nome',
             ],
             'description' => [
-                'label' => 'Description',
-                'placeholder' => 'Optional',
+                'label' => 'Descrizione',
+                'placeholder' => 'Opzionale',
             ],
             'search' => [
-                'label' => 'Search',
-                'placeholder' => 'Search',
+                'label' => 'Cerca',
+                'placeholder' => 'Cerca',
             ],
             'photo' => [
-                'label' => 'Photo',
+                'label' => 'Foto',
             ],
         ],
 
         'actions' => [
             'cancel' => [
-                'label' => 'Cancel',
+                'label' => 'Annulla',
             ],
             'next' => [
-                'label' => 'Next',
+                'label' => 'Avanti',
             ],
             'create' => [
-                'label' => 'Create',
+                'label' => 'Crea',
             ],
 
         ],
 
         'messages' => [
-            'members_limit_error' => 'Members cannot exceed  :count',
-            'empty_search_result' => 'No users found matching your search.',
+            'members_limit_error' => 'I membri non possono superare :count',
+            'empty_search_result' => 'Nessun utente trovato che corrisponde alla tua ricerca.',
         ],
     ],
 

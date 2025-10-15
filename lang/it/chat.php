@@ -7,35 +7,35 @@ return [
      *------------------------*/
     'labels' => [
 
-        'you_replied_to_yourself' => 'You replied to Yourself',
-        'participant_replied_to_you' => ':sender replied to You',
-        'participant_replied_to_themself' => ':sender replied to Themself',
-        'participant_replied_other_participant' => ':sender replied to :receiver',
-        'you' => 'You',
-        'user' => 'User',
-        'replying_to' => 'Replying to :participant',
-        'replying_to_yourself' => 'Replying to Yourself',
-        'attachment' => 'Attachment',
+        'you_replied_to_yourself' => 'Hai risposto a te stesso',
+        'participant_replied_to_you' => ':sender ha risposto a te',
+        'participant_replied_to_themself' => ':sender ha risposto a se stesso',
+        'participant_replied_other_participant' => ':sender ha risposto a :receiver',
+        'you' => 'Tu',
+        'user' => 'Utente',
+        'replying_to' => 'Rispondendo a :participant',
+        'replying_to_yourself' => 'Rispondendo a te stesso',
+        'attachment' => 'Allegato',
     ],
 
     'inputs' => [
         'message' => [
-            'label' => 'Message',
-            'placeholder' => 'Type a message',
+            'label' => 'Messaggio',
+            'placeholder' => 'Scrivi un messaggio',
         ],
         'media' => [
             'label' => 'Media',
             'placeholder' => 'Media',
         ],
         'files' => [
-            'label' => 'Files',
-            'placeholder' => 'Files',
+            'label' => 'File',
+            'placeholder' => 'File',
         ],
     ],
 
     'message_groups' => [
-        'today' => 'Today',
-        'yesterday' => 'Yesterday',
+        'today' => 'Oggi',
+        'yesterday' => 'Ieri',
 
     ],
 
