@@ -158,7 +158,7 @@ trait Chatable
         // create and save photo is present
         if ($photo) {
             // save photo to disk
-            $path = $photo->store(WireChat::storageFolder(), WireChat::storageDisk());
+            $path = $photo->store(ChatHelper::storageFolder(), ChatHelper::storageDisk());
 
             // create attachment
             $group->cover()->create([
@@ -166,7 +166,7 @@ trait Chatable
                 'file_name' => basename($path),
                 'original_name' => $photo->getClientOriginalName(),
                 'mime_type' => $photo->getMimeType(),
-                'url' => Storage::disk(WireChat::storageDisk())->url($path),
+                'url' => Storage::disk(ChatHelper::storageDisk())->url($path),
             ]);
         }
 
@@ -424,7 +424,7 @@ trait Chatable
     public function searchChatables(string $query): ?Collection
     {
         // Retrieve the fields that are searchable for users.
-        $searchableFields = WireChat::searchableFields();
+        $searchableFields = ChatHelper::searchableFields();
 
         // Get the user model from the configuration, defaulting to App\Models\User.
         $userModel = app(config('wirechat.user_model', \App\Models\User::class));
