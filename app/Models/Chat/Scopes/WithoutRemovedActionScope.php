@@ -5,7 +5,7 @@ namespace App\Models\Chat\Scopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Namu\WireChat\Enums\Actions;
+use App\Enums\Chat\Actions;
 
 class WithoutRemovedActionScope implements Scope
 {

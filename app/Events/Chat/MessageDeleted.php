@@ -7,7 +7,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Namu\WireChat\Facades\WireChat;
+use App\Helpers\Chat\ChatHelper;
 use App\Models\Chat\Message;
 
 class MessageDeleted implements ShouldBroadcastNow

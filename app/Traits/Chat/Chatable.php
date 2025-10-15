@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use App\Enums\Chat\ConversationType;
 use App\Enums\Chat\ParticipantRole;
-use Namu\WireChat\Facades\WireChat;
+use App\Helpers\Chat\ChatHelper;
 use App\Models\Chat\Conversation;
 use App\Models\Chat\Group;
 use App\Models\Chat\Message;

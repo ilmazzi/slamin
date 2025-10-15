@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Namu\WireChat\Facades\WireChat;
+use App\Helpers\Chat\ChatHelper;
 use App\Models\Chat\Message;
 
 class MessageCreated implements ShouldBroadcast
