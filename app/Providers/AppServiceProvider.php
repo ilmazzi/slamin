@@ -65,6 +65,13 @@ class AppServiceProvider extends ServiceProvider
             'gig' => \App\Models\Gig::class,
             'event' => \App\Models\Event::class,
             'group' => \App\Models\Group::class,
+            // Chat models
+            'conversation' => \App\Models\Chat\Conversation::class,
+            'message' => \App\Models\Chat\Message::class,
+            'participant' => \App\Models\Chat\Participant::class,
+            'attachment' => \App\Models\Chat\Attachment::class,
+            'chat_group' => \App\Models\Chat\Group::class,
+            'action' => \App\Models\Chat\Action::class,
         ]);
 
         // Registra l'observer per i video
