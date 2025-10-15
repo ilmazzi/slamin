@@ -1,5 +1,5 @@
 
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
 
 <ul wire:loading.delay.long.remove wire:target="search" class="p-2 grid w-full spacey-y-2">
     @foreach ($conversations as $key=> $conversation)

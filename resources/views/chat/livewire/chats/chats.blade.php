@@ -1,4 +1,4 @@
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
 
 <div x-data="{ selectedConversationId: '{{ request()->conversation ?? $selectedConversationId }}' }"
     x-on:open-chat.window="selectedConversationId= $event.detail.conversation; $wire.selectedConversationId= $event.detail.conversation;"

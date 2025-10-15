@@ -1,5 +1,5 @@
 
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
 
 @if(auth()->check() && ChatHelper::notificationsEnabled())
 
@@ -95,7 +95,7 @@
         registerServiceWorker();
 
         userId = @js(auth()->id());
-        encodedType = @js(\Namu\WireChat\Helpers\MorphClassResolver::encode(auth()->user()->getMorphClass()));
+        encodedType = @js(ChatHelper::encodeMorphClass(auth()->user()->getMorphClass()));
 
         {{-- We listen to notify participant event --}}
         Echo.private(`participant.${encodedType}.${userId}`)

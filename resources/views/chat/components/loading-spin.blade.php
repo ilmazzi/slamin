@@ -1,5 +1,5 @@
 
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
   {{-- Define previous message outside the loop --}}
 <div class="w-full flex  items-center ">
 <span {{$attributes->merge([ 'class'=>"mx-auto  w-5 h-5 "])}} >

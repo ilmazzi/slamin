@@ -115,5 +115,14 @@ class ChatHelper
     {
         return '#3B82F6'; // Blue color
     }
+
+    /**
+     * Encode morph class for notifications
+     */
+    public static function encodeMorphClass(string $morphClass): string
+    {
+        // Simple encoding - in a real implementation you might want more sophisticated encoding
+        return base64_encode($morphClass);
+    }
 }
 
