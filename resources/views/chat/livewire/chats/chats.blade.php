@@ -53,6 +53,7 @@
         @endif
     </main>
 
-
+    {{-- Modal component for new chat/group --}}
+    <livewire:chat.modal />
 
 </div>
