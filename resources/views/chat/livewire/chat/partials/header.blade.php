@@ -52,7 +52,7 @@
                                 class="h-8 w-8 lg:w-10 lg:h-10 " />
                             <h6 class="font-bold text-base text-gray-800 dark:text-white w-full truncate">
                                 {{ $receiver?->display_name }} @if ($conversation->isSelfConversation())
-                                    ({{ __('chat::chat.labels.you') }})
+                                    ({{ __('wirechat::chat.labels.you') }})
                                 @endif
                             </h6>
                         </div>
@@ -84,7 +84,7 @@
                                 widget="{{ $this->isWidget() }}">
                                 <button class="w-full text-start">
                                     <x-chat::dropdown-link>
-                                        {{ __('chat::chat.actions.open_group_info.label') }}
+                                        {{ __('wirechat::chat.actions.open_group_info.label') }}
                                     </x-chat::dropdown-link>
                                 </button>
                             </x-chat::actions.show-group-info>
@@ -94,7 +94,7 @@
                                 widget="{{ $this->isWidget() }}">
                                 <button class="w-full text-start">
                                     <x-chat::dropdown-link>
-                                        {{ __('chat::chat.actions.open_chat_info.label') }}
+                                        {{ __('wirechat::chat.actions.open_chat_info.label') }}
                                     </x-chat::dropdown-link>
                                 </button>
                             </x-chat::actions.show-chat-info>
@@ -115,7 +115,7 @@
                         {{-- Only show delete and clear if conversation is NOT group --}}
                         @if (!$conversation->isGroup())
                             <button class="w-full" wire:click="clearConversation"
-                                wire:confirm="{{ __('chat::chat.actions.clear_chat.confirmation_message') }}">
+                                wire:confirm="{{ __('wirechat::chat.actions.clear_chat.confirmation_message') }}">
 
                                 <x-chat::dropdown-link>
                                     @lang('chat::chat.actions.clear_chat.label')
@@ -123,7 +123,7 @@
                             </button>
 
                             <button wire:click="deleteConversation"
-                                wire:confirm="{{ __('chat::chat.actions.delete_chat.confirmation_message') }}"
+                                wire:confirm="{{ __('wirechat::chat.actions.delete_chat.confirmation_message') }}"
                                 class="w-full text-start">
 
                                 <x-chat::dropdown-link class="text-red-500 dark:text-red-500">
@@ -136,7 +136,7 @@
 
                         @if ($conversation->isGroup() && !$this->auth->isOwnerOf($conversation))
                             <button wire:click="exitConversation"
-                                wire:confirm="{{ __('chat::chat.actions.exit_group.confirmation_message') }}"
+                                wire:confirm="{{ __('wirechat::chat.actions.exit_group.confirmation_message') }}"
                                 class="w-full text-start ">
 
                                 <x-chat::dropdown-link class="text-red-500 dark:text-gray-500">

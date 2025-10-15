@@ -5,7 +5,7 @@
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg> </button>
-        <h3>{{__('chat::chat.group.permissions.heading.label')}} </h3>
+        <h3>{{__('wirechat::chat.group.permissions.heading.label')}} </h3>
     </section>
 
 
@@ -14,7 +14,7 @@
 
             <h5 class="w-full text-start py-4 bg-[var(--wc-light-secondary)] dark:bg-[var(--wc-dark-secondary)] px-4">
                 
-                {{__('chat::chat.group.permissions.labels.members_can')}}:
+                {{__('wirechat::chat.group.permissions.labels.members_can')}}:
             </h5>
 
             <ul class="space-y-2">
@@ -30,7 +30,7 @@
                     </span>
 
                     <span class="w-full text-start">
-                        <h5 class="font-medium">{{__('chat::chat.group.permissions.actions.edit_group_information.label')}}</h5>
+                        <h5 class="font-medium">{{__('wirechat::chat.group.permissions.actions.edit_group_information.label')}}</h5>
                         <p>@lang('chat::chat.group.permissions.actions.edit_group_information.helper_text')</p>
                     </span>
 
