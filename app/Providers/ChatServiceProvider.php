@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Lang;
 use Livewire\Livewire;
 
 class ChatServiceProvider extends ServiceProvider
@@ -23,6 +24,9 @@ class ChatServiceProvider extends ServiceProvider
     {
         // Register chat views namespace
         View::addNamespace('chat', resource_path('views/chat'));
+        
+        // Register chat translations namespace
+        Lang::addNamespace('chat', base_path('lang'));
 
         // Register Livewire components with 'chat' prefix (based on Wirechat structure)
         
