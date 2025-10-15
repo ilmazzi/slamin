@@ -91,5 +91,29 @@ class ChatHelper
     {
         return true;
     }
+
+    /**
+     * Show new group modal button
+     */
+    public static function showNewGroupModalButton(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Check if notifications are enabled
+     */
+    public static function notificationsEnabled(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get primary color
+     */
+    public static function getColor(): string
+    {
+        return '#3B82F6'; // Blue color
+    }
 }
 

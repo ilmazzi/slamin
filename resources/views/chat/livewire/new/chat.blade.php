@@ -34,7 +34,7 @@
     <div class="relative w-full">
 
         {{-- New Group button --}}
-        @if (WireChat::showNewGroupModalButton() && auth()->user()->canCreateGroups())
+        @if (ChatHelper::showNewGroupModalButton() && auth()->user()->canCreateGroups())
 
         {{-- Buton to trigger opening of new grop modal --}}
         <x-chat::actions.new-group widget="{{$this->isWidget()}}">

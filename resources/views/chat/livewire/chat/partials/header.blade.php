@@ -13,7 +13,7 @@
         <a @if ($this->isWidget()) @click="$dispatch('close-chat',{conversation: {{json_encode($conversation->id)}} })"
             dusk="return_to_home_button_dispatch"
         @else
-            href="{{ route(WireChat::indexRouteName(), $conversation->id) }}"
+            href="{{ route(ChatHelper::indexRouteName(), $conversation->id) }}"
             dusk="return_to_home_button_link" @endif
             @class([
                 'shrink-0  cursor-pointer dark:text-white',
@@ -106,7 +106,7 @@
                                 @lang('chat::chat.actions.close_chat.label')
                             </x-chat::dropdown-link>
                         @else
-                            <x-chat::dropdown-link href="{{ route(WireChat::indexRouteName()) }}" class="shrink-0">
+                            <x-chat::dropdown-link href="{{ route(ChatHelper::indexRouteName()) }}" class="shrink-0">
                                 @lang('chat::chat.actions.close_chat.label')
                             </x-chat::dropdown-link>
                         @endif

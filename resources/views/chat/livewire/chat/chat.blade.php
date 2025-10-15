@@ -3,7 +3,7 @@
 @use('Namu\WireChat\Facades\WireChat')
 
 @php
-    $primaryColor = WireChat::getColor();
+    $primaryColor = ChatHelper::getColor();
 @endphp
 
 
