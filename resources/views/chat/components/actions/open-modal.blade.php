@@ -4,11 +4,13 @@
     'widget' => false
 ])
 
-<div  onclick="Livewire.dispatch('openChatModal', { 
+<div  
+    x-data 
+    @click="$dispatch('openChatModal', { 
         component: '{{ $component }}', 
         arguments: { 
-            conversation:`{{$conversation ?? null }}`, 
-            widget: @js($widget)
+            conversation: '{{$conversation ?? null }}', 
+            widget: {{ $widget ? 'true' : 'false' }}
         } 
     })">
 
