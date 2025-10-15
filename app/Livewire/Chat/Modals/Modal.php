@@ -29,9 +29,29 @@ class Modal extends Component
         $this->activeComponent = null;
     }
 
+    protected function getComponentClass(string $component): string
+    {
+        $components = [
+            'chat.new-chat' => \App\Livewire\Chat\New\Chat::class,
+            'chat.new-group' => \App\Livewire\Chat\New\Group::class,
+            'chat.chat-info' => \App\Livewire\Chat\Chat\Info::class,
+            'chat.chat-group-info' => \App\Livewire\Chat\Chat\Group\Info::class,
+            'chat.chat-group-members' => \App\Livewire\Chat\Chat\Group\Members::class,
+            'chat.chat-group-permissions' => \App\Livewire\Chat\Chat\Group\Permissions::class,
+            'chat.chat-group-add-members' => \App\Livewire\Chat\Chat\Group\AddMembers::class,
+            'chat.chat-drawer' => \App\Livewire\Chat\Chat\Drawer::class,
+        ];
+
+        if (!isset($components[$component])) {
+            throw new \InvalidArgumentException("Component {$component} not found");
+        }
+
+        return $components[$component];
+    }
+
     public function openChatModal($component, $arguments = [], $modalAttributes = []): void
     {
-        $componentClass = app(ComponentRegistry::class)->getClass($component);
+        $componentClass = $this->getComponentClass($component);
         $id = md5($component.serialize($arguments));
 
         $arguments = collect($arguments)
