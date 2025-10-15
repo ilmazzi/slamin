@@ -1,4 +1,4 @@
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
 <div id="new-chat-modal ">
 
     <div 

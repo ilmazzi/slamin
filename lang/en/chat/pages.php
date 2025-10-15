@@ -17,4 +17,11 @@ return [
             ],
         ],
     ],
+    'new' => [
+        'chat' => [
+            'labels' => [
+                'heading' => 'New Chat',
+            ],
+        ],
+    ],
 ];
