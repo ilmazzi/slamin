@@ -75,5 +75,21 @@ class ChatHelper
     {
         return config('chat.broadcasting.enabled', true);
     }
+
+    /**
+     * Show new chat modal button
+     */
+    public static function showNewChatModalButton(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Allow chats search
+     */
+    public static function allowChatsSearch(): bool
+    {
+        return true;
+    }
 }
 

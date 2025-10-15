@@ -6,4 +6,9 @@ return [
             'welcome' => 'Benvenuto nella Chat',
         ],
     ],
+    'chats' => [
+        'labels' => [
+            'heading' => 'Chat',
+        ],
+    ],
 ];

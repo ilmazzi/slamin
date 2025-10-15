@@ -72,18 +72,6 @@ class Chats extends Component
     public $selectedConversationId;
 
     /**
-     * Mount the component.
-     */
-    public function mount()
-    {
-        // Initialize default values for features
-        $this->showNewChatModalButton = true;
-        $this->allowChatsSearch = true;
-        $this->showHomeRouteButton = false;
-        $this->title = null;
-    }
-
-    /**
      * Returns an array of event listeners.
      *
      * @return array
