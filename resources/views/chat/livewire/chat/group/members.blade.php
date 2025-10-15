@@ -23,7 +23,7 @@
             </button>
             </x-chat::actions.close-modal>
 
-            <h3 class=" mx-auto font-semibold ">{{__('wirechat::chat.group.members.heading.label')}} </h3>
+            <h3 class=" mx-auto font-semibold ">{{__('chat::chat.group.members.heading.label')}} </h3>
 
 
 
@@ -32,7 +32,7 @@
         {{-- Member limit error --}}
         <section class="flex flex-wrap items-center px-0 border-b dark:border-[var(--wc-dark-secondary)]">
             <input type="search" id="users-search-field" wire:model.live.debounce='search' autocomplete="off"
-                placeholder="{{__('wirechat::chat.group.members.inputs.search.placeholder')}}"
+                placeholder="{{__('chat::chat.group.members.inputs.search.placeholder')}}"
                 class=" w-full border-0 w-auto dark:bg-[var(--wc-dark-primary)] outline-hidden focus:outline-hidden bg-[var(--wc-dark-parimary)] rounded-lg focus:ring-0 hover:ring-0">
         </section>
 
@@ -71,7 +71,7 @@
                                         {{ $loopParticipantIsAuth ? 'You' : $participant->participantable->display_name }}</h6>
                                         @if ($participant->isOwner()|| $participant->isAdmin())
                                         <span  style="background-color: var(--chat-primary-color);" class=" flex items-center col-span-2 text-white text-xs font-medium ml-auto px-2.5 py-px rounded-sm ">
-                                            {{$participant->isOwner()? __('wirechat::chat.group.members.labels.owner'): __('wirechat::chat.group.members.labels.admin')}}
+                                            {{$participant->isOwner()? __('chat::chat.group.members.labels.owner'): __('chat::chat.group.members.labels.admin')}}
                                         </span>
                                         @endif
 
@@ -87,10 +87,10 @@
                                         class="truncate ">
                                         @if ($loopParticipantIsAuth)
                                             
-                                        {{__('wirechat::chat.group.members.actions.send_message_to_yourself.label')}}
+                                        {{__('chat::chat.group.members.actions.send_message_to_yourself.label')}}
                                         @else
                                         
-                                        {{__('wirechat::chat.group.members.actions.send_message_to_member.label',['member'=>$participant->participantable?->display_name ])}}
+                                        {{__('chat::chat.group.members.actions.send_message_to_member.label',['member'=>$participant->participantable?->display_name ])}}
                                         @endif
                                     </x-chat::dropdown-button>
 
@@ -101,16 +101,16 @@
                                             @if ($participant->isAdmin())
                                                 <x-chat::dropdown-button
                                                     wire:click="dismissAdmin('{{ $participant->id }}')"
-                                                    wire:confirm="{{__('wirechat::chat.group.members.actions.dismiss_admin.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
+                                                    wire:confirm="{{__('chat::chat.group.members.actions.dismiss_admin.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
                                                     class="  ">
-                                                    {{__('wirechat::chat.group.members.actions.dismiss_admin.label')}}
+                                                    {{__('chat::chat.group.members.actions.dismiss_admin.label')}}
                                                 </x-chat::dropdown-button>
                                             @else
                                                 <x-chat::dropdown-button
                                                     wire:click="makeAdmin('{{ $participant->id }}')"
-                                                    wire:confirm="{{__('wirechat::chat.group.members.actions.make_admin.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
+                                                    wire:confirm="{{__('chat::chat.group.members.actions.make_admin.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
                                                     class=" ">
-                                                    {{__('wirechat::chat.group.members.actions.make_admin.label')}}
+                                                    {{__('chat::chat.group.members.actions.make_admin.label')}}
                                                 </x-chat::dropdown-button>
                                             @endif
                                         @endif
@@ -119,9 +119,9 @@
                                             @if (!$participant->isOwner() && !$loopParticipantIsAuth && !$participant->isAdmin())
                                             <x-chat::dropdown-button
                                                 wire:click="removeFromGroup('{{ $participant->id }}')"
-                                                wire:confirm="{{__('wirechat::chat.group.members.actions.remove_from_group.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
+                                                wire:confirm="{{__('chat::chat.group.members.actions.remove_from_group.confirmation_message',['member'=>$participant->participantable?->display_name])}}"
                                                 class="text-red-500 ">
-                                                {{__('wirechat::chat.group.members.actions.remove_from_group.label')}}
+                                                {{__('chat::chat.group.members.actions.remove_from_group.label')}}
                                             </x-chat::dropdown-button>
                                             @endif
 
@@ -146,14 +146,14 @@
                     <section class="w-full justify-center flex my-3">
                         <button dusk="loadMoreButton" @click="$wire.loadMore()"
                             class=" text-sm dark:text-white hover:text-gray-700 transition-colors dark:hover:text-gray-500 dark:gray-200">
-                            {{__('wirechat::chat.group.members.actions.load_more.label')}}
+                            {{__('chat::chat.group.members.actions.load_more.label')}}
                         </button>
                     </section>
                 @endif
 
             @else
 
-            <span class="m-auto">{{__('wirechat::chat.group.members.labels.no_members_found')}}</span>
+            <span class="m-auto">{{__('chat::chat.group.members.labels.no_members_found')}}</span>
             @endif
 
         </section>

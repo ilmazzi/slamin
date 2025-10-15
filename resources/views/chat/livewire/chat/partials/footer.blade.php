@@ -192,7 +192,7 @@
                     <section class="p-px py-1 w-full col-span-12">
                         <div class="flex justify-between items-center dark:text-white">
                             <h6 class="text-sm">
-                                    {{ $replyMessage?->ownedBy($this->auth) ? __('wirechat::chat.labels.replying_to_yourself'): __('wirechat::chat.labels.replying_to',['participant'=>$replyMessage->sendable?->name])  }}
+                                    {{ $replyMessage?->ownedBy($this->auth) ? __('chat::chat.labels.replying_to_yourself'): __('chat::chat.labels.replying_to',['participant'=>$replyMessage->sendable?->name])  }}
                             </h6>
                             <button wire:loading.attr="disabled" wire:click="removeReply()"
                                 class="disabled:cursor-progress">
@@ -395,7 +395,7 @@
                     <div @class(['flex gap-2 sm:px-2 w-full'])>
                         <textarea @focus-input-field.window="$el.focus()" autocomplete="off" x-model='body' x-ref="body"
                             wire:loading.delay.longest.attr="disabled" wire:target="sendMessage" id="chat-input-field" autofocus
-                            type="text" name="message" placeholder="{{ __('wirechat::chat.inputs.message.placeholder') }}" maxlength="1700" rows="1"
+                            type="text" name="message" placeholder="{{ __('chat::chat.inputs.message.placeholder') }}" maxlength="1700" rows="1"
                             @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
                             @keydown.shift.enter.prevent="insertNewLine($el)" {{-- @keydown.enter.prevent prevents the
                                default behavior of Enter key press only if Shift is not held down. --}} @keydown.enter.prevent=""
@@ -568,7 +568,7 @@
                                 count); // Limit files to the allowed number
                                 $dispatch('chat-toast', {
                                     type: 'warning',
-                                    message: @js(__('wirechat::validation.max.array', ['attribute' => __('wirechat::chat.inputs.media.label'),'max'=>config('chat.attachments.max_uploads', 5)]))
+                                    message: @js(__('chat::validation.max.array', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('chat.attachments.max_uploads', 5)]))
                                 });
                             }
 
@@ -591,14 +591,14 @@
                                     if (file.size > this.maxSize) {
                                         $dispatch('chat-toast', {
                                             type: 'warning',
-                                            message: @js(__('wirechat::validation.max.file', ['attribute' => __('wirechat::chat.inputs.media.label'),'max'=>config('chat.attachments.media_max_upload_size', 12288)]))
+                                            message: @js(__('chat::validation.max.file', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('chat.attachments.media_max_upload_size', 12288)]))
                                          //   message: `File size exceeds the maximum limit (${this.maxSize / 1024 / 1024}MB): ${file.name}`
                                         });
                                     } else {
                                         const extension = file.name.split('.').pop().toLowerCase();
                                         $dispatch('chat-toast', {
                                             type: 'warning',
-                                            message: @js(__('wirechat::validation.mimes', [ 'attribute' => __('wirechat::chat.inputs.media.label'), 'values' => implode(', ', config('chat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp'])) ]))
+                                            message: @js(__('chat::validation.mimes', [ 'attribute' => __('chat::chat.inputs.media.label'), 'values' => implode(', ', config('chat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp'])) ]))
                                            // message: `One or more Files not uploaded: .${extension} (type not allowed)`
                                         });
 

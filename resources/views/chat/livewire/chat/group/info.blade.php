@@ -14,7 +14,7 @@
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg> </button>
-        <h3>{{__('wirechat::chat.group.info.heading.label')}}</h3>
+        <h3>{{__('chat::chat.group.info.heading.label')}}</h3>
     </section>
     {{-- Details --}}
     <header>
@@ -118,7 +118,7 @@
                     </form>
 
                     {{-- Members count --}}
-                    <p class="mx-auto">  {{ __('wirechat::chat.group.info.labels.members') }} {{  $totalParticipants }} </p>
+                    <p class="mx-auto">  {{ __('chat::chat.group.info.labels.members') }} {{  $totalParticipants }} </p>
 
                 </div>
 
@@ -132,7 +132,7 @@
                         <span class="col-span-11">
                             <div x-show="!editing">
                                 @if (empty($description))
-                                    <p class="text-sm" style="color: var(--chat-primary-color)">{{ __('wirechat::chat.group.info.labels.add_description') }}  </p>
+                                    <p class="text-sm" style="color: var(--chat-primary-color)">{{ __('chat::chat.group.info.labels.add_description') }}  </p>
                                 @else
                                     <p class="font-medium break-all   whitespace-pre-line ">{{ $description }}
                                     </p>
@@ -184,7 +184,7 @@
             <div @dusk="non_editable_group_information_section" class="flex  flex-col items-center gap-5 py-5 px-4  ">
                 <x-chat::avatar :src="$cover_url" class=" h-32 w-32 mx-auto" />
                 <h4 dusk="group_name" class="font-medium  break-all   whitespace-pre-line   text-2xl ">{{ $groupName }} </h4>
-                <p class="mx-auto">{{ __('wirechat::chat.group.info.labels.members') }}  {{ $totalParticipants }} </p>
+                <p class="mx-auto">{{ __('chat::chat.group.info.labels.members') }}  {{ $totalParticipants }} </p>
                 <p class="font-medium break-all   whitespace-pre-line ">{{ $description }} </p>
             </div>
         @endif
@@ -204,7 +204,7 @@
             conversation="{{ $conversation?->id }}" widget="{{ $this->isWidget() }}">
             {{-- Members count --}}
             <button class="cursor-pointer flex w-full justify-between items-center px-8 focus:outline-hidden ">
-                <span class="text-gray-600 dark:text-gray-300">{{ __('wirechat::chat.group.info.labels.members') }}  {{ $totalParticipants }}</span>
+                <span class="text-gray-600 dark:text-gray-300">{{ __('chat::chat.group.info.labels.members') }}  {{ $totalParticipants }}</span>
                 {{-- Search icon --}}
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -228,7 +228,7 @@
                             d="M5.25 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM2.25 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM18.75 7.5a.75.75 0 0 0-1.5 0v2.25H15a.75.75 0 0 0 0 1.5h2.25v2.25a.75.75 0 0 0 1.5 0v-2.25H21a.75.75 0 0 0 0-1.5h-2.25V7.5Z" />
                     </svg>
 
-                    <span>{{ __('wirechat::chat.group.info.actions.add_members.label') }}</span>
+                    <span>{{ __('chat::chat.group.info.actions.add_members.label') }}</span>
                 </button>
             </x-chat::actions.open-modal>
         @endif
@@ -244,7 +244,7 @@
         @if ($authIsOwner)
 
             {{-- Delete group --}}
-            <button wire:confirm="{{ __('wirechat::chat.group.info.actions.delete_group.confirmation_message') }}" wire:click="deleteGroup"
+            <button wire:confirm="{{ __('chat::chat.group.info.actions.delete_group.confirmation_message') }}" wire:click="deleteGroup"
                 class="cursor-pointer w-full py-5 px-8 hover:bg-[var(--wc-light-secondary)] dark:hover:bg-[var(--wc-dark-secondary)] transition text-start space-y-2   gap-3   text-red-500">
                 <div class="flex gap-3 items-center ">
 
@@ -253,7 +253,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                     </svg>
-                    <span>{{ __('wirechat::chat.group.info.actions.delete_group.label') }}</span>
+                    <span>{{ __('chat::chat.group.info.actions.delete_group.label') }}</span>
                 </div>
 
                 <p class="dark:text-white/60 text-sm text-gray-600/80">@lang('chat::chat.group.info.actions.delete_group.helper_text')</p>
@@ -279,7 +279,7 @@
             </div>
         @else
         {{-- Exit Group --}}
-            <button wire:confirm="{{ __('wirechat::chat.group.info.actions.exit_group.confirmation_message') }}" wire:click="exitConversation"
+            <button wire:confirm="{{ __('chat::chat.group.info.actions.exit_group.confirmation_message') }}" wire:click="exitConversation"
                 class="cursor-pointer w-full py-5 px-8 hover:bg-[var(--wc-light-secondary)] dark:hover:bg-[var(--wc-dark-secondary)] transition flex gap-3 items-center text-red-500">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-box-arrow-right w-5 h-5" viewBox="0 0 16 16">

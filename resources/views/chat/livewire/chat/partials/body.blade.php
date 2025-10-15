@@ -148,23 +148,23 @@
 
                                     @php
                                     $sender = $message?->ownedBy($this->auth)
-                                        ? __('wirechat::chat.labels.you')
-                                        : ($message->sendable?->display_name ?? __('wirechat::chat.labels.user'));
+                                        ? __('chat::chat.labels.you')
+                                        : ($message->sendable?->display_name ?? __('chat::chat.labels.user'));
 
                                     $receiver = $parent?->ownedBy($this->auth)
-                                        ? __('wirechat::chat.labels.you')
-                                        : ($parent->sendable?->display_name ?? __('wirechat::chat.labels.user'));
+                                        ? __('chat::chat.labels.you')
+                                        : ($parent->sendable?->display_name ?? __('chat::chat.labels.user'));
                                     @endphp
 
                                     <h6 class="text-xs text-gray-500 dark:text-gray-300 px-2">
                                         @if ($parent?->ownedBy($this->auth) && $message?->ownedBy($this->auth))
-                                            {{ __('wirechat::chat.labels.you_replied_to_yourself') }}
+                                            {{ __('chat::chat.labels.you_replied_to_yourself') }}
                                         @elseif ($parent?->ownedBy($this->auth))
-                                            {{ __('wirechat::chat.labels.participant_replied_to_you', ['sender' => $sender]) }}
+                                            {{ __('chat::chat.labels.participant_replied_to_you', ['sender' => $sender]) }}
                                         @elseif ($message?->ownedBy($parent->sendable))
-                                            {{ __('wirechat::chat.labels.participant_replied_to_themself', ['sender' => $sender]) }}
+                                            {{ __('chat::chat.labels.participant_replied_to_themself', ['sender' => $sender]) }}
                                         @else
-                                            {{ __('wirechat::chat.labels.participant_replied_other_participant', ['sender' => $sender, 'receiver' => $receiver]) }}
+                                            {{ __('chat::chat.labels.participant_replied_other_participant', ['sender' => $sender, 'receiver' => $receiver]) }}
                                         @endif
                                     </h6>
 
@@ -177,7 +177,7 @@
                                     ])>
                                         <p
                                             class=" bg-[var(--wc-light-secondary)] dark:text-white break-all  dark:bg-[var(--wc-dark-secondary)] text-black line-clamp-1 text-sm  rounded-full max-w-fit   px-3 py-1 ">
-                                            {{ $parent?->body != '' ? $parent?->body : ($parent->hasAttachment() ?  __('wirechat::chat.labels.attachment') : '') }}
+                                            {{ $parent?->body != '' ? $parent?->body : ($parent->hasAttachment() ?  __('chat::chat.labels.attachment') : '') }}
                                         </p>
                                     </div>
 
@@ -226,7 +226,7 @@
 
                                             @if ($message->ownedBy($this->auth)|| ($authParticipant->isAdmin() && $isGroup))
                                                 <button dusk="delete_message_for_everyone" wire:click="deleteForEveryone('{{ encrypt($message->id) }}')"
-                                                    wire:confirm="{{ __('wirechat::chat.actions.delete_for_everyone.confirmation_message') }}" class="w-full text-start">
+                                                    wire:confirm="{{ __('chat::chat.actions.delete_for_everyone.confirmation_message') }}" class="w-full text-start">
                                                     <x-chat::dropdown-link>
                                                         @lang('chat::chat.actions.delete_for_everyone.label')
                                                     </x-chat::dropdown-link>
@@ -237,7 +237,7 @@
                                             {{-- Dont show delete for me if is group --}}
                                             @if (!$isGroup)
                                             <button dusk="delete_message_for_me" wire:click="deleteForMe('{{ encrypt($message->id) }}')"
-                                                wire:confirm="{{ __('wirechat::chat.actions.delete_for_me.confirmation_message') }}" class="w-full text-start">
+                                                wire:confirm="{{ __('chat::chat.actions.delete_for_me.confirmation_message') }}" class="w-full text-start">
                                                 <x-chat::dropdown-link>
                                                     @lang('chat::chat.actions.delete_for_me.label')
                                                 </x-chat::dropdown-link>
