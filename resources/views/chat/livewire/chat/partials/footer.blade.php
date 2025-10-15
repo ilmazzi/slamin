@@ -98,7 +98,7 @@
                                     class="shrink-0 cursor-pointer relative w-16 h-14 rounded-lg  bg-[var(--wc-light-secondary)] dark:bg-[var(--wc-dark-primary)]   hover:bg-[var(--wc-light-primary)] dark:hover:bg-[var(--wc-dark-primary)] border border-[var(--wc-light-secondary)] dark:border-[var(--wc-dark-secondary)]  flex text-center justify-center ">
                                     <input wire:loading.attr="disabled"
                                         @change="handleFileSelect(event,{{ count($media) }})" type="file" multiple
-                                        accept="{{ Helper::formattedMediaMimesForAcceptAttribute() }}" class="sr-only">
+                                        accept="{{ ChatHelper::formattedMediaMimesForAcceptAttribute() }}" class="sr-only">
                                     <span class="m-auto ">
 
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -167,7 +167,7 @@
                                 class="cursor-pointer shrink-0 relative w-16 h-14 rounded-lg bg-[var(--wc-light-primary)] dark:bg-[var(--wc-dark-primary)]   hover:border-[var(--wc-light-primary)] dark:hover:border-[var(--wc-dark-primary)] border border-[var(--wc-light-secondary)] dark:border-[var(--wc-dark-secondary)]  transition-colors   flex text-center justify-center  ">
                                 <input wire:loading.attr="disabled"
                                     @change="handleFileSelect(event,{{ count($files) }})" type="file" multiple
-                                    accept="{{ Helper::formattedFileMimesForAcceptAttribute() }}" class="sr-only"
+                                    accept="{{ ChatHelper::formattedFileMimesForAcceptAttribute() }}" class="sr-only"
                                     hidden>
                                 <span class="  m-auto">
 
@@ -328,7 +328,7 @@
                                         <input wire:loading.attr="disabled" wire:target="sendMessage"
                                             dusk="file-upload-input"
                                             @change="handleFileSelect(event, {{ count($files) }})" type="file"
-                                            multiple accept="{{ Helper::formattedFileMimesForAcceptAttribute() }}"
+                                            multiple accept="{{ ChatHelper::formattedFileMimesForAcceptAttribute() }}"
                                             class="sr-only" style="display: none">
 
                                         <div
@@ -360,7 +360,7 @@
                                         <input dusk="media-upload-input" wire:loading.attr="disabled"
                                             wire:target="sendMessage"
                                             @change="handleFileSelect(event, {{ count($media) }})" type="file"
-                                            multiple accept="{{ Helper::formattedMediaMimesForAcceptAttribute() }}"
+                                            multiple accept="{{ ChatHelper::formattedMediaMimesForAcceptAttribute() }}"
                                             class="sr-only" style="display: none">
 
                                         <div

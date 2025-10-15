@@ -124,5 +124,39 @@ class ChatHelper
         // Simple encoding - in a real implementation you might want more sophisticated encoding
         return base64_encode($morphClass);
     }
+
+    /**
+     * Get formatted media MIME types for accept attribute
+     */
+    public static function formattedMediaMimesForAcceptAttribute(): string
+    {
+        $mimes = config('wirechat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+        return '.' . implode(',.', $mimes);
+    }
+
+    /**
+     * Get formatted file MIME types for accept attribute
+     */
+    public static function formattedFileMimesForAcceptAttribute(): string
+    {
+        $mimes = config('wirechat.attachments.file_mimes', ['pdf', 'doc', 'docx', 'txt', 'zip']);
+        return '.' . implode(',.', $mimes);
+    }
+
+    /**
+     * Get index route name
+     */
+    public static function indexRouteName(): string
+    {
+        return 'chat.index';
+    }
+
+    /**
+     * Get view route name
+     */
+    public static function viewRouteName(): string
+    {
+        return 'chat.show';
+    }
 }
 
