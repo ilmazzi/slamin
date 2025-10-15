@@ -151,9 +151,10 @@
                     );
 
                     this.listeners.push(
-                        Livewire.on('activeWireChatModalComponentChanged', ({
+                        Livewire.on('activeChatModalComponentChanged', ({
                             id
                         }) => {
+                            this.show = true;
                             this.setActiveModalComponent(id);
                         })
                     );
