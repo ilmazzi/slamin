@@ -149,5 +149,23 @@ class ChatHelper
         return '.' . implode(',.', $mimes);
     }
 
+    /**
+     * Check if a string contains only emojis
+     */
+    public static function isEmoji(string $text): bool
+    {
+        // Remove all whitespace and check if the string contains only emoji characters
+        $cleanText = preg_replace('/\s+/', '', $text);
+        
+        if (empty($cleanText)) {
+            return false;
+        }
+        
+        // Use regex to match emoji characters
+        $emojiPattern = '/[\x{1F600}-\x{1F64F}]|[\x{1F300}-\x{1F5FF}]|[\x{1F680}-\x{1F6FF}]|[\x{1F1E0}-\x{1F1FF}]|[\x{2600}-\x{26FF}]|[\x{2700}-\x{27BF}]/u';
+        
+        return preg_match($emojiPattern, $cleanText) && strlen($cleanText) <= 4;
+    }
+
 }
 

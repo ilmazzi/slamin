@@ -309,6 +309,6 @@ class Message extends Model
         }
 
         // Use the isEmoji helper method to check if the message body contains only emojis
-        return Helper::isEmoji($this->body);
+        return ChatHelper::isEmoji($this->body);
     }
 }
