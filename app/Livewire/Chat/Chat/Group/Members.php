@@ -88,7 +88,7 @@ class Members extends ModalComponent
             redirectRoute: route(ChatHelper::viewRouteName(), [$conversation->id]),
             events: [
                 WidgetsChatHelper::class => ['open-chat',  ['conversation' => $conversation->id]],
-                'closeWireChatModal',
+                'closeChatModal',
             ]
         );
 

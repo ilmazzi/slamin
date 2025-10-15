@@ -139,7 +139,7 @@ class AddMembers extends ModalComponent
             }
         }
 
-        $this->closeWireChatModal();
+        $this->closeChatModal();
 
         $this->dispatch('participantsCountUpdated', $this->newTotalCount)->to(Info::class);
     }

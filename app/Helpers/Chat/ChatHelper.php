@@ -167,5 +167,21 @@ class ChatHelper
         return preg_match($emojiPattern, $cleanText) && strlen($cleanText) <= 4;
     }
 
+    /**
+     * Get messages queue name
+     */
+    public static function messagesQueue(): string
+    {
+        return config('queue.connections.redis.queue', 'default');
+    }
+
+    /**
+     * Get notifications queue name
+     */
+    public static function notificationsQueue(): string
+    {
+        return config('queue.connections.redis.queue', 'default');
+    }
+
 }
 

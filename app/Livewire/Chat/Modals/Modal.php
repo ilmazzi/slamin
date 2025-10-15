@@ -18,8 +18,8 @@ class Modal extends Component
     public function getListeners(): array
     {
         return [
-            'openWireChatModal',
-            'destroyWireChatModal',
+            'openChatModal',
+            'destroyChatModal',
         ];
     }
 
@@ -29,7 +29,7 @@ class Modal extends Component
         $this->activeComponent = null;
     }
 
-    public function openWireChatModal($component, $arguments = [], $modalAttributes = []): void
+    public function openChatModal($component, $arguments = [], $modalAttributes = []): void
     {
         $componentClass = app(ComponentRegistry::class)->getClass($component);
         $id = md5($component.serialize($arguments));
@@ -49,7 +49,7 @@ class Modal extends Component
 
         $this->activeComponent = $id;
 
-        $this->dispatch('activeWireChatModalComponentChanged', id: $id);
+        $this->dispatch('activeChatModalComponentChanged', id: $id);
     }
 
     public function resolveComponentProps(array $attributes, Component $component): Collection
@@ -99,7 +99,7 @@ class Modal extends Component
             ->filter();
     }
 
-    public function destroyWireChatModal($id): void
+    public function destroyChatModal($id): void
     {
         unset($this->components[$id]);
     }

@@ -77,8 +77,8 @@ class Chat extends Component
 
         return [
             'refresh' => '$refresh',
-            'echo-private:conversation.'.$conversationId.',.Namu\\WireChat\\Events\\MessageCreated' => 'appendNewMessage',
-            'echo-private:conversation.'.$conversationId.',.Namu\\WireChat\\Events\\MessageDeleted' => 'removeDeletedMessage',
+            'echo-private:conversation.'.$conversationId.',.App\\Events\\Chat\\MessageCreated' => 'appendNewMessage',
+            'echo-private:conversation.'.$conversationId.',.App\\Events\\Chat\\MessageDeleted' => 'removeDeletedMessage',
 
             //  'echo-private:conversation.' .$this->conversation->id. ',.Namu\\WireChat\\Events\\MessageDeleted' => 'removeDeletedMessage',
         ];

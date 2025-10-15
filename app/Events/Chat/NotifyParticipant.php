@@ -46,7 +46,7 @@ class NotifyParticipant implements ShouldBroadcastNow
      */
     public function broadcastQueue(): string
     {
-        return $this->message->conversation->isPrivate() ? WireChat::messagesQueue() : WireChat::notificationsQueue();
+        return $this->message->conversation->isPrivate() ? ChatHelper::messagesQueue() : ChatHelper::notificationsQueue();
     }
 
     public function broadcastWhen(): bool
@@ -70,7 +70,7 @@ class NotifyParticipant implements ShouldBroadcastNow
     {
         return [
             'message' => new MessageResource($this->message),
-            'redirect_url' => route(WireChat::viewRouteName(), [$this->message->conversation_id]),
+            'redirect_url' => route(ChatHelper::viewRouteName(), [$this->message->conversation_id]),
         ];
     }
 }

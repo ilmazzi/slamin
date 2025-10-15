@@ -39,7 +39,7 @@ class MessageDeleted implements ShouldBroadcastNow
      */
     public function broadcastQueue(): string
     {
-        return WireChat::notificationsQueue();
+        return ChatHelper::notificationsQueue();
     }
 
     /**

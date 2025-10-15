@@ -22,7 +22,7 @@ class MessageCreated implements ShouldBroadcast
 
     public function __construct(Message $message)
     {
-        $this->onQueue(WireChat::messagesQueue());
+        $this->onQueue(ChatHelper::messagesQueue());
         $this->message = $message->load([]);
     }
 
@@ -51,7 +51,7 @@ class MessageCreated implements ShouldBroadcast
      */
     public function broadcastQueue(): string
     {
-        return WireChat::messagesQueue();
+        return ChatHelper::messagesQueue();
     }
 
     /**
