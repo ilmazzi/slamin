@@ -598,7 +598,7 @@
                                         const extension = file.name.split('.').pop().toLowerCase();
                                         $dispatch('wirechat-toast', {
                                             type: 'warning',
-                                            message: @js(__('chat::validation.mimes', [ 'attribute' => __('chat::chat.inputs.media.label'), 'values' => implode(', ', config('wirechat.attachments.media_mimes')) ]))
+                                            message: @js(__('chat::validation.mimes', [ 'attribute' => __('chat::chat.inputs.media.label'), 'values' => implode(', ', config('wirechat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp'])) ]))
                                            // message: `One or more Files not uploaded: .${extension} (type not allowed)`
                                         });
 
