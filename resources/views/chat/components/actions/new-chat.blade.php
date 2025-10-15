@@ -4,7 +4,7 @@
 
 
 <x-chat::actions.open-modal
-        component="chat.new-chat"
+        component="chat.new.chat"
         :widget="$widget"
         >
 {{$slot}}
