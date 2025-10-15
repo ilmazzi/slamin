@@ -32,14 +32,31 @@ class Modal extends Component
     protected function getComponentClass(string $component): string
     {
         $components = [
+            // Pages
+            'chat.pages.chats' => \App\Livewire\Chat\Pages\Chats::class,
+            'chat.pages.chat' => \App\Livewire\Chat\Pages\Chat::class,
+            
+            // Main components
+            'chat.chats' => \App\Livewire\Chat\Chats\Chats::class,
+            'chat.chat' => \App\Livewire\Chat\Chat\Chat::class,
+            'chat.modal' => \App\Livewire\Chat\Modals\Modal::class,
+            
+            // New chat/group
             'chat.new.chat' => \App\Livewire\Chat\New\Chat::class,
             'chat.new.group' => \App\Livewire\Chat\New\Group::class,
+            
+            // Chat components
             'chat.chat.info' => \App\Livewire\Chat\Chat\Info::class,
+            'chat.chat.drawer' => \App\Livewire\Chat\Chat\Drawer::class,
+            
+            // Group components
             'chat.chat.group.info' => \App\Livewire\Chat\Chat\Group\Info::class,
             'chat.chat.group.members' => \App\Livewire\Chat\Chat\Group\Members::class,
             'chat.chat.group.permissions' => \App\Livewire\Chat\Chat\Group\Permissions::class,
             'chat.chat.group.add-members' => \App\Livewire\Chat\Chat\Group\AddMembers::class,
-            'chat.chat.drawer' => \App\Livewire\Chat\Chat\Drawer::class,
+            
+            // Widget
+            'chat.widget' => \App\Livewire\Chat\Widgets\WireChat::class,
         ];
 
         if (!isset($components[$component])) {
