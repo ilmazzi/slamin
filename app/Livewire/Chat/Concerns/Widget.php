@@ -9,7 +9,7 @@ use App\Livewire\Chat\Chat\Chats;
 /**
  * Trait Actionable
  *
- * @property \Namu\WireChat\Models\Conversation|null $conversation
+ * @property \App\Models\Chat\onversation|null $conversation
  */
 trait Widget
 {

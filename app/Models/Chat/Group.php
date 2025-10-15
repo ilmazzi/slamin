@@ -26,8 +26,8 @@ use App\Helpers\Chat\ChatHelper;
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Namu\WireChat\Models\Conversation $conversation
- * @property-read \Namu\WireChat\Models\Attachment|null $cover
+ * @property-read \App\Models\Chat\onversation $conversation
+ * @property-read \App\Models\Chat\ttachment|null $cover
  * @property-read string|null $cover_url
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Group newModelQuery()
@@ -100,7 +100,7 @@ class Group extends Model
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\GroupFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     public function conversation(): BelongsTo

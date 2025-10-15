@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Enums\Chat\Actions;
 use App\Enums\Chat\MessageType;
 use App\Helpers\Chat\ChatHelper;
-use Namu\WireChat\Helpers\Helper;
 use App\Models\Chat\Scopes\WithoutRemovedMessages;
 use App\Traits\Chat\Actionable;
 
@@ -31,10 +30,10 @@ use App\Traits\Chat\Actionable;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Action> $actions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\ction> $actions
  * @property-read int|null $actions_count
- * @property-read \Namu\WireChat\Models\Attachment|null $attachment
- * @property-read \Namu\WireChat\Models\Conversation|null $conversation
+ * @property-read \App\Models\Chat\ttachment|null $attachment
+ * @property-read \App\Models\Chat\onversation|null $conversation
  * @property-read Message|null $parent
  * @property-read Message|null $reply
  * @property-read Model|\Eloquent $sendable
@@ -110,7 +109,7 @@ class Message extends Model
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\MessageFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     protected static function booted()

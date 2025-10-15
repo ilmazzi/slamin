@@ -29,9 +29,9 @@ use App\Traits\Chat\Actionable;
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Action> $actions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\ction> $actions
  * @property-read int|null $actions_count
- * @property-read \Namu\WireChat\Models\Conversation $conversation
+ * @property-read \App\Models\Chat\onversation $conversation
  * @property-read Model|\Eloquent $participantable
  *
  * @method bool hasDeletedConversation(bool $checkDeletionExpired = false)
@@ -121,11 +121,11 @@ class Participant extends Model
      * the resolver cannot guess the correct namespace for your Factory class.
      * so we exlicilty tell it the correct namespace
      *
-     * @return \Namu\WireChat\Workbench\Database\Factories\ParticipantFactory
+     * @return \App\Models\Chat\Factory
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\ParticipantFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     /**
@@ -152,7 +152,7 @@ class Participant extends Model
     /**
      * Remove the "withoutExited" global scope to include exited participants.
      *
-     * @param  Builder<\Namu\WireChat\Models\Participant>  $query
+     * @param  Builder<\App\Models\Chat\articipant>  $query
      */
     public function scopeWithExited(Builder $query): void
     {

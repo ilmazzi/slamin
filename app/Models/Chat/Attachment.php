@@ -59,7 +59,7 @@ class Attachment extends Model
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\AttachmentFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     /**

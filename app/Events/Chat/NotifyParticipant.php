@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Helpers\Chat\ChatHelper;
 use App\Helpers\Chat\MorphClassResolver;
-use Namu\WireChat\Http\Resources\MessageResource;
+// use App\Http\Resources\Chat\MessageResource; // TODO: Implement this resource
 use App\Models\Chat\Message;
 use App\Models\Chat\Participant;
 

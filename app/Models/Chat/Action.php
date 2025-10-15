@@ -71,7 +71,7 @@ class Action extends Model
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\ActionFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     // Polymorphic relationship to the entity being acted upon (message, conversation, etc.)

@@ -7,7 +7,7 @@ use Livewire\Attributes\Locked;
 use Livewire\WithFileUploads;
 use App\Enums\Chat\ParticipantRole;
 use App\Helpers\Chat\ChatHelper;
-use Namu\WireChat\Jobs\DeleteConversationJob;
+// use App\Jobs\Chat\DeleteConversationJob; // TODO: Implement this job
 use App\Livewire\Chat\Chat\Chat;
 use App\Livewire\Chat\Chats\Chats;
 use App\Livewire\Chat\Concerns\ModalComponent;

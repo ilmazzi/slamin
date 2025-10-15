@@ -17,7 +17,7 @@ use App\Enums\Chat\MessageType;
 use App\Events\Chat\MessageCreated;
 use App\Events\Chat\MessageDeleted;
 use App\Helpers\Chat\ChatHelper;
-use Namu\WireChat\Jobs\NotifyParticipants;
+// use App\Jobs\Chat\NotifyParticipants; // TODO: Implement this job
 use App\Livewire\Chat\Chats\Chats;
 use App\Livewire\Chat\Concerns\Widget;
 use App\Models\Chat\Conversation;
@@ -732,7 +732,7 @@ class Chat extends Component
         // Group the messages
         $this->loadedMessages = $messages
             ->groupBy(function ($message) {
-                /** @var \Namu\WireChat\Models\Message $message */
+                /** @var \App\Models\Chat\essage $message */
                 return $this->messageGroupKey($message);
             })
             ->map->values();  // Re-index each group
@@ -815,7 +815,7 @@ class Chat extends Component
                 $this->receiverParticipant = $this->authParticipant;
             }
 
-            /** @var \Namu\WireChat\Models\Participant|null $participant */
+            /** @var \App\Models\Chat\articipant|null $participant */
             $participant = $this->receiverParticipant;
 
             $this->receiver = $participant

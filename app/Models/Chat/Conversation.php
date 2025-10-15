@@ -27,13 +27,13 @@ use App\Traits\Chat\Actionable;
  * @property int|null $disappearing_duration
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Action> $actions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\ction> $actions
  * @property-read int|null $actions_count
- * @property-read \Namu\WireChat\Models\Group|null $group
- * @property-read \Namu\WireChat\Models\Message|null $lastMessage
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Message> $messages
+ * @property-read \App\Models\Chat\roup|null $group
+ * @property-read \App\Models\Chat\essage|null $lastMessage
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\essage> $messages
  * @property-read int|null $messages_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Participant> $participants
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\articipant> $participants
  * @property-read int|null $participants_count
  *
  * @method bool isSelf()
@@ -132,7 +132,7 @@ class Conversation extends Model
      */
     protected static function newFactory()
     {
-        return \Namu\WireChat\Workbench\Database\Factories\ConversationFactory::new();
+        return \App\Models\Chat\Factory::new();
     }
 
     /**
@@ -524,7 +524,7 @@ class Conversation extends Model
      * Retrieve unread messages in this conversation for a specific user.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $user
-     * @return \Illuminate\Database\Eloquent\Collection<int,\Namu\WireChat\Models\Message>
+     * @return \Illuminate\Database\Eloquent\Collection<int,\App\Models\Chat\essage>
      */
     public function unreadMessages(Model|Authenticatable $user): \Illuminate\Database\Eloquent\Collection
     {
@@ -544,7 +544,7 @@ class Conversation extends Model
             return $this->messages->filter(function ($message) use ($lastReadAt, $user) {
                 // If lastReadAt is null, consider all messages as unread
                 // Also, exclude messages that belong to the user
-                /** @var \Namu\WireChat\Models\Message $message */
+                /** @var \App\Models\Chat\essage $message */
                 return ($lastReadAt == null || $message->created_at > $lastReadAt) && ! $message->ownedBy($user);
             });
         }
@@ -553,7 +553,7 @@ class Conversation extends Model
         $query = $this->messages();
 
         // WORKING
-        /** @var \Illuminate\Database\Eloquent\Collection<int, \Namu\WireChat\Models\Message> $messages */
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chat\essage> $messages */
         $messages = $query->whereIsNotOwnedBy($user)->when($lastReadAt, function ($query) use ($lastReadAt) {
 
             $query->where('created_at', '>', $lastReadAt);
