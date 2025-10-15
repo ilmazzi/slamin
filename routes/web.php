@@ -1467,12 +1467,15 @@ Route::post('/test-broadcast', function () {
 
 
 // ===== ROUTES PER CHAT =====
-Route::prefix('chat')->name('chat.')->middleware('auth')->group(function () {
-        // Wirechat embedded - direct layout
-        Route::get('/', function () {
-            return view('layouts.wirechat');
-        })->name('index');
-});
+Route::middleware(config('chat.routes.middleware'))
+    ->prefix(config('chat.routes.prefix'))
+    ->name('chat.')
+    ->group(function () {
+        Route::get('/', App\Livewire\Chat\Pages\Chats::class)->name('index');
+        Route::get('/{conversation}', App\Livewire\Chat\Pages\Chat::class)
+            ->middleware(App\Http\Middleware\Chat\BelongsToConversation::class)
+            ->name('show');
+    });
 
 // ===== ROUTES PER ARTICOLI/NOTIZIE =====
 
