@@ -130,5 +130,5 @@
 
     </div>
 
-    <livewire:wirechat.chat.drawer />
+    <livewire:chat.chat.drawer />
 </div>
