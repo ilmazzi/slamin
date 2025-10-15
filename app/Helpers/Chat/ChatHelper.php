@@ -143,20 +143,5 @@ class ChatHelper
         return '.' . implode(',.', $mimes);
     }
 
-    /**
-     * Get index route name
-     */
-    public static function indexRouteName(): string
-    {
-        return 'chat.index';
-    }
-
-    /**
-     * Get view route name
-     */
-    public static function viewRouteName(): string
-    {
-        return 'chat.show';
-    }
 }
 
