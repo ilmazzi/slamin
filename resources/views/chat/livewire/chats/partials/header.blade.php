@@ -1,5 +1,5 @@
 
-@use('Namu\WireChat\Facades\WireChat')
+@use('App\Helpers\Chat\ChatHelper')
 
 <header class="px-3 z-10 sticky top-0 w-full py-2 " dusk="header">
 

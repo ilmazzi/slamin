@@ -4,7 +4,7 @@
 
 
 <x-chat::actions.open-modal
-        component="wirechat.new.chat"
+        component="chat.new-chat"
         :widget="$widget"
         >
 {{$slot}}
