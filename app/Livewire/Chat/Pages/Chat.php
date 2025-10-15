@@ -27,6 +27,6 @@ class Chat extends Component
     public function render()
     {
         return view('chat::livewire.pages.chat')
-            ->layout(config('wirechat.layout', 'chat::layouts.app'));
+            ->layout(config('chat.layout', 'chat::layouts.app'));
     }
 }

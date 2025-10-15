@@ -17,7 +17,7 @@ class Helper
      */
     public static function formattedMediaMimesForAcceptAttribute(): string
     {
-        $fileExtensions = config('wirechat.attachments.media_mimes');
+        $fileExtensions = config('chat.attachments.media_mimes');
 
         return '.'.implode(',.', $fileExtensions);
     }
@@ -33,7 +33,7 @@ class Helper
      */
     public static function formattedFileMimesForAcceptAttribute(): string
     {
-        $fileExtensions = config('wirechat.attachments.file_mimes');
+        $fileExtensions = config('chat.attachments.file_mimes');
 
         return '.'.implode(',.', $fileExtensions);
     }

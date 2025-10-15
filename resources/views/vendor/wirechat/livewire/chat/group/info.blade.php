@@ -132,7 +132,7 @@
                         <span class="col-span-11">
                             <div x-show="!editing">
                                 @if (empty($description))
-                                    <p class="text-sm" style="color: var(--wirechat-primary-color)">{{ __('wirechat::chat.group.info.labels.add_description') }}  </p>
+                                    <p class="text-sm" style="color: var(--chat-primary-color)">{{ __('wirechat::chat.group.info.labels.add_description') }}  </p>
                                 @else
                                     <p class="font-medium break-all   whitespace-pre-line ">{{ $description }}
                                     </p>
@@ -199,7 +199,7 @@
     {{-- Members section --}}
     <section class="my-4 text-left space-y-3">
         {{-- Actiion button to trigger opening members  modal --}}
-        <x-wirechat::actions.open-modal component="wirechat.chat.group.members"
+        <x-wirechat::actions.open-modal component="chat.chat.group.members"
             conversation="{{ $conversation?->id }}" widget="{{ $this->isWidget() }}" :panel="$this->panel">
             {{-- Members count --}}
             <button class="cursor-pointer flex w-full justify-between items-center px-8 focus:outline-hidden ">
@@ -217,7 +217,7 @@
 
         {{-- Add Members --}}
         @if ($authIsAdminInGroup || $group?->allowsMembersToAddOthers())
-            <x-wirechat::actions.open-modal component="wirechat.chat.group.add-members"
+            <x-wirechat::actions.open-modal component="chat.chat.group.add-members"
                 conversation="{{ $conversation?->id }}" widget="{{ $this->isWidget() }}">
                 <button @dusk="open_add_members_modal_button"
                     class="cursor-pointer w-full py-5 px-8 hover:bg-[var(--wc-light-secondary)] dark:hover:bg-[var(--wc-dark-secondary)] focus:outline-hidden transition  flex gap-3 items-center">

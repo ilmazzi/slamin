@@ -24,4 +24,11 @@ return [
             ],
         ],
     ],
+    'widgets' => [
+        'chat' => [
+            'messages' => [
+                'welcome' => 'Benvenuto nella Chat',
+            ],
+        ],
+    ],
 ];

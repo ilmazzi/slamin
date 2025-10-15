@@ -5,7 +5,7 @@
 
 
 <x-wirechat::actions.open-modal
-        component="wirechat.new.chat"
+        component="chat.new.chat"
         :widget="$widget"
         :panel="$panel"
         >

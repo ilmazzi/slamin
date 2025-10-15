@@ -132,7 +132,7 @@
                         <span class="col-span-11">
                             <div x-show="!editing">
                                 @if (empty($description))
-                                    <p class="text-sm" style="color: var(--wirechat-primary-color)">{{ __('chat::chat.group.info.labels.add_description') }}  </p>
+                                    <p class="text-sm" style="color: var(--chat-primary-color)">{{ __('chat::chat.group.info.labels.add_description') }}  </p>
                                 @else
                                     <p class="font-medium break-all   whitespace-pre-line ">{{ $description }}
                                     </p>
@@ -200,7 +200,7 @@
     <section class="my-4 text-left space-y-3">
 
         {{-- Actiion button to trigger opening members  modal --}}
-        <x-chat::actions.open-modal component="wirechat.chat.group.members"
+        <x-chat::actions.open-modal component="chat.chat.group.members"
             conversation="{{ $conversation?->id }}" widget="{{ $this->isWidget() }}">
             {{-- Members count --}}
             <button class="cursor-pointer flex w-full justify-between items-center px-8 focus:outline-hidden ">
@@ -218,7 +218,7 @@
 
         {{-- Add Members --}}
         @if ($authIsAdminInGroup || $group?->allowsMembersToAddOthers())
-            <x-chat::actions.open-modal component="wirechat.chat.group.add-members"
+            <x-chat::actions.open-modal component="chat.chat.group.add-members"
                 conversation="{{ $conversation?->id }}" widget="{{ $this->isWidget() }}">
                 <button @dusk="open_add_members_modal_button"
                     class="cursor-pointer w-full py-5 px-8 hover:bg-[var(--wc-light-secondary)] dark:hover:bg-[var(--wc-dark-secondary)] focus:outline-hidden transition  flex gap-3 items-center">
@@ -261,7 +261,7 @@
             {{-- Permissions --}}
             <div>
 
-                <x-chat::actions.open-chat-drawer component='wirechat.chat.group.permissions'
+                <x-chat::actions.open-chat-drawer component='chat.chat.group.permissions'
                     conversation="{{ $conversation?->id }}">
                     <button
                         class="cursor-pointer w-full py-5 px-8 hover:bg-[var(--wc-light-secondary)] dark:hover:bg-[var(--wc-dark-secondary)] transition text-start space-y-2   gap-3   dark:text-white/90">

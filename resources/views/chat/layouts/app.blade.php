@@ -44,7 +44,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    @wirechatStyles
+    {{-- @wirechatStyles removed --}}
 </head>
 
 <body  x-data x-cloak class="font-sans antialiased">
@@ -58,7 +58,7 @@
     </div>
 
     @livewireScripts
-    @wirechatAssets
+    {{-- @wirechatAssets removed --}}
 </body>
 
 </html>

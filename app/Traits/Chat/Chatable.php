@@ -427,7 +427,7 @@ trait Chatable
         $searchableFields = ChatHelper::searchableFields();
 
         // Get the user model from the configuration, defaulting to App\Models\User.
-        $userModel = app(config('wirechat.user_model', \App\Models\User::class));
+        $userModel = app(config('chat.user_model', \App\Models\User::class));
 
         // Return null if the search query is blank or the user model is unavailable.
         if (blank($query) || ! $userModel) {
@@ -467,7 +467,7 @@ trait Chatable
     public function getWireSearchableFields(): ?array
     {
         // Define the fields specified as searchable in the configuration
-        $fieldsToCheck = config('wirechat.user_searchable_fields');
+        $fieldsToCheck = config('chat.user_searchable_fields');
 
         // Get the table name associated with the model
         $tableName = $this->getTable();

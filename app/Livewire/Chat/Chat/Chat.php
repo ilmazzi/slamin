@@ -327,7 +327,7 @@ class Chat extends Component
         // Combine media and files arrays
 
         $attachments = array_merge($this->media, $this->files);
-        //    dd(config('wirechat.file_mimes'));
+        //    dd(config('chat.file_mimes'));
 
         // If combined files array is empty, continue to validate body
         if (empty($attachments)) {
@@ -340,15 +340,15 @@ class Chat extends Component
 
             //  dd($attachments);
             // Retrieve maxUploads count
-            $maxUploads = config('wirechat.attachments.max_uploads');
+            $maxUploads = config('chat.attachments.max_uploads');
 
             // Files
-            $fileMimes = implode(',', config('wirechat.attachments.file_mimes'));
-            $fileMaxUploadSize = (int) config('wirechat.attachments.file_max_upload_size');
+            $fileMimes = implode(',', config('chat.attachments.file_mimes'));
+            $fileMaxUploadSize = (int) config('chat.attachments.file_max_upload_size');
 
             // media
-            $mediaMimes = implode(',', config('wirechat.attachments.media_mimes'));
-            $mediaMaxUploadSize = (int) config('wirechat.attachments.media_max_upload_size');
+            $mediaMimes = implode(',', config('chat.attachments.media_mimes'));
+            $mediaMaxUploadSize = (int) config('chat.attachments.media_max_upload_size');
 
             try {
 
@@ -367,7 +367,7 @@ class Chat extends Component
                     $this->addError($field, $messages[0]);
                 }
 
-                return $this->dispatch('wirechat-toast', type: 'warning', message: $th->getMessage());
+                return $this->dispatch('chat-toast', type: 'warning', message: $th->getMessage());
             }
 
             // Combine media and files thne perform loop together
@@ -749,7 +749,7 @@ class Chat extends Component
 
     public function mount($conversation = null)
     {
-        // dd(config('wirechat.attachments.storage_disk'));
+        // dd(config('chat.attachments.storage_disk'));
 
         // dd(Storage::disk()->url('/'));
 

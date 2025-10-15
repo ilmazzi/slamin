@@ -126,8 +126,8 @@ class Message extends Model
                 $message->attachment->delete();
 
                 // also delete from storage
-                if (Storage::disk(config('wirechat.attachments.storage_disk', 'public'))->exists($message->attachment->file_path)) {
-                    Storage::disk(config('wirechat.attachments.storage_disk', 'public'))->delete($message->attachment->file_path);
+                if (Storage::disk(config('chat.attachments.storage_disk', 'public'))->exists($message->attachment->file_path)) {
+                    Storage::disk(config('chat.attachments.storage_disk', 'public'))->delete($message->attachment->file_path);
                 }
             }
 

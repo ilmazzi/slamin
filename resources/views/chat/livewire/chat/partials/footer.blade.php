@@ -285,7 +285,7 @@
                     {{-- Also only show  upload popup if allowed in configuration  --}}
                     @if (count($this->media) == 0 &&
                             count($this->files) == 0 &&
-                            (config('wirechat.allow_file_attachments', true) || config('wirechat.allow_media_attachments', true)))
+                            (config('chat.allow_file_attachments', true) || config('chat.allow_media_attachments', true)))
                         <x-chat::popover position="top" popoverOffset="70">
 
                             <x-slot name="trigger" wire:loading.attr="disabled">
@@ -322,7 +322,7 @@
                             <div class="grid gap-2 w-full ">
 
                                 {{-- Upload Files --}}
-                                @if (config('wirechat.allow_file_attachments', true))
+                                @if (config('chat.allow_file_attachments', true))
                                     <label wire:loading.class="cursor-progress" x-data="attachments('files')"
                                         class="cursor-pointer">
                                         <input wire:loading.attr="disabled" wire:target="sendMessage"
@@ -352,7 +352,7 @@
 
 
                                 {{-- Upload Media --}}
-                                @if (config('wirechat.allow_media_attachments', true))
+                                @if (config('chat.allow_media_attachments', true))
                                     <label wire:loading.class="cursor-progress" x-data="attachments('media')"
                                         class="cursor-pointer">
 
@@ -495,10 +495,10 @@
                         isDropping: false, // Tracks if a file is being dragged over the drop area
                         type: type, // Type of file being uploaded (e.g., "media" or "file")
                         isUploading: false, // Indicates if files are currently uploading
-                        MAXFILES: @json(config('wirechat.attachments.max_uploads', 5)), // Maximum number of files allowed
-                        maxSize: @json(config('wirechat.attachments.media_max_upload_size', 12288)) * 1024, // Max size per file (in bytes)
-                        allowedFileTypes: type === 'media' ? @json(config('wirechat.attachments.media_mimes')) :
-                        @json(config('wirechat.attachments.file_mimes')), // Allowed MIME types based on type
+                        MAXFILES: @json(config('chat.attachments.max_uploads', 5)), // Maximum number of files allowed
+                        maxSize: @json(config('chat.attachments.media_max_upload_size', 12288)) * 1024, // Max size per file (in bytes)
+                        allowedFileTypes: type === 'media' ? @json(config('chat.attachments.media_mimes')) :
+                        @json(config('chat.attachments.file_mimes')), // Allowed MIME types based on type
                         progress: 0, // Progress of the current upload (0-100)
                         wireModel: type, // The Livewire model to bind to
 
@@ -541,7 +541,7 @@
                                     (error) => {
                                         // this.isUploading = false;
                                         fileProgress[index] = -1; // Mark as failed
-                                        $dispatch('wirechat-toast', { type: 'error', message: `Validation error: ${error}` });
+                                        $dispatch('chat-toast', { type: 'error', message: `Validation error: ${error}` });
                                     },
                                     (event) => {
                                         fileProgress[index] = event.detail.progress; // Update per-file progress
@@ -566,9 +566,9 @@
                             if (totalFiles > this.MAXFILES) {
                                 files = Array.from(files).slice(0, this.MAXFILES -
                                 count); // Limit files to the allowed number
-                                $dispatch('wirechat-toast', {
+                                $dispatch('chat-toast', {
                                     type: 'warning',
-                                    message: @js(__('chat::validation.max.array', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('wirechat.attachments.max_uploads', 5)]))
+                                    message: @js(__('chat::validation.max.array', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('chat.attachments.max_uploads', 5)]))
                                 });
                             }
 
@@ -589,16 +589,16 @@
                             if (invalidFiles.length > 0) {
                                 invalidFiles.forEach((file) => {
                                     if (file.size > this.maxSize) {
-                                        $dispatch('wirechat-toast', {
+                                        $dispatch('chat-toast', {
                                             type: 'warning',
-                                            message: @js(__('chat::validation.max.file', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('wirechat.attachments.media_max_upload_size', 12288)]))
+                                            message: @js(__('chat::validation.max.file', ['attribute' => __('chat::chat.inputs.media.label'),'max'=>config('chat.attachments.media_max_upload_size', 12288)]))
                                          //   message: `File size exceeds the maximum limit (${this.maxSize / 1024 / 1024}MB): ${file.name}`
                                         });
                                     } else {
                                         const extension = file.name.split('.').pop().toLowerCase();
-                                        $dispatch('wirechat-toast', {
+                                        $dispatch('chat-toast', {
                                             type: 'warning',
-                                            message: @js(__('chat::validation.mimes', [ 'attribute' => __('chat::chat.inputs.media.label'), 'values' => implode(', ', config('wirechat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp'])) ]))
+                                            message: @js(__('chat::validation.mimes', [ 'attribute' => __('chat::chat.inputs.media.label'), 'values' => implode(', ', config('chat.attachments.media_mimes', ['jpg', 'jpeg', 'png', 'gif', 'webp'])) ]))
                                            // message: `One or more Files not uploaded: .${extension} (type not allowed)`
                                         });
 

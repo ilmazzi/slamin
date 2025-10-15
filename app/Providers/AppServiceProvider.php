@@ -130,7 +130,7 @@ class AppServiceProvider extends ServiceProvider
         // Registra un handler globale per le eccezioni non gestite
         $this->registerGlobalExceptionHandler();
         
-        $morphMap = config('wirechat.morph_map', []);
+        $morphMap = config('chat.morph_map', []);
         if (!empty($morphMap) && is_array($morphMap)) {
             Relation::enforceMorphMap($morphMap);
         }

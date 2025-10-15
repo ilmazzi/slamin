@@ -130,7 +130,7 @@ class ChatHelper
      */
     public static function formattedMediaMimesForAcceptAttribute(): string
     {
-        $mimes = config('wirechat.attachments.media_mimes') ?? ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $mimes = config('chat.attachments.media_mimes') ?? ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         if (!is_array($mimes)) {
             $mimes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         }
@@ -142,7 +142,7 @@ class ChatHelper
      */
     public static function formattedFileMimesForAcceptAttribute(): string
     {
-        $mimes = config('wirechat.attachments.file_mimes') ?? ['pdf', 'doc', 'docx', 'txt', 'zip'];
+        $mimes = config('chat.attachments.file_mimes') ?? ['pdf', 'doc', 'docx', 'txt', 'zip'];
         if (!is_array($mimes)) {
             $mimes = ['pdf', 'doc', 'docx', 'txt', 'zip'];
         }

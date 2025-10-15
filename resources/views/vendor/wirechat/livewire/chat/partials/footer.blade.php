@@ -611,7 +611,7 @@
                                     (error) => {
                                         // this.isUploading = false;
                                         fileProgress[index] = -1; // Mark as failed
-                                        $dispatch('wirechat-toast', { type: 'error', message: `Validation error: ${error}` });
+                                        $dispatch('chat-toast', { type: 'error', message: `Validation error: ${error}` });
                                     },
                                     (event) => {
                                         fileProgress[index] = event.detail.progress; // Update per-file progress
@@ -636,7 +636,7 @@
                             if (totalFiles > this.MAXFILES) {
                                 files = Array.from(files).slice(0, this.MAXFILES -
                                 count); // Limit files to the allowed number
-                                $dispatch('wirechat-toast', {
+                                $dispatch('chat-toast', {
                                     type: 'warning',
                                     message: @js(__('wirechat::validation.max.array', ['attribute' => __('wirechat::chat.inputs.media.label'),'max'=>$this->panel()->getMaxUploads()]))
                                 });
@@ -659,7 +659,7 @@
                             if (invalidFiles.length > 0) {
                                 invalidFiles.forEach((file) => {
                                     if (file.size > this.maxSize) {
-                                        $dispatch('wirechat-toast', {
+                                        $dispatch('chat-toast', {
                                             type: 'warning',
                                             message:this.type===media?
                                                     @js(__('wirechat::validation.max.file', ['attribute' => __('wirechat::chat.inputs.media.label'),'max'=>$this->panel()->getMediaMaxUploadSize()])):
@@ -669,7 +669,7 @@
                                         });
                                     } else {
                                         const extension = file.name.split('.').pop().toLowerCase();
-                                        $dispatch('wirechat-toast', {
+                                        $dispatch('chat-toast', {
                                             type: 'warning',
                                             message: this.type===media?
                                                     @js(__('wirechat::validation.mimes', [ 'attribute' => __('wirechat::chat.inputs.media.label'), 'values' => implode(', ', $this->panel()->getMediaMimes()) ])):

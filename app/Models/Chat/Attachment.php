@@ -89,7 +89,7 @@ class Attachment extends Model
 
         $disk = Storage::disk(ChatHelper::storageDisk());
 
-        $config = config('wirechat.attachments');
+        $config = config('chat.attachments');
 
         // If the disk is set to private, generate a temporary URL
         if (($config['disk_visibility'] ?? 'public') === 'private') {

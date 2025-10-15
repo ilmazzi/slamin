@@ -28,12 +28,12 @@
                 body: body,
                 icon: icon,
                 vibrate: [200, 100, 200],
-                tag: 'wirechat-notification-' + message.conversation_id,
+                tag: 'chat-notification-' + message.conversation_id,
                 renotify: true,
                 data: {
                     url: redirect_url,
                     type: 'SHOW_NOTIFICATION',
-                    tag: 'wirechat-notification-' + message.conversation_id
+                    tag: 'chat-notification-' + message.conversation_id
                 }
             };
 
@@ -71,7 +71,7 @@
             notification.onclick = (event) => {
                 event.preventDefault();
                 const convId = message.conversation_id || 'default';
-                const windowName = 'wirechat-conversation';
+                const windowName = 'chat-conversation';
                 const url = event.currentTarget.data.url;
                 const openedWindow = window.open(url, windowName);
                 if (openedWindow) {
@@ -85,7 +85,7 @@
 
         registerServiceWorker() {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register(`{{asset(config('wirechat.notifications.main_sw_script','sw.js'))}}`)
+                    navigator.serviceWorker.register(`{{asset(config('chat.notifications.main_sw_script','sw.js'))}}`)
                         .then(reg => console.log('Wirechat Service Worker registered'))
                         .catch(err => console.error('Wirechat Service Worker registration failed:', err));
                 }
@@ -119,7 +119,7 @@
 
         document.addEventListener('chat-opened', (event) => {
             const conversation = event.detail.conversation;
-            const tag = 'wirechat-notification-' + conversation;
+            const tag = 'chat-notification-' + conversation;
 
             if (navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({

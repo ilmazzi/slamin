@@ -37,7 +37,7 @@ class WireChat extends Component
 
     public function openChatWidget($conversation, $arguments = [], $modalAttributes = []): void
     {
-        $component = 'wirechat.chat';
+        $component = 'chat.chat';
         // $componentClass = app(ComponentRegistry::class)->getClass($component);
 
         // Generate a unique ID using the conversationId and arguments
