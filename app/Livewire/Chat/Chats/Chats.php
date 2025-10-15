@@ -72,6 +72,18 @@ class Chats extends Component
     public $selectedConversationId;
 
     /**
+     * Mount the component.
+     */
+    public function mount()
+    {
+        // Initialize default values for features
+        $this->showNewChatModalButton = true;
+        $this->allowChatsSearch = true;
+        $this->showHomeRouteButton = false;
+        $this->title = null;
+    }
+
+    /**
      * Returns an array of event listeners.
      *
      * @return array
@@ -87,7 +99,7 @@ class Chats extends Component
             'refresh' => '$refresh',
             'hardRefresh',
             // Construct the channel name using the encoded type and user ID.
-            "echo-private:participant.{$encodedType}.{$userId},.Namu\\WireChat\\Events\\NotifyParticipant" => 'refreshComponent',
+            "echo-private:participant.{$encodedType}.{$userId},.App\\Events\\Chat\\NotifyParticipant" => 'refreshComponent',
         ];
     }
 
