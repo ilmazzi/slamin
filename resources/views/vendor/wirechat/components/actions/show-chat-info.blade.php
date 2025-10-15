@@ -5,7 +5,7 @@
 
 
 <x-wirechat::actions.open-chat-drawer 
-        component="chat.chat.info"
+        component="chat.chat-info"
         dusk="show_chat_info"
         conversation="{{$conversation}}"
         :widget="$widget"

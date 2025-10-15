@@ -129,5 +129,5 @@
 
     </div>
 
-    <livewire:chat.chat.drawer />
+    <livewire:chat.chat-drawer />
 </div>

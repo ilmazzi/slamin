@@ -137,7 +137,7 @@ $hasEmojiPicker= $this->panel()->hasEmojiPicker();
 
     </div>
 
-    <livewire:wirechat.chat.drawer />
+    <livewire:wirechat.chat-drawer />
 
     @script
 

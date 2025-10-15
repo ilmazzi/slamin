@@ -5,7 +5,7 @@
 
 
 <x-chat::actions.open-chat-drawer 
-        component="chat.chat.group.info"
+        component="chat.chat-group-info"
         dusk="show_group_info"
         conversation="{{$conversation}}"
         :widget="$widget"
