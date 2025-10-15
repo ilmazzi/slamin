@@ -3,7 +3,7 @@
 return [
 
     // chat component
-    'chat' => [
+    'wirechat' => [
         'messages' => [
             'welcome' => 'Select a conversation to start messaging',
 

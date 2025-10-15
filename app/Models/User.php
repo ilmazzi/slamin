@@ -409,6 +409,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles->pluck('name')->toArray();
     }
 
+    public function getMorphClass(): string
+    {
+        return 'user';
+    }
+
     /**
      * Check if user is active (for future status management)
      */

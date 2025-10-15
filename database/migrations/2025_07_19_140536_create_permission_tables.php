@@ -118,23 +118,9 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     * 
-     * ⚠️ ATTENZIONE CRITICA: NON ESEGUIRE IL ROLLBACK DI QUESTA MIGRATION IN PRODUZIONE!
-     * Eliminare queste tabelle cancellerebbe TUTTI i ruoli e permessi degli utenti!
-     * 
-     * Se DEVI assolutamente fare rollback, prima fai backup del database!
      */
     public function down(): void
     {
-        // PROTEZIONE: Non permettere rollback in produzione
-        if (app()->environment('production')) {
-            throw new \Exception(
-                '🚨 OPERAZIONE BLOCCATA: Non puoi fare rollback di permission tables in produzione! ' .
-                'Questo cancellerebbe tutti i ruoli admin. ' .
-                'Se necessario, fai backup del database e rimuovi questo check.'
-            );
-        }
-
         $tableNames = config('permission.table_names');
 
         if (empty($tableNames)) {
