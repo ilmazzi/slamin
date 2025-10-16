@@ -1,3 +1,5 @@
+@use('App\Helpers\AvatarHelper')
+
 <div class="h-[calc(100vh_-_10rem)]  sm:h-[450px] bg-[var(--wc-light-primary)] dark:bg-[var(--wc-dark-primary)] dark:text-white border border-[var(--wc-light-secondary)] dark:border-[var(--wc-dark-secondary)] overflow-y-auto overflow-x-hidden  ">
  
 <header class=" sticky top-0 bg-[var(--wc-light-primary)] dark:bg-[var(--wc-dark-primary)] z-10 p-2">
@@ -106,7 +108,7 @@
                          @endif
         
                             class="flex cursor-pointer gap-2 items-center w-full">
-                            <x-chat::avatar src="{{$user->cover_url}}" class="w-10 h-10" />
+                            <x-chat::avatar :src="AvatarHelper::getUserAvatarUrl($user)" class="w-10 h-10" />
 
                            <div @class(['opacity-70' => $isAlreadyAParticipant]) >
                             <p

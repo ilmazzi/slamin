@@ -4,6 +4,7 @@ namespace App\Livewire\Chat\Chat;
 
 use Livewire\Attributes\Locked;
 use App\Helpers\Chat\ChatHelper;
+use App\Helpers\AvatarHelper;
 use App\Livewire\Chat\Chats\Chats;
 use App\Livewire\Chat\Concerns\ModalComponent;
 use App\Livewire\Chat\Concerns\Widget;
@@ -81,7 +82,7 @@ class Info extends ModalComponent
         // Pass data to the view
         return view('chat::livewire.chat.info', [
             'receiver' => $receiver,
-            'cover_url' => $receiver?->cover_url,
+            'cover_url' => $receiver ? AvatarHelper::getUserAvatarUrl($receiver) : null,
         ]);
     }
 }

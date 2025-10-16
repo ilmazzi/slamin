@@ -1,4 +1,5 @@
 @use('App\Helpers\Chat\ChatHelper')
+@use('App\Helpers\AvatarHelper')
 <div id="new-chat-modal ">
 
     <div 
@@ -62,7 +63,7 @@
                             wire:click="createConversation('{{ $user->id }}',{{ json_encode(get_class($user)) }})"
                             class="flex cursor-pointer group gap-2 items-center p-2">
 
-                            <x-chat::avatar :src="$user->cover_url" class="w-10 h-10" />
+                            <x-chat::avatar :src="AvatarHelper::getUserAvatarUrl($user)" class="w-10 h-10" />
 
                             <p class="group-hover:underline transition-all">
                                 {{ $user->display_name }}</p>

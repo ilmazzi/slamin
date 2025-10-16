@@ -1,4 +1,6 @@
 
+@use('App\Helpers\AvatarHelper')
+
 <div x-data dusk="new_group_modal">
 
     <div
@@ -206,7 +208,7 @@
                                     <label
                                         wire:click="toggleMember('{{ $user->id }}',{{ json_encode(get_class($user)) }})"
                                         class="flex cursor-pointer gap-2 items-center w-full">
-                                        <x-chat::avatar  src="{{ $user->cover_url }}" class="w-10 h-10" />
+                                        <x-chat::avatar :src="AvatarHelper::getUserAvatarUrl($user)" class="w-10 h-10" />
 
                                         <p class="group-hover:underline transition-all truncate">
                                             {{ $user->display_name }}</p>
