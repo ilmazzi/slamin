@@ -29,3 +29,73 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Chat Utility Classes - Support for bg-[var(--wc-*)] */
+.bg-\[var\(--wc-light-primary\)\] {
+    background-color: var(--wc-light-primary) !important;
+}
+.bg-\[var\(--wc-light-secondary\)\] {
+    background-color: var(--wc-light-secondary) !important;
+}
+.bg-\[var\(--wc-light-accent\)\] {
+    background-color: var(--wc-light-accent) !important;
+}
+.bg-\[var\(--wc-dark-primary\)\] {
+    background-color: var(--wc-dark-primary) !important;
+}
+.bg-\[var\(--wc-dark-secondary\)\] {
+    background-color: var(--wc-dark-secondary) !important;
+}
+.bg-\[var\(--wc-dark-accent\)\] {
+    background-color: var(--wc-dark-accent) !important;
+}
+
+.border-\[var\(--wc-light-border\)\] {
+    border-color: var(--wc-light-border) !important;
+}
+.border-\[var\(--wc-light-secondary\)\] {
+    border-color: var(--wc-light-secondary) !important;
+}
+.border-\[var\(--wc-light-primary\)\] {
+    border-color: var(--wc-light-primary) !important;
+}
+.border-\[var\(--wc-dark-border\)\] {
+    border-color: var(--wc-dark-border) !important;
+}
+.border-\[var\(--wc-dark-secondary\)\] {
+    border-color: var(--wc-dark-secondary) !important;
+}
+.border-\[var\(--wc-dark-primary\)\] {
+    border-color: var(--wc-dark-primary) !important;
+}
+
+.hover\:bg-\[var\(--wc-light-secondary\)\]:hover {
+    background-color: var(--wc-light-secondary) !important;
+}
+.hover\:bg-\[var\(--wc-dark-secondary\)\]:hover {
+    background-color: var(--wc-dark-secondary) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .dark\:bg-\[var\(--wc-dark-primary\)\] {
+        background-color: var(--wc-dark-primary) !important;
+    }
+    .dark\:bg-\[var\(--wc-dark-secondary\)\] {
+        background-color: var(--wc-dark-secondary) !important;
+    }
+    .dark\:bg-\[var\(--wc-dark-accent\)\] {
+        background-color: var(--wc-dark-accent) !important;
+    }
+    .dark\:border-\[var\(--wc-dark-border\)\] {
+        border-color: var(--wc-dark-border) !important;
+    }
+    .dark\:border-\[var\(--wc-dark-secondary\)\] {
+        border-color: var(--wc-dark-secondary) !important;
+    }
+    .dark\:border-\[var\(--wc-dark-primary\)\] {
+        border-color: var(--wc-dark-primary) !important;
+    }
+    .dark\:hover\:bg-\[var\(--wc-dark-secondary\)\]:hover {
+        background-color: var(--wc-dark-secondary) !important;
+    }
+}
