@@ -29,8 +29,8 @@
     
     @livewireStyles
     
-    <!-- Tailwind CSS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Chat CSS -->
+    <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
     
     @stack('styles')
 </head>

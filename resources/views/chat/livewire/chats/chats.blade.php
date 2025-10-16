@@ -10,7 +10,7 @@
              conversationElement.scrollIntoView({ behavior: 'smooth' });
          }
      }, 200);"
-    class="flex flex-col bg-[var(--wc-light-primary)] dark:bg-[var(--wc-dark-primary)] transition-all h-full overflow-hidden w-full sm:p-3">
+    class="d-flex flex-column chat-transition h-100 overflow-hidden w-100" style="background: var(--chat-bg-primary);">
 
     @php
         /* Show header if any of these conditions are true  */
@@ -35,20 +35,17 @@
                 $wire.loadMore();
             }
             "
-        class=" overflow-y-auto py-2   grow  h-full relative " style="contain:content">
-
-        {{-- loading indicator --}}
+        class="overflow-auto py-2 flex-grow-1 h-100 position-relative" style="contain:content">
 
         @if (count($conversations) > 0)
             {{-- include list item --}}
             @include('chat::livewire.chats.partials.list')
 
-
             {{-- include load more if true --}}
             @includeWhen($canLoadMore, 'chat::livewire.chats.partials.load-more-button')
         @else
-            <div class="w-full flex items-center h-full justify-center">
-                <h6 class=" font-bold text-gray-700 dark:text-white">{{ __('chat::chats.labels.no_conversations_yet')  }}</h6>
+            <div class="w-100 d-flex align-items-center h-100 justify-content-center">
+                <h6 class="fw-bold" style="color: var(--chat-text);">{{ __('chat::chats.labels.no_conversations_yet')  }}</h6>
             </div>
         @endif
     </main>
