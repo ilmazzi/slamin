@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    @vite('resources/js/app.js') <!-- All meta and title start-->
     @include('layout.head')
     <!-- meta and title end-->
 
