@@ -47,11 +47,17 @@ class ChatServiceProvider extends ServiceProvider
         Livewire::component('chat.chat.info', \App\Livewire\Chat\Chat\Info::class);
         Livewire::component('chat.chat.drawer', \App\Livewire\Chat\Chat\Drawer::class);
         
-        // Group components
+        // Group components (both formats for compatibility)
         Livewire::component('chat.chat.group.info', \App\Livewire\Chat\Chat\Group\Info::class);
         Livewire::component('chat.chat.group.members', \App\Livewire\Chat\Chat\Group\Members::class);
         Livewire::component('chat.chat.group.permissions', \App\Livewire\Chat\Chat\Group\Permissions::class);
         Livewire::component('chat.chat.group.add-members', \App\Livewire\Chat\Chat\Group\AddMembers::class);
+        
+        // Alternative naming with hyphens
+        Livewire::component('chat.chat-group-info', \App\Livewire\Chat\Chat\Group\Info::class);
+        Livewire::component('chat.chat-group-members', \App\Livewire\Chat\Chat\Group\Members::class);
+        Livewire::component('chat.chat-group-permissions', \App\Livewire\Chat\Chat\Group\Permissions::class);
+        Livewire::component('chat.chat-group-add-members', \App\Livewire\Chat\Chat\Group\AddMembers::class);
         
         // Widget
         Livewire::component('chat.widget', \App\Livewire\Chat\Widgets\WireChat::class);

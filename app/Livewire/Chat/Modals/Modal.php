@@ -55,6 +55,12 @@ class Modal extends Component
             'chat.chat.group.permissions' => \App\Livewire\Chat\Chat\Group\Permissions::class,
             'chat.chat.group.add-members' => \App\Livewire\Chat\Chat\Group\AddMembers::class,
             
+            // Alternative naming with hyphens
+            'chat.chat-group-info' => \App\Livewire\Chat\Chat\Group\Info::class,
+            'chat.chat-group-members' => \App\Livewire\Chat\Chat\Group\Members::class,
+            'chat.chat-group-permissions' => \App\Livewire\Chat\Chat\Group\Permissions::class,
+            'chat.chat-group-add-members' => \App\Livewire\Chat\Chat\Group\AddMembers::class,
+            
             // Widget
             'chat.widget' => \App\Livewire\Chat\Widgets\WireChat::class,
         ];
