@@ -293,4 +293,12 @@
         @endif
 
     </footer>
+
+    {{-- Members section --}}
+    <section class="border-t border-[var(--wc-light-border)] dark:border-[var(--wc-dark-border)]">
+        <div class="p-4">
+            <h4 class="font-medium mb-4">@lang('chat::chat.group.info.members.heading')</h4>
+            <livewire:chat.chat.group.members :conversation="$conversation" :key="'members-' . $conversation->id" />
+        </div>
+    </section>
 </div>

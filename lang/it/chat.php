@@ -127,6 +127,9 @@ return [
                 'members' => 'Members',
                 'add_description' => 'Add a group description',
             ],
+            'members' => [
+                'heading' => 'Membri del Gruppo',
+            ],
             'inputs' => [
                 'name' => [
                     'label' => 'Group name',
