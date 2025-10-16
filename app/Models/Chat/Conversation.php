@@ -60,6 +60,14 @@ class Conversation extends Model
     use HasDynamicIds;
     use HasFactory;
 
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
+
     protected $fillable = [
         'disappearing_started_at',
         'disappearing_duration',
