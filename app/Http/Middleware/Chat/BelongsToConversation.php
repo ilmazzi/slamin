@@ -18,14 +18,23 @@ class BelongsToConversation
     {
 
         $user = $request->user();
-        $conversationId = $request->route('conversation');
-
-        $conversation = Conversation::findOrFail($conversationId);
+        
+        // Get the conversation from route model binding or find it manually
+        $conversation = $request->route('conversation');
+        
+        // If it's not a Conversation model instance, it's probably an ID
+        if (!($conversation instanceof Conversation)) {
+            $conversationId = $conversation;
+            $conversation = Conversation::findOrFail($conversationId);
+        }
 
         if (! $user || ! $user->belongsToConversation($conversation)
         ) {
             abort(403, 'Forbidden');
         }
+
+        // Make sure the conversation is available to the route
+        $request->route()->setParameter('conversation', $conversation);
 
         return $next($request);
 
