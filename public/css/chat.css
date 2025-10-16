@@ -179,6 +179,31 @@
     align-items: center;
     color: var(--chat-text-secondary);
     font-size: 0.875rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chat-item-message-content {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    flex: 1;
+    min-width: 0; /* Allow text to truncate */
+}
+
+.chat-item-message-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.chat-item-message-time {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--chat-text-secondary);
+    font-weight: 500;
+    padding: 0 0.25rem;
 }
 
 .chat-item-time {
