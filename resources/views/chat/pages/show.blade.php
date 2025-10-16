@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('content')
+@section('main-content')
 <div class="container-fluid mt-3">
     <div class="row">
         <div class="col-12">
