@@ -190,6 +190,13 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Chat Simple Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat', function () {
+        return view('chat-simple.index');
+    })->name('chat.index');
+});
+
 
 
 

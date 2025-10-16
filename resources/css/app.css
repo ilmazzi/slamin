@@ -16,4 +16,36 @@
     display: none !important;
 }
 
+/* Chat Simple Styles */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.max-w-75 {
+    max-width: 75%;
+}
+
+.max-w-50 {
+    max-width: 50%;
+}
+
+/* Conversation List Styles */
+.conversation-item {
+    transition: background-color 0.2s ease, border-right 0.2s ease;
+    border-right: 3px solid transparent;
+}
+
+.conversation-item:hover {
+    background-color: var(--bs-gray-100);
+}
+
+.conversation-selected {
+    background-color: var(--bs-gray-100) !important;
+    border-right: 3px solid var(--bs-primary) !important;
+}
+
+.conversation-selected:hover {
+    background-color: var(--bs-gray-100) !important;
+}
+
 

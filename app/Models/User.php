@@ -759,6 +759,26 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     /**
+     * Relazioni per il sistema chat
+     */
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'participants')
+                    ->withPivot('role', 'last_read_at')
+                    ->withTimestamps();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
+
+    /**
      * Relazione con i like unificati
      */
     public function likes()
