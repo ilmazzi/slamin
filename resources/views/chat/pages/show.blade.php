@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">
-                <div class="card-body p-0" style="height: calc(100vh - 150px);">
-                    <livewire:chat.pages.chat :conversation="$conversation" />
+                <div class="card-body p-0" style="height: calc(100vh - 150px); overflow: hidden;">
+                    @livewire('chat.pages.chat', ['conversation' => $conversation])
                 </div>
             </div>
         </div>
