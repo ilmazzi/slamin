@@ -1,4 +1,6 @@
 
+@use('App\Helpers\AvatarHelper')
+
 <main x-data="{
     height: 0,
     previousHeight: 0,
@@ -125,7 +127,7 @@
                                 $previousMessage &&
                                 $message?->sendable?->is($previousMessage?->sendable),
                         ])>
-                            <x-chat::avatar src="{{ $message->sendable?->cover_url ?? null }}" class="h-8 w-8" />
+                            <x-chat::avatar :src="$message->sendable ? AvatarHelper::getUserAvatarUrl($message->sendable) : null" class="h-8 w-8" />
                         </div>
                     @endif
 

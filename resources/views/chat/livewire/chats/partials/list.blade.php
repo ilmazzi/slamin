@@ -1,5 +1,6 @@
 
 @use('App\Helpers\Chat\ChatHelper')
+@use('App\Helpers\AvatarHelper')
 
 <ul wire:loading.delay.long.remove wire:target="search" class="p-2 grid w-full spacey-y-2">
     @foreach ($conversations as $key=> $conversation)
@@ -59,7 +60,7 @@
             <div class="shrink-0">
                 <x-chat::avatar disappearing="{{ $conversation->hasDisappearingTurnedOn() }}"
                     group="{{ $conversation->isGroup() }}"
-                    :src="$group ? $group?->cover_url : $receiver?->cover_url ?? null" class="w-12 h-12" />
+                    :src="$group ? $group?->cover_url : ($receiver ? AvatarHelper::getUserAvatarUrl($receiver) : null)" class="w-12 h-12" />
             </div>
 
             <aside class="grid  grid-cols-12 w-full">
