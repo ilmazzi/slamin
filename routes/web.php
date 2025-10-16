@@ -1471,8 +1471,14 @@ Route::middleware(config('chat.routes.middleware'))
     ->prefix(config('chat.routes.prefix'))
     ->name('chat.')
     ->group(function () {
-        Route::get('/', App\Livewire\Chat\Pages\Chats::class)->name('index');
-        Route::get('/{conversation}', App\Livewire\Chat\Pages\Chat::class)
+        Route::get('/', function () {
+            return view('chat.pages.index');
+        })->name('index');
+        
+        Route::get('/{conversation}', function ($conversation) {
+            $conversation = \App\Models\Chat\Conversation::findOrFail($conversation);
+            return view('chat.pages.show', compact('conversation'));
+        })
             ->middleware(App\Http\Middleware\Chat\BelongsToConversation::class)
             ->name('show');
     });

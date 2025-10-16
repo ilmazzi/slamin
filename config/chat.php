@@ -68,5 +68,16 @@ return [
         'enabled' => true,
         'connection' => env('BROADCAST_CONNECTION', 'reverb'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Layout Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Define the layout to use for chat pages.
+    |
+    */
+    'layout' => 'layout.master',
+    'home_route' => 'home',
 ];
 
