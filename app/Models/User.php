@@ -16,12 +16,11 @@ use App\Models\SystemSetting;
 use App\Models\UserLanguage;
 use App\Services\OnlineStatusService;
 use Illuminate\Support\Facades\DB;
-use App\Traits\Chat\Chatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, Chatable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -290,15 +289,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Notification::class, 'user_id');
     }
 
-    /**
-     * Unread chat notifications for this user
-     */
-    public function unreadChatNotifications()
-    {
-        return $this->hasMany(Notification::class, 'user_id')
-                    ->where('type', \App\Models\Notification::TYPE_CHAT_MESSAGE)
-                    ->where('is_read', false);
-    }
 
     /**
      * Get events where user is participating (accepted invitations or requests)
@@ -765,9 +755,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->adminGroups()->count();
     }
 
-    // ========================================
-    // RELAZIONI PER IL SISTEMA DI CHAT
-    // ========================================
 
 
 

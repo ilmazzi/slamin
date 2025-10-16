@@ -6,5 +6,4 @@ return [
     App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\LanguageServiceProvider::class,
-    App\Providers\ChatServiceProvider::class,
 ];

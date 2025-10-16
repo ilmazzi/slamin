@@ -11,91 +11,9 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/* Chat CSS Variables */
-:root {
-    --wc-brand-primary: #3B82F6;
-    
-    --wc-light-primary: #fff;  /* white */
-    --wc-light-secondary: oklch(0.967 0.003 264.542);/* --color-gray-100 */
-    --wc-light-accent: oklch(0.985 0.002 247.839);/* --color-gray-50 */
-    --wc-light-border: oklch(0.928 0.006 264.531);/* --color-gray-200 */
-
-    --wc-dark-primary: oklch(0.21 0.034 264.665); /* --color-zinc-900 */
-    --wc-dark-secondary: oklch(0.278 0.033 256.848);/* --color-zinc-800 */
-    --wc-dark-accent: oklch(0.373 0.034 259.733);/* --color-zinc-700 */
-    --wc-dark-border: oklch(0.373 0.034 259.733);/* --color-zinc-700 */
-}
 
 [x-cloak] {
     display: none !important;
 }
 
-/* Chat Utility Classes - Support for bg-[var(--wc-*)] */
-.bg-\[var\(--wc-light-primary\)\] {
-    background-color: var(--wc-light-primary) !important;
-}
-.bg-\[var\(--wc-light-secondary\)\] {
-    background-color: var(--wc-light-secondary) !important;
-}
-.bg-\[var\(--wc-light-accent\)\] {
-    background-color: var(--wc-light-accent) !important;
-}
-.bg-\[var\(--wc-dark-primary\)\] {
-    background-color: var(--wc-dark-primary) !important;
-}
-.bg-\[var\(--wc-dark-secondary\)\] {
-    background-color: var(--wc-dark-secondary) !important;
-}
-.bg-\[var\(--wc-dark-accent\)\] {
-    background-color: var(--wc-dark-accent) !important;
-}
 
-.border-\[var\(--wc-light-border\)\] {
-    border-color: var(--wc-light-border) !important;
-}
-.border-\[var\(--wc-light-secondary\)\] {
-    border-color: var(--wc-light-secondary) !important;
-}
-.border-\[var\(--wc-light-primary\)\] {
-    border-color: var(--wc-light-primary) !important;
-}
-.border-\[var\(--wc-dark-border\)\] {
-    border-color: var(--wc-dark-border) !important;
-}
-.border-\[var\(--wc-dark-secondary\)\] {
-    border-color: var(--wc-dark-secondary) !important;
-}
-.border-\[var\(--wc-dark-primary\)\] {
-    border-color: var(--wc-dark-primary) !important;
-}
-
-.hover\:bg-\[var\(--wc-light-secondary\)\]:hover {
-    background-color: var(--wc-light-secondary) !important;
-}
-.hover\:bg-\[var\(--wc-dark-secondary\)\]:hover {
-    background-color: var(--wc-dark-secondary) !important;
-}
-
-@media (prefers-color-scheme: dark) {
-    .dark\:bg-\[var\(--wc-dark-primary\)\] {
-        background-color: var(--wc-dark-primary) !important;
-    }
-    .dark\:bg-\[var\(--wc-dark-secondary\)\] {
-        background-color: var(--wc-dark-secondary) !important;
-    }
-    .dark\:bg-\[var\(--wc-dark-accent\)\] {
-        background-color: var(--wc-dark-accent) !important;
-    }
-    .dark\:border-\[var\(--wc-dark-border\)\] {
-        border-color: var(--wc-dark-border) !important;
-    }
-    .dark\:border-\[var\(--wc-dark-secondary\)\] {
-        border-color: var(--wc-dark-secondary) !important;
-    }
-    .dark\:border-\[var\(--wc-dark-primary\)\] {
-        border-color: var(--wc-dark-primary) !important;
-    }
-    .dark\:hover\:bg-\[var\(--wc-dark-secondary\)\]:hover {
-        background-color: var(--wc-dark-secondary) !important;
-    }
-}

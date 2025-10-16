@@ -194,6 +194,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 
 
 
+
 Route::view('index', 'index')->name('index');
 Route::view('project_dashboard', 'project_dashboard')->name('project_dashboard');
 
@@ -1466,21 +1467,6 @@ Route::post('/test-broadcast', function () {
 });
 
 
-// ===== ROUTES PER CHAT =====
-Route::middleware(config('chat.routes.middleware'))
-    ->prefix(config('chat.routes.prefix'))
-    ->name('chat.')
-    ->group(function () {
-        Route::get('/', function () {
-            return view('chat.pages.index');
-        })->name('index');
-        
-        Route::get('/{conversation}', function (\App\Models\Chat\Conversation $conversation) {
-            return view('chat.pages.show', compact('conversation'));
-        })
-            ->middleware(App\Http\Middleware\Chat\BelongsToConversation::class)
-            ->name('show');
-    });
 
 // ===== ROUTES PER ARTICOLI/NOTIZIE =====
 

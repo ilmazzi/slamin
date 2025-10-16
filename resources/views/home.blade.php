@@ -1629,20 +1629,7 @@ use App\Helpers\PlaceholderHelper;
                 });
         };
 
-        // Funzione per iniziare una chat
-        window.startChat = function(userId) {
-            // Verifica se l'utente è autenticato
-            const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
-            if (!isAuthenticated) {
-                window.location.href = '{{ route("login") }}';
-                return;
-            }
-
-            // Con Wirechat, reindirizziamo direttamente alla chat
-            // Wirechat gestirà automaticamente la creazione della chat privata
-            window.location.href = '{{ route("chat.index") }}';
-        };
 
         // Funzione per mostrare messaggio di successo
         window.showSuccessMessage = function(message) {
