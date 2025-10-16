@@ -48,4 +48,50 @@
     background-color: var(--bs-gray-100) !important;
 }
 
+/* Chat Responsive Layout */
+.chat-sidebar {
+    width: 100%;
+    max-width: 350px;
+    transition: transform 0.3s ease;
+}
+
+.chat-main {
+    width: 100%;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .chat-sidebar {
+        width: 33.333%;
+        max-width: 400px;
+    }
+    
+    .chat-main {
+        width: 66.667%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .chat-sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        z-index: 10;
+        background: white;
+        transform: translateX(0);
+    }
+    
+    .chat-sidebar.sidebar-hidden {
+        transform: translateX(-100%);
+    }
+    
+    .chat-main {
+        width: 100%;
+    }
+}
+
 

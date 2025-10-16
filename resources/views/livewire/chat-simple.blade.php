@@ -1,21 +1,21 @@
-<div class="d-flex" style="height: calc(100vh - 100px);">
+<div class="d-flex position-relative" style="height: calc(100vh - 100px);">
     <!-- Sidebar -->
-    <div class="col-md-4 col-lg-3 border-end p-0" style="background-color: #ffffff;">
+    <div class="chat-sidebar border-end p-0 {{ $selectedConversationId ? 'sidebar-hidden' : '' }}" style="background-color: #ffffff;">
         <!-- Header -->
         <div class="p-3 border-bottom bg-white">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0 fw-bold text-dark">Messaggi</h5>
-                <button class="btn btn-link p-0 text-primary" data-bs-toggle="modal" data-bs-target="#newChatModal" style="font-size: 1.5rem;">
-                    <i class="ph ph-chat-circle-dots"></i>
-                </button>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 fw-bold text-dark">Messaggi</h5>
+                    <button class="btn btn-link p-0 text-primary" data-bs-toggle="modal" data-bs-target="#newChatModal" style="font-size: 1.5rem;">
+                        <i class="ph ph-chat-circle-dots"></i>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="ph ph-magnifying-glass text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Cerca conversazioni..." wire:model.live="search">
+                </div>
             </div>
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                    <i class="ph ph-magnifying-glass text-muted"></i>
-                </span>
-                <input type="text" class="form-control border-start-0 ps-0" placeholder="Cerca conversazioni..." wire:model.live="search">
-            </div>
-        </div>
 
             <!-- Conversations List -->
             <div class="overflow-auto" style="height: calc(100vh - 200px); background-color: #ffffff;">
@@ -72,12 +72,17 @@
     </div>
 
         <!-- Main Chat Area -->
-        <div class="col-md-8 col-lg-9 d-flex flex-column bg-white">
+        <div class="chat-main flex-grow-1 d-flex flex-column bg-white">
             @if($this->selectedConversation)
             <!-- Chat Header -->
             <div class="p-3 border-bottom bg-white">
                 <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+                    <!-- Mobile back button -->
+                    <button class="btn btn-link text-dark p-0 me-3 d-md-none" wire:click="$set('selectedConversationId', null)" style="font-size: 1.5rem;">
+                        <i class="ph ph-arrow-left"></i>
+                    </button>
+                    
+                    <div class="d-flex align-items-center flex-grow-1">
                         @if($this->selectedConversation->isGroup())
                             @if($this->selectedConversation->avatar)
                                 <img src="{{ asset('storage/' . $this->selectedConversation->avatar) }}" alt="{{ $this->selectedConversation->name }}" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
