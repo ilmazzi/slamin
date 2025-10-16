@@ -1,16 +1,8 @@
 @extends('layout.master')
 
 @section('main-content')
-<div class="container-fluid mt-3">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body p-0" style="height: calc(100vh - 150px); overflow: hidden;">
-                    @livewire('chat.pages.chats')
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid p-0" style="height: calc(100vh - 100px);">
+    @livewire('chat.pages.chats')
 </div>
 @endsection
 

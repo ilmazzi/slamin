@@ -1475,8 +1475,7 @@ Route::middleware(config('chat.routes.middleware'))
             return view('chat.pages.index');
         })->name('index');
         
-        Route::get('/{conversation}', function ($conversation) {
-            $conversation = \App\Models\Chat\Conversation::findOrFail($conversation);
+        Route::get('/{conversation}', function (\App\Models\Chat\Conversation $conversation) {
             return view('chat.pages.show', compact('conversation'));
         })
             ->middleware(App\Http\Middleware\Chat\BelongsToConversation::class)
