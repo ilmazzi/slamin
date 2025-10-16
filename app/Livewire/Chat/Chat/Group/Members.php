@@ -216,6 +216,9 @@ class Members extends ModalComponent
             'type' => Actions::REMOVED_BY_ADMIN,  // Type of action
         ]);
 
+        // Actually delete the participant from the database
+        $participant->delete();
+
         // remove from
         // Remove member if they are already selected
         $this->participants = $this->participants->reject(function ($member) use ($participant) {
