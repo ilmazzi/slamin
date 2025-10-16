@@ -104,10 +104,10 @@
 
 /* === CHAT LIST === */
 .chat-list {
-    padding: 0.5rem;
+    
     width: 100%;
     display: grid;
-    gap: 0.5rem;
+    
 }
 
 .chat-item {
@@ -185,7 +185,7 @@
 
 .chat-item-message-content {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.5rem;
     align-items: center;
     flex: 1;
     min-width: 0; /* Allow text to truncate */
@@ -196,6 +196,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 1;
+    max-width: calc(100% - 4rem); /* Allow more space for text */
 }
 
 .chat-item-message-time {
