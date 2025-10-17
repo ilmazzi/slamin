@@ -7,7 +7,15 @@
                     <i class="ph ph-list"></i>
                 </span>
 
-                <div class="header-searchbar w-100">
+                <!-- Mobile: Solo lente di ingrandimento -->
+                <div class="d-block d-md-none">
+                    <button class="btn btn-link text-dark" id="searchToggle" data-bs-toggle="collapse" data-bs-target="#mobileSearchBar">
+                        <i class="ti ti-search"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop: Barra di ricerca normale -->
+                <div class="header-searchbar w-100 d-none d-md-block">
                     <form action="{{ route('search.index') }}" method="GET" class="mx-sm-3 app-form app-icon-form">
                         <div class="position-relative">
                             <input aria-label="Search" class="form-control" placeholder="{{ __('search.search_placeholder') }}" name="q" type="search">
@@ -94,9 +102,9 @@
                            role="button"
                            id="notificationTrigger"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" style="width: 20px; height: 20px;">
+                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" class="w-5 h-5">
                             <!-- Dynamic notification badge -->
-                            <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification" style="display: none;">0</span>
+                            <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification d-none">0</span>
                         </a>
                         <div aria-labelledby="notificationcanvasRightLabel"
                              class="offcanvas offcanvas-end header-notification-canvas"
@@ -123,19 +131,19 @@
                                 </div>
 
                                 <!-- Notifications will be loaded here -->
-                                <div id="notificationsList" style="display: none;">
+                                <div id="notificationsList" class="d-none">
                                     <!-- Dynamic notifications loaded via JavaScript -->
                                 </div>
 
                                 <!-- Empty state -->
-                                <div id="notificationsEmpty" class="text-center p-4" style="display: none;">
+                                <div id="notificationsEmpty" class="text-center p-4 d-none">
                                     <i class="ph ph-bell-slash display-4 text-muted mb-3"></i>
                                     <h6 class="text-muted">{{ __('notifications.no_notifications') }}</h6>
                                     <p class="text-muted small">{{ __('notifications.notifications_placeholder') }}</p>
                                 </div>
 
                                 <!-- Footer actions -->
-                                <div class="p-3 border-top" id="notificationsFooter" style="display: none;">
+                                <div class="p-3 border-top" id="notificationsFooter" class="d-none">
                                     <div class="row g-2">
                                         <div class="col-6">
                                             <a href="{{ route('notifications.index') }}" class="btn btn-outline-primary btn-sm w-100">
@@ -228,4 +236,16 @@
 
     </div>
 </header>
+
+<!-- Mobile Search Bar - Appare sotto la topbar -->
+<div class="collapse d-md-none" id="mobileSearchBar">
+    <div class="bg-white border-bottom p-3">
+        <form action="{{ route('search.index') }}" method="GET" class="app-form">
+            <div class="position-relative">
+                <input aria-label="Search" class="form-control" placeholder="{{ __('search.search_placeholder') }}" name="q" type="search">
+                <i class="ti ti-search text-dark position-absolute top-50 end-0 translate-middle-y me-3"></i>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- Header Section ends -->

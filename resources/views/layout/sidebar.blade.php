@@ -87,7 +87,7 @@
                     <li class="dropdown-item">
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-link p-0 mb-0 text-danger f-w-500" style="text-decoration: none;">
+                            <button type="submit" class="btn btn-link p-0 mb-0 text-danger f-w-500 text-decoration-none">
                                 <i class="ph-duotone ph-sign-out pe-1 f-s-20"></i> {{ __('sidebar.logout_button') }}
                             </button>
                         </form>
@@ -231,7 +231,7 @@
                                 @auth
                                 <!-- {{ __('common.didactic') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                    <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.didactic') }}</span>
                                     </a>
@@ -240,7 +240,7 @@
                                 @auth
                                 <!-- {{ __('common.fan_support') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                    <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.fan_support') }}</span>
                                     </a>
@@ -249,7 +249,7 @@
                                 @auth
                                 <!-- {{ __('common.wiki') }} Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
-                                    <a href="#" class="nav-link disabled" style="pointer-events: none; opacity: 0.6;">
+                                    <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
                                         <span class="text-muted">{{ __('common.wiki') }}</span>
                                     </a>
