@@ -156,10 +156,7 @@ class ChatSimple extends Component
         }
 
         return User::where('id', '!=', Auth::id())
-            ->where(function($query) {
-                $query->where('name', 'like', '%' . $this->userSearch . '%')
-                    ->orWhere('username', 'like', '%' . $this->userSearch . '%');
-            })
+            ->where('name', 'like', '%' . $this->userSearch . '%')
             ->limit(10)
             ->get();
     }

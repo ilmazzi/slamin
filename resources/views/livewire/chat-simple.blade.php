@@ -252,7 +252,7 @@
                                          style="width: 40px; height: 40px; object-fit: cover;">
                                     <div>
                                         <h6 class="mb-0 fw-semibold text-dark">{{ $user->name }}</h6>
-                                        <small class="text-muted">{{ '@' . $user->username }}</small>
+                                        <small class="text-muted">{{ $user->email }}</small>
                                     </div>
                                 </div>
                                 <button class="btn btn-link text-primary p-0" 
