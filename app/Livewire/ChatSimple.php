@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,6 +21,8 @@ class ChatSimple extends Component
     public $files = [];
     public $showEmojiPicker = false;
     public $search = '';
+    public $userSearch = '';
+    public $showNewChatModal = false;
 
     protected $listeners = [
         'messageSent' => 'loadMessages',
@@ -144,6 +147,65 @@ class ChatSimple extends Component
                 ->where('user_id', Auth::id())
                 ->update(['last_read_at' => now()]);
         }
+    }
+
+    public function getSearchedUsersProperty()
+    {
+        if (empty($this->userSearch)) {
+            return collect([]);
+        }
+
+        return User::where('id', '!=', Auth::id())
+            ->where(function($query) {
+                $query->where('name', 'like', '%' . $this->userSearch . '%')
+                    ->orWhere('username', 'like', '%' . $this->userSearch . '%');
+            })
+            ->limit(10)
+            ->get();
+    }
+
+    public function startChatWithUser($userId)
+    {
+        $user = User::find($userId);
+        
+        if (!$user) {
+            return;
+        }
+
+        // Check if conversation already exists
+        $existingConversation = Auth::user()->conversations()
+            ->whereHas('participants', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('is_group', false)
+            ->whereHas('participants', function($query) {
+                $query->select('conversation_id')
+                    ->groupBy('conversation_id')
+                    ->havingRaw('COUNT(user_id) = 2');
+            })
+            ->first();
+
+        if ($existingConversation) {
+            $this->selectedConversationId = $existingConversation->id;
+            $this->userSearch = '';
+            $this->dispatch('close-modal', 'newChatModal');
+            return;
+        }
+
+        // Create new conversation
+        $conversation = Conversation::create([
+            'is_group' => false,
+        ]);
+
+        // Add participants
+        $conversation->participants()->attach([
+            Auth::id() => ['joined_at' => now()],
+            $userId => ['joined_at' => now()],
+        ]);
+
+        $this->selectedConversationId = $conversation->id;
+        $this->userSearch = '';
+        $this->dispatch('close-modal', 'newChatModal');
     }
 
     public function render()

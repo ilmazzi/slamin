@@ -218,4 +218,87 @@
             </div>
         @endif
     </div>
+
+    <!-- New Chat Modal -->
+    <div class="modal fade" id="newChatModal" tabindex="-1" aria-labelledby="newChatModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark" id="newChatModalLabel">Nuova Chat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Search Input -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="ph ph-magnifying-glass text-muted"></i>
+                        </span>
+                        <input type="text" 
+                               class="form-control border-start-0 ps-0 shadow-none" 
+                               placeholder="Cerca utenti..." 
+                               wire:model.live.debounce.300ms="userSearch"
+                               autofocus>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div class="overflow-auto" style="max-height: 300px; background-color: #ffffff;">
+                        @forelse($this->searchedUsers as $user)
+                            <div class="p-3 border-bottom d-flex align-items-center justify-content-between cursor-pointer hover-bg-light"
+                                 style="transition: background-color 0.2s;">
+                                <div class="d-flex align-items-center flex-grow-1">
+                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}" 
+                                         alt="{{ $user->name }}" 
+                                         class="rounded-circle me-3" 
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                    <div>
+                                        <h6 class="mb-0 fw-semibold text-dark">{{ $user->name }}</h6>
+                                        <small class="text-muted">{{ '@' . $user->username }}</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-link text-primary p-0" 
+                                        wire:click="startChatWithUser({{ $user->id }})"
+                                        style="font-size: 1.5rem;">
+                                    <i class="ph ph-plus-circle"></i>
+                                </button>
+                            </div>
+                        @empty
+                            @if(!empty($userSearch))
+                                <div class="text-center text-muted py-5">
+                                    <i class="ph ph-user-circle-slash mb-2" style="font-size: 2rem;"></i>
+                                    <p class="mb-0">Nessun utente trovato</p>
+                                </div>
+                            @else
+                                <div class="text-center text-muted py-5">
+                                    <i class="ph ph-magnifying-glass mb-2" style="font-size: 2rem;"></i>
+                                    <p class="mb-0">Cerca un utente per iniziare una chat</p>
+                                </div>
+                            @endif
+                        @endforelse
+                    </div>
+
+                    <!-- Divider -->
+                    @if(!empty($this->searchedUsers) || !empty($userSearch))
+                        <hr class="my-3">
+                    @endif
+
+                    <!-- Create Group Button -->
+                    <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center" disabled>
+                        <i class="ph ph-users me-2"></i>
+                        Crea un gruppo (prossimamente)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('close-modal', (modalId) => {
+            const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+            if (modal) {
+                modal.hide();
+            }
+        });
+    });
+</script>

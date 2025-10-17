@@ -48,6 +48,11 @@
     background-color: var(--bs-gray-100) !important;
 }
 
+/* Modal User List Hover */
+.hover-bg-light:hover {
+    background-color: var(--bs-gray-100) !important;
+}
+
 /* Chat Responsive Layout */
 .chat-sidebar {
     width: 100%;
