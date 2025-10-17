@@ -1,45 +1,5 @@
 <!-- Header Section starts -->
 <header class="header-main">
-<style>
-/* Header spacing optimization */
-.header-main .header-left .header-searchbar {
-    max-width: 300px;
-    margin-right: 1rem;
-}
-
-.header-main .header-right ul {
-    gap: 0.5rem;
-}
-
-.header-main .header-right ul li .head-icon {
-    width: 35px;
-    height: 35px;
-    padding: 0.4rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-    .header-main .header-left .header-searchbar {
-        max-width: 250px;
-    }
-}
-
-@media (max-width: 992px) {
-    .header-main .header-left .header-searchbar {
-        max-width: 200px;
-    }
-
-    .header-main .header-right ul {
-        gap: 0.3rem;
-    }
-
-    .header-main .header-right ul li .head-icon {
-        width: 32px;
-        height: 32px;
-        padding: 0.3rem;
-    }
-}
-</style>
     <div class="container-fluid">
         <div class="row">
             <div class="col-8 col-sm-6 d-flex align-items-center header-left p-0">
