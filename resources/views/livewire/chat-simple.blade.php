@@ -1,3 +1,4 @@
+<div>
 <!-- Mobile: Solo lista chat -->
 <div class="d-md-none {{ $selectedConversationId ? 'd-none' : 'd-block' }}" style="height: calc(100vh - 100px);">
     <!-- Header -->
@@ -528,3 +529,4 @@
         }
     });
 </script>
+</div>
