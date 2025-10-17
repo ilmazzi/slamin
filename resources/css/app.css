@@ -53,68 +53,6 @@
     background-color: var(--bs-gray-100) !important;
 }
 
-/* Chat Responsive Layout */
-.chat-sidebar {
-    width: 100%;
-    max-width: 350px;
-    transition: transform 0.3s ease;
-}
-
-.chat-main {
-    width: 100%;
-}
-
-/* Desktop - 2 colonne affiancate */
-@media (min-width: 768px) {
-    .chat-sidebar {
-        width: 33.333%;
-        max-width: 400px;
-        position: relative;
-        transform: translateX(0);
-    }
-    
-    .chat-main {
-        width: 66.667%;
-    }
-    
-    .chat-sidebar.sidebar-hidden {
-        transform: translateX(0); /* Su desktop non si nasconde */
-    }
-}
-
-/* Mobile - 1 colonna con sidebar principale */
-@media (max-width: 767px) {
-    .chat-sidebar {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        z-index: 10;
-        background: white;
-        transform: translateX(0);
-    }
-    
-    .chat-sidebar.sidebar-hidden {
-        transform: translateX(-100%);
-    }
-    
-    .chat-main {
-        width: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 5;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    }
-    
-    .chat-main.conversation-active {
-        transform: translateX(0);
-    }
-}
+/* Chat Responsive Layout - Solo classi Bootstrap */
 
 
