@@ -174,7 +174,7 @@ class ChatSimple extends Component
             ->whereHas('participants', function($query) use ($userId) {
                 $query->where('user_id', $userId);
             })
-            ->where('is_group', false)
+            ->where('type', 'private')
             ->whereHas('participants', function($query) {
                 $query->select('conversation_id')
                     ->groupBy('conversation_id')
@@ -191,7 +191,7 @@ class ChatSimple extends Component
 
         // Create new conversation
         $conversation = Conversation::create([
-            'is_group' => false,
+            'type' => 'private',
         ]);
 
         // Add participants
