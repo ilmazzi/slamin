@@ -3,31 +3,6 @@
 @section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events_general.events_poetry_slam'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
-<style>
-/* Assicura che il footer sia sempre visibile */
-footer {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    z-index: 1000 !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* Assicura che il footer non si sovrapponga alla sidebar */
-@media (min-width: 1200px) {
-    footer {
-        padding-left: 20rem !important;
-    }
-}
-
-@media (max-width: 1199px) {
-    footer {
-        padding-left: 4.5rem !important;
-    }
-}
 .custom-marker { background: transparent; border: none; }
 
 /* Mobile-First Responsive Styles */

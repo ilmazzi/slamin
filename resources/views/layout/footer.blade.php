@@ -9,11 +9,8 @@
             </div>
             <div class="col-md-3">
                 <div class="footer-text text-end">
-                    <a class="f-w-500 text-primary me-3" href="{{ route('help.index') }}">
-                        <i class="ti ti-help"></i>
-                    </a>
-                    <a class="f-w-500 text-primary" href="{{ route('faq.index') }}">
-                        FAQ
+                    <a class="f-w-500 text-primary" href="{{ route('help.index') }}">
+                        Need Help <i class="ti ti-help"></i>
                     </a>
                 </div>
             </div>
