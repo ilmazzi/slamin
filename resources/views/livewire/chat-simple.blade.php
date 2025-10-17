@@ -76,11 +76,16 @@
             @if($this->selectedConversation)
             <!-- Chat Header -->
             <div class="p-3 border-bottom bg-white">
-                <div class="d-flex align-items-center justify-content-between">
-                    <!-- Mobile back button -->
-                    <button class="btn btn-link text-dark p-0 me-3 d-md-none" wire:click="$set('selectedConversationId', null)" style="font-size: 1.5rem;">
-                        <i class="ph ph-arrow-left"></i>
-                    </button>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <!-- Mobile back button -->
+                        <button class="btn btn-link text-dark p-0 me-3 d-md-none" wire:click="$set('selectedConversationId', null)" style="font-size: 1.5rem;">
+                            <i class="ph ph-arrow-left"></i>
+                        </button>
+                        
+                        <!-- Mobile new chat button -->
+                        <button class="btn btn-link text-primary p-0 me-3 d-md-none" data-bs-toggle="modal" data-bs-target="#newChatModal" style="font-size: 1.5rem;">
+                            <i class="ph ph-chat-circle-dots"></i>
+                        </button>
                     
                     <div class="d-flex align-items-center flex-grow-1">
                         @if($this->selectedConversation->isGroup())
@@ -300,5 +305,21 @@
                 modal.hide();
             }
         });
+    });
+
+    // Reset form when modal is hidden
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('newChatModal');
+        if (modal) {
+            modal.addEventListener('hidden.bs.modal', function () {
+                // Reset the search input
+                const searchInput = modal.querySelector('input[wire\\:model\\.live\\.debounce\\.300ms="userSearch"]');
+                if (searchInput) {
+                    searchInput.value = '';
+                    // Trigger Livewire update
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+        }
     });
 </script>

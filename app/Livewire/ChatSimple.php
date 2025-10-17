@@ -205,6 +205,11 @@ class ChatSimple extends Component
         $this->dispatch('close-modal', 'newChatModal');
     }
 
+    public function resetUserSearch()
+    {
+        $this->userSearch = '';
+    }
+
     public function render()
     {
         return view('livewire.chat-simple');
