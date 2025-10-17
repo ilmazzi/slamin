@@ -196,8 +196,8 @@ class ChatSimple extends Component
 
         // Add participants
         $conversation->participants()->attach([
-            Auth::id() => ['joined_at' => now()],
-            $userId => ['joined_at' => now()],
+            Auth::id(),
+            $userId,
         ]);
 
         $this->selectedConversationId = $conversation->id;
