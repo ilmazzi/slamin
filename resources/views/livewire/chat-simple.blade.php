@@ -86,7 +86,7 @@
             </button>
             
             <div class="d-flex align-items-center flex-grow-1">
-                @if($this->selectedConversation->isGroup())
+                @if($this->selectedConversation && $this->selectedConversation->isGroup())
                     @if($this->selectedConversation->avatar)
                         <img src="{{ asset('storage/' . $this->selectedConversation->avatar) }}" alt="{{ $this->selectedConversation->name }}" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
                     @else
@@ -98,7 +98,7 @@
                         <h6 class="mb-0 fw-semibold text-dark">{{ $this->selectedConversation->name }}</h6>
                         <small class="text-muted">{{ $this->selectedConversation->participants->count() }} membri</small>
                     </div>
-                @else
+                @elseif($this->selectedConversation)
                     @php
                         $otherUser = $this->selectedConversation->participants->where('id', '!=', auth()->id())->first();
                     @endphp
@@ -293,7 +293,7 @@
         <div class="p-3 border-bottom bg-white">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center flex-grow-1">
-                    @if($this->selectedConversation->isGroup())
+                    @if($this->selectedConversation && $this->selectedConversation->isGroup())
                         @if($this->selectedConversation->avatar)
                             <img src="{{ asset('storage/' . $this->selectedConversation->avatar) }}" alt="{{ $this->selectedConversation->name }}" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
                         @else
@@ -305,7 +305,7 @@
                             <h6 class="mb-0 fw-semibold text-dark">{{ $this->selectedConversation->name }}</h6>
                             <small class="text-muted">{{ $this->selectedConversation->participants->count() }} membri</small>
                         </div>
-                    @else
+                    @elseif($this->selectedConversation)
                         @php
                             $otherUser = $this->selectedConversation->participants->where('id', '!=', auth()->id())->first();
                         @endphp
