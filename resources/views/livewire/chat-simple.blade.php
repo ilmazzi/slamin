@@ -72,7 +72,7 @@
     </div>
 
         <!-- Main Chat Area -->
-        <div class="chat-main flex-grow-1 d-flex flex-column bg-white">
+        <div class="chat-main flex-grow-1 d-flex flex-column bg-white {{ $selectedConversationId ? 'conversation-active' : '' }}">
             @if($this->selectedConversation)
             <!-- Chat Header -->
             <div class="p-3 border-bottom bg-white">
