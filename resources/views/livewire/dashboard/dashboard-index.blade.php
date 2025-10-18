@@ -291,32 +291,66 @@
                                                     );
                                                 @endphp
                                                 
-                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 120px; min-height: 120px;">
-                                                    <div class="d-flex flex-column h-100">
-                                                        <!-- Numero giorno -->
-                                                        <div class="d-flex justify-content-between align-items-start mb-1">
-                                                            <span class="f-s-12 f-w-600 text-muted">{{ $currentDate->day }}</span>
-                                                            @if($dayEvents->count() > 0)
-                                                                <small class="text-muted f-s-9">{{ $dayEvents->count() }}</small>
-                                                            @endif
+                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 120px; min-height: 120px; position: relative; overflow: hidden;">
+                                                    <!-- Numero giorno sempre visibile -->
+                                                    <div class="position-absolute top-0 start-0 p-1">
+                                                        <span class="f-s-10 f-md-14 f-w-600 text-muted">{{ $currentDate->day }}</span>
+                                                    </div>
+                                                    
+                                                    <!-- Eventi del giorno con slider -->
+                                                    @if($dayEvents->count() > 0)
+                                                        <div class="position-absolute top-0 end-0 p-1">
+                                                            <span class="badge bg-{{ $dayEvents->first()['color'] ?? 'secondary' }} f-s-8 f-md-10 px-2">
+                                                                {{ $dayEvents->first()['type'] === 'organized' ? 'Org' : ($dayEvents->first()['type'] === 'participating' ? 'Part' : 'Wish') }}
+                                                            </span>
                                                         </div>
                                                         
-                                                        <!-- Eventi del giorno -->
-                                                        @if($dayEvents->count() > 0)
-                                                            <div class="flex-grow-1 d-flex flex-column gap-1">
-                                                                @foreach($dayEvents->take(3) as $event)
-                                                                    <div class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9 cursor-pointer text-truncate" 
-                                                                         title="{{ $event['title'] ?? 'Evento senza titolo' }} - {{ $event['time'] ?? 'Orario non disponibile' }}"
-                                                                         wire:click="viewEvent({{ $event['id'] ?? 0 }})">
-                                                                        {{ Str::limit($event['title'] ?? 'Evento senza titolo', 15) }}
+                                                        <!-- Slider degli eventi -->
+                                                        <div class="position-absolute w-100 h-100 top-0 start-0" style="overflow: hidden;">
+                                                            @foreach($dayEvents as $index => $event)
+                                                                <div class="event-card position-absolute w-100 h-100 d-flex flex-column justify-content-between p-2 {{ $index === 0 ? 'active' : '' }}" 
+                                                                     style="background: {{ isset($event['image']) && $event['image'] ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(' . $event['image'] . ')' : 'linear-gradient(135deg, var(--bs-' . ($event['color'] ?? 'secondary') . '), var(--bs-' . ($event['color'] ?? 'secondary') . '-rgb))' }}; background-size: cover; background-position: center; color: white; transition: transform 0.3s ease;"
+                                                                     data-slide="{{ $index }}">
+                                                                    
+                                                                    <!-- Header con icona -->
+                                                                    <div class="d-flex justify-content-center">
+                                                                        @if(isset($event['image']) && $event['image'])
+                                                                            <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
+                                                                                 class="rounded-circle" 
+                                                                                 style="width: 24px; height: 24px; object-fit: cover;">
+                                                                        @else
+                                                                            <i class="ph ph-calendar f-s-12 f-md-18"></i>
+                                                                        @endif
                                                                     </div>
-                                                                @endforeach
-                                                                @if($dayEvents->count() > 3)
-                                                                    <small class="text-muted f-s-9">+{{ $dayEvents->count() - 3 }}</small>
-                                                                @endif
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                                                                    
+                                                                    <!-- Contenuto principale -->
+                                                                    <div class="text-center">
+                                                                        <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%;">
+                                                                            {{ Str::limit($event['title'] ?? 'Evento senza titolo', 15) }}
+                                                                        </div>
+                                                                        <div class="f-s-9 f-md-11 text-white-50">
+                                                                            {{ $event['time'] ?? 'Orario non disponibile' }}
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <!-- Footer con indicatori slider -->
+                                                                    @if($dayEvents->count() > 1)
+                                                                        <div class="d-flex justify-content-center gap-1">
+                                                                            @foreach($dayEvents as $indicatorIndex => $indicatorEvent)
+                                                                                <div class="slider-indicator rounded-circle {{ $indicatorIndex === 0 ? 'active' : '' }}" 
+                                                                                     style="width: 4px; height: 4px; background: {{ $indicatorIndex === 0 ? 'white' : 'rgba(255,255,255,0.5)' }};"></div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        
+                                                        <!-- Click handler per l'evento -->
+                                                        <div class="position-absolute w-100 h-100 top-0 start-0" 
+                                                             style="z-index: 10; cursor: pointer;" 
+                                                             wire:click="viewEvent({{ $dayEvents->first()['id'] ?? 0 }})"></div>
+                                                    @endif
                                                 </div>
                                                 
                                                 @php $currentDate->addDay(); @endphp
@@ -769,5 +803,83 @@
             document.querySelector('.btn-group .btn:nth-child(3)').classList.remove('btn-outline-primary');
         }
     }
+
+    // Funzione per gestire slider eventi nel calendario desktop
+    function initEventSliders() {
+        // Trova tutte le celle del calendario con eventi
+        document.querySelectorAll('#calendar-desktop-view .col[style*="position: relative"]').forEach(cell => {
+            const eventCards = cell.querySelectorAll('.event-card');
+            if (eventCards.length > 1) {
+                let currentSlide = 0;
+                const totalSlides = eventCards.length;
+                
+                // Funzione per mostrare uno slide specifico
+                function showEventSlide(slideIndex) {
+                    eventCards.forEach((card, index) => {
+                        if (index === slideIndex) {
+                            card.style.transform = 'translateX(0)';
+                            card.classList.add('active');
+                        } else {
+                            card.style.transform = 'translateX(100%)';
+                            card.classList.remove('active');
+                        }
+                    });
+                    
+                    // Aggiorna indicatori
+                    const indicators = cell.querySelectorAll('.slider-indicator');
+                    indicators.forEach((indicator, index) => {
+                        if (index === slideIndex) {
+                            indicator.style.background = 'white';
+                            indicator.classList.add('active');
+                        } else {
+                            indicator.style.background = 'rgba(255,255,255,0.5)';
+                            indicator.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // Auto-scroll ogni 3 secondi
+                const autoScroll = setInterval(() => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    showEventSlide(currentSlide);
+                }, 3000);
+                
+                // Pausa auto-scroll quando si passa sopra la cella
+                cell.addEventListener('mouseenter', () => {
+                    clearInterval(autoScroll);
+                });
+                
+                // Riprendi auto-scroll quando si esce dalla cella
+                cell.addEventListener('mouseleave', () => {
+                    autoScroll = setInterval(() => {
+                        currentSlide = (currentSlide + 1) % totalSlides;
+                        showEventSlide(currentSlide);
+                    }, 3000);
+                });
+                
+                // Click sugli indicatori per cambiare slide
+                cell.querySelectorAll('.slider-indicator').forEach((indicator, index) => {
+                    indicator.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentSlide = index;
+                        showEventSlide(currentSlide);
+                    });
+                });
+                
+                // Inizializza il primo slide
+                showEventSlide(0);
+            }
+        });
+    }
+
+    // Inizializza gli slider quando il DOM è caricato
+    document.addEventListener('DOMContentLoaded', function() {
+        initEventSliders();
+    });
+
+    // Reinizializza gli slider dopo aggiornamenti Livewire
+    document.addEventListener('livewire:navigated', function() {
+        initEventSliders();
+    });
 </script>
 @endpush
