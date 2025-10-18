@@ -71,66 +71,72 @@
                             </div>
 
                             <!-- Griglia del calendario -->
-                            <div class="table-responsive">
-                                <table class="table table-bordered mb-0">
-                                    <!-- Header giorni della settimana -->
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Lun</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Mar</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Mer</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Gio</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Ven</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Sab</th>
-                                            <th class="text-center p-2 f-s-12 f-w-600">Dom</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $firstDay = now()->setMonth($currentMonth)->setYear($currentYear)->startOfMonth();
-                                            $lastDay = now()->setMonth($currentMonth)->setYear($currentYear)->endOfMonth();
-                                            $startDay = $firstDay->copy()->startOfWeek()->addDay(); // Lunedì
-                                            $endDay = $lastDay->copy()->endOfWeek()->addDay(); // Domenica
-                                            $currentDate = $startDay->copy();
-                                        @endphp
+                            <div class="row g-1">
+                                <!-- Header giorni della settimana -->
+                                <div class="col-12">
+                                    <div class="row g-1 mb-2">
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Lun</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Mar</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Mer</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Gio</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Ven</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Sab</div>
+                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Dom</div>
+                                    </div>
+                                </div>
 
-                                        @while($currentDate->lte($endDay))
-                                            <tr>
-                                                @for($i = 0; $i < 7; $i++)
-                                                    @php
-                                                        $isCurrentMonth = $currentDate->month == $currentMonth;
-                                                        $isToday = $currentDate->isToday();
-                                                        $dayEvents = collect($calendarEvents)->where('start', $currentDate->format('Y-m-d'))->merge(
-                                                            collect($wishlistEvents)->where('start', $currentDate->format('Y-m-d'))
-                                                        );
-                                                    @endphp
-                                                    
-                                                    <td class="p-2 position-relative {{ $isCurrentMonth ? '' : 'text-muted' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 80px; vertical-align: top;">
-                                                        <div class="d-flex justify-content-between align-items-start">
+                                <!-- Giorni del mese -->
+                                @php
+                                    $firstDay = now()->setMonth($currentMonth)->setYear($currentYear)->startOfMonth();
+                                    $lastDay = now()->setMonth($currentMonth)->setYear($currentYear)->endOfMonth();
+                                    $startDay = $firstDay->copy()->startOfWeek()->addDay(); // Lunedì
+                                    $endDay = $lastDay->copy()->endOfWeek()->addDay(); // Domenica
+                                    $currentDate = $startDay->copy();
+                                @endphp
+
+                                @while($currentDate->lte($endDay))
+                                    <div class="col-12">
+                                        <div class="row g-1">
+                                            @for($i = 0; $i < 7; $i++)
+                                                @php
+                                                    $isCurrentMonth = $currentDate->month == $currentMonth;
+                                                    $isToday = $currentDate->isToday();
+                                                    $dayEvents = collect($calendarEvents)->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                        collect($wishlistEvents)->where('start', $currentDate->format('Y-m-d'))
+                                                    );
+                                                @endphp
+                                                
+                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 100px; min-height: 100px;">
+                                                    <div class="d-flex flex-column h-100">
+                                                        <div class="d-flex justify-content-between align-items-start mb-1">
                                                             <span class="f-s-14 f-w-600">{{ $currentDate->day }}</span>
                                                             @if($dayEvents->count() > 0)
-                                                                <div class="d-flex flex-column gap-1">
-                                                                    @foreach($dayEvents->take(2) as $event)
-                                                                        <div class="badge bg-{{ $event['color'] }} f-s-10 cursor-pointer" 
-                                                                             title="{{ $event['title'] }} - {{ $event['time'] }}"
-                                                                             wire:click="viewEvent({{ $event['id'] }})">
-                                                                            {{ $event['title'] }}
-                                                                        </div>
-                                                                    @endforeach
-                                                                    @if($dayEvents->count() > 2)
-                                                                        <small class="text-muted f-s-10">+{{ $dayEvents->count() - 2 }}</small>
-                                                                    @endif
-                                                                </div>
+                                                                <small class="text-muted f-s-10">{{ $dayEvents->count() }}</small>
                                                             @endif
                                                         </div>
-                                                    </td>
-                                                    
-                                                    @php $currentDate->addDay(); @endphp
-                                                @endfor
-                                            </tr>
-                                        @endwhile
-                                    </tbody>
-                                </table>
+                                                        
+                                                        @if($dayEvents->count() > 0)
+                                                            <div class="flex-grow-1 d-flex flex-column gap-1">
+                                                                @foreach($dayEvents->take(3) as $event)
+                                                                    <div class="badge bg-{{ $event['color'] }} f-s-9 cursor-pointer text-truncate" 
+                                                                         title="{{ $event['title'] }} - {{ $event['time'] }}"
+                                                                         wire:click="viewEvent({{ $event['id'] }})">
+                                                                        {{ Str::limit($event['title'], 15) }}
+                                                                    </div>
+                                                                @endforeach
+                                                                @if($dayEvents->count() > 3)
+                                                                    <small class="text-muted f-s-9">+{{ $dayEvents->count() - 3 }}</small>
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                
+                                                @php $currentDate->addDay(); @endphp
+                                            @endfor
+                                        </div>
+                                    </div>
+                                @endwhile
                             </div>
 
                             <!-- Legenda eventi -->
