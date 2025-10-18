@@ -319,7 +319,7 @@
                                                                                  class="rounded-circle" 
                                                                                  style="width: 32px; height: 32px; object-fit: cover;">
                                                                         @else
-                                                                            <div class="bg-white bg-opacity-30 rounded-circle d-flex align-items-center justify-content-center border border-white border-opacity-50" 
+                                                                            <div class="bg-{{ $event['color'] ?? 'secondary' }} bg-opacity-80 rounded-circle d-flex align-items-center justify-content-center border border-white border-opacity-50" 
                                                                                  style="width: 32px; height: 32px;">
                                                                                 <i class="ph ph-calendar f-s-14 f-md-18 text-white"></i>
                                                                             </div>
