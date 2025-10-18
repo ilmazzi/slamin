@@ -33,6 +33,7 @@ return [
     'statistics' => 'Statistiche',
     'success' => 'Successo',
     'upload_performance' => 'Carica video',
+    'upload_photo' => 'Carica foto',
     'user_not_found' => 'Utente non trovato',
     'view_all' => 'Vedi Tutto',
     'view_all_activity' => 'Vedi Tutta l\'Attività',

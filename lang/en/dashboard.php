@@ -30,6 +30,7 @@ return array (
   'organize_event_desc' => 'Create new events',
   'upload_performance' => 'Upload Video',
   'upload_performance_desc' => 'Share your talent',
+  'upload_photo' => 'Upload Photo',
   'write_article' => 'Article',
   'write_article_desc' => 'Post an article',
   'my_wishlist' => 'My Wishlist',

@@ -52,42 +52,51 @@
                                     </h6>
                                 </li>
                                 <li class="dropdown-divider"></li>
-                                <!-- 1. Scrivi Poesia - per poeti e admin -->
-                                @can('poems.create')
+                                <!-- 1. Scrivi Poesia - per tutti gli utenti autenticati -->
+                                @auth
                                 <li class="dropdown-item">
                                     <a href="{{ route('poems.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <x-icon name="poetry" size="20" class="me-2 text-info" />
                                         <span>{{ __('dashboard.write_poem') }}</span>
                                     </a>
                                 </li>
-                                @endcan
-                                <!-- 2. Crea Evento - per organizer e admin -->
-                                @can('events.create.public')
+                                @endauth
+                                <!-- 2. Crea Evento - per tutti gli utenti autenticati -->
+                                @auth
                                 <li class="dropdown-item">
                                     <a href="{{ route('events.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <x-icon name="event" size="20" class="me-2 text-success" />
                                         <span>{{ __('dashboard.organize_event') }}</span>
                                     </a>
                                 </li>
-                                @endcan
-                                <!-- 3. Carica Video - per poeti e admin -->
-                                @can('videos.upload')
+                                @endauth
+                                <!-- 3. Carica Video - per tutti gli utenti autenticati -->
+                                @auth
                                 <li class="dropdown-item">
                                     <a href="{{ route('videos.upload') }}" class="d-flex align-items-center text-decoration-none">
                                         <x-icon name="media" size="20" class="me-2 text-warning" />
                                         <span>{{ __('dashboard.upload_performance') }}</span>
                                     </a>
                                 </li>
-                                @endcan
-                                <!-- 4. Scrivi Articolo - per organizer, venue_owner e admin -->
-                                @can('articles.create')
+                                @endauth
+                                <!-- 4. Scrivi Articolo - per tutti gli utenti autenticati -->
+                                @auth
                                 <li class="dropdown-item">
                                     <a href="{{ route('articles.create') }}" class="d-flex align-items-center text-decoration-none">
                                         <x-icon name="article" size="20" class="me-2 text-primary" />
                                         <span>{{ __('dashboard.write_article') }}</span>
                                     </a>
                                 </li>
-                                @endcan
+                                @endauth
+                                <!-- 5. Carica Foto - per tutti gli utenti autenticati -->
+                                @auth
+                                <li class="dropdown-item">
+                                    <a href="{{ route('photos.create') }}" class="d-flex align-items-center text-decoration-none">
+                                        <i class="ph ph-camera text-secondary me-2" style="font-size: 20px;"></i>
+                                        <span>{{ __('dashboard.upload_photo') }}</span>
+                                    </a>
+                                </li>
+                                @endauth
                             </ul>
                         </div>
                     </li>
