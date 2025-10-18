@@ -312,25 +312,33 @@
                                                                      style="background: {{ isset($event['image']) && $event['image'] ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(' . $event['image'] . ')' : 'linear-gradient(135deg, var(--bs-' . ($event['color'] ?? 'secondary') . '), var(--bs-' . ($event['color'] ?? 'secondary') . '-rgb))' }}; background-size: cover; background-position: center; color: white; transition: transform 0.3s ease;"
                                                                      data-slide="{{ $index }}">
                                                                     
-                                                                    <!-- Header con icona -->
+                                                                    <!-- Header con icona o immagine -->
                                                                     <div class="d-flex justify-content-center">
                                                                         @if(isset($event['image']) && $event['image'])
                                                                             <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
                                                                                  class="rounded-circle" 
                                                                                  style="width: 24px; height: 24px; object-fit: cover;">
                                                                         @else
-                                                                            <i class="ph ph-calendar f-s-12 f-md-18"></i>
+                                                                            <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" 
+                                                                                 style="width: 24px; height: 24px;">
+                                                                                <i class="ph ph-calendar f-s-12 f-md-16 text-white"></i>
+                                                                            </div>
                                                                         @endif
                                                                     </div>
                                                                     
                                                                     <!-- Contenuto principale -->
                                                                     <div class="text-center">
-                                                                        <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%;">
+                                                                        <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
                                                                             {{ Str::limit($event['title'] ?? 'Evento senza titolo', 15) }}
                                                                         </div>
-                                                                        <div class="f-s-9 f-md-11 text-white-50">
+                                                                        <div class="f-s-9 f-md-11 text-white-50" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
                                                                             {{ $event['time'] ?? 'Orario non disponibile' }}
                                                                         </div>
+                                                                        @if(isset($event['venue']) && $event['venue'])
+                                                                            <div class="f-s-8 f-md-10 text-white-50 mt-1" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                                                                                <i class="ph ph-map-pin f-s-8"></i> {{ Str::limit($event['venue'], 12) }}
+                                                                            </div>
+                                                                        @endif
                                                                     </div>
                                                                     
                                                                     <!-- Footer con indicatori slider -->
