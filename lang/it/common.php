@@ -164,5 +164,8 @@ return [
 
     'upload_video' => 'Upload video',
     'yes_delete' => 'Yes delete',
-
+    'footer_copyright' => [
+        'everything' => 'Tutto',
+        'is_under_license' => 'è sotto licenza',
+    ],
 ];

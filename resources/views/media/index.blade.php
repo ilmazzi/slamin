@@ -3,7 +3,6 @@
 @section('title', __('common.media_section') . ' - Slamin')
 
 @section('css')
-</style>
 @endsection
 
 @section('main-content')
@@ -420,7 +419,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!-- Terza Riga: Box di Ricerca Media -->
 <div class="row mb-4">
@@ -579,36 +577,6 @@
         </div>
     </div>
 </div>
-    <div class="col-12">
-        <div class="card hover-effect">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="ph-duotone ph-list me-2"></i>
-                    Risultati della ricerca
-                </h5>
-                <span class="badge bg-primary" id="resultsCount">0 risultati</span>
-            </div>
-            <div class="card-body">
-                <div class="row" id="resultsContainer">
-                    <!-- I risultati verranno caricati dinamicamente qui -->
-                </div>
-                <div class="text-center mt-3" id="loadingResults" style="display: none;">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Caricamento risultati...</span>
-                    </div>
-                    <p class="mt-2 text-muted">Caricamento risultati...</p>
-                </div>
-                <div class="text-center mt-3" id="noResults" style="display: none;">
-                    <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
-                        <i class="ph-duotone ph-magnifying-glass f-s-48 text-primary"></i>
-                    </div>
-                    <p class="text-muted f-s-16 mb-0">Nessun risultato trovato</p>
-                    <p class="text-muted f-s-14">Prova a modificare i criteri di ricerca</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Photo Viewer Modal a Tutta Pagina -->
 <div class="custom-modal" id="photoViewerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px);">
@@ -735,7 +703,6 @@
             </div>
         </div>
     </div>
-</div>
 
 
 

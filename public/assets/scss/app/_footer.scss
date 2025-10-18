@@ -21,11 +21,9 @@ div{
     }
 }
 
-.semi-nav{
-    ~footer{
-        padding-left: 4.5rem;
-        transition: var(--app-transition);
-    }
+nav.semi-nav ~ footer{
+    padding-left: 4.5rem;
+    transition: var(--app-transition);
 }
 }
 

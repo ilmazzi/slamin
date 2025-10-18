@@ -393,7 +393,8 @@
             </div>
         </div>
 
-            <!-- Inviti in Sospeso -->
+        <!-- Inviti in Sospeso -->
+        <div class="row mt-4">
             @if(auth()->user()->eventInvitations()->where('status', 'pending')->count() > 0)
             <div class="col-lg-4">
                 <div class="card hover-effect equal-card">
@@ -893,5 +894,6 @@ document.addEventListener('DOMContentLoaded', function() {
     border-radius: 50%;
     opacity: 0.6;
 }
+
 </style>
 @endpush

@@ -137,4 +137,8 @@ return array (
   'upload_error' => 'Error when loading',
   'please_wait' => 'Please wait...',
   'processing' => 'In progress...',
+  'footer_copyright' => [
+    'everything' => 'Everything',
+    'is_under_license' => 'is under license',
+  ],
 );

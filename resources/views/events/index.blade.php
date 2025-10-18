@@ -3,6 +3,7 @@
 @section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events_general.events_poetry_slam'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
+<style>
 .custom-marker { background: transparent; border: none; }
 
 /* Mobile-First Responsive Styles */
@@ -518,7 +519,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
     <!-- Event Details Modal -->
     <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">

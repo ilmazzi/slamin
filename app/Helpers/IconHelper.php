@@ -10,13 +10,13 @@ class IconHelper
     public static function getIcon($feature, $size = '24', $fallback = true)
     {
         $iconMap = [
-            'dashboard' => '001-dashboard.png',
-            'snap' => '002-kpop.png',
-            'event' => '003-microphone.png',
-            'learn' => '004-teacher.png',
+            'dashboard' => 'dashboard.svg',
+            'snap' => 'snap.svg',
+            'event' => 'event.svg',
+            'learn' => 'learn.svg',
             'gigs' => '005-togetherness.png',
-            'news' => '006-news.png',
-            'media' => '007-camera.png',
+            'news' => 'news.svg',
+            'media' => 'media.svg',
             'poetry' => 'poetry.png', // Using avatar for poetry for now
             'profile' => '014-user.png',
             'team' => '009-team.png',
@@ -98,8 +98,19 @@ class IconHelper
     {
         $iconPath = self::getIcon($feature, $size, $fallback);
 
-        if ($iconPath && !str_contains($iconPath, 'ph ph-')) {
-            // It's an image file
+        if ($iconPath && str_contains($iconPath, '.svg')) {
+            // It's an SVG file
+            return sprintf(
+                '<img src="%s" alt="%s" class="icon-%s %s" style="width: %spx; height: %spx;">',
+                $iconPath,
+                $feature,
+                $feature,
+                $class,
+                $size,
+                $size
+            );
+        } elseif ($iconPath && !str_contains($iconPath, 'ph ph-')) {
+            // It's an image file (PNG, JPG, etc.)
             return sprintf(
                 '<img src="%s" alt="%s" class="icon-%s %s" style="width: %spx; height: %spx;">',
                 $iconPath,

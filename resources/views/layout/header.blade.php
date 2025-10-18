@@ -31,19 +31,19 @@
                     @auth
                     <!-- {{ __('dashboard.dashboard') }} - Solo per utenti autenticati -->
                     <li class="header-dashboard">
-                        <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('dashboard.dashboard') }}">
-                            <x-icon name="dashboard" size="20" class="me-2" />
+                        <a href="{{ route('dashboard') }}" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('dashboard.dashboard') }}" style="width: 40px; height: 40px;">
+                            <img src="{{ asset('assets/images/dashboard.svg') }}" alt="Dashboard" style="width: 20px; height: 20px;">
                         </a>
                     </li>
 
                     <!-- Shortcuts - Solo per utenti autenticati -->
                     <li class="header-shortcuts">
                         <div class="flex-shrink-0 dropdown">
-                            <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2"
+                            <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
                                data-bs-toggle="dropdown"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.shortcuts') }}">
-                                <x-icon name="shortcuts" size="20" class="me-2" />
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.shortcuts') }}" style="width: 40px; height: 40px;">
+                                <i class="ph ph-lightning"></i>
                             </a>
                             <ul class="dropdown-menu header-card border-0">
                                 <li class="dropdown-header">
@@ -95,14 +95,14 @@
                     <!-- Notifications - Solo per utenti autenticati -->
                     <li class="header-notification">
                         <a aria-controls="notificationcanvasRight"
-                           class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2"
+                           class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
                            data-bs-target="#notificationcanvasRight"
                            data-bs-toggle="offcanvas"
                            href="#"
                            role="button"
                            id="notificationTrigger"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}">
-                            <img id="notificationIcon" src="{{ asset('assets/images/bell.png') }}" alt="{{ __('common.notifications') }}" class="w-5 h-5">
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}" style="width: 40px; height: 40px;">
+                            <img src="{{ asset('assets/images/bell.svg') }}" alt="Notifiche" style="width: 20px; height: 20px;">
                             <!-- Dynamic notification badge -->
                             <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification d-none">0</span>
                         </a>
@@ -166,12 +166,12 @@
 
                     <!-- Theme Toggle - Per tutti gli utenti -->
                     <li class="header-dark">
-                        <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.dark_theme') }}">
+                        <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.dark_theme') }}" style="width: 40px; height: 40px;">
                             <i class="ph ph-moon-stars"></i>
                         </div>
-                        <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.light_theme') }}">
+                        <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.light_theme') }}" style="width: 40px; height: 40px;">
                             <i class="ph ph-sun-dim"></i>
                         </div>
                     </li>
@@ -204,30 +204,36 @@
                     @auth
                     <!-- Wiki - Prossimamente - Solo per utenti autenticati
                     <li class="header-wiki">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled d-flex align-items-center justify-content-center"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wiki (Prossimamente)"
-                           style="opacity: 0.5; cursor: not-allowed;">
+                           style="opacity: 0.5; cursor: not-allowed; width: 40px; height: 40px;">
                             <i class="ph ph-book-open"></i>
                         </a>
                     </li>-->
 
                     <!-- Corsi - Prossimamente - Solo per utenti autenticati
                     <li class="header-courses">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled d-flex align-items-center justify-content-center"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Corsi (Prossimamente)"
-                           style="opacity: 0.5; cursor: not-allowed;">
+                           style="opacity: 0.5; cursor: not-allowed; width: 40px; height: 40px;">
                             <i class="ph ph-graduation-cap"></i>
                         </a>
                     </li>-->
 
                     <!-- Forum - Prossimamente - Solo per utenti autenticati
                     <li class="header-forum">
-                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled"
+                        <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled d-flex align-items-center justify-content-center"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Forum (Prossimamente)"
-                           style="opacity: 0.5; cursor: not-allowed;">
+                           style="opacity: 0.5; cursor: not-allowed; width: 40px; height: 40px;">
                             <i class="ph ph-chats-circle"></i>
                         </a>
                     </li>-->
+
+                    <!-- Impostazioni - Solo per utenti autenticati -->
+                    
+                    <!-- Profilo Utente - Solo per utenti autenticati -->
+                    
+
                     @endauth
 
                 </ul>
