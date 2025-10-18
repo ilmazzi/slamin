@@ -450,7 +450,7 @@ class DashboardIndex extends Component
                 'url' => route('events.show', $event),
                 'type' => 'organized',
                 'className' => 'event-organized',
-                'color' => 'primary',
+                'color' => 'info',
                 'venue' => $event->venue_name,
                 'city' => $event->city,
             ];

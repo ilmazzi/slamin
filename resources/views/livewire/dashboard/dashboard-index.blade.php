@@ -393,10 +393,10 @@
                         @if(count($upcomingEvents) > 0)
                             <div class="d-grid gap-3">
                                 @foreach($upcomingEvents as $event)
-                                    <div class="card hover-effect border-start border-4 border-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
+                                    <div class="card hover-effect border-start border-4 border-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
                                         <div class="card-body d-flex align-items-center pa-15">
                                             <!-- Icona evento -->
-                                            <div class="bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} h-50 w-50 d-flex-center rounded-circle me-3">
+                                            <div class="bg-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} h-50 w-50 d-flex-center rounded-circle me-3">
                                                 <i class="ph ph-calendar f-s-20 text-white"></i>
                                             </div>
                                             
@@ -404,7 +404,7 @@
                                             <div class="flex-grow-1">
                                                 <div class="d-flex align-items-start justify-content-between mb-1">
                                                     <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] }}</h6>
-                                                    <span class="badge bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
+                                                    <span class="badge bg-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
                                                         {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
                                                     </span>
                                                 </div>
@@ -420,7 +420,7 @@
                                             
                                             <!-- Bottone azione -->
                                             <div class="ms-3">
-                                                <a href="{{ $event['url'] }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} btn-sm">
+                                                <a href="{{ $event['url'] }}" class="btn btn-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} btn-sm">
                                                     <i class="ph ph-arrow-right me-1"></i>Vedi
                                                 </a>
                                             </div>
