@@ -767,7 +767,7 @@
                     <div class="card hover-effect equal-card">
                         <div class="card-header">
                             <h6 class="card-title mb-0 f-w-600">
-                                <i class="ph ph-clock me-2 text-info"></i>{{ __('dashboard.recent_activity') }}
+                                <i class="ph ph-clock me-2 text-primary"></i>{{ __('dashboard.recent_activity') }}
                             </h6>
                         </div>
                         <div class="card-body pa-20">
