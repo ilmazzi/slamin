@@ -143,13 +143,16 @@ class DashboardIndex extends Component
     }
 
     /**
-     * Get recent activity for user
+     * Get recent activity for user (excluding view activities)
      */
     private function getRecentActivity($user)
     {
-        $activities = ActivityService::getRecentActivities($user, 10);
+        $activities = ActivityService::getRecentActivities($user, 15);
 
-        return $activities->map(function ($activity) {
+        return $activities->filter(function ($activity) {
+            // Escludi le attività di visualizzazione (view)
+            return $activity->action !== 'view' && $activity->action !== 'viewed';
+        })->take(8)->map(function ($activity) {
             return [
                 'id' => $activity->id,
                 'message' => $activity->formatted_description,
@@ -423,6 +426,32 @@ class DashboardIndex extends Component
     {
         $this->loadCalendarData();
         $this->render();
+    }
+
+    /**
+     * Navigate to previous month
+     */
+    public function previousMonth()
+    {
+        $this->currentMonth--;
+        if ($this->currentMonth < 1) {
+            $this->currentMonth = 12;
+            $this->currentYear--;
+        }
+        $this->loadCalendarData();
+    }
+
+    /**
+     * Navigate to next month
+     */
+    public function nextMonth()
+    {
+        $this->currentMonth++;
+        if ($this->currentMonth > 12) {
+            $this->currentMonth = 1;
+            $this->currentYear++;
+        }
+        $this->loadCalendarData();
     }
 
     /**

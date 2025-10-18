@@ -35,145 +35,9 @@
             </div>
         </div>
 
-        <!-- 2. STATISTICHE - Mobile First Grid 2x2 -->
+        <!-- 2. CALENDARIO - PRIMO ELEMENTO, Mobile First -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card hover-effect equal-card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="card-title mb-0 f-w-600">
-                                <i class="ph ph-chart-bar me-2 text-primary"></i>{{ __('dashboard.statistics') }}
-                            </h6>
-                            <a href="{{ route('user-stats.index') }}" class="btn btn-sm btn-outline-primary d-none d-md-inline-block">
-                                <i class="ph ph-chart-line me-1"></i>{{ __('dashboard.view_detailed_stats') }}
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body pa-20">
-                        <!-- Mobile: 2x2 grid, Desktop: 2x3 grid -->
-                        <div class="row g-3">
-                            <!-- Statistica 1 - Eventi Passati -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('events.index', ['filter' => 'past']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-secondary">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-secondary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-clock-counter-clockwise f-s-18 text-secondary"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-secondary mb-1 f-w-600">{{ $stats['past_events'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.past_events') }}</p>
-                                                <span class="badge bg-light-secondary f-s-10">{{ __('dashboard.role_history') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Statistica 2 - Eventi Futuri -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('events.index', ['filter' => 'future']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-warning">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-warning h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-calendar-check f-s-18 text-warning"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-warning mb-1 f-w-600">{{ $stats['future_events'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.future_events') }}</p>
-                                                <span class="badge bg-light-warning f-s-10">{{ __('dashboard.role_upcoming') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Statistica 3 - Eventi Organizzati -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('events.index', ['filter' => 'organized']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-primary">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-article f-s-18 text-primary"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-primary mb-1 f-w-600">{{ $stats['organized_events'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.organized_events') }}</p>
-                                                <span class="badge bg-light-primary f-s-10">{{ __('dashboard.role_organizer') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Statistica 4 - Inviti in Attesa -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-success">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-success h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-envelope f-s-18 text-success"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-success mb-1 f-w-600">{{ $stats['pending_invitations'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.pending_invitations') }}</p>
-                                                <span class="badge bg-light-success f-s-10">{{ __('dashboard.role_invitations') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Statistica 5 - Inviti ai Gruppi -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('group-invitations.index') }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-primary">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-primary h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-users f-s-18 text-primary"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-primary mb-1 f-w-600">{{ $stats['pending_group_invitations'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">{{ __('dashboard.group_invitations') }}</p>
-                                                <span class="badge bg-light-primary f-s-10">{{ __('dashboard.groups') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Statistica 6 - Notifiche -->
-                            <div class="col-6 col-lg-4">
-                                <a href="{{ route('notifications.index') }}" class="text-decoration-none">
-                                    <div class="card hover-effect equal-card b-t-4-info">
-                                        <div class="card-body eshop-cards text-center pa-15">
-                                            <div class="bg-light-info h-40 w-40 d-flex-center rounded-circle m-auto mb-2">
-                                                <i class="ph ph-bell f-s-18 text-info"></i>
-                                            </div>
-                                            <span class="ripple-effect"></span>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-info mb-1 f-w-600">{{ $stats['unread_notifications'] }}</h4>
-                                                <p class="f-w-500 text-dark f-s-12 mb-1">Notifiche</p>
-                                                <span class="badge bg-light-info f-s-10">Nuove</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. CALENDARIO - Mobile First -->
-        <div class="row mb-4">
-            <div class="col-12 col-lg-8">
                 <div class="card hover-effect equal-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h6 class="card-title mb-0 f-w-600">
@@ -210,9 +74,124 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 4. AZIONI RAPIDE - Mobile First -->
-            <div class="col-12 col-lg-4">
+        <!-- 3. STATISTICHE COMPATTE - Mobile First, molto più piccole -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card hover-effect equal-card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-title mb-0 f-w-600">
+                                <i class="ph ph-chart-bar me-2 text-primary"></i>{{ __('dashboard.statistics') }}
+                            </h6>
+                            <a href="{{ route('user-stats.index') }}" class="btn btn-sm btn-primary d-none d-md-inline-block">
+                                <i class="ph ph-chart-line me-1"></i>{{ __('dashboard.view_detailed_stats') }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body pa-15">
+                        <!-- Mobile: 3x2 grid, Desktop: 6x1 grid - STATISTICHE COMPATTE -->
+                        <div class="row g-2">
+                            <!-- Statistica 1 - Eventi Passati -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('events.index', ['filter' => 'past']) }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-secondary">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-secondary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-clock-counter-clockwise f-s-14 text-secondary"></i>
+                                            </div>
+                                            <h6 class="text-secondary mb-0 f-w-600 f-s-16">{{ $stats['past_events'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">{{ __('dashboard.past_events') }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Statistica 2 - Eventi Futuri -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('events.index', ['filter' => 'future']) }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-warning">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-warning h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-calendar-check f-s-14 text-warning"></i>
+                                            </div>
+                                            <h6 class="text-warning mb-0 f-w-600 f-s-16">{{ $stats['future_events'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">{{ __('dashboard.future_events') }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Statistica 3 - Eventi Organizzati -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('events.index', ['filter' => 'organized']) }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-primary">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-primary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-article f-s-14 text-primary"></i>
+                                            </div>
+                                            <h6 class="text-primary mb-0 f-w-600 f-s-16">{{ $stats['organized_events'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">{{ __('dashboard.organized_events') }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Statistica 4 - Inviti in Attesa -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-success">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-success h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-envelope f-s-14 text-success"></i>
+                                            </div>
+                                            <h6 class="text-success mb-0 f-w-600 f-s-16">{{ $stats['pending_invitations'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">{{ __('dashboard.pending_invitations') }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Statistica 5 - Inviti ai Gruppi -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('group-invitations.index') }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-primary">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-primary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-users f-s-14 text-primary"></i>
+                                            </div>
+                                            <h6 class="text-primary mb-0 f-w-600 f-s-16">{{ $stats['pending_group_invitations'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">{{ __('dashboard.group_invitations') }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Statistica 6 - Notifiche -->
+                            <div class="col-4 col-lg-2">
+                                <a href="{{ route('notifications.index') }}" class="text-decoration-none">
+                                    <div class="card hover-effect b-t-3-info">
+                                        <div class="card-body text-center pa-10">
+                                            <div class="bg-light-info h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                                <i class="ph ph-bell f-s-14 text-info"></i>
+                                            </div>
+                                            <h6 class="text-info mb-0 f-w-600 f-s-16">{{ $stats['unread_notifications'] }}</h6>
+                                            <p class="f-w-500 text-dark f-s-10 mb-0">Notifiche</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. AZIONI RAPIDE E ATTIVITÀ RECENTI - Mobile First -->
+        <div class="row mb-4">
+            <!-- AZIONI RAPIDE - Eleganti e ricche di informazioni -->
+            <div class="col-12 col-lg-6">
                 <div class="card hover-effect equal-card">
                     <div class="card-header">
                         <h6 class="card-title mb-0 f-w-600">
@@ -220,21 +199,43 @@
                         </h6>
                     </div>
                     <div class="card-body pa-20">
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-3">
                             @foreach($quickActions as $action)
-                                <a href="{{ $action['url'] }}" class="btn btn-outline-{{ $action['color'] }} btn-sm d-flex align-items-center justify-content-start">
-                                    <i class="{{ $action['icon'] }} me-2"></i>
-                                    <span>{{ __('dashboard.' . $action['key']) }}</span>
+                                <a href="{{ $action['url'] }}" class="card hover-effect text-decoration-none border-0 bg-light-{{ $action['color'] }}">
+                                    <div class="card-body d-flex align-items-center pa-15">
+                                        <div class="bg-{{ $action['color'] }} h-40 w-40 d-flex-center rounded-circle me-3">
+                                            <i class="{{ $action['icon'] }} f-s-18 text-white"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 f-w-600 text-dark">{{ __('dashboard.' . $action['key']) }}</h6>
+                                            <p class="mb-0 f-s-12 text-muted">
+                                                @if($action['key'] === 'write_poem')
+                                                    Crea e condividi le tue poesie
+                                                @elseif($action['key'] === 'organize_event')
+                                                    Organizza il tuo evento slam
+                                                @elseif($action['key'] === 'upload_performance')
+                                                    Carica le tue performance video
+                                                @elseif($action['key'] === 'write_article')
+                                                    Scrivi articoli e contenuti
+                                                @elseif($action['key'] === 'help')
+                                                    Ottieni supporto e aiuto
+                                                @elseif($action['key'] === 'faq')
+                                                    Domande frequenti
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div class="ms-2">
+                                            <i class="ph ph-arrow-right f-s-16 text-muted"></i>
+                                        </div>
+                                    </div>
                                 </a>
                             @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 5. ATTIVITÀ RECENTI - Mobile First -->
-        <div class="row mb-4">
+            <!-- ATTIVITÀ RECENTI - Eleganti e ricche di informazioni -->
             <div class="col-12 col-lg-6">
                 <div class="card hover-effect equal-card">
                     <div class="card-header">
@@ -246,13 +247,28 @@
                         @if(count($recentActivity) > 0)
                             <div class="timeline">
                                 @foreach($recentActivity as $activity)
-                                    <div class="timeline-item d-flex align-items-start mb-3">
-                                        <div class="timeline-marker bg-{{ $activity['color'] }} rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px; min-width: 32px;">
-                                            <i class="{{ $activity['icon'] }} f-s-14 text-white"></i>
-                                        </div>
-                                        <div class="timeline-content flex-grow-1">
-                                            <p class="mb-1 f-s-14">{{ $activity['message'] }}</p>
-                                            <small class="text-muted">{{ $activity['time'] }}</small>
+                                    <div class="card hover-effect mb-3 border-0 bg-light-{{ $activity['color'] }}">
+                                        <div class="card-body d-flex align-items-start pa-15">
+                                            <div class="bg-{{ $activity['color'] }} rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px; min-width: 36px;">
+                                                <i class="{{ $activity['icon'] }} f-s-16 text-white"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 f-s-14 f-w-600 text-dark">{{ $activity['title'] }}</h6>
+                                                <p class="mb-1 f-s-13 text-muted">{{ $activity['message'] }}</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <small class="text-muted f-s-11">{{ $activity['time'] }}</small>
+                                                    @if($activity['content_type'])
+                                                        <span class="badge bg-{{ $activity['content_type_color'] }} f-s-10">{{ $activity['content_type'] }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            @if($activity['url'])
+                                                <div class="ms-2">
+                                                    <a href="{{ $activity['url'] }}" class="btn btn-sm btn-{{ $activity['color'] }}">
+                                                        <i class="ph ph-arrow-right f-s-12"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -267,9 +283,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 6. EVENTI PROSSIMI - Mobile First -->
-            <div class="col-12 col-lg-6">
+        <!-- 5. EVENTI PROSSIMI - Mobile First -->
+        <div class="row mb-4">
+            <div class="col-12">
                 <div class="card hover-effect equal-card">
                     <div class="card-header">
                         <h6 class="card-title mb-0 f-w-600">
@@ -278,20 +296,31 @@
                     </div>
                     <div class="card-body pa-20">
                         @if(count($upcomingEvents) > 0)
-                            @foreach($upcomingEvents as $event)
-                                <div class="d-flex align-items-center mb-3 p-3 border rounded">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 f-s-14">{{ $event['title'] }}</h6>
-                                        <p class="mb-1 f-s-12 text-muted">{{ $event['date'] }}</p>
-                                        <p class="mb-0 f-s-12 text-muted">{{ $event['venue'] }}, {{ $event['city'] }}</p>
+                            <div class="row g-3">
+                                @foreach($upcomingEvents as $event)
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card hover-effect border-0 bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
+                                            <div class="card-body pa-15">
+                                                <div class="d-flex align-items-start justify-content-between mb-2">
+                                                    <h6 class="mb-1 f-s-14 f-w-600 text-dark">{{ $event['title'] }}</h6>
+                                                    <span class="badge bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
+                                                        {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
+                                                    </span>
+                                                </div>
+                                                <p class="mb-1 f-s-12 text-muted">
+                                                    <i class="ph ph-calendar me-1"></i>{{ $event['date'] }}
+                                                </p>
+                                                <p class="mb-2 f-s-12 text-muted">
+                                                    <i class="ph ph-map-pin me-1"></i>{{ $event['venue'] }}, {{ $event['city'] }}
+                                                </p>
+                                                <a href="{{ $event['url'] }}" class="btn btn-sm btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
+                                                    <i class="ph ph-arrow-right me-1"></i>Vedi dettagli
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="ms-3">
-                                        <span class="badge bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
-                                            {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         @else
                             <div class="text-center py-4">
                                 <i class="ph ph-calendar f-s-48 text-muted mb-3"></i>
@@ -304,7 +333,7 @@
             </div>
         </div>
 
-        <!-- 7. CONTENUTI SPECIFICI PER RUOLO - Mobile First -->
+        <!-- 6. CONTENUTI SPECIFICI PER RUOLO - Mobile First -->
         @if(!empty($roleContent))
             <div class="row mb-4">
                 <div class="col-12">
