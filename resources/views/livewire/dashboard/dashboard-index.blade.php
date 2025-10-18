@@ -106,7 +106,7 @@
                                                     );
                                                 @endphp
                                                 
-                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 100px; min-height: 100px;">
+                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 100px; min-height: 100px;">
                                                     <div class="d-flex flex-column h-100">
                                                         <div class="d-flex justify-content-between align-items-start mb-1">
                                                             <span class="f-s-14 f-w-600">{{ $currentDate->day }}</span>
@@ -508,149 +508,7 @@
 
     </div>
 
-    <!-- Calendar Styles -->
-    <style>
-        .calendar-container {
-            background: white;
-            border-radius: 8px;
-        }
-
-        .calendar-grid {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .calendar-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .calendar-day-header {
-            flex: 1;
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 12px;
-            color: #6c757d;
-            border-right: 1px solid #e9ecef;
-        }
-
-        .calendar-day-header:last-child {
-            border-right: none;
-        }
-
-        .calendar-week {
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .calendar-week:last-child {
-            border-bottom: none;
-        }
-
-        .calendar-day {
-            flex: 1;
-            min-height: 80px;
-            padding: 8px;
-            border-right: 1px solid #e9ecef;
-            position: relative;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .calendar-day:last-child {
-            border-right: none;
-        }
-
-        .calendar-day:hover {
-            background-color: #f8f9fa;
-        }
-
-        .calendar-day.other-month {
-            background-color: #f8f9fa;
-            color: #adb5bd;
-        }
-
-        .calendar-day.today {
-            background-color: #fff3cd;
-        }
-
-        .calendar-day.today .day-number {
-            background-color: #ffc107;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .day-number {
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .day-events {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            margin-top: 4px;
-        }
-
-        .event-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .event-dot:hover {
-            transform: scale(1.2);
-        }
-
-        .more-events {
-            font-size: 10px;
-            color: #6c757d;
-            font-weight: 500;
-        }
-
-        .calendar-legend {
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-
-        .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .calendar-day {
-                min-height: 60px;
-                padding: 4px;
-            }
-
-            .calendar-day-header {
-                padding: 8px 4px;
-                font-size: 11px;
-            }
-
-            .day-number {
-                font-size: 12px;
-            }
-
-            .event-dot {
-                width: 6px;
-                height: 6px;
-            }
-        }
-    </style>
+   
 
     <!-- Livewire Scripts -->
     <script>
