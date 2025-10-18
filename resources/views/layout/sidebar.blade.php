@@ -12,14 +12,19 @@
 
         @auth
         <div class="d-flex align-items-center nav-profile p-3">
-            <span class="h-45 w-45 d-flex-center b-r-10 position-relative bg-danger m-auto">
-                <img alt="avatar" class="img-fluid b-r-10" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}">
+            <span class="h-45 w-45 d-flex-center rounded-circle position-relative m-auto">
+                <img alt="avatar" class="img-fluid rounded-circle" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}" style="width: 45px; height: 45px; object-fit: cover;">
                 <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
             </span>
-            <div class="flex-grow-1 ps-2">
-                <a href="{{ route('user.show', auth()->user()) }}" class="text-primary mb-0 d-flex align-items-center">
-                    {!! \App\Helpers\AvatarHelper::getUserBadgesHtml(auth()->user(), 3, '18') !!}
-                    <span>{{ auth()->user()->getDisplayName() }}</span>
+            <div class="flex-grow-1 ps-2 sidebar-text">
+                <a href="{{ route('user.show', auth()->user()) }}" class="text-primary mb-0 d-flex flex-column">
+                    <div>
+                        {!! \App\Helpers\AvatarHelper::getUserBadgesHtml(auth()->user(), 3, '18') !!}
+                        <span class="fw-semibold">{{ auth()->user()->name }}</span>
+                    </div>
+                    @if(auth()->user()->nickname)
+                        <small class="text-muted f-s-11 ms-3">{{ auth()->user()->nickname }}</small>
+                    @endif
                 </a>
                 <p class="text-muted f-s-12 mb-0">
                     @if(auth()->user()->getRoleNames()->count() > 0)

@@ -27,14 +27,37 @@
                 overflow: hidden;
             }
         }
+        
+        .nav-profile {
+            .sidebar-text {
+                display: none;
+            }
+            
+            .profile-menu-dropdown {
+                display: none !important;
+            }
+        }
+        
+        // Assicuriamoci che anche quando la sidebar è collassata, il testo non esca
+        .nav-profile {
+            overflow: hidden;
+            max-width: 100%;
+        }
     }
 
     &:hover {
         .toggle-semi-nav {
             opacity: 1;
         }
+        
+        .nav-profile {
+            .sidebar-text {
+                display: block;
+            }
+        }
     }
 }
+
 
 nav {
     width: var(--sidebar-width);
@@ -44,7 +67,9 @@ nav {
     position: fixed;
     background-color: rgba(var(--white),1);
     z-index: 1003;
+    overflow: hidden; // Previene che il contenuto esca dalla sidebar
 }
+
 
 
     .app-logo {
