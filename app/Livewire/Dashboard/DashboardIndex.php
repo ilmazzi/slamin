@@ -51,6 +51,8 @@ class DashboardIndex extends Component
             'upcomingEvents' => $this->getUpcomingEvents($user),
             'quickActions' => $this->getQuickActions($user),
             'roleContent' => $this->getRoleSpecificContent($user),
+            'calendarEvents' => $this->calendarEvents,
+            'wishlistEvents' => $this->wishlistEvents,
         ]);
     }
 
@@ -257,6 +259,8 @@ class DashboardIndex extends Component
         if ($user->can('poems.create')) {
             $actions[] = [
                 'key' => 'write_poem',
+                'title' => 'Scrivi Poesia',
+                'description' => 'Crea una nuova poesia e condividila con la community',
                 'icon' => 'ph ph-pen-nib',
                 'color' => 'info',
                 'url' => route('poems.create')
@@ -267,6 +271,8 @@ class DashboardIndex extends Component
         if ($user->can('events.create.public') || $user->can('events.create.private')) {
             $actions[] = [
                 'key' => 'organize_event',
+                'title' => 'Organizza Evento',
+                'description' => 'Crea un nuovo evento di Poetry Slam',
                 'icon' => 'ph ph-calendar-plus',
                 'color' => 'success',
                 'url' => route('events.create')
@@ -277,6 +283,8 @@ class DashboardIndex extends Component
         if ($user->can('videos.upload')) {
             $actions[] = [
                 'key' => 'upload_performance',
+                'title' => 'Carica Video',
+                'description' => 'Condividi la tua performance video',
                 'icon' => 'ph ph-upload',
                 'color' => 'warning',
                 'url' => route('videos.upload')
@@ -287,6 +295,8 @@ class DashboardIndex extends Component
         if ($user->can('articles.create')) {
             $actions[] = [
                 'key' => 'write_article',
+                'title' => 'Scrivi Articolo',
+                'description' => 'Pubblica un articolo sulla community',
                 'icon' => 'ph ph-newspaper',
                 'color' => 'primary',
                 'url' => route('articles.create')
@@ -296,6 +306,8 @@ class DashboardIndex extends Component
         // 5. Help - per tutti gli utenti autenticati
         $actions[] = [
             'key' => 'help',
+            'title' => 'Aiuto',
+            'description' => 'Guida e supporto per utilizzare la piattaforma',
             'icon' => 'ph ph-question',
             'color' => 'info',
             'url' => route('help.index')
@@ -304,6 +316,8 @@ class DashboardIndex extends Component
         // 6. FAQ - per tutti gli utenti autenticati
         $actions[] = [
             'key' => 'faq',
+            'title' => 'FAQ',
+            'description' => 'Domande frequenti e risposte',
             'icon' => 'ph ph-chat-circle',
             'color' => 'success',
             'url' => route('faq.index')
