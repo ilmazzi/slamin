@@ -317,11 +317,11 @@
                                                                         @if(isset($event['image']) && $event['image'])
                                                                             <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
                                                                                  class="rounded-circle" 
-                                                                                 style="width: 24px; height: 24px; object-fit: cover;">
+                                                                                 style="width: 32px; height: 32px; object-fit: cover;">
                                                                         @else
-                                                                            <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" 
-                                                                                 style="width: 24px; height: 24px;">
-                                                                                <i class="ph ph-calendar f-s-12 f-md-16 text-white"></i>
+                                                                            <div class="bg-white bg-opacity-30 rounded-circle d-flex align-items-center justify-content-center border border-white border-opacity-50" 
+                                                                                 style="width: 32px; height: 32px;">
+                                                                                <i class="ph ph-calendar f-s-14 f-md-18 text-white"></i>
                                                                             </div>
                                                                         @endif
                                                                     </div>
