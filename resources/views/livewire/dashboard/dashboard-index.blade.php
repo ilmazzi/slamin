@@ -168,7 +168,7 @@
                                             @if($dayEvents->count() > 0)
                                                 <div class="d-grid gap-2">
                                                     @foreach($dayEvents as $event)
-                                                        <div class="d-flex align-items-center p-2 rounded bg-light">
+                                                        <div class="d-flex align-items-center p-2 rounded bg-light-primary">
                                                             <div class="me-2">
                                                                 <div class="w-2 h-2 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
                                                             </div>
