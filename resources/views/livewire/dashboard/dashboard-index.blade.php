@@ -438,11 +438,11 @@
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="card-title mb-0 f-w-600">
-                                <i class="ph ph-chart-line me-2 text-info"></i>{{ __('dashboard.statistics') }}
+                                <i class="ph ph-chart-line me-2 text-primary"></i>{{ __('dashboard.statistics') }}
                             </h6>
-                            <a href="{{ route('user-stats.index') }}" class="btn btn-light-info btn-sm">
+                            <button href="{{ route('user-stats.index') }}" class="btn btn-light-primary btn-sm">
                                 <i class="ph ph-chart-line me-1"></i>{{ __('dashboard.view_detailed_stats') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="card-body pa-15">
