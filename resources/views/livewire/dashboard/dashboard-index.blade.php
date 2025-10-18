@@ -140,7 +140,7 @@
                         <div id="calendar-week-view" class="d-none d-md-none">
                             <div class="d-grid gap-2">
                                 @php
-                                    $weekStart = now()->setMonth($currentMonth)->setYear($currentYear)->startOfWeek();
+                                    $weekStart = now()->setMonth($currentMonth)->setYear($currentYear)->startOfMonth()->startOfWeek()->addDay();
                                     $weekDays = [];
                                     for($i = 0; $i < 7; $i++) {
                                         $weekDays[] = $weekStart->copy()->addDays($i);
