@@ -25,6 +25,11 @@ class DashboardIndex extends Component
     public $selectedInvitation = null;
     public $showGroupInvitationModal = false;
     public $selectedGroupInvitation = null;
+    
+    // Properties for mobile calendar pagination
+    public $currentView = 'list'; // list, week, month
+    public $listPage = 1;
+    public $weekPage = 0; // 0 = current week, -1 = previous, 1 = next
 
     protected $listeners = [
         'refreshDashboard' => 'refreshData',
@@ -683,5 +688,43 @@ class DashboardIndex extends Component
 
         // Redirect to event details
         return redirect()->route('events.show', $event);
+    }
+
+    /**
+     * Switch mobile calendar view
+     */
+    public function switchView($view)
+    {
+        $this->currentView = $view;
+        $this->listPage = 1;
+        $this->weekPage = 0;
+    }
+
+    /**
+     * Navigate list view
+     */
+    public function nextListPage()
+    {
+        $this->listPage++;
+    }
+
+    public function previousListPage()
+    {
+        if ($this->listPage > 1) {
+            $this->listPage--;
+        }
+    }
+
+    /**
+     * Navigate week view
+     */
+    public function nextWeek()
+    {
+        $this->weekPage++;
+    }
+
+    public function previousWeek()
+    {
+        $this->weekPage--;
     }
 }

@@ -48,13 +48,13 @@
                             <!-- Toggle visualizzazioni - Solo su mobile -->
                             <div class="d-md-none">
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-outline-primary btn-sm active" onclick="switchCalendarView('list')">
+                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'list' ? 'active' : '' }}" wire:click="switchView('list')">
                                         <i class="ph ph-list"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="switchCalendarView('week')">
+                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'week' ? 'active' : '' }}" wire:click="switchView('week')">
                                         <i class="ph ph-calendar"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="switchCalendarView('month')">
+                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'month' ? 'active' : '' }}" wire:click="switchView('month')">
                                         <i class="ph ph-calendar-blank"></i>
                                     </button>
                                 </div>
@@ -64,14 +64,30 @@
                     <div class="card-body pa-20">
                         
                         <!-- VISUALIZZAZIONE LISTA - Mobile (Default) -->
-                        <div id="calendar-list-view" class="d-md-none">
+                        <div id="calendar-list-view" class="d-md-none {{ $currentView !== 'list' ? 'd-none' : '' }}">
+                            <!-- Controlli navigazione lista -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <button class="btn btn-outline-primary btn-sm" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
+                                    <i class="ph ph-chevron-left"></i> Precedente
+                                </button>
+                                <span class="f-s-14 f-w-600 text-center">
+                                    Pagina {{ $listPage }}
+                                </span>
+                                <button class="btn btn-outline-primary btn-sm" wire:click="nextListPage">
+                                    Successiva <i class="ph ph-chevron-right"></i>
+                                </button>
+                            </div>
+                            
                             <div class="d-grid gap-3">
                                 @php
                                     $allEvents = collect($calendarEvents)->merge(collect($wishlistEvents))->sortBy('start');
                                     $groupedEvents = $allEvents->groupBy('start');
+                                    $eventsPerPage = 5;
+                                    $startIndex = ($listPage - 1) * $eventsPerPage;
+                                    $paginatedEvents = $groupedEvents->slice($startIndex, $eventsPerPage);
                                 @endphp
                                 
-                                @foreach($groupedEvents as $date => $events)
+                                @foreach($paginatedEvents as $date => $events)
                                     <div class="card hover-effect">
                                         <div class="card-body p-3">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
@@ -137,13 +153,28 @@
                         </div>
                         
                         <!-- VISUALIZZAZIONE SETTIMANALE - Mobile -->
-                        <div id="calendar-week-view" class="d-none d-md-none">
+                        <div id="calendar-week-view" class="d-md-none {{ $currentView !== 'week' ? 'd-none' : '' }}">
+                            <!-- Controlli navigazione settimana -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <button class="btn btn-outline-primary btn-sm" wire:click="previousWeek">
+                                    <i class="ph ph-chevron-left"></i> Settimana precedente
+                                </button>
+                                <span class="f-s-14 f-w-600 text-center">
+                                    Settimana {{ $weekPage === 0 ? 'corrente' : ($weekPage > 0 ? '+' . $weekPage : $weekPage) }}
+                                </span>
+                                <button class="btn btn-outline-primary btn-sm" wire:click="nextWeek">
+                                    Settimana successiva <i class="ph ph-chevron-right"></i>
+                                </button>
+                            </div>
+                            
                             <div class="d-grid gap-2">
                                 @php
-                                    $weekStart = now()->setMonth($currentMonth)->setYear($currentYear)->startOfMonth()->startOfWeek()->addDay();
+                                    // Calcola la settimana in base alla paginazione
+                                    $today = now();
+                                    $currentWeekStart = $today->copy()->startOfWeek()->addDay()->addWeeks($weekPage);
                                     $weekDays = [];
                                     for($i = 0; $i < 7; $i++) {
-                                        $weekDays[] = $weekStart->copy()->addDays($i);
+                                        $weekDays[] = $currentWeekStart->copy()->addDays($i);
                                     }
                                 @endphp
                                 
@@ -193,7 +224,7 @@
                         </div>
                         
                         <!-- VISUALIZZAZIONE MENSILE - Mobile (Compatto) -->
-                        <div id="calendar-month-view" class="d-none d-md-none">
+                        <div id="calendar-month-view" class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">
@@ -234,11 +265,11 @@
                                                         <span class="f-s-10 f-w-600">{{ $currentDate->day }}</span>
                                                         @if($dayEvents->count() > 0)
                                                             <div class="d-flex gap-1">
-                                                                @foreach($dayEvents->take(2) as $event)
-                                                                    <div class="w-1 h-1 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
+                                                                @foreach($dayEvents->take(3) as $event)
+                                                                    <div class="w-2 h-2 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
                                                                 @endforeach
-                                                                @if($dayEvents->count() > 2)
-                                                                    <div class="w-1 h-1 rounded-circle bg-secondary"></div>
+                                                                @if($dayEvents->count() > 3)
+                                                                    <div class="w-2 h-2 rounded-circle bg-secondary"></div>
                                                                 @endif
                                                             </div>
                                                         @endif
