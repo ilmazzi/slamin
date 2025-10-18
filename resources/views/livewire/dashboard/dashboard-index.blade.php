@@ -68,13 +68,13 @@
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">
                                     <div class="row g-1 mb-2">
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Lun</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Mar</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Mer</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Gio</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Ven</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Sab</div>
-                                        <div class="col text-center p-2 f-s-12 f-w-600 bg-light-secondary">Dom</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">L</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">M</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">M</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">G</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">V</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">S</div>
+                                        <div class="col text-center p-1 p-md-2 f-s-10 f-md-12 f-w-600 bg-light-secondary">D</div>
                                     </div>
                                 </div>
 
@@ -99,27 +99,68 @@
                                                     );
                                                 @endphp
                                                 
-                                                <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 100px; min-height: 100px;">
+                                                <!-- Mobile: altezza adeguata per slider, Desktop: altezza normale -->
+                                                <div class="col border rounded p-1 p-md-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 100px; min-height: 100px;">
                                                     <div class="d-flex flex-column h-100">
+                                                        <!-- Numero giorno - sempre visibile -->
                                                         <div class="d-flex justify-content-between align-items-start mb-1">
-                                                            <span class="f-s-14 f-w-600">{{ $currentDate->day }}</span>
+                                                            <span class="f-s-10 f-md-12 f-w-600 text-muted">{{ $currentDate->day }}</span>
                                                             @if($dayEvents->count() > 0)
-                                                                <small class="text-muted f-s-10">{{ $dayEvents->count() }}</small>
+                                                                <small class="text-muted f-s-8 f-md-9">{{ $dayEvents->count() }}</small>
                                                             @endif
                                                         </div>
                                                         
+                                                        <!-- Eventi del giorno - Slider di card full-size -->
                                                         @if($dayEvents->count() > 0)
-                                                            <div class="flex-grow-1 d-flex flex-column gap-1">
-                                                                @foreach($dayEvents->take(3) as $event)
-                                                                    <div class="badge bg-{{ $event['color'] }} f-s-9 cursor-pointer text-truncate" 
-                                                                         title="{{ $event['title'] }} - {{ $event['time'] }}"
-                                                                         wire:click="viewEvent({{ $event['id'] }})">
-                                                                        {{ Str::limit($event['title'], 15) }}
-                                                                    </div>
-                                                                @endforeach
-                                                                @if($dayEvents->count() > 3)
-                                                                    <small class="text-muted f-s-9">+{{ $dayEvents->count() - 3 }}</small>
-                                                                @endif
+                                                            <div class="flex-grow-1 position-relative overflow-hidden">
+                                                                <div class="event-slider" data-day="{{ $currentDate->format('Y-m-d') }}">
+                                                                    @foreach($dayEvents as $index => $event)
+                                                                        <div class="event-card position-absolute w-100 h-100 d-flex flex-column justify-content-between p-2 {{ $index === 0 ? 'active' : '' }}" 
+                                                                             style="transition: transform 0.3s ease; transform: translateX({{ $index * 100 }}%); 
+                                                                                    @if(isset($event['image']) && $event['image'])
+                                                                                        background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('{{ $event['image'] }}');
+                                                                                        background-size: cover;
+                                                                                        background-position: center;
+                                                                                        background-repeat: no-repeat;
+                                                                                    @else
+                                                                                        background: linear-gradient(135deg, rgba({{ $event['color'] === 'primary' ? '13,110,253' : '108,117,125' }}, 0.1), rgba({{ $event['color'] === 'primary' ? '13,110,253' : '108,117,125' }}, 0.05));
+                                                                                    @endif">
+                                                                            
+                                                                            <!-- Header con badge tipo -->
+                                                                            <div class="d-flex justify-content-end align-items-start">
+                                                                                <span class="badge bg-{{ $event['color'] }} f-s-8 f-md-10 px-2">{{ $event['type'] === 'organized' ? 'Org' : ($event['type'] === 'participating' ? 'Part' : 'Wish') }}</span>
+                                                                            </div>
+                                                                            
+                                                                            <!-- Contenuto principale evento -->
+                                                                            <div class="flex-grow-1 d-flex flex-column justify-content-center text-center">
+                                                                                <!-- Titolo evento -->
+                                                                                <div class="mb-2">
+                                                                                    <div class="f-s-10 f-md-13 f-w-600 {{ isset($event['image']) && $event['image'] ? 'text-white' : 'text-dark' }} cursor-pointer text-truncate" 
+                                                                                         title="{{ $event['title'] }}"
+                                                                                         wire:click="viewEvent({{ $event['id'] }})">
+                                                                                        {{ Str::limit($event['title'], 15) }}
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                <!-- Orario -->
+                                                                                <div class="f-s-9 f-md-11 {{ isset($event['image']) && $event['image'] ? 'text-white' : 'text-muted' }}">{{ $event['time'] }}</div>
+                                                                            </div>
+                                                                            
+                                                                            <!-- Footer con indicatore slider -->
+                                                                            <div class="d-flex justify-content-center">
+                                                                                @if($dayEvents->count() > 1)
+                                                                                    <div class="d-flex gap-1">
+                                                                                        @foreach($dayEvents as $dotIndex => $dotEvent)
+                                                                                            <div class="slider-dot rounded-circle bg-{{ $dotEvent['color'] }} {{ $dotIndex === 0 ? 'active' : '' }}" 
+                                                                                                 style="width: 4px; height: 4px; opacity: {{ $dotIndex === 0 ? '1' : '0.5' }}; cursor: pointer;"
+                                                                                                 onclick="showEventSlide('{{ $currentDate->format('Y-m-d') }}', {{ $dotIndex }})"></div>
+                                                                                        @endforeach
+                                                                                    </div>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -607,6 +648,55 @@
                         timer: 2000,
                         showConfirmButton: false
                     });
+                }
+            });
+        });
+        
+        // Funzione per gestire lo slider degli eventi nel calendario
+        function showEventSlide(day, index) {
+            const slider = document.querySelector(`[data-day="${day}"]`);
+            if (!slider) return;
+            
+            const cards = slider.querySelectorAll('.event-card');
+            const dots = slider.querySelectorAll('.slider-dot');
+            
+            // Nascondi tutte le card
+            cards.forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Mostra la card selezionata
+            if (cards[index]) {
+                cards[index].classList.add('active');
+                cards[index].style.transform = 'translateX(0%)';
+            }
+            
+            // Nascondi le altre card
+            cards.forEach((card, i) => {
+                if (i !== index) {
+                    card.style.transform = `translateX(${(i - index) * 100}%)`;
+                }
+            });
+            
+            // Aggiorna gli indicatori
+            dots.forEach((dot, i) => {
+                dot.style.opacity = i === index ? '1' : '0.5';
+                dot.classList.toggle('active', i === index);
+            });
+        }
+        
+        // Auto-scroll per slider con più di 1 evento
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliders = document.querySelectorAll('.event-slider');
+            sliders.forEach(slider => {
+                const cards = slider.querySelectorAll('.event-card');
+                if (cards.length > 1) {
+                    let currentIndex = 0;
+                    setInterval(() => {
+                        currentIndex = (currentIndex + 1) % cards.length;
+                        const day = slider.getAttribute('data-day');
+                        showEventSlide(day, currentIndex);
+                    }, 3000); // Cambia slide ogni 3 secondi
                 }
             });
         });

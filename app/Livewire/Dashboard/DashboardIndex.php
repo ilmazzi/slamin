@@ -453,6 +453,7 @@ class DashboardIndex extends Component
                 'color' => 'primary',
                 'venue' => $event->venue_name,
                 'city' => $event->city,
+                'image' => $event->image_url ?? null,
             ];
         }
 
@@ -474,6 +475,7 @@ class DashboardIndex extends Component
                 'color' => 'secondary',
                 'venue' => $event->venue_name,
                 'city' => $event->city,
+                'image' => $event->image_url ?? null,
             ];
         }
 
@@ -504,6 +506,7 @@ class DashboardIndex extends Component
                 'color' => 'warning',
                 'venue' => $event->venue_name,
                 'city' => $event->city,
+                'image' => $event->image_url ?? null,
             ];
         }
 
