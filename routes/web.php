@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
@@ -455,9 +454,9 @@ Route::get('/test', function () {
 
 // Dashboard moderna multilanguage
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/livewire', App\Livewire\Dashboard\DashboardIndex::class)->name('dashboard.livewire');
-    Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
+    Route::get('/dashboard', App\Livewire\Dashboard\DashboardIndex::class)->name('dashboard');
+    // Route per switch language (da implementare se necessario)
+    // Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
 
     // User Statistics
     Route::get('/user-stats', [App\Http\Controllers\UserStatsController::class, 'index'])->name('user-stats.index');

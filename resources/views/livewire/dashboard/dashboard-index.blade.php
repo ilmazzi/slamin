@@ -60,14 +60,7 @@
                                 <h5 class="mb-0 f-w-600 text-dark">
                                     {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
                                 </h5>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
-                                        <i class="ph ph-caret-left"></i>
-                                    </button>
-                                    <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
-                                        <i class="ph ph-caret-right"></i>
-                                    </button>
-                                </div>
+                                
                             </div>
 
                             <!-- Griglia del calendario -->
@@ -380,31 +373,32 @@
             </div>
         </div>
 
-        <!-- 5. EVENTI PROSSIMI - Mobile First -->
+        <!-- 5. EVENTI PROSSIMI E ATTIVITÀ SOCIALI - Mobile First -->
         <div class="row mb-4">
-            <div class="col-12">
+            <!-- EVENTI PROSSIMI -->
+            <div class="col-12 col-lg-6">
                 <div class="card hover-effect equal-card">
                     <div class="card-header">
                         <h6 class="card-title mb-0 f-w-600">
-                            <i class="ph ph-calendar-check me-2 text-success"></i>{{ __('dashboard.future_events') }}
+                            <i class="ph ph-calendar-check me-2 text-primary"></i>{{ __('dashboard.future_events') }}
                         </h6>
                     </div>
                     <div class="card-body pa-20">
                         @if(count($upcomingEvents) > 0)
                             <div class="d-grid gap-3">
                                 @foreach($upcomingEvents as $event)
-                                    <div class="card hover-effect border-start border-4 border-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
+                                    <div class="card hover-effect b-s-4-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }}">
                                         <div class="card-body d-flex align-items-center pa-15">
                                             <!-- Icona evento -->
-                                            <div class="bg-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} h-50 w-50 d-flex-center rounded-circle me-3">
-                                                <i class="ph ph-calendar f-s-20 text-white"></i>
+                                            <div class="bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} h-50 w-50 d-flex-center rounded-circle me-3">
+                                                <i class="ph ph-calendar f-s-20 text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }}"></i>
                                             </div>
                                             
                                             <!-- Contenuto evento -->
                                             <div class="flex-grow-1">
                                                 <div class="d-flex align-items-start justify-content-between mb-1">
                                                     <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] }}</h6>
-                                                    <span class="badge bg-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
+                                                    <span class="badge bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} f-s-10">
                                                         {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
                                                     </span>
                                                 </div>
@@ -420,7 +414,7 @@
                                             
                                             <!-- Bottone azione -->
                                             <div class="ms-3">
-                                                <a href="{{ $event['url'] }}" class="btn btn-{{ $event['type'] === 'organized' ? 'info' : ($event['type'] === 'participating' ? 'success' : 'warning') }} btn-sm">
+                                                <a href="{{ $event['url'] }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} btn-sm">
                                                     <i class="ph ph-arrow-right me-1"></i>Vedi
                                                 </a>
                                             </div>
@@ -435,6 +429,84 @@
                                 <p class="text-muted small">Non hai eventi in programma</p>
                             </div>
                         @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- ATTIVITÀ SOCIALI -->
+            <div class="col-12 col-lg-6">
+                <div class="card hover-effect equal-card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0 f-w-600">
+                            <i class="ph ph-users me-2 text-primary"></i>Attività Sociali
+                        </h6>
+                    </div>
+                    <div class="card-body pa-20">
+                        <div class="d-grid gap-3">
+                            <!-- Amici Online -->
+                            <div class="card hover-effect b-s-4-primary">
+                                <div class="card-body d-flex align-items-center pa-15">
+                                    <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle me-3">
+                                        <i class="ph ph-user-circle f-s-20 text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Amici Online</h6>
+                                        <p class="mb-0 f-s-13 text-muted">3 amici attivi ora</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <span class="badge bg-light-primary text-primary f-s-12">3</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gruppi Attivi -->
+                            <div class="card hover-effect b-s-4-secondary">
+                                <div class="card-body d-flex align-items-center pa-15">
+                                    <div class="bg-light-secondary h-50 w-50 d-flex-center rounded-circle me-3">
+                                        <i class="ph ph-users-three f-s-20 text-secondary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Gruppi Attivi</h6>
+                                        <p class="mb-0 f-s-13 text-muted">2 gruppi con nuove attività</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <span class="badge bg-light-secondary text-secondary f-s-12">2</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Inviti Ricevuti -->
+                            <div class="card hover-effect b-s-4-primary">
+                                <div class="card-body d-flex align-items-center pa-15">
+                                    <div class="bg-light-primary h-50 w-50 d-flex-center rounded-circle me-3">
+                                        <i class="ph ph-envelope f-s-20 text-primary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Inviti Ricevuti</h6>
+                                        <p class="mb-0 f-s-13 text-muted">1 nuovo invito da rispondere</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <span class="badge bg-light-primary text-primary f-s-12">1</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Messaggi Non Letti -->
+                            <div class="card hover-effect b-s-4-secondary">
+                                <div class="card-body d-flex align-items-center pa-15">
+                                    <div class="bg-light-secondary h-50 w-50 d-flex-center rounded-circle me-3">
+                                        <i class="ph ph-chat-circle f-s-20 text-secondary"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Messaggi</h6>
+                                        <p class="mb-0 f-s-13 text-muted">5 messaggi non letti</p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <span class="badge bg-light-secondary text-secondary f-s-12">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
