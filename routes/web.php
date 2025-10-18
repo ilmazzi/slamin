@@ -456,6 +456,7 @@ Route::get('/test', function () {
 // Dashboard moderna multilanguage
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/livewire', App\Livewire\Dashboard\DashboardIndex::class)->name('dashboard.livewire');
     Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
 
     // User Statistics

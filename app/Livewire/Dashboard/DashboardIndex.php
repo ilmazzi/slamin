@@ -1,34 +1,57 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Livewire\Dashboard;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Livewire\Component;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
-use App\Models\User;
 use App\Models\Event;
 use App\Models\EventInvitation;
 use App\Models\EventRequest;
 use App\Services\ActivityService;
 
-class DashboardController extends Controller
+class DashboardIndex extends Component
 {
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
+    use WithPagination;
+
+    // Properties for dynamic content
+    public $currentMonth = null;
+    public $currentYear = null;
+    public $calendarEvents = [];
+    public $wishlistEvents = [];
+
+    // Properties for interactions
+    public $showInvitationModal = false;
+    public $selectedInvitation = null;
+    public $showGroupInvitationModal = false;
+    public $selectedGroupInvitation = null;
+
+    protected $listeners = [
+        'refreshDashboard' => 'refreshData',
+        'invitationProcessed' => 'refreshData',
+        'groupInvitationProcessed' => 'refreshData',
+        'wishlistToggled' => 'refreshData',
+    ];
+
+    public function mount()
     {
-        // Middleware auth è gestito nelle route
+        $this->currentMonth = now()->month;
+        $this->currentYear = now()->year;
+        $this->loadCalendarData();
     }
 
-    /**
-     * Display the user dashboard.
-     */
-    public function index(Request $request)
+    public function render()
     {
-        // Redirect to Livewire component
-        return redirect()->route('dashboard.livewire');
+        $user = Auth::user();
+        
+        return view('livewire.dashboard.dashboard-index', [
+            'user' => $user,
+            'stats' => $this->getUserStats($user),
+            'recentActivity' => $this->getRecentActivity($user),
+            'upcomingEvents' => $this->getUpcomingEvents($user),
+            'quickActions' => $this->getQuickActions($user),
+            'roleContent' => $this->getRoleSpecificContent($user),
+        ]);
     }
 
     /**
@@ -150,7 +173,6 @@ class DashboardController extends Controller
      */
     private function getUpcomingEvents($user)
     {
-        // Get user's upcoming events (organized + participating)
         $events = [];
 
         // Events organized by user
@@ -191,13 +213,16 @@ class DashboardController extends Controller
             ];
         }
 
-        // Events in user's wishlist
-        $wishlistedEvents = $user->wishlistedEvents()
-                                ->upcoming()
-                                ->published()
-                                ->orderBy('start_datetime')
-                                ->limit(5)
-                                ->get();
+        // Events in user's wishlist (if method exists)
+        $wishlistedEvents = collect([]);
+        if (method_exists($user, 'wishlistedEvents')) {
+            $wishlistedEvents = $user->wishlistedEvents()
+                                    ->upcoming()
+                                    ->published()
+                                    ->orderBy('start_datetime')
+                                    ->limit(5)
+                                    ->get();
+        }
 
         foreach ($wishlistedEvents as $event) {
             $events[] = [
@@ -224,8 +249,6 @@ class DashboardController extends Controller
     private function getQuickActions($user)
     {
         $actions = [];
-
-        // Ordine richiesto: Scrivi poesia, Crea evento, Carica video, Scrivi articolo
 
         // 1. Scrivi Poesia - per poeti e admin
         if ($user->can('poems.create')) {
@@ -383,23 +406,126 @@ class DashboardController extends Controller
     }
 
     /**
-     * Switch language
+     * Load calendar data
      */
-    public function switchLanguage(Request $request)
+    public function loadCalendarData()
     {
-        $locale = $request->input('locale');
+        // This will be implemented to load calendar events
+        // For now, we'll keep it simple
+        $this->calendarEvents = [];
+        $this->wishlistEvents = [];
+    }
 
-        if (in_array($locale, ['it', 'en', 'fr', 'es', 'de'])) {
-            session(['locale' => $locale]);
+    /**
+     * Refresh dashboard data
+     */
+    public function refreshData()
+    {
+        $this->loadCalendarData();
+        $this->render();
+    }
 
-            // Update user preference if logged in
-            if (Auth::check()) {
-                $user = Auth::user();
-                // TODO: Add preferred_language field to users table
-                // $user->update(['preferred_language' => $locale]);
-            }
+    /**
+     * Toggle wishlist for an event
+     */
+    public function toggleWishlist($eventId)
+    {
+        $user = Auth::user();
+        $event = Event::find($eventId);
+        
+        if (!$event) {
+            $this->dispatch('showNotification', [
+                'type' => 'error',
+                'message' => 'Evento non trovato'
+            ]);
+            return;
         }
 
-        return redirect()->back();
+        if (method_exists($user, 'wishlistedEvents')) {
+            if ($user->wishlistedEvents()->where('event_id', $eventId)->exists()) {
+                $user->wishlistedEvents()->detach($eventId);
+                $message = 'Rimosso dalla lista desideri';
+                $inWishlist = false;
+            } else {
+                $user->wishlistedEvents()->attach($eventId);
+                $message = 'Aggiunto alla lista desideri';
+                $inWishlist = true;
+            }
+        } else {
+            $this->dispatch('showNotification', [
+                'type' => 'error',
+                'message' => 'Funzionalità wishlist non disponibile'
+            ]);
+            return;
+        }
+
+        $this->dispatch('showNotification', [
+            'type' => $inWishlist ? 'success' : 'info',
+            'message' => $message
+        ]);
+
+        $this->refreshData();
+    }
+
+    /**
+     * Process event invitation
+     */
+    public function processInvitation($invitationId, $action)
+    {
+        $invitation = EventInvitation::find($invitationId);
+        
+        if (!$invitation) {
+            $this->dispatch('showNotification', [
+                'type' => 'error',
+                'message' => 'Invito non trovato'
+            ]);
+            return;
+        }
+
+        if ($action === 'accept') {
+            $invitation->update(['status' => EventInvitation::STATUS_ACCEPTED]);
+            $message = 'Invito accettato';
+        } else {
+            $invitation->update(['status' => EventInvitation::STATUS_DECLINED]);
+            $message = 'Invito rifiutato';
+        }
+
+        $this->dispatch('showNotification', [
+            'type' => 'success',
+            'message' => $message
+        ]);
+
+        $this->dispatch('invitationProcessed');
+    }
+
+    /**
+     * Process group invitation
+     */
+    public function processGroupInvitation($invitationId, $action)
+    {
+        $invitation = \App\Models\GroupInvitation::find($invitationId);
+        
+        if (!$invitation) {
+            $this->dispatch('showNotification', [
+                'type' => 'error',
+                'message' => 'Invito gruppo non trovato'
+            ]);
+            return;
+        }
+
+        if ($action === 'accept') {
+            $invitation->update(['status' => 'accepted']);
+            $message = 'Invito gruppo accettato';
+        } else {
+            $invitation->update(['status' => 'declined']);
+            $message = 'Invito gruppo rifiutato';
+        }
+
+        $this->dispatch('showNotification', [
+            'type' => 'success',
+            'message' => $message
+        ]);
+
+        $this->dispatch('groupInvitationProcessed');
     }
 }

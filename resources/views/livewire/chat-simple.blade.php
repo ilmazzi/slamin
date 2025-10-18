@@ -26,9 +26,9 @@
                     <div class="me-3">
                         @if($conversation->isGroup())
                             @if($conversation->avatar)
-                                <img src="{{ asset('storage/' . $conversation->avatar) }}" alt="{{ $conversation->name }}" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $conversation->avatar) }}" alt="{{ $conversation->name }}" class="rounded-circle bg-light-success" style="width: 45px; height: 45px; object-fit: cover;">
                             @else
-                                <div class="rounded-circle d-flex align-items-center bg-success bg-opacity-10 justify-content-center" style="width: 45px; height: 45px;">
+                                <div class="rounded-circle d-flex align-items-center bg-light-success bg-opacity-10 justify-content-center" style="width: 45px; height: 45px;">
                                     <i class="ph ph-users text-success" style="font-size: 1.5rem;"></i>
                                 </div>
                             @endif
@@ -244,7 +244,7 @@
                                 @if($conversation->avatar)
                                     <img src="{{ asset('storage/' . $conversation->avatar) }}" alt="{{ $conversation->name }}" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
                                 @else
-                                    <div class="rounded-circle d-flex align-items-center bg-success bg-opacity-10 justify-content-center" style="width: 45px; height: 45px;">
+                                    <div class="rounded-circle d-flex align-items-center bg-light-success bg-opacity-10 justify-content-center" style="width: 45px; height: 45px;">
                                         <i class="ph ph-users text-success" style="font-size: 1.5rem;"></i>
                                     </div>
                                 @endif
