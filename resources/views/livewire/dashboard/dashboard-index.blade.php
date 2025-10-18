@@ -5,22 +5,32 @@
         <!-- 1. WELCOME CARD - Mobile First -->
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card hover-effect b-e-4-primary">
+                <div class="card project-profit-card">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <!-- Mobile: Stack vertically, Desktop: Side by side -->
+                            <!-- Contenuto principale -->
                             <div class="col-12 col-md-8">
-                                <h4 class="mb-1 f-w-600">{{ __('dashboard.welcome', ['name' => $user->getDisplayName()]) }}</h4>
-                                <p class="text-primary-50 mb-2 f-s-14">{{ $user->getName() }}</p>
-                                <div class="d-flex flex-wrap gap-1">
-                                    @foreach($user->getRoleNames() as $role)
-                                        <span class="badge bg-light-info text-dark f-s-12">
-                                            {{ __('auth.role_' . $role) ?: ucfirst($role) }}
-                                        </span>
-                                    @endforeach
+                                <div class="profit-arrow">
+                                    <span class="bg-white text-primary h-80 w-80 d-flex-center">
+                                        <i class="ph-bold ph-arrow-up-right f-s-18"></i>
+                                    </span>
+                                </div>
+                                <span class="bg-primary h-45 w-45 d-flex-center b-r-50">
+                                    <i class="ph-bold ph-user-circle f-s-24"></i>
+                                </span>
+                                <div class="mt-3">
+                                    <h4 class="text-dark mb-1 f-w-600">{{ __('dashboard.welcome', ['name' => $user->getDisplayName()]) }}</h4>
+                                    <p class="f-w-500 mb-2 f-s-14 text-primary-50">{{ $user->getName() }}</p>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach($user->getRoleNames() as $role)
+                                            <span class="badge bg-light-info text-dark f-s-12">
+                                                {{ __('auth.role_' . $role) ?: ucfirst($role) }}
+                                            </span>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Mobile: Center avatar, Desktop: Right align -->
+                            <!-- Avatar a destra -->
                             <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
                                 <div class="bg-white-500 h-50 w-50 d-flex-center rounded-circle mx-auto ms-md-auto">
                                     <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
@@ -34,7 +44,6 @@
                 </div>
             </div>
         </div>
-
         <!-- 2. CALENDARIO - Mobile First con visualizzazioni intelligenti -->
         <div class="row mb-4">
             <div class="col-12">
