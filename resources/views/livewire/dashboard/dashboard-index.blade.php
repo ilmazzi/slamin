@@ -14,7 +14,7 @@
                                 <p class="text-primary-50 mb-2 f-s-14">{{ $user->getName() }}</p>
                                 <div class="d-flex flex-wrap gap-1">
                                     @foreach($user->getRoleNames() as $role)
-                                        <span class="badge bg-light-success text-dark f-s-12">
+                                        <span class="badge bg-light-info text-dark f-s-12">
                                             {{ __('auth.role_' . $role) ?: ucfirst($role) }}
                                         </span>
                                     @endforeach
@@ -98,7 +98,7 @@
                                 <a href="{{ route('events.index', ['filter' => 'past']) }}" class="text-decoration-none">
                                     <div class="card hover-effect b-t-3-secondary">
                                         <div class="card-body text-center pa-10">
-                                            <div class="bg-light-secondary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                            <div class="bg-light-info h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
                                                 <i class="ph ph-clock-counter-clockwise f-s-14 text-secondary"></i>
                                             </div>
                                             <h6 class="text-secondary mb-0 f-w-600 f-s-16">{{ $stats['past_events'] }}</h6>
@@ -113,7 +113,7 @@
                                 <a href="{{ route('events.index', ['filter' => 'future']) }}" class="text-decoration-none">
                                     <div class="card hover-effect b-t-3-warning">
                                         <div class="card-body text-center pa-10">
-                                            <div class="bg-light-warning h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                            <div class="bg-light-success h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
                                                 <i class="ph ph-calendar-check f-s-14 text-warning"></i>
                                             </div>
                                             <h6 class="text-warning mb-0 f-w-600 f-s-16">{{ $stats['future_events'] }}</h6>
@@ -143,7 +143,7 @@
                                 <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="text-decoration-none">
                                     <div class="card hover-effect b-t-3-success">
                                         <div class="card-body text-center pa-10">
-                                            <div class="bg-light-success h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                            <div class="bg-light-secondary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
                                                 <i class="ph ph-envelope f-s-14 text-success"></i>
                                             </div>
                                             <h6 class="text-success mb-0 f-w-600 f-s-16">{{ $stats['pending_invitations'] }}</h6>
@@ -158,7 +158,7 @@
                                 <a href="{{ route('group-invitations.index') }}" class="text-decoration-none">
                                     <div class="card hover-effect b-t-3-primary">
                                         <div class="card-body text-center pa-10">
-                                            <div class="bg-light-primary h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                            <div class="bg-light-warning h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
                                                 <i class="ph ph-users f-s-14 text-primary"></i>
                                             </div>
                                             <h6 class="text-primary mb-0 f-w-600 f-s-16">{{ $stats['pending_group_invitations'] }}</h6>
@@ -173,7 +173,7 @@
                                 <a href="{{ route('notifications.index') }}" class="text-decoration-none">
                                     <div class="card hover-effect b-t-3-info">
                                         <div class="card-body text-center pa-10">
-                                            <div class="bg-light-info h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
+                                            <div class="bg-light-danger h-30 w-30 d-flex-center rounded-circle m-auto mb-1">
                                                 <i class="ph ph-bell f-s-14 text-info"></i>
                                             </div>
                                             <h6 class="text-info mb-0 f-w-600 f-s-16">{{ $stats['unread_notifications'] }}</h6>
