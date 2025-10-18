@@ -391,25 +391,37 @@
                     </div>
                     <div class="card-body pa-20">
                         @if(count($upcomingEvents) > 0)
-                            <div class="row g-3">
+                            <div class="d-grid gap-3">
                                 @foreach($upcomingEvents as $event)
-                                    <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="card hover-effect border-0 bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
-                                            <div class="card-body pa-15">
-                                                <div class="d-flex align-items-start justify-content-between mb-2">
-                                                    <h6 class="mb-1 f-s-14 f-w-600 text-dark">{{ $event['title'] }}</h6>
+                                    <div class="card hover-effect border-start border-4 border-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
+                                        <div class="card-body d-flex align-items-center pa-15">
+                                            <!-- Icona evento -->
+                                            <div class="bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} h-50 w-50 d-flex-center rounded-circle me-3">
+                                                <i class="ph ph-calendar f-s-20 text-white"></i>
+                                            </div>
+                                            
+                                            <!-- Contenuto evento -->
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex align-items-start justify-content-between mb-1">
+                                                    <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] }}</h6>
                                                     <span class="badge bg-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} f-s-10">
                                                         {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
                                                     </span>
                                                 </div>
-                                                <p class="mb-1 f-s-12 text-muted">
-                                                    <i class="ph ph-calendar me-1"></i>{{ $event['date'] }}
-                                                </p>
-                                                <p class="mb-2 f-s-12 text-muted">
-                                                    <i class="ph ph-map-pin me-1"></i>{{ $event['venue'] }}, {{ $event['city'] }}
-                                                </p>
-                                                <a href="{{ $event['url'] }}" class="btn btn-sm btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }}">
-                                                    <i class="ph ph-arrow-right me-1"></i>Vedi dettagli
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <i class="ph ph-calendar f-s-14 text-muted me-2"></i>
+                                                    <span class="f-s-13 text-muted">{{ $event['date'] }}</span>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="ph ph-map-pin f-s-14 text-muted me-2"></i>
+                                                    <span class="f-s-13 text-muted">{{ $event['venue'] }}, {{ $event['city'] }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Bottone azione -->
+                                            <div class="ms-3">
+                                                <a href="{{ $event['url'] }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'success' : 'warning') }} btn-sm">
+                                                    <i class="ph ph-arrow-right me-1"></i>Vedi
                                                 </a>
                                             </div>
                                         </div>
