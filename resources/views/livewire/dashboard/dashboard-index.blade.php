@@ -46,7 +46,7 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card hover-effect equal-card">
-                    <div class="card-header">
+                    <div class="card-header b-b-4-warning">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 f-w-600 text-dark">
                                 {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
@@ -435,7 +435,7 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card hover-effect equal-card">
-                    <div class="card-header">
+                    <div class="card-header ">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="card-title mb-0 f-w-600">
                                 <i class="ph ph-chart-line me-2 text-primary"></i>{{ __('dashboard.statistics') }}
@@ -451,7 +451,7 @@
                             <!-- Statistica 1 - Eventi Passati -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('events.index', ['filter' => 'past']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-secondary">
+                                    <div class="card hover-effect b-b-3-secondary">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-secondary rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-calendar-check f-s-16 text-secondary"></i>
@@ -466,7 +466,7 @@
                             <!-- Statistica 2 - Eventi Futuri -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('events.index', ['filter' => 'upcoming']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-primary">
+                                    <div class="card hover-effect b-b-3-primary">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-primary rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-calendar f-s-16 text-primary"></i>
@@ -481,7 +481,7 @@
                             <!-- Statistica 3 - Eventi Organizzati -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('events.index', ['filter' => 'organized']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-success">
+                                    <div class="card hover-effect b-b-3-success">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-success rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-users f-s-16 text-success"></i>
@@ -496,7 +496,7 @@
                             <!-- Statistica 4 - Inviti Pendenti -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('events.index', ['filter' => 'invitations']) }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-warning">
+                                    <div class="card hover-effect b-b-3-warning">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-warning rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-envelope f-s-16 text-warning"></i>
@@ -511,7 +511,7 @@
                             <!-- Statistica 5 - Poesie -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('poems.index') }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-info">
+                                    <div class="card hover-effect b-b-3-info">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-info rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-book-open f-s-16 text-info"></i>
@@ -526,7 +526,7 @@
                             <!-- Statistica 6 - Gruppi -->
                             <div class="col-4 col-lg-2">
                                 <a href="{{ route('groups.index') }}" class="text-decoration-none">
-                                    <div class="card hover-effect b-t-3-danger">
+                                    <div class="card hover-effect b-b-3-danger">
                                         <div class="card-body text-center pa-10">
                                             <div class="bg-light-danger rounded-circle d-flex-center mx-auto mb-2" style="width: 40px; height: 40px;">
                                                 <i class="ph ph-users-three f-s-16 text-danger"></i>
