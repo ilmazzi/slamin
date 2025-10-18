@@ -309,7 +309,7 @@
                                                         <div class="position-absolute w-100 h-100 top-0 start-0" style="overflow: hidden;">
                                                             @foreach($dayEvents as $index => $event)
                                                                 <div class="event-card position-absolute w-100 h-100 d-flex flex-column justify-content-between p-2 {{ $index === 0 ? 'active' : '' }}" 
-                                                                     style="background: {{ isset($event['image']) && $event['image'] ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(' . $event['image'] . ')' : 'linear-gradient(135deg, var(--bs-' . ($event['color'] ?? 'secondary') . '), var(--bs-' . ($event['color'] ?? 'secondary') . '-rgb))' }}; background-size: cover; background-position: center; color: white; transition: transform 0.3s ease;"
+                                                                     style="background: {{ isset($event['image']) && $event['image'] ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(' . $event['image'] . ')' : 'linear-gradient(135deg, var(--bs-light-' . ($event['color'] ?? 'secondary') . '), var(--bs-light-' . ($event['color'] ?? 'secondary') . '-rgb))' }}; background-size: cover; background-position: center; color: {{ isset($event['image']) && $event['image'] ? 'white' : 'var(--bs-' . ($event['color'] ?? 'secondary') . ')' }}; transition: transform 0.3s ease;"
                                                                      data-slide="{{ $index }}">
                                                                     
                                                                     <!-- Header con icona o immagine -->
@@ -328,14 +328,14 @@
                                                                     
                                                                     <!-- Contenuto principale -->
                                                                     <div class="text-center">
-                                                                        <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                                                                        <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%; {{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
                                                                             {{ Str::limit($event['title'] ?? 'Evento senza titolo', 15) }}
                                                                         </div>
-                                                                        <div class="f-s-9 f-md-11 text-white-50" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                                                                        <div class="f-s-9 f-md-11 {{ isset($event['image']) && $event['image'] ? 'text-white-50' : 'text-muted' }}" style="{{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
                                                                             {{ $event['time'] ?? 'Orario non disponibile' }}
                                                                         </div>
                                                                         @if(isset($event['venue']) && $event['venue'])
-                                                                            <div class="f-s-8 f-md-10 text-white-50 mt-1" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+                                                                            <div class="f-s-8 f-md-10 {{ isset($event['image']) && $event['image'] ? 'text-white-50' : 'text-muted' }} mt-1" style="{{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
                                                                                 <i class="ph ph-map-pin f-s-8"></i> {{ Str::limit($event['venue'], 12) }}
                                                                             </div>
                                                                         @endif
