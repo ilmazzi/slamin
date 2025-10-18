@@ -12,7 +12,12 @@
                             <div class="col-12 col-md-8">
                                 <div class="profit-arrow">
                                     <span class="bg-white text-primary h-80 w-80 d-flex-center">
-                                        <i class="ph-bold ph-arrow-up-right f-s-18"></i>
+                                        <div class="bg-white-500 h-50 w-50 d-flex-center rounded-circle mx-auto ms-md-auto">
+                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                                 alt="{{ $user->getDisplayName() }}"
+                                                 class="rounded-circle"
+                                                 style="width: 90px; height: 90px; object-fit: cover;">
+                                        </div>
                                     </span>
                                 </div>
                                 <span class="bg-primary h-45 w-45 d-flex-center b-r-50">
@@ -31,14 +36,7 @@
                                 </div>
                             </div>
                             <!-- Avatar a destra -->
-                            <div class="col-12 col-md-4 text-center text-md-end mt-3 mt-md-0">
-                                <div class="bg-white-500 h-50 w-50 d-flex-center rounded-circle mx-auto ms-md-auto">
-                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                         alt="{{ $user->getDisplayName() }}"
-                                         class="rounded-circle"
-                                         style="width: 90px; height: 90px; object-fit: cover;">
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
