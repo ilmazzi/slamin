@@ -55,4 +55,9 @@ return array (
   'error_message' => 'An error occurred. Try again.',
   'success' => 'Success',
   'ok' => 'OK',
+  'previous' => 'Previous',
+  'next' => 'Next',
+  'page' => 'Page',
+  'previous_month' => 'Previous month',
+  'next_month' => 'Next month',
 );

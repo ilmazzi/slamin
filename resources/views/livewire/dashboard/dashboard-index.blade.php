@@ -46,7 +46,7 @@
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card hover-effect equal-card">
-                    <div class="card-header b-b-4-warning">
+                    <div class="card-header ">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 f-w-600 text-dark">
                                 {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
@@ -293,6 +293,19 @@
                         
                         <!-- VISUALIZZAZIONE MENSILE - Desktop -->
                         <div id="calendar-desktop-view" class="d-none d-md-block">
+                            <!-- Controlli navigazione mese -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
+                                    <i class="ph ph-chevron-left"></i> {{ __('dashboard.previous_month') }}
+                                </button>
+                                <h5 class="mb-0 f-w-600 text-center">
+                                    {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
+                                </h5>
+                                <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
+                                    {{ __('dashboard.next_month') }} <i class="ph ph-chevron-right"></i>
+                                </button>
+                            </div>
+                            
                             <!-- Griglia del calendario desktop -->
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->

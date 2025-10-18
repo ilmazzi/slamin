@@ -52,5 +52,10 @@ return [
     'help_desc' => 'Consulta la guida',
     'faq' => 'FAQ',
     'faq_desc' => 'Domande frequenti',
+    'previous' => 'Precedente',
+    'next' => 'Successiva',
+    'page' => 'Pagina',
+    'previous_month' => 'Mese precedente',
+    'next_month' => 'Mese successivo',
 
 ];
