@@ -53,11 +53,100 @@
                         </div>
                     </div>
                     <div class="card-body pa-20">
-                        <!-- Placeholder per calendario Livewire -->
-                        <div class="text-center py-5">
-                            <i class="ph ph-calendar f-s-48 text-muted mb-3"></i>
-                            <h6 class="text-muted">Calendario in sviluppo</h6>
-                            <p class="text-muted small">Il calendario interattivo sarà disponibile presto</p>
+                        <!-- Calendario Livewire -->
+                        <div>
+                            <!-- Header del mese -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0 f-w-600 text-dark">
+                                    {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
+                                </h5>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
+                                        <i class="ph ph-caret-left"></i>
+                                    </button>
+                                    <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
+                                        <i class="ph ph-caret-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Griglia del calendario -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-0">
+                                    <!-- Header giorni della settimana -->
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Lun</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Mar</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Mer</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Gio</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Ven</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Sab</th>
+                                            <th class="text-center p-2 f-s-12 f-w-600">Dom</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $firstDay = now()->setMonth($currentMonth)->setYear($currentYear)->startOfMonth();
+                                            $lastDay = now()->setMonth($currentMonth)->setYear($currentYear)->endOfMonth();
+                                            $startDay = $firstDay->copy()->startOfWeek()->addDay(); // Lunedì
+                                            $endDay = $lastDay->copy()->endOfWeek()->addDay(); // Domenica
+                                            $currentDate = $startDay->copy();
+                                        @endphp
+
+                                        @while($currentDate->lte($endDay))
+                                            <tr>
+                                                @for($i = 0; $i < 7; $i++)
+                                                    @php
+                                                        $isCurrentMonth = $currentDate->month == $currentMonth;
+                                                        $isToday = $currentDate->isToday();
+                                                        $dayEvents = collect($calendarEvents)->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                            collect($wishlistEvents)->where('start', $currentDate->format('Y-m-d'))
+                                                        );
+                                                    @endphp
+                                                    
+                                                    <td class="p-2 position-relative {{ $isCurrentMonth ? '' : 'text-muted' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 80px; vertical-align: top;">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <span class="f-s-14 f-w-600">{{ $currentDate->day }}</span>
+                                                            @if($dayEvents->count() > 0)
+                                                                <div class="d-flex flex-column gap-1">
+                                                                    @foreach($dayEvents->take(2) as $event)
+                                                                        <div class="badge bg-{{ $event['color'] }} f-s-10 cursor-pointer" 
+                                                                             title="{{ $event['title'] }} - {{ $event['time'] }}"
+                                                                             wire:click="viewEvent({{ $event['id'] }})">
+                                                                            {{ $event['title'] }}
+                                                                        </div>
+                                                                    @endforeach
+                                                                    @if($dayEvents->count() > 2)
+                                                                        <small class="text-muted f-s-10">+{{ $dayEvents->count() - 2 }}</small>
+                                                                    @endif
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                    
+                                                    @php $currentDate->addDay(); @endphp
+                                                @endfor
+                                            </tr>
+                                        @endwhile
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Legenda eventi -->
+                            <div class="mt-3">
+                                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="badge bg-primary me-2 f-s-10">Eventi organizzati</div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="badge bg-success me-2 f-s-10">Eventi partecipazione</div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="badge bg-warning me-2 f-s-10">Lista desideri</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <!-- Bottoni azione -->
@@ -412,6 +501,150 @@
         @endif
 
     </div>
+
+    <!-- Calendar Styles -->
+    <style>
+        .calendar-container {
+            background: white;
+            border-radius: 8px;
+        }
+
+        .calendar-grid {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .calendar-day-header {
+            flex: 1;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: #6c757d;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .calendar-day-header:last-child {
+            border-right: none;
+        }
+
+        .calendar-week {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .calendar-week:last-child {
+            border-bottom: none;
+        }
+
+        .calendar-day {
+            flex: 1;
+            min-height: 80px;
+            padding: 8px;
+            border-right: 1px solid #e9ecef;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .calendar-day:last-child {
+            border-right: none;
+        }
+
+        .calendar-day:hover {
+            background-color: #f8f9fa;
+        }
+
+        .calendar-day.other-month {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+        }
+
+        .calendar-day.today {
+            background-color: #fff3cd;
+        }
+
+        .calendar-day.today .day-number {
+            background-color: #ffc107;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .day-number {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .day-events {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 4px;
+        }
+
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .event-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .more-events {
+            font-size: 10px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .calendar-legend {
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .calendar-day {
+                min-height: 60px;
+                padding: 4px;
+            }
+
+            .calendar-day-header {
+                padding: 8px 4px;
+                font-size: 11px;
+            }
+
+            .day-number {
+                font-size: 12px;
+            }
+
+            .event-dot {
+                width: 6px;
+                height: 6px;
+            }
+        }
+    </style>
 
     <!-- Livewire Scripts -->
     <script>

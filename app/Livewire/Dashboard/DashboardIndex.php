@@ -413,10 +413,101 @@ class DashboardIndex extends Component
      */
     public function loadCalendarData()
     {
-        // This will be implemented to load calendar events
-        // For now, we'll keep it simple
-        $this->calendarEvents = [];
-        $this->wishlistEvents = [];
+        $user = Auth::user();
+        $startDate = now()->setMonth($this->currentMonth)->setYear($this->currentYear)->startOfMonth();
+        $endDate = now()->setMonth($this->currentMonth)->setYear($this->currentYear)->endOfMonth();
+
+        // Get user's events for the current month
+        $this->calendarEvents = $this->getUserEventsForMonth($user, $startDate, $endDate);
+        
+        // Get wishlist events if method exists
+        if (method_exists($user, 'wishlistedEvents')) {
+            $this->wishlistEvents = $this->getWishlistEventsForMonth($user, $startDate, $endDate);
+        } else {
+            $this->wishlistEvents = [];
+        }
+    }
+
+    /**
+     * Get user events for specific month
+     */
+    private function getUserEventsForMonth($user, $startDate, $endDate)
+    {
+        $events = [];
+
+        // Events organized by user
+        $organizedEvents = $user->organizedEvents()
+                               ->whereBetween('start_datetime', [$startDate, $endDate])
+                               ->published()
+                               ->get();
+
+        foreach ($organizedEvents as $event) {
+            $events[] = [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->start_datetime->format('Y-m-d'),
+                'time' => $event->start_datetime->format('H:i'),
+                'url' => route('events.show', $event),
+                'type' => 'organized',
+                'className' => 'event-organized',
+                'color' => 'primary',
+                'venue' => $event->venue_name,
+                'city' => $event->city,
+            ];
+        }
+
+        // Events where user is participating
+        $participatingEvents = $user->participatingEvents()
+                                   ->whereBetween('start_datetime', [$startDate, $endDate])
+                                   ->published()
+                                   ->get();
+
+        foreach ($participatingEvents as $event) {
+            $events[] = [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->start_datetime->format('Y-m-d'),
+                'time' => $event->start_datetime->format('H:i'),
+                'url' => route('events.show', $event),
+                'type' => 'participating',
+                'className' => 'event-participating',
+                'color' => 'success',
+                'venue' => $event->venue_name,
+                'city' => $event->city,
+            ];
+        }
+
+        return $events;
+    }
+
+    /**
+     * Get wishlist events for specific month
+     */
+    private function getWishlistEventsForMonth($user, $startDate, $endDate)
+    {
+        $events = [];
+
+        $wishlistEvents = $user->wishlistedEvents()
+                              ->whereBetween('start_datetime', [$startDate, $endDate])
+                              ->published()
+                              ->get();
+
+        foreach ($wishlistEvents as $event) {
+            $events[] = [
+                'id' => $event->id,
+                'title' => $event->title,
+                'start' => $event->start_datetime->format('Y-m-d'),
+                'time' => $event->start_datetime->format('H:i'),
+                'url' => route('events.show', $event),
+                'type' => 'wishlisted',
+                'className' => 'event-wishlisted',
+                'color' => 'warning',
+                'venue' => $event->venue_name,
+                'city' => $event->city,
+            ];
+        }
+
+        return $events;
     }
 
     /**
@@ -556,5 +647,24 @@ class DashboardIndex extends Component
         ]);
 
         $this->dispatch('groupInvitationProcessed');
+    }
+
+    /**
+     * View event details
+     */
+    public function viewEvent($eventId)
+    {
+        $event = Event::find($eventId);
+        
+        if (!$event) {
+            $this->dispatch('showNotification', [
+                'type' => 'error',
+                'message' => 'Evento non trovato'
+            ]);
+            return;
+        }
+
+        // Redirect to event details
+        return redirect()->route('events.show', $event);
     }
 }
