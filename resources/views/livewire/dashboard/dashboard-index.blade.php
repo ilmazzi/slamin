@@ -74,14 +74,14 @@
                         <div id="calendar-list-view" class="d-md-none {{ $currentView !== 'list' ? 'd-none' : '' }}">
                             <!-- Controlli navigazione lista -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button class="btn btn-outline-primary btn-sm" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
-                                    <i class="ph ph-chevron-left"></i> Precedente
+                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
+                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">Precedente</span><span class="d-md-none">Prec</span>
                                 </button>
-                                <span class="f-s-14 f-w-600 text-center">
+                                <span class="f-s-12 f-md-14 f-w-600 text-center">
                                     Pagina {{ $listPage }}
                                 </span>
-                                <button class="btn btn-outline-primary btn-sm" wire:click="nextListPage">
-                                    Successiva <i class="ph ph-chevron-right"></i>
+                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="nextListPage">
+                                    <span class="d-none d-md-inline">Successiva</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
                                 </button>
                             </div>
                             
@@ -163,14 +163,14 @@
                         <div id="calendar-week-view" class="d-md-none {{ $currentView !== 'week' ? 'd-none' : '' }}">
                             <!-- Controlli navigazione settimana -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button class="btn btn-outline-primary btn-sm" wire:click="previousWeek">
-                                    <i class="ph ph-chevron-left"></i> Settimana precedente
+                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="previousWeek">
+                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">Settimana precedente</span><span class="d-md-none">Prec</span>
                                 </button>
-                                <span class="f-s-14 f-w-600 text-center">
+                                <span class="f-s-12 f-md-14 f-w-600 text-center">
                                     Settimana {{ $weekPage === 0 ? 'corrente' : ($weekPage > 0 ? '+' . $weekPage : $weekPage) }}
                                 </span>
-                                <button class="btn btn-outline-primary btn-sm" wire:click="nextWeek">
-                                    Settimana successiva <i class="ph ph-chevron-right"></i>
+                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="nextWeek">
+                                    <span class="d-none d-md-inline">Settimana successiva</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
                                 </button>
                             </div>
                             
@@ -440,9 +440,9 @@
                             <h6 class="card-title mb-0 f-w-600">
                                 <i class="ph ph-chart-line me-2 text-primary"></i>{{ __('dashboard.statistics') }}
                             </h6>
-                            <button href="{{ route('user-stats.index') }}" class="btn btn-light-primary btn-sm">
-                                <i class="ph ph-chart-line me-1"></i>{{ __('dashboard.view_detailed_stats') }}
-                            </button>
+                            <a href="{{ route('user-stats.index') }}" class="btn btn-light-primary btn-sm f-s-10 f-md-12">
+                                <i class="ph ph-chart-line me-1 f-s-10 f-md-12"></i><span class="d-none d-md-inline">{{ __('dashboard.view_detailed_stats') }}</span><span class="d-md-none">Dettagli</span>
+                            </a>
                         </div>
                     </div>
                     <div class="card-body pa-15">
