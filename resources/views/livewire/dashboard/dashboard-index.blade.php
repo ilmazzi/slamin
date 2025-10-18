@@ -74,14 +74,14 @@
                         <div id="calendar-list-view" class="d-md-none {{ $currentView !== 'list' ? 'd-none' : '' }}">
                             <!-- Controlli navigazione lista -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
-                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">Precedente</span><span class="d-md-none">Prec</span>
+                                <button class="btn btn-light-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
+                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">{{ __('dashboard.previous') }}</span><span class="d-md-none">Prec</span>
                                 </button>
                                 <span class="f-s-12 f-md-14 f-w-600 text-center">
-                                    Pagina {{ $listPage }}
+                                    {{ __('dashboard.page') }} {{ $listPage }}
                                 </span>
                                 <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="nextListPage">
-                                    <span class="d-none d-md-inline">Successiva</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
+                                    <span class="d-none d-md-inline">{{ __('dashboard.next') }}</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
                                 </button>
                             </div>
                             
