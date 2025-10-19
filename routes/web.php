@@ -137,7 +137,7 @@ Route::prefix('admin/settings')->name('admin.settings.')->middleware(['auth'])->
 });
 
 // Public Routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', App\Livewire\Home\HomeIndex::class)->name('home');
 
 // Public Help and FAQ Routes
 Route::get('/help', [App\Http\Controllers\HelpController::class, 'help'])->name('help.index');
@@ -1192,16 +1192,16 @@ Route::prefix('poems')->name('poems.')->group(function () {
         Route::get('/my/liked', [App\Http\Controllers\PoemActionController::class, 'liked'])->name('liked');
 
         // Commenti
-        Route::get('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
-        Route::post('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
-        Route::put('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'update'])->name('comments.update');
-        Route::delete('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'destroy'])->name('comments.destroy');
-        Route::post('/comments/{comment}/like', [App\Http\Controllers\PoemCommentController::class, 'toggleLike'])->name('comments.like');
+        // Route::get('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'index'])->name('comments.index');
+        // Route::post('/{poem:slug}/comments', [App\Http\Controllers\PoemCommentController::class, 'store'])->name('comments.store');
+        // Route::put('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'update'])->name('comments.update');
+        // Route::delete('/comments/{comment}', [App\Http\Controllers\PoemCommentController::class, 'destroy'])->name('comments.destroy');
+        // Route::post('/comments/{comment}/like', [App\Http\Controllers\PoemCommentController::class, 'toggleLike'])->name('comments.like');
 
         // Moderazione commenti (solo admin)
-        Route::middleware('can:moderate,App\Models\PoemComment')->group(function () {
-            Route::post('/comments/{comment}/moderate', [App\Http\Controllers\PoemCommentController::class, 'moderate'])->name('comments.moderate');
-        });
+        // Route::middleware('can:moderate,App\Models\PoemComment')->group(function () {
+        //     Route::post('/comments/{comment}/moderate', [App\Http\Controllers\PoemCommentController::class, 'moderate'])->name('comments.moderate');
+        // });
     });
 });
 
@@ -1506,34 +1506,34 @@ Route::prefix('articles')->name('articles.')->group(function () {
 
         // Like degli articoli
         Route::prefix('{article}/likes')->name('likes.')->group(function () {
-            Route::post('/toggle', [App\Http\Controllers\ArticleLikeController::class, 'toggle'])->name('toggle');
-            Route::post('/', [App\Http\Controllers\ArticleLikeController::class, 'like'])->name('like');
-            Route::delete('/', [App\Http\Controllers\ArticleLikeController::class, 'unlike'])->name('unlike');
-            Route::get('/likers', [App\Http\Controllers\ArticleLikeController::class, 'getLikers'])->name('likers');
-            Route::get('/status', [App\Http\Controllers\ArticleLikeController::class, 'getStatus'])->name('status');
+            // Route::post('/toggle', [App\Http\Controllers\ArticleLikeController::class, 'toggle'])->name('toggle');
+            // Route::post('/', [App\Http\Controllers\ArticleLikeController::class, 'like'])->name('like');
+            // Route::delete('/', [App\Http\Controllers\ArticleLikeController::class, 'unlike'])->name('unlike');
+            // Route::get('/likers', [App\Http\Controllers\ArticleLikeController::class, 'getLikers'])->name('likers');
+            // Route::get('/status', [App\Http\Controllers\ArticleLikeController::class, 'getStatus'])->name('status');
         });
 
         // Commenti degli articoli
         Route::prefix('{article}/comments')->name('comments.')->group(function () {
-            Route::get('/index', [App\Http\Controllers\ArticleCommentController::class, 'index'])->name('index');
-            Route::post('/', [App\Http\Controllers\ArticleCommentController::class, 'store'])->name('store');
-            Route::put('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'update'])->name('update');
-            Route::delete('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'destroy'])->name('destroy');
-            Route::get('/{comment}/replies', [App\Http\Controllers\ArticleCommentController::class, 'getReplies'])->name('replies');
+            // Route::get('/index', [App\Http\Controllers\ArticleCommentController::class, 'index'])->name('index');
+            // Route::post('/', [App\Http\Controllers\ArticleCommentController::class, 'store'])->name('store');
+            // Route::put('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'update'])->name('update');
+            // Route::delete('/{comment}', [App\Http\Controllers\ArticleCommentController::class, 'destroy'])->name('destroy');
+            // Route::get('/{comment}/replies', [App\Http\Controllers\ArticleCommentController::class, 'getReplies'])->name('replies');
 
             // Like dei commenti
-            Route::post('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'like'])->name('like');
-            Route::delete('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'unlike'])->name('unlike');
+            // Route::post('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'like'])->name('like');
+            // Route::delete('/{comment}/like', [App\Http\Controllers\ArticleCommentController::class, 'unlike'])->name('unlike');
 
             // Moderazione commenti (admin/editor)
-            Route::post('/{comment}/approve', [App\Http\Controllers\ArticleCommentController::class, 'approve'])->name('approve');
-            Route::post('/{comment}/reject', [App\Http\Controllers\ArticleCommentController::class, 'reject'])->name('reject');
+            // Route::post('/{comment}/approve', [App\Http\Controllers\ArticleCommentController::class, 'approve'])->name('approve');
+            // Route::post('/{comment}/reject', [App\Http\Controllers\ArticleCommentController::class, 'reject'])->name('reject');
         });
 
         // Segnalazioni articoli
         Route::prefix('{article}/reports')->name('reports.')->group(function () {
             Route::post('/', [App\Http\Controllers\ArticleReportController::class, 'store'])->name('store');
-            Route::get('/check', [App\Http\Controllers\ArticleCommentController::class, 'checkReport'])->name('check');
+            // Route::get('/check', [App\Http\Controllers\ArticleCommentController::class, 'checkReport'])->name('check');
         });
     });
 
