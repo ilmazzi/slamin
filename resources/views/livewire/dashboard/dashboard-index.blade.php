@@ -232,6 +232,19 @@
                         
                         <!-- VISUALIZZAZIONE MENSILE - Mobile (Compatto) -->
                         <div id="calendar-month-view" class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
+                            <!-- Header Calendario -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0 f-w-600">CALENDARIO EVENTI</h6>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
+                                        <i class="ph ph-chevron-left"></i>
+                                    </button>
+                                    <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
+                                        <i class="ph ph-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">
@@ -271,13 +284,9 @@
                                                     <div class="d-flex justify-content-between align-items-center h-100">
                                                         <span class="f-s-10 f-w-600">{{ $currentDate->day }}</span>
                                                         @if($dayEvents->count() > 0)
-                                                            <div class="d-flex gap-1">
-                                                                @foreach($dayEvents->take(3) as $event)
-                                                                    <div class="rounded-circle bg-{{ $event['color'] ?? 'secondary' }}" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"></div>
-                                                                @endforeach
-                                                                @if($dayEvents->count() > 3)
-                                                                    <div class="rounded-circle bg-secondary" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"></div>
-                                                                @endif
+                                                            <div class="d-flex align-items-center gap-1">
+                                                                <div class="rounded-circle bg-primary" style="width: 8px; height: 8px; min-width: 8px; min-height: 8px;"></div>
+                                                                <span class="f-s-8 f-w-600 text-muted">{{ $dayEvents->count() }}</span>
                                                             </div>
                                                         @endif
                                                     </div>
