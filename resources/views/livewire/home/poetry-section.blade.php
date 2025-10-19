@@ -25,11 +25,11 @@
                             <div class="card-body p-0">
                                 <!-- Immagine della poesia o placeholder -->
                                 <div class="position-relative">
-                                    <a href="{{ route('poems.show', $poem->id) }}" class="text-decoration-none">
+                                        <a href="{{ route('poems.show', $poem->slug) }}" class="text-decoration-none">
                                         @if ($poem->thumbnail_url)
                                             <img src="{{ $poem->thumbnail_url }}" class="w-100" alt="{{ $poem->title }}" style="height: 120px; object-fit: cover; border-radius: 8px 8px 0 0;">
                                         @else
-                                            {!! \App\Helpers\PlaceholderHelper::getPoemPlaceholderHtml(0, 120, 'w-100', route('poems.show', $poem->id)) !!}
+                                            {!! \App\Helpers\PlaceholderHelper::getPoemPlaceholderHtml(0, 120, 'w-100', route('poems.show', $poem->slug)) !!}
                                         @endif
                                     </a>
                                 </div>
@@ -58,7 +58,7 @@
                                                     <i class="ph-duotone ph-clock f-s-12 me-1"></i>
                                                     {{ $poem->created_at->diffForHumans() }}
                                                 </small>
-                                                <a href="{{ route('poems.show', $poem->id) }}" class="btn btn-sm btn-light-primary">
+                                                <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-sm btn-light-primary">
                                                     <i class="ph-duotone ph-eye f-s-12 me-1"></i>
                                                     Leggi
                                                 </a>

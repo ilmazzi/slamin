@@ -45,7 +45,7 @@
                                                 <i class="ph-duotone ph-clock f-s-12 me-1"></i>
                                                 {{ $article->created_at->diffForHumans() }}
                                             </small>
-                                            <a href="{{ route('articles.show', $article->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-sm btn-outline-primary">
                                                 <i class="ph-duotone ph-eye f-s-12 me-1"></i>
                                                 Leggi
                                             </a>
