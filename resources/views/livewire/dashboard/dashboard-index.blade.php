@@ -53,10 +53,10 @@
                                 <h6 class="mb-0 f-w-600 text-primary">CALENDARIO EVENTI</h6>
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
-                                        <i class="ph ph-chevron-left"></i>
+                                        <span class="f-s-12 f-w-600">‹</span>
                                     </button>
                                     <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
-                                        <i class="ph ph-chevron-right"></i>
+                                        <span class="f-s-12 f-w-600">›</span>
                                     </button>
                                 </div>
                             </div>
