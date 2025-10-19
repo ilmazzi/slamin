@@ -265,13 +265,6 @@
                                                     $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
-                                                    
-                                                    // Debug per i primi giorni di ottobre
-                                                    if ($isCurrentMonth && $currentDate->day <= 3) {
-                                                        $debugDate = $currentDate->format('Y-m-d');
-                                                        $debugEvents = $calendarEvents->where('start', $debugDate);
-                                                        // Log per debug
-                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 40px; min-height: 40px;">
@@ -286,6 +279,11 @@
                                                                     <div class="w-2 h-2 rounded-circle bg-secondary"></div>
                                                                 @endif
                                                             </div>
+                                                        @else
+                                                            <!-- Debug: mostra sempre un punto per i primi 7 giorni di ottobre -->
+                                                            @if($isCurrentMonth && $currentDate->day <= 7)
+                                                                <div class="w-2 h-2 rounded-circle bg-danger" title="Debug: {{ $currentDate->format('Y-m-d') }} - Events: {{ $dayEvents->count() }}"></div>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </div>
@@ -347,13 +345,6 @@
                                                     $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
-                                                    
-                                                    // Debug per i primi giorni di ottobre
-                                                    if ($isCurrentMonth && $currentDate->day <= 3) {
-                                                        $debugDate = $currentDate->format('Y-m-d');
-                                                        $debugEvents = $calendarEvents->where('start', $debugDate);
-                                                        // Log per debug
-                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 120px; min-height: 120px; position: relative; overflow: hidden;">
