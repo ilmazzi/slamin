@@ -445,6 +445,23 @@ class DashboardIndex extends Component
         } else {
             $this->wishlistEvents = collect([]);
         }
+        
+        // Debug: aggiungi un evento di test per il primo giorno del mese corrente
+        if ($this->calendarEvents->isEmpty()) {
+            $this->calendarEvents->push([
+                'id' => 'test',
+                'title' => 'Evento di Test',
+                'start' => now()->setMonth($this->currentMonth)->setYear($this->currentYear)->startOfMonth()->format('Y-m-d'),
+                'time' => '10:00',
+                'url' => '#',
+                'type' => 'test',
+                'className' => 'event-test',
+                'color' => 'primary',
+                'venue' => 'Test Venue',
+                'city' => 'Test City',
+                'image' => null,
+            ]);
+        }
     }
 
     /**

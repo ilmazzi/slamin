@@ -265,6 +265,12 @@
                                                     $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
+                                                    
+                                                    // Debug temporaneo per il primo giorno del mese
+                                                    if ($currentDate->day == 1 && $isCurrentMonth) {
+                                                        $debugEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'));
+                                                        // Log per debug
+                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 40px; min-height: 40px;">
@@ -340,6 +346,12 @@
                                                     $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
+                                                    
+                                                    // Debug temporaneo per il primo giorno del mese
+                                                    if ($currentDate->day == 1 && $isCurrentMonth) {
+                                                        $debugEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'));
+                                                        // Log per debug
+                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 120px; min-height: 120px; position: relative; overflow: hidden;">
