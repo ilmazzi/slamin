@@ -58,7 +58,7 @@
                                                     <i class="ph-duotone ph-clock f-s-12 me-1"></i>
                                                     {{ $poem->created_at->diffForHumans() }}
                                                 </small>
-                                                <a href="{{ route('poems.show', $poem->id) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('poems.show', $poem->id) }}" class="btn btn-sm btn-light-primary">
                                                     <i class="ph-duotone ph-eye f-s-12 me-1"></i>
                                                     Leggi
                                                 </a>
