@@ -137,7 +137,7 @@ Route::prefix('admin/settings')->name('admin.settings.')->middleware(['auth'])->
 });
 
 // Public Routes
-Route::get('/', App\Livewire\Home\HomeIndex::class)->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Public Help and FAQ Routes
 Route::get('/help', [App\Http\Controllers\HelpController::class, 'help'])->name('help.index');
