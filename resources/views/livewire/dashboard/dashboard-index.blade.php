@@ -829,10 +829,7 @@
             </div>
         @endif
 
-    </div>
-</div>
-
-<!-- Modal per eventi del giorno - Solo mobile -->
+        <!-- Modal per eventi del giorno - Solo mobile -->
 <div class="modal fade" id="dayEventsModal" tabindex="-1" aria-labelledby="dayEventsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -885,6 +882,9 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
             </div>
         </div>
+    </div>
+</div>
+
     </div>
 </div>
 
