@@ -68,6 +68,12 @@
                                                                 Guarda
                                                             </a>
                                                         </div>
+                                                        <!-- Social Actions -->
+                                                        <div class="d-flex justify-content-end mt-2">
+                                                            <livewire:social.social-view-counter :model="$video" :size="'sm'" />
+                                                            <livewire:social.social-like-button :model="$video" :size="'sm'" />
+                                                            <livewire:social.social-comment-button :model="$video" :size="'sm'" />
+                                                        </div>
                                                         <!-- Avatar utente cliccabile -->
                                                         <div class="d-flex align-items-center mt-3 pt-2 border-top">
                                                             <a href="{{ route('profile.show', $video->user->id) }}" class="text-decoration-none d-flex align-items-center">
