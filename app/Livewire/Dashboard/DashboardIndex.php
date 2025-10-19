@@ -763,5 +763,8 @@ class DashboardIndex extends Component
         );
         
         $this->selectedDayEvents = $dayEvents;
+        
+        // Force Livewire to update the modal content
+        $this->dispatch('modal-updated');
     }
 }

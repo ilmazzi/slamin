@@ -287,6 +287,7 @@
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#dayEventsModal" 
                                                         wire:click="selectDay('{{ $currentDate->format('Y-m-d') }}')"
+                                                        onclick="openDayModal()"
                                                      @endif>
                                                     <div class="d-flex justify-content-between align-items-center h-100">
                                                         <span class="f-s-10 f-w-600">{{ $currentDate->day }}</span>
@@ -905,6 +906,33 @@
             }
         });
     });
+
+    // Gestione aggiornamento modal eventi giorno
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('modal-updated', () => {
+            // Forza l'aggiornamento del modal se è già aperto
+            const modal = document.getElementById('dayEventsModal');
+            if (modal && modal.classList.contains('show')) {
+                // Il modal è già aperto, forziamo l'aggiornamento del contenuto
+                const modalBody = modal.querySelector('.modal-body');
+                if (modalBody) {
+                    modalBody.style.opacity = '0.5';
+                    setTimeout(() => {
+                        modalBody.style.opacity = '1';
+                    }, 100);
+                }
+            }
+        });
+    });
+
+    // Funzione per aprire il modal eventi giorno
+    function openDayModal() {
+        // Aspetta che Livewire aggiorni i dati
+        setTimeout(() => {
+            const modal = new bootstrap.Modal(document.getElementById('dayEventsModal'));
+            modal.show();
+        }, 100);
+    }
 
     // Funzione per cambiare visualizzazione calendario
     function switchCalendarView(view) {
