@@ -38,13 +38,7 @@
                                 <div class="p-3">
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            @if ($article->user->avatar_url)
-                                                <img src="{{ $article->user->avatar_url }}" class="rounded-circle" alt="{{ $article->user->name }}" style="width: 40px; height: 40px; object-fit: cover;">
-                                            @else
-                                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                    <i class="ph-duotone ph-user f-s-16 text-muted"></i>
-                                                </div>
-                                            @endif
+                                        <img src="{{ $article->user->profile_photo_url }}" class="rounded-circle" alt="{{ $article->user->name }}" style="width: 40px; height: 40px; object-fit: cover;">
                                         </div>
                                         <div class="flex-grow-1">
                                             <h6 class="card-title f-s-14 f-w-600 mb-1">{{ Str::limit($article->title, 60) }}</h6>
