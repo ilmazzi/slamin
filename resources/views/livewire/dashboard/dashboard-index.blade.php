@@ -905,11 +905,15 @@
     });
 
     // Gestione modal eventi giorno
+    let dayEventsModal = null;
+    
     document.addEventListener('livewire:init', () => {
+        // Inizializza il modal una sola volta
+        dayEventsModal = new bootstrap.Modal(document.getElementById('dayEventsModal'));
+        
         Livewire.on('open-modal', () => {
             // Apri il modal programmaticamente
-            const modal = new bootstrap.Modal(document.getElementById('dayEventsModal'));
-            modal.show();
+            dayEventsModal.show();
         });
     });
 
