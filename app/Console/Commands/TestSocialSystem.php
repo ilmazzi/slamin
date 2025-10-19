@@ -174,7 +174,7 @@ class TestSocialSystem extends Command
         $poem = Poem::first();
         if ($poem) {
             $oldCount = $poem->comment_count;
-            $comment = $poem->addComment("Test commento poesia da {$user->name}", $user);
+            $comment = $poem->addComment($user, "Test commento poesia da {$user->name}");
             $newCount = $poem->fresh()->comment_count;
             
             if ($comment) {
@@ -203,9 +203,9 @@ class TestSocialSystem extends Command
                 ['Foto', Photo::count()],
                 ['Eventi', Event::count()],
                 ['Articoli', Carousel::count()],
-                ['Like Totali', \App\Models\Like::count()],
-                ['Views Totali', \App\Models\View::count()],
-                ['Commenti Totali', \App\Models\Comment::count()],
+                ['Like Totali', \App\Models\UnifiedLike::count()],
+                ['Views Totali', \App\Models\UnifiedView::count()],
+                ['Commenti Totali', \App\Models\UnifiedComment::count()],
                 ['Like Utente', $user->likes()->count()],
                 ['Views Utente', $user->views()->count()],
                 ['Commenti Utente', $user->comments()->count()],

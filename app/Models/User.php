@@ -783,7 +783,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function likes()
     {
-        return $this->hasMany(\App\Models\Like::class);
+        return $this->hasMany(\App\Models\UnifiedLike::class);
     }
 
     /**
@@ -791,7 +791,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function views()
     {
-        return $this->hasMany(\App\Models\View::class);
+        return $this->hasMany(\App\Models\UnifiedView::class);
     }
 
     /**
@@ -799,7 +799,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function comments()
     {
-        return $this->hasMany(\App\Models\Comment::class);
+        return $this->hasMany(\App\Models\UnifiedComment::class);
     }
 
     /**

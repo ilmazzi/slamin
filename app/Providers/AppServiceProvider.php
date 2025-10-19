@@ -14,8 +14,8 @@ use App\Models\EventInvitation;
 use App\Models\EventRequest;
 use App\Models\GroupInvitation;
 use App\Models\Follow;
-use App\Models\Like;
-use App\Models\Comment;
+use App\Models\UnifiedLike;
+use App\Models\UnifiedComment;
 use App\Models\ForumPost;
 use App\Observers\VideoObserver;
 use App\Observers\GroupObserver;
@@ -112,11 +112,11 @@ class AppServiceProvider extends ServiceProvider
         // Registra l'observer per i follow
         Follow::observe(FollowObserver::class);
 
-        // Registra l'observer per i like (gamification)
-        Like::observe(LikeObserver::class);
+        // Registra l'observer per i like unificati (gamification)
+        UnifiedLike::observe(LikeObserver::class);
 
-        // Registra l'observer per i commenti (gamification)
-        Comment::observe(CommentObserver::class);
+        // Registra l'observer per i commenti unificati (gamification)
+        UnifiedComment::observe(CommentObserver::class);
 
         // Registra l'observer per i post del forum (gamification)
         ForumPost::observe(ForumPostObserver::class);

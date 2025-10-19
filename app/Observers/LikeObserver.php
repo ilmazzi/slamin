@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Like;
+use App\Models\UnifiedLike;
 use App\Services\BadgeService;
 
 class LikeObserver
@@ -17,7 +17,7 @@ class LikeObserver
     /**
      * Handle the Like "created" event.
      */
-    public function created(Like $like): void
+    public function created(UnifiedLike $like): void
     {
         if ($like->user) {
             // Check and award badges for likes

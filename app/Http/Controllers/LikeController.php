@@ -175,7 +175,7 @@ class LikeController extends Controller
             'poem' => \App\Models\Poem::class,
             'article' => \App\Models\Article::class,
             'event' => \App\Models\Event::class,
-            'comment' => \App\Models\Comment::class,
+            'comment' => \App\Models\UnifiedComment::class,
         ];
 
         return $models[$type] ?? null;
@@ -192,7 +192,7 @@ class LikeController extends Controller
             \App\Models\Poem::class => 'poem',
             \App\Models\Article::class => 'article',
             \App\Models\Event::class => 'event',
-            \App\Models\Comment::class => 'comment',
+            \App\Models\UnifiedComment::class => 'comment',
         ];
 
         return $types[$class] ?? 'unknown';
@@ -209,7 +209,7 @@ class LikeController extends Controller
             \App\Models\Poem::class => 'poesia',
             \App\Models\Article::class => 'articolo',
             \App\Models\Event::class => 'evento',
-            \App\Models\Comment::class => 'commento',
+            \App\Models\UnifiedComment::class => 'commento',
         ];
 
         return $types[get_class($content)] ?? 'contenuto';

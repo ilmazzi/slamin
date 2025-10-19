@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Comment;
+use App\Models\UnifiedComment;
 use App\Services\BadgeService;
 
 class CommentObserver
@@ -17,7 +17,7 @@ class CommentObserver
     /**
      * Handle the Comment "created" event.
      */
-    public function created(Comment $comment): void
+    public function created(UnifiedComment $comment): void
     {
         if ($comment->user) {
             // Check and award badges for comments
