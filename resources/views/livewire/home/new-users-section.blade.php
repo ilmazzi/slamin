@@ -10,7 +10,7 @@
             </h5>
             <div class="row">
                 @foreach ($newUsers as $user)
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-body p-0">
                                 <!-- Banner Image -->
