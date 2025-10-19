@@ -115,10 +115,10 @@ use App\Helpers\PlaceholderHelper;
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
                         <div class="d-flex flex-wrap gap-2">
                             <!-- Like Button (Sistema Unificato) -->
-                            <x-social-like-button :content="$article" type="article" />
+                            <livewire:social.social-like-button :content="$article" type="article" />
 
                             <!-- View Counter (Sistema Unificato) -->
-                            <x-social-view-counter :content="$article" type="article" />
+                            <livewire:social.social-view-counter :content="$article" type="article" />
 
 
 

@@ -41,13 +41,13 @@
      style="cursor: pointer; display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; {{ $buttonStyle }}"
      onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
      onmouseout="this.style.backgroundColor='transparent'">
-    <img src="{{ asset('assets/images/like.png') }}" alt="{{ __('common.like') }}" style="{{ $iconStyle }} {{ $isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
+    <img src="{{ asset('assets/images/like.svg') }}" alt="{{ __('common.like') }}" style="{{ $iconStyle }} {{ $isLiked ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
     <span class="text-secondary like-count {{ $textClass }}">{{ number_format($likeCount) }}</span>
 </div>
 @else
 <div class="social-like-counter"
      style="display: flex; flex-direction: column; align-items: center; border-radius: 8px; {{ $buttonStyle }}">
-    <img src="{{ asset('assets/images/like.png') }}" alt="{{ __('common.like') }}" style="{{ $iconStyle }} filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
+    <img src="{{ asset('assets/images/like.svg') }}" alt="{{ __('common.like') }}" style="{{ $iconStyle }} filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%); opacity: 0.6;">
     <span class="text-secondary like-count {{ $textClass }}">{{ number_format($likeCount) }}</span>
 </div>
 @endif

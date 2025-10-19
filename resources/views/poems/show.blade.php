@@ -244,7 +244,7 @@
                     <!-- {{ __('invitations.actions') }} social -->
                     @auth
                     <div class="d-flex justify-content-center gap-2 mb-4">
-                        <x-social-like-button :content="$poem" />
+                        <livewire:social.social-like-button :content="$poem" />
                         <x-social-comment-button :content="$poem" type="poem" />
 
                         <button class="btn btn-warning icon-btn" onclick="toggleBookmark()" id="bookmarkBtn" title="{{ __('poems.actions.bookmark') }}">
@@ -373,8 +373,8 @@
                                     </a>
                                 </small>
                                 <div class="d-flex align-items-center gap-2 mt-1">
-                                    <x-social-like-button :content="$relatedPoem" type="poem" size="sm" />
-                                    <x-social-view-counter :content="$relatedPoem" type="poem" size="sm" />
+                                    <livewire:social.social-like-button :content="$relatedPoem" type="poem" size="sm" />
+                                    <livewire:social.social-view-counter :content="$relatedPoem" type="poem" size="sm" />
                                     <x-social-comment-button :content="$relatedPoem" type="poem" size="sm" />
                                 </div>
                             </div>

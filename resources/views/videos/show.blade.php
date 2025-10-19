@@ -194,10 +194,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
                                 <!-- Like Button (Sistema Unificato) -->
-                                <x-social-like-button :content="$video" type="video" />
+                                <livewire:social.social-like-button :content="$video" type="video" />
 
                                 <!-- View Counter (Sistema Unificato) -->
-                                <x-social-view-counter :content="$video" type="video" />
+                                <livewire:social.social-view-counter :content="$video" type="video" />
 
                                 <!-- Snap Button (Sistema Unificato) -->
                                 <x-social-snap-button :content="$video" type="video" />

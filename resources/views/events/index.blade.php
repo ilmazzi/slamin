@@ -420,8 +420,8 @@
                             <!-- Social Actions -->
                             @if(Auth::check())
                                 <div class="d-flex align-items-center gap-2 mb-3">
-                                    <x-social-like-button :content="$event" type="event" />
-                                    <x-social-view-counter :content="$event" type="event" />
+                                    <livewire:social.social-like-button :content="$event" type="event" />
+                                    <livewire:social.social-view-counter :content="$event" type="event" />
                                     <x-social-comment-button :content="$event" type="event" />
                                     <x-report-button :content="$event" type="event" />
                                 </div>

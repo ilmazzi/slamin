@@ -1,8 +1,8 @@
 <div>
-    <div class="social-comment-btn"
+    <div class="social-component social-comment-btn"
          wire:click="toggleModal"
          title="Commenti"
-         style="cursor: pointer; display: flex; flex-direction: column; align-items: center; border-radius: 8px; transition: all 0.2s; {{ $this->getSizeStyles() }}"
+         style="cursor: pointer; border-radius: 8px; transition: all 0.2s; {{ $this->getSizeStyles() }}"
          onmouseover="this.style.backgroundColor='rgba(0,0,0,0.05)'"
          onmouseout="this.style.backgroundColor='transparent'">
         <i class="ph-duotone ph-chat-circle {{ $this->getIconClass() }} text-primary"></i>

@@ -106,8 +106,8 @@
                             <!-- Video Actions -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex gap-2">
-                                    <x-social-like-button :content="$mostPopularVideo" type="video" />
-                                    <x-social-view-counter :content="$mostPopularVideo" type="video" />
+                                    <livewire:social.social-like-button :content="$mostPopularVideo" type="video" />
+                                    <livewire:social.social-view-counter :content="$mostPopularVideo" type="video" />
                                     <x-social-snap-button :content="$mostPopularVideo" type="video" />
                                     <x-social-comment-button :content="$mostPopularVideo" type="video" />
                                 </div>
@@ -173,8 +173,8 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <x-social-view-counter :content="$video" type="video" size="sm" />
-                                            <x-social-like-button :content="$video" type="video" size="sm" />
+                                            <livewire:social.social-view-counter :content="$video" type="video" size="sm" />
+                                            <livewire:social.social-like-button :content="$video" type="video" size="sm" />
                                             <x-social-snap-button :content="$video" type="video" size="sm" />
                                             <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
@@ -215,8 +215,8 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <x-social-view-counter :content="$video" type="video" size="sm" />
-                                            <x-social-like-button :content="$video" type="video" size="sm" />
+                                            <livewire:social.social-view-counter :content="$video" type="video" size="sm" />
+                                            <livewire:social.social-like-button :content="$video" type="video" size="sm" />
                                             <x-social-snap-button :content="$video" type="video" size="sm" />
                                             <x-social-comment-button :content="$video" type="video" size="sm" />
                                         </div>
@@ -283,8 +283,8 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <x-social-view-counter :content="$photo" type="photo" size="sm" />
-                                            <x-social-like-button :content="$photo" type="photo" size="sm" />
+                                            <livewire:social.social-view-counter :content="$photo" type="photo" size="sm" />
+                                            <livewire:social.social-like-button :content="$photo" type="photo" size="sm" />
                                             <x-social-comment-button :content="$photo" type="photo" size="sm" />
                                         </div>
                                     </div>
@@ -324,8 +324,8 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            <x-social-view-counter :content="$photo" type="photo" size="sm" />
-                                            <x-social-like-button :content="$photo" type="photo" size="sm" />
+                                            <livewire:social.social-view-counter :content="$photo" type="photo" size="sm" />
+                                            <livewire:social.social-like-button :content="$photo" type="photo" size="sm" />
                                             <x-social-comment-button :content="$photo" type="photo" size="sm" />
                                         </div>
                                     </div>
@@ -397,8 +397,8 @@
                             <!-- Photo Actions -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex gap-2">
-                                    <x-social-like-button :content="$mostPopularPhoto" type="photo" />
-                                    <x-social-view-counter :content="$mostPopularPhoto" type="photo" />
+                                    <livewire:social.social-like-button :content="$mostPopularPhoto" type="photo" />
+                                    <livewire:social.social-view-counter :content="$mostPopularPhoto" type="photo" />
                                     <x-social-comment-button :content="$mostPopularPhoto" type="photo" />
                                 </div>
                                 <small class="text-muted">
