@@ -66,6 +66,19 @@
                                                             Vedi
                                                         </a>
                                                     </div>
+                                                    <!-- Avatar utente cliccabile -->
+                                                    <div class="d-flex align-items-center mt-3 pt-2 border-top">
+                                                        <a href="{{ route('profile.show', $event->organizer->id) }}" class="text-decoration-none d-flex align-items-center">
+                                                            @if ($event->organizer->profile_photo_url)
+                                                                <img src="{{ $event->organizer->profile_photo_url }}" class="rounded-circle me-2" alt="{{ $event->organizer->name }}" style="width: 32px; height: 32px; object-fit: cover;">
+                                                            @else
+                                                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                                                    <i class="ph-duotone ph-user f-s-14 text-muted"></i>
+                                                                </div>
+                                                            @endif
+                                                            <span class="text-muted f-s-12">{{ $event->organizer->name }}</span>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

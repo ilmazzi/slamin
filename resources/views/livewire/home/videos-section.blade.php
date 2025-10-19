@@ -3,35 +3,23 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-gradient-success text-white d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">
-                        <a href="{{ route('videos.index') }}" class="text-decoration-none text-white d-flex align-items-center">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <a href="{{ route('videos.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                             <i class="ph-duotone ph-video f-s-16 me-2"></i>
-                            Video
+                            Video recenti
                         </a>
                     </h5>
-                    <div class="d-flex align-items-center">
-                        <div class="btn-group btn-group-sm me-3" role="group">
-                            <button type="button" class="btn {{ $contentType === 'recent' ? 'btn-light' : 'btn-outline-light' }}" 
-                                    wire:click="toggleContent('recent')">
-                                Recenti
+                    @if ($videos->count() > 1)
+                        <div class="d-flex">
+                            <button class="btn btn-sm bg-light-primary text-primary me-2 border-0" type="button" data-bs-target="#videosCarousel" data-bs-slide="prev">
+                                <span class="f-s-12">‹</span>
                             </button>
-                            <button type="button" class="btn {{ $contentType === 'popular' ? 'btn-light' : 'btn-outline-light' }}" 
-                                    wire:click="toggleContent('popular')">
-                                Popolari
+                            <button class="btn btn-sm bg-light-primary text-primary border-0" type="button" data-bs-target="#videosCarousel" data-bs-slide="next">
+                                <span class="f-s-12">›</span>
                             </button>
                         </div>
-                        @if ($videos->count() > 1)
-                            <div class="d-flex">
-                                <button class="btn btn-sm bg-light-success text-white me-2 border-0" type="button" data-bs-target="#videosCarousel" data-bs-slide="prev">
-                                    <span class="f-s-12">‹</span>
-                                </button>
-                                <button class="btn btn-sm bg-light-success text-white border-0" type="button" data-bs-target="#videosCarousel" data-bs-slide="next">
-                                    <span class="f-s-12">›</span>
-                                </button>
-                            </div>
-                        @endif
-                    </div>
+                    @endif
                 </div>
                 <div class="card-body p-0">
                     <div id="videosCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
@@ -66,17 +54,30 @@
                                                 <div class="card-body">
                                                     <h6 class="card-title f-s-14 f-w-600 mb-2">{{ Str::limit($video->title, 50) }}</h6>
                                                     <p class="card-text text-muted f-s-12 mb-2">
-                                                        <i class="ph-duotone ph-user f-s-12 me-1"></i>
-                                                        {{ $video->user->name }}
+                                                        <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
+                                                        {{ $video->created_at->diffForHumans() }}
                                                     </p>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <small class="text-muted">
                                                             <i class="ph-duotone ph-clock f-s-12 me-1"></i>
-                                                            {{ $video->created_at->diffForHumans() }}
+                                                            {{ $video->duration ?? 'N/A' }}
                                                         </small>
                                                         <a href="{{ route('videos.show', $video->id) }}" class="btn btn-sm btn-outline-primary">
                                                             <i class="ph-duotone ph-eye f-s-12 me-1"></i>
                                                             Guarda
+                                                        </a>
+                                                    </div>
+                                                    <!-- Avatar utente cliccabile -->
+                                                    <div class="d-flex align-items-center mt-3 pt-2 border-top">
+                                                        <a href="{{ route('profile.show', $video->user->id) }}" class="text-decoration-none d-flex align-items-center">
+                                                            @if ($video->user->profile_photo_url)
+                                                                <img src="{{ $video->user->profile_photo_url }}" class="rounded-circle me-2" alt="{{ $video->user->name }}" style="width: 32px; height: 32px; object-fit: cover;">
+                                                            @else
+                                                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                                                    <i class="ph-duotone ph-user f-s-14 text-muted"></i>
+                                                                </div>
+                                                            @endif
+                                                            <span class="text-muted f-s-12">{{ $video->user->name }}</span>
                                                         </a>
                                                     </div>
                                                 </div>
