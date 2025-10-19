@@ -202,7 +202,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::view('index', 'index')->name('index');
-Route::view('project_dashboard', 'project_dashboard')->name('project_dashboard');
 
 Route::view('accordions', 'accordions')->name('accordions');
 Route::view('add_blog', 'add_blog')->name('add_blog');
@@ -455,8 +454,6 @@ Route::get('/test', function () {
 // Dashboard moderna multilanguage
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', App\Livewire\Dashboard\DashboardIndex::class)->name('dashboard');
-    // Route per switch language (da implementare se necessario)
-    // Route::post('/switch-language', [App\Http\Controllers\Dashboard\DashboardController::class, 'switchLanguage'])->name('switch-language');
 
     // User Statistics
     Route::get('/user-stats', [App\Http\Controllers\UserStatsController::class, 'index'])->name('user-stats.index');
@@ -485,9 +482,6 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::get('/events', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
 
 // TEST: View semplice per verificare se il sistema view funziona
-Route::get('/test-simple-view', function () {
-    return view('dashboard.index', ['stats' => []]);
-})->name('test-simple-view');
 
 // Route per i luoghi recenti (pubblica)
 Route::get('/events/recent-venues', [EventController::class, 'getRecentVenues'])->name('events.recent-venues')->middleware('auth');
