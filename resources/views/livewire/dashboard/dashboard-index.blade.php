@@ -232,18 +232,6 @@
                         
                         <!-- VISUALIZZAZIONE MENSILE - Mobile (Compatto) -->
                         <div id="calendar-month-view" class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
-                            <!-- Debug temporaneo -->
-                            <div class="alert alert-danger small mb-2">
-                                <strong>Debug Mensile:</strong> Month: {{ $currentMonth }}, Year: {{ $currentYear }}<br>
-                                Calendar Events: {{ $calendarEvents->count() }}, Wishlist Events: {{ $wishlistEvents->count() }}<br>
-                                @if($calendarEvents->count() > 0)
-                                    <small>Primi eventi: 
-                                        @foreach($calendarEvents->take(3) as $event)
-                                            {{ $event['title'] ?? 'N/A' }} ({{ $event['start'] ?? 'N/A' }}) 
-                                        @endforeach
-                                    </small>
-                                @endif
-                            </div>
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">
@@ -285,10 +273,10 @@
                                                         @if($dayEvents->count() > 0)
                                                             <div class="d-flex gap-1">
                                                                 @foreach($dayEvents->take(3) as $event)
-                                                                    <div class="w-2 h-2 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
+                                                                    <div class="w-3 h-3 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
                                                                 @endforeach
                                                                 @if($dayEvents->count() > 3)
-                                                                    <div class="w-2 h-2 rounded-circle bg-secondary"></div>
+                                                                    <div class="w-3 h-3 rounded-circle bg-secondary"></div>
                                                                 @endif
                                                             </div>
                                                         @endif
