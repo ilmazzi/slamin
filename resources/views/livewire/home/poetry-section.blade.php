@@ -58,11 +58,15 @@
                                                     <i class="ph-duotone ph-clock f-s-12 me-1"></i>
                                                     {{ $poem->created_at->diffForHumans() }}
                                                 </small>
-                                                <div class="d-flex">
-                                                    <x-social-view-counter :model="$poem" />
-                                                    <x-social-like-button :model="$poem" />
-                                                    <x-social-comment-button :model="$poem" />
-                                                </div>
+                                                <a href="{{ route('poems.show', $poem->id) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="ph-duotone ph-eye f-s-12 me-1"></i>
+                                                    Leggi
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-end mt-2">
+                                                <x-social-view-counter :model="$poem" />
+                                                <x-social-like-button :model="$poem" />
+                                                <x-social-comment-button :model="$poem" />
                                             </div>
                                         </div>
                                     </div>
