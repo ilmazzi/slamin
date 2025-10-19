@@ -232,6 +232,18 @@
                         
                         <!-- VISUALIZZAZIONE MENSILE - Mobile (Compatto) -->
                         <div id="calendar-month-view" class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
+                            <!-- Debug temporaneo -->
+                            <div class="alert alert-danger small mb-2">
+                                <strong>Debug Mensile:</strong> Month: {{ $currentMonth }}, Year: {{ $currentYear }}<br>
+                                Calendar Events: {{ $calendarEvents->count() }}, Wishlist Events: {{ $wishlistEvents->count() }}<br>
+                                @if($calendarEvents->count() > 0)
+                                    <small>Primi eventi: 
+                                        @foreach($calendarEvents->take(3) as $event)
+                                            {{ $event['title'] ?? 'N/A' }} ({{ $event['start'] ?? 'N/A' }}) 
+                                        @endforeach
+                                    </small>
+                                @endif
+                            </div>
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">

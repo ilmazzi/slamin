@@ -445,6 +445,23 @@ class DashboardIndex extends Component
         } else {
             $this->wishlistEvents = collect([]);
         }
+        
+        // Debug: aggiungi un evento di test per il 20 ottobre 2025
+        if ($this->currentMonth == 10 && $this->currentYear == 2025) {
+            $this->calendarEvents->push([
+                'id' => 'test-oct-20',
+                'title' => 'Evento Test 20 Ott',
+                'start' => '2025-10-20',
+                'time' => '10:00',
+                'url' => '#',
+                'type' => 'test',
+                'className' => 'event-test',
+                'color' => 'primary',
+                'venue' => 'Test Venue',
+                'city' => 'Test City',
+                'image' => null,
+            ]);
+        }
     }
 
     /**
