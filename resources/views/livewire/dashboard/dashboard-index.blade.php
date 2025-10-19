@@ -284,10 +284,7 @@
                                                 <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }} {{ $dayEvents->count() > 0 ? 'cursor-pointer' : '' }}" 
                                                      style="height: 40px; min-height: 40px;" 
                                                      @if($dayEvents->count() > 0) 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#dayEventsModal" 
                                                         wire:click="selectDay('{{ $currentDate->format('Y-m-d') }}')"
-                                                    
                                                      @endif>
                                                     <div class="d-flex justify-content-between align-items-center h-100">
                                                         <span class="f-s-10 f-w-600">{{ $currentDate->day }}</span>
