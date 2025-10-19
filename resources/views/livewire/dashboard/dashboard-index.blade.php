@@ -279,11 +279,6 @@
                                                                     <div class="w-2 h-2 rounded-circle bg-secondary"></div>
                                                                 @endif
                                                             </div>
-                                                        @else
-                                                            <!-- Debug: mostra sempre un punto per i primi 7 giorni di ottobre -->
-                                                            @if($isCurrentMonth && $currentDate->day <= 7)
-                                                                <div class="w-2 h-2 rounded-circle bg-danger" title="Debug: {{ $currentDate->format('Y-m-d') }} - Events: {{ $dayEvents->count() }}"></div>
-                                                            @endif
                                                         @endif
                                                     </div>
                                                 </div>
