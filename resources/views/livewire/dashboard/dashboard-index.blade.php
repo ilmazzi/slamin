@@ -47,24 +47,38 @@
             <div class="col-12">
                 <div class="card hover-effect equal-card">
                     <div class="card-header ">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 f-w-600 text-dark">
-                                {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
-                            </h5>
-                            
-                            <!-- Toggle visualizzazioni - Solo su mobile -->
-                            <div class="d-md-none">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'list' ? 'active' : '' }}" wire:click="switchView('list')">
-                                        <i class="ph ph-list"></i>
+                        <!-- Header per visualizzazione mensile -->
+                        <div class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0 f-w-600 text-primary">CALENDARIO EVENTI</h6>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
+                                        <i class="ph ph-chevron-left"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'week' ? 'active' : '' }}" wire:click="switchView('week')">
-                                        <i class="ph ph-calendar"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'month' ? 'active' : '' }}" wire:click="switchView('month')">
-                                        <i class="ph ph-calendar-blank"></i>
+                                    <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
+                                        <i class="ph ph-chevron-right"></i>
                                     </button>
                                 </div>
+                            </div>
+                            <div class="text-center mb-3">
+                                <h5 class="mb-0 f-w-600 text-dark">
+                                    {{ now()->setMonth($currentMonth)->setYear($currentYear)->format('F Y') }}
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <!-- Toggle visualizzazioni - Solo su mobile -->
+                        <div class="d-md-none">
+                            <div class="btn-group btn-group-sm w-100" role="group">
+                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'list' ? 'active' : '' }}" wire:click="switchView('list')">
+                                    <i class="ph ph-list"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'week' ? 'active' : '' }}" wire:click="switchView('week')">
+                                    <i class="ph ph-calendar"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'month' ? 'active' : '' }}" wire:click="switchView('month')">
+                                    <i class="ph ph-calendar-blank"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -232,19 +246,6 @@
                         
                         <!-- VISUALIZZAZIONE MENSILE - Mobile (Compatto) -->
                         <div id="calendar-month-view" class="d-md-none {{ $currentView !== 'month' ? 'd-none' : '' }}">
-                            <!-- Header Calendario -->
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="mb-0 f-w-600">CALENDARIO EVENTI</h6>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-light-primary btn-sm" wire:click="previousMonth">
-                                        <i class="ph ph-chevron-left"></i>
-                                    </button>
-                                    <button class="btn btn-light-primary btn-sm" wire:click="nextMonth">
-                                        <i class="ph ph-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
                             <div class="row g-1">
                                 <!-- Header giorni della settimana -->
                                 <div class="col-12">
