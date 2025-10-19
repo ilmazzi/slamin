@@ -281,7 +281,13 @@
                                                     );
                                                 @endphp
                                                 
-                                                <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 40px; min-height: 40px;">
+                                                <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }} {{ $dayEvents->count() > 0 ? 'cursor-pointer' : '' }}" 
+                                                     style="height: 40px; min-height: 40px;" 
+                                                     @if($dayEvents->count() > 0) 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#dayEventsModal" 
+                                                        wire:click="selectDay('{{ $currentDate->format('Y-m-d') }}')"
+                                                     @endif>
                                                     <div class="d-flex justify-content-between align-items-center h-100">
                                                         <span class="f-s-10 f-w-600">{{ $currentDate->day }}</span>
                                                         @if($dayEvents->count() > 0)
@@ -823,6 +829,62 @@
             </div>
         @endif
 
+    </div>
+</div>
+
+<!-- Modal per eventi del giorno - Solo mobile -->
+<div class="modal fade" id="dayEventsModal" tabindex="-1" aria-labelledby="dayEventsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dayEventsModalLabel">
+                    Eventi del {{ $selectedDay ? \Carbon\Carbon::parse($selectedDay)->format('d/m/Y') : '' }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if($selectedDayEvents && $selectedDayEvents->count() > 0)
+                    <div class="d-grid gap-3">
+                        @foreach($selectedDayEvents as $event)
+                            <div class="d-flex align-items-center p-3 rounded bg-light-primary">
+                                <div class="me-3">
+                                    <div class="w-3 h-3 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer" 
+                                            wire:click="viewEvent({{ $event['id'] ?? 0 }})"
+                                            data-bs-dismiss="modal">
+                                            {{ $event['title'] ?? 'Evento senza titolo' }}
+                                        </h6>
+                                        <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9">
+                                            {{ $event['type'] === 'organized' ? 'Org' : ($event['type'] === 'participating' ? 'Part' : 'Wish') }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="ph ph-clock f-s-12 text-muted me-1"></i>
+                                        <span class="f-s-12 text-muted">{{ $event['time'] ?? 'Orario non disponibile' }}</span>
+                                        @if(isset($event['venue']) && $event['venue'])
+                                            <span class="mx-2 text-muted">•</span>
+                                            <i class="ph ph-map-pin f-s-12 text-muted me-1"></i>
+                                            <span class="f-s-12 text-muted">{{ $event['venue'] }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-4">
+                        <i class="ph ph-calendar-x f-s-48 text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Nessun evento per questo giorno</p>
+                    </div>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+            </div>
+        </div>
     </div>
 </div>
 

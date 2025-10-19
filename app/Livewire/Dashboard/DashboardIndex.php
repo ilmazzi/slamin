@@ -30,6 +30,10 @@ class DashboardIndex extends Component
     public $currentView = 'list'; // list, week, month
     public $listPage = 1;
     public $weekPage = 0; // 0 = current week, -1 = previous, 1 = next
+    
+    // Properties for day events modal
+    public $selectedDay = null;
+    public $selectedDayEvents = [];
 
     protected $listeners = [
         'refreshDashboard' => 'refreshData',
@@ -743,5 +747,20 @@ class DashboardIndex extends Component
     public function previousWeek()
     {
         $this->weekPage--;
+    }
+
+    /**
+     * Select day for modal display
+     */
+    public function selectDay($date)
+    {
+        $this->selectedDay = $date;
+        
+        // Get events for the selected day
+        $dayEvents = $this->calendarEvents->where('start', $date)->merge(
+            $this->wishlistEvents->where('start', $date)
+        );
+        
+        $this->selectedDayEvents = $dayEvents->toArray();
     }
 }
