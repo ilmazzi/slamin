@@ -276,9 +276,17 @@
                                                 @php
                                                     $isCurrentMonth = $currentDate->month == $currentMonth;
                                                     $isToday = $currentDate->isToday();
-                                                    $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                    // Get all events for the day
+                                                    $allDayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
+                                                    
+                                                    // Apply filter
+                                                    if ($eventFilter === 'all') {
+                                                        $dayEvents = $allDayEvents;
+                                                    } else {
+                                                        $dayEvents = $allDayEvents->where('type', $eventFilter);
+                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-1 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }} {{ $dayEvents->count() > 0 ? 'cursor-pointer' : '' }}" 
@@ -351,9 +359,17 @@
                                                 @php
                                                     $isCurrentMonth = $currentDate->month == $currentMonth;
                                                     $isToday = $currentDate->isToday();
-                                                    $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                    // Get all events for the day
+                                                    $allDayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
+                                                    
+                                                    // Apply filter
+                                                    if ($eventFilter === 'all') {
+                                                        $dayEvents = $allDayEvents;
+                                                    } else {
+                                                        $dayEvents = $allDayEvents->where('type', $eventFilter);
+                                                    }
                                                 @endphp
                                                 
                                                 <div class="col border rounded p-2 {{ $isCurrentMonth ? '' : 'text-muted bg-light-primary' }} {{ $isToday ? 'bg-light-warning' : '' }}" style="height: 120px; min-height: 120px; position: relative; overflow: hidden;">
@@ -437,18 +453,30 @@
                         <!-- Legenda eventi -->
                         <div class="row mt-3">
                             <div class="col-12">
-                                <div class="d-flex flex-wrap gap-2 justify-content-center">
-                                    <div class="d-flex align-items-center gap-1">
-                                        <div class="w-2 h-2 rounded-circle bg-primary"></div>
-                                        <small class="text-muted">Organizzati</small>
+                                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                                    <div class="d-flex align-items-center gap-2 cursor-pointer" 
+                                         wire:click="filterEvents('organized')" 
+                                         style="opacity: {{ $eventFilter === 'organized' || $eventFilter === 'all' ? '1' : '0.5' }}">
+                                        <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #007bff;"></div>
+                                        <small class="text-muted f-s-12">Organizzati</small>
                                     </div>
-                                    <div class="d-flex align-items-center gap-1">
-                                        <div class="w-2 h-2 rounded-circle bg-secondary"></div>
-                                        <small class="text-muted">Partecipo</small>
+                                    <div class="d-flex align-items-center gap-2 cursor-pointer" 
+                                         wire:click="filterEvents('participating')" 
+                                         style="opacity: {{ $eventFilter === 'participating' || $eventFilter === 'all' ? '1' : '0.5' }}">
+                                        <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #6c757d;"></div>
+                                        <small class="text-muted f-s-12">Partecipo</small>
                                     </div>
-                                    <div class="d-flex align-items-center gap-1">
-                                        <div class="w-2 h-2 rounded-circle bg-warning"></div>
-                                        <small class="text-muted">Wishlist</small>
+                                    <div class="d-flex align-items-center gap-2 cursor-pointer" 
+                                         wire:click="filterEvents('wishlist')" 
+                                         style="opacity: {{ $eventFilter === 'wishlist' || $eventFilter === 'all' ? '1' : '0.5' }}">
+                                        <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #ffc107;"></div>
+                                        <small class="text-muted f-s-12">Wishlist</small>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 cursor-pointer" 
+                                         wire:click="filterEvents('all')" 
+                                         style="opacity: {{ $eventFilter === 'all' ? '1' : '0.5' }}">
+                                        <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #28a745;"></div>
+                                        <small class="text-muted f-s-12">Tutti</small>
                                     </div>
                                 </div>
                             </div>

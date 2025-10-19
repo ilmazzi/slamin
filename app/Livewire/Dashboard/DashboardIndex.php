@@ -34,6 +34,9 @@ class DashboardIndex extends Component
     // Properties for day events modal
     public $selectedDay = null;
     public $selectedDayEvents = null;
+    
+    // Properties for event filtering
+    public $eventFilter = 'all';
 
     protected $listeners = [
         'refreshDashboard' => 'refreshData',
@@ -766,5 +769,13 @@ class DashboardIndex extends Component
         
         // Open modal programmatically
         $this->dispatch('open-modal');
+    }
+
+    /**
+     * Filter events by type
+     */
+    public function filterEvents($type)
+    {
+        $this->eventFilter = $type;
     }
 }
