@@ -446,12 +446,12 @@ class DashboardIndex extends Component
             $this->wishlistEvents = collect([]);
         }
         
-        // Debug: aggiungi un evento di test per il primo giorno del mese corrente
-        if ($this->calendarEvents->isEmpty()) {
+        // Debug: aggiungi un evento di test per il 19 ottobre 2025
+        if ($this->currentMonth == 10 && $this->currentYear == 2025) {
             $this->calendarEvents->push([
-                'id' => 'test',
-                'title' => 'Evento di Test',
-                'start' => now()->setMonth($this->currentMonth)->setYear($this->currentYear)->startOfMonth()->format('Y-m-d'),
+                'id' => 'test-oct-19',
+                'title' => 'Evento Test 19 Ott',
+                'start' => '2025-10-19',
                 'time' => '10:00',
                 'url' => '#',
                 'type' => 'test',

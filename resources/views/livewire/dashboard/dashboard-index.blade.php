@@ -266,9 +266,10 @@
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
                                                     
-                                                    // Debug temporaneo per il primo giorno del mese
-                                                    if ($currentDate->day == 1 && $isCurrentMonth) {
-                                                        $debugEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'));
+                                                    // Debug per i primi giorni di ottobre
+                                                    if ($isCurrentMonth && $currentDate->day <= 3) {
+                                                        $debugDate = $currentDate->format('Y-m-d');
+                                                        $debugEvents = $calendarEvents->where('start', $debugDate);
                                                         // Log per debug
                                                     }
                                                 @endphp
@@ -347,9 +348,10 @@
                                                         $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
                                                     
-                                                    // Debug temporaneo per il primo giorno del mese
-                                                    if ($currentDate->day == 1 && $isCurrentMonth) {
-                                                        $debugEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'));
+                                                    // Debug per i primi giorni di ottobre
+                                                    if ($isCurrentMonth && $currentDate->day <= 3) {
+                                                        $debugDate = $currentDate->format('Y-m-d');
+                                                        $debugEvents = $calendarEvents->where('start', $debugDate);
                                                         // Log per debug
                                                     }
                                                 @endphp
