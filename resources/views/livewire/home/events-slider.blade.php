@@ -43,7 +43,7 @@
                                                         @if ($event->image_url)
                                                             <img src="{{ $event->image_url }}" class="card-img-top" alt="{{ $event->title }}" style="height: 200px; object-fit: cover;">
                                                         @else
-                                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                            <div class="card-img-top bg-light-primary d-flex align-items-center justify-content-center" style="height: 200px;">
                                                                 <i class="ph-duotone ph-calendar f-s-48 text-muted"></i>
                                                             </div>
                                                         @endif
