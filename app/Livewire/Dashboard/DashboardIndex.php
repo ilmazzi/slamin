@@ -764,7 +764,7 @@ class DashboardIndex extends Component
         
         $this->selectedDayEvents = $dayEvents;
         
-        // Force Livewire to update the modal content
-        $this->dispatch('modal-updated');
+        // Open modal programmatically
+        $this->dispatch('open-modal');
     }
 }
