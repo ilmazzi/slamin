@@ -437,13 +437,13 @@ class DashboardIndex extends Component
         $endDate = now()->setMonth($this->currentMonth)->setYear($this->currentYear)->endOfMonth();
 
         // Get user's events for the current month
-        $this->calendarEvents = $this->getUserEventsForMonth($user, $startDate, $endDate);
+        $this->calendarEvents = collect($this->getUserEventsForMonth($user, $startDate, $endDate));
         
         // Get wishlist events if method exists
         if (method_exists($user, 'wishlistedEvents')) {
-            $this->wishlistEvents = $this->getWishlistEventsForMonth($user, $startDate, $endDate);
+            $this->wishlistEvents = collect($this->getWishlistEventsForMonth($user, $startDate, $endDate));
         } else {
-            $this->wishlistEvents = [];
+            $this->wishlistEvents = collect([]);
         }
     }
 
