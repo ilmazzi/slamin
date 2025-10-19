@@ -6,15 +6,14 @@
                 Articoli
             </a>
         </h5>
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" class="btn {{ $contentType === 'new' ? 'btn-light' : 'btn-outline-light' }}" 
-                    wire:click="toggleContent('new')">
-                Nuovi
-            </button>
-            <button type="button" class="btn {{ $contentType === 'popular' ? 'btn-light' : 'btn-outline-light' }}" 
-                    wire:click="toggleContent('popular')">
-                Popolari
-            </button>
+        <div class="d-flex align-items-center">
+            <span class="text-white f-s-12 me-2">Nuovi</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" 
+                       wire:click="toggleContent('{{ $contentType === 'new' ? 'popular' : 'new' }}')"
+                       {{ $contentType === 'popular' ? 'checked' : '' }}>
+            </div>
+            <span class="text-white f-s-12 ms-2">Popolari</span>
         </div>
     </div>
     <div class="card-body">
