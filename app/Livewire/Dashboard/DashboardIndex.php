@@ -33,7 +33,7 @@ class DashboardIndex extends Component
     
     // Properties for day events modal
     public $selectedDay = null;
-    public $selectedDayEvents = [];
+    public $selectedDayEvents = null;
 
     protected $listeners = [
         'refreshDashboard' => 'refreshData',
@@ -46,6 +46,7 @@ class DashboardIndex extends Component
     {
         $this->currentMonth = now()->month;
         $this->currentYear = now()->year;
+        $this->selectedDayEvents = collect([]);
         $this->loadCalendarData();
     }
 
@@ -761,6 +762,6 @@ class DashboardIndex extends Component
             $this->wishlistEvents->where('start', $date)
         );
         
-        $this->selectedDayEvents = $dayEvents->toArray();
+        $this->selectedDayEvents = $dayEvents;
     }
 }
