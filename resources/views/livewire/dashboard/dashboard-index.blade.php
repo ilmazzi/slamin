@@ -273,10 +273,10 @@
                                                         @if($dayEvents->count() > 0)
                                                             <div class="d-flex gap-1">
                                                                 @foreach($dayEvents->take(3) as $event)
-                                                                    <div class="w-3 h-3 rounded-circle bg-{{ $event['color'] ?? 'secondary' }}"></div>
+                                                                    <div class="rounded-circle bg-{{ $event['color'] ?? 'secondary' }}" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"></div>
                                                                 @endforeach
                                                                 @if($dayEvents->count() > 3)
-                                                                    <div class="w-3 h-3 rounded-circle bg-secondary"></div>
+                                                                    <div class="rounded-circle bg-secondary" style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"></div>
                                                                 @endif
                                                             </div>
                                                         @endif
