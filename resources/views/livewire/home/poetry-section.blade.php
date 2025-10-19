@@ -1,7 +1,7 @@
 <div class="card">
-    <div class="card-header bg-gradient-info text-white d-flex justify-content-between align-items-center">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">
-            <a href="{{ route('poems.index') }}" class="text-decoration-none text-white d-flex align-items-center">
+            <a href="{{ route('poems.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                 <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
                 Poesie
             </a>

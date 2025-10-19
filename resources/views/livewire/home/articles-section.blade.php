@@ -1,7 +1,7 @@
 <div class="card">
-    <div class="card-header bg-gradient-warning text-white d-flex justify-content-between align-items-center">
+    <div class="card-header bg-light-warning d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">
-            <a href="{{ route('articles.index') }}" class="text-decoration-none text-white d-flex align-items-center">
+            <a href="{{ route('articles.index') }}" class="text-decoration-none text-warning d-flex align-items-center">
                 <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
                 Articoli
             </a>
