@@ -619,35 +619,37 @@
                             <div class="d-grid gap-3">
                                 @foreach($upcomingEvents as $event)
                                     <div class="card hover-effect b-s-4-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }}">
-                                        <div class="card-body d-flex align-items-center pa-15">
-                                            <!-- Icona evento -->
-                                            <div class="bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} h-50 w-50 d-flex-center rounded-circle me-3">
-                                                <i class="ph ph-calendar f-s-20 text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }}"></i>
-                                            </div>
-                                            
-                                            <!-- Contenuto evento -->
-                                            <div class="flex-grow-1">
-                                                <div class="d-flex align-items-start justify-content-between mb-1">
-                                                    <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] ?? 'Evento senza titolo' }}</h6>
-                                                    <span class="badge bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} f-s-10">
-                                                        {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
-                                                    </span>
+                                        <div class="card-body pa-15">
+                                            <div class="d-flex align-items-start">
+                                                <!-- Icona evento -->
+                                                <div class="bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} d-flex-center rounded-circle me-3" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px;">
+                                                    <i class="ph ph-calendar f-s-20 text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }}"></i>
                                                 </div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <i class="ph ph-calendar f-s-14 text-muted me-2"></i>
-                                                    <span class="f-s-13 text-muted">{{ $event['date'] ?? 'Data non disponibile' }}</span>
+                                                
+                                                <!-- Contenuto evento -->
+                                                <div class="flex-grow-1 me-3">
+                                                    <div class="d-flex align-items-start justify-content-between mb-1">
+                                                        <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] ?? 'Evento senza titolo' }}</h6>
+                                                        <span class="badge bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} f-s-10">
+                                                            {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-1">
+                                                        <i class="ph ph-calendar f-s-14 text-muted me-2"></i>
+                                                        <span class="f-s-13 text-muted">{{ $event['date'] ?? 'Data non disponibile' }}</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <i class="ph ph-map-pin f-s-14 text-muted me-2"></i>
+                                                        <span class="f-s-13 text-muted">{{ $event['venue'] ?? 'Luogo non disponibile' }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                    </div>
+                                                    
+                                                    <!-- Bottone azione -->
+                                                    <div>
+                                                        <a href="{{ $event['url'] ?? '#' }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} btn-sm">
+                                                            <i class="ph ph-arrow-right me-1"></i>Vedi
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="ph ph-map-pin f-s-14 text-muted me-2"></i>
-                                                    <span class="f-s-13 text-muted">{{ $event['venue'] ?? 'Luogo non disponibile' }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Bottone azione -->
-                                            <div class="ms-3">
-                                                <a href="{{ $event['url'] ?? '#' }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} btn-sm">
-                                                    <i class="ph ph-arrow-right me-1"></i>Vedi
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
