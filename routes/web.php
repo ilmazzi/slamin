@@ -998,7 +998,7 @@ Route::prefix('premium')->name('premium.')->middleware(['auth', 'verified'])->gr
 
     // Media Routes (pubbliche - fuori dal gruppo auth)
     Route::prefix('media')->name('media.')->group(function () {
-        Route::get('/', [App\Http\Controllers\MediaController::class, 'index'])->name('index');
+        Route::get('/', App\Livewire\Media\MediaIndex::class)->name('index');
         Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
         Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
     });
