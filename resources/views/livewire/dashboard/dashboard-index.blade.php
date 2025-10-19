@@ -262,8 +262,8 @@
                                                 @php
                                                     $isCurrentMonth = $currentDate->month == $currentMonth;
                                                     $isToday = $currentDate->isToday();
-                                                    $dayEvents = collect($calendarEvents)->where('start', $currentDate->format('Y-m-d'))->merge(
-                                                        collect($wishlistEvents)->where('start', $currentDate->format('Y-m-d'))
+                                                    $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                        $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
                                                 @endphp
                                                 
@@ -337,8 +337,8 @@
                                                 @php
                                                     $isCurrentMonth = $currentDate->month == $currentMonth;
                                                     $isToday = $currentDate->isToday();
-                                                    $dayEvents = collect($calendarEvents)->where('start', $currentDate->format('Y-m-d'))->merge(
-                                                        collect($wishlistEvents)->where('start', $currentDate->format('Y-m-d'))
+                                                    $dayEvents = $calendarEvents->where('start', $currentDate->format('Y-m-d'))->merge(
+                                                        $wishlistEvents->where('start', $currentDate->format('Y-m-d'))
                                                     );
                                                 @endphp
                                                 
