@@ -15,18 +15,19 @@
             <div class="col-lg-5 col-xxl-3 eshop-cards-container">
                 <div class="row">
                     <div class="col-6 col-md-3 col-lg-6">
-                        <div class="card">
-                            <span class="bg-primary h-50 w-50 d-flex-center rounded-circle m-auto eshop-icon-box">
-                                    <i class="ph  ph-currency-circle-dollar f-s-24"></i>
-                            </span>
-
-
-                            <div class="card-body eshop-cards">
-                                <span class="ripple-effect"></span>
-                                <div class="overflow-hidden">
-                                    <h3 class="text-primary mb-0">1.2M</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">Total Sales</p>
-                                    <span class="badge bg-light-primary">View Report</span>
+                        <div class="card project-profit-card">
+                            <div class="card-body">
+                                <div class="profit-arrow">
+                             <span class="bg-white text-primary h-45 w-45 d-flex-center">
+                                  <i class="ph-bold  ph-arrow-up-right f-s-18"></i>
+                             </span>
+                                </div>
+                                <span class="bg-primary h-45 w-45 d-flex-center b-r-50">
+                         <i class="ph-bold  ph-chart-line-up f-s-24"></i>
+                        </span>
+                                <div class="mt-3">
+                                    <h4 class="text-dark">22.2K+</h4>
+                                    <p class="f-w-500 mb-0 txt-ellipsis-1">Total profit Progress</p>
                                 </div>
                             </div>
                         </div>

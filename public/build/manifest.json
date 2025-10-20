@@ -19,6 +19,14 @@
     "file": "assets/chat-bg-D5GZwZP6.jpg",
     "src": "public/assets/images/dashboard/project/chat-bg.jpg"
   },
+  "public/assets/images/dashboard/project/meeting-bg.png": {
+    "file": "assets/meeting-bg-BldcbZCY.png",
+    "src": "public/assets/images/dashboard/project/meeting-bg.png"
+  },
+  "public/assets/images/dashboard/project/payment-card-bg.jpg": {
+    "file": "assets/payment-card-bg-D5AvgPvx.jpg",
+    "src": "public/assets/images/dashboard/project/payment-card-bg.jpg"
+  },
   "public/assets/images/landing/colour-theme-bg.png": {
     "file": "assets/colour-theme-bg-DKFSn6ob.png",
     "src": "public/assets/images/landing/colour-theme-bg.png"
@@ -68,12 +76,12 @@
     "src": "public/assets/images/slick/30.jpg"
   },
   "public/assets/scss/style.scss": {
-    "file": "assets/style-9RuZN_bJ.css",
+    "file": "assets/style-xaDN-dZY.css",
     "src": "public/assets/scss/style.scss",
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-DK0_gLoS.css",
+    "file": "assets/app-CNeBc4lB.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },

@@ -338,15 +338,15 @@ Route::view('progress', 'progress')->name('progress');
 // Photo Routes - AUTHENTICATED (management and interactions) - MUST BE FIRST!
 Route::prefix('photos')->name('photos.')->middleware('auth')->group(function () {
     // Upload and management - specific routes BEFORE {photo} parameter
-    Route::get('/create', [App\Http\Controllers\PhotoController::class, 'create'])->name('create');
-    Route::post('/', [App\Http\Controllers\PhotoController::class, 'store'])->name('store');
+    Route::get('/create', App\Livewire\Photos\PhotoUpload::class)->name('create');
 });
 
 // Photo Routes - PUBLIC (viewing only)
 Route::prefix('photos')->name('photos.')->group(function () {
     // Public photo viewing - anyone can see photos
-    Route::get('/', [App\Http\Controllers\PhotoController::class, 'index'])->name('index');
-    Route::get('/user/{userId}', [App\Http\Controllers\PhotoController::class, 'getUserPhotos'])->name('user');
+    Route::get('/', App\Livewire\Photos\PhotoIndex::class)->name('index');
+    Route::get('/user/{userId}', App\Livewire\Photos\PhotoIndex::class)->name('user');
+    Route::get('/{photo}/image', [App\Http\Controllers\PhotoController::class, 'image'])->name('image');
     Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'show'])->name('show');
 });
 
@@ -904,14 +904,14 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 
     });
 
-    // Profile Routes (accessibili a tutti gli utenti autenticati)
-    Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
-        Route::get('/', [App\Http\Controllers\ProfileController::class, 'show'])->name('show');
-        Route::get('/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('edit');
-        Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
-        Route::get('/videos', [App\Http\Controllers\ProfileController::class, 'videos'])->name('videos');
+        // Profile Routes (accessibili a tutti gli utenti autenticati)
+        Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
+            Route::get('/', App\Livewire\Profile\ProfileShow::class)->name('show');
+            Route::get('/edit', App\Livewire\Profile\ProfileEdit::class)->name('edit');
+            Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
+        Route::get('/videos', App\Livewire\Profile\VideoManagement::class)->name('videos');
         Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
-        Route::get('/photos', [App\Http\Controllers\ProfileController::class, 'photos'])->name('photos');
+        Route::get('/photos', App\Livewire\Photos\PhotoIndex::class)->name('photos');
         Route::delete('/photos/{photo}', [App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('photos.delete');
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
         Route::get('/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('followers');
@@ -930,7 +930,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
     });
 
     // Public Profile Routes (accessibili a tutti)
-    Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
+    Route::get('/user/{user}', App\Livewire\Profile\ProfileShow::class)->name('user.show');
     Route::get('/user/{user}/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('user.followers');
     Route::get('/user/{user}/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('user.following');
 
@@ -992,8 +992,6 @@ Route::prefix('premium')->name('premium.')->middleware(['auth', 'verified'])->gr
         Route::get('/faq', [App\Http\Controllers\PremiumController::class, 'faq'])->name('premium.faq');
     });
 
-    // Public Profile Routes (accessibili a tutti)
-    Route::get('/user/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('user.show');
 });
 
     // Media Routes (pubbliche - fuori dal gruppo auth)

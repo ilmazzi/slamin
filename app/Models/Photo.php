@@ -99,7 +99,7 @@ class Photo extends Model
             return $this->image_path;
         }
 
-        return Storage::url($this->image_path);
+        return route('photos.image', ['photo' => $this->id]);
     }
 
     /**
@@ -111,7 +111,7 @@ class Photo extends Model
             if (str_starts_with($this->thumbnail_path, 'http')) {
                 return $this->thumbnail_path;
             }
-            return Storage::url($this->thumbnail_path);
+            return route('photos.image', ['photo' => $this->id]);
         }
 
         return $this->image_url;
