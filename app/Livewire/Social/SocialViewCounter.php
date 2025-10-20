@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SocialViewCounter extends Component
 {
-    public $model;
     public $modelType;
     public $modelId;
     public $viewCount = 0;
@@ -19,7 +18,6 @@ class SocialViewCounter extends Component
 
     public function mount($model, $size = 'md', $showCount = true, $autoIncrement = true)
     {
-        $this->model = $model;
         $this->modelType = get_class($model);
         $this->modelId = $model->id;
         $this->size = $size;
@@ -32,6 +30,11 @@ class SocialViewCounter extends Component
         if ($this->autoIncrement) {
             $this->incrementView();
         }
+    }
+
+    public function getModelProperty()
+    {
+        return app($this->modelType)->find($this->modelId);
     }
 
     public function incrementView()
@@ -54,8 +57,6 @@ class SocialViewCounter extends Component
 
     public function refreshViewCount()
     {
-        // Ricarica il modello dal database per avere i dati aggiornati
-        $this->model = $this->model->fresh();
         $this->viewCount = $this->model->views()->count();
     }
 

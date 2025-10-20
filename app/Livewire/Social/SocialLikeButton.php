@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SocialLikeButton extends Component
 {
-    public $model;
     public $modelType;
     public $modelId;
     public $isLiked = false;
@@ -20,13 +19,17 @@ class SocialLikeButton extends Component
 
     public function mount($model, $size = 'md', $showCount = true)
     {
-        $this->model = $model;
         $this->modelType = get_class($model);
         $this->modelId = $model->id;
         $this->size = $size;
         $this->showCount = $showCount;
         
         $this->refreshLikeStatus();
+    }
+
+    public function getModelProperty()
+    {
+        return app($this->modelType)->find($this->modelId);
     }
 
     public function toggleLike()
@@ -55,8 +58,6 @@ class SocialLikeButton extends Component
 
     public function refreshLikeStatus()
     {
-        // Ricarica il modello dal database per avere i dati aggiornati
-        $this->model = $this->model->fresh();
         $this->isLiked = $this->model->isLikedByCurrentUser();
         $this->likeCount = $this->model->likes()->count();
     }
