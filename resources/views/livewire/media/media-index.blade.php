@@ -300,11 +300,11 @@
     </div>
 
     <!-- Modali -->
-    @if($showVideoModal && $selectedVideo)
-        <livewire:media.video-modal :video="$selectedVideo" />
+    @if($showVideoModal && $selectedVideoId)
+        <livewire:media.video-modal :videoId="$selectedVideoId" />
     @endif
 
-    @if($showPhotoModal && $selectedPhoto)
-        <livewire:media.photo-modal :photo="$selectedPhoto" />
+    @if($showPhotoModal && $selectedPhotoId)
+        <livewire:media.photo-modal :photoId="$selectedPhotoId" />
     @endif
 </div>

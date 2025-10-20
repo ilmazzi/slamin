@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph-duotone ph-image me-2"></i>
-                    {{ $photo->title }}
+                    {{ $this->photo->title }}
                 </h5>
                 <button type="button" class="btn-close" wire:click="$parent.closePhotoModal"></button>
             </div>
@@ -13,9 +13,9 @@
                     <!-- Photo -->
                     <div class="col-lg-8">
                         <div class="position-relative">
-                            <img src="{{ $photo->image_url }}" 
+                            <img src="{{ $this->photo->image_url }}" 
                                  class="img-fluid rounded" 
-                                 alt="{{ $photo->title }}" 
+                                 alt="{{ $this->photo->title }}" 
                                  style="max-height: 500px; width: 100%; object-fit: contain;">
                         </div>
                         
@@ -23,28 +23,28 @@
                         <div class="mt-3">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <h4 class="mb-1">{{ $photo->title }}</h4>
+                                    <h4 class="mb-1">{{ $this->photo->title }}</h4>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $photo->user->profile_photo_url }}" 
+                                        <img src="{{ $this->photo->user->profile_photo_url }}" 
                                              class="rounded-circle me-2" 
-                                             alt="{{ $photo->user->name }}" 
+                                             alt="{{ $this->photo->user->name }}" 
                                              style="width: 40px; height: 40px; object-fit: cover;">
                                         <div>
-                                            <h6 class="mb-0">{{ $photo->user->name }}</h6>
-                                            <small class="text-muted">{{ $photo->created_at->diffForHumans() }}</small>
+                                            <h6 class="mb-0">{{ $this->photo->user->name }}</h6>
+                                            <small class="text-muted">{{ $this->photo->created_at->diffForHumans() }}</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <livewire:social.social-view-counter :model="$photo" :size="'md'" />
-                                    <livewire:social.social-like-button :model="$photo" :size="'md'" />
-                                    <livewire:social.social-comment-button :model="$photo" :size="'md'" />
+                                    <livewire:social.social-view-counter :model="$this->photo" :size="'md'" />
+                                    <livewire:social.social-like-button :model="$this->photo" :size="'md'" />
+                                    <livewire:social.social-comment-button :model="$this->photo" :size="'md'" />
                                 </div>
                             </div>
                             
-                            @if($photo->description)
+                            @if($this->photo->description)
                                 <div class="mb-3">
-                                    <p class="mb-0">{{ $photo->description }}</p>
+                                    <p class="mb-0">{{ $this->photo->description }}</p>
                                 </div>
                             @endif
                         </div>
@@ -56,14 +56,14 @@
                             <div class="card-header">
                                 <h6 class="mb-0">
                                     <i class="ph-duotone ph-chat-circle me-2"></i>
-                                    Commenti ({{ $photo->comments()->where('status', 'approved')->count() }})
+                                    Commenti ({{ $this->photo->comments()->where('status', 'approved')->count() }})
                                 </h6>
                             </div>
                             <div class="card-body p-0">
                                 <div class="p-3" style="max-height: 400px; overflow-y: auto;">
                                     <!-- Comments List -->
                                     <div class="comments-list mb-3">
-                                        @forelse($photo->comments()->where('status', 'approved')->with('user')->latest()->take(10)->get() as $comment)
+                                        @forelse($this->photo->comments()->where('status', 'approved')->with('user')->latest()->take(10)->get() as $comment)
                                             <div class="d-flex mb-3">
                                                 <div class="flex-shrink-0 me-3">
                                                     <img src="{{ $comment->user->profile_photo_url }}" 

@@ -12,9 +12,9 @@ class MediaIndex extends Component
 {
     public $videoType = 'popular'; // 'popular' o 'recent'
     public $searchQuery = '';
-    public $selectedVideo = null;
+    public $selectedVideoId = null;
     public $showVideoModal = false;
-    public $selectedPhoto = null;
+    public $selectedPhotoId = null;
     public $showPhotoModal = false;
 
     public function mount()
@@ -29,28 +29,46 @@ class MediaIndex extends Component
 
     public function openVideoModal($videoId)
     {
-        $this->selectedVideo = Video::with(['user', 'likes', 'comments', 'snaps'])
-            ->find($videoId);
+        $this->selectedVideoId = $videoId;
         $this->showVideoModal = true;
     }
 
     public function closeVideoModal()
     {
         $this->showVideoModal = false;
-        $this->selectedVideo = null;
+        $this->selectedVideoId = null;
     }
 
     public function openPhotoModal($photoId)
     {
-        $this->selectedPhoto = Photo::with(['user', 'likes', 'comments'])
-            ->find($photoId);
+        $this->selectedPhotoId = $photoId;
         $this->showPhotoModal = true;
     }
 
     public function closePhotoModal()
     {
         $this->showPhotoModal = false;
-        $this->selectedPhoto = null;
+        $this->selectedPhotoId = null;
+    }
+
+    public function getSelectedVideoProperty()
+    {
+        if (!$this->selectedVideoId) {
+            return null;
+        }
+        
+        return Video::with(['user', 'likes', 'comments', 'snaps'])
+            ->find($this->selectedVideoId);
+    }
+
+    public function getSelectedPhotoProperty()
+    {
+        if (!$this->selectedPhotoId) {
+            return null;
+        }
+        
+        return Photo::with(['user', 'likes', 'comments'])
+            ->find($this->selectedPhotoId);
     }
 
     public function render()

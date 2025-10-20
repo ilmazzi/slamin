@@ -9,14 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class VideoModal extends Component
 {
-    public Video $video;
+    public $videoId;
     public $newComment = '';
     public $showSnapForm = false;
     public $snapContent = '';
 
-    public function mount(Video $video)
+    public function mount($videoId)
     {
-        $this->video = $video;
+        $this->videoId = $videoId;
+    }
+
+    public function getVideoProperty()
+    {
+        return Video::with(['user', 'likes', 'comments', 'snaps'])
+            ->find($this->videoId);
     }
 
     public function addComment()
@@ -40,9 +46,6 @@ class VideoModal extends Component
 
             $this->newComment = '';
             session()->flash('success', 'Commento aggiunto con successo!');
-            
-            // Ricarica il video con i commenti aggiornati
-            $this->video = $this->video->fresh(['comments.user']);
         } catch (\Exception $e) {
             session()->flash('error', 'Errore nell\'aggiunta del commento.');
         }
@@ -71,9 +74,6 @@ class VideoModal extends Component
             $this->snapContent = '';
             $this->showSnapForm = false;
             session()->flash('success', 'Snap creato con successo!');
-            
-            // Ricarica il video con gli snap aggiornati
-            $this->video = $this->video->fresh(['snaps.user']);
         } catch (\Exception $e) {
             session()->flash('error', 'Errore nella creazione dello snap.');
         }

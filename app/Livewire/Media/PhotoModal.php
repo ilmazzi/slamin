@@ -8,12 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class PhotoModal extends Component
 {
-    public Photo $photo;
+    public $photoId;
     public $newComment = '';
 
-    public function mount(Photo $photo)
+    public function mount($photoId)
     {
-        $this->photo = $photo;
+        $this->photoId = $photoId;
+    }
+
+    public function getPhotoProperty()
+    {
+        return Photo::with(['user', 'likes', 'comments'])
+            ->find($this->photoId);
     }
 
     public function addComment()
@@ -37,9 +43,6 @@ class PhotoModal extends Component
 
             $this->newComment = '';
             session()->flash('success', 'Commento aggiunto con successo!');
-            
-            // Ricarica la foto con i commenti aggiornati
-            $this->photo = $this->photo->fresh(['comments.user']);
         } catch (\Exception $e) {
             session()->flash('error', 'Errore nell\'aggiunta del commento.');
         }

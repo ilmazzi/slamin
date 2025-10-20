@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     <i class="ph-duotone ph-video me-2"></i>
-                    {{ $video->title }}
+                    {{ $this->video->title }}
                 </h5>
                 <button type="button" class="btn-close" wire:click="$parent.closeVideoModal"></button>
             </div>
@@ -13,9 +13,9 @@
                     <!-- Video Player -->
                     <div class="col-lg-8">
                         <div class="position-relative">
-                            @if($video->video_url)
+                            @if($this->video->video_url)
                                 <video controls class="w-100" style="max-height: 500px;">
-                                    <source src="{{ $video->video_url }}" type="video/mp4">
+                                    <source src="{{ $this->video->video_url }}" type="video/mp4">
                                     Il tuo browser non supporta il tag video.
                                 </video>
                             @else
@@ -32,28 +32,28 @@
                         <div class="mt-3">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <h4 class="mb-1">{{ $video->title }}</h4>
+                                    <h4 class="mb-1">{{ $this->video->title }}</h4>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $video->user->profile_photo_url }}" 
+                                        <img src="{{ $this->video->user->profile_photo_url }}" 
                                              class="rounded-circle me-2" 
-                                             alt="{{ $video->user->name }}" 
+                                             alt="{{ $this->video->user->name }}" 
                                              style="width: 40px; height: 40px; object-fit: cover;">
                                         <div>
-                                            <h6 class="mb-0">{{ $video->user->name }}</h6>
-                                            <small class="text-muted">{{ $video->created_at->diffForHumans() }}</small>
+                                            <h6 class="mb-0">{{ $this->video->user->name }}</h6>
+                                            <small class="text-muted">{{ $this->video->created_at->diffForHumans() }}</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <livewire:social.social-view-counter :model="$video" :size="'md'" />
-                                    <livewire:social.social-like-button :model="$video" :size="'md'" />
-                                    <livewire:social.social-comment-button :model="$video" :size="'md'" />
+                                    <livewire:social.social-view-counter :model="$this->video" :size="'md'" />
+                                    <livewire:social.social-like-button :model="$this->video" :size="'md'" />
+                                    <livewire:social.social-comment-button :model="$this->video" :size="'md'" />
                                 </div>
                             </div>
                             
-                            @if($video->description)
+                            @if($this->video->description)
                                 <div class="mb-3">
-                                    <p class="mb-0">{{ $video->description }}</p>
+                                    <p class="mb-0">{{ $this->video->description }}</p>
                                 </div>
                             @endif
                         </div>
@@ -67,13 +67,13 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#comments-tab" type="button" role="tab">
                                             <i class="ph-duotone ph-chat-circle me-1"></i>
-                                            Commenti ({{ $video->comments()->where('status', 'approved')->count() }})
+                                            Commenti ({{ $this->video->comments()->where('status', 'approved')->count() }})
                                         </button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#snaps-tab" type="button" role="tab">
                                             <i class="ph-duotone ph-lightning me-1"></i>
-                                            Snap ({{ $video->snaps()->count() }})
+                                            Snap ({{ $this->video->snaps()->count() }})
                                         </button>
                                     </li>
                                 </ul>
@@ -85,7 +85,7 @@
                                         <div class="p-3" style="max-height: 400px; overflow-y: auto;">
                                             <!-- Comments List -->
                                             <div class="comments-list mb-3">
-                                                @forelse($video->comments()->where('status', 'approved')->with('user')->latest()->take(10)->get() as $comment)
+                                                @forelse($this->video->comments()->where('status', 'approved')->with('user')->latest()->take(10)->get() as $comment)
                                                     <div class="d-flex mb-3">
                                                         <div class="flex-shrink-0 me-3">
                                                             <img src="{{ $comment->user->profile_photo_url }}" 
@@ -141,7 +141,7 @@
                                         <div class="p-3" style="max-height: 400px; overflow-y: auto;">
                                             <!-- Snaps List -->
                                             <div class="snaps-list mb-3">
-                                                @forelse($video->snaps()->with('user')->latest()->take(10)->get() as $snap)
+                                                @forelse($this->video->snaps()->with('user')->latest()->take(10)->get() as $snap)
                                                     <div class="d-flex mb-3">
                                                         <div class="flex-shrink-0 me-3">
                                                             <img src="{{ $snap->user->profile_photo_url }}" 
