@@ -21,6 +21,8 @@
             <!-- Video HTML5 con URL diretto (PeerTube o locale) -->
             <video x-ref="videoPlayer" 
                    controls 
+                   playsinline
+                   webkit-playsinline
                    class="w-100"
                    style="max-height: 60vh;"
                    x-on:timeupdate="updateTime()">

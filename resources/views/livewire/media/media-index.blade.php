@@ -72,7 +72,7 @@
                             @endif
 
                             <!-- Video Actions -->
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                                 <div class="d-flex gap-2">
                                     @if($mostPopularVideo)
                                         <livewire:social.social-like-button :content="$mostPopularVideo" type="video" size="sm" />
@@ -80,14 +80,14 @@
                                         <livewire:social.social-comment-button :content="$mostPopularVideo" type="video" size="sm" />
                                     @endif
                                 </div>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 w-100 w-md-auto">
                                     <a href="{{ route('videos.show', $mostPopularVideo) }}" 
-                                       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+                                       class="btn btn-primary btn-sm d-flex align-items-center gap-1 w-100 w-md-auto justify-content-center"
                                        target="_blank">
                                         <i class="ph-duotone ph-arrow-square-out f-s-12"></i>
                                         <span>Apri video</span>
                                     </a>
-                                    <small class="text-muted">
+                                    <small class="text-muted d-none d-md-block">
                                         <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
                                         {{ $mostPopularVideo->created_at->format('d/m/Y') }}
                                     </small>
@@ -148,7 +148,7 @@
                                                 {{ Str::limit($video->title, 40) }}
                                             </a>
                                         </h6>
-                                        <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 @if($video)
                                                     <livewire:social.social-like-button :content="$video" type="video" size="xs" />
@@ -157,9 +157,9 @@
                                                 @endif
                                             </div>
                                             <a href="{{ route('videos.show', $video) }}" 
-                                               class="btn btn-outline-primary btn-xs d-flex align-items-center gap-1"
+                                               class="btn btn-primary btn-xs d-flex align-items-center gap-1"
                                                target="_blank"
-                                               style="font-size: 10px; padding: 2px 6px;">
+                                               style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                                 <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
                                                 <span>Apri</span>
                                             </a>
@@ -197,7 +197,7 @@
                                                 {{ Str::limit($video->title, 40) }}
                                             </a>
                                         </h6>
-                                        <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 @if($video)
                                                     <livewire:social.social-like-button :content="$video" type="video" size="xs" />
@@ -206,9 +206,9 @@
                                                 @endif
                                             </div>
                                             <a href="{{ route('videos.show', $video) }}" 
-                                               class="btn btn-outline-primary btn-xs d-flex align-items-center gap-1"
+                                               class="btn btn-primary btn-xs d-flex align-items-center gap-1"
                                                target="_blank"
-                                               style="font-size: 10px; padding: 2px 6px;">
+                                               style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                                 <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
                                                 <span>Apri</span>
                                             </a>
@@ -416,7 +416,7 @@
                             @endif
 
                             <!-- Photo Actions -->
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
                                 <div class="d-flex gap-2">
                                     @if($mostPopularPhoto)
                                         <livewire:social.social-like-button :content="$mostPopularPhoto" type="photo" size="sm" />
@@ -424,7 +424,7 @@
                                         <livewire:social.social-comment-button :content="$mostPopularPhoto" type="photo" size="sm" />
                                     @endif
                                 </div>
-                                <small class="text-muted">
+                                <small class="text-muted d-none d-md-block">
                                     <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
                                     {{ $mostPopularPhoto->created_at->format('d/m/Y') }}
                                 </small>
