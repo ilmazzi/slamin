@@ -22,7 +22,7 @@
              x-on:mouseleave="tooltipVisible = false">
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
                  style="width: 20px; height: 20px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                <i class="ph ph-camera text-white" style="font-size: 10px;"></i>
+                <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 12px; height: 12px; filter: brightness(0) invert(1);">
             </div>
         </div>
     @endforeach

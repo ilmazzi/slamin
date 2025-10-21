@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Video;
+use App\Models\VideoSnap;
 use App\Models\Group;
 use App\Models\GigApplication;
 use App\Models\Event;
@@ -59,19 +60,13 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'user' => \App\Models\User::class,
             'video' => \App\Models\Video::class,
+            'video_snap' => \App\Models\VideoSnap::class,
             'poem' => \App\Models\Poem::class,
             'article' => \App\Models\Article::class,
             'photo' => \App\Models\Photo::class,
             'gig' => \App\Models\Gig::class,
             'event' => \App\Models\Event::class,
             'group' => \App\Models\Group::class,
-            // Chat models
-            'conversation' => \App\Models\Chat\Conversation::class,
-            'message' => \App\Models\Chat\Message::class,
-            'participant' => \App\Models\Chat\Participant::class,
-            'attachment' => \App\Models\Chat\Attachment::class,
-            'chat_group' => \App\Models\Chat\Group::class,
-            'action' => \App\Models\Chat\Action::class,
         ]);
 
         // Registra l'observer per i video

@@ -13,7 +13,11 @@
                style="max-height: 60vh;"
                x-on:timeupdate="updateTime()"
                x-on:loadedmetadata="setDuration()">
-            <source src="{{ $video->peertube_direct_url ?? $video->video_url }}" type="video/mp4">
+            @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+                <source src="{{ $video->peertube_direct_url ?? $video->video_url }}" type="video/mp4">
+            @else
+                <source src="{{ $video->video_url }}" type="video/mp4">
+            @endif
             Il tuo browser non supporta il tag video.
         </video>
         
@@ -23,7 +27,7 @@
                     class="btn btn-success btn-sm rounded-circle"
                     style="width: 50px; height: 50px;"
                     title="Crea Snap">
-                <i class="ph ph-camera" style="font-size: 20px;"></i>
+                <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
             </button>
         </div>
     </div>
@@ -40,7 +44,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            <i class="ph ph-camera me-2"></i>Crea Snap
+                            <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 20px; height: 20px; margin-right: 8px;">Crea Snap
                         </h5>
                         <button type="button" class="btn-close" wire:click="closeSnapModal"></button>
                     </div>
@@ -69,7 +73,7 @@
                         <button type="button" class="btn btn-secondary" wire:click="closeSnapModal">Annulla</button>
                         <button type="button" class="btn btn-primary" wire:click="createSnap" wire:loading.attr="disabled">
                             <span wire:loading.remove wire:target="createSnap">
-                                <i class="ph ph-camera me-1"></i>Crea Snap
+                                <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 16px; height: 16px; margin-right: 4px;">Crea Snap
                             </span>
                             <span wire:loading wire:target="createSnap">
                                 <div class="spinner-border spinner-border-sm me-1" role="status">
