@@ -345,6 +345,23 @@ Route::prefix('photos')->name('photos.')->group(function () {
     // Public photo viewing - anyone can see photos
     Route::get('/', App\Livewire\Photos\PhotoIndex::class)->name('index');
     Route::get('/user/{userId}', App\Livewire\Photos\PhotoIndex::class)->name('user');
+    // Route per servire le immagini
+    Route::get('/{photo}/image', function(\App\Models\Photo $photo) {
+        if (!$photo->isApproved()) {
+            abort(404);
+        }
+        
+        if (!\Illuminate\Support\Facades\Storage::exists($photo->image_path)) {
+            abort(404);
+        }
+        
+        $file = \Illuminate\Support\Facades\Storage::get($photo->image_path);
+        $mimeType = \Illuminate\Support\Facades\Storage::mimeType($photo->image_path);
+        
+        return response($file, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Cache-Control', 'public, max-age=31536000');
+    })->name('image');
 });
 Route::view('project_app', 'project_app')->name('project_app');
 Route::view('project_details', 'project_details')->name('project_details');
