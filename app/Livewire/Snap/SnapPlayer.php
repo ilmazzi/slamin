@@ -98,36 +98,55 @@ class SnapPlayer extends Component
             'user_id' => Auth::id(),
             'timestamp' => $this->snapTimestamp,
             'title' => $this->snapTitle,
+            'title_length' => strlen($this->snapTitle),
             'description' => $this->snapDescription
         ]);
         
-        $this->validate([
-            'snapTitle' => 'required|string|max:255',
-            'snapDescription' => 'nullable|string|max:500',
-            'snapTimestamp' => 'required|integer|min:0'
-        ]);
-        
-        $snap = VideoSnap::create([
-            'video_id' => $this->video->id,
-            'user_id' => Auth::id(),
-            'timestamp' => $this->snapTimestamp,
-            'title' => $this->snapTitle,
-            'description' => $this->snapDescription,
-            'status' => 'approved'
-        ]);
-        
-        Log::info('Snap creato con successo', ['snap_id' => $snap->id]);
-        
-        $this->snapTitle = '';
-        $this->snapDescription = '';
-        $this->showSnapModal = false;
-        
-        // Ricarica gli snap
-        $this->snaps = $this->video->approvedSnaps()->orderBy('timestamp')->get();
-        
-        $this->dispatch('snap-created');
-        
-        session()->flash('message', 'Snap creato con successo!');
+        try {
+            $this->validate([
+                'snapTitle' => 'required|string|max:255',
+                'snapDescription' => 'nullable|string|max:500',
+                'snapTimestamp' => 'required|integer|min:0'
+            ]);
+            
+            Log::info('Validazione superata, creo lo snap...');
+            
+            $snap = VideoSnap::create([
+                'video_id' => $this->video->id,
+                'user_id' => Auth::id(),
+                'timestamp' => $this->snapTimestamp,
+                'title' => $this->snapTitle,
+                'description' => $this->snapDescription,
+                'status' => 'approved'
+            ]);
+            
+            Log::info('Snap creato con successo', ['snap_id' => $snap->id]);
+            
+            $this->snapTitle = '';
+            $this->snapDescription = '';
+            $this->showSnapModal = false;
+            
+            // Ricarica gli snap
+            $this->snaps = $this->video->approvedSnaps()->orderBy('timestamp')->get();
+            
+            $this->dispatch('snap-created');
+            
+            session()->flash('message', 'Snap creato con successo!');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Errore validazione snap', [
+                'errors' => $e->errors(),
+                'title' => $this->snapTitle,
+                'timestamp' => $this->snapTimestamp
+            ]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Errore creazione snap', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            session()->flash('error', 'Errore durante la creazione dello snap: ' . $e->getMessage());
+        }
     }
     
     public function render()

@@ -22,6 +22,13 @@
         </div>
     @endif
     
+    @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
         @if($videoDirectUrl)
@@ -75,23 +82,29 @@
                         <button type="button" class="btn-close" wire:click="closeSnapModal"></button>
                     </div>
                     <div class="modal-body">
-                        <form wire:submit="createSnap">
+                        <!-- Debug: mostra valori correnti -->
+                        <div class="alert alert-info" style="font-size: 12px;">
+                            <strong>Debug:</strong> Title: "{{ $snapTitle }}" | Timestamp: {{ $snapTimestamp }}
+                        </div>
+                        
+                        <form wire:submit.prevent="createSnap">
                             <div class="mb-3">
                                 <label class="form-label">Titolo *</label>
-                                <input type="text" class="form-control" wire:model="snapTitle" placeholder="Titolo del momento">
-                                @error('snapTitle') <span class="text-danger">{{ $message }}</span> @enderror
+                                <input type="text" class="form-control" wire:model.defer="snapTitle" placeholder="Titolo del momento" required>
+                                @error('snapTitle') <span class="text-danger d-block mt-1">{{ $message }}</span> @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Descrizione</label>
-                                <textarea class="form-control" wire:model="snapDescription" rows="3" placeholder="Descrizione del momento"></textarea>
-                                @error('snapDescription') <span class="text-danger">{{ $message }}</span> @enderror
+                                <textarea class="form-control" wire:model.defer="snapDescription" rows="3" placeholder="Descrizione del momento"></textarea>
+                                @error('snapDescription') <span class="text-danger d-block mt-1">{{ $message }}</span> @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Timestamp</label>
                                 <div class="form-control-plaintext">
                                     <i class="ph ph-clock me-1"></i>{{ gmdate('i:s', $snapTimestamp) }}
                                 </div>
-                                <input type="hidden" wire:model="snapTimestamp">
+                                <input type="hidden" wire:model.defer="snapTimestamp">
+                                @error('snapTimestamp') <span class="text-danger d-block mt-1">{{ $message }}</span> @enderror
                             </div>
                         </form>
                     </div>
