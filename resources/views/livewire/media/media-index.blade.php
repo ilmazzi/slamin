@@ -141,10 +141,10 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            @if($photo)
-                                                <livewire:social.social-like-button :content="$photo" type="photo" size="xs" />
-                                                <livewire:social.social-view-counter :content="$photo" type="photo" size="xs" />
-                                                <livewire:social.social-comment-button :content="$photo" type="photo" size="xs" />
+                                            @if($video)
+                                                <livewire:social.social-like-button :content="$video" type="video" size="xs" />
+                                                <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
+                                                <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
                                             @endif
                                         </div>
                                     </div>
@@ -181,10 +181,10 @@
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-2">
-                                            @if($photo)
-                                                <livewire:social.social-like-button :content="$photo" type="photo" size="xs" />
-                                                <livewire:social.social-view-counter :content="$photo" type="photo" size="xs" />
-                                                <livewire:social.social-comment-button :content="$photo" type="photo" size="xs" />
+                                            @if($video)
+                                                <livewire:social.social-like-button :content="$video" type="video" size="xs" />
+                                                <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
+                                                <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
                                             @endif
                                         </div>
                                     </div>
