@@ -23,7 +23,7 @@
         <div x-data="{ showTooltip: false }"
              class="snap-marker position-absolute" 
              style="left: {{ ($snap->timestamp / ($duration ?: 1)) * 100 }}%"
-             x-on:click="$wire.seekToTime({{ $snap->timestamp }})"
+             x-on:click="Livewire.dispatch('seek-video', { timestamp: {{ $snap->timestamp }} })"
              x-on:mouseenter="showTooltip = true"
              x-on:mouseleave="showTooltip = false">
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"

@@ -132,8 +132,8 @@ class SnapPlayer extends Component
             $this->snapDescription = '';
             $this->showSnapModal = false;
             
-            // Forza il refresh del componente
-            $this->video->refresh();
+            // Non fare refresh del video per evitare che si fermi
+            // Gli snap si aggiornano automaticamente con il computed property
             
             session()->flash('message', 'Snap creato con successo!');
             
