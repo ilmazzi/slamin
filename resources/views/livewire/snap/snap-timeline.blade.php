@@ -1,20 +1,15 @@
-<div x-data="{ 
-    currentTime: $wire.entangle('currentTime'),
-    duration: {{ $duration }}
-}" 
-     class="snap-timeline position-relative">
+<div class="snap-timeline position-relative">
     
     <!-- Progress Bar -->
     <div class="progress" style="height: 8px; background-color: #e9ecef;">
-        <div class="progress-bar bg-primary" 
-             :style="`width: ${(currentTime / duration) * 100}%`"></div>
+        <div class="progress-bar bg-primary" style="width: 0%"></div>
     </div>
     
     <!-- Snap Markers -->
     @foreach($snaps as $snap)
         <div class="snap-marker position-absolute" 
              style="left: {{ ($snap->timestamp / ($duration ?: 1)) * 100 }}%"
-             onclick="document.querySelector('video[x-ref=\\'videoPlayer\\']').currentTime = {{ $snap->timestamp }}; $wire.currentTime = {{ $snap->timestamp }}"
+             onclick="const video = document.querySelector('.snap-player video'); if(video) { video.currentTime = {{ $snap->timestamp }}; }"
              title="{{ $snap->title }}">
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
                  style="width: 20px; height: 20px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer;">
