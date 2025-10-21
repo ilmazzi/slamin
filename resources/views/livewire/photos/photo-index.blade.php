@@ -64,7 +64,7 @@
             @foreach($photos as $photo)
                 <div class="col-6 col-md-4 col-lg-3 col-xl-2">
                     <div class="card hover-effect h-100">
-                        <a href="{{ route('photos.show', $photo) }}" class="text-decoration-none">
+                        <a href="#" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })" class="text-decoration-none">
                             <div class="position-relative" style="padding-top: 100%; overflow: hidden;">
                                 <img src="{{ $photo->thumbnail_url }}" 
                                      alt="{{ $photo->alt_text ?: $photo->title }}"

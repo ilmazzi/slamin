@@ -345,15 +345,6 @@ Route::prefix('photos')->name('photos.')->group(function () {
     // Public photo viewing - anyone can see photos
     Route::get('/', App\Livewire\Photos\PhotoIndex::class)->name('index');
     Route::get('/user/{userId}', App\Livewire\Photos\PhotoIndex::class)->name('user');
-    Route::get('/{photo}/image', [App\Http\Controllers\PhotoController::class, 'image'])->name('image');
-    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'show'])->name('show');
-});
-
-// Photo Routes - AUTHENTICATED (edit/delete) - After public routes
-Route::prefix('photos')->name('photos.')->middleware('auth')->group(function () {
-    Route::get('/{photo}/edit', [App\Http\Controllers\PhotoController::class, 'edit'])->name('edit');
-    Route::put('/{photo}', [App\Http\Controllers\PhotoController::class, 'update'])->name('update');
-    Route::delete('/{photo}', [App\Http\Controllers\PhotoController::class, 'destroy'])->name('destroy');
 });
 Route::view('project_app', 'project_app')->name('project_app');
 Route::view('project_details', 'project_details')->name('project_details');
@@ -1362,15 +1353,8 @@ Route::prefix('api/videos')->middleware('auth')->group(function () {
 // Route pubblica per URL PeerTube
 Route::get('/videos/{video}/peertube-url', [App\Http\Controllers\VideoController::class, 'getPeerTubeUrl'])->name('videos.peertube-url');
 
-// API routes for photos (completamente pubbliche)
-Route::prefix('api/photos')->group(function () {
-    Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
-});
-
-
 // API routes per commenti (pubbliche per lettura)
 Route::get('/api/videos/{video}/comments', [App\Http\Controllers\VideoController::class, 'getComments'])->name('api.videos.comments');
-Route::get('/api/photos/{photo}/comments', [App\Http\Controllers\PhotoController::class, 'getComments'])->name('api.photos.comments');
 
 // API routes per sistema commenti unificato (senza CSRF)
 Route::prefix('api/social')->middleware('web')->group(function () {

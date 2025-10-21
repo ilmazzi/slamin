@@ -278,7 +278,7 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
-                                            <a href="{{ route('photos.show', $photo) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                            <a href="#" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
                                                 {{ Str::limit($photo->title, 40) }}
                                             </a>
                                         </h6>
@@ -319,7 +319,7 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
-                                            <a href="{{ route('photos.show', $photo) }}" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
+                                            <a href="#" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
                                                 {{ Str::limit($photo->title, 40) }}
                                             </a>
                                         </h6>
