@@ -7,30 +7,23 @@
     
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
-        @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
-            <!-- PeerTube iframe per video con snap -->
-            <div class="position-relative" style="padding-bottom: 56.25%; height: 0; overflow: hidden;">
-                <iframe x-ref="videoPlayer"
-                        src="{{ $video->peertube_embed_url }}" 
-                        frameborder="0" 
-                        allowfullscreen
-                        class="position-absolute top-0 left-0 w-100 h-100"
-                        style="border: none;"
-                        x-on:load="initPeerTubePlayer()">
-                </iframe>
-            </div>
-        @else
-            <!-- Video HTML5 per video locali -->
-            <video x-ref="videoPlayer" 
-                   controls 
-                   class="w-100"
-                   style="max-height: 60vh;"
-                   x-on:timeupdate="updateTime()"
-                   x-on:loadedmetadata="setDuration()">
+        <!-- Video HTML5 con URL PeerTube diretto -->
+        <video x-ref="videoPlayer" 
+               controls 
+               class="w-100"
+               style="max-height: 60vh;"
+               x-on:timeupdate="updateTime()"
+               x-on:loadedmetadata="setDuration()"
+               x-on:loadstart="loadPeerTubeVideo()">
+            @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+                <!-- Per PeerTube, carichiamo l'URL diretto via JavaScript -->
+                <source src="" type="video/mp4" x-ref="videoSource">
+            @else
+                <!-- Per video locali -->
                 <source src="{{ $video->video_url }}" type="video/mp4">
-                Il tuo browser non supporta il tag video.
-            </video>
-        @endif
+            @endif
+            Il tuo browser non supporta il tag video.
+        </video>
         
         <!-- Pulsante Crea Snap -->
         <div class="position-absolute top-0 end-0 m-3">
@@ -104,50 +97,42 @@
 function initPlayer() {
     // Listener per seek
     Livewire.on('player-seek', (data) => {
-        if (this.$refs.videoPlayer.tagName === 'VIDEO') {
-            // Video HTML5
-            this.$refs.videoPlayer.currentTime = data.timestamp;
-        } else {
-            // PeerTube iframe - non possiamo controllare direttamente
-            // Mostriamo un messaggio o apriamo il video in una nuova tab
-            const videoUrl = '{{ $video->peertube_url }}?start=' + data.timestamp;
-            window.open(videoUrl, '_blank');
-        }
+        this.$refs.videoPlayer.currentTime = data.timestamp;
     });
 }
 
-function initPeerTubePlayer() {
-    // Per PeerTube iframe, non possiamo controllare il player direttamente
-    // Impostiamo valori di default
-    this.currentTime = 0;
-    this.duration = {{ $video->duration ?? 0 }};
+function loadPeerTubeVideo() {
+    @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+        // Carica l'URL diretto di PeerTube via API
+        fetch('{{ route("videos.peertube-url", $video) }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.files && data.files.length > 0) {
+                    // Usa il primo file disponibile (migliore qualità)
+                    const videoFile = data.files[0];
+                    this.$refs.videoSource.src = videoFile.url;
+                    this.$refs.videoPlayer.load();
+                } else {
+                    console.error('Errore caricamento video PeerTube:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Errore API PeerTube:', error);
+            });
+    @endif
 }
 
 function updateTime() {
-    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
-        this.currentTime = this.$refs.videoPlayer.currentTime;
-        // Emetti evento per timeline
-        this.$dispatch('video-time-update', { time: this.currentTime });
-    }
-    // Per PeerTube iframe, non possiamo ottenere il tempo corrente
+    this.currentTime = this.$refs.videoPlayer.currentTime;
+    // Emetti evento per timeline
+    this.$dispatch('video-time-update', { time: this.currentTime });
 }
 
 function setDuration() {
-    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
-        this.duration = this.$refs.videoPlayer.duration;
-    }
-    // Per PeerTube iframe, usiamo la durata dal database
+    this.duration = this.$refs.videoPlayer.duration;
 }
 
 function createSnapAtCurrentTime() {
-    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
-        this.$wire.openSnapModal(this.currentTime);
-    } else {
-        // Per PeerTube, chiediamo all'utente di inserire il timestamp manualmente
-        const timestamp = prompt('Inserisci il timestamp in secondi (es: 120 per 2 minuti):');
-        if (timestamp && !isNaN(timestamp)) {
-            this.$wire.openSnapModal(parseInt(timestamp));
-        }
-    }
+    this.$wire.openSnapModal(this.currentTime);
 }
 </script>
