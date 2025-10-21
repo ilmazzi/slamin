@@ -27,33 +27,4 @@
     </div>
 </div>
 
-<script>
-function showSnapTooltip(element, title, description) {
-    const tooltip = document.getElementById('snap-tooltip');
-    const titleEl = document.getElementById('snap-tooltip-title');
-    const descEl = document.getElementById('snap-tooltip-description');
-    
-    if (tooltip && titleEl && descEl) {
-        titleEl.textContent = title;
-        descEl.textContent = description || 'Nessuna descrizione';
-        
-        // Posiziona il tooltip sopra il marker
-        const rect = element.getBoundingClientRect();
-        const timelineRect = element.closest('.snap-timeline').getBoundingClientRect();
-        
-        tooltip.style.display = 'block';
-        tooltip.style.left = (rect.left - timelineRect.left) + 'px';
-        tooltip.style.bottom = '100%';
-        tooltip.style.marginBottom = '5px';
-        tooltip.style.transform = 'translateX(-50%)';
-    }
-}
-
-function hideSnapTooltip() {
-    const tooltip = document.getElementById('snap-tooltip');
-    if (tooltip) {
-        tooltip.style.display = 'none';
-    }
-}
-</script>
 

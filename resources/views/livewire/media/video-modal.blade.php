@@ -23,7 +23,7 @@
                 
                 <!-- Title & Description -->
                 @if($video->title || $video->description)
-                    <div class="mb-3">
+                    <div class="mb-4">
                         @if($video->title)
                             <h6 class="f-s-16 f-w-600 mb-2">{{ $video->title }}</h6>
                         @endif
