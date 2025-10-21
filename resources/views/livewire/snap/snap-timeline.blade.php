@@ -1,24 +1,7 @@
 <div x-data="{ 
     currentTime: $wire.entangle('currentTime'),
-    duration: {{ $duration }},
-    
-    initTimeline() {
-        // Listener per aggiornamenti tempo
-        Livewire.on('video-time-update', (data) => {
-            this.currentTime = data.time;
-        });
-    },
-    
-    seekToTimestamp(timestamp) {
-        // Trova il video player nel componente padre
-        const videoPlayer = document.querySelector('video[x-ref=\"videoPlayer\"]');
-        if (videoPlayer) {
-            videoPlayer.currentTime = timestamp;
-            this.currentTime = timestamp;
-        }
-    }
+    duration: {{ $duration }}
 }" 
-     x-init="initTimeline()"
      class="snap-timeline position-relative">
     
     <!-- Progress Bar -->
@@ -36,7 +19,7 @@
         }"
              class="snap-marker position-absolute" 
              style="left: {{ ($snap->timestamp / ($duration ?: 1)) * 100 }}%"
-             x-on:click="seekToTimestamp(snapTimestamp)"
+             x-on:click="document.querySelector('video[x-ref=\\'videoPlayer\\']').currentTime = snapTimestamp; $wire.currentTime = snapTimestamp"
              x-on:mouseenter="showTooltip = true"
              x-on:mouseleave="showTooltip = false">
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
