@@ -2,7 +2,14 @@
     currentTime: $wire.entangle('currentTime'),
     duration: {{ $duration }},
     tooltipVisible: false,
-    tooltipTitle: ''
+    tooltipTitle: '',
+    
+    initTimeline() {
+        // Listener per aggiornamenti tempo
+        Livewire.on('video-time-update', (data) => {
+            this.currentTime = data.time;
+        });
+    }
 }" 
      x-init="initTimeline()"
      class="snap-timeline position-relative">
@@ -36,11 +43,3 @@
     </div>
 </div>
 
-<script>
-function initTimeline() {
-    // Listener per aggiornamenti tempo
-    Livewire.on('video-time-update', (data) => {
-        this.currentTime = data.time;
-    });
-}
-</script>

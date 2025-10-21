@@ -1,6 +1,48 @@
 <div x-data="{ 
     currentTime: $wire.entangle('currentTime'),
-    duration: $wire.entangle('duration')
+    duration: $wire.entangle('duration'),
+    
+    initPlayer() {
+        // Listener per seek
+        Livewire.on('player-seek', (data) => {
+            this.$refs.videoPlayer.currentTime = data.timestamp;
+        });
+    },
+    
+    loadPeerTubeVideo() {
+        @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+            // Carica l'URL diretto di PeerTube via API
+            fetch('{{ route("videos.peertube-url", $video) }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.files && data.files.length > 0) {
+                        // Usa il primo file disponibile (migliore qualità)
+                        const videoFile = data.files[0];
+                        this.$refs.videoSource.src = videoFile.url;
+                        this.$refs.videoPlayer.load();
+                    } else {
+                        console.error('Errore caricamento video PeerTube:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore API PeerTube:', error);
+                });
+        @endif
+    },
+    
+    updateTime() {
+        this.currentTime = this.$refs.videoPlayer.currentTime;
+        // Emetti evento per timeline
+        this.$dispatch('video-time-update', { time: this.currentTime });
+    },
+    
+    setDuration() {
+        this.duration = this.$refs.videoPlayer.duration;
+    },
+    
+    createSnapAtCurrentTime() {
+        this.$wire.openSnapModal(this.currentTime);
+    }
 }" 
      x-init="initPlayer()"
      class="snap-player">
@@ -93,46 +135,3 @@
     @endif
 </div>
 
-<script>
-function initPlayer() {
-    // Listener per seek
-    Livewire.on('player-seek', (data) => {
-        this.$refs.videoPlayer.currentTime = data.timestamp;
-    });
-}
-
-function loadPeerTubeVideo() {
-    @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
-        // Carica l'URL diretto di PeerTube via API
-        fetch('{{ route("videos.peertube-url", $video) }}')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.files && data.files.length > 0) {
-                    // Usa il primo file disponibile (migliore qualità)
-                    const videoFile = data.files[0];
-                    this.$refs.videoSource.src = videoFile.url;
-                    this.$refs.videoPlayer.load();
-                } else {
-                    console.error('Errore caricamento video PeerTube:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Errore API PeerTube:', error);
-            });
-    @endif
-}
-
-function updateTime() {
-    this.currentTime = this.$refs.videoPlayer.currentTime;
-    // Emetti evento per timeline
-    this.$dispatch('video-time-update', { time: this.currentTime });
-}
-
-function setDuration() {
-    this.duration = this.$refs.videoPlayer.duration;
-}
-
-function createSnapAtCurrentTime() {
-    this.$wire.openSnapModal(this.currentTime);
-}
-</script>
