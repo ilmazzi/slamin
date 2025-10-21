@@ -9,12 +9,10 @@ class PhotoModal extends Component
 {
     public $photoId;
     public $showModal = false;
-    public $newComment = '';
 
     protected $listeners = [
         'openPhotoModal' => 'openModal',
-        'closePhotoModal' => 'closeModal',
-        'commentAdded' => 'refreshComments'
+        'closePhotoModal' => 'closeModal'
     ];
 
     public function openModal($photoId = null)
@@ -27,53 +25,12 @@ class PhotoModal extends Component
         }
         
         $this->showModal = true;
-        $this->newComment = '';
     }
 
     public function closeModal()
     {
         $this->showModal = false;
         $this->photoId = null;
-        $this->newComment = '';
-    }
-
-    public function addComment()
-    {
-        if (!auth()->check()) {
-            $this->dispatch('show-auth-modal');
-            return;
-        }
-
-        if (empty(trim($this->newComment))) {
-            return;
-        }
-
-        $photo = $this->photo;
-        if (!$photo) {
-            return;
-        }
-
-        try {
-            $user = auth()->user();
-            $photo->addComment($user, trim($this->newComment));
-            
-            $this->newComment = '';
-            
-            // Dispatch event per aggiornare i contatori
-            $this->dispatch('commentAdded', [
-                'contentId' => $photo->id,
-                'contentType' => 'photo'
-            ]);
-            
-        } catch (\Exception $e) {
-            // Handle error silently
-        }
-    }
-
-    public function refreshComments($data = null)
-    {
-        // Force re-render
-        $this->dispatch('$refresh');
     }
 
     public function getPhotoProperty()
@@ -89,24 +46,10 @@ class PhotoModal extends Component
         }
     }
 
-    public function getCommentsProperty()
-    {
-        if (!$this->photo) {
-            return collect();
-        }
-
-        return $this->photo->comments()
-            ->with(['user'])
-            ->whereNull('parent_id')
-            ->orderBy('created_at', 'desc')
-            ->get();
-    }
-
     public function render()
     {
         return view('livewire.media.photo-modal', [
             'photo' => $this->photo,
-            'comments' => $this->comments,
         ]);
     }
 }
