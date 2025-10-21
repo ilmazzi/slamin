@@ -34,10 +34,18 @@
                 @endif
                 
                 <!-- Social Buttons -->
-                <div class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
-                    @livewire('social.social-view-counter', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-view-'.$video->id))
-                    @livewire('social.social-like-button', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-like-'.$video->id))
-                    @livewire('social.social-comment-button', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-comment-'.$video->id))
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        @livewire('social.social-view-counter', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-view-'.$video->id))
+                        @livewire('social.social-like-button', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-like-'.$video->id))
+                        @livewire('social.social-comment-button', ['content' => $video, 'type' => 'video', 'size' => 'md'], key('video-modal-comment-'.$video->id))
+                    </div>
+                    <a href="{{ route('videos.show', $video) }}" 
+                       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+                       target="_blank">
+                        <i class="ph-duotone ph-arrow-square-out f-s-14"></i>
+                        <span>Apri video</span>
+                    </a>
                 </div>
                 
                 <!-- Comments Section -->

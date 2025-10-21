@@ -80,10 +80,18 @@
                                         <livewire:social.social-comment-button :content="$mostPopularVideo" type="video" size="sm" />
                                     @endif
                                 </div>
-                                <small class="text-muted">
-                                    <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
-                                    {{ $mostPopularVideo->created_at->format('d/m/Y') }}
-                                </small>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ route('videos.show', $mostPopularVideo) }}" 
+                                       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+                                       target="_blank">
+                                        <i class="ph-duotone ph-arrow-square-out f-s-12"></i>
+                                        <span>Apri video</span>
+                                    </a>
+                                    <small class="text-muted">
+                                        <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
+                                        {{ $mostPopularVideo->created_at->format('d/m/Y') }}
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     @else
@@ -140,12 +148,21 @@
                                                 {{ Str::limit($video->title, 40) }}
                                             </a>
                                         </h6>
-                                        <div class="d-flex align-items-center gap-2">
-                                            @if($video)
-                                                <livewire:social.social-like-button :content="$video" type="video" size="xs" />
-                                                <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
-                                                <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
-                                            @endif
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                @if($video)
+                                                    <livewire:social.social-like-button :content="$video" type="video" size="xs" />
+                                                    <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
+                                                    <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
+                                                @endif
+                                            </div>
+                                            <a href="{{ route('videos.show', $video) }}" 
+                                               class="btn btn-outline-primary btn-xs d-flex align-items-center gap-1"
+                                               target="_blank"
+                                               style="font-size: 10px; padding: 2px 6px;">
+                                                <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
+                                                <span>Apri</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -180,12 +197,21 @@
                                                 {{ Str::limit($video->title, 40) }}
                                             </a>
                                         </h6>
-                                        <div class="d-flex align-items-center gap-2">
-                                            @if($video)
-                                                <livewire:social.social-like-button :content="$video" type="video" size="xs" />
-                                                <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
-                                                <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
-                                            @endif
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                @if($video)
+                                                    <livewire:social.social-like-button :content="$video" type="video" size="xs" />
+                                                    <livewire:social.social-view-counter :content="$video" type="video" size="xs" />
+                                                    <livewire:social.social-comment-button :content="$video" type="video" size="xs" />
+                                                @endif
+                                            </div>
+                                            <a href="{{ route('videos.show', $video) }}" 
+                                               class="btn btn-outline-primary btn-xs d-flex align-items-center gap-1"
+                                               target="_blank"
+                                               style="font-size: 10px; padding: 2px 6px;">
+                                                <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
+                                                <span>Apri</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -545,7 +571,7 @@
                                                 </div>
                                                 
                                                 <!-- Social Stats -->
-                                                <div class="d-flex align-items-center gap-2">
+                                                <div class="d-flex align-items-center gap-2 mb-3">
                                                     <div class="d-flex align-items-center justify-content-center text-muted" style="width: 60px; height: 32px;">
                                                         <i class="ph-duotone ph-eye f-s-18"></i>
                                                         <span class="f-s-13 ms-1">{{ number_format($video->views_count ?? 0) }}</span>
@@ -568,6 +594,16 @@
                                                         <i class="ph-duotone ph-chat-circle f-s-18"></i>
                                                         <span class="f-s-13">{{ number_format($video->comments_count ?? 0) }}</span>
                                                     </button>
+                                                </div>
+                                                
+                                                <!-- Action Button -->
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="{{ route('videos.show', $video) }}" 
+                                                       class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+                                                       target="_blank">
+                                                        <i class="ph-duotone ph-arrow-square-out f-s-12"></i>
+                                                        <span>Apri video</span>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
