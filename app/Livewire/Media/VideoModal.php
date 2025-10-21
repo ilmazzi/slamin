@@ -4,6 +4,7 @@ namespace App\Livewire\Media;
 
 use Livewire\Component;
 use App\Models\Video;
+use Illuminate\Support\Facades\Auth;
 
 class VideoModal extends Component
 {
@@ -39,7 +40,7 @@ class VideoModal extends Component
 
     public function addComment()
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             $this->dispatch('show-auth-modal');
             return;
         }
@@ -54,16 +55,13 @@ class VideoModal extends Component
         }
 
         try {
-            $user = auth()->user();
+            $user = Auth::user();
             $video->addComment($user, trim($this->newComment));
             
             $this->newComment = '';
             
-            // Dispatch event per aggiornare i contatori
-            $this->dispatch('commentAdded', [
-                'contentId' => $video->id,
-                'contentType' => 'video'
-            ]);
+            // Non ricaricare il componente, solo resettare la proprietà computed
+            unset($this->comments);
             
         } catch (\Exception $e) {
             // Handle error silently
@@ -72,8 +70,8 @@ class VideoModal extends Component
 
     public function refreshComments($data = null)
     {
-        // Force re-render
-        $this->dispatch('$refresh');
+        // Reset the computed property instead of forcing a refresh
+        unset($this->comments);
     }
 
     public function getVideoProperty()

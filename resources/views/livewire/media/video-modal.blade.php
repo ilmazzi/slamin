@@ -19,7 +19,7 @@
             
             <div class="modal-body p-3">
                 <!-- Video con Snap -->
-                @livewire('snap.snap-player', ['video' => $video])
+                @livewire('snap.snap-player', ['video' => $video], key('snap-player-'.$video->id))
                 
                 <!-- Title & Description -->
                 @if($video->title || $video->description)
