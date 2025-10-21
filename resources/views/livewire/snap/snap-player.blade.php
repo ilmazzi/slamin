@@ -67,7 +67,7 @@
     
     <!-- Timeline con Snap -->
     <div class="mt-3">
-        @livewire('snap.snap-timeline', ['video' => $video, 'snaps' => $snaps])
+        @livewire('snap.snap-timeline', ['video' => $video, 'snaps' => $this->snaps])
     </div>
     
     <!-- Snap Modal -->
