@@ -3,29 +3,63 @@
     duration: {{ $video->duration ?? 0 }},
     
     updateTime() {
-        this.currentTime = this.$refs.videoPlayer.currentTime;
-        this.$dispatch('video-time-update', { time: this.currentTime });
+        if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+            this.currentTime = this.$refs.videoPlayer.currentTime;
+            this.$dispatch('video-time-update', { time: this.currentTime });
+        }
+        // Per PeerTube iframe, non possiamo ottenere il tempo corrente
     },
     
     createSnapAtCurrentTime() {
-        this.$wire.openSnapModal(this.currentTime);
+        if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+            this.$wire.openSnapModal(this.currentTime);
+        } else {
+            // Per PeerTube, chiediamo all'utente di inserire il timestamp manualmente
+            const timestamp = prompt('Inserisci il timestamp in secondi (es: 120 per 2 minuti):');
+            if (timestamp && !isNaN(timestamp)) {
+                this.$wire.openSnapModal(parseInt(timestamp));
+            }
+        }
     }
 }" 
-     x-init="Livewire.on('player-seek', (data) => this.$refs.videoPlayer.currentTime = data.timestamp)"
+     x-init="Livewire.on('player-seek', (data) => {
+         if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+             this.$refs.videoPlayer.currentTime = data.timestamp;
+         } else {
+             // Per PeerTube iframe, apri il video con timestamp
+             const videoUrl = '{{ $video->peertube_url }}?start=' + data.timestamp;
+             window.open(videoUrl, '_blank');
+         }
+     })"
      class="snap-player">
     
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
-        <video x-ref="videoPlayer" 
-               controls 
-               class="w-100"
-               style="max-height: 60vh;"
-               x-on:timeupdate="updateTime()">
-            <source src="{{ $video->peertube_direct_url ?? $video->video_url }}" type="video/mp4">
-            Il tuo browser non supporta il tag video.
-        </video>
+        @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+            <!-- PeerTube iframe per video con snap -->
+            <div class="position-relative" style="padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                <iframe x-ref="videoPlayer"
+                        src="{{ $video->peertube_embed_url }}" 
+                        frameborder="0" 
+                        allowfullscreen
+                        class="position-absolute top-0 left-0 w-100 h-100"
+                        style="border: none;">
+                </iframe>
+            </div>
+        @else
+            <!-- Video HTML5 per video locali -->
+            <video x-ref="videoPlayer" 
+                   controls 
+                   class="w-100"
+                   style="max-height: 60vh;"
+                   x-on:timeupdate="updateTime()">
+                <source src="{{ $video->video_url }}" type="video/mp4">
+                Il tuo browser non supporta il tag video.
+            </video>
+        @endif
         
         <!-- Pulsante Crea Snap -->
+        @if(!$video->isUploadedToPeerTube() || !$video->isReadyOnPeerTube())
         <div class="position-absolute top-0 end-0 m-3">
             <button x-on:click="createSnapAtCurrentTime()" 
                     class="btn btn-success btn-sm rounded-circle"
@@ -34,6 +68,7 @@
                 <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 24px; height: 24px; filter: brightness(0) invert(1);">
             </button>
         </div>
+        @endif
     </div>
     
     <!-- Timeline con Snap -->
