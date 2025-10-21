@@ -20,10 +20,14 @@
     
     <!-- Snap Markers -->
     @foreach($snaps as $snap)
-        <div x-data="{ showTooltip: false }"
+        <div x-data="{ 
+            showTooltip: false,
+            snapTitle: '{{ addslashes($snap->title) }}',
+            snapTimestamp: {{ $snap->timestamp }}
+        }"
              class="snap-marker position-absolute" 
              style="left: {{ ($snap->timestamp / ($duration ?: 1)) * 100 }}%"
-             x-on:click="Livewire.dispatch('seek-video', { timestamp: {{ $snap->timestamp }} })"
+             x-on:click="Livewire.dispatch('seek-video', { timestamp: snapTimestamp })"
              x-on:mouseenter="showTooltip = true"
              x-on:mouseleave="showTooltip = false">
             <div class="snap-indicator bg-success rounded-circle d-flex align-items-center justify-content-center"
@@ -36,7 +40,7 @@
                  x-transition
                  class="snap-tooltip position-absolute bg-dark text-white rounded p-2"
                  style="bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 12px; white-space: nowrap; margin-bottom: 5px; z-index: 1000;">
-                <strong>{{ $snap->title }}</strong>
+                <strong x-text="snapTitle"></strong>
             </div>
         </div>
     @endforeach
