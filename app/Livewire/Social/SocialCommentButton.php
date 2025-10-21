@@ -3,104 +3,80 @@
 namespace App\Livewire\Social;
 
 use Livewire\Component;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class SocialCommentButton extends Component
 {
-    public $modelType;
-    public $modelId;
-    public $commentCount = 0;
-    public $size = 'md';
-    public $showCount = true;
-    public $showModal = false;
+    public Model $content;
+    public string $type;
+    public string $size = 'md';
+    
+    public int $commentCount = 0;
+    public bool $showModal = false;
 
-    protected $listeners = ['commentAdded' => 'refreshCommentCount', 'commentRemoved' => 'refreshCommentCount'];
+    protected $listeners = ['refreshCommentButton' => 'refreshCommentCount'];
 
-    public function mount($model, $size = 'md', $showCount = true)
+    public function mount(Model $content, string $type, string $size = 'md')
     {
-        $this->modelType = get_class($model);
-        $this->modelId = $model->id;
+        $this->content = $content;
+        $this->type = $type;
         $this->size = $size;
-        $this->showCount = $showCount;
         
         $this->refreshCommentCount();
     }
 
-    public function getModelProperty()
+    public function openCommentModal()
     {
-        return app($this->modelType)->find($this->modelId);
+        if (!auth()->check()) {
+            $this->dispatch('show-auth-modal');
+            return;
+        }
+
+        $this->dispatch('openCommentModal', [
+            'contentId' => $this->content->id,
+            'contentType' => $this->type
+        ]);
     }
 
-    public function toggleModal()
+    public function closeCommentModal()
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per commentare.');
-            return redirect()->route('login');
-        }
-
-        $this->showModal = !$this->showModal;
-    }
-
-    public function addComment($content)
-    {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per commentare.');
-            return redirect()->route('login');
-        }
-
-        try {
-            $this->model->addComment(Auth::user(), $content);
-            $this->refreshCommentCount();
-            
-            // Emetti evento per aggiornare altri componenti
-            $this->dispatch('commentAdded', [
-                'modelType' => $this->modelType,
-                'modelId' => $this->modelId,
-                'commentCount' => $this->commentCount
-            ]);
-
-            session()->flash('success', 'Commento aggiunto con successo!');
-            $this->showModal = false;
-
-        } catch (\Exception $e) {
-            session()->flash('error', 'Errore durante l\'aggiunta del commento. Riprova.');
-        }
+        $this->showModal = false;
     }
 
     public function refreshCommentCount()
     {
-        $this->commentCount = $this->model->comments()->where('status', 'approved')->count();
+        $this->commentCount = $this->content->comment_count;
     }
 
-    public function getSizeStyles()
+    public function getSizeClassesProperty()
     {
-        $sizes = [
-            'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
-            'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
-            'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
+        return [
+            'sm' => [
+                'button' => 'btn btn-sm',
+                'icon' => 'f-s-16',
+                'text' => 'f-s-10'
+            ],
+            'md' => [
+                'button' => 'btn',
+                'icon' => 'f-s-18',
+                'text' => 'f-s-12'
+            ],
+            'lg' => [
+                'button' => 'btn btn-lg',
+                'icon' => 'f-s-20',
+                'text' => 'f-s-14'
+            ],
+            'xs' => [
+                'button' => 'btn btn-sm',
+                'icon' => 'f-s-14',
+                'text' => 'f-s-9'
+            ]
+        ][$this->size] ?? [
+            'button' => 'btn',
+            'icon' => 'f-s-18',
+            'text' => 'f-s-12'
         ];
-        return $sizes[$this->size] ?? $sizes['md'];
-    }
-
-    public function getIconClass()
-    {
-        $sizes = [
-            'sm' => 'f-s-16',
-            'md' => 'f-s-20',
-            'lg' => 'f-s-24'
-        ];
-        return $sizes[$this->size] ?? $sizes['md'];
-    }
-
-    public function getTextClass()
-    {
-        $sizes = [
-            'sm' => 'f-s-10',
-            'md' => 'f-s-12',
-            'lg' => 'f-s-14'
-        ];
-        return $sizes[$this->size] ?? $sizes['md'];
     }
 
     public function render()

@@ -85,10 +85,10 @@
         <div class="d-flex justify-content-between align-items-center mt-auto">
             <div class="d-flex gap-1">
                 <!-- Like Button (Sistema Unificato) -->
-                <x-social-like-button :content="$article" type="article" />
+                
 
                 <!-- Commenti (Sistema Unificato) -->
-                <x-social-comment-button :content="$article" type="article" />
+                
 
                 <!-- Report Button (Sistema Unificato) -->
                 <x-report-button :content="$article" type="article" />

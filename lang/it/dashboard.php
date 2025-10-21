@@ -41,7 +41,7 @@ return [
     'view_all_invitations' => 'Visualizza tutti gli inviti',
     'view_detailed_stats' => 'Statistiche dettagliate',
     'view_full_calendar' => 'Vedi calendario completo',
-    'welcome' => 'Benvenuto, :name!',
+    'welcome' => 'Benvenuto, ',
     'write_article' => 'Scrivi articolo',
     'write_article_desc' => 'Condividi le tue riflessioni',
     'write_poem' => 'Scrivi poesia',

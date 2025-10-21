@@ -78,3 +78,4 @@ class PhotoIndex extends Component
 }
 
 
+

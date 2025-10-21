@@ -105,8 +105,8 @@
                                 
                                 <!-- Social Actions -->
                                 <div class="d-flex gap-1">
-                                    <livewire:social.social-view-counter :model="$photo" :size="'xs'" />
-                                    <livewire:social.social-like-button :model="$photo" :size="'xs'" />
+                                    
+                                    
                                 </div>
                             </div>
                         </div>

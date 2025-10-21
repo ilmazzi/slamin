@@ -74,13 +74,13 @@
 
     /* Social actions mobile optimization */
     .social-like-btn,
-    .social-view-counter,
+    .view-counter,
     .social-comment-btn {
         padding: 0.25rem !important;
     }
 
     .social-like-btn img,
-    .social-view-counter i,
+    .view-counter i,
     .social-comment-btn i {
         width: 18px !important;
         height: 18px !important;
@@ -420,9 +420,9 @@
                             <!-- Social Actions -->
                             @if(Auth::check())
                                 <div class="d-flex align-items-center gap-2 mb-3">
-                                    <livewire:social.social-like-button :content="$event" type="event" />
-                                    <livewire:social.social-view-counter :content="$event" type="event" />
-                                    <x-social-comment-button :content="$event" type="event" />
+                                    
+                                    
+                                    
                                     <x-report-button :content="$event" type="event" />
                                 </div>
                             @endif

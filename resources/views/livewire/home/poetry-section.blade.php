@@ -58,9 +58,9 @@
                                                 </a>
                                             </div>
                                             <div class="d-flex justify-content-end mt-2">
-                                                <livewire:social.social-view-counter :model="$poem" :size="'sm'" />
-                                                <livewire:social.social-like-button :model="$poem" :size="'sm'" />
-                                                <livewire:social.social-comment-button :model="$poem" :size="'sm'" />
+                                                
+                                                
+                                                
                                             </div>
                                         </div>
                                     </div>

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MediaController;
 use App\Http\Controllers\WebhookController;
 
 
@@ -994,11 +993,9 @@ Route::prefix('premium')->name('premium.')->middleware(['auth', 'verified'])->gr
 
 });
 
-    // Media Routes (pubbliche - fuori dal gruppo auth)
+    // Media Routes
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('/', App\Livewire\Media\MediaIndex::class)->name('index');
-        Route::post('/like', [App\Http\Controllers\MediaController::class, 'like'])->name('like');
-        Route::post('/comment', [App\Http\Controllers\MediaController::class, 'comment'])->name('comment');
     });
 
     // Report Routes
@@ -1017,14 +1014,7 @@ Route::prefix('moderation')->name('moderation.')->middleware('auth')->group(func
 
 
 
-// Admin Social Settings Routes
-Route::prefix('admin/social-settings')->name('admin.social-settings.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\SocialSettingsController::class, 'index'])->name('index');
-    Route::post('/update', [App\Http\Controllers\Admin\SocialSettingsController::class, 'update'])->name('update');
-    Route::post('/toggle', [App\Http\Controllers\Admin\SocialSettingsController::class, 'toggleFeature'])->name('toggle');
-    Route::get('/api/settings', [App\Http\Controllers\Admin\SocialSettingsController::class, 'getSettings'])->name('api.settings');
-    Route::post('/reset', [App\Http\Controllers\Admin\SocialSettingsController::class, 'reset'])->name('reset');
-});
+// Admin Social Settings Routes - REMOVED (controller deleted)
 
 // Test Routes (solo in ambiente locale)
 if (app()->environment('local')) {
@@ -1377,8 +1367,6 @@ Route::prefix('api/photos')->group(function () {
     Route::get('/{photo}', [App\Http\Controllers\PhotoController::class, 'getPhotoData'])->name('api.photos.get');
 });
 
-// API route per ricerca media (completamente pubblica)
-Route::get('/api/media/search', [App\Http\Controllers\MediaController::class, 'search'])->name('api.media.search');
 
 // API routes per commenti (pubbliche per lettura)
 Route::get('/api/videos/{video}/comments', [App\Http\Controllers\VideoController::class, 'getComments'])->name('api.videos.comments');

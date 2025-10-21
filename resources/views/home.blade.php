@@ -502,11 +502,11 @@ use App\Helpers\PlaceholderHelper;
                                                         <p class="card-text">{{ Str::limit($video->description, 80) }}</p>
                                                     @endif
                                                     <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                        <livewire:social.social-view-counter :model="$video" :size="'sm'" />
+                                                        
                                                         <div class="d-flex gap-1 justify-content-end">
-                                                            <livewire:social.social-like-button :model="$video" :size="'sm'" />
-                                                            <x-social-snap-button :content="$video" type="video" size="sm" />
-                                                            <livewire:social.social-comment-button :model="$video" :size="'sm'" />
+                                                            
+                                                            
+                                                            
 
                                                             <x-report-button :content="$video" type="video"
                                                                 size="sm" />
@@ -705,7 +705,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 <span class="badge bg-light-info f-s-10 mb-2">{{ $poem->category }}</span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
-                                                                <x-social-view-counter :content="$poem" type="poem" size="sm" />
+                                                                
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $poem->created_at->diffForHumans() }}
@@ -777,7 +777,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 <span class="badge bg-light-info f-s-10 mb-2">{{ $poem->category }}</span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
-                                                                <x-social-view-counter :content="$poem" type="poem" size="sm" />
+                                                                
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $poem->created_at->diffForHumans() }}
@@ -883,7 +883,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
-                                                                <x-social-view-counter :content="$article" type="article" size="sm" />
+                                                                
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $article->created_at->diffForHumans() }}
@@ -961,7 +961,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </span>
                                                             @endif
                                                             <div class="d-flex align-items-center gap-2">
-                                                                <x-social-view-counter :content="$article" type="article" size="sm" />
+                                                                
                                                                 <small class="text-muted f-s-11">
                                                                     <i
                                                                         class="ph-duotone ph-clock f-s-10 me-1"></i>{{ $article->created_at->diffForHumans() }}

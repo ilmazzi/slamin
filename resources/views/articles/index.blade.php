@@ -78,9 +78,9 @@ use App\Helpers\PlaceholderHelper;
                                                 <div class="d-flex gap-3 text-muted f-s-14">
                                                     <span><i class="ph ph-user me-1"></i>{{ $bannerArticle->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $bannerArticle->published_at ? $bannerArticle->published_at->format('d/m/Y') : $bannerArticle->created_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$bannerArticle" type="article" size="sm" />
-                                                    <x-social-like-button :content="$bannerArticle" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$bannerArticle" type="article" size="sm" />
+                                                    
+                                                    
+                                                    
                                                 </div>
                                                 <a href="{{ route('articles.show', $bannerArticle->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -121,9 +121,9 @@ use App\Helpers\PlaceholderHelper;
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured1->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured1->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$featured1" type="article" size="sm" />
-                                                    <x-social-like-button :content="$featured1" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$featured1" type="article" size="sm" />
+                                                    
+                                                    
+                                                    
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured1->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -163,9 +163,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent1" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent1" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent1" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent1->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -204,9 +204,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent2" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent2" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent2" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent2->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -249,9 +249,9 @@ use App\Helpers\PlaceholderHelper;
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured2->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured2->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$featured2" type="article" size="sm" />
-                                                    <x-social-like-button :content="$featured2" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$featured2" type="article" size="sm" />
+                                                    
+                                                    
+                                                    
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured2->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -291,9 +291,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent3" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent3" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent3" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent3->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -332,9 +332,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent4" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent4" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent4" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent4->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -377,9 +377,9 @@ use App\Helpers\PlaceholderHelper;
                                                 <div class="d-flex gap-3 text-muted f-s-12">
                                                     <span><i class="ph ph-user me-1"></i>{{ $featured3->user->name ?? 'N/A' }}</span>
                                                     <span><i class="ph ph-calendar me-1"></i>{{ $featured3->published_at->format('d/m/Y') }}</span>
-                                                    <x-social-view-counter :content="$featured3" type="article" size="sm" />
-                                                    <x-social-like-button :content="$featured3" type="article" size="sm" />
-                                                    <x-social-comment-button :content="$featured3" type="article" size="sm" />
+                                                    
+                                                    
+                                                    
                                                 </div>
                                                 <a href="{{ route('articles.show', $featured3->slug) }}" class="btn btn-primary">
                                                     {{ __('articles.read_more') }}
@@ -419,9 +419,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent5" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent5" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent5" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent5->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -460,9 +460,9 @@ use App\Helpers\PlaceholderHelper;
                                                     </div>
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex gap-2 text-muted f-s-11">
-                                                            <x-social-view-counter :content="$recent6" type="article" size="sm" />
-                                                            <x-social-like-button :content="$recent6" type="article" size="sm" />
-                                                            <x-social-comment-button :content="$recent6" type="article" size="sm" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <a href="{{ route('articles.show', $recent6->slug) }}" class="btn btn-outline-primary btn-sm">
                                                             {{ __('articles.read_more') }}
@@ -527,9 +527,9 @@ use App\Helpers\PlaceholderHelper;
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex gap-2 text-muted f-s-12">
-                                                <x-social-view-counter :content="$article" type="article" size="sm" />
-                                                <x-social-like-button :content="$article" type="article" size="sm" />
-                                                <x-social-comment-button :content="$article" type="article" size="sm" />
+                                                
+                                                
+                                                
                                             </div>
                                             <div class="btn-group btn-group-sm">
                                                 <a href="{{ route('articles.show', $article) }}" class="btn btn-outline-primary">

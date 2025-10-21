@@ -69,9 +69,9 @@
                                                         </div>
                                                         <!-- Social Actions -->
                                                         <div class="d-flex justify-content-end mt-2">
-                                                            <livewire:social.social-view-counter :model="$event" :size="'sm'" />
-                                                            <livewire:social.social-like-button :model="$event" :size="'sm'" />
-                                                            <livewire:social.social-comment-button :model="$event" :size="'sm'" />
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                         <!-- Avatar utente cliccabile -->
                                                         <div class="d-flex align-items-center mt-3 pt-2 border-top">

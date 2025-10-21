@@ -1,9 +1,6 @@
-<div>
-    <div class="social-component social-view-counter"
-         style="border-radius: 8px; transition: all 0.2s; {{ $this->getSizeStyles() }}">
-        <i class="ti ti-eye {{ $this->getIconClass() }} text-primary"></i>
-        @if($showCount)
-            <span class="text-secondary view-count {{ $this->getTextClass() }}">{{ number_format($viewCount) }}</span>
-        @endif
+<div class="social-view-counter">
+    <div class="d-flex align-items-center justify-content-center gap-1 text-muted" style="width: 60px; height: 32px;">
+        <i class="ph-duotone ph-eye {{ $this->sizeClasses['icon'] }}"></i>
+        <span class="{{ $this->sizeClasses['text'] }}">{{ number_format($viewCount) }}</span>
     </div>
 </div>

@@ -88,6 +88,9 @@
     
     @stack('scripts')
     
+    <!-- Global Comment Modal -->
+    <livewire:social.global-comment-modal />
+    
     <!-- SVG Icons -->
     <svg style="display: none;">
         <symbol id="icon-like" viewBox="0 0 32 32" fill="currentColor">

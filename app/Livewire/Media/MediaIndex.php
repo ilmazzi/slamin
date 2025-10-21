@@ -3,23 +3,27 @@
 namespace App\Livewire\Media;
 
 use Livewire\Component;
-use App\Models\Video;
 use App\Models\Photo;
-use App\Models\VideoSnap;
-use Illuminate\Http\Request;
+use App\Models\Video;
 
 class MediaIndex extends Component
 {
-    public $videoType = 'popular'; // 'popular' o 'recent'
+    // Video section properties
+    public $videoType = 'popular'; // 'popular' or 'recent'
+    
+    // Photo section properties  
+    public $photoType = 'popular'; // 'popular' or 'recent'
+    
+    // Search properties
     public $searchQuery = '';
-    public $selectedVideoId = null;
-    public $showVideoModal = false;
-    public $selectedPhotoId = null;
-    public $showPhotoModal = false;
+    public $mediaType = '';
+    public $userId = '';
+    public $dateFrom = '';
+    public $dateTo = '';
 
     public function mount()
     {
-        // Inizializzazione se necessario
+        // Inizializzazione
     }
 
     public function toggleVideoType($type)
@@ -27,127 +31,250 @@ class MediaIndex extends Component
         $this->videoType = $type;
     }
 
-    public function openVideoModal($videoId)
+    public function togglePhotoType($type)
     {
-        $this->selectedVideoId = $videoId;
-        $this->showVideoModal = true;
+        $this->photoType = $type;
     }
 
-    public function closeVideoModal()
+    public function searchMedia()
     {
-        $this->showVideoModal = false;
-        $this->selectedVideoId = null;
+        // La ricerca viene gestita automaticamente dai computed properties
+        // che si aggiornano quando cambiano le proprietà di ricerca
+        $this->dispatch('search-performed', [
+            'query' => $this->searchQuery,
+            'type' => $this->mediaType,
+            'user' => $this->userId,
+            'dateFrom' => $this->dateFrom,
+            'dateTo' => $this->dateTo,
+        ]);
     }
 
-    public function openPhotoModal($photoId)
+    public function clearSearch()
     {
-        $this->selectedPhotoId = $photoId;
-        $this->showPhotoModal = true;
+        $this->searchQuery = '';
+        $this->mediaType = '';
+        $this->userId = '';
+        $this->dateFrom = '';
+        $this->dateTo = '';
     }
 
-    public function closePhotoModal()
+    // Search results
+    public function getSearchResultsProperty()
     {
-        $this->showPhotoModal = false;
-        $this->selectedPhotoId = null;
+        if (!$this->hasActiveSearch) {
+            return [
+                'videos' => collect(),
+                'photos' => collect(),
+                'total' => 0
+            ];
+        }
+
+        $allResults = $this->buildSearchQuery();
+        
+        $videos = $allResults->where('type', 'video')->values();
+        $photos = $allResults->where('type', 'photo')->values();
+        
+        return [
+            'videos' => $videos,
+            'photos' => $photos,
+            'total' => $videos->count() + $photos->count()
+        ];
     }
 
-    public function getSelectedVideoProperty()
+    private function buildSearchQuery()
     {
-        if (!$this->selectedVideoId) {
-            return null;
+        $query = collect();
+        
+        // Se c'è una ricerca attiva
+        if ($this->hasActiveSearch) {
+            // Cerca video
+            if ($this->mediaType === 'video' || $this->mediaType === '') {
+                $videoQuery = Video::with(['user'])
+                    ->withCount(['likes', 'comments', 'views'])
+                    ->where('is_public', true)
+                    ->where('moderation_status', 'approved');
+                
+                if ($this->searchQuery) {
+                    $videoQuery->where(function($q) {
+                        $q->where('title', 'like', '%' . $this->searchQuery . '%')
+                          ->orWhere('description', 'like', '%' . $this->searchQuery . '%')
+                          ->orWhereHas('user', function($userQuery) {
+                              $userQuery->where('name', 'like', '%' . $this->searchQuery . '%');
+                          });
+                    });
+                }
+                
+                if ($this->userId) {
+                    $videoQuery->whereHas('user', function($q) {
+                        $q->where('name', 'like', '%' . $this->userId . '%');
+                    });
+                }
+                
+                if ($this->dateFrom) {
+                    $videoQuery->where('created_at', '>=', $this->dateFrom);
+                }
+                
+                if ($this->dateTo) {
+                    $videoQuery->where('created_at', '<=', $this->dateTo);
+                }
+                
+                $videos = $videoQuery->get()->map(function($video) {
+                    $video->type = 'video';
+                    return $video;
+                });
+                
+                $query = $query->merge($videos);
+            }
+            
+            // Cerca foto
+            if ($this->mediaType === 'photo' || $this->mediaType === '') {
+                $photoQuery = Photo::with(['user'])
+                    ->withCount(['likes', 'comments', 'views'])
+                    ->where('status', 'approved')
+                    ->where('moderation_status', 'approved');
+                
+                if ($this->searchQuery) {
+                    $photoQuery->where(function($q) {
+                        $q->where('title', 'like', '%' . $this->searchQuery . '%')
+                          ->orWhere('description', 'like', '%' . $this->searchQuery . '%')
+                          ->orWhereHas('user', function($userQuery) {
+                              $userQuery->where('name', 'like', '%' . $this->searchQuery . '%');
+                          });
+                    });
+                }
+                
+                if ($this->userId) {
+                    $photoQuery->whereHas('user', function($q) {
+                        $q->where('name', 'like', '%' . $this->userId . '%');
+                    });
+                }
+                
+                if ($this->dateFrom) {
+                    $photoQuery->where('created_at', '>=', $this->dateFrom);
+                }
+                
+                if ($this->dateTo) {
+                    $photoQuery->where('created_at', '<=', $this->dateTo);
+                }
+                
+                $photos = $photoQuery->get()->map(function($photo) {
+                    $photo->type = 'photo';
+                    return $photo;
+                });
+                
+                $query = $query->merge($photos);
+            }
         }
         
-        return Video::with(['user', 'likes', 'comments', 'snaps'])
-            ->find($this->selectedVideoId);
+        return $query;
     }
 
-    public function getSelectedPhotoProperty()
+    public function getHasActiveSearchProperty()
     {
-        if (!$this->selectedPhotoId) {
-            return null;
-        }
-        
-        return Photo::with(['user', 'likes', 'comments'])
-            ->find($this->selectedPhotoId);
+        return !empty($this->searchQuery) || 
+               !empty($this->mediaType) || 
+               !empty($this->userId) || 
+               !empty($this->dateFrom) || 
+               !empty($this->dateTo);
     }
 
-    public function render()
+    // Video methods
+    public function getMostPopularVideoProperty()
     {
-        // Query base per video
-        $videosQuery = Video::with(['user', 'likes', 'comments', 'snaps'])
+        return Video::with(['user'])
             ->where('is_public', true)
-            ->where('moderation_status', 'approved');
+            ->where('moderation_status', 'approved')
+            ->withCount(['likes', 'comments', 'views'])
+            ->get()
+            ->sortByDesc(function($video) {
+                return ($video->likes_count ?? 0) + 
+                       ($video->comments_count ?? 0) + 
+                       ($video->views_count ?? 0);
+            })
+            ->first();
+    }
 
-        // Video più popolare
-        $mostPopularVideo = $videosQuery->withCount([
-            'likes',
-            'comments' => function($query) {
-                $query->where('status', 'approved');
-            },
-            'snaps',
-            'views'
-        ])->get()->map(function($video) {
-            $video->total_interactions = ($video->likes_count ?? 0) +
-                                       ($video->comments_count ?? 0) +
-                                       ($video->snaps_count ?? 0) +
-                                       ($video->views_count ?? 0);
-            return $video;
-        })->sortByDesc('total_interactions')->first();
+    public function getPopularVideosProperty()
+    {
+        return Video::with(['user'])
+            ->where('is_public', true)
+            ->where('moderation_status', 'approved')
+            ->withCount(['likes', 'comments', 'views'])
+            ->get()
+            ->sortByDesc(function($video) {
+                return ($video->likes_count ?? 0) + 
+                       ($video->comments_count ?? 0) + 
+                       ($video->views_count ?? 0);
+            })
+            ->take(6);
+    }
 
-        // Video popolari o recenti
-        if ($this->videoType === 'popular') {
-            $videos = $videosQuery->withCount([
-                'likes',
-                'comments' => function($query) {
-                    $query->where('status', 'approved');
-                },
-                'snaps',
-                'views'
-            ])->get()->map(function($video) {
-                $video->total_interactions = ($video->likes_count ?? 0) +
-                                           ($video->comments_count ?? 0) +
-                                           ($video->snaps_count ?? 0) +
-                                           ($video->views_count ?? 0);
-                return $video;
-            })->sortByDesc('total_interactions')->take(6);
-        } else {
-            $videos = $videosQuery->withCount(['likes', 'comments', 'snaps', 'views'])
-                ->orderBy('created_at', 'desc')
-                ->take(6)
-                ->get();
-        }
+    public function getRecentVideosProperty()
+    {
+        return Video::with(['user'])
+            ->where('is_public', true)
+            ->where('moderation_status', 'approved')
+            ->withCount(['likes', 'comments', 'views'])
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
+    }
 
-        // Foto recenti
-        $recentPhotos = Photo::with(['user', 'likes', 'comments'])
+    // Photo methods
+    public function getMostPopularPhotoProperty()
+    {
+        return Photo::with(['user'])
+            ->where('status', 'approved')
+            ->where('moderation_status', 'approved')
+            ->withCount(['likes', 'comments', 'views'])
+            ->get()
+            ->sortByDesc(function($photo) {
+                return ($photo->likes_count ?? 0) + 
+                       ($photo->comments_count ?? 0) + 
+                       ($photo->views_count ?? 0);
+            })
+            ->first();
+    }
+
+    public function getPopularPhotosProperty()
+    {
+        return Photo::with(['user'])
+            ->where('status', 'approved')
+            ->where('moderation_status', 'approved')
+            ->withCount(['likes', 'comments', 'views'])
+            ->get()
+            ->sortByDesc(function($photo) {
+                return ($photo->likes_count ?? 0) + 
+                       ($photo->comments_count ?? 0) + 
+                       ($photo->views_count ?? 0);
+            })
+            ->take(6);
+    }
+
+    public function getRecentPhotosProperty()
+    {
+        return Photo::with(['user'])
             ->where('status', 'approved')
             ->where('moderation_status', 'approved')
             ->withCount(['likes', 'comments', 'views'])
             ->orderBy('created_at', 'desc')
-            ->take(8)
-            ->get();
-
-        // Video più visti
-        $mostViewedVideos = $videosQuery->withCount(['likes', 'comments', 'snaps', 'views'])
-            ->orderBy('views_count', 'desc')
-            ->take(4)
-            ->get();
-
-        // Snap più recenti
-        $recentSnaps = VideoSnap::with(['video.user', 'user'])
-            ->whereHas('video', function($query) {
-                $query->where('is_public', true)
-                      ->where('moderation_status', 'approved');
-            })
-            ->orderBy('created_at', 'desc')
             ->take(6)
             ->get();
+    }
 
+    public function render()
+    {
         return view('livewire.media.media-index', [
-            'mostPopularVideo' => $mostPopularVideo,
-            'videos' => $videos,
-            'recentPhotos' => $recentPhotos,
-            'mostViewedVideos' => $mostViewedVideos,
-            'recentSnaps' => $recentSnaps,
+            'mostPopularVideo' => $this->mostPopularVideo,
+            'popularVideos' => $this->popularVideos,
+            'recentVideos' => $this->recentVideos,
+            'mostPopularPhoto' => $this->mostPopularPhoto,
+            'popularPhotos' => $this->popularPhotos,
+            'recentPhotos' => $this->recentPhotos,
+            'videoType' => $this->videoType,
+            'photoType' => $this->photoType,
+            'searchResults' => $this->searchResults,
+            'hasActiveSearch' => $this->hasActiveSearch,
         ]);
     }
 }

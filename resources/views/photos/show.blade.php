@@ -49,7 +49,7 @@
                                     <small class="d-block">
                                         <i class="ph ph-calendar me-1"></i>{{ $photo->created_at->format('d/m/Y H:i') }}
                                     </small>
-                                    <x-social-view-counter :content="$photo" type="photo" size="sm" />
+                                    
                                 </div>
                             </div>
                         </div>
@@ -80,15 +80,15 @@
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-center gap-3">
-                        <x-social-like-button :content="$photo" type="photo" />
-                        <x-social-view-counter :content="$photo" type="photo" />
-                        <x-social-comment-button :content="$photo" type="photo" />
+                        
+                        
+                        
                     </div>
                 </div>
             </div>
 
             <!-- Comments Section (Sistema Unificato) -->
-            <x-social-comments-section :content="$photo" type="photo" />
+            
 
         </div>
 

@@ -3,93 +3,108 @@
 namespace App\Livewire\Social;
 
 use Livewire\Component;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class SocialLikeButton extends Component
 {
-    public $modelType;
-    public $modelId;
-    public $isLiked = false;
-    public $likeCount = 0;
-    public $size = 'md';
-    public $showCount = true;
+    public Model $content;
+    public string $type;
+    public string $size = 'md';
+    
+    public bool $isLiked = false;
+    public int $likeCount = 0;
+    public bool $isLoading = false;
 
-    protected $listeners = ['likeToggled' => 'refreshLikeStatus'];
+    protected $listeners = ['refreshLikeButton' => 'refreshLikeStatus'];
 
-    public function mount($model, $size = 'md', $showCount = true)
+    public function mount(Model $content, string $type, string $size = 'md')
     {
-        $this->modelType = get_class($model);
-        $this->modelId = $model->id;
+        $this->content = $content;
+        $this->type = $type;
         $this->size = $size;
-        $this->showCount = $showCount;
         
         $this->refreshLikeStatus();
     }
 
-    public function getModelProperty()
-    {
-        return app($this->modelType)->find($this->modelId);
-    }
-
     public function toggleLike()
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per mettere like.');
-            return redirect()->route('login');
+        if (!auth()->check()) {
+            $this->dispatch('show-auth-modal');
+            return;
         }
 
+        $this->isLoading = true;
+
         try {
-            $this->model->toggleLike(Auth::user());
-            $this->refreshLikeStatus();
+            $user = auth()->user();
             
-            // Emetti evento per aggiornare altri componenti
-            $this->dispatch('likeToggled', [
-                'modelType' => $this->modelType,
-                'modelId' => $this->modelId,
+            if ($this->isLiked) {
+                // Rimuovi like
+                $this->content->unlike($user);
+                $this->isLiked = false;
+                $this->likeCount = max(0, $this->likeCount - 1);
+            } else {
+                // Aggiungi like
+                $this->content->like($user);
+                $this->isLiked = true;
+                $this->likeCount = $this->likeCount + 1;
+            }
+            
+            // Dispatch event per aggiornare altri componenti
+            $this->dispatch('like-toggled', [
+                'contentId' => $this->content->id,
+                'contentType' => $this->type,
                 'isLiked' => $this->isLiked,
                 'likeCount' => $this->likeCount
             ]);
-
+            
         } catch (\Exception $e) {
-            session()->flash('error', 'Errore durante l\'operazione. Riprova.');
+            $this->dispatch('show-error', 'Errore durante l\'operazione');
+        } finally {
+            $this->isLoading = false;
         }
     }
 
     public function refreshLikeStatus()
     {
-        $this->isLiked = $this->model->isLikedByCurrentUser();
-        $this->likeCount = $this->model->likes()->count();
+        $this->isLiked = auth()->check() ? $this->content->isLikedBy(auth()->user()) : false;
+        $this->likeCount = $this->content->likes_count;
     }
 
-    public function getSizeStyles()
+    public function getSizeClassesProperty()
     {
-        $sizes = [
-            'sm' => 'min-width: 50px; padding: 6px; gap: 2px;',
-            'md' => 'min-width: 60px; padding: 8px; gap: 2px;',
-            'lg' => 'min-width: 70px; padding: 10px; gap: 2px;'
+        return [
+            'sm' => [
+                'button' => 'btn btn-sm',
+                'width' => '24px',
+                'height' => '24px',
+                'text' => 'f-s-10'
+            ],
+            'md' => [
+                'button' => 'btn',
+                'width' => '26px',
+                'height' => '26px',
+                'text' => 'f-s-12'
+            ],
+            'lg' => [
+                'button' => 'btn btn-lg',
+                'width' => '28px',
+                'height' => '28px',
+                'text' => 'f-s-14'
+            ],
+            'xs' => [
+                'button' => 'btn btn-sm',
+                'width' => '22px',
+                'height' => '22px',
+                'text' => 'f-s-9'
+            ]
+        ][$this->size] ?? [
+            'button' => 'btn',
+            'width' => '26px',
+            'height' => '26px',
+            'text' => 'f-s-12'
         ];
-        return $sizes[$this->size] ?? $sizes['md'];
-    }
-
-    public function getIconStyles()
-    {
-        $sizes = [
-            'sm' => 'width: 20px; height: 20px;',
-            'md' => 'width: 24px; height: 24px;',
-            'lg' => 'width: 28px; height: 28px;'
-        ];
-        return $sizes[$this->size] ?? $sizes['md'];
-    }
-
-    public function getTextClass()
-    {
-        $sizes = [
-            'sm' => 'f-s-10',
-            'md' => 'f-s-12',
-            'lg' => 'f-s-14'
-        ];
-        return $sizes[$this->size] ?? $sizes['md'];
     }
 
     public function render()

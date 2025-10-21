@@ -1,122 +1,143 @@
-<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);" wire:click.self="$parent.closePhotoModal">
-    <div class="modal-dialog modal-lg">
+<div>
+@if($showModal && $photo)
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.8); z-index: 1055;">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="ph-duotone ph-image me-2"></i>
-                    {{ $this->photo->title }}
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($photo->user) }}" 
+                         class="rounded-circle" 
+                         alt="{{ $photo->user->name }}"
+                         style="width: 32px; height: 32px; object-fit: cover;">
+                    <div>
+                        <div class="f-s-14 f-w-600">{{ $photo->user->name }}</div>
+                        <small class="text-muted f-s-12">{{ $photo->created_at->diffForHumans() }}</small>
+                    </div>
                 </h5>
-                <button type="button" class="btn-close" wire:click="$parent.closePhotoModal"></button>
+                <button type="button" class="btn-close" wire:click="closeModal"></button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- Photo -->
-                    <div class="col-lg-8">
-                        <div class="position-relative">
-                            <img src="{{ $this->photo->image_url }}" 
-                                 class="img-fluid rounded" 
-                                 alt="{{ $this->photo->title }}" 
-                                 style="max-height: 500px; width: 100%; object-fit: contain;">
-                        </div>
-                        
-                        <!-- Photo Info -->
-                        <div class="mt-3">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-                                    <h4 class="mb-1">{{ $this->photo->title }}</h4>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{ $this->photo->user->profile_photo_url }}" 
-                                             class="rounded-circle me-2" 
-                                             alt="{{ $this->photo->user->name }}" 
-                                             style="width: 40px; height: 40px; object-fit: cover;">
-                                        <div>
-                                            <h6 class="mb-0">{{ $this->photo->user->name }}</h6>
-                                            <small class="text-muted">{{ $this->photo->created_at->diffForHumans() }}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <livewire:social.social-view-counter :model="$this->photo" :size="'md'" />
-                                    <livewire:social.social-like-button :model="$this->photo" :size="'md'" />
-                                    <livewire:social.social-comment-button :model="$this->photo" :size="'md'" />
-                                </div>
-                            </div>
-                            
-                            @if($this->photo->description)
-                                <div class="mb-3">
-                                    <p class="mb-0">{{ $this->photo->description }}</p>
-                                </div>
-                            @endif
-                        </div>
+            
+            <div class="modal-body p-3">
+                <!-- Photo -->
+                <div class="mb-3 text-center" style="background-color: #f8f9fa;">
+                    <img src="{{ $photo->image_url }}" 
+                         class="img-fluid" 
+                         alt="{{ $photo->title }}"
+                         style="max-height: 60vh; object-fit: contain;">
+                </div>
+                
+                <!-- Title & Description -->
+                @if($photo->title || $photo->description)
+                    <div class="mb-3">
+                        @if($photo->title)
+                            <h6 class="f-s-16 f-w-600 mb-2">{{ $photo->title }}</h6>
+                        @endif
+                        @if($photo->description)
+                            <p class="f-s-14 text-muted mb-0">{{ $photo->description }}</p>
+                        @endif
                     </div>
+                @endif
+                
+                <!-- Social Buttons -->
+                <div class="d-flex align-items-center gap-2 mb-3 pb-3 border-bottom">
+                    @livewire('social.social-view-counter', ['content' => $photo, 'type' => 'photo', 'size' => 'md'], key('photo-modal-view-'.$photo->id))
+                    @livewire('social.social-like-button', ['content' => $photo, 'type' => 'photo', 'size' => 'md'], key('photo-modal-like-'.$photo->id))
+                    @livewire('social.social-comment-button', ['content' => $photo, 'type' => 'photo', 'size' => 'md'], key('photo-modal-comment-'.$photo->id))
+                </div>
+                
+                <!-- Comments Section -->
+                <div id="photo-comments-section">
+                    <h6 class="f-s-14 f-w-600 mb-3">
+                        <i class="ph-duotone ph-chat-circle me-1"></i>
+                        Commenti ({{ $comments->count() }})
+                    </h6>
                     
-                    <!-- Comments -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h6 class="mb-0">
-                                    <i class="ph-duotone ph-chat-circle me-2"></i>
-                                    Commenti ({{ $this->photo->comments()->where('status', 'approved')->count() }})
-                                </h6>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="p-3" style="max-height: 400px; overflow-y: auto;">
-                                    <!-- Comments List -->
-                                    <div class="comments-list mb-3">
-                                        @forelse($this->photo->comments()->where('status', 'approved')->with('user')->latest()->take(10)->get() as $comment)
-                                            <div class="d-flex mb-3">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <img src="{{ $comment->user->profile_photo_url }}" 
-                                                         class="rounded-circle" 
-                                                         alt="{{ $comment->user->name }}" 
-                                                         style="width: 32px; height: 32px; object-fit: cover;">
+                    <!-- Add Comment Form -->
+                    @if(auth()->check())
+                        <div class="mb-4">
+                            <div class="d-flex align-items-start gap-2">
+                                <div class="flex-shrink-0">
+                                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}" 
+                                         alt="{{ auth()->user()->name }}" 
+                                         class="rounded-circle" 
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <textarea 
+                                        wire:model.live="newComment" 
+                                        class="form-control" 
+                                        rows="3" 
+                                        placeholder="Scrivi un commento..."
+                                        style="resize: none;"
+                                    ></textarea>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-primary btn-sm" 
+                                            wire:click="addComment"
+                                            wire:loading.attr="disabled"
+                                            wire:target="addComment"
+                                            @disabled(empty(trim($newComment)))
+                                        >
+                                            <span wire:loading.remove wire:target="addComment">
+                                                <i class="ph-duotone ph-paper-plane-tilt me-1"></i>
+                                                Commenta
+                                            </span>
+                                            <span wire:loading wire:target="addComment">
+                                                <div class="spinner-border spinner-border-sm me-1" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
                                                 </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="d-flex justify-content-between align-items-start mb-1">
-                                                        <h6 class="mb-0 f-s-12 f-w-600">{{ $comment->user->name }}</h6>
-                                                        <small class="text-muted f-s-10">{{ $comment->created_at->diffForHumans() }}</small>
-                                                    </div>
-                                                    <p class="mb-0 f-s-12">{{ $comment->content }}</p>
-                                                </div>
-                                            </div>
-                                        @empty
-                                            <div class="text-center py-3">
-                                                <i class="ph-duotone ph-chat-circle f-s-24 text-muted mb-2"></i>
-                                                <p class="text-muted f-s-12 mb-0">Nessun commento ancora</p>
-                                            </div>
-                                        @endforelse
+                                                Invio...
+                                            </span>
+                                        </button>
                                     </div>
-                                    
-                                    <!-- Add Comment Form -->
-                                    @auth
-                                        <div class="border-top pt-3">
-                                            <form wire:submit.prevent="addComment">
-                                                <div class="mb-2">
-                                                    <textarea class="form-control form-control-sm" 
-                                                              wire:model="newComment" 
-                                                              rows="2" 
-                                                              placeholder="Aggiungi un commento..." 
-                                                              maxlength="500"
-                                                              required></textarea>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary btn-sm">
-                                                    <i class="ph-duotone ph-paper-plane-right me-1"></i>
-                                                    Invia
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @else
-                                        <div class="alert alert-info alert-sm">
-                                            <i class="ph-duotone ph-info me-1"></i>
-                                            <a href="{{ route('login') }}" class="text-decoration-none">Accedi</a> per commentare.
-                                        </div>
-                                    @endauth
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="alert alert-info">
+                            <i class="ph-duotone ph-info me-2"></i>
+                            Devi essere autenticato per commentare
+                        </div>
+                    @endif
+                    
+                    <!-- Comments List -->
+                    @if($comments->count() > 0)
+                        <div class="comments-list">
+                            @foreach($comments as $comment)
+                                <div class="comment-item mb-3 pb-3 border-bottom">
+                                    <div class="d-flex align-items-start gap-2">
+                                        <div class="flex-shrink-0">
+                                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($comment->user) }}" 
+                                                 alt="{{ $comment->user->name }}" 
+                                                 class="rounded-circle" 
+                                                 style="width: 32px; height: 32px; object-fit: cover;">
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h6 class="mb-0 f-s-13 f-w-600">
+                                                    {{ $comment->user->name }}
+                                                </h6>
+                                                <span class="f-s-11 text-muted">
+                                                    {{ $comment->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                            <p class="mb-0 f-s-14">{{ $comment->content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center text-muted py-3">
+                            <i class="ph-duotone ph-chat-circle f-s-24 mb-2"></i>
+                            <p class="f-s-13 mb-0">Nessun commento ancora. Sii il primo a commentare!</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+</div>
+@endif
 </div>

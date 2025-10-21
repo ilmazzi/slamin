@@ -4,91 +4,109 @@ namespace App\Livewire\Media;
 
 use Livewire\Component;
 use App\Models\Video;
-use App\Models\VideoSnap;
-use Illuminate\Support\Facades\Auth;
 
 class VideoModal extends Component
 {
     public $videoId;
+    public $showModal = false;
     public $newComment = '';
-    public $showSnapForm = false;
-    public $snapContent = '';
 
-    public function mount($videoId)
+    protected $listeners = [
+        'openVideoModal' => 'openModal',
+        'closeVideoModal' => 'closeModal',
+        'commentAdded' => 'refreshComments'
+    ];
+
+    public function openModal($videoId = null)
     {
-        $this->videoId = $videoId;
+        // Se videoId è un array (evento Livewire con parametri)
+        if (is_array($videoId)) {
+            $this->videoId = $videoId['videoId'] ?? null;
+        } else {
+            $this->videoId = $videoId;
+        }
+        
+        $this->showModal = true;
+        $this->newComment = '';
     }
 
-    public function getVideoProperty()
+    public function closeModal()
     {
-        return Video::with(['user', 'likes', 'comments', 'snaps'])
-            ->find($this->videoId);
+        $this->showModal = false;
+        $this->videoId = null;
+        $this->newComment = '';
     }
 
     public function addComment()
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per commentare.');
+        if (!auth()->check()) {
+            $this->dispatch('show-auth-modal');
             return;
         }
 
         if (empty(trim($this->newComment))) {
-            session()->flash('error', 'Il commento non può essere vuoto.');
+            return;
+        }
+
+        $video = $this->video;
+        if (!$video) {
             return;
         }
 
         try {
-            $this->video->comments()->create([
-                'user_id' => Auth::id(),
-                'content' => $this->newComment,
-                'status' => 'approved'
-            ]);
-
+            $user = auth()->user();
+            $video->addComment($user, trim($this->newComment));
+            
             $this->newComment = '';
-            session()->flash('success', 'Commento aggiunto con successo!');
+            
+            // Dispatch event per aggiornare i contatori
+            $this->dispatch('commentAdded', [
+                'contentId' => $video->id,
+                'contentType' => 'video'
+            ]);
+            
         } catch (\Exception $e) {
-            session()->flash('error', 'Errore nell\'aggiunta del commento.');
+            // Handle error silently
         }
     }
 
-    public function createSnap()
+    public function refreshComments($data = null)
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per creare uno snap.');
-            return;
-        }
+        // Force re-render
+        $this->dispatch('$refresh');
+    }
 
-        if (empty(trim($this->snapContent))) {
-            session()->flash('error', 'Lo snap non può essere vuoto.');
-            return;
+    public function getVideoProperty()
+    {
+        if (!$this->videoId) {
+            return null;
         }
 
         try {
-            VideoSnap::create([
-                'video_id' => $this->video->id,
-                'user_id' => Auth::id(),
-                'content' => $this->snapContent,
-                'timestamp' => 0 // Per ora sempre 0, potremmo implementare la selezione del timestamp
-            ]);
-
-            $this->snapContent = '';
-            $this->showSnapForm = false;
-            session()->flash('success', 'Snap creato con successo!');
+            return Video::with(['user'])->find($this->videoId);
         } catch (\Exception $e) {
-            session()->flash('error', 'Errore nella creazione dello snap.');
+            return null;
         }
     }
 
-    public function toggleSnapForm()
+    public function getCommentsProperty()
     {
-        $this->showSnapForm = !$this->showSnapForm;
-        if (!$this->showSnapForm) {
-            $this->snapContent = '';
+        if (!$this->video) {
+            return collect();
         }
+
+        return $this->video->comments()
+            ->with(['user'])
+            ->whereNull('parent_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function render()
     {
-        return view('livewire.media.video-modal');
+        return view('livewire.media.video-modal', [
+            'video' => $this->video,
+            'comments' => $this->comments,
+        ]);
     }
 }

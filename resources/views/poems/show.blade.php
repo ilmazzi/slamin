@@ -244,8 +244,8 @@
                     <!-- {{ __('invitations.actions') }} social -->
                     @auth
                     <div class="d-flex justify-content-center gap-2 mb-4">
-                        <livewire:social.social-like-button :content="$poem" />
-                        <x-social-comment-button :content="$poem" type="poem" />
+                        
+                        
 
                         <button class="btn btn-warning icon-btn" onclick="toggleBookmark()" id="bookmarkBtn" title="{{ __('poems.actions.bookmark') }}">
                             <i class="ph {{ $poem->is_bookmarked_by_current_user ? 'ph-bookmark-fill text-warning' : 'ph-bookmark' }}"></i>
@@ -299,7 +299,7 @@
             </div>
 
             <!-- Sezione commenti unificata -->
-            <x-social-comments-section :content="$poem" />
+            
         </div>
 
         <!-- Sidebar -->
@@ -373,9 +373,9 @@
                                     </a>
                                 </small>
                                 <div class="d-flex align-items-center gap-2 mt-1">
-                                    <livewire:social.social-like-button :content="$relatedPoem" type="poem" size="sm" />
-                                    <livewire:social.social-view-counter :content="$relatedPoem" type="poem" size="sm" />
-                                    <x-social-comment-button :content="$relatedPoem" type="poem" size="sm" />
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>

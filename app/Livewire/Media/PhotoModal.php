@@ -4,52 +4,109 @@ namespace App\Livewire\Media;
 
 use Livewire\Component;
 use App\Models\Photo;
-use Illuminate\Support\Facades\Auth;
 
 class PhotoModal extends Component
 {
     public $photoId;
+    public $showModal = false;
     public $newComment = '';
 
-    public function mount($photoId)
+    protected $listeners = [
+        'openPhotoModal' => 'openModal',
+        'closePhotoModal' => 'closeModal',
+        'commentAdded' => 'refreshComments'
+    ];
+
+    public function openModal($photoId = null)
     {
-        $this->photoId = $photoId;
+        // Se photoId è un array (evento Livewire con parametri)
+        if (is_array($photoId)) {
+            $this->photoId = $photoId['photoId'] ?? null;
+        } else {
+            $this->photoId = $photoId;
+        }
+        
+        $this->showModal = true;
+        $this->newComment = '';
     }
 
-    public function getPhotoProperty()
+    public function closeModal()
     {
-        return Photo::with(['user', 'likes', 'comments'])
-            ->find($this->photoId);
+        $this->showModal = false;
+        $this->photoId = null;
+        $this->newComment = '';
     }
 
     public function addComment()
     {
-        if (!Auth::check()) {
-            session()->flash('error', 'Devi essere autenticato per commentare.');
+        if (!auth()->check()) {
+            $this->dispatch('show-auth-modal');
             return;
         }
 
         if (empty(trim($this->newComment))) {
-            session()->flash('error', 'Il commento non può essere vuoto.');
+            return;
+        }
+
+        $photo = $this->photo;
+        if (!$photo) {
             return;
         }
 
         try {
-            $this->photo->comments()->create([
-                'user_id' => Auth::id(),
-                'content' => $this->newComment,
-                'status' => 'approved'
-            ]);
-
+            $user = auth()->user();
+            $photo->addComment($user, trim($this->newComment));
+            
             $this->newComment = '';
-            session()->flash('success', 'Commento aggiunto con successo!');
+            
+            // Dispatch event per aggiornare i contatori
+            $this->dispatch('commentAdded', [
+                'contentId' => $photo->id,
+                'contentType' => 'photo'
+            ]);
+            
         } catch (\Exception $e) {
-            session()->flash('error', 'Errore nell\'aggiunta del commento.');
+            // Handle error silently
         }
+    }
+
+    public function refreshComments($data = null)
+    {
+        // Force re-render
+        $this->dispatch('$refresh');
+    }
+
+    public function getPhotoProperty()
+    {
+        if (!$this->photoId) {
+            return null;
+        }
+
+        try {
+            return Photo::with(['user'])->find($this->photoId);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function getCommentsProperty()
+    {
+        if (!$this->photo) {
+            return collect();
+        }
+
+        return $this->photo->comments()
+            ->with(['user'])
+            ->whereNull('parent_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function render()
     {
-        return view('livewire.media.photo-modal');
+        return view('livewire.media.photo-modal', [
+            'photo' => $this->photo,
+            'comments' => $this->comments,
+        ]);
     }
 }

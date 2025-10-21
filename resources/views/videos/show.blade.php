@@ -193,14 +193,9 @@
                         <!-- Video Actions -->
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex gap-2">
-                                <!-- Like Button (Sistema Unificato) -->
-                                <livewire:social.social-like-button :content="$video" type="video" />
+                                <!-- Social components will be added here -->
 
-                                <!-- View Counter (Sistema Unificato) -->
-                                <livewire:social.social-view-counter :content="$video" type="video" />
-
-                                <!-- Snap Button (Sistema Unificato) -->
-                                <x-social-snap-button :content="$video" type="video" />
+                                <!-- Snap Button will be added here -->
 
                                 <!-- Report Button -->
                                 <x-report-button :content="$video" type="video" />
@@ -214,8 +209,7 @@
                     </div>
                 </div>
 
-                <!-- Comments Section (Sistema Unificato) -->
-                <x-social-comments-section :content="$video" type="video" />
+                <!-- Comments Section will be added here -->
             </div>
 
             <div class="col-lg-4">
@@ -406,10 +400,10 @@ let isVideoPlaying = false;
 let isFullscreen = false;
 
 // Variabile per tracciare se le visualizzazioni sono già state incrementate - RIMOSSA
-// Ora gestita dal componente social-view-counter
+// Gestita dal nuovo sistema social
 
 // Funzione globale per incrementare le visualizzazioni - RIMOSSA
-// Ora gestita dal componente social-view-counter
+// Gestita dal nuovo sistema social
 
 // Inizializzazione del player HTML5
 document.addEventListener('DOMContentLoaded', function() {
@@ -479,7 +473,7 @@ function updateLikeButtons(userLike) {
     }
 }
 
-// Funzioni per commenti - RIMOSSO: ora gestito dal componente social-comments-section
+// Funzioni per commenti - RIMOSSO: ora gestito dal nuovo sistema social
 
 // Funzioni per snap
 function showSnapModal() {
@@ -565,7 +559,7 @@ function deleteSnap(snapId) {
     .catch(error => console.error('Errore:', error));
 }
 
-// Contatore caratteri per commenti - RIMOSSO: ora gestito dal componente social-comments-section
+// Contatore caratteri per commenti - RIMOSSO: ora gestito dal nuovo sistema social
 
 // Inizializzazione
 document.addEventListener('DOMContentLoaded', function() {
@@ -576,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateLikeButtons('{{ $userLike->type }}');
     @endif
 
-    // Incrementa le visualizzazioni - ora gestito dal componente social-view-counter
+    // Incrementa le visualizzazioni - ora gestito dal nuovo sistema social
 
     // Sistema per rilevare interazioni con la timeline
 

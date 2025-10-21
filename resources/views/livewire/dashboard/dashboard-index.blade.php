@@ -18,7 +18,7 @@
                         </div>
                       
                         <div class="mt-3">
-                            <h4 class="text-dark mb-1 f-w-600">{{ $user->getDisplayName() }}</h4>
+                            <h4 class="text-dark mb-1 f-w-600">{{__('dashboard.welcome')}} {{ $user->getDisplayName() }}</h4>
                             <p class="f-w-500 mb-2 f-s-14 text-primary-50">{{ $user->getName() }}</p>
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach($user->getRoleNames() as $role)
