@@ -75,6 +75,11 @@ class SnapPlayer extends Component
     
     public function openSnapModal($timestamp)
     {
+        Log::info('Apertura modal snap', [
+            'timestamp' => $timestamp,
+            'video_id' => $this->video->id
+        ]);
+        
         $this->snapTimestamp = $timestamp;
         $this->showSnapModal = true;
     }
@@ -88,13 +93,21 @@ class SnapPlayer extends Component
     
     public function createSnap()
     {
+        Log::info('Tentativo creazione snap', [
+            'video_id' => $this->video->id,
+            'user_id' => Auth::id(),
+            'timestamp' => $this->snapTimestamp,
+            'title' => $this->snapTitle,
+            'description' => $this->snapDescription
+        ]);
+        
         $this->validate([
             'snapTitle' => 'required|string|max:255',
             'snapDescription' => 'nullable|string|max:500',
             'snapTimestamp' => 'required|integer|min:0'
         ]);
         
-        VideoSnap::create([
+        $snap = VideoSnap::create([
             'video_id' => $this->video->id,
             'user_id' => Auth::id(),
             'timestamp' => $this->snapTimestamp,
@@ -102,6 +115,8 @@ class SnapPlayer extends Component
             'description' => $this->snapDescription,
             'status' => 'approved'
         ]);
+        
+        Log::info('Snap creato con successo', ['snap_id' => $snap->id]);
         
         $this->snapTitle = '';
         $this->snapDescription = '';
@@ -111,6 +126,8 @@ class SnapPlayer extends Component
         $this->snaps = $this->video->approvedSnaps()->orderBy('timestamp')->get();
         
         $this->dispatch('snap-created');
+        
+        session()->flash('message', 'Snap creato con successo!');
     }
     
     public function render()

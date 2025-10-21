@@ -14,6 +14,14 @@
      x-init="Livewire.on('player-seek', (data) => this.$refs.videoPlayer.currentTime = data.timestamp)"
      class="snap-player">
     
+    <!-- Messaggi di successo/errore -->
+    @if (session()->has('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+    
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
         @if($videoDirectUrl)
