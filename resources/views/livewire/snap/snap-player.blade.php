@@ -7,19 +7,30 @@
     
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
-        <video x-ref="videoPlayer" 
-               controls 
-               class="w-100"
-               style="max-height: 60vh;"
-               x-on:timeupdate="updateTime()"
-               x-on:loadedmetadata="setDuration()">
-            @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
-                <source src="{{ $video->peertube_direct_url ?? $video->video_url }}" type="video/mp4">
-            @else
+        @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+            <!-- PeerTube iframe per video con snap -->
+            <div class="position-relative" style="padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                <iframe x-ref="videoPlayer"
+                        src="{{ $video->peertube_embed_url }}" 
+                        frameborder="0" 
+                        allowfullscreen
+                        class="position-absolute top-0 left-0 w-100 h-100"
+                        style="border: none;"
+                        x-on:load="initPeerTubePlayer()">
+                </iframe>
+            </div>
+        @else
+            <!-- Video HTML5 per video locali -->
+            <video x-ref="videoPlayer" 
+                   controls 
+                   class="w-100"
+                   style="max-height: 60vh;"
+                   x-on:timeupdate="updateTime()"
+                   x-on:loadedmetadata="setDuration()">
                 <source src="{{ $video->video_url }}" type="video/mp4">
-            @endif
-            Il tuo browser non supporta il tag video.
-        </video>
+                Il tuo browser non supporta il tag video.
+            </video>
+        @endif
         
         <!-- Pulsante Crea Snap -->
         <div class="position-absolute top-0 end-0 m-3">
@@ -93,21 +104,50 @@
 function initPlayer() {
     // Listener per seek
     Livewire.on('player-seek', (data) => {
-        this.$refs.videoPlayer.currentTime = data.timestamp;
+        if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+            // Video HTML5
+            this.$refs.videoPlayer.currentTime = data.timestamp;
+        } else {
+            // PeerTube iframe - non possiamo controllare direttamente
+            // Mostriamo un messaggio o apriamo il video in una nuova tab
+            const videoUrl = '{{ $video->peertube_url }}?start=' + data.timestamp;
+            window.open(videoUrl, '_blank');
+        }
     });
 }
 
+function initPeerTubePlayer() {
+    // Per PeerTube iframe, non possiamo controllare il player direttamente
+    // Impostiamo valori di default
+    this.currentTime = 0;
+    this.duration = {{ $video->duration ?? 0 }};
+}
+
 function updateTime() {
-    this.currentTime = this.$refs.videoPlayer.currentTime;
-    // Emetti evento per timeline
-    this.$dispatch('video-time-update', { time: this.currentTime });
+    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+        this.currentTime = this.$refs.videoPlayer.currentTime;
+        // Emetti evento per timeline
+        this.$dispatch('video-time-update', { time: this.currentTime });
+    }
+    // Per PeerTube iframe, non possiamo ottenere il tempo corrente
 }
 
 function setDuration() {
-    this.duration = this.$refs.videoPlayer.duration;
+    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+        this.duration = this.$refs.videoPlayer.duration;
+    }
+    // Per PeerTube iframe, usiamo la durata dal database
 }
 
 function createSnapAtCurrentTime() {
-    this.$wire.openSnapModal(this.currentTime);
+    if (this.$refs.videoPlayer.tagName === 'VIDEO') {
+        this.$wire.openSnapModal(this.currentTime);
+    } else {
+        // Per PeerTube, chiediamo all'utente di inserire il timestamp manualmente
+        const timestamp = prompt('Inserisci il timestamp in secondi (es: 120 per 2 minuti):');
+        if (timestamp && !isNaN(timestamp)) {
+            this.$wire.openSnapModal(parseInt(timestamp));
+        }
+    }
 }
 </script>

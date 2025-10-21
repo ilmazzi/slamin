@@ -384,4 +384,23 @@ class Video extends Model
 
         return null;
     }
+
+    /**
+     * Ottiene l'URL diretto del file video PeerTube
+     */
+    public function getPeerTubeDirectUrlAttribute(): ?string
+    {
+        if ($this->isUploadedToPeerTube()) {
+            // Se abbiamo già l'URL diretto salvato nel database, usalo
+            if ($this->getRawOriginal('peertube_direct_url')) {
+                return $this->getRawOriginal('peertube_direct_url');
+            }
+
+            // Altrimenti costruiscilo dall'UUID
+            $peerTubeUrl = config('services.peertube.url', 'https://video.slamin.it');
+            return $peerTubeUrl . '/videos/watch/' . $this->peertube_uuid;
+        }
+
+        return null;
+    }
 }
