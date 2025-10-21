@@ -128,8 +128,6 @@ class SnapPlayer extends Component
             $this->snapDescription = '';
             $this->showSnapModal = false;
             
-            session()->flash('message', 'Snap creato con successo!');
-            
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Errore validazione snap', [
                 'errors' => $e->errors(),
@@ -142,7 +140,6 @@ class SnapPlayer extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Errore durante la creazione dello snap: ' . $e->getMessage());
         }
     }
     
