@@ -11,7 +11,7 @@
         this.$wire.openSnapModal(Math.floor(this.currentTime));
     }
 }" 
-     x-init="Livewire.on('player-seek', (data) => this.$refs.videoPlayer.currentTime = data.timestamp)"
+     x-init=""
      class="snap-player">
     
     <!-- Messaggi di successo/errore -->

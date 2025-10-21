@@ -20,7 +20,7 @@ class SnapPlayer extends Component
     public $snapDescription = '';
     public $videoDirectUrl = null;
     
-    protected $listeners = ['seek-video' => 'seekToTime', 'open-snap-modal' => 'openSnapModal'];
+    protected $listeners = ['open-snap-modal' => 'openSnapModal'];
     
     public function mount(Video $video)
     {
@@ -74,10 +74,6 @@ class SnapPlayer extends Component
         return null;
     }
     
-    public function seekToTime($timestamp)
-    {
-        $this->dispatch('player-seek', timestamp: $timestamp);
-    }
     
     public function openSnapModal($timestamp)
     {
