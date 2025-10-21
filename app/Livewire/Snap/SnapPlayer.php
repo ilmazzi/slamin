@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class SnapPlayer extends Component
 {
     public $video;
-    public $snaps;
     public $currentTime = 0;
     public $duration = 0;
     public $showSnapModal = false;
@@ -26,7 +25,6 @@ class SnapPlayer extends Component
     public function mount(Video $video)
     {
         $this->video = $video;
-        $this->snaps = $video->approvedSnaps()->orderBy('timestamp')->get();
         $this->duration = $video->duration ?? 0;
         
         // Ottieni l'URL diretto del video (server-side)
@@ -35,6 +33,14 @@ class SnapPlayer extends Component
         } else {
             $this->videoDirectUrl = $this->video->video_url;
         }
+    }
+    
+    /**
+     * Computed property per gli snap
+     */
+    public function getSnapsProperty()
+    {
+        return $this->video->approvedSnaps()->orderBy('timestamp')->get();
     }
     
     /**
@@ -126,10 +132,8 @@ class SnapPlayer extends Component
             $this->snapDescription = '';
             $this->showSnapModal = false;
             
-            // Ricarica gli snap
-            $this->snaps = $this->video->approvedSnaps()->orderBy('timestamp')->get();
-            
-            $this->dispatch('snap-created');
+            // Forza il refresh del componente
+            $this->video->refresh();
             
             session()->flash('message', 'Snap creato con successo!');
             
