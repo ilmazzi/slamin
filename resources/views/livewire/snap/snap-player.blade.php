@@ -11,6 +11,12 @@
     
     loadPeerTubeVideo() {
         @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+            // Controlla che il riferimento esista
+            if (!this.$refs.videoPlayer) {
+                console.error('Video player reference not found');
+                return;
+            }
+            
             // Carica l'URL diretto di PeerTube via API
             fetch('{{ route("videos.peertube-url", $video) }}')
                 .then(response => response.json())
@@ -54,7 +60,7 @@
         this.$wire.openSnapModal(this.currentTime);
     }
 }" 
-     x-init="initPlayer()"
+     x-init="initPlayer(); loadPeerTubeVideo()"
      class="snap-player">
     
     <!-- Video Player -->
@@ -65,8 +71,7 @@
                class="w-100"
                style="max-height: 60vh;"
                x-on:timeupdate="updateTime()"
-               x-on:loadedmetadata="setDuration()"
-               x-on:loadstart="loadPeerTubeVideo()">
+               x-on:loadedmetadata="setDuration()">
             @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
                 <!-- Per PeerTube, carichiamo l'URL diretto via JavaScript -->
                 <source src="" type="video/mp4">
