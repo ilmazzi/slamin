@@ -18,7 +18,17 @@
                     if (data.success && data.files && data.files.length > 0) {
                         // Usa il primo file disponibile (migliore qualità)
                         const videoFile = data.files[0];
-                        this.$refs.videoSource.src = videoFile.url;
+                        
+                        // Crea un nuovo elemento source
+                        const source = document.createElement('source');
+                        source.src = videoFile.url;
+                        source.type = 'video/mp4';
+                        
+                        // Rimuovi source esistenti e aggiungi quello nuovo
+                        this.$refs.videoPlayer.innerHTML = '';
+                        this.$refs.videoPlayer.appendChild(source);
+                        
+                        // Forza il caricamento del video
                         this.$refs.videoPlayer.load();
                     } else {
                         console.error('Errore caricamento video PeerTube:', data.error);
@@ -59,7 +69,7 @@
                x-on:loadstart="loadPeerTubeVideo()">
             @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
                 <!-- Per PeerTube, carichiamo l'URL diretto via JavaScript -->
-                <source src="" type="video/mp4" x-ref="videoSource">
+                <source src="" type="video/mp4">
             @else
                 <!-- Per video locali -->
                 <source src="{{ $video->video_url }}" type="video/mp4">
