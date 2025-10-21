@@ -20,12 +20,31 @@
             <div class="modal-body p-3">
                 <!-- Video -->
                 <div class="mb-3" style="background-color: #000;">
-                    @if($video->video_url)
-                        <video controls class="w-100" style="max-height: 60vh;">
-                            <source src="{{ $video->video_url }}" type="video/mp4">
-                            Il tuo browser non supporta il tag video.
-                        </video>
+                    @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
+                        <!-- Video PeerTube con iframe -->
+                        <div class="position-relative" style="padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                            <iframe 
+                                src="{{ $video->peertube_embed_url }}" 
+                                frameborder="0" 
+                                allowfullscreen
+                                class="position-absolute top-0 left-0 w-100 h-100"
+                                style="border: none;">
+                            </iframe>
+                        </div>
+                    @elseif($video->isUploadedToPeerTube() && $video->isProcessingOnPeerTube())
+                        <!-- Video in elaborazione -->
+                        <div class="d-flex align-items-center justify-content-center bg-light" 
+                             style="height: 400px;">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Elaborazione...</span>
+                                </div>
+                                <h6 class="text-primary">Video in elaborazione</h6>
+                                <p class="text-muted f-s-14">Il video sarà disponibile a breve</p>
+                            </div>
+                        </div>
                     @else
+                        <!-- Video non disponibile -->
                         <div class="d-flex align-items-center justify-content-center bg-light" 
                              style="height: 400px;">
                             <div class="text-center">
