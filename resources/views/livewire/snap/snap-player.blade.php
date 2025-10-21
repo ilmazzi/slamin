@@ -1,84 +1,27 @@
 <div x-data="{ 
     currentTime: $wire.entangle('currentTime'),
-    duration: $wire.entangle('duration'),
-    
-    initPlayer() {
-        // Listener per seek
-        Livewire.on('player-seek', (data) => {
-            this.$refs.videoPlayer.currentTime = data.timestamp;
-        });
-    },
-    
-    loadPeerTubeVideo() {
-        @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
-            // Controlla che il riferimento esista
-            if (!this.$refs.videoPlayer) {
-                console.error('Video player reference not found');
-                return;
-            }
-            
-            // Carica l'URL diretto di PeerTube via API
-            fetch('{{ route("videos.peertube-url", $video) }}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.files && data.files.length > 0) {
-                        // Usa il primo file disponibile (migliore qualità)
-                        const videoFile = data.files[0];
-                        
-                        // Crea un nuovo elemento source
-                        const source = document.createElement('source');
-                        source.src = videoFile.url;
-                        source.type = 'video/mp4';
-                        
-                        // Rimuovi source esistenti e aggiungi quello nuovo
-                        this.$refs.videoPlayer.innerHTML = '';
-                        this.$refs.videoPlayer.appendChild(source);
-                        
-                        // Forza il caricamento del video
-                        this.$refs.videoPlayer.load();
-                    } else {
-                        console.error('Errore caricamento video PeerTube:', data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Errore API PeerTube:', error);
-                });
-        @endif
-    },
+    duration: {{ $video->duration ?? 0 }},
     
     updateTime() {
         this.currentTime = this.$refs.videoPlayer.currentTime;
-        // Emetti evento per timeline
         this.$dispatch('video-time-update', { time: this.currentTime });
-    },
-    
-    setDuration() {
-        this.duration = this.$refs.videoPlayer.duration;
     },
     
     createSnapAtCurrentTime() {
         this.$wire.openSnapModal(this.currentTime);
     }
 }" 
-     x-init="initPlayer(); loadPeerTubeVideo()"
+     x-init="Livewire.on('player-seek', (data) => this.$refs.videoPlayer.currentTime = data.timestamp)"
      class="snap-player">
     
     <!-- Video Player -->
     <div class="position-relative" style="background-color: #000;">
-        <!-- Video HTML5 con URL PeerTube diretto -->
         <video x-ref="videoPlayer" 
                controls 
                class="w-100"
                style="max-height: 60vh;"
-               x-on:timeupdate="updateTime()"
-               x-on:loadedmetadata="setDuration()">
-            @if($video->isUploadedToPeerTube() && $video->isReadyOnPeerTube())
-                <!-- Per PeerTube, carichiamo l'URL diretto via JavaScript -->
-                <source src="" type="video/mp4">
-            @else
-                <!-- Per video locali -->
-                <source src="{{ $video->video_url }}" type="video/mp4">
-            @endif
+               x-on:timeupdate="updateTime()">
+            <source src="{{ $video->peertube_direct_url ?? $video->video_url }}" type="video/mp4">
             Il tuo browser non supporta il tag video.
         </video>
         
