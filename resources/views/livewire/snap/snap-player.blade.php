@@ -38,9 +38,9 @@
             </div>
         @endif
         
-        <!-- Pulsante Crea Snap -->
+        <!-- Pulsante Crea Snap - Desktop (sopra il video) -->
         @if($videoDirectUrl)
-        <div class="position-absolute top-0 end-0 m-3">
+        <div class="position-absolute top-0 end-0 m-3 d-none d-md-block">
             <button x-on:click="createSnapAtCurrentTime()" 
                     class="btn btn-success btn-sm rounded-circle"
                     style="width: 50px; height: 50px;"
@@ -50,6 +50,18 @@
         </div>
         @endif
     </div>
+    
+    <!-- Pulsante Crea Snap - Mobile (sotto il video) -->
+    @if($videoDirectUrl)
+    <div class="d-md-none mt-3 d-flex justify-content-center">
+        <button x-on:click="createSnapAtCurrentTime()" 
+                class="btn btn-success d-flex align-items-center gap-2"
+                style="font-size: 16px; padding: 12px 24px;">
+            <img src="{{ asset('assets/images/snap.svg') }}" alt="Snap" style="width: 20px; height: 20px; filter: brightness(0) invert(1);">
+            <span>Crea Snap al momento attuale</span>
+        </button>
+    </div>
+    @endif
     
     <!-- Timeline con Snap -->
     <div class="mt-4 mb-3">
