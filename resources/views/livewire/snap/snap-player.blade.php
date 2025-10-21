@@ -8,7 +8,7 @@
     },
     
     createSnapAtCurrentTime() {
-        this.$wire.openSnapModal(this.currentTime);
+        this.$wire.openSnapModal(Math.floor(this.currentTime));
     }
 }" 
      x-init="Livewire.on('player-seek', (data) => this.$refs.videoPlayer.currentTime = data.timestamp)"
@@ -82,11 +82,6 @@
                         <button type="button" class="btn-close" wire:click="closeSnapModal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Debug: mostra valori correnti -->
-                        <div class="alert alert-info" style="font-size: 12px;">
-                            <strong>Debug:</strong> Title: "{{ $snapTitle }}" | Timestamp: {{ $snapTimestamp }}
-                        </div>
-                        
                         <form wire:submit.prevent="createSnap">
                             <div class="mb-3">
                                 <label class="form-label">Titolo *</label>
