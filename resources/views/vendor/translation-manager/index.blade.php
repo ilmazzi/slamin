@@ -277,7 +277,6 @@
 </div>
 
 @push('styles')
-<link href="https://vitalets.github.io/x-editable/assets/x-editable/bootstrap5-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 <style>
     .editable {
         cursor: pointer;
@@ -285,9 +284,11 @@
         padding: 4px 8px;
         display: block;
         min-height: 30px;
+        position: relative;
     }
     .editable:hover {
         background-color: #f8f9fa;
+        border-bottom: 2px dashed #0d6efd;
     }
     .editable.status-1 {
         font-weight: bold;
@@ -297,11 +298,19 @@
         color: #999;
         font-style: italic;
     }
+    .editable:hover::after {
+        content: '✏️';
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #0d6efd;
+        font-size: 12px;
+    }
 </style>
 @endpush
 
 @push('scripts')
-<script src="https://vitalets.github.io/x-editable/assets/x-editable/bootstrap5-editable/js/bootstrap-editable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script>
 jQuery(document).ready(function($){
@@ -311,17 +320,54 @@ jQuery(document).ready(function($){
         }
     });
 
-    $('.editable').editable().on('hidden', function(e, reason){
-        var locale = $(this).data('locale');
-        if(reason === 'save'){
-            $(this).removeClass('status-0').addClass('status-1');
-        }
-        if(reason === 'save' || reason === 'nochange') {
-            var $next = $(this).closest('tr').next().find('.editable.locale-'+locale);
-            setTimeout(function() {
-                $next.editable('show');
-            }, 300);
-        }
+    // Custom inline editing con Bootstrap 5
+    $('.editable').on('click', function(e){
+        e.preventDefault();
+        var $el = $(this);
+        var value = $el.text();
+        var url = $el.data('url');
+        var name = $el.data('name');
+        
+        // Crea un input inline
+        var $input = $('<textarea class="form-control form-control-sm" rows="2"></textarea>').val(value);
+        var $saveBtn = $('<button class="btn btn-success btn-sm mt-1 me-1"><i class="ph-duotone ph-check"></i></button>');
+        var $cancelBtn = $('<button class="btn btn-secondary btn-sm mt-1"><i class="ph-duotone ph-x"></i></button>');
+        var $btnGroup = $('<div class="mt-1"></div>').append($saveBtn).append($cancelBtn);
+        
+        $el.hide().after($input).after($btnGroup);
+        $input.focus().select();
+        
+        // Save
+        $saveBtn.on('click', function(){
+            var newValue = $input.val();
+            $.post(url, {
+                name: name,
+                value: newValue,
+                _token: '{{ csrf_token() }}'
+            }, function(response){
+                $el.text(newValue).removeClass('status-0').addClass('status-1').show();
+                $input.remove();
+                $btnGroup.remove();
+            }).fail(function(){
+                alert('Errore nel salvataggio');
+            });
+        });
+        
+        // Cancel
+        $cancelBtn.on('click', function(){
+            $el.show();
+            $input.remove();
+            $btnGroup.remove();
+        });
+        
+        // Enter to save, Esc to cancel
+        $input.on('keydown', function(e){
+            if(e.key === 'Enter' && e.ctrlKey){
+                $saveBtn.click();
+            } else if(e.key === 'Escape'){
+                $cancelBtn.click();
+            }
+        });
     });
 
     $('.group-select').on('change', function(){
