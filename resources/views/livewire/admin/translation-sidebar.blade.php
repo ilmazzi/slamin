@@ -1,4 +1,4 @@
-<div>
+<div class="translation-sidebar-wrapper">
     <!-- Floating Toggle Button -->
     <button 
         wire:click="toggleSidebar"
@@ -128,75 +128,76 @@
             </small>
         </div>
     </div>
-</div>
-
-<style>
-.translation-toggle-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.translation-item:hover {
-    background: #e9ecef !important;
-}
-
-/* Scrollbar personalizzata */
-.translation-sidebar > div:nth-child(4)::-webkit-scrollbar {
-    width: 8px;
-}
-
-.translation-sidebar > div:nth-child(4)::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.translation-sidebar > div:nth-child(4)::-webkit-scrollbar-thumb {
-    background: #667eea;
-    border-radius: 10px;
-}
-
-.translation-sidebar > div:nth-child(4)::-webkit-scrollbar-thumb:hover {
-    background: #764ba2;
-}
-</style>
-
-@script
-<script>
-// Ascolta eventi di aggiornamento traduzione
-Livewire.on('translationUpdated', (event) => {
-    const key = event.key;
-    const newValue = event.value;
     
-    // Trova tutti gli elementi con quella traduzione e aggiornali
-    document.querySelectorAll(`[data-i18n-key="${key}"]`).forEach(el => {
-        el.textContent = newValue;
-        // Visual feedback
-        el.style.transition = 'all 0.3s ease';
-        el.style.backgroundColor = '#d4edda';
-        setTimeout(() => {
-            el.style.backgroundColor = '';
-        }, 1000);
+    <!-- Styles -->
+    <style>
+    .translation-toggle-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .translation-item:hover {
+        background: #e9ecef !important;
+    }
+    
+    /* Scrollbar personalizzata */
+    .translation-sidebar > div:nth-child(4)::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .translation-sidebar > div:nth-child(4)::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    .translation-sidebar > div:nth-child(4)::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 10px;
+    }
+    
+    .translation-sidebar > div:nth-child(4)::-webkit-scrollbar-thumb:hover {
+        background: #764ba2;
+    }
+    </style>
+    
+    @script
+    <script>
+    // Ascolta eventi di aggiornamento traduzione
+    Livewire.on('translationUpdated', (event) => {
+        const key = event.key;
+        const newValue = event.value;
+        
+        // Trova tutti gli elementi con quella traduzione e aggiornali
+        document.querySelectorAll(`[data-i18n-key="${key}"]`).forEach(el => {
+            el.textContent = newValue;
+            // Visual feedback
+            el.style.transition = 'all 0.3s ease';
+            el.style.backgroundColor = '#d4edda';
+            setTimeout(() => {
+                el.style.backgroundColor = '';
+            }, 1000);
+        });
+        
+        console.log('Translation updated:', key, newValue);
     });
     
-    console.log('Translation updated:', key, newValue);
-});
-
-// Notifiche
-Livewire.on('notify', (event) => {
-    const type = event.type;
-    const message = event.message;
-    
-    // Usa Toastify se disponibile
-    if (typeof Toastify !== 'undefined') {
-        Toastify({
-            text: message,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
-        }).showToast();
-    } else {
-        alert(message);
-    }
-});
-</script>
-@endscript
+    // Notifiche
+    Livewire.on('notify', (event) => {
+        const type = event.type;
+        const message = event.message;
+        
+        // Usa Toastify se disponibile
+        if (typeof Toastify !== 'undefined') {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === 'success' ? "#28a745" : "#dc3545",
+            }).showToast();
+        } else {
+            alert(message);
+        }
+    });
+    </script>
+    @endscript
+</div>
