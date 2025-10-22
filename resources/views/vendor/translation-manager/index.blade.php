@@ -277,7 +277,7 @@
 </div>
 
 @push('styles')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<link href="https://vitalets.github.io/x-editable/assets/x-editable/bootstrap5-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 <style>
     .editable {
         cursor: pointer;
@@ -301,7 +301,7 @@
 @endpush
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script src="https://vitalets.github.io/x-editable/assets/x-editable/bootstrap5-editable/js/bootstrap-editable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 <script>
 jQuery(document).ready(function($){
