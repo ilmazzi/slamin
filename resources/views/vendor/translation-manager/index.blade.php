@@ -2,7 +2,7 @@
 
 @section('title', 'Translation Manager')
 
-@section('content')
+@section('main-content')
 <div class="container-fluid">
     <!-- Breadcrumb -->
     <div class="row">

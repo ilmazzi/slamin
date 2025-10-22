@@ -91,6 +91,11 @@
     <!-- Global Comment Modal -->
     <livewire:social.global-comment-modal />
     
+    <!-- Translation Sidebar (Admin Only) -->
+    @if(auth()->check() && auth()->user()->hasRole('admin'))
+        <livewire:admin.translation-sidebar />
+    @endif
+    
     <!-- SVG Icons -->
     <svg style="display: none;">
         <symbol id="icon-like" viewBox="0 0 32 32" fill="currentColor">
