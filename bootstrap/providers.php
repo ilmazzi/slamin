@@ -6,4 +6,5 @@ return [
     App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\LanguageServiceProvider::class,
+    Barryvdh\TranslationManager\ManagerServiceProvider::class,
 ];
