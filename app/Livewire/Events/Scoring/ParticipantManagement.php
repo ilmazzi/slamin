@@ -11,6 +11,7 @@ class ParticipantManagement extends Component
 {
     public $event;
     public $participants;
+    public $isLocked = false;
     public $showAddModal = false;
     public $participantType = 'user'; // 'user' or 'guest'
     
@@ -32,6 +33,7 @@ class ParticipantManagement extends Component
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->isLocked = $event->status === Event::STATUS_COMPLETED;
         $this->loadParticipants();
     }
 
@@ -97,6 +99,11 @@ class ParticipantManagement extends Component
 
     public function addParticipant()
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile modificare i partecipanti. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         if ($this->participantType === 'user') {
             $this->validate([
                 'selectedUser' => 'required',
@@ -152,6 +159,11 @@ class ParticipantManagement extends Component
 
     public function updateStatus($participantId, $newStatus)
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile modificare i partecipanti. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         $participant = EventParticipant::findOrFail($participantId);
         $participant->status = $newStatus;
         $participant->save();
@@ -162,6 +174,11 @@ class ParticipantManagement extends Component
 
     public function removeParticipant($participantId)
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile modificare i partecipanti. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         $participant = EventParticipant::findOrFail($participantId);
         $participant->delete();
 

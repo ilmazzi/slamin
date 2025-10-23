@@ -19,6 +19,21 @@
             </div>
         </div>
 
+        {{-- Lock Alert --}}
+        @if($isLocked)
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="ph ph-lock-simple f-s-24 me-3"></i>
+                    <div>
+                        <strong>Evento Completato</strong><br>
+                        La classifica è stata generata. Non è possibile modificare i punteggi.
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         {{-- Navigation --}}
         <div class="row mb-3">
             <div class="col-12">

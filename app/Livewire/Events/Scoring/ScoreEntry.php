@@ -11,6 +11,7 @@ use App\Models\EventParticipant;
 class ScoreEntry extends Component
 {
     public $event;
+    public $isLocked = false;
     public $rounds;
     public $participants;
     public $selectedRound = 1;
@@ -28,6 +29,7 @@ class ScoreEntry extends Component
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->isLocked = $event->status === Event::STATUS_COMPLETED;
         $this->loadData();
     }
 
@@ -68,6 +70,11 @@ class ScoreEntry extends Component
 
     public function saveScore($participantId)
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile modificare i punteggi. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         $score = $this->scores[$participantId] ?? null;
         
         if ($score === '' || $score === null) {
@@ -128,6 +135,11 @@ class ScoreEntry extends Component
 
     public function saveRound()
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile modificare i turni. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         $this->validate([
             'round_number' => 'required|integer|min:1',
             'round_name' => 'required|string|max:255',
@@ -155,6 +167,11 @@ class ScoreEntry extends Component
 
     public function deleteRound($roundId)
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'Impossibile eliminare i turni. L\'evento è completato e la classifica è stata generata.']);
+            return;
+        }
+        
         $round = EventRound::findOrFail($roundId);
         $round->delete();
         
