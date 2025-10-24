@@ -119,7 +119,11 @@ class ProfileShow extends Component
 
     public function getTopBadgesProperty()
     {
-        return $this->user->top3Badges;
+        return $this->user->userBadges()
+            ->with('badge')
+            ->orderBy('earned_at', 'desc')
+            ->limit(3)
+            ->get();
     }
 
     public function getLevelProperty()

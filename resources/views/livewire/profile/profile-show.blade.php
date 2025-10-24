@@ -119,7 +119,7 @@
                                 </div>
                                 
                                 <!-- Rotating Badges -->
-                                @if(isset($topBadges[0]))
+                                @if(isset($topBadges[0]) && $topBadges[0]->badge)
                                 <div class="badge-container" style="animation: orbit-rotate-1 20s linear infinite;">
                                     <img src="{{ $topBadges[0]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[0]->badge->name }}" 
@@ -129,7 +129,7 @@
                                 </div>
                                 @endif
                                 
-                                @if(isset($topBadges[1]))
+                                @if(isset($topBadges[1]) && $topBadges[1]->badge)
                                 <div class="badge-container" style="animation: orbit-rotate-2 25s linear infinite;">
                                     <img src="{{ $topBadges[1]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[1]->badge->name }}" 
@@ -139,7 +139,7 @@
                                 </div>
                                 @endif
                                 
-                                @if(isset($topBadges[2]))
+                                @if(isset($topBadges[2]) && $topBadges[2]->badge)
                                 <div class="badge-container" style="animation: orbit-rotate-3 30s linear infinite;">
                                     <img src="{{ $topBadges[2]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[2]->badge->name }}" 
