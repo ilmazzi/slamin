@@ -88,16 +88,23 @@ async function initMap() {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                 .then(r => r.json())
                 .then(data => {
+                    console.log('Reverse geocode result:', data);
                     if (data && data.address) {
                         const addr = data.address;
-                        $wire.dispatch('map-clicked', {
+                        
+                        const eventData = {
                             latitude: lat,
                             longitude: lng,
                             city: addr.city || addr.town || addr.village || '',
                             address: (addr.road || '') + (addr.house_number ? ' ' + addr.house_number : ''),
                             postcode: addr.postcode || '',
                             country: addr.country_code ? addr.country_code.toUpperCase() : ''
-                        });
+                        };
+                        
+                        console.log('Dispatching to parent:', eventData);
+                        
+                        // Use $dispatch to send to parent component (Livewire 3)
+                        $dispatch('map-clicked', eventData);
                     }
                 });
         });
