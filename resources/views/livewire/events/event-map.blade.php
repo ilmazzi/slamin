@@ -33,27 +33,20 @@ function waitForElement() {
 }
 
 async function initMap() {
-    console.log('🔄 initMap() called');
-    
     // Wait for Leaflet library
     if (typeof L === 'undefined') {
-        console.log('⏳ Leaflet not loaded yet');
         setTimeout(initMap, 300);
         return;
     }
     
     // Prevent double initialization
     if (eventMap !== null) {
-        console.log('ℹ️ Map already initialized');
         return;
     }
     
     try {
-        console.log('⏳ Waiting for map element with dimensions...');
         // Wait for element to have dimensions
         await waitForElement();
-        
-        console.log('🗺️ Initializing Leaflet map...');
         
         // Initialize map
         eventMap = L.map('eventMap', {
@@ -61,8 +54,6 @@ async function initMap() {
             zoomControl: true,
             attributionControl: true
         }).setView([41.9028, 12.4964], 6);
-        
-        console.log('✅ Leaflet map object created:', eventMap !== null);
         
         // Add tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -88,7 +79,6 @@ async function initMap() {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                 .then(r => r.json())
                 .then(data => {
-                    console.log('Reverse geocode result:', data);
                     if (data && data.address) {
                         const addr = data.address;
                         
@@ -101,8 +91,6 @@ async function initMap() {
                             country: addr.country_code ? addr.country_code.toUpperCase() : ''
                         };
                         
-                        console.log('Dispatching to parent:', eventData);
-                        
                         // Use $dispatch to send to parent component (Livewire 3)
                         $dispatch('map-clicked', eventData);
                     }
@@ -111,19 +99,14 @@ async function initMap() {
         
         // Force resize after tiles load
         setTimeout(() => {
-            if (eventMap) {
-                eventMap.invalidateSize(true);
-                console.log('✅ Map resized and ready!');
-            }
+            if (eventMap) eventMap.invalidateSize(true);
         }, 500);
         
     } catch (e) {
-        // If map is already initialized, that's OK, just log it
+        // If map is already initialized, that's OK
         if (e.message && e.message.includes('already initialized')) {
-            console.log('ℹ️ Map already initialized (this is OK)');
             // Don't set to null! The map is actually working
         } else {
-            console.error('❌ Map initialization failed:', e);
             eventMap = null;
         }
     }
@@ -133,17 +116,13 @@ async function initMap() {
 let mapInitStarted = false;
 
 function safeInitMap() {
-    if (mapInitStarted) {
-        console.log('⚠️ Map init already in progress, skipping');
-        return;
-    }
+    if (mapInitStarted) return;
     mapInitStarted = true;
     initMap();
 }
 
 // Initialize on component load
 document.addEventListener('livewire:navigated', () => {
-    console.log('📡 livewire:navigated event');
     if (eventMap === null) {
         mapInitStarted = false;
         safeInitMap();
@@ -151,7 +130,6 @@ document.addEventListener('livewire:navigated', () => {
 });
 
 // First load
-console.log('🚀 Starting first map init...');
 safeInitMap();
 
 // Watch for fullAddress changes (Livewire 3 reactive approach)
@@ -165,19 +143,13 @@ Livewire.hook('commit', ({ component, succeed }) => {
         if (currentAddress !== lastAddress && currentAddress.length >= 5) {
             lastAddress = currentAddress;
             
-            console.log('Auto-geocoding:', currentAddress);
-            
             // Geocode using Nominatim
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(currentAddress)}`)
                 .then(r => r.json())
                 .then(data => {
-                    console.log('Geocoding result:', data);
                     if (data && data.length > 0) {
                         const lat = parseFloat(data[0].lat);
                         const lng = parseFloat(data[0].lon);
-                        
-                        console.log('Setting pin at:', lat, lng);
-                        console.log('eventMap exists:', eventMap !== null);
                         
                         // Update properties
                         $wire.set('latitude', lat);
@@ -186,12 +158,10 @@ Livewire.hook('commit', ({ component, succeed }) => {
                         // Wait for map to be initialized if not ready
                         const updateMap = () => {
                             if (!eventMap) {
-                                console.log('Map not ready, retrying...');
                                 setTimeout(updateMap, 500);
                                 return;
                             }
                             
-                            console.log('Updating map with pin...');
                             eventMap.setView([lat, lng], 15);
                             
                             if (eventMarker) {
@@ -199,16 +169,10 @@ Livewire.hook('commit', ({ component, succeed }) => {
                             } else {
                                 eventMarker = L.marker([lat, lng]).addTo(eventMap);
                             }
-                            console.log('✅ Pin placed!');
                         };
                         
                         updateMap();
-                    } else {
-                        console.log('No results found');
                     }
-                })
-                .catch(err => {
-                    console.error('Geocoding error:', err);
                 });
         }
     });
