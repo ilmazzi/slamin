@@ -135,13 +135,21 @@ Livewire.hook('commit', ({ component, succeed }) => {
                         const lng = parseFloat(data[0].lon);
                         
                         console.log('Setting pin at:', lat, lng);
+                        console.log('eventMap exists:', eventMap !== null);
                         
                         // Update properties
                         $wire.set('latitude', lat);
                         $wire.set('longitude', lng);
                         
-                        // Update map
-                        if (eventMap) {
+                        // Wait for map to be initialized if not ready
+                        const updateMap = () => {
+                            if (!eventMap) {
+                                console.log('Map not ready, retrying...');
+                                setTimeout(updateMap, 500);
+                                return;
+                            }
+                            
+                            console.log('Updating map with pin...');
                             eventMap.setView([lat, lng], 15);
                             
                             if (eventMarker) {
@@ -149,7 +157,10 @@ Livewire.hook('commit', ({ component, succeed }) => {
                             } else {
                                 eventMarker = L.marker([lat, lng]).addTo(eventMap);
                             }
-                        }
+                            console.log('✅ Pin placed!');
+                        };
+                        
+                        updateMap();
                     } else {
                         console.log('No results found');
                     }
