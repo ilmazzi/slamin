@@ -67,6 +67,10 @@ class AppServiceProvider extends ServiceProvider
             'gig' => \App\Models\Gig::class,
             'event' => \App\Models\Event::class,
             'group' => \App\Models\Group::class,
+            'forum_post' => \App\Models\ForumPost::class,
+            'event_round' => \App\Models\EventRound::class,
+            'event_participant' => \App\Models\EventParticipant::class,
+            'event_ranking' => \App\Models\EventRanking::class,
         ]);
 
         // Registra l'observer per i video

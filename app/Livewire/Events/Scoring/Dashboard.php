@@ -8,11 +8,13 @@ use App\Models\Event;
 class Dashboard extends Component
 {
     public $event;
+    public $isLocked = false;
     public $stats;
 
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->isLocked = $event->status === Event::STATUS_COMPLETED;
         $this->loadStats();
     }
 

@@ -9,6 +9,7 @@ use App\Services\EventScoringService;
 class Rankings extends Component
 {
     public $event;
+    public $isLocked = false;
     public $rankings;
     public $canCalculate = false;
     public $stats;
@@ -16,6 +17,7 @@ class Rankings extends Component
     public function mount(Event $event)
     {
         $this->event = $event;
+        $this->isLocked = $event->status === Event::STATUS_COMPLETED;
         $this->loadRankings();
     }
 
@@ -55,6 +57,11 @@ class Rankings extends Component
 
     public function finalizeEvent()
     {
+        if ($this->isLocked) {
+            $this->dispatch('swal:error', ['title' => 'Errore', 'text' => 'L\'evento è già stato completato e la classifica generata.']);
+            return;
+        }
+        
         try {
             $scoringService = app(EventScoringService::class);
             
