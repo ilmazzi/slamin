@@ -101,6 +101,12 @@ return [
         'technical' => 'Tecnico',
         'translation' => 'Traduzione',
         'other' => 'Altro',
+        'poeta' => 'Poeta',
+        'artist' => 'Artista',
+        'mc' => 'MC',
+        'sound_engineer' => 'Fonico',
+        'photographer' => 'Fotografo',
+        'videographer' => 'Videomaker',
     ],
     
     // Types
@@ -108,16 +114,28 @@ return [
         'paid' => 'Retribuito',
         'volunteer' => 'Volontariato',
         'collaboration' => 'Collaborazione',
+        'artist_poet' => 'Artista/Poeta',
+        'performer' => 'Performer',
+        'host' => 'Host',
+        'judge' => 'Giudice',
+        'technician' => 'Tecnico',
     ],
     
     // Languages
     'languages' => [
+        'it' => 'Italiano',
+        'en' => 'Inglese',
+        'es' => 'Spagnolo',
+        'fr' => 'Francese',
+        'de' => 'Tedesco',
+        'pt' => 'Portoghese',
         'italian' => 'Italiano',
         'english' => 'Inglese',
         'spanish' => 'Spagnolo',
         'french' => 'Francese',
         'german' => 'Tedesco',
         'portuguese' => 'Portoghese',
+        'italiano' => 'Italiano',
     ],
     
     // Remote
