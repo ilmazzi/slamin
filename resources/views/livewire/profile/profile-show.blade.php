@@ -93,41 +93,96 @@
                 <!-- Elegant Profile Card with Badges -->
                 <div class="card overflow-hidden mb-4">
                     <div class="card-body p-0">
-                        <div class="profile-call-box bg-gradient-mode">
-                            <!-- Background Images -->
-                            <img alt="profile-bg" class="img-fluid position-relative z-1" 
-                                 src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp') }}"
-                                 style="width: 100%; height: 200px; object-fit: cover;">
-                            <img alt="bg-vector" class="img-fluid bg-vector-img" 
-                                 src="{{ asset('assets/images/dashboard/project/bg-round.png') }}">
-                            <img alt="bg-vector2" class="img-fluid bg-vector-img1" 
-                                 src="{{ asset('assets/images/dashboard/project/bg-round2.png') }}">
-
-                            <!-- Profile Details Box -->
-                            <div class="meeting-details-box d-flex align-items-center p-3">
-                                <div class="h-60 w-60 d-flex-center b-r-50 overflow-hidden bg-white flex-shrink-0 shadow">
-                                    <img alt="{{ $user->name }}" class="img-fluid" 
-                                         src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                         style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div class="flex-grow-1 ps-3">
-                                    <div class="fw-medium txt-ellipsis-1 text-white f-s-18">
-                                        {{ $user->getDisplayName() }}
-                                        @if($user->verified_at)
-                                            <i class="ph ph-check-circle-fill text-success ms-1" title="Verificato"></i>
-                                        @endif
-                                    </div>
-                                    <div class="text-white-50 f-s-14 txt-ellipsis-1">@{{ $user->nickname }}</div>
-                                    @if($user->bio)
-                                    <div class="text-white-75 f-s-12 txt-ellipsis-2 mt-1">{{ $user->bio }}</div>
-                                    @endif
-                                </div>
-                                @if($isOwnProfile)
-                                <a href="{{ route('profile.edit') }}" class="btn btn-white btn-sm mt-2">
-                                    <i class="ph ph-pencil me-1"></i>Modifica
-                                </a>
+                        <div class="profile-call-box bg-gradient-mode position-relative" style="height: 450px;">
+                            <!-- Display Name at Top -->
+                            <div class="position-absolute w-100 text-center text-primary fw-bold f-s-24" style="top: 20px; z-index: 10;">
+                                {{ $user->getDisplayName() }}
+                                @if($user->verified_at)
+                                    <i class="ph ph-check-circle-fill text-success ms-1" title="Verificato"></i>
                                 @endif
                             </div>
+
+                            <!-- Solar System Container -->
+                            <div class="meeting-call-box position-relative d-flex flex-column align-items-center justify-content-center" style="height: 400px; margin-top: 50px;">
+                                <!-- Orbits -->
+                                <div class="orbit-path orbit-1"></div>
+                                <div class="orbit-path orbit-2"></div>
+                                <div class="orbit-path orbit-3"></div>
+                                
+                                <!-- Central Avatar -->
+                                <div class="position-absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;">
+                                    <div class="d-flex-center b-r-50 overflow-hidden bg-white shadow" style="width: 100px; height: 100px;">
+                                        <img alt="{{ $user->name }}" class="img-fluid" 
+                                             src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                </div>
+                                
+                                <!-- Rotating Badges -->
+                                @if(isset($topBadges[0]))
+                                <div class="badge-container" style="animation: orbit-rotate-1 20s linear infinite;">
+                                    <img src="{{ $topBadges[0]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
+                                         alt="{{ $topBadges[0]->badge->name }}" 
+                                         class="bg-vector-img" 
+                                         style="width: 60px; height: 60px;">
+                                    <div class="badge-name">{{ $topBadges[0]->badge->name }}</div>
+                                </div>
+                                @endif
+                                
+                                @if(isset($topBadges[1]))
+                                <div class="badge-container" style="animation: orbit-rotate-2 25s linear infinite;">
+                                    <img src="{{ $topBadges[1]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
+                                         alt="{{ $topBadges[1]->badge->name }}" 
+                                         class="bg-vector-img1" 
+                                         style="width: 60px; height: 60px;">
+                                    <div class="badge-name">{{ $topBadges[1]->badge->name }}</div>
+                                </div>
+                                @endif
+                                
+                                @if(isset($topBadges[2]))
+                                <div class="badge-container" style="animation: orbit-rotate-3 30s linear infinite;">
+                                    <img src="{{ $topBadges[2]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
+                                         alt="{{ $topBadges[2]->badge->name }}" 
+                                         class="bg-vector-img2" 
+                                         style="width: 60px; height: 60px;">
+                                    <div class="badge-name">{{ $topBadges[2]->badge->name }}</div>
+                                </div>
+                                @endif
+                                
+                                <!-- Name and Nickname Below Avatar -->
+                                <div class="position-absolute text-center" style="top: 65%; left: 50%; transform: translate(-50%, 0); z-index: 10;">
+                                    <div class="text-white-50 f-s-14">@{{ $user->nickname }}</div>
+                                    @if($user->bio)
+                                    <div class="text-white-75 f-s-12 mt-1" style="max-width: 250px;">{{ Str::limit($user->bio, 60) }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <!-- Badge Info at Bottom -->
+                            <div class="position-absolute w-100 text-center" style="bottom: 20px; z-index: 10;">
+                                <div class="d-flex justify-content-center gap-4">
+                                    <div class="text-white">
+                                        <i class="ph ph-medal f-s-20"></i>
+                                        <span class="ms-1">{{ $badgesCount }} Badge</span>
+                                    </div>
+                                    <div class="text-white">
+                                        <i class="ph ph-star f-s-20"></i>
+                                        <span class="ms-1">{{ $totalPoints }} Punti</span>
+                                    </div>
+                                    <div class="text-white">
+                                        <i class="ph ph-ranking f-s-20"></i>
+                                        <span class="ms-1">Livello {{ $level }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            @if($isOwnProfile)
+                            <div class="position-absolute" style="top: 15px; right: 15px; z-index: 10;">
+                                <a href="{{ route('profile.edit') }}" class="btn btn-white btn-sm">
+                                    <i class="ph ph-pencil me-1"></i>Modifica
+                                </a>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
