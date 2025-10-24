@@ -166,7 +166,7 @@
                                     <button wire:click="shareGig" class="btn btn-light-secondary">
                                         <i class="ph ph-share-network me-2"></i>{{ __('gigs.actions.share') }}
                                     </button>
-                                    <button wire:click="deleteGig" wire:confirm="{{ __('gigs.confirm_delete') }}" class="btn btn-light-danger">
+                                    <button onclick="confirm('{{ __('gigs.confirm_delete') }}') || event.stopImmediatePropagation()" wire:click="deleteGig" class="btn btn-light-danger">
                                         <i class="ph ph-trash me-2"></i>{{ __('gigs.delete') }}
                                     </button>
                                 </div>
