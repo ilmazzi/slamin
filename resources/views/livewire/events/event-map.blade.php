@@ -112,71 +112,53 @@ document.addEventListener('livewire:navigated', () => {
 // First load
 initMap();
 
-// Listen for trigger-geocode event from THIS component (Livewire 3 way)
-@this.on('trigger-geocode', (event) => {
-    const address = event.address || event[0]?.address;
-    if (!address) {
-        console.log('No address to geocode');
-        return;
-    }
-    
-    console.log('Geocoding address:', address);
-    
-    // Geocode using Nominatim
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-        .then(r => r.json())
-        .then(data => {
-            console.log('Geocoding result:', data);
-            if (data && data.length > 0) {
-                const lat = parseFloat(data[0].lat);
-                const lng = parseFloat(data[0].lon);
-                
-                console.log('Setting pin at:', lat, lng);
-                
-                // Update wire properties using @this (Livewire 3)
-                @this.set('latitude', lat);
-                @this.set('longitude', lng);
-                
-                // Update map
-                if (eventMap) {
-                    eventMap.setView([lat, lng], 15);
-                    
-                    if (eventMarker) {
-                        eventMarker.setLatLng([lat, lng]);
-                    } else {
-                        eventMarker = L.marker([lat, lng]).addTo(eventMap);
-                    }
-                }
-            } else {
-                console.log('No results found for address');
-            }
-        })
-        .catch(err => {
-            console.error('Geocoding error:', err);
-        });
-});
+// Watch for fullAddress changes (Livewire 3 reactive approach)
+let lastAddress = '';
 
-// Listen for updates from parent component (e.g. when a recent venue is selected)
-@this.on('update-map-location', (event) => {
-    const { latitude, longitude } = event;
-    
-    if (!eventMap || !latitude || !longitude) return;
-    
-    try {
-        // Update map view
-        eventMap.setView([latitude, longitude], 15);
+Livewire.hook('commit', ({ component, succeed }) => {
+    succeed(() => {
+        const currentAddress = $wire.fullAddress || '';
         
-        // Update or create marker
-        if (eventMarker) {
-            eventMarker.setLatLng([latitude, longitude]);
-        } else {
-            eventMarker = L.marker([latitude, longitude]).addTo(eventMap);
+        // Only geocode if address changed and has minimum length
+        if (currentAddress !== lastAddress && currentAddress.length >= 5) {
+            lastAddress = currentAddress;
+            
+            console.log('Auto-geocoding:', currentAddress);
+            
+            // Geocode using Nominatim
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(currentAddress)}`)
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Geocoding result:', data);
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lng = parseFloat(data[0].lon);
+                        
+                        console.log('Setting pin at:', lat, lng);
+                        
+                        // Update properties
+                        $wire.set('latitude', lat);
+                        $wire.set('longitude', lng);
+                        
+                        // Update map
+                        if (eventMap) {
+                            eventMap.setView([lat, lng], 15);
+                            
+                            if (eventMarker) {
+                                eventMarker.setLatLng([lat, lng]);
+                            } else {
+                                eventMarker = L.marker([lat, lng]).addTo(eventMap);
+                            }
+                        }
+                    } else {
+                        console.log('No results found');
+                    }
+                })
+                .catch(err => {
+                    console.error('Geocoding error:', err);
+                });
         }
-        
-        console.log('✅ Map updated to:', latitude, longitude);
-    } catch (e) {
-        console.error('Error updating map:', e);
-    }
+    });
 });
 </script>
 @endscript

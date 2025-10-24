@@ -17,16 +17,6 @@ class EventMap extends Component
     #[Reactive]
     public $fullAddress = '';
 
-    public function updatedFullAddress($value)
-    {
-        if (empty($value) || strlen($value) < 5) {
-            return;
-        }
-        
-        // Dispatch to JS to geocode
-        $this->dispatch('trigger-geocode', address: $value);
-    }
-
     public function render()
     {
         return view('livewire.events.event-map');
