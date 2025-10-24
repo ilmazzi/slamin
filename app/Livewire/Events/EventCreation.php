@@ -364,6 +364,11 @@ class EventCreation extends Component
         if ($propertyName === 'is_online') {
             $this->dispatch('location-mode-changed', isOnline: $this->is_online);
         }
+        
+        // Auto-geocode when address fields change
+        if (in_array($propertyName, ['venue_address', 'city', 'postcode', 'country'])) {
+            $this->geocodeAddress();
+        }
     }
 
     #[On('map-clicked')]

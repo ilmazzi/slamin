@@ -466,7 +466,7 @@
                                         <div class="col-12">
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.venue_address') }}</label>
-                                            <textarea wire:model="venue_address"
+                                            <textarea wire:model.live.debounce.1000ms="venue_address"
                                                       class="form-control @error('venue_address') is-invalid @enderror"
                                                       rows="2"
                                                       placeholder="{{ __('events.venue_address_placeholder') }}"></textarea>
@@ -480,7 +480,7 @@
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.postcode') }}</label>
                                             <input type="text"
-                                                   wire:model="postcode"
+                                                   wire:model.live.debounce.1000ms="postcode"
                                                    class="form-control"
                                                    placeholder="{{ __('events.postcode_placeholder') }}">
                                             </div>
@@ -489,7 +489,7 @@
                                         <div class="col-md-8">
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.country') }}</label>
-                                            <select wire:model="country" class="form-select">
+                                            <select wire:model.live="country" class="form-select">
                                                 <option value="IT">Italia</option>
                                                 <option value="FR">France</option>
                                                 <option value="DE">Deutschland</option>
@@ -498,12 +498,6 @@
                                                 <option value="US">United States</option>
                                             </select>
                                             </div>
-                                        </div>
-                                        
-                                        <div class="col-12">
-                                            <button type="button" wire:click="geocodeAddress" class="btn btn-light-primary mb-3">
-                                                <i class="ph ph-map-pin me-2"></i>{{ __('events.set_pin_on_map') }}
-                                            </button>
                                         </div>
 
                                         <div class="col-12">

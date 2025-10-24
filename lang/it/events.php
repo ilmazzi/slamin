@@ -104,7 +104,6 @@ return [
   'country' => 'Nazione',
     'map_location' => 'Posizione sulla Mappa',
     'map_auto_positioning_help' => 'Clicca sulla mappa o inserisci l\'indirizzo per posizionare automaticamente',
-    'set_pin_on_map' => 'Posiziona Pin sulla Mappa',
   'recent_venues' => 'Locali Recenti',
   'recent_venues_help' => 'Seleziona un locale utilizzato di recente',
   'select_recent_venue' => 'Seleziona Locale',
