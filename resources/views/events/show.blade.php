@@ -156,7 +156,7 @@
                                 <i class="ph ph-currency-eur me-2 text-muted f-s-14"></i>
                                 <div>
                                     <small class="text-muted d-block f-s-12">{{ __('events.entry_fee') }}</small>
-                                    <span class="badge bg-success f-s-12">{{ __('common.free') }}</span>
+                                    <span class="badge bg-success f-s-12">{{ __('events.free') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -807,7 +807,7 @@
                                         <div class="col-md-6 mb-2">
                                             <small class="text-muted">
                                                 <i class="ph ph-translate me-1"></i>
-                                                {{ __('common.language_selector') }}: {{ __('events.language_' . $position['language']) }}
+                                                {{ __('events.language_selector') }}: {{ __('events.language_' . $position['language']) }}
                                             </small>
                                         </div>
                                         @endif
@@ -1508,7 +1508,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.cancel') }}</button>
                     <button type="submit" class="btn btn-primary">{{ __('gigs.applications.submit_application') }}</button>
                 </div>
             </form>

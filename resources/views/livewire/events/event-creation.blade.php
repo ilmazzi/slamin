@@ -539,7 +539,7 @@
                                                     <select wire:model.live="recurrence_type"
                                                             class="form-select @error('recurrence_type') is-invalid @enderror"
                                                             required>
-                                                        <option value="">{{ __('common.select') }}</option>
+                                                        <option value="">{{ __('events.select') }}</option>
                                                         <option value="daily">{{ __('events.daily') }}</option>
                                                         <option value="weekly">{{ __('events.weekly') }}</option>
                                                         <option value="monthly">{{ __('events.monthly') }}</option>
@@ -1550,7 +1550,7 @@
                                                 <table class="table table-sm mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>{{ __('common.name') }}</th>
+                                                            <th>{{ __('events.name') }}</th>
                                                             <th>{{ __('events.role') }}</th>
                                                         </tr>
                                                     </thead>
@@ -1640,7 +1640,7 @@
             <div class="card position-sticky top-0">
                 <div class="card-header">
                     <h6 class="mb-0">
-                        <i class="ph ph-info-circle me-2"></i>{{ __('common.help') }}
+                        <i class="ph ph-info-circle me-2"></i>{{ __('events.help') }}
                     </h6>
                 </div>
                 <div class="card-body">

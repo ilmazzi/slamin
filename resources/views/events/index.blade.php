@@ -239,12 +239,12 @@
                             <div class="col-lg-3 col-md-12">
                                 <div class="d-flex gap-2 justify-content-end p-2">
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="ph ph-funnel me-1"></i>{{ __('common.filter') }}
+                                        <i class="ph ph-funnel me-1"></i>{{ __('events.filter') }}
                                     </button>
                                     @auth
                                         @can('events.create.public')
                                             <a href="{{ route('events.create') }}" class="btn btn-success">
-                                                <i class="ph ph-plus me-1"></i>{{ __('common.create') }}
+                                                <i class="ph ph-plus me-1"></i>{{ __('events.create') }}
                                             </a>
                                         @endcan
                                     @endauth
@@ -430,7 +430,7 @@
                             <!-- Action Buttons -->
                             <div class="d-flex gap-2">
                                 <a href="{{ route('events.show', $event) }}" class="btn btn-primary btn-sm flex-fill">
-                                    <i class="ti ti-eye me-1"></i>{{ __('common.view') }}
+                                    <i class="ti ti-eye me-1"></i>{{ __('events.view') }}
                                 </a>
                                 @can('delete', $event)
                                     <button type="button" class="btn btn-light-danger btn-sm"
@@ -527,7 +527,7 @@
         <div class="modal-content">
             <div class="modal-header">
                     <h5 class="modal-title" id="eventDetailsModalLabel">{{ __('events.event_details') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('events.close') }}"></button>
             </div>
                 <div class="modal-body" id="eventDetailsModalBody">
                     <!-- Content will be loaded here -->
@@ -548,7 +548,7 @@
                 <h5 class="modal-title text-danger" id="deleteEventModalLabel">
                     <i class="ph ph-warning me-2"></i>{{ __('events.delete_event_title') }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('events.close') }}"></button>
             </div>
             <div class="modal-body">
                 <p>{{ __('events.confirm_delete_event', ['title' => '']) }} <strong id="deleteEventTitle"></strong></p>
@@ -895,7 +895,7 @@ function showAllEvents() {
                                         `<p class="mb-2"><i class="ph ph-globe me-1"></i>{{ __('events.online_event_label') }}</p>` :
                                         `<p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>`
                                     }
-                                    <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
+                                    <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('events.view_details') }}</a>
                                 </div>
                             `);
                     }
@@ -911,7 +911,7 @@ function showAllEvents() {
         })
         .catch(error => {
             console.error('Error loading all events:', error);
-            showNotification('{{ __('common.loading_error') }} degli eventi', 'error');
+            showNotification('{{ __('events.loading_error') }} degli eventi', 'error');
         });
 }
 

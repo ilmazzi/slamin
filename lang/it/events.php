@@ -381,10 +381,20 @@ return [
     // Associated Groups
     'associated_groups' => 'Gruppi Associati',
     
-    // Actions
+    // Actions & Common UI
     'view' => 'Visualizza',
     'show' => 'Mostra',
     'close' => 'Chiudi',
+    'select' => 'Seleziona',
+    'filter' => 'Filtra',
+    'help' => 'Aiuto',
+    'manage' => 'Gestisci',
+    'view_details' => 'Visualizza Dettagli',
+    'accept_request' => 'Accetta Richiesta',
+    'reject_request' => 'Rifiuta Richiesta',
+    'invite_artists' => 'Invita Artisti',
+    'language_selector' => 'Seleziona Lingua',
+    'loading_error' => 'Errore di Caricamento',
     'description_event' => 'Descrizione',
     'private_event_notice_title' => 'Evento Privato',
     'private_event_notice_text' => 'Questo evento è visibile solo agli utenti invitati',

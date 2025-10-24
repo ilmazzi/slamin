@@ -539,7 +539,7 @@
                                                     <select wire:model.live="recurrence_type"
                                                             class="form-select @error('recurrence_type') is-invalid @enderror"
                                                             required>
-                                                        <option value="">{{ __('common.select') }}</option>
+                                                        <option value="">{{ __('events.select') }}</option>
                                                         <option value="daily">{{ __('events.daily') }}</option>
                                                         <option value="weekly">{{ __('events.weekly') }}</option>
                                                         <option value="monthly">{{ __('events.monthly') }}</option>
@@ -650,7 +650,7 @@
                                         <!-- Event Image -->
                                         <div class="mb-3">
                                             <label class="form-label">
-                                                {{ __('events.event_image') }} ({{ __('common.optional') }})
+                                                {{ __('events.event_image') }} ({{ __('events.optional') }})
                                             </label>
                                             <input type="file"
                                                    wire:model="event_image"
@@ -678,7 +678,7 @@
                                         <!-- Promotional Video -->
                                         <div class="mb-0">
                                             <label class="form-label">
-                                                {{ __('events.promotional_video') }} ({{ __('common.optional') }})
+                                                {{ __('events.promotional_video') }} ({{ __('events.optional') }})
                                             </label>
                                             <input type="url"
                                                    wire:model.live="promotional_video"
@@ -728,7 +728,7 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-6">
-                                                    <label class="form-label">{{ __('common.currency') }}</label>
+                                                    <label class="form-label">{{ __('events.currency') }}</label>
                                                     <select wire:model.live="ticket_currency" class="form-select">
                                                         <option value="EUR">EUR (€)</option>
                                                         <option value="USD">USD ($)</option>
@@ -1016,12 +1016,12 @@
                                                                     <select wire:model.live="gig_positions.{{ $index }}.language"
                                                                             class="form-select">
                                                                         <option value="">{{ __('events.no_preference') }}</option>
-                                                                        <option value="italiano">{{ __('common.italian') }}</option>
-                                                                        <option value="inglese">{{ __('common.english') }}</option>
-                                                                        <option value="francese">{{ __('common.french') }}</option>
-                                                                        <option value="tedesco">{{ __('common.german') }}</option>
-                                                                        <option value="spagnolo">{{ __('common.spanish') }}</option>
-                                                                        <option value="portoghese">{{ __('common.portuguese') }}</option>
+                                                                        <option value="italiano">{{ __('events.italian') }}</option>
+                                                                        <option value="inglese">{{ __('events.english') }}</option>
+                                                                        <option value="francese">{{ __('events.french') }}</option>
+                                                                        <option value="tedesco">{{ __('events.german') }}</option>
+                                                                        <option value="spagnolo">{{ __('events.spanish') }}</option>
+                                                                        <option value="portoghese">{{ __('events.portuguese') }}</option>
                                                                     </select>
                                                                 </div>
 
@@ -1049,7 +1049,7 @@
                                                                                        placeholder="0.00">
                                                                             </div>
                                                                             <div class="col-md-6">
-                                                                                <label class="form-label">{{ __('common.currency') }}</label>
+                                                                                <label class="form-label">{{ __('events.currency') }}</label>
                                                                                 <select wire:model.live="gig_positions.{{ $index }}.cachet_currency"
                                                                                         class="form-select">
                                                                                     <option value="EUR">EUR (€)</option>
@@ -1086,7 +1086,7 @@
                                                                                        placeholder="0.00">
                                                                             </div>
                                                                             <div class="col-md-6">
-                                                                                <label class="form-label">{{ __('common.currency') }}</label>
+                                                                                <label class="form-label">{{ __('events.currency') }}</label>
                                                                                 <select wire:model.live="gig_positions.{{ $index }}.travel_currency"
                                                                                         class="form-select">
                                                                                     <option value="EUR">EUR (€)</option>
@@ -1563,7 +1563,7 @@
                                                 <table class="table table-sm mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>{{ __('common.name') }}</th>
+                                                            <th>{{ __('events.name') }}</th>
                                                             <th>{{ __('events.role') }}</th>
                                                         </tr>
                                                     </thead>
@@ -1653,7 +1653,7 @@
             <div class="card position-sticky top-0">
                 <div class="card-header">
                     <h6 class="mb-0">
-                        <i class="ph ph-info-circle me-2"></i>{{ __('common.help') }}
+                        <i class="ph ph-info-circle me-2"></i>{{ __('events.help') }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -1664,7 +1664,7 @@
                     <!-- Progress Bar -->
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-2">
-                            <small class="text-secondary">{{ __('common.progress') }}</small>
+                            <small class="text-secondary">{{ __('events.progress') }}</small>
                             <small class="text-secondary f-w-600">{{ round(($currentStep / $totalSteps) * 100) }}%</small>
                         </div>
                         <div class="progress">
@@ -1748,7 +1748,7 @@
                                 <button type="button"
                                         wire:click="nextStep"
                                         class="btn btn-primary">
-                                    {{ __('common.next') }}<i class="ph ph-arrow-right ms-2"></i>
+                                    {{ __('events.next') }}<i class="ph ph-arrow-right ms-2"></i>
                                 </button>
                             @else
                                 <button type="button"
@@ -1762,7 +1762,7 @@
                                 <button type="button"
                                         wire:click="prevStep"
                                         class="btn btn-secondary">
-                                    <i class="ph ph-arrow-left me-2"></i>{{ __('common.previous') }}
+                                    <i class="ph ph-arrow-left me-2"></i>{{ __('events.previous') }}
                                 </button>
                             @endif
                         </div>
