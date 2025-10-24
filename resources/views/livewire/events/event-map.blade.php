@@ -33,20 +33,27 @@ function waitForElement() {
 }
 
 async function initMap() {
+    console.log('🔄 initMap() called');
+    
     // Wait for Leaflet library
     if (typeof L === 'undefined') {
+        console.log('⏳ Leaflet not loaded yet');
         setTimeout(initMap, 300);
         return;
     }
     
     // Prevent double initialization
     if (eventMap !== null) {
+        console.log('ℹ️ Map already initialized');
         return;
     }
     
     try {
+        console.log('⏳ Waiting for map element with dimensions...');
         // Wait for element to have dimensions
         await waitForElement();
+        
+        console.log('🗺️ Initializing Leaflet map...');
         
         // Initialize map
         eventMap = L.map('eventMap', {
@@ -54,6 +61,8 @@ async function initMap() {
             zoomControl: true,
             attributionControl: true
         }).setView([41.9028, 12.4964], 6);
+        
+        console.log('✅ Leaflet map object created:', eventMap !== null);
         
         // Add tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -95,22 +104,48 @@ async function initMap() {
         
         // Force resize after tiles load
         setTimeout(() => {
-            if (eventMap) eventMap.invalidateSize(true);
+            if (eventMap) {
+                eventMap.invalidateSize(true);
+                console.log('✅ Map resized and ready!');
+            }
         }, 500);
         
     } catch (e) {
-        eventMap = null;
+        // If map is already initialized, that's OK, just log it
+        if (e.message && e.message.includes('already initialized')) {
+            console.log('ℹ️ Map already initialized (this is OK)');
+            // Don't set to null! The map is actually working
+        } else {
+            console.error('❌ Map initialization failed:', e);
+            eventMap = null;
+        }
     }
+}
+
+// Initialize ONCE - use a flag to prevent double init
+let mapInitStarted = false;
+
+function safeInitMap() {
+    if (mapInitStarted) {
+        console.log('⚠️ Map init already in progress, skipping');
+        return;
+    }
+    mapInitStarted = true;
+    initMap();
 }
 
 // Initialize on component load
 document.addEventListener('livewire:navigated', () => {
-    eventMap = null;
-    initMap();
+    console.log('📡 livewire:navigated event');
+    if (eventMap === null) {
+        mapInitStarted = false;
+        safeInitMap();
+    }
 });
 
 // First load
-initMap();
+console.log('🚀 Starting first map init...');
+safeInitMap();
 
 // Watch for fullAddress changes (Livewire 3 reactive approach)
 let lastAddress = '';
