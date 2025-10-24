@@ -275,6 +275,6 @@ class MediaIndex extends Component
             'photoType' => $this->photoType,
             'searchResults' => $this->searchResults,
             'hasActiveSearch' => $this->hasActiveSearch,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

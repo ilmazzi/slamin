@@ -172,6 +172,6 @@ class ModerationQueue extends Component
             'moderatedSubreddits' => $moderatedSubreddits,
             'posts' => $posts,
             'comments' => $comments,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

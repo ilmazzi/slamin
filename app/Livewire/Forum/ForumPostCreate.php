@@ -111,8 +111,8 @@ class ForumPostCreate extends Component
     {
         $subreddits = Subreddit::active()->public()->orderBy('name')->get();
 
-        return view('livewire.forum-post-create', [
+        return view('livewire.forum.forum-post-create', [
             'subreddits' => $subreddits,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

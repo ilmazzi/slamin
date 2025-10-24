@@ -59,6 +59,8 @@ class ForumDashboard extends Component
 
     public function render()
     {
-        return view('livewire.admin.forum-dashboard');
+        return view('livewire.admin.forum-dashboard')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

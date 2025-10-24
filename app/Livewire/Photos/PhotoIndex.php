@@ -73,7 +73,7 @@ class PhotoIndex extends Component
             'photos' => $this->photos,
             'user' => $this->user,
             'isOwnPhotos' => $this->isOwnPhotos,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }
 

@@ -178,7 +178,7 @@ class ProfileShow extends Component
             'stats' => $this->stats,
             'isOwnProfile' => $this->isOwnProfile,
             'activeTab' => $this->activeTab,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }
 

@@ -219,6 +219,6 @@ class SubredditManagement extends Component
 
         return view('livewire.admin.subreddit-management', [
             'subreddits' => $subreddits
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

@@ -66,7 +66,7 @@ class DashboardIndex extends Component
             'roleContent' => $this->getRoleSpecificContent($user),
             'calendarEvents' => $this->calendarEvents,
             'wishlistEvents' => $this->wishlistEvents,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 
     /**

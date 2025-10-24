@@ -103,6 +103,8 @@ class MyBadges extends Component
 
     public function render()
     {
-        return view('livewire.profile.my-badges');
+        return view('livewire.profile.my-badges')->extends('layout.master')->section('main-content')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

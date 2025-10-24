@@ -84,6 +84,6 @@ class ReportsManagement extends Component
 
         return view('livewire.moderator.reports-management', [
             'reports' => $reports,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

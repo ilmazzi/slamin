@@ -91,6 +91,6 @@ class UserBadges extends Component
         return view('livewire.admin.gamification.user-badges', [
             'userBadges' => $userBadges,
             'badges' => $badges,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

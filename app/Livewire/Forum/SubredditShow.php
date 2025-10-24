@@ -91,10 +91,10 @@ class SubredditShow extends Component
         $isSubscribed = Auth::check() && $this->subreddit->isSubscribedBy(Auth::user());
         $isModerator = Auth::check() && $this->subreddit->isModerator(Auth::user());
 
-        return view('livewire.subreddit-show', [
+        return view('livewire.forum.subreddit-show', [
             'posts' => $posts,
             'isSubscribed' => $isSubscribed,
             'isModerator' => $isModerator,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

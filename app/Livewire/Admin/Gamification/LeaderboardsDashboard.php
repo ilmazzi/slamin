@@ -60,6 +60,8 @@ class LeaderboardsDashboard extends Component
 
     public function render()
     {
-        return view('livewire.admin.gamification.leaderboards-dashboard');
+        return view('livewire.admin.gamification.leaderboards-dashboard')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

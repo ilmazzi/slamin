@@ -51,6 +51,8 @@ class ForumSettings extends Component
 
     public function render()
     {
-        return view('livewire.admin.forum-settings');
+        return view('livewire.admin.forum-settings')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

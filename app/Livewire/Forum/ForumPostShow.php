@@ -96,8 +96,8 @@ class ForumPostShow extends Component
 
         $comments = $query->get();
 
-        return view('livewire.forum-post-show', [
+        return view('livewire.forum.forum-post-show', [
             'comments' => $comments,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

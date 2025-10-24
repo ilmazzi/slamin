@@ -106,6 +106,8 @@ class LevelManagement extends Component
 
     public function render()
     {
-        return view('livewire.admin.gamification.level-management');
+        return view('livewire.admin.gamification.level-management')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

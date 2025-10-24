@@ -78,9 +78,9 @@ class ForumIndex extends Component
 
         $posts = $query->paginate(20);
 
-        return view('livewire.forum-index', [
+        return view('livewire.forum.forum-index', [
             'posts' => $posts,
             'popularSubreddits' => $popularSubreddits,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

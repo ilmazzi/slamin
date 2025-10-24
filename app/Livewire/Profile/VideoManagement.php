@@ -80,7 +80,7 @@ class VideoManagement extends Component
     {
         return view('livewire.profile.video-management', [
             'videos' => $this->videos,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }
 
