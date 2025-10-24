@@ -194,6 +194,8 @@ class ParticipantManagement extends Component
 
     public function render()
     {
-        return view('livewire.events.scoring.participant-management');
+        return view('livewire.events.scoring.participant-management')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

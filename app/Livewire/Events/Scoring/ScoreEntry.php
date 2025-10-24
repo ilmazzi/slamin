@@ -188,6 +188,8 @@ class ScoreEntry extends Component
 
     public function render()
     {
-        return view('livewire.events.scoring.score-entry');
+        return view('livewire.events.scoring.score-entry')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

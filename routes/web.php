@@ -77,12 +77,12 @@ Route::prefix('admin/gamification')->name('admin.gamification.')->middleware(['a
     Route::get('/leaderboards', App\Livewire\Admin\Gamification\LeaderboardsDashboard::class)->name('leaderboards');
 });
 
-// Event Scoring Routes (for organizers)
+// Event Scoring Routes (for organizers) - Livewire 3
 Route::prefix('events/{event}/scoring')->name('events.scoring.')->middleware('auth')->group(function () {
-    Route::get('/', [App\Http\Controllers\EventScoringController::class, 'dashboard'])->name('dashboard');
-    Route::get('/participants', [App\Http\Controllers\EventScoringController::class, 'participants'])->name('participants');
-    Route::get('/scores', [App\Http\Controllers\EventScoringController::class, 'scores'])->name('scores');
-    Route::get('/rankings', [App\Http\Controllers\EventScoringController::class, 'rankings'])->name('rankings');
+    Route::get('/', App\Livewire\Events\Scoring\Dashboard::class)->name('dashboard');
+    Route::get('/participants', App\Livewire\Events\Scoring\ParticipantManagement::class)->name('participants');
+    Route::get('/scores', App\Livewire\Events\Scoring\ScoreEntry::class)->name('scores');
+    Route::get('/rankings', App\Livewire\Events\Scoring\Rankings::class)->name('rankings');
 });
 
 // User Profile Badges & Gamification

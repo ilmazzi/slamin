@@ -91,6 +91,8 @@ class Rankings extends Component
 
     public function render()
     {
-        return view('livewire.events.scoring.rankings');
+        return view('livewire.events.scoring.rankings')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }
