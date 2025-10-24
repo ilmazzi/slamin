@@ -9,7 +9,7 @@
 @endsection
 
 @section('main-content')
-    <livewire:event-edit :eventId="$event->id" />
+    <livewire:events.event-edit :eventId="$event->id" />
 @endsection
 
 @push('scripts')

@@ -2,6 +2,6 @@
 
 @section('main-content')
 <div class="container-fluid p-0" style="height: calc(100vh - 100px);">
-    <livewire:chat-simple />
+    <livewire:chat.chat-simple />
 </div>
 @endsection
