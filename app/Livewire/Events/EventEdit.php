@@ -251,7 +251,7 @@ class EventEdit extends EventCreation
             ], Event::class, $this->event->id);
 
             session()->flash('success', __('events.event_updated_successfully'));
-            return redirect()->route('events.show', $this->event->id);
+            return $this->redirectRoute('events.show', ['event' => $this->event->id]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Validation errors - let Livewire handle them
