@@ -301,12 +301,12 @@
                                             <!-- Event Info -->
                                             <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
                                                 @if($event->entry_fee > 0)
-                                                    <span class="badge bg-warning f-s-10">{{ __('events_general.entry_fee') }}: €{{ $event->entry_fee }}</span>
+                                                    <span class="badge bg-warning f-s-10">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
                                                 @else
-                                                    <span class="badge bg-success f-s-10">{{ __('events_general.free') }}</span>
+                                                    <span class="badge bg-success f-s-10">{{ __('events.free') }}</span>
                                                 @endif
                                                 @if($event->max_participants)
-                                                    <small class="text-muted f-s-10">{{ __('events_general.max_participants') }}: {{ $event->max_participants }}</small>
+                                                    <small class="text-muted f-s-10">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
                                                 @endif
                                                 <span class="badge bg-primary f-s-10">
                                                     {{ (int)$event->gigs()->count() }} {{ __('gigs.organizer_section.gigs') }}

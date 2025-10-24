@@ -1,17 +1,17 @@
 @extends('layout.master')
 
-@section('title', __('events_general.manage_event') . ' ' . $event->title)
+@section('title', __('events.manage_event') . ' ' . $event->title)
 @section('css')
 
 @endsection
 
 @section('breadcrumb-title')
-<h3>{{ __('events_general.manage_event') }}</h3>
+<h3>{{ __('events.manage_event') }}</h3>
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events_general.dashboard') }}</a></li>
-<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events_general.events') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events.dashboard') }}</a></li>
+<li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('events.events') }}</a></li>
 <li class="breadcrumb-item"><a href="{{ route('events.show', $event) }}">{{ $event->title }}</a></li>
 <li class="breadcrumb-item active">{{ __('common.manage') }}</li>
 @endsection
@@ -32,28 +32,28 @@
                             <h2 class="text-white mb-3 fw-bold">{{ $event->title }}</h2>
                             @if($event->start_datetime && $event->start_datetime->isPast())
                                 <span class="badge bg-white text-primary fs-6 px-3 py-2">
-                                    <i class="ph ph-clock me-2"></i>{{ __('events_general.event_ended') }}
+                                    <i class="ph ph-clock me-2"></i>{{ __('events.event_ended') }}
                                 </span>
                             @elseif($event->start_datetime && $event->start_datetime->diffInDays(now()) <= 7)
                                 <span class="badge bg-warning text-dark fs-6 px-3 py-2">
-                                    <i class="ph ph-warning me-2"></i>{{ __('events_general.event_imminent') }}
+                                    <i class="ph ph-warning me-2"></i>{{ __('events.event_imminent') }}
                                 </span>
                             @elseif($event->is_availability_based)
                                 <span class="badge bg-info fs-6 px-3 py-2">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.availability_based_event') }}
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.availability_based_event') }}
                                 </span>
                             @else
                                 <span class="badge bg-success fs-6 px-3 py-2">
-                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.upcoming_events') }}
+                                    <i class="ph ph-calendar-check me-2"></i>{{ __('events.upcoming_events') }}
                                 </span>
                             @endif
                         </div>
                         <div class="col-md-4 text-end">
                             <a href="{{ route('events.show', $event) }}" class="btn btn-white text-primary me-2 px-4">
-                                <i class="ph ph-eye me-2"></i>{{ __('events_general.view_event') }}
+                                <i class="ph ph-eye me-2"></i>{{ __('events.view_event') }}
                             </a>
                             <a href="{{ route('events.edit', $event) }}" class="btn btn-light-white text-white px-4">
-                                <i class="ph ph-pencil me-2"></i>{{ __('events_general.edit_event_action') }}
+                                <i class="ph ph-pencil me-2"></i>{{ __('events.edit_event_action') }}
                             </a>
                         </div>
                     </div>
@@ -76,8 +76,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-warning mb-0">{{ $pendingInvites }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events_general.pending_invitations') }}</p>
-                                    <span class="badge bg-light-warning">📨 {{ __('events_general.waiting_status') }}</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_invitations') }}</p>
+                                    <span class="badge bg-light-warning">📨 {{ __('events.waiting_status') }}</span>
                     </div>
                 </div>
             </div>
@@ -92,8 +92,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-info mb-0">{{ $pendingRequests }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events_general.pending_requests') }}</p>
-                                    <span class="badge bg-light-info">🙋 {{ __('events_general.applications_status') }}</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.pending_requests') }}</p>
+                                    <span class="badge bg-light-info">🙋 {{ __('events.applications_status') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -108,8 +108,8 @@
                                 <span class="ripple-effect"></span>
                                 <div class="overflow-hidden">
                                     <h3 class="text-success mb-0">{{ $confirmed }}</h3>
-                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events_general.confirmed_participants') }}</p>
-                                    <span class="badge bg-light-success">✅ {{ __('events_general.participants_status') }}</span>
+                                    <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">{{ __('events.confirmed_participants') }}</p>
+                                    <span class="badge bg-light-success">✅ {{ __('events.participants_status') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -140,15 +140,15 @@
                                     </h3>
                                     <p class="mg-b-35 f-w-600 text-dark-800 txt-ellipsis-1">
                                         @if($event->is_availability_based)
-                                            {{ __('events_general.availability_based_event') }}
+                                            {{ __('events.availability_based_event') }}
                                         @elseif($daysToEvent !== null)
-                                            {{ $isPast ? __('events_general.days_ago') : __('events_general.days_remaining') }}
+                                            {{ $isPast ? __('events.days_ago') : __('events.days_remaining') }}
                                         @else
-                                            {{ __('events_general.not_specified') }}
+                                            {{ __('events.not_specified') }}
                                         @endif
                                     </p>
                                     <span class="badge bg-light-{{ $isPast ? 'secondary' : 'primary' }}">
-                                        {{ $isPast ? '🕒 ' . __('events_general.past') : '⏰ ' . __('events_general.imminent') }}
+                                        {{ $isPast ? '🕒 ' . __('events.past') : '⏰ ' . __('events.imminent') }}
                                     </span>
                                 </div>
                             </div>
@@ -219,14 +219,14 @@
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
-                        <i class="ph ph-hand-waving me-2"></i>{{ __('events_general.participation_requests') }}
+                        <i class="ph ph-hand-waving me-2"></i>{{ __('events.participation_requests') }}
                         <span class="badge bg-warning ms-2">{{ $event->pendingRequests->count() }}</span>
                     </h5>
 
                     <!-- Bulk Actions -->
                     <div class="alert alert-primary d-none" id="bulkActionsRequests">
                         <div class="d-flex align-items-center justify-content-between">
-                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> {{ __('events_general.requests_selected') }}</span>
+                            <span><i class="ph ph-selection-all me-2"></i><span id="selectedRequestsCount">0</span> {{ __('events.requests_selected') }}</span>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-light-success btn-sm" onclick="bulkActionRequests('accept')">
                                 <i class="ph ph-check me-1"></i>Accetta
@@ -381,7 +381,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="ph ph-users me-2"></i>{{ __('events_general.confirmed_participants_list') }}
+                        <i class="ph ph-users me-2"></i>{{ __('events.confirmed_participants_list') }}
                         <span class="badge bg-success ms-2">{{ $event->acceptedInvitations->count() + $event->acceptedRequests->count() }}</span>
                     </h5>
                 </div>
@@ -432,7 +432,7 @@
                                                     <div class="mb-1">
                                                         <span class="badge bg-light-primary">{{ ucfirst($participant['role']) }}</span>
                                                         <span class="badge bg-light-success ms-1">
-                                                            {{ $participant['type'] === 'invited' ? __('events_general.invited_badge') : __('events_general.request_badge') }}
+                                                            {{ $participant['type'] === 'invited' ? __('events.invited_badge') : __('events.request_badge') }}
                                                     </span>
                                                 </div>
                                                 <small class="text-muted">
@@ -496,20 +496,20 @@
                             </div>
                             <div class="timeline-content bg-light-primary b-1-primary">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-primary">{{ __('events_general.start_event') }}</h6>
+                                    <h6 class="mb-1 text-primary">{{ __('events.start_event') }}</h6>
                                     @if($event->start_datetime)
                                         <span class="badge bg-primary">{{ $event->start_datetime->diffForHumans() }}</span>
                                     @else
-                                        <span class="badge bg-info">{{ __('events_general.availability_based_event') }}</span>
+                                        <span class="badge bg-info">{{ __('events.availability_based_event') }}</span>
                                     @endif
                                 </div>
                         <p class="text-muted mb-0">
                             @if($event->start_datetime)
                                 {{ $event->start_datetime->format('d/m/Y H:i') }}
                             @elseif($event->is_availability_based)
-                                {{ __('events_general.availability_based_event_description') }}
+                                {{ __('events.availability_based_event_description') }}
                             @else
-                                {{ __('events_general.not_specified') }}
+                                {{ __('events.not_specified') }}
                             @endif
                         </p>
                     </div>
@@ -523,20 +523,20 @@
                             </div>
                             <div class="timeline-content bg-light-success b-1-success">
                                 <div class="d-flex justify-content-between align-items-center timeline-flex">
-                                    <h6 class="mb-1 text-success">{{ __('events_general.end_event') }}</h6>
+                                    <h6 class="mb-1 text-success">{{ __('events.end_event') }}</h6>
                                     @if($event->start_datetime && $event->end_datetime)
                                         <span class="badge bg-success">{{ $event->duration }}h</span>
                                     @else
-                                        <span class="badge bg-info">{{ __('events_general.availability_based_event') }}</span>
+                                        <span class="badge bg-info">{{ __('events.availability_based_event') }}</span>
                                     @endif
                                 </div>
                         <p class="text-muted mb-0">
                             @if($event->end_datetime)
                                 {{ $event->end_datetime->format('d/m/Y H:i') }}
                             @elseif($event->is_availability_based)
-                                {{ __('events_general.availability_based_event_description') }}
+                                {{ __('events.availability_based_event_description') }}
                             @else
-                                {{ __('events_general.not_specified') }}
+                                {{ __('events.not_specified') }}
                             @endif
                         </p>
                     </div>
@@ -563,7 +563,7 @@
                         <div class="col-6">
                             <div class="border rounded p-3">
                                 <div class="h4 text-success mb-1">{{ $event->requests->count() }}</div>
-                                <small class="text-muted">{{ __('events_general.total_requests') }}</small>
+                                <small class="text-muted">{{ __('events.total_requests') }}</small>
                             </div>
                         </div>
                         <div class="col-6">
@@ -739,11 +739,11 @@
 <script>
 // Traduzioni JavaScript
 const translations = {
-    accept_action: '{{ __('events_general.accept_action') }}',
-    reject_action: '{{ __('events_general.reject_action') }}',
-    requests: '{{ __('events_general.requests') }}',
-    message_for_action: '{{ __('events_general.message_for_action') }}',
-    this_request: '{{ __('events_general.this_request') }}'
+    accept_action: '{{ __('events.accept_action') }}',
+    reject_action: '{{ __('events.reject_action') }}',
+    requests: '{{ __('events.requests') }}',
+    message_for_action: '{{ __('events.message_for_action') }}',
+    this_request: '{{ __('events.this_request') }}'
 };
 let selectedRequests = [];
 let currentRequestId = null;

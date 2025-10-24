@@ -33,7 +33,7 @@
                             $roleDisplay = match($role) {
                                 'admin' => 'Amministratore',
                                 'moderatore' => 'Moderatore',
-                                'organizzatore' => __('events_general.organizer'),
+                                'organizzatore' => __('events.organizer'),
                                 'poeta' => 'Poeta',
                                 'giudice' => 'Giudice',
                                 'spettatore' => 'Spettatore',
@@ -130,7 +130,7 @@
                                 <li class="no-sub {{ request()->routeIs('events.*') ? 'active' : '' }}">
                                     <a href="{{ route('events.index') }}">
                                         <x-icon name="event" size="20" class="me-2" />
-                                        {{ __('events_general.events') }}
+                                        {{ __('events.events') }}
                                         @auth
                                         @if(auth()->user()->organizedEvents()->where('start_datetime', '>', now())->count() > 0)
                                             <span class="badge bg-primary badge-notification ms-2">

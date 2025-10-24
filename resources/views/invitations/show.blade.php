@@ -55,7 +55,7 @@
                             <p class="mb-0 f-w-600">{{ $invitation->event->title ?? '{{ __('invitations.event') }} non trovato' }}</p>
                         </div>
                                                 <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-1">{{ __('events_general.organizer') }}</h6>
+                            <h6 class="text-muted mb-1">{{ __('events.organizer') }}</h6>
                             <div class="d-flex align-items-center">
                                 @if($invitation->event && $invitation->event->organizer)
                                     @if($invitation->event->organizer->profile_photo)
@@ -71,7 +71,7 @@
                                     @endif
                                     <span class="f-w-600">{{ $invitation->event->organizer->name }}</span>
                                 @else
-                                    <span class="f-w-600 text-muted">{{ __('events_general.organizer') }} non disponibile</span>
+                                    <span class="f-w-600 text-muted">{{ __('events.organizer') }} non disponibile</span>
                                 @endif
                             </div>
                         </div>

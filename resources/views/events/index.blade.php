@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events_general.events_poetry_slam'))
+@section('title', request('filter') ? __('dashboard.' . request('filter') . '_events') : __('events.events_poetry_slam'))
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
 <style>
@@ -121,17 +121,17 @@
                 {{ __('dashboard.pending_invitations') }}
                 @break
             @default
-                {{ __('events_general.events_poetry_slam') }}
+                {{ __('events.events_poetry_slam') }}
         @endswitch
     @else
-        {{ __('events_general.events_poetry_slam') }}
+        {{ __('events.events_poetry_slam') }}
     @endif
 </h3>
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events_general.dashboard') }}</a></li>
-<li class="breadcrumb-item active">{{ __('events_general.events') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('events.dashboard') }}</a></li>
+<li class="breadcrumb-item active">{{ __('events.events') }}</li>
 @endsection
 
 @section('main-content')
@@ -145,13 +145,13 @@
                     <div id="eventsMap" style="height: 300px; border-radius: 10px; overflow: hidden; position: relative;">
                         <!-- Map Controls Overlay -->
                         <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1001; pointer-events: auto;">
-                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events_general.center_on_my_position') }}" style="z-index: 1002;">
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}" style="z-index: 1002;">
                                 <i class="ph ph-map-pin f-s-14"></i>
                             </button>
-                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events_general.refresh_events') }}" style="z-index: 1002;">
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}" style="z-index: 1002;">
                                 <i class="ph ph-arrow-clockwise f-s-14"></i>
                             </button>
-                            <button class="btn btn-primary btn-sm d-block" onclick="showAllEvents()" title="{{ __('events_general.show_all_events') }}" style="z-index: 1002;">
+                            <button class="btn btn-primary btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}" style="z-index: 1002;">
                                 <i class="ph ph-globe f-s-14"></i>
                             </button>
                         </div>
@@ -176,7 +176,7 @@
                                         <i class="ph ph-magnifying-glass text-muted"></i>
                                     </span>
                                     <input type="text" name="search" class="form-control border-start-0"
-                                           placeholder="{{ __('events_general.search_events') }}"
+                                           placeholder="{{ __('events.search_events') }}"
                                            value="{{ request('search') }}">
                                 </div>
                             </div>
@@ -184,7 +184,7 @@
                             <!-- City Filter - Full width on mobile, half on tablet -->
                             <div class="col-12 col-sm-6">
                                 <select name="city" class="form-select">
-                                    <option value="">{{ __('events_general.filter_by_city') }}</option>
+                                    <option value="">{{ __('events.filter_by_city') }}</option>
                                     @foreach($events->pluck('city')->unique()->filter() as $city)
                                         <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>
                                             {{ $city }}
@@ -196,9 +196,9 @@
                             <!-- Type Filter - Full width on mobile, half on tablet -->
                             <div class="col-12 col-sm-6">
                                 <select name="type" class="form-select">
-                                    <option value="">{{ __('events_general.all_types') }}</option>
-                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events_general.public_events') }}</option>
-                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events_general.private_events') }}</option>
+                                    <option value="">{{ __('events.all_types') }}</option>
+                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
+                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
                             </div>
                             </div>
@@ -209,30 +209,30 @@
                             <div class="col-lg-9 col-md-12">
                                 <div class="d-flex flex-wrap gap-2 align-items-center p-2">
                                     <button type="button" class="btn btn-light-primary btn-sm" data-filter="today">
-                                        <i class="ph ph-calendar me-1"></i> {{ __('events_general.today') }}
+                                        <i class="ph ph-calendar me-1"></i> {{ __('events.today') }}
                                     </button>
                                     <button type="button" class="btn btn-light-info btn-sm" data-filter="tomorrow">
-                                        <i class="ph ph-calendar-plus me-1"></i> {{ __('events_general.tomorrow') }}
+                                        <i class="ph ph-calendar-plus me-1"></i> {{ __('events.tomorrow') }}
                                     </button>
                                     <button type="button" class="btn btn-light-success btn-sm" data-filter="weekend">
-                                        <i class="ph ph-calendar-check me-1"></i> {{ __('events_general.weekend') }}
+                                        <i class="ph ph-calendar-check me-1"></i> {{ __('events.weekend') }}
                                     </button>
                                     <button type="button" class="btn btn-light-warning btn-sm" data-filter="free">
-                                        <i class="ph ph-currency-circle-dollar me-1"></i> {{ __('events_general.free_events') }}
+                                        <i class="ph ph-currency-circle-dollar me-1"></i> {{ __('events.free_events') }}
                                     </button>
                                     <button type="button" class="btn btn-light-secondary btn-sm" data-filter="nearby">
-                                        <i class="ph ph-map-pin me-1"></i> {{ __('events_general.nearby') }}
+                                        <i class="ph ph-map-pin me-1"></i> {{ __('events.nearby') }}
                                     </button>
                                     @auth
                                         <button type="button" class="btn btn-light-primary btn-sm" data-filter="my">
-                                            <i class="ph ph-user me-1"></i> {{ __('events_general.my_events') }}
+                                            <i class="ph ph-user me-1"></i> {{ __('events.my_events') }}
                                         </button>
                                         <button type="button" class="btn btn-light-warning btn-sm" data-filter="private">
-                                            <i class="ph ph-lock me-1"></i> {{ __('events_general.my_private_events') }}
+                                            <i class="ph ph-lock me-1"></i> {{ __('events.my_private_events') }}
                                         </button>
                                     @endauth
                                     <button type="button" class="btn btn-light-danger btn-sm" data-filter="past">
-                                        <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('events_general.past_events') }}
+                                        <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('events.past_events') }}
                                     </button>
                                 </div>
                             </div>
@@ -261,9 +261,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
-                <h5 class="mb-0">{{ __('events_general.events_list') }}</h5>
+                <h5 class="mb-0">{{ __('events.events_list') }}</h5>
                 <div class="d-flex align-items-center gap-2">
-                    <label class="form-label mb-0 f-s-14">{{ __('events_general.show') }}:</label>
+                    <label class="form-label mb-0 f-s-14">{{ __('events.show') }}:</label>
                     <select class="form-select form-select-sm" style="width: auto;" onchange="changePerPage(this.value)">
                         <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
                         <option value="20" {{ request('per_page', 10) == 20 ? 'selected' : '' }}>20</option>
@@ -281,7 +281,7 @@
                     <!-- Past Event Ribbon -->
                     @if($event->start_datetime && $event->start_datetime < now())
                         <div class="arrow-ribbon arrow-left ribbon-danger" style="z-index: 5000;">
-                            <span>{{ __('events_general.past_event') }}</span>
+                            <span>{{ __('events.past_event') }}</span>
                         </div>
                     @endif
 
@@ -289,13 +289,13 @@
                     <div class="position-absolute top-0 end-0 p-2" style="z-index: 3;">
                         <div class="d-flex flex-column gap-1">
                             @if($event->is_public)
-                                <span class="badge bg-success f-s-10">{{ __('events_general.public') }}</span>
+                                <span class="badge bg-success f-s-10">{{ __('events.public') }}</span>
                             @else
-                                <span class="badge bg-warning f-s-10">{{ __('events_general.private') }}</span>
+                                <span class="badge bg-warning f-s-10">{{ __('events.private') }}</span>
                             @endif
                             @if($event->acceptsRequests())
                                 <span class="badge bg-primary f-s-10">
-                                    <i class="ph ph-check me-1"></i>{{ __('events_general.apply_to_event') }}
+                                    <i class="ph ph-check me-1"></i>{{ __('events.apply_to_event') }}
                                 </span>
                             @endif
                             @if($event->category)
@@ -321,8 +321,8 @@
                         @endif
                         <div class="position-absolute bottom-0 start-0 text-white p-2 w-100" style="z-index: 2;">
                             @if($event->is_online)
-                                <h6 class="mb-1 text-white f-s-12">{{ __('events_general.online_event') }}</h6>
-                                <small class="text-white-50 f-s-10"><i class="ph ph-globe me-1"></i>{{ __('events_general.virtual_event') }}</small>
+                                <h6 class="mb-1 text-white f-s-12">{{ __('events.online_event') }}</h6>
+                                <small class="text-white-50 f-s-10"><i class="ph ph-globe me-1"></i>{{ __('events.virtual_event') }}</small>
                             @else
                             <h6 class="mb-1 text-white f-s-12">{{ Str::limit($event->venue_name, 30) }}</h6>
                             <small class="text-white-50 f-s-10"><i class="ph ph-map-pin me-1"></i>{{ $event->city }}</small>
@@ -403,12 +403,12 @@
                             <!-- Event Info -->
                             <div class="d-flex flex-wrap align-items-center gap-1 mb-3">
                                 @if($event->entry_fee > 0)
-                                    <span class="badge bg-warning f-s-10">{{ __('events_general.entry_fee') }}: €{{ $event->entry_fee }}</span>
+                                    <span class="badge bg-warning f-s-10">{{ __('events.entry_fee') }}: €{{ $event->entry_fee }}</span>
                                 @else
-                                    <span class="badge bg-success f-s-10">{{ __('events_general.free') }}</span>
+                                    <span class="badge bg-success f-s-10">{{ __('events.free') }}</span>
                                 @endif
                                 @if($event->max_participants)
-                                    <small class="text-muted f-s-10">{{ __('events_general.max_participants') }}: {{ $event->max_participants }}</small>
+                                    <small class="text-muted f-s-10">{{ __('events.max_participants') }}: {{ $event->max_participants }}</small>
                                 @endif
                                 @if($event->status === 'completed')
                                     <span class="badge bg-light-success f-s-10">
@@ -435,7 +435,7 @@
                                 @can('delete', $event)
                                     <button type="button" class="btn btn-light-danger btn-sm"
                                             onclick="confirmDeleteEvent({{ $event->id }}, '{{ addslashes($event->title) }}')"
-                                            title="{{ __('events_general.delete_event') }}">
+                                            title="{{ __('events.delete_event') }}">
                                         <i class="ti ti-trash"></i>
                                     </button>
                                 @endcan
@@ -449,12 +449,12 @@
                 <div class="card">
                     <div class="card-body text-center py-5">
                         <i class="ph ph-calendar-x f-s-48 text-muted mb-3"></i>
-                        <h5 class="text-muted">{{ __('events_general.no_events_found') }}</h5>
-                        <p class="text-muted">{{ __('events_general.try_adjusting_filters') }}</p>
+                        <h5 class="text-muted">{{ __('events.no_events_found') }}</h5>
+                        <p class="text-muted">{{ __('events.try_adjusting_filters') }}</p>
                         @auth
                             @can('events.create.public')
                                 <a href="{{ route('events.create') }}" class="btn btn-primary">
-                                    <i class="ph ph-plus me-1"></i>{{ __('events_general.create_first_event') }}
+                                    <i class="ph ph-plus me-1"></i>{{ __('events.create_first_event') }}
                                 </a>
                             @endcan
                         @endauth
@@ -475,7 +475,7 @@
                         </div>
                     </div>
                     <h5 class="mb-1 f-s-16">{{ $statistics['total_events'] }}</h5>
-                    <p class="text-muted mb-0 f-s-12">{{ __('events_general.total_events') }}</p>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.total_events') }}</p>
                 </div>
             </div>
         </div>
@@ -488,7 +488,7 @@
                         </div>
                     </div>
                     <h5 class="mb-1 f-s-16">{{ $statistics['public_events'] }}</h5>
-                    <p class="text-muted mb-0 f-s-12">{{ __('events_general.public_events_count') }}</p>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.public_events_count') }}</p>
                 </div>
             </div>
         </div>
@@ -501,7 +501,7 @@
                         </div>
                     </div>
                     <h5 class="mb-1 f-s-16">{{ $statistics['upcoming_events'] }}</h5>
-                    <p class="text-muted mb-0 f-s-12">{{ __('events_general.upcoming_events_count') }}</p>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.upcoming_events_count') }}</p>
                 </div>
             </div>
         </div>
@@ -514,7 +514,7 @@
                         </div>
                     </div>
                     <h5 class="mb-1 f-s-16">{{ $statistics['venues_count'] }}</h5>
-                    <p class="text-muted mb-0 f-s-12">{{ __('events_general.venues_count') }}</p>
+                    <p class="text-muted mb-0 f-s-12">{{ __('events.venues_count') }}</p>
                 </div>
             </div>
         </div>
@@ -526,15 +526,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                    <h5 class="modal-title" id="eventDetailsModalLabel">{{ __('events_general.event_details') }}</h5>
+                    <h5 class="modal-title" id="eventDetailsModalLabel">{{ __('events.event_details') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
                 <div class="modal-body" id="eventDetailsModalBody">
                     <!-- Content will be loaded here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events_general.close') }}</button>
-                    <a href="#" class="btn btn-primary" id="eventDetailsModalLink">{{ __('events_general.view_complete_details') }}</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.close') }}</button>
+                    <a href="#" class="btn btn-primary" id="eventDetailsModalLink">{{ __('events.view_complete_details') }}</a>
                 </div>
         </div>
     </div>
@@ -546,7 +546,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-danger" id="deleteEventModalLabel">
-                    <i class="ph ph-warning me-2"></i>{{ __('events_general.delete_event_title') }}
+                    <i class="ph ph-warning me-2"></i>{{ __('events.delete_event_title') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('common.close') }}"></button>
             </div>
@@ -554,22 +554,22 @@
                 <p>{{ __('events.confirm_delete_event', ['title' => '']) }} <strong id="deleteEventTitle"></strong></p>
                 <div class="alert alert-warning">
                     <i class="ph ph-warning me-2"></i>
-                    <strong>{{ __('events_general.warning') }}</strong> {{ __('events_general.delete_action_warning') }}
+                    <strong>{{ __('events.warning') }}</strong> {{ __('events.delete_action_warning') }}
                     <ul class="mb-0 mt-2">
-                        <li>{{ __('events_general.delete_warning_participants') }}</li>
-                        <li>{{ __('events_general.delete_warning_invitations') }}</li>
-                        <li>{{ __('events_general.delete_warning_favorites') }}</li>
-                        <li>{{ __('events_general.delete_warning_festival') }}</li>
+                        <li>{{ __('events.delete_warning_participants') }}</li>
+                        <li>{{ __('events.delete_warning_invitations') }}</li>
+                        <li>{{ __('events.delete_warning_favorites') }}</li>
+                        <li>{{ __('events.delete_warning_festival') }}</li>
                     </ul>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events_general.cancel') }}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.cancel') }}</button>
                 <form id="deleteEventForm" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="ph ph-trash me-2"></i>{{ __('events_general.delete_permanently') }}
+                        <i class="ph ph-trash me-2"></i>{{ __('events.delete_permanently') }}
                     </button>
                 </form>
             </div>
@@ -756,7 +756,7 @@ function loadEventsOnMapWithFilter(params) {
 
             if (events.length === 0) {
 
-                showNotification('{{ __('events_general.no_events_with_filters') }}', 'info');
+                showNotification('{{ __('events.no_events_with_filters') }}', 'info');
                 return;
             }
 
@@ -841,7 +841,7 @@ function loadEventsOnMapWithFilter(params) {
     })
     .catch(error => {
             console.error('Error loading events:', error);
-            showNotification('{{ __('events_general.error_loading_events') }}', 'error');
+            showNotification('{{ __('events.error_loading_events') }}', 'error');
     });
 }
 
@@ -854,12 +854,12 @@ function centerOnUser() {
                 const userLng = position.coords.longitude;
                 map.setView([userLat, userLng], 12);
                 loadEventsOnMap(userLat, userLng);
-                showNotification('{{ __('events_general.map_centered_on_position') }}', 'success');
+                showNotification('{{ __('events.map_centered_on_position') }}', 'success');
             },
             function(error) {
                 let message = error.code === 1 ?
-                    '{{ __('events_general.geolocation_https_required') }}' :
-                    '{{ __('events_general.cannot_get_position') }}';
+                    '{{ __('events.geolocation_https_required') }}' :
+                    '{{ __('events.cannot_get_position') }}';
                 showNotification(message, 'warning');
             }
         );
@@ -870,7 +870,7 @@ function centerOnUser() {
 function refreshEvents() {
     const center = map.getCenter();
     loadEventsOnMap(center.lat, center.lng);
-    showNotification('{{ __('events_general.events_updated') }}', 'success');
+    showNotification('{{ __('events.events_updated') }}', 'success');
 }
 
 // Funzione per mostrare tutti gli eventi (senza filtro geografico)
@@ -892,7 +892,7 @@ function showAllEvents() {
                                 <div class="p-2">
                                     <h6>${event.title}</h6>
                                     ${event.is_online ?
-                                        `<p class="mb-2"><i class="ph ph-globe me-1"></i>{{ __('events_general.online_event_label') }}</p>` :
+                                        `<p class="mb-2"><i class="ph ph-globe me-1"></i>{{ __('events.online_event_label') }}</p>` :
                                         `<p class="mb-2"><i class="ph ph-map-pin me-1"></i>${event.venue_name}, ${event.city}</p>`
                                     }
                                     <a href="/events/${event.id}" class="btn btn-primary btn-sm mt-2">{{ __('common.view_details') }}</a>
@@ -1143,7 +1143,7 @@ function openEventDetailsModal(event) {
             <div class="col-md-8">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <h4 class="mb-0">${event.title}</h4>
-                    <span class="badge ${event.category_color_class} fs-6">${event.category_name || '{{ __('events_general.not_available') }}'}</span>
+                    <span class="badge ${event.category_color_class} fs-6">${event.category_name || '{{ __('events.not_available') }}'}</span>
                 </div>
 
                 <div class="row mb-3">
@@ -1159,7 +1159,7 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-globe text-success me-2"></i>
-                        <strong class="text-success">{{ __('events_general.online_event_label') }}</strong>
+                        <strong class="text-success">{{ __('events.online_event_label') }}</strong>
                         ${event.timezone ? `<br><small class="text-muted">Fuso orario: ${event.timezone}</small>` : ''}
                     </div>
                 </div>
@@ -1169,7 +1169,7 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                        <strong>{{ __('events_general.location_label') }}</strong> ${event.venue_name || '{{ __('events_general.not_available') }}'}
+                        <strong>{{ __('events.location_label') }}</strong> ${event.venue_name || '{{ __('events.not_available') }}'}
                         ${event.city ? `<br><small class="text-muted">${event.city}</small>` : ''}
                     </div>
                 </div>
@@ -1180,18 +1180,18 @@ function openEventDetailsModal(event) {
                 <div class="row mb-3">
                     <div class="col-12">
                         <i class="fas fa-user text-info me-2"></i>
-                        <strong>{{ __('events_general.organizer_label') }}</strong> ${event.organizer}
+                        <strong>{{ __('events.organizer_label') }}</strong> ${event.organizer}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-6">
                         <i class="fas fa-users text-warning me-2"></i>
-                        <strong>{{ __('events_general.participants_label') }}</strong> ${event.max_participants || '{{ __('events_general.unlimited') }}'}
+                        <strong>{{ __('events.participants_label') }}</strong> ${event.max_participants || '{{ __('events.unlimited') }}'}
                     </div>
                     <div class="col-6">
                         <i class="fas fa-euro-sign text-success me-2"></i>
-                        <strong>{{ __('events_general.price_label') }}</strong> ${event.entry_fee ? event.entry_fee + '€' : '{{ __('events_general.free_label') }}'}
+                        <strong>{{ __('events.price_label') }}</strong> ${event.entry_fee ? event.entry_fee + '€' : '{{ __('events.free_label') }}'}
                     </div>
                 </div>
             </div>

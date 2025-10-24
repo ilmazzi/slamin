@@ -300,7 +300,7 @@
         <div class="col-md-3 mb-3">
             <div class="metric-card text-center">
                 <div class="metric-number">{{ $analytics['overview']['total_participants'] }}</div>
-                <div class="metric-label">{{ __('events_general.participants') }} Totali</div>
+                <div class="metric-label">{{ __('events.participants') }} Totali</div>
                 <div class="metric-change positive">
                     <i class="ph ph-users me-1"></i>
                     {{ $analytics['overview']['avg_participants_per_event'] }} media per evento
@@ -320,7 +320,7 @@
         <div class="col-md-3 mb-3">
             <div class="metric-card text-center">
                 <div class="metric-number">{{ $analytics['overview']['repeat_participants'] }}</div>
-                <div class="metric-label">{{ __('events_general.participants') }} Ricorrenti</div>
+                <div class="metric-label">{{ __('events.participants') }} Ricorrenti</div>
                 <div class="metric-change positive">
                     <i class="ph ph-repeat me-1"></i>
                     Alto engagement
@@ -498,7 +498,7 @@
                         </div>
                         <div class="col-6">
                             <div class="h4 text-success" id="newRequestsToday">-</div>
-                                                            <small class="text-muted">{{ __('events_general.requests_today') }}</small>
+                                                            <small class="text-muted">{{ __('events.requests_today') }}</small>
                         </div>
                         <div class="col-6">
                             <div class="h4 text-info" id="eventsNext7Days">-</div>

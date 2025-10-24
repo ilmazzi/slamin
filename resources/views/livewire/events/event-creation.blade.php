@@ -676,7 +676,7 @@
                                             <input type="url"
                                                    wire:model.live="promotional_video"
                                                    class="form-control @error('promotional_video') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.promotional_video_placeholder') }}">
+                                                   placeholder="{{ __('events.promotional_video_placeholder') }}">
                                             @error('promotional_video')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -1454,7 +1454,7 @@
                                                         <p class="mb-2">
                                                             <i class="ph ph-users-three me-2 text-primary"></i>
                                                             <strong>{{ __('events.max_participants') }}:</strong>
-                                                            {{ $max_participants }} {{ __('events_general.people') }}
+                                                            {{ $max_participants }} {{ __('events.people') }}
                                                         </p>
                                                     </div>
                                                 @endif
