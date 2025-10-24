@@ -1,9 +1,4 @@
 <div>
-    @assets
-    <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
-    <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
-    @endassets
-    
     <div wire:ignore>
         <div id="eventMap" class="border rounded"></div>
     </div>
@@ -14,28 +9,46 @@
 let eventMap = null;
 let eventMarker = null;
 
+// Auto-initialize when DOM is ready
+document.addEventListener('livewire:navigated', () => {
+    initMap();
+});
+
+// Also init on first load
+setTimeout(() => {
+    initMap();
+}, 1000);
+
 function initMap() {
-    // Wait for Leaflet to be loaded
+    // Wait for Leaflet library
     if (typeof L === 'undefined') {
-        setTimeout(initMap, 300);
+        console.log('⏳ Waiting for Leaflet...');
+        setTimeout(initMap, 500);
+        return;
+    }
+    
+    // Check if element exists
+    const mapElement = document.getElementById('eventMap');
+    if (!mapElement) {
+        console.log('⏳ Waiting for map element...');
+        setTimeout(initMap, 500);
         return;
     }
     
     // Prevent double initialization
-    if (eventMap) return;
+    if (eventMap !== null) {
+        console.log('ℹ️ Map already initialized');
+        return;
+    }
     
     try {
-        // Wait for DOM element to be ready
-        const mapElement = document.getElementById('eventMap');
-        if (!mapElement) {
-            setTimeout(initMap, 300);
-            return;
-        }
+        console.log('🗺️ Initializing Event Map...');
         
         // Initialize map
         eventMap = L.map('eventMap', {
             scrollWheelZoom: true,
-            zoomControl: true
+            zoomControl: true,
+            attributionControl: true
         }).setView([41.9028, 12.4964], 6);
         
         // Add tile layer
@@ -44,13 +57,13 @@ function initMap() {
             maxZoom: 19
         }).addTo(eventMap);
         
-        // Click handler
+        // Click handler for selecting location
         eventMap.on('click', (e) => {
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
             
-            $wire.latitude = lat;
-            $wire.longitude = lng;
+            $wire.set('latitude', lat);
+            $wire.set('longitude', lng);
             
             if (eventMarker) {
                 eventMarker.setLatLng([lat, lng]);
@@ -76,35 +89,23 @@ function initMap() {
                 });
         });
         
-        // CRITICAL: Force resize after initialization
-        setTimeout(() => {
-            if (eventMap) {
-                eventMap.invalidateSize(true);
-            }
-        }, 250);
+        // CRITICAL: Force multiple resizes to ensure proper display
+        [250, 500, 1000, 2000].forEach(delay => {
+            setTimeout(() => {
+                if (eventMap) {
+                    eventMap.invalidateSize(true);
+                }
+            }, delay);
+        });
         
-        setTimeout(() => {
-            if (eventMap) {
-                eventMap.invalidateSize(true);
-            }
-        }, 750);
-        
-        setTimeout(() => {
-            if (eventMap) {
-                eventMap.invalidateSize(true);
-            }
-        }, 1500);
-        
-        console.log('✅ Event Map initialized');
+        console.log('✅ Event Map initialized successfully');
         
     } catch (e) {
         console.error('❌ Map initialization error:', e);
-        setTimeout(initMap, 500);
+        eventMap = null;
+        setTimeout(initMap, 1000);
     }
 }
-
-// Start initialization
-initMap();
 
 // Listen for updates from parent component (e.g. when a recent venue is selected)
 Livewire.on('update-map-location', (event) => {

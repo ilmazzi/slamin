@@ -29,6 +29,8 @@
     
     @livewireStyles
     
+    <!-- Leaflet Maps -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
     
     @stack('styles')
 </head>
@@ -85,6 +87,9 @@
  
 
     @livewireScripts
+    
+    <!-- Leaflet Maps JS -->
+    <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
     
     @stack('scripts')
     
