@@ -1817,8 +1817,6 @@ function initFlatpickr() {
             $wire.set('end_datetime', dateStr);
         }
     });
-    
-    console.log('✅ Flatpickr initialized');
 }
 </script>
 @endscript

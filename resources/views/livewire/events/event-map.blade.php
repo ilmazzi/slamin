@@ -22,12 +22,10 @@ function waitForElement() {
             // Check if element has dimensions
             const rect = mapElement.getBoundingClientRect();
             if (rect.height === 0 || rect.width === 0) {
-                console.log('⏳ Waiting for map container dimensions...');
                 setTimeout(checkElement, 100);
                 return;
             }
             
-            console.log('✅ Map container ready:', rect.width, 'x', rect.height);
             resolve(mapElement);
         };
         checkElement();
@@ -37,7 +35,6 @@ function waitForElement() {
 async function initMap() {
     // Wait for Leaflet library
     if (typeof L === 'undefined') {
-        console.log('⏳ Waiting for Leaflet...');
         setTimeout(initMap, 300);
         return;
     }
@@ -49,9 +46,7 @@ async function initMap() {
     
     try {
         // Wait for element to have dimensions
-        const mapElement = await waitForElement();
-        
-        console.log('🗺️ Initializing Leaflet map...');
+        await waitForElement();
         
         // Initialize map
         eventMap = L.map('eventMap', {
@@ -103,10 +98,7 @@ async function initMap() {
             if (eventMap) eventMap.invalidateSize(true);
         }, 500);
         
-        console.log('✅ Event Map initialized successfully');
-        
     } catch (e) {
-        console.error('❌ Map error:', e);
         eventMap = null;
     }
 }
