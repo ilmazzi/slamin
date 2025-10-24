@@ -20,7 +20,7 @@ class EventMap extends Component
 
     public function render()
     {
-        return view('livewire.event-map');
+        return view('livewire.events.event-map');
     }
 }
 
