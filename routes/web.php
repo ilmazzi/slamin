@@ -924,16 +924,8 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('followers');
         Route::get('/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('following');
 
-        // Language Routes
-        Route::prefix('languages')->name('languages.')->group(function () {
-            Route::get('/', [App\Http\Controllers\UserLanguageController::class, 'index'])->name('index');
-            Route::get('/create', [App\Http\Controllers\UserLanguageController::class, 'create'])->name('create');
-            Route::post('/', [App\Http\Controllers\UserLanguageController::class, 'store'])->name('store');
-            Route::get('/{userLanguage}/edit', [App\Http\Controllers\UserLanguageController::class, 'edit'])->name('edit');
-            Route::put('/{userLanguage}', [App\Http\Controllers\UserLanguageController::class, 'update'])->name('update');
-            Route::delete('/{userLanguage}', [App\Http\Controllers\UserLanguageController::class, 'destroy'])->name('destroy');
-            Route::get('/search', [App\Http\Controllers\UserLanguageController::class, 'search'])->name('search');
-        });
+        // Language Management - Livewire 3
+        Route::get('/languages', App\Livewire\Profile\LanguageManagement::class)->name('languages.index');
     });
 
     // Public Profile Routes (accessibili a tutti)
