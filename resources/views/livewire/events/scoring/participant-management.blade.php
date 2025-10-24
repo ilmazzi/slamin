@@ -8,10 +8,10 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <div>
                                 <h4 class="text-white mb-1">{{ $event->title }}</h4>
-                                <p class="mb-0 opacity-75">Gestione Partecipanti</p>
+                                <p class="mb-0 opacity-75">{{ __('events.scoring.participant_management') }}</p>
                             </div>
                             <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light">
-                                <i class="ph ph-arrow-left me-2"></i>Dashboard
+                                <i class="ph ph-arrow-left me-2"></i>{{ __('events.scoring.dashboard') }}
                             </a>
                         </div>
                     </div>
@@ -26,8 +26,8 @@
                 <div class="alert alert-warning d-flex align-items-center">
                     <i class="ph ph-lock-simple f-s-24 me-3"></i>
                     <div>
-                        <strong>Evento Completato</strong><br>
-                        La classifica è stata generata. Non è possibile modificare i partecipanti.
+                        <strong>{{ __('events.scoring.event_completed') }}</strong><br>
+                        {{ __('events.scoring.rankings_generated') }}
                     </div>
                 </div>
             </div>
@@ -39,16 +39,16 @@
             <div class="col-12">
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-chart-pie me-2"></i>Dashboard
+                        <i class="ph ph-chart-pie me-2"></i>{{ __('events.scoring.dashboard') }}
                     </a>
                     <a href="{{ route('events.scoring.participants', $event) }}" class="btn btn-primary">
-                        <i class="ph ph-users me-2"></i>Partecipanti
+                        <i class="ph ph-users me-2"></i>{{ __('events.scoring.participants') }}
                     </a>
                     <a href="{{ route('events.scoring.scores', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-pencil-line me-2"></i>Punteggi
+                        <i class="ph ph-pencil-line me-2"></i>{{ __('events.scoring.scores') }}
                     </a>
                     <a href="{{ route('events.scoring.rankings', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-ranking me-2"></i>Classifica
+                        <i class="ph ph-ranking me-2"></i>{{ __('events.scoring.rankings') }}
                     </a>
                 </div>
             </div>
@@ -62,15 +62,15 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h5 class="mb-0">
                                 <i class="ph-duotone ph-users me-2"></i>
-                                Partecipanti ({{ $participants->count() }})
+                                {{ __('events.scoring.participants') }} ({{ $participants->count() }})
                             </h5>
                             <button wire:click="openAddModal" class="btn btn-primary" @if($isLocked) disabled @endif>
-                                <i class="ph ph-plus me-2"></i>Aggiungi
+                                <i class="ph ph-plus me-2"></i>{{ __('events.scoring.add') }}
                             </button>
                         </div>
                         <p class="text-muted small mb-0 mt-2">
                             <i class="ph ph-info me-1"></i>
-                            Gli utenti vengono aggiunti automaticamente quando accettano inviti o richieste per questo evento Poetry Slam.
+                            {{ __('events.scoring.users_added_automatically') }}
                         </p>
                     </div>
 
@@ -105,7 +105,7 @@
                                                             </h6>
                                                             @if($participant->isGuest())
                                                                 <span class="badge bg-light-warning mb-2">
-                                                                    <i class="ph ph-user-circle me-1"></i>Ospite
+                                                                    <i class="ph ph-user-circle me-1"></i>{{ __('events.scoring.guest') }}
                                                                 </span>
                                                             @endif
                                                             @if($participant->guest_email)
@@ -115,20 +115,20 @@
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="form-label small">Stato</label>
+                                                        <label class="form-label small">{{ __('events.scoring.status') }}</label>
                                                         <select wire:change="updateStatus({{ $participant->id }}, $event.target.value)" 
                                                                 class="form-select form-select-sm">
-                                                            <option value="confirmed" {{ $participant->status === 'confirmed' ? 'selected' : '' }}>Confermato</option>
-                                                            <option value="performed" {{ $participant->status === 'performed' ? 'selected' : '' }}>Esibito</option>
-                                                            <option value="disqualified" {{ $participant->status === 'disqualified' ? 'selected' : '' }}>Squalificato</option>
-                                                            <option value="no_show" {{ $participant->status === 'no_show' ? 'selected' : '' }}>Assente</option>
+                                                            <option value="confirmed" {{ $participant->status === 'confirmed' ? 'selected' : '' }}>{{ __('events.scoring.confirmed') }}</option>
+                                                            <option value="performed" {{ $participant->status === 'performed' ? 'selected' : '' }}>{{ __('events.scoring.performed') }}</option>
+                                                            <option value="disqualified" {{ $participant->status === 'disqualified' ? 'selected' : '' }}>{{ __('events.scoring.disqualified') }}</option>
+                                                            <option value="no_show" {{ $participant->status === 'no_show' ? 'selected' : '' }}>{{ __('events.scoring.no_show') }}</option>
                                                         </select>
                                                     </div>
 
                                                     <button wire:click="removeParticipant({{ $participant->id }})" 
                                                             class="btn btn-light-danger w-100"
-                                                            onclick="return confirm('Sei sicuro di voler rimuovere questo partecipante?')">
-                                                        <i class="ph ph-trash me-2"></i>Rimuovi
+                                                            onclick="return confirm('{{ __('events.scoring.are_you_sure_you_want_to_remove_this_participant') }}')">
+                                                        <i class="ph ph-trash me-2"></i>{{ __('events.scoring.remove') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -143,11 +143,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 80px;">#</th>
-                                            <th>Partecipante</th>
-                                            <th>Tipo</th>
-                                            <th>Stato</th>
-                                            <th>Punteggio</th>
-                                            <th style="width: 120px;">Azioni</th>
+                                            <th>{{ __('events.scoring.name') }}</th>
+                                            <th>{{ __('events.scoring.type') }}</th>
+                                            <th>{{ __('events.scoring.status') }}</th>
+                                            <th>{{ __('events.scoring.score') }}</th>
+                                            <th style="width: 120px;">{{ __('events.scoring.actions') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -182,21 +182,21 @@
                                                 <td>
                                                     @if($participant->isGuest())
                                                         <span class="badge bg-light-warning">
-                                                            <i class="ph ph-user-circle me-1"></i>Ospite
+                                                            <i class="ph ph-user-circle me-1"></i>{{ __('events.scoring.guest') }}
                                                         </span>
                                                     @else
                                                         <span class="badge bg-light-success">
-                                                            <i class="ph ph-user-check me-1"></i>Registrato
+                                                            <i class="ph ph-user-check me-1"></i>{{ __('events.scoring.registered') }}
                                                         </span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <select wire:change="updateStatus({{ $participant->id }}, $event.target.value)" 
                                                             class="form-select form-select-sm">
-                                                        <option value="confirmed" {{ $participant->status === 'confirmed' ? 'selected' : '' }}>Confermato</option>
-                                                        <option value="performed" {{ $participant->status === 'performed' ? 'selected' : '' }}>Esibito</option>
-                                                        <option value="disqualified" {{ $participant->status === 'disqualified' ? 'selected' : '' }}>Squalificato</option>
-                                                        <option value="no_show" {{ $participant->status === 'no_show' ? 'selected' : '' }}>Assente</option>
+                                                        <option value="confirmed" {{ $participant->status === 'confirmed' ? 'selected' : '' }}>{{ __('events.scoring.confirmed') }}</option>
+                                                        <option value="performed" {{ $participant->status === 'performed' ? 'selected' : '' }}>{{ __('events.scoring.performed') }}</option>
+                                                        <option value="disqualified" {{ $participant->status === 'disqualified' ? 'selected' : '' }}>{{ __('events.scoring.disqualified') }}</option>
+                                                        <option value="no_show" {{ $participant->status === 'no_show' ? 'selected' : '' }}>{{ __('events.scoring.no_show') }}</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -211,7 +211,7 @@
                                                 <td>
                                                     <button wire:click="removeParticipant({{ $participant->id }})" 
                                                             class="btn btn-light-danger"
-                                                            onclick="return confirm('Sei sicuro?')">
+                                                            onclick="return confirm('{{ __('events.scoring.are_you_sure_you_want_to_remove_this_participant') }}')">
                                                         <i class="ph ph-trash"></i>
                                                     </button>
                                                 </td>
@@ -223,8 +223,8 @@
                         @else
                             <div class="text-center py-5">
                                 <i class="ph-duotone ph-users f-s-60 text-muted mb-3"></i>
-                                <h5 class="text-muted">Nessun partecipante</h5>
-                                <p class="text-muted">Aggiungi il primo partecipante all'evento!</p>
+                                <h5 class="text-muted">{{ __('events.scoring.no_participants') }}</h5>
+                                <p class="text-muted">{{ __('events.scoring.add_first_participant_to_event') }}</p>
                             </div>
                         @endif
                     </div>
@@ -239,23 +239,23 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Aggiungi Partecipante</h5>
+                        <h5 class="modal-title">{{ __('events.scoring.add_participant') }}</h5>
                         <button type="button" class="btn-close" wire:click="$set('showAddModal', false)"></button>
                     </div>
                     <div class="modal-body">
                         {{-- Type Selection --}}
                         <div class="mb-4">
-                            <label class="form-label">Tipo Partecipante</label>
+                            <label class="form-label">{{ __('events.scoring.participant_type') }}</label>
                             <div class="d-flex gap-2">
                                 <button type="button" 
                                         wire:click="$set('participantType', 'user')"
                                         class="btn {{ $participantType === 'user' ? 'btn-primary' : 'btn-light-primary' }} flex-fill">
-                                    <i class="ph ph-user-check me-2"></i>Utente Registrato
+                                    <i class="ph ph-user-check me-2"></i>{{ __('events.scoring.registered_user') }}
                                 </button>
                                 <button type="button" 
                                         wire:click="$set('participantType', 'guest')"
                                         class="btn {{ $participantType === 'guest' ? 'btn-primary' : 'btn-light-primary' }} flex-fill">
-                                    <i class="ph ph-user-circle me-2"></i>Ospite
+                                        <i class="ph ph-user-circle me-2"></i>{{ __('events.scoring.guest') }}
                                 </button>
                             </div>
                         </div>
@@ -263,7 +263,7 @@
                         @if($participantType === 'user')
                             {{-- User Search --}}
                             <div class="mb-3">
-                                <label class="form-label">Cerca Utente *</label>
+                                <label class="form-label">{{ __('events.scoring.search_user') }} *</label>
                                 @if($selectedUser)
                                     <div class="card border">
                                         <div class="card-body p-3">
@@ -285,7 +285,7 @@
                                     <input type="text" 
                                            wire:model.live.debounce.300ms="userSearch"
                                            class="form-control"
-                                           placeholder="Nome, nickname o email...">
+                                           placeholder="{{ __('events.scoring.name_nickname_email') }}">
                                     
                                     @if(count($searchResults) > 0)
                                         <div class="list-group mt-2" style="max-height: 300px; overflow-y: auto;">
@@ -313,19 +313,19 @@
                             {{-- Guest Fields --}}
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <label class="form-label">Nome *</label>
+                                    <label class="form-label">{{ __('events.scoring.name') }} *</label>
                                     <input type="text" wire:model="guest_name" class="form-control" required>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <label class="form-label">Email</label>
+                                    <label class="form-label">{{ __('events.scoring.email') }}</label>
                                     <input type="email" wire:model="guest_email" class="form-control">
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <label class="form-label">Telefono</label>
+                                    <label class="form-label">{{ __('events.scoring.phone') }}</label>
                                     <input type="text" wire:model="guest_phone" class="form-control">
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Bio</label>
+                                    <label class="form-label">{{ __('events.scoring.bio') }}</label>
                                     <textarea wire:model="guest_bio" class="form-control" rows="2"></textarea>
                                 </div>
                             </div>
@@ -334,22 +334,22 @@
                         {{-- Common Fields --}}
                         <div class="row g-3 mt-2">
                             <div class="col-12 col-md-6">
-                                <label class="form-label">Ordine Esibizione</label>
+                                <label class="form-label">{{ __('events.scoring.performance_order') }}</label>
                                 <input type="number" wire:model="performance_order" class="form-control" min="1">
-                                <small class="text-muted">Lascia vuoto per auto-assegnazione</small>
+                                <small class="text-muted">{{ __('events.scoring.leave_empty_for_auto_assignment') }}</small>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Note</label>
+                                <label class="form-label">{{ __('events.scoring.notes') }}</label>
                                 <textarea wire:model="notes" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" wire:click="$set('showAddModal', false)">
-                            Annulla
+                            {{ __('events.scoring.cancel') }}
                         </button>
                         <button type="button" class="btn btn-primary" wire:click="addParticipant">
-                            <i class="ph ph-check me-2"></i>Aggiungi Partecipante
+                            <i class="ph ph-check me-2"></i>{{ __('events.scoring.add_participant') }}
                         </button>
                     </div>
                 </div>
@@ -362,7 +362,7 @@
         Livewire.on('swal:success', (data) => {
             Swal.fire({
                 icon: 'success',
-                title: data[0].title || 'Successo!',
+                title: data[0].title || '{{ __('common.success') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-primary',
                 timer: 3000
@@ -372,7 +372,7 @@
         Livewire.on('swal:warning', (data) => {
             Swal.fire({
                 icon: 'warning',
-                title: data[0].title || 'Attenzione',
+                title: data[0].title || '{{ __('common.warning') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-warning'
             });

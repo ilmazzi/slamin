@@ -8,10 +8,10 @@
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <div>
                                 <h4 class="text-white mb-1">{{ $event->title }}</h4>
-                                <p class="mb-0 opacity-75">Classifica Finale</p>
+                                <p class="mb-0 opacity-75">{{ __('events.scoring.final_rankings') }}</p>
                             </div>
                             <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light">
-                                <i class="ph ph-arrow-left me-2"></i>Dashboard
+                                <i class="ph ph-arrow-left me-2"></i>{{ __('events.scoring.dashboard') }}
                             </a>
                         </div>
                     </div>
@@ -24,16 +24,16 @@
             <div class="col-12">
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{{ route('events.scoring.dashboard', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-chart-pie me-2"></i>Dashboard
+                        <i class="ph ph-chart-pie me-2"></i>{{ __('events.scoring.dashboard') }}
                     </a>
                     <a href="{{ route('events.scoring.participants', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-users me-2"></i>Partecipanti
+                        <i class="ph ph-users me-2"></i>{{ __('events.scoring.participants') }}
                     </a>
                     <a href="{{ route('events.scoring.scores', $event) }}" class="btn btn-light-primary">
-                        <i class="ph ph-pencil-line me-2"></i>Punteggi
+                        <i class="ph ph-pencil-line me-2"></i>{{ __('events.scoring.scores') }}
                     </a>
                     <a href="{{ route('events.scoring.rankings', $event) }}" class="btn btn-primary">
-                        <i class="ph ph-ranking me-2"></i>Classifica
+                        <i class="ph ph-ranking me-2"></i>{{ __('events.scoring.rankings') }}
                     </a>
                 </div>
             </div>
@@ -48,9 +48,9 @@
                     <div class="card border-success">
                         <div class="card-body text-center py-4">
                             <i class="ph-duotone ph-check-circle f-s-60 text-success mb-3"></i>
-                            <h4 class="text-success mb-2">🎊 Evento Completato</h4>
+                            <h4 class="text-success mb-2">🎊 {{ __('events.scoring.event_completed') }}</h4>
                             <p class="text-muted mb-0">
-                                Classifica finale pubblicata e badge assegnati ai vincitori!
+                                {{ __('events.scoring.final_rankings_published') }}
                             </p>
                         </div>
                     </div>
@@ -64,14 +64,14 @@
                                     <div class="p-3 bg-light-info rounded text-center">
                                         <i class="ph-duotone ph-users f-s-30 text-info mb-2"></i>
                                         <h5 class="mb-0">{{ $stats['with_scores'] }}/{{ $stats['total_participants'] }}</h5>
-                                        <small class="text-muted">Con Punteggi</small>
+                                        <small class="text-muted">{{ __('events.scoring.with_scores') }}</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="p-3 bg-light-success rounded text-center">
                                         <i class="ph-duotone ph-trophy f-s-30 text-success mb-2"></i>
                                         <h5 class="mb-0">{{ $stats['badges_awarded'] }}</h5>
-                                        <small class="text-muted">Badge Assegnati</small>
+                                        <small class="text-muted">{{ __('events.scoring.badges_awarded') }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -83,10 +83,10 @@
                                         <div class="card bg-light-warning h-100">
                                             <div class="card-body text-center">
                                                 <i class="ph-duotone ph-calculator f-s-40 text-warning mb-2"></i>
-                                                <h6 class="mb-2">Classifica Parziale</h6>
-                                                <p class="text-muted small mb-3">Aggiorna classifica senza chiudere evento</p>
+                                                <h6 class="mb-2">{{ __('events.scoring.calculate_partial_rankings') }}</h6>
+                                                <p class="text-muted small mb-3">{{ __('events.scoring.update_rankings_without_closing_event') }}</p>
                                                 <button wire:click="calculatePartialRankings" class="btn btn-warning w-100">
-                                                    <i class="ph ph-calculator me-2"></i>Calcola Parziale
+                                                    <i class="ph ph-calculator me-2"></i>{{ __('events.scoring.calculate_partial_rankings') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -98,10 +98,10 @@
                                         <div class="card bg-light-success h-100">
                                             <div class="card-body text-center">
                                                 <i class="ph-duotone ph-trophy f-s-40 text-success mb-2"></i>
-                                                <h6 class="mb-2">Finalizza Evento</h6>
-                                                <p class="text-muted small mb-3">Classifica + Badge + Chiusura in 1 click</p>
+                                                <h6 class="mb-2">{{ __('events.scoring.finalize_event') }}</h6>
+                                                <p class="text-muted small mb-3">{{ __('events.scoring.finalize_event') }}</p>
                                                 <button onclick="confirmFinalize()" class="btn btn-success w-100">
-                                                    <i class="ph ph-check-circle me-2"></i>Termina Evento
+                                                    <i class="ph ph-check-circle me-2"></i>{{ __('events.scoring.terminate_event') }}
                                                 </button>
                                             </div>
                                         </div>
@@ -112,7 +112,7 @@
                             @if(!$canCalculate || $stats['with_scores'] === 0)
                                 <div class="alert alert-light-info mt-3 mb-0">
                                     <i class="ph ph-info me-2"></i>
-                                    Inserisci i punteggi prima di generare la classifica.
+                                    {{ __('events.scoring.insert_scores_before_generating_rankings') }}
                                 </div>
                             @endif
                         </div>
@@ -129,7 +129,7 @@
                     <div class="card-header">
                         <h5 class="mb-0">
                             <i class="ph-duotone ph-ranking me-2"></i>
-                            Classifica Finale
+                                {{ __('events.scoring.final_rankings') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -163,14 +163,14 @@
                                                                 <div>
                                                                     <h6 class="mb-0">{{ $ranking->participant->display_name }}</h6>
                                                                     @if($ranking->participant->isGuest())
-                                                                        <span class="badge bg-light-warning">Ospite</span>
+                                                                        <span class="badge bg-light-warning">{{ __('events.scoring.guest') }}</span>
                                                                     @endif
                                                                 </div>
                                                             </div>
 
                                                             <div class="d-flex gap-2 flex-wrap">
                                                                 <span class="badge bg-gradient-warning">
-                                                                    <i class="ph ph-star-four me-1"></i>{{ number_format($ranking->total_score, 1) }} punti
+                                                                    <i class="ph ph-star-four me-1"></i>{{ number_format($ranking->total_score, 1) }} {{ __('events.scoring.points') }}
                                                                 </span>
                                                                 
                                                                 @if($ranking->badge)
@@ -195,10 +195,10 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 80px;">Pos.</th>
-                                            <th>Partecipante</th>
-                                            <th>Punteggi per Turno</th>
-                                            <th style="width: 150px;">Totale</th>
-                                            <th>Badge</th>
+                                            <th>{{ __('events.scoring.participant_name') }}</th>
+                                            <th>{{ __('events.scoring.round_scores') }}</th>
+                                            <th style="width: 150px;">{{ __('events.scoring.total_score') }}</th>
+                                            <th>{{ __('events.scoring.badge') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -227,7 +227,7 @@
                                                             <div>
                                                                 <strong>{{ $ranking->participant->display_name }}</strong>
                                                                 @if($ranking->participant->isGuest())
-                                                                    <br><span class="badge bg-light-warning">Ospite</span>
+                                                                    <br><span class="badge bg-light-warning">{{ __('events.scoring.guest') }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -238,7 +238,7 @@
                                                         <div class="d-flex gap-2 flex-wrap">
                                                             @foreach($ranking->round_scores as $round => $score)
                                                                 <span class="badge bg-light-info">
-                                                                    T{{ $round }}: {{ number_format($score, 1) }}
+                                                                    T{{ $round }}: {{ number_format($score, 1) }} {{ __('events.scoring.points') }}
                                                                 </span>
                                                             @endforeach
                                                         </div>
@@ -261,11 +261,11 @@
                                                                 <strong class="d-block">{{ $ranking->badge->name }}</strong>
                                                                 @if($ranking->badge_awarded)
                                                                     <span class="badge bg-light-success">
-                                                                        <i class="ph ph-check me-1"></i>Assegnato
+                                                                        <i class="ph ph-check me-1"></i>{{ __('events.scoring.assigned') }}
                                                                     </span>
                                                                 @else
                                                                     <span class="badge bg-light-secondary">
-                                                                        <i class="ph ph-clock me-1"></i>Da assegnare
+                                                                        <i class="ph ph-clock me-1"></i>{{ __('events.scoring.to_assign') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
@@ -283,14 +283,14 @@
                                 <h5 class="text-muted">{{ __('gamification.no_rankings') }}</h5>
                                 
                                 @if($canCalculate)
-                                    <p class="text-muted mb-3">Hai {{ $stats['with_scores'] }} partecipanti con punteggi. Calcola la classifica!</p>
+                                    <p class="text-muted mb-3">{{ __('events.scoring.you_have_participants_with_scores') }}</p>
                                     <button wire:click="calculatePartialRankings" class="btn btn-warning">
-                                        <i class="ph ph-calculator me-2"></i>Calcola Classifica Parziale
+                                        <i class="ph ph-calculator me-2"></i>{{ __('events.scoring.calculate_partial_rankings') }}
                                     </button>
                                 @else
-                                    <p class="text-muted mb-3">Inserisci i punteggi prima di calcolare la classifica.</p>
+                                    <p class="text-muted mb-3">{{ __('events.scoring.insert_scores_before_generating_rankings') }}</p>
                                     <a href="{{ route('events.scoring.scores', $event) }}" class="btn btn-primary">
-                                        <i class="ph ph-pencil-line me-2"></i>Vai ai Punteggi
+                                        <i class="ph ph-pencil-line me-2"></i>{{ __('events.scoring.go_to_scores') }}
                                     </a>
                                 @endif
                             </div>
@@ -305,23 +305,23 @@
     <script>
         function confirmFinalize() {
             Swal.fire({
-                title: 'Finalizzare l\'Evento?',
+                title: '{{ __('events.scoring.confirm_finalize_event') }}?',
                 html: `
                     <div class="text-start">
-                        <p class="mb-3">Questa azione completerà definitivamente l'evento:</p>
+                        <p class="mb-3">{{ __('events.scoring.this_action_will_complete_the_event') }}:</p>
                         <ul class="list-unstyled">
-                            <li class="mb-2"><i class="ph ph-check text-success me-2"></i> Calcola classifica finale</li>
-                            <li class="mb-2"><i class="ph ph-trophy text-warning me-2"></i> Assegna badge ai vincitori</li>
-                            <li class="mb-2"><i class="ph ph-lock text-info me-2"></i> Chiude l'evento</li>
-                            <li class="mb-2"><i class="ph ph-eye text-primary me-2"></i> Pubblica risultati</li>
+                            <li class="mb-2"><i class="ph ph-check text-success me-2"></i> {{ __('events.scoring.calculate_final_rankings') }}</li>
+                            <li class="mb-2"><i class="ph ph-trophy text-warning me-2"></i> {{ __('events.scoring.assign_badges_to_winners') }}</li>
+                            <li class="mb-2"><i class="ph ph-lock text-info me-2"></i> {{ __('events.scoring.close_event') }}</li>
+                            <li class="mb-2"><i class="ph ph-eye text-primary me-2"></i> {{ __('events.scoring.publish_results') }}</li>
                         </ul>
-                        <p class="text-danger mb-0"><strong>Attenzione:</strong> Non potrai più modificare i punteggi!</p>
+                        <p class="text-danger mb-0"><strong>{{ __('common.warning') }}:</strong> {{ __('events.scoring.you_will_not_be_able_to_modify_scores') }}</p>
                     </div>
                 `,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Sì, Finalizza!',
-                cancelButtonText: 'Annulla',
+                confirmButtonText: '{{ __('events.scoring.yes_finalize') }}',
+                cancelButtonText: '{{ __('events.scoring.cancel') }}',
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-light-secondary',
                 reverseButtons: true
@@ -335,7 +335,7 @@
         Livewire.on('swal:success', (data) => {
             Swal.fire({
                 icon: 'success',
-                title: data[0].title || 'Successo!',
+                title: data[0].title || '{{ __('common.success') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-primary',
                 timer: 3000
@@ -345,7 +345,7 @@
         Livewire.on('swal:error', (data) => {
             Swal.fire({
                 icon: 'error',
-                title: data[0].title || 'Errore',
+                title: data[0].title || '{{ __('events.scoring.error') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-danger'
             });
