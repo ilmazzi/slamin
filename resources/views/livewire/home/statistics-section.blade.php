@@ -9,7 +9,7 @@
                                 <i class="ph-duotone ph-video f-s-24 text-primary"></i>
                             </div>
                             <h4 class="mb-1 f-w-600 text-primary">{{ number_format($stats['total_videos']) }}</h4>
-                            <p class="text-muted f-s-12 mb-0">Video</p>
+                            <p class="text-muted f-s-12 mb-0">{{ __('home.statistics.videos') }}</p>
                         </div>
                     </div>
                     <div class="col-md-3 col-6 mb-3">
@@ -18,7 +18,7 @@
                                 <i class="ph-duotone ph-calendar f-s-24 text-success"></i>
                             </div>
                             <h4 class="mb-1 f-w-600 text-success">{{ number_format($stats['total_events']) }}</h4>
-                            <p class="text-muted f-s-12 mb-0">Eventi</p>
+                            <p class="text-muted f-s-12 mb-0">{{ __('home.statistics.events') }}</p>
                         </div>
                     </div>
                     <div class="col-md-3 col-6 mb-3">
@@ -27,7 +27,7 @@
                                 <i class="ph-duotone ph-users f-s-24 text-info"></i>
                             </div>
                             <h4 class="mb-1 f-w-600 text-info">{{ number_format($stats['total_users']) }}</h4>
-                            <p class="text-muted f-s-12 mb-0">Utenti</p>
+                            <p class="text-muted f-s-12 mb-0">{{ __('home.statistics.users') }}</p>
                         </div>
                     </div>
                     <div class="col-md-3 col-6 mb-3">
@@ -36,7 +36,7 @@
                                 <i class="ph-duotone ph-eye f-s-24 text-warning"></i>
                             </div>
                             <h4 class="mb-1 f-w-600 text-warning">{{ number_format($stats['total_views']) }}</h4>
-                            <p class="text-muted f-s-12 mb-0">Visualizzazioni</p>
+                            <p class="text-muted f-s-12 mb-0">{{ __('home.statistics.views') }}</p>
                         </div>
                     </div>
                 </div>

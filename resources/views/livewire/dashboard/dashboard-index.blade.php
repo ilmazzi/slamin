@@ -132,18 +132,18 @@
                                                             <div class="d-flex justify-content-between align-items-start mb-1">
                                                                 <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer" 
                                                                     wire:click="viewEvent({{ $event['id'] ?? 0 }})">
-                                                                    {{ $event['title'] ?? 'Evento senza titolo' }}
+                                                                    {{ $event['title'] ?? __('dashboard.event_without_title') }}
                                                                 </h6>
                                                                 <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9">
-                                                                    {{ $event['type'] === 'organized' ? 'Org' : ($event['type'] === 'participating' ? 'Part' : 'Wish') }}
+                                                                    {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
                                                                 </span>
                                                             </div>
                                                             <div class="d-flex align-items-center">
                                                                 <i class="ph ph-clock f-s-12 text-muted me-1"></i>
-                                                                <span class="f-s-12 text-muted">{{ $event['time'] ?? 'Orario non disponibile' }}</span>
+                                                                <span class="f-s-12 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
                                                                 <span class="mx-2 text-muted">•</span>
                                                                 <i class="ph ph-map-pin f-s-12 text-muted me-1"></i>
-                                                                <span class="f-s-12 text-muted">{{ $event['venue'] ?? 'Luogo non disponibile' }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                                <span class="f-s-12 text-muted">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -156,8 +156,8 @@
                                 @if($allEvents->isEmpty())
                                     <div class="text-center py-4">
                                         <i class="ph ph-calendar f-s-48 text-muted mb-3"></i>
-                                        <h6 class="text-muted">Nessun evento questo mese</h6>
-                                        <p class="text-muted small">Non hai eventi programmati</p>
+                                        <h6 class="text-muted">{{ __('dashboard.no_events_this_month') }}</h6>
+                                        <p class="text-muted small">{{ __('dashboard.no_events_scheduled') }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -168,13 +168,13 @@
                             <!-- Controlli navigazione settimana -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="previousWeek">
-                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">Settimana precedente</span><span class="d-md-none">Prec</span>
+                                    <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">{{ __('dashboard.previous_week') }}</span><span class="d-md-none">Prec</span>
                                 </button>
                                 <span class="f-s-12 f-md-14 f-w-600 text-center">
-                                    Settimana {{ $weekPage === 0 ? 'corrente' : ($weekPage > 0 ? '+' . $weekPage : $weekPage) }}
+                                    {{ __('dashboard.week') }} {{ $weekPage === 0 ? __('dashboard.current') : ($weekPage > 0 ? '+' . $weekPage : $weekPage) }}
                                 </span>
                                 <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="nextWeek">
-                                    <span class="d-none d-md-inline">Settimana successiva</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
+                                    <span class="d-none d-md-inline">{{ __('dashboard.next_week') }}</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
                                 </button>
                             </div>
                             
@@ -216,16 +216,16 @@
                                                             </div>
                                                             <div class="flex-grow-1">
                                                                 <div class="f-s-12 f-w-600 cursor-pointer" wire:click="viewEvent({{ $event['id'] ?? 0 }})">
-                                                                    {{ Str::limit($event['title'] ?? 'Evento senza titolo', 25) }}
+                                                                    {{ Str::limit($event['title'] ?? __('dashboard.event_without_title'), 25) }}
                                                                 </div>
-                                                                <div class="f-s-11 text-muted">{{ $event['time'] ?? 'Orario non disponibile' }}</div>
+                                                                <div class="f-s-11 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</div>
                                                             </div>
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             @else
                                                 <div class="text-center py-2">
-                                                    <span class="text-muted f-s-12">Nessun evento</span>
+                                                    <span class="text-muted f-s-12">{{ __('dashboard.no_events') }}</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -372,7 +372,7 @@
                                                     @if($dayEvents->count() > 0)
                                                         <div class="position-absolute top-0 end-0 p-1">
                                                             <span class="badge bg-{{ $dayEvents->first()['color'] ?? 'secondary' }} f-s-8 f-md-10 px-2">
-                                                                {{ $dayEvents->first()['type'] === 'organized' ? 'Org' : ($dayEvents->first()['type'] === 'participating' ? 'Part' : 'Wish') }}
+                                                                    {{ $dayEvents->first()['type'] === 'organized' ? __('dashboard.organized') : ($dayEvents->first()['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
                                                             </span>
                                                         </div>
                                                         
@@ -386,7 +386,7 @@
                                                                     <!-- Header con icona o immagine -->
                                                                     <div class="d-flex justify-content-center">
                                                                         @if(isset($event['image']) && $event['image'])
-                                                                            <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
+                                                                            <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? __('dashboard.event_without_title') }}" 
                                                                                  class="rounded-circle" 
                                                                                  style="width: 32px; height: 32px; object-fit: cover;">
                                                                         @else
@@ -400,10 +400,10 @@
                                                                     <!-- Contenuto principale -->
                                                                     <div class="text-center">
                                                                         <div class="f-s-10 f-md-13 f-w-600 text-truncate" style="max-width: 100%; {{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
-                                                                            {{ Str::limit($event['title'] ?? 'Evento senza titolo', 15) }}
+                                                                            {{ Str::limit($event['title'] ?? __('dashboard.event_without_title'), 15) }}
                                                                         </div>
                                                                         <div class="f-s-9 f-md-11 {{ isset($event['image']) && $event['image'] ? 'text-white-50' : 'text-secondary' }}" style="{{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
-                                                                            {{ $event['time'] ?? 'Orario non disponibile' }}
+                                                                            {{ $event['time'] ?? __('dashboard.time_not_available') }}
                                                                         </div>
                                                                         @if(isset($event['venue']) && $event['venue'])
                                                                             <div class="f-s-8 f-md-10 {{ isset($event['image']) && $event['image'] ? 'text-white-50' : 'text-secondary' }} mt-1" style="{{ isset($event['image']) && $event['image'] ? 'text-shadow: 0 1px 2px rgba(0,0,0,0.8);' : '' }}">
@@ -448,25 +448,25 @@
                                          wire:click="filterEvents('organized')" 
                                          style="opacity: {{ $eventFilter === 'organized' || $eventFilter === 'all' ? '1' : '0.5' }}">
                                         <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #007bff;"></div>
-                                        <small class="text-muted f-s-12">Organizzati</small>
+                                        <small class="text-muted f-s-12">{{ __('dashboard.organized') }}</small>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 cursor-pointer" 
                                          wire:click="filterEvents('participating')" 
                                          style="opacity: {{ $eventFilter === 'participating' || $eventFilter === 'all' ? '1' : '0.5' }}">
                                         <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #6c757d;"></div>
-                                        <small class="text-muted f-s-12">Partecipo</small>
+                                        <small class="text-muted f-s-12">{{ __('dashboard.participating') }}</small>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 cursor-pointer" 
                                          wire:click="filterEvents('wishlist')" 
                                          style="opacity: {{ $eventFilter === 'wishlist' || $eventFilter === 'all' ? '1' : '0.5' }}">
                                         <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #ffc107;"></div>
-                                        <small class="text-muted f-s-12">Wishlist</small>
+                                        <small class="text-muted f-s-12">{{ __('dashboard.wish') }}</small>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 cursor-pointer" 
                                          wire:click="filterEvents('all')" 
                                          style="opacity: {{ $eventFilter === 'all' ? '1' : '0.5' }}">
                                         <div class="rounded-circle" style="width: 12px; height: 12px; background-color: #28a745;"></div>
-                                        <small class="text-muted f-s-12">Tutti</small>
+                                        <small class="text-muted f-s-12">{{ __('dashboard.all') }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -502,7 +502,7 @@
                                                 <i class="ph ph-calendar-check f-s-16 text-secondary"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['past_events'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Passati</small>
+                                            <small class="text-muted f-s-11">{{ __('dashboard.past') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -517,7 +517,7 @@
                                                 <i class="ph ph-calendar f-s-16 text-primary"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['future_events'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Futuri</small>
+                                            <small class="text-muted f-s-11">{{ __('dashboard.future') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -532,7 +532,7 @@
                                                 <i class="ph ph-users f-s-16 text-success"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['organized_events'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Organizzati</small>
+                                            <small class="text-muted f-s-11">{{ __('dashboard.organized') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -547,7 +547,7 @@
                                                 <i class="ph ph-envelope f-s-16 text-warning"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['pending_invitations'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Inviti</small>
+                                                <small class="text-muted f-s-11">{{ __('dashboard.pending_invitations') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -562,7 +562,7 @@
                                                 <i class="ph ph-book-open f-s-16 text-info"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['poems'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Poesie</small>
+                                            <small class="text-muted f-s-11">{{ __('dashboard.poems') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -577,7 +577,7 @@
                                                 <i class="ph ph-users-three f-s-16 text-danger"></i>
                                             </div>
                                             <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $stats['groups'] ?? 0 }}</h6>
-                                            <small class="text-muted f-s-11">Gruppi</small>
+                                            <small class="text-muted f-s-11">{{ __('dashboard.groups') }}</small>
                                         </div>
                                     </div>
                                 </a>
@@ -608,8 +608,8 @@
                                                     <i class="ph {{ $action['icon'] ?? 'ph-question' }} f-s-20 text-{{ $action['color'] ?? 'secondary' }}"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ $action['title'] ?? 'Azione' }}</h6>
-                                                    <p class="mb-0 f-s-13 text-muted">{{ $action['description'] ?? 'Descrizione non disponibile' }}</p>
+                                                    <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ $action['title'] ?? __('dashboard.action') }}</h6>
+                                                    <p class="mb-0 f-s-13 text-muted">{{ $action['description'] ?? __('dashboard.description_not_available') }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -647,24 +647,24 @@
                                                 <!-- Contenuto evento -->
                                                 <div class="flex-grow-1 me-3">
                                                     <div class="d-flex align-items-start justify-content-between mb-1">
-                                                        <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] ?? 'Evento senza titolo' }}</h6>
+                                                        <h6 class="mb-0 f-s-16 f-w-600 text-dark">{{ $event['title'] ?? __('dashboard.event_without_title') }}</h6>
                                                         <span class="badge bg-light-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} text-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} f-s-10">
-                                                            {{ $event['type'] === 'organized' ? 'Organizzato' : ($event['type'] === 'participating' ? 'Partecipo' : 'Wishlist') }}
+                                                            {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
                                                         </span>
                                                     </div>
                                                     <div class="d-flex align-items-center mb-1">
                                                         <i class="ph ph-calendar f-s-14 text-muted me-2"></i>
-                                                        <span class="f-s-13 text-muted">{{ $event['date'] ?? 'Data non disponibile' }}</span>
+                                                        <span class="f-s-13 text-muted">{{ $event['date'] ?? __('dashboard.date_not_available') }}</span>
                                                     </div>
                                                     <div class="d-flex align-items-center mb-2">
                                                         <i class="ph ph-map-pin f-s-14 text-muted me-2"></i>
-                                                        <span class="f-s-13 text-muted">{{ $event['venue'] ?? 'Luogo non disponibile' }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                        <span class="f-s-13 text-muted">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
                                                     </div>
                                                     
                                                     <!-- Bottone azione -->
                                                     <div>
                                                         <a href="{{ $event['url'] ?? '#' }}" class="btn btn-{{ $event['type'] === 'organized' ? 'primary' : ($event['type'] === 'participating' ? 'secondary' : 'primary') }} btn-sm">
-                                                            <i class="ph ph-arrow-right me-1"></i>Vedi
+                                                            <i class="ph ph-arrow-right me-1"></i>{{ __('dashboard.view') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -676,8 +676,8 @@
                         @else
                             <div class="text-center py-4">
                                 <i class="ph ph-calendar f-s-48 text-muted mb-3"></i>
-                                <h6 class="text-muted">Nessun evento prossimo</h6>
-                                <p class="text-muted small">Non hai eventi in programma</p>
+                                    <h6 class="text-muted">{{ __('dashboard.no_upcoming_events') }}</h6>
+                                <p class="text-muted small">{{ __('dashboard.no_events_scheduled') }}</p>
                             </div>
                         @endif
                     </div>
@@ -689,7 +689,7 @@
                 <div class="card hover-effect equal-card">
                     <div class="card-header">
                         <h6 class="card-title mb-0 f-w-600">
-                            <i class="ph ph-users me-2 text-primary"></i>Attività Sociali
+                            <i class="ph ph-users me-2 text-primary"></i>{{ __('dashboard.social_activities') }}
                         </h6>
                     </div>
                     <div class="card-body pa-20">
@@ -701,8 +701,8 @@
                                         <i class="ph ph-user-circle f-s-20 text-primary"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Amici Online</h6>
-                                        <p class="mb-0 f-s-13 text-muted">3 amici attivi ora</p>
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ __('dashboard.online_friends') }}</h6>
+                                        <p class="mb-0 f-s-13 text-muted">{{ __('dashboard.3_active_friends_now') }}</p>
                                     </div>
                                     <div class="ms-3">
                                         <span class="badge bg-light-primary text-primary f-s-12">3</span>
@@ -717,8 +717,8 @@
                                         <i class="ph ph-users-three f-s-20 text-secondary"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Gruppi Attivi</h6>
-                                        <p class="mb-0 f-s-13 text-muted">2 gruppi con nuove attività</p>
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ __('dashboard.active_groups') }}</h6>
+                                        <p class="mb-0 f-s-13 text-muted">{{ __('dashboard.2_groups_with_new_activities') }}</p>
                                     </div>
                                     <div class="ms-3">
                                         <span class="badge bg-light-secondary text-secondary f-s-12">2</span>
@@ -733,8 +733,8 @@
                                         <i class="ph ph-envelope f-s-20 text-primary"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Inviti Ricevuti</h6>
-                                        <p class="mb-0 f-s-13 text-muted">1 nuovo invito da rispondere</p>
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ __('dashboard.received_invitations') }}</h6>
+                                        <p class="mb-0 f-s-13 text-muted">{{ __('dashboard.1_new_invitation_to_reply') }}</p>
                                     </div>
                                     <div class="ms-3">
                                         <span class="badge bg-light-primary text-primary f-s-12">1</span>
@@ -749,8 +749,8 @@
                                         <i class="ph ph-chat-circle f-s-20 text-secondary"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">Messaggi</h6>
-                                        <p class="mb-0 f-s-13 text-muted">5 messaggi non letti</p>
+                                        <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ __('dashboard.messages') }}</h6>
+                                        <p class="mb-0 f-s-13 text-muted">{{ __('dashboard.5_unread_messages') }}</p>
                                     </div>
                                     <div class="ms-3">
                                         <span class="badge bg-light-secondary text-secondary f-s-12">5</span>
@@ -783,7 +783,7 @@
                                                     <div class="bg-light-{{ $content['color'] }} h-40 w-40 d-flex-center rounded-circle me-3">
                                                         <i class="ph {{ $content['icon'] }} f-s-16 text-{{ $content['color'] }}"></i>
                                                     </div>
-                                                    <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $content['title'] ?? 'Contenuto' }}</h6>
+                                                    <h6 class="mb-0 f-s-14 f-w-600 text-dark">{{ $content['title'] ?? __('dashboard.content') }}</h6>
                                                 </div>
                                                 <p class="mb-2 f-s-12 text-muted">{{ $content['description'] }}</p>
                                                 @if(isset($content['count']))
@@ -791,7 +791,7 @@
                                                         <span class="badge bg-{{ $content['color'] }} f-s-10">{{ $content['count'] }}</span>
                                                         @if(isset($content['url']))
                                                             <a href="{{ $content['url'] }}" class="btn btn-{{ $content['color'] }} btn-sm">
-                                                                <i class="ph ph-arrow-right me-1"></i>Vedi
+                                                                    <i class="ph ph-arrow-right me-1"></i>{{ __('dashboard.view') }}
                                                             </a>
                                                         @endif
                                                     </div>
@@ -826,7 +826,7 @@
                                                 <i class="ph {{ $activity['icon'] }} f-s-20 text-{{ $activity['color'] }}"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ $activity['title'] ?? 'Attività' }}</h6>
+                                                <h6 class="mb-1 f-s-16 f-w-600 text-dark">{{ $activity['title'] ?? __('dashboard.activity') }}</h6>
                                                 <p class="mb-1 f-s-13 text-muted">{{ $activity['message'] }}</p>
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <small class="text-muted f-s-11">{{ $activity['time'] }}</small>
@@ -853,7 +853,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="dayEventsModalLabel">
-                    Eventi del {{ $selectedDay ? \Carbon\Carbon::parse($selectedDay)->format('d/m/Y') : '' }}
+                    {{ __('dashboard.events_for_day') }} {{ $selectedDay ? \Carbon\Carbon::parse($selectedDay)->format('d/m/Y') : '' }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -870,15 +870,15 @@
                                         <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer" 
                                             wire:click="viewEvent({{ $event['id'] ?? 0 }})"
                                             data-bs-dismiss="modal">
-                                            {{ $event['title'] ?? 'Evento senza titolo' }}
+                                            {{ $event['title'] ?? __('dashboard.event_without_title') }}
                                         </h6>
                                         <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9">
-                                            {{ $event['type'] === 'organized' ? 'Org' : ($event['type'] === 'participating' ? 'Part' : 'Wish') }}
+                                            {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
                                         </span>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <i class="ph ph-clock f-s-12 text-muted me-1"></i>
-                                        <span class="f-s-12 text-muted">{{ $event['time'] ?? 'Orario non disponibile' }}</span>
+                                        <span class="f-s-12 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
                                         @if(isset($event['venue']) && $event['venue'])
                                             <span class="mx-2 text-muted">•</span>
                                             <i class="ph ph-map-pin f-s-12 text-muted me-1"></i>
@@ -892,12 +892,12 @@
                 @else
                     <div class="text-center py-4">
                         <i class="ph ph-calendar-x f-s-48 text-muted mb-3"></i>
-                        <p class="text-muted mb-0">Nessun evento per questo giorno</p>
+                        <p class="text-muted mb-0">{{ __('dashboard.no_events_for_this_day') }}</p>
                     </div>
                 @endif
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('dashboard.close') }}</button>
             </div>
         </div>
     </div>
@@ -915,7 +915,7 @@
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: data.type,
-                    title: data.type === 'success' ? 'Successo' : (data.type === 'error' ? 'Errore' : 'Info'),
+                    title: data.type === 'success' ? __('dashboard.success') : (data.type === 'error' ? __('dashboard.error') : __('dashboard.information')),
                     text: data.message,
                     timer: 2000,
                     showConfirmButton: false

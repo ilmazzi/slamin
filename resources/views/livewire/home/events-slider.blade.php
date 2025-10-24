@@ -7,7 +7,7 @@
                     <h5 class="mb-0">
                         <a href="{{ route('events.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                             <i class="ph-duotone ph-calendar f-s-16 me-2"></i>
-                            Eventi in arrivo
+                            {{ __('home.events_section.title') }}
                         </a>
                     </h5>
                     @if ($recentEvents->chunk(2)->count() > 1)
@@ -55,7 +55,7 @@
                                                         <h6 class="card-title f-s-14 f-w-600 mb-2">{{ Str::limit($event->title, 50) }}</h6>
                                                         <p class="card-text text-muted f-s-12 mb-2">
                                                             <i class="ph-duotone ph-map-pin f-s-12 me-1"></i>
-                                                            {{ $event->venue_name ?? 'Luogo da definire' }}
+                                                            {{ $event->venue_name ?? __('home.events_section.location_to_define') }}
                                                         </p>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <small class="text-muted">
@@ -64,7 +64,7 @@
                                                             </small>
                                                             <a href="{{ route('events.show', $event->id) }}" class="btn btn-sm btn-outline-primary">
                                                                 <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                                Vedi
+                                                                {{ __('home.events_section.view') }}
                                                             </a>
                                                         </div>
                                                         <!-- Social Actions -->

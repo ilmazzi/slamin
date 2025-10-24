@@ -3,11 +3,11 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <x-icon name="settings" size="20" class="me-2" />
-                {{ __('languages.manage_languages') }}
+                {{ __('profile.manage_languages') }}
             </h5>
             <button class="btn btn-primary btn-sm" wire:click="showAddForm">
                 <i class="ph ph-plus me-1"></i>
-                {{ __('languages.add_language') }}
+                {{ __('profile.add_language') }}
             </button>
         </div>
         
@@ -31,20 +31,20 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="mb-0">
-                        {{ $editingLanguage ? __('languages.edit_language') : __('languages.add_language') }}
+                        {{ $editingLanguage ? __('profile.edit_language') : __('profile.add_language') }}
                     </h6>
                 </div>
                 <div class="card-body">
                     <form wire:submit.prevent="save">
                         <div class="row">
                             <div class="col-12 mb-3">
-                                <label for="searchLanguage" class="form-label">{{ __('languages.language_name') }}</label>
+                                <label for="searchLanguage" class="form-label">{{ __('profile.language_name') }}</label>
                                 <div class="position-relative">
                                     <input type="text" 
                                            class="form-control @error('language_name') is-invalid @enderror" 
                                            id="searchLanguage" 
                                            wire:model.live="searchLanguage"
-                                           placeholder="Cerca una lingua..." 
+                                           placeholder="{{ __('profile.search_language') }}" 
                                            autocomplete="off">
                                     
                                     @if($showLanguageDropdown && count($this->filteredLanguages) > 0)
@@ -78,12 +78,12 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="type" class="form-label">{{ __('languages.type') }}</label>
+                                <label for="type" class="form-label">{{ __('profile.type') }}</label>
                                 <select class="form-select @error('type') is-invalid @enderror" 
                                         id="type" wire:model.live="type" required>
-                                    <option value="native">{{ __('languages.native') }}</option>
-                                    <option value="spoken">{{ __('languages.spoken') }}</option>
-                                    <option value="written">{{ __('languages.written') }}</option>
+                                    <option value="native">{{ __('profile.native') }}</option>
+                                    <option value="spoken">{{ __('profile.spoken') }}</option>
+                                    <option value="written">{{ __('profile.written') }}</option>
                                 </select>
                                 @error('type') 
                                     <div class="invalid-feedback">{{ $message }}</div> 
@@ -92,20 +92,20 @@
                                 @if($type === 'native')
                                 <div class="alert alert-info mt-2 mb-0">
                                     <i class="ph ph-info me-2"></i>
-                                    Per le lingue native non è necessario specificare il livello.
+                                    {{ __('profile.native_level_info') }}
                                 </div>
                                 @endif
                             </div>
                             
                             @if($type !== 'native')
                             <div class="col-md-6 mb-3">
-                                <label for="level" class="form-label">{{ __('languages.level') }}</label>
+                                <label for="level" class="form-label">{{ __('profile.level') }}</label>
                                 <select class="form-select @error('level') is-invalid @enderror" 
                                         id="level" wire:model="level" required>
-                                    <option value="">{{ __('languages.select_level') }}</option>
-                                    <option value="excellent">{{ __('languages.excellent') }}</option>
-                                    <option value="good">{{ __('languages.good') }}</option>
-                                    <option value="poor">{{ __('languages.poor') }}</option>
+                                    <option value="">{{ __('profile.select_level') }}</option>
+                                    <option value="excellent">{{ __('profile.excellent') }}</option>
+                                    <option value="good">{{ __('profile.good') }}</option>
+                                    <option value="poor">{{ __('profile.poor') }}</option>
                                 </select>
                                 @error('level') 
                                     <div class="invalid-feedback">{{ $message }}</div> 
@@ -120,10 +120,10 @@
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">
-                                {{ $editingLanguage ? __('common.update') : __('common.add') }}
+                                <i class="ph ph-check me-1"></i> {{ $editingLanguage ? __('profile.update') : __('profile.add') }}
                             </button>
                             <button type="button" class="btn btn-secondary" wire:click="resetForm">
-                                {{ __('common.cancel') }}
+                                {{ __('profile.cancel') }}
                             </button>
                         </div>
                     </form>
@@ -137,10 +137,10 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>{{ __('languages.language') }}</th>
-                            <th>{{ __('languages.type') }}</th>
-                            <th>{{ __('languages.level') }}</th>
-                            <th class="text-end">{{ __('common.actions') }}</th>
+                            <th>{{ __('profile.language') }}</th>
+                            <th>{{ __('profile.type') }}</th>
+                            <th>{{ __('profile.level') }}</th>
+                            <th class="text-end">{{ __('profile.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,7 +170,7 @@
                                         <i class="ph ph-pencil"></i>
                                     </button>
                                     <button class="btn btn-outline-danger" 
-                                            onclick="confirm('{{ __('languages.confirm_delete') }}') && @this.deleteLanguage({{ $language->id }})">
+                                            onclick="confirm('{{ __('profile.confirm_delete') }}') && @this.deleteLanguage({{ $language->id }})">
                                         <i class="ph ph-trash"></i>
                                     </button>
                                 </div>
@@ -183,11 +183,11 @@
             @else
             <div class="text-center py-4">
                 <i class="ph ph-globe f-s-48 text-muted mb-3"></i>
-                <h6 class="text-muted">{{ __('languages.no_languages') }}</h6>
-                <p class="text-muted">{{ __('languages.add_first_language') }}</p>
+                <h6 class="text-muted">{{ __('profile.no_languages') }}</h6>
+                <p class="text-muted">{{ __('profile.add_first_language') }}</p>
                 <button class="btn btn-primary" wire:click="showAddForm">
                     <i class="ph ph-plus me-1"></i>
-                    {{ __('languages.add_language') }}
+                    {{ __('profile.add_language') }}
                 </button>
             </div>
             @endif

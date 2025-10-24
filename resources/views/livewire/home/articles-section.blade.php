@@ -3,17 +3,17 @@
         <h5 class="card-title mb-0">
             <a href="{{ route('articles.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                 <i class="ph-duotone ph-newspaper f-s-16 me-2"></i>
-                Articoli
+                {{ __('home.articles_section.title') }}
             </a>
         </h5>
         <div class="d-flex align-items-center">
-            <span class="text-dark f-s-12 me-2 f-w-600">Nuovi</span>
+            <span class="text-dark f-s-12 me-2 f-w-600">{{ __('home.articles_section.new') }}</span>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" 
                        wire:click="toggleContent('{{ $contentType === 'new' ? 'popular' : 'new' }}')"
                        {{ $contentType === 'popular' ? 'checked' : '' }}>
             </div>
-            <span class="text-dark f-s-12 ms-2 f-w-600">Popolari</span>
+                <span class="text-dark f-s-12 ms-2 f-w-600">{{ __('home.articles_section.popular') }}</span>
         </div>
     </div>
     <div class="card-body">
@@ -54,7 +54,7 @@
                                                 </small>
                                                 <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-sm btn-outline-primary">
                                                     <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                    Leggi
+                                                    {{ __('home.articles_section.read') }}
                                                 </a>
                                             </div>
                                         </div>
@@ -68,7 +68,7 @@
         @else
             <div class="text-center py-4">
                 <i class="ph-duotone ph-newspaper f-s-48 text-muted mb-3"></i>
-                <p class="text-muted">Nessun articolo disponibile</p>
+                <p class="text-muted">{{ __('home.articles_section.no_articles_available') }}</p>
             </div>
         @endif
     </div>

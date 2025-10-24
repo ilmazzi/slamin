@@ -362,7 +362,7 @@
         Livewire.on('swal:success', (data) => {
             Swal.fire({
                 icon: 'success',
-                title: data[0].title || '{{ __('common.success') }}',
+                title: data[0].title || '{{ __('events.scoring.success') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-primary',
                 timer: 3000
@@ -372,7 +372,7 @@
         Livewire.on('swal:warning', (data) => {
             Swal.fire({
                 icon: 'warning',
-                title: data[0].title || '{{ __('common.warning') }}',
+                title: data[0].title || '{{ __('events.scoring.warning') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-warning'
             });

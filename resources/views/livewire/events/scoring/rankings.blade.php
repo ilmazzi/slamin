@@ -315,7 +315,7 @@
                             <li class="mb-2"><i class="ph ph-lock text-info me-2"></i> {{ __('events.scoring.close_event') }}</li>
                             <li class="mb-2"><i class="ph ph-eye text-primary me-2"></i> {{ __('events.scoring.publish_results') }}</li>
                         </ul>
-                        <p class="text-danger mb-0"><strong>{{ __('common.warning') }}:</strong> {{ __('events.scoring.you_will_not_be_able_to_modify_scores') }}</p>
+                        <p class="text-danger mb-0"><strong>{{ __('events.scoring.warning') }}:</strong> {{ __('events.scoring.you_will_not_be_able_to_modify_scores') }}</p>
                     </div>
                 `,
                 icon: 'warning',
@@ -335,7 +335,7 @@
         Livewire.on('swal:success', (data) => {
             Swal.fire({
                 icon: 'success',
-                title: data[0].title || '{{ __('common.success') }}',
+                title: data[0].title || '{{ __('events.scoring.success') }}',
                 text: data[0].text || '',
                 confirmButtonClass: 'btn btn-primary',
                 timer: 3000

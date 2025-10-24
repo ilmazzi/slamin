@@ -7,7 +7,7 @@
                     <h5 class="mb-0">
                         <a href="{{ route('videos.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                             <i class="ph-duotone ph-video f-s-16 me-2"></i>
-                            Video recenti
+                            {{ __('home.videos_section.title') }}
                         </a>
                     </h5>
                     @if ($videos->chunk(2)->count() > 1)
@@ -65,7 +65,7 @@
                                                             </small>
                                                             <a href="{{ route('videos.show', $video->id) }}" class="btn btn-sm btn-outline-primary">
                                                                 <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                                Guarda
+                                                                {{ __('home.videos_section.watch') }}
                                                             </a>
                                                         </div>
                                                         <!-- Social Actions -->

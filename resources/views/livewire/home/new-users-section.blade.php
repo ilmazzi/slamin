@@ -5,7 +5,7 @@
             <h5 class="mb-3">
                 <a href="{{ route('groups.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                     <i class="ph-duotone ph-user-plus f-s-16 me-2"></i>
-                    Nuovi utenti
+                    {{ __('home.new_users.title') }}
                 </a>
             </h5>
             <div class="row">
@@ -58,22 +58,22 @@
                                     <div class="d-flex justify-content-between mb-3">
                                         <div class="text-center">
                                             <h4 class="text-primary f-s-14 f-w-600 mb-0">{{ $user->poems_count }}</h4>
-                                            <p class="text-secondary f-s-9 mb-0">Poesie</p>
+                                            <p class="text-secondary f-s-9 mb-0">{{ __('home.new_users.poems') }}</p>
                                         </div>
                                         <div class="text-center">
                                             <h4 class="text-primary f-s-14 f-w-600 mb-0">{{ $user->articles_count }}</h4>
-                                            <p class="text-secondary f-s-9 mb-0">Articoli</p>
+                                            <p class="text-secondary f-s-9 mb-0">{{ __('home.new_users.articles') }}</p>
                                         </div>
                                         <div class="text-center">
                                             <h4 class="text-primary f-s-14 f-w-600 mb-0">{{ $user->likes_count + $user->comments_count + $user->views_count }}</h4>
-                                            <p class="text-secondary f-s-9 mb-0">Interazioni</p>
+                                            <p class="text-secondary f-s-9 mb-0">{{ __('home.new_users.interactions') }}</p>
                                         </div>
                                     </div>
                                     
                                     <!-- Button -->
                                     <button class="btn btn-primary b-r-22 w-100 f-s-12" wire:click="followUser({{ $user->id }})">
                                         <i class="ph-duotone ph-user-plus f-s-10 me-1"></i>
-                                        Segui
+                                        {{ __('home.new_users.follow_button') }}
                                     </button>
                                 </div>
                             </div>

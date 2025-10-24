@@ -6,9 +6,9 @@
             <div class="card mb-3">
                 <div class="card-body text-center">
                         <h2 class="mb-2">
-                            <i class="ph ph-pencil-simple me-2"></i>{{ __('events_general.edit_event') }}
+                            <i class="ph ph-pencil-simple me-2"></i>{{ __('events.edit_event') }}
                         </h2>
-                    <p class="text-secondary mb-0">{{ __('events_general.edit_event_help') }}</p>
+                    <p class="text-secondary mb-0">{{ __('events.edit_event_help') }}</p>
                 </div>
                     </div>
 
@@ -21,7 +21,7 @@
                             <div class="text-center cursor-pointer" wire:click="goToStep({{ $i }})">
                                 <i class="ph ph-{{ $i == 1 ? 'info' : ($i == 2 ? 'calendar-check' : ($i == 3 ? 'gear' : ($i == 4 ? 'users' : 'eye'))) }} {{ $i <= $currentStep ? 'text-primary' : 'text-secondary' }} f-s-40 mb-2"></i>
                                 <div class="f-w-600 {{ $i <= $currentStep ? 'text-primary' : 'text-secondary' }}">
-                                            {{ __('events_general.step') }} {{ $i }}
+                                            {{ __('events.step') }} {{ $i }}
                                         </div>
                                     </div>
                                     @if($i < $totalSteps)
@@ -32,7 +32,7 @@
 
                             <!-- Mobile Progress -->
                             <div class="d-lg-none text-center">
-                                <h6 class="mb-2">{{ __('events_general.step') }} {{ $currentStep }} {{ __('events_general.step_of') }} {{ $totalSteps }}</h6>
+                                <h6 class="mb-2">{{ __('events.step') }} {{ $currentStep }} {{ __('events.step_of') }} {{ $totalSteps }}</h6>
                                 <div class="progress">
                             <div class="progress-bar bg-primary"
                                  role="progressbar"
@@ -51,24 +51,24 @@
                 <div class="card" style="display: {{ $currentStep == 1 ? 'block' : 'none' }}">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-info me-2"></i>{{ __('events_general.step_basic_info') }}
+                            <i class="ph ph-info me-2"></i>{{ __('events.step_basic_info') }}
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="app-form">
                             <!-- Title -->
                             <div class="mb-3">
-                                <label class="form-label">{{ __('events_general.title_event') }} *</label>
+                                <label class="form-label">{{ __('events.title_event') }} *</label>
                                 <input type="text"
                                        wire:model.live="title"
                                        class="form-control @error('title') is-invalid @enderror"
-                                       placeholder="{{ __('events_general.title_placeholder') }}"
+                                       placeholder="{{ __('events.title_placeholder') }}"
                                        required>
                                 @error('title')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                                 @if(strlen($title) > 0)
-                                    <small class="text-secondary">{{ strlen($title) }}/255 {{ __('events_general.characters') }}</small>
+                                    <small class="text-secondary">{{ strlen($title) }}/255 {{ __('events.characters') }}</small>
                                 @endif
                             </div>
 
@@ -82,23 +82,23 @@
                                            {{ $has_subtitle ? 'checked' : '' }}>
                                     <label class="form-check-label" for="subtitle-toggle">
                                         <i class="ph ph-{{ $has_subtitle ? 'check-circle' : 'plus-circle' }} me-1"></i>
-                                        {{ $has_subtitle ? __('events_general.subtitle_active') : __('events_general.add_subtitle') }}
+                                        {{ $has_subtitle ? __('events.subtitle_active') : __('events.add_subtitle') }}
                                     </label>
                                 </div>
 
                                 @if($has_subtitle)
                                     <div class="mt-3">
-                                        <label class="form-label">{{ __('events_general.subtitle') }} *</label>
+                                        <label class="form-label">{{ __('events.subtitle') }} *</label>
                                         <input type="text"
                                                wire:model.live="subtitle"
                                                class="form-control @error('subtitle') is-invalid @enderror"
-                                               placeholder="{{ __('events_general.subtitle_placeholder') }}"
+                                               placeholder="{{ __('events.subtitle_placeholder') }}"
                                                required>
                                         @error('subtitle')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                         @if(strlen($subtitle) > 0)
-                                            <small class="text-secondary">{{ strlen($subtitle) }}/255 {{ __('events_general.characters') }}</small>
+                                            <small class="text-secondary">{{ strlen($subtitle) }}/255 {{ __('events.characters') }}</small>
                                         @endif
                                     </div>
                                 @endif
@@ -106,10 +106,10 @@
 
                             <!-- Description -->
                             <div class="mb-3">
-                                <label class="form-label">{{ __('events_general.description') }}</label>
+                                <label class="form-label">{{ __('events.description') }}</label>
                                 <textarea wire:model.live="description"
                                           class="form-control @error('description') is-invalid @enderror"
-                                          placeholder="{{ __('events_general.description_placeholder') }}"
+                                          placeholder="{{ __('events.description_placeholder') }}"
                                           rows="5"></textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -118,26 +118,26 @@
 
                             <!-- Requirements -->
                             <div class="mb-3">
-                                <label class="form-label">{{ __('events_general.requirements') }}</label>
+                                <label class="form-label">{{ __('events.requirements') }}</label>
                                 <textarea wire:model.live="requirements"
                                           class="form-control @error('requirements') is-invalid @enderror"
-                                          placeholder="{{ __('events_general.requirements_placeholder') }}"
+                                          placeholder="{{ __('events.requirements_placeholder') }}"
                                           rows="3"></textarea>
                                 @error('requirements')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="text-secondary">{{ __('events_general.requirements_help') }}</small>
+                                <small class="text-secondary">{{ __('events.requirements_help') }}</small>
                             </div>
 
                             <!-- Category & Public/Private -->
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                <label class="form-label">{{ __('events_general.category') }} *</label>
+                                <label class="form-label">{{ __('events.category') }} *</label>
                                 <select wire:model.live="category"
                                         class="form-select @error('category') is-invalid @enderror"
                                         required>
-                                    <option value="">{{ __('events_general.select_category') }}</option>
+                                    <option value="">{{ __('events.select_category') }}</option>
                                     @foreach($categories as $key => $categoryName)
                                         <option value="{{ $key }}">{{ $categoryName }}</option>
                                     @endforeach
@@ -150,7 +150,7 @@
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                <label class="form-label">{{ __('events_general.event_type') }} *</label>
+                                <label class="form-label">{{ __('events.event_type') }} *</label>
                                 <div class="d-flex gap-3">
                                     <div class="form-check">
                                         <input class="form-check-input"
@@ -160,7 +160,7 @@
                                                id="public"
                                                checked>
                                         <label class="form-check-label" for="public">
-                                            <i class="ph ph-globe me-1"></i>{{ __('events_general.public') }}
+                                            <i class="ph ph-globe me-1"></i>{{ __('events.public') }}
                                         </label>
                                     </div>
                                     <div class="form-check">
@@ -170,15 +170,15 @@
                                                value="0"
                                                id="private">
                                         <label class="form-check-label" for="private">
-                                            <i class="ph ph-lock me-1"></i>{{ __('events_general.private') }}
+                                            <i class="ph ph-lock me-1"></i>{{ __('events.private') }}
                                         </label>
                                     </div>
                                 </div>
                                         <small class="text-secondary d-block mt-2">
                                     @if($is_public)
-                                        <i class="ph ph-info text-info me-1"></i>{{ __('events_general.public_event_help') }}
+                                        <i class="ph ph-info text-info me-1"></i>{{ __('events.public_event_help') }}
                                     @else
-                                        <i class="ph ph-info text-warning me-1"></i>{{ __('events_general.private_event_help') }}
+                                        <i class="ph ph-info text-warning me-1"></i>{{ __('events.private_event_help') }}
                                     @endif
                                         </small>
                                 </div>
@@ -194,7 +194,7 @@
                 <div class="card" style="display: {{ $currentStep == 2 ? 'block' : 'none' }}">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-calendar-check me-2"></i>{{ __('events_general.step_date_location') }}
+                            <i class="ph ph-calendar-check me-2"></i>{{ __('events.step_date_location') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -202,18 +202,18 @@
                             <!-- DATE & TIME SECTION -->
                             <div class="mb-4">
                                 <h6 class="text-primary mb-3">
-                                    <i class="ph ph-calendar me-2"></i>{{ __('events_general.date_and_time') }}
+                                    <i class="ph ph-calendar me-2"></i>{{ __('events.date_and_time') }}
                                 </h6>
 
                                 <div class="row">
                                     <!-- Start DateTime -->
                                     <div class="col-md-6">
                                         <div class="mb-3" wire:ignore>
-                                            <label class="form-label">{{ __('events_general.start_datetime') }} *</label>
+                                            <label class="form-label">{{ __('events.start_datetime') }} *</label>
                                             <input type="text"
                                                    id="start_datetime"
                                                    class="form-control @error('start_datetime') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.start_datetime_placeholder') }}"
+                                                   placeholder="{{ __('events.start_datetime_placeholder') }}"
                                                    {{ !$is_availability_based ? 'required' : '' }}
                                                    readonly>
                                         </div>
@@ -225,11 +225,11 @@
                                     <!-- End DateTime -->
                                     <div class="col-md-6">
                                         <div class="mb-3" wire:ignore>
-                                            <label class="form-label">{{ __('events_general.end_datetime') }} *</label>
+                                            <label class="form-label">{{ __('events.end_datetime') }} *</label>
                                             <input type="text"
                                                    id="end_datetime"
                                                    class="form-control @error('end_datetime') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.end_datetime_placeholder') }}"
+                                                   placeholder="{{ __('events.end_datetime_placeholder') }}"
                                                    {{ !$is_availability_based ? 'required' : '' }}
                                                    readonly>
                                         </div>
@@ -248,31 +248,31 @@
                                                            class="form-check-input"
                                                            id="is_availability_based">
                                                     <label class="form-check-label f-w-600" for="is_availability_based">
-                                                        <i class="ph ph-users-three me-1"></i>{{ __('events_general.availability_based_event') }}
+                                                        <i class="ph ph-users-three me-1"></i>{{ __('events.availability_based_event') }}
                                                     </label>
                                                 </div>
                                                 <small class="text-secondary">
-                                                    {{ __('events_general.availability_based_help') }}
+                                                    {{ __('events.availability_based_help') }}
                                                 </small>
 
                                                 @if($is_availability_based)
                                                     <div class="row mt-3">
                                                         <div class="col-md-6">
                                                             <div class="mb-2" wire:ignore>
-                                                                <label class="form-label">{{ __('events_general.availability_deadline') }}</label>
+                                                                <label class="form-label">{{ __('events.availability_deadline') }}</label>
                                                                 <input type="text"
                                                                        id="availability_deadline"
                                                                        class="form-control"
-                                                                       placeholder="{{ __('events_general.availability_deadline_placeholder') }}"
+                                                                       placeholder="{{ __('events.availability_deadline_placeholder') }}"
                                                                        readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
-                                                            <label class="form-label">{{ __('events_general.availability_instructions') }}</label>
+                                                            <label class="form-label">{{ __('events.availability_instructions') }}</label>
                                                             <textarea wire:model.live="availability_instructions"
                                                                       class="form-control"
                                                                       rows="2"
-                                                                      placeholder="{{ __('events_general.availability_instructions_placeholder') }}"></textarea>
+                                                                      placeholder="{{ __('events.availability_instructions_placeholder') }}"></textarea>
                                                         </div>
                                                     </div>
 
@@ -282,12 +282,12 @@
                                                          x-init="init()">
                                                                 <div class="card-header">
                                                                     <h6 class="mb-0">
-                                                                        <i class="ph ph-calendar-plus me-2"></i>{{ __('events_general.availability_multiple_dates') }}
+                                                                        <i class="ph ph-calendar-plus me-2"></i>{{ __('events.availability_multiple_dates') }}
                                                                     </h6>
                                                                 </div>
                                                                 <div class="card-body">
                                                             <p class="text-secondary mb-3">
-                                                                        {{ __('events_general.availability_multiple_dates_help') }}
+                                                                        {{ __('events.availability_multiple_dates_help') }}
                                                                     </p>
 
                                                             <template x-for="(option, index) in options" :key="index">
@@ -295,27 +295,27 @@
                                                                     <div class="card-body">
                                                                         <div class="row align-items-end">
                                                                             <div class="col-md-5 mb-2">
-                                                                                <label class="form-label">{{ __('events_general.availability_option_datetime') }} *</label>
+                                                                                <label class="form-label">{{ __('events.availability_option_datetime') }} *</label>
                                                                                 <input type="text"
                                                                                        :id="'availability_option_' + index"
                                                                                        x-model="options[index].datetime"
                                                                                        class="form-control availability-picker"
-                                                                                       placeholder="{{ __('events_general.availability_option_datetime') }}"
+                                                                                       placeholder="{{ __('events.availability_option_datetime') }}"
                                                                                        required
                                                                                        readonly>
                                                                     </div>
                                                                             <div class="col-md-6 mb-2">
-                                                                                <label class="form-label">{{ __('events_general.availability_option_description') }}</label>
+                                                                                <label class="form-label">{{ __('events.availability_option_description') }}</label>
                                                                                 <input type="text"
                                                                                        x-model="options[index].description"
                                                                                        class="form-control"
-                                                                                       placeholder="{{ __('events_general.availability_option_description') }}">
+                                                                                       placeholder="{{ __('events.availability_option_description') }}">
                                                                             </div>
                                                                             <div class="col-md-1 mb-2">
                                                                                 <button type="button" 
                                                                                         @click="removeOption(index)"
                                                                                         class="btn btn-danger"
-                                                                                        title="{{ __('events_general.remove_availability_option') }}">
+                                                                                        title="{{ __('events.remove_availability_option') }}">
                                                                                     <i class="ph ph-trash"></i>
                                                                                 </button>
                                                                             </div>
@@ -328,13 +328,13 @@
                                                                 <button type="button" 
                                                                         @click="addOption()"
                                                                         class="btn btn-primary">
-                                                                            <i class="ph ph-plus me-2"></i>{{ __('events_general.add_availability_option') }}
+                                                                            <i class="ph ph-plus me-2"></i>{{ __('events.add_availability_option') }}
                                                                         </button>
                                                                     </div>
 
                                                                     <div class="alert alert-info mt-3">
                                                                         <i class="ph ph-info me-2"></i>
-                                                                        <strong>{{ __('events_general.availability_multiple_dates_notice') }}</strong>
+                                                                        <strong>{{ __('events.availability_multiple_dates_notice') }}</strong>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -348,7 +348,7 @@
                             <!-- LOCATION SECTION -->
                             <div class="mb-4">
                                 <h6 class="text-primary mb-3">
-                                    <i class="ph ph-map-pin me-2"></i>{{ __('events_general.location') }}
+                                    <i class="ph ph-map-pin me-2"></i>{{ __('events.location') }}
                                 </h6>
 
                                 <!-- Online/In Person Toggle -->
@@ -357,12 +357,12 @@
                                         <button type="button"
                                                 wire:click="$set('is_online', false)"
                                                 class="btn btn-{{ !$is_online ? 'primary' : 'secondary' }} flex-fill">
-                                                <i class="ph ph-map-pin me-2"></i>{{ __('events_general.in_person') }}
+                                                <i class="ph ph-map-pin me-2"></i>{{ __('events.in_person') }}
                                         </button>
                                         <button type="button"
                                                 wire:click="$set('is_online', true)"
                                                 class="btn btn-{{ $is_online ? 'primary' : 'secondary' }} flex-fill">
-                                                <i class="ph ph-globe me-2"></i>{{ __('events_general.online') }}
+                                                <i class="ph ph-globe me-2"></i>{{ __('events.online') }}
                                         </button>
                                     </div>
                                 </div>
@@ -371,7 +371,7 @@
                                 <div class="row" style="display: {{ $is_online ? 'flex' : 'none' }}">
                                     <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.online_url') }} *</label>
+                                            <label class="form-label">{{ __('events.online_url') }} *</label>
                                             <input type="url"
                                                    wire:model.live="online_url"
                                                    class="form-control @error('online_url') is-invalid @enderror"
@@ -381,14 +381,14 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                             <small class="text-secondary">
-                                                <i class="ph ph-info me-1"></i>{{ __('events_general.online_url_help') }}
+                                                <i class="ph ph-info me-1"></i>{{ __('events.online_url_help') }}
                                             </small>
                                             </div>
                                         </div>
 
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.timezone') }} *</label>
+                                            <label class="form-label">{{ __('events.timezone') }} *</label>
                                             <select wire:model.live="timezone"
                                                     class="form-select @error('timezone') is-invalid @enderror"
                                                     {{ $is_online ? 'required' : '' }}>
@@ -415,21 +415,21 @@
                                         <div class="col-12">
                                             <div class="mb-3">
                                                 <label class="form-label">
-                                                    <i class="ph ph-trend-up me-2"></i>{{ __('events_general.recent_venues') }}
+                                                    <i class="ph ph-trend-up me-2"></i>{{ __('events.recent_venues') }}
                                                 </label>
                                                 <select wire:model.live="selectedRecentVenue" 
                                                         class="form-select"
                                                         wire:change="loadRecentVenueFromSelect">
-                                                    <option value="">{{ __('events_general.select_recent_venue') }}</option>
+                                                    <option value="">{{ __('events.select_recent_venue') }}</option>
                                                     @foreach($recentVenues as $index => $venue)
                                                         <option value="{{ $index }}">
                                                             {{ $venue['venue_name'] }} - {{ $venue['venue_address'] }}, {{ $venue['city'] }}
-                                                            ({{ $venue['total_usage'] }} {{ __('events_general.times') }}, {{ $venue['unique_users'] }} {{ __('events_general.users') }})
+                                                            ({{ $venue['total_usage'] }} {{ __('events.times') }}, {{ $venue['unique_users'] }} {{ __('events.users') }})
                                                         </option>
                                                     @endforeach
                                                 </select>
                                                 <small class="text-secondary">
-                                                    <i class="ph ph-info me-1"></i>{{ __('events_general.recent_venues_help') }}
+                                                    <i class="ph ph-info me-1"></i>{{ __('events.recent_venues_help') }}
                                                 </small>
                                             </div>
                                         </div>
@@ -437,11 +437,11 @@
 
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.venue_name') }}</label>
+                                            <label class="form-label">{{ __('events.venue_name') }}</label>
                                             <input type="text"
                                                    wire:model.live="venue_name"
                                                    class="form-control @error('venue_name') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.venue_name_placeholder') }}">
+                                                   placeholder="{{ __('events.venue_name_placeholder') }}">
                                             @error('venue_name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -450,13 +450,13 @@
 
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.city') }}</label>
+                                            <label class="form-label">{{ __('events.city') }}</label>
                                             <input type="text"
                                                    id="city-input"
                                                    name="city"
                                                    value="{{ $city }}"
                                                    class="form-control @error('city') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.city_placeholder') }}">
+                                                   placeholder="{{ __('events.city_placeholder') }}">
                                             @error('city')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -465,12 +465,12 @@
 
                                         <div class="col-12">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.venue_address') }}</label>
+                                            <label class="form-label">{{ __('events.venue_address') }}</label>
                                             <textarea id="venue-address-input"
                                                       name="venue_address"
                                                       class="form-control @error('venue_address') is-invalid @enderror"
                                                       rows="2"
-                                                      placeholder="{{ __('events_general.venue_address_placeholder') }}">{{ $venue_address }}</textarea>
+                                                      placeholder="{{ __('events.venue_address_placeholder') }}">{{ $venue_address }}</textarea>
                                             @error('venue_address')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -479,19 +479,19 @@
 
                                         <div class="col-md-4">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.postcode') }}</label>
+                                            <label class="form-label">{{ __('events.postcode') }}</label>
                                             <input type="text"
                                                    id="postcode-input"
                                                    name="postcode"
                                                    value="{{ $postcode }}"
                                                    class="form-control"
-                                                   placeholder="{{ __('events_general.postcode_placeholder') }}">
+                                                   placeholder="{{ __('events.postcode_placeholder') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-md-8">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.country') }}</label>
+                                            <label class="form-label">{{ __('events.country') }}</label>
                                             <select id="country-select" name="country" class="form-select">
                                                 <option value="IT" {{ $country == 'IT' ? 'selected' : '' }}>Italia</option>
                                                 <option value="FR" {{ $country == 'FR' ? 'selected' : '' }}>France</option>
@@ -505,9 +505,9 @@
 
                                         <div class="col-12">
                                             <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.map_location') }}</label>
+                                            <label class="form-label">{{ __('events.map_location') }}</label>
                                                 @livewire('event-map', ['latitude' => $latitude, 'longitude' => $longitude])
-                                                <small class="text-secondary d-block mt-2">{{ __('events_general.map_auto_positioning_help') }}</small>
+                                                <small class="text-secondary d-block mt-2">{{ __('events.map_auto_positioning_help') }}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -516,7 +516,7 @@
                             <!-- RECURRENCE SECTION -->
                             <div>
                                 <h6 class="text-primary mb-3">
-                                    <i class="ph ph-arrow-clockwise me-2"></i>{{ __('events_general.recurrence') }}
+                                    <i class="ph ph-arrow-clockwise me-2"></i>{{ __('events.recurrence') }}
                                 </h6>
 
                                 <div class="form-check mb-3">
@@ -525,7 +525,7 @@
                                            class="form-check-input"
                                            id="is_recurring">
                                     <label class="form-check-label f-w-600" for="is_recurring">
-                                        {{ __('events_general.recurring_event') }}
+                                        {{ __('events.recurring_event') }}
                                     </label>
                                 </div>
 
@@ -535,15 +535,15 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="mb-3">
-                                                    <label class="form-label">{{ __('events_general.recurrence_type') }} *</label>
+                                                    <label class="form-label">{{ __('events.recurrence_type') }} *</label>
                                                     <select wire:model.live="recurrence_type"
                                                             class="form-select @error('recurrence_type') is-invalid @enderror"
                                                             required>
                                                         <option value="">{{ __('common.select') }}</option>
-                                                        <option value="daily">{{ __('events_general.daily') }}</option>
-                                                        <option value="weekly">{{ __('events_general.weekly') }}</option>
-                                                        <option value="monthly">{{ __('events_general.monthly') }}</option>
-                                                        <option value="yearly">{{ __('events_general.yearly') }}</option>
+                                                        <option value="daily">{{ __('events.daily') }}</option>
+                                                        <option value="weekly">{{ __('events.weekly') }}</option>
+                                                        <option value="monthly">{{ __('events.monthly') }}</option>
+                                                        <option value="yearly">{{ __('events.yearly') }}</option>
                                                     </select>
                                                     @error('recurrence_type')
                                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -553,34 +553,34 @@
 
                                                 <div class="col-md-4">
                                                     <div class="mb-3">
-                                                    <label class="form-label">{{ __('events_general.recurrence_interval') }}</label>
+                                                    <label class="form-label">{{ __('events.recurrence_interval') }}</label>
                                                     <input type="number"
                                                            wire:model.live="recurrence_interval"
                                                            class="form-control"
                                                            min="1"
                                                            value="1">
-                                                        <small class="text-secondary">{{ __('events_general.recurrence_interval_help') }}</small>
+                                                        <small class="text-secondary">{{ __('events.recurrence_interval_help') }}</small>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="mb-3">
-                                                    <label class="form-label">{{ __('events_general.recurrence_count') }}</label>
+                                                    <label class="form-label">{{ __('events.recurrence_count') }}</label>
                                                     <input type="number"
                                                            wire:model.live="recurrence_count"
                                                            class="form-control"
                                                            min="1"
                                                            max="100"
                                                            placeholder="10">
-                                                        <small class="text-secondary">{{ __('events_general.recurrence_count_help') }}</small>
+                                                        <small class="text-secondary">{{ __('events.recurrence_count_help') }}</small>
                                                     </div>
                                                 </div>
 
                                                 @if($recurrence_type == 'weekly')
                                                     <div class="col-12">
-                                                        <label class="form-label">{{ __('events_general.recurrence_weekdays') }} *</label>
+                                                        <label class="form-label">{{ __('events.recurrence_weekdays') }} *</label>
                                                         <div class="row g-2">
-                                                            @foreach(['1' => __('events_general.weekday_1'), '2' => __('events_general.weekday_2'), '3' => __('events_general.weekday_3'), '4' => __('events_general.weekday_4'), '5' => __('events_general.weekday_5'), '6' => __('events_general.weekday_6'), '7' => __('events_general.weekday_7')] as $day => $label)
+                                                            @foreach(['1' => __('events.weekday_1'), '2' => __('events.weekday_2'), '3' => __('events.weekday_3'), '4' => __('events.weekday_4'), '5' => __('events.weekday_5'), '6' => __('events.weekday_6'), '7' => __('events.weekday_7')] as $day => $label)
                                                                 <div class="col-md-3 col-sm-4 col-6">
                                                                     <div class="form-check">
                                                                         <input class="form-check-input"
@@ -606,14 +606,14 @@
                                                 @if($recurrence_type == 'monthly')
                                                     <div class="col-12">
                                                         <div class="mb-3">
-                                                        <label class="form-label">{{ __('events_general.recurrence_monthday') }}</label>
+                                                        <label class="form-label">{{ __('events.recurrence_monthday') }}</label>
                                                         <input type="number"
                                                                wire:model.live="recurrence_monthday"
                                                                class="form-control"
                                                                min="1"
                                                                max="31"
                                                                placeholder="1">
-                                                            <small class="text-secondary">{{ __('events_general.recurrence_monthday_help') }}</small>
+                                                            <small class="text-secondary">{{ __('events.recurrence_monthday_help') }}</small>
                                                         </div>
                                                     </div>
                                                 @endif
@@ -632,9 +632,9 @@
                 <div class="card" style="display: {{ $currentStep == 3 ? 'block' : 'none' }}">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-gear me-2"></i>{{ __('events_general.step_event_details') }}
+                            <i class="ph ph-gear me-2"></i>{{ __('events.step_event_details') }}
                         </h5>
-                        <p class="text-muted mb-0">{{ __('events_general.step_details_description') }}</p>
+                        <p class="text-muted mb-0">{{ __('events.step_details_description') }}</p>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -643,14 +643,14 @@
                                 <div class="card border-primary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-primary">
-                                            <i class="ph ph-image me-2"></i>{{ __('events_general.media_and_content') }}
+                                            <i class="ph ph-image me-2"></i>{{ __('events.media_and_content') }}
                                         </h6>
                         </div>
                                     <div class="card-body p-3">
                                         <!-- Event Image -->
                                         <div class="mb-3">
                                             <label class="form-label">
-                                                {{ __('events_general.event_image') }} ({{ __('common.optional') }})
+                                                {{ __('events.event_image') }} ({{ __('common.optional') }})
                                             </label>
                                             <input type="file"
                                                    wire:model="event_image"
@@ -667,7 +667,7 @@
                                                 </div>
                                             @elseif ($existing_image_url)
                                                 <div class="mt-2">
-                                                    <p class="text-muted small mb-1">{{ __('events_general.current_image') }}:</p>
+                                                    <p class="text-muted small mb-1">{{ __('events.current_image') }}:</p>
                                                     <img src="{{ $existing_image_url }}" 
                                                          class="img-thumbnail" 
                                                          style="max-height: 150px">
@@ -678,12 +678,12 @@
                                         <!-- Promotional Video -->
                                         <div class="mb-0">
                                             <label class="form-label">
-                                                {{ __('events_general.promotional_video') }} ({{ __('common.optional') }})
+                                                {{ __('events.promotional_video') }} ({{ __('common.optional') }})
                                             </label>
                                             <input type="url"
                                                    wire:model.live="promotional_video"
                                                    class="form-control @error('promotional_video') is-invalid @enderror"
-                                                   placeholder="{{ __('events_general.promotional_video_placeholder') }}">
+                                                   placeholder="{{ __('events.promotional_video_placeholder') }}">
                                             @error('promotional_video')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -697,7 +697,7 @@
                                 <div class="card border-success">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-success">
-                                            <i class="ph ph-currency-circle-dollar me-2"></i>{{ __('events_general.payment') }}
+                                            <i class="ph ph-currency-circle-dollar me-2"></i>{{ __('events.payment') }}
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -708,7 +708,7 @@
                                                    class="form-check-input"
                                                    id="is_paid_event">
                                             <label for="is_paid_event" class="form-check-label f-w-600">
-                                                {{ __('events_general.is_paid_event') }}
+                                                {{ __('events.is_paid_event') }}
                                             </label>
                                         </div>
 
@@ -716,13 +716,13 @@
                                         @if($is_paid_event)
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <label class="form-label">{{ __('events_general.ticket_price') }}</label>
+                                                    <label class="form-label">{{ __('events.ticket_price') }}</label>
                                                     <input type="number"
                                                            wire:model.live="ticket_price"
                                                            class="form-control @error('ticket_price') is-invalid @enderror"
                                                            min="0"
                                                            step="0.01"
-                                                           placeholder="{{ __('events_general.ticket_price_placeholder') }}">
+                                                           placeholder="{{ __('events.ticket_price_placeholder') }}">
                                                     @error('ticket_price')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -747,7 +747,7 @@
                                 <div class="card border-info">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-info">
-                                            <i class="ph ph-users me-2"></i>{{ __('events_general.associations') }}
+                                            <i class="ph ph-users me-2"></i>{{ __('events.associations') }}
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -758,14 +758,14 @@
                                                    class="form-check-input"
                                                    id="is_linked_to_group">
                                             <label for="is_linked_to_group" class="form-check-label f-w-600">
-                                                {{ __('events_general.is_linked_to_group') }}
+                                                {{ __('events.is_linked_to_group') }}
                                             </label>
                                         </div>
 
                                         @if($is_linked_to_group)
                                             <div>
                                                 <p class="text-secondary small mb-2">
-                                                    {{ __('events_general.groups_help') }}
+                                                    {{ __('events.groups_help') }}
                                                 </p>
                                                 
                                                 @php
@@ -774,7 +774,7 @@
                                                 
                                                 @if($groups->count() > 0)
                                                     <div class="mb-2">
-                                                        <label class="form-label">{{ __('events_general.select_groups') }}</label>
+                                                        <label class="form-label">{{ __('events.select_groups') }}</label>
                                                     </div>
                                                     @foreach($groups as $group)
                                                         <div class="form-check mb-2">
@@ -792,7 +792,7 @@
                                                         </div>
                                                     @endforeach
                                                 @else
-                                                    <p class="text-muted small">{{ __('events_general.no_groups_available') }}</p>
+                                                    <p class="text-muted small">{{ __('events.no_groups_available') }}</p>
                                                 @endif
                                             </div>
                                         @endif
@@ -805,7 +805,7 @@
                                 <div class="card border-warning">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-warning">
-                                            <i class="ph ph-trophy me-2"></i>{{ __('events_general.festival') }}
+                                            <i class="ph ph-trophy me-2"></i>{{ __('events.festival') }}
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -814,11 +814,11 @@
                                             <div class="alert alert-info alert-sm mb-3">
                                                 <small>
                                                     <i class="ph ph-info-circle me-1"></i>
-                                                    {{ __('events_general.festival_events_selection_help') }}
+                                                    {{ __('events.festival_events_selection_help') }}
                                                 </small>
                                             </div>
                                             <p class="text-secondary small">
-                                                {{ __('events_general.festival_events_management_later') }}
+                                                {{ __('events.festival_events_management_later') }}
                                             </p>
                                         @else
                                             <!-- Other categories: link to existing festival -->
@@ -828,7 +828,7 @@
                                                        class="form-check-input"
                                                        id="is_festival_event">
                                                 <label for="is_festival_event" class="form-check-label f-w-600">
-                                                    {{ __('events_general.is_festival_event') }}
+                                                    {{ __('events.is_festival_event') }}
                                                 </label>
                                             </div>
 
@@ -842,9 +842,9 @@
                                                 
                                                 @if($festivals->count() > 0)
                                                     <div>
-                                                        <label class="form-label">{{ __('events_general.select_festival') }}</label>
+                                                        <label class="form-label">{{ __('events.select_festival') }}</label>
                                                         <select wire:model.live="festival_id" class="form-select">
-                                                            <option value="">{{ __('events_general.select_festival') }}</option>
+                                                            <option value="">{{ __('events.select_festival') }}</option>
                                                             @foreach($festivals as $festival)
                                                                 <option value="{{ $festival->id }}">
                                                                     {{ $festival->title }} 
@@ -856,7 +856,7 @@
                                                         </select>
                                                     </div>
                                                 @else
-                                                    <p class="text-muted small">{{ __('events_general.no_festivals_available') }}</p>
+                                                    <p class="text-muted small">{{ __('events.no_festivals_available') }}</p>
                                                 @endif
                                             @endif
                                         @endif
@@ -873,7 +873,7 @@
                 <div class="card" style="display: {{ $currentStep == 4 ? 'block' : 'none' }}">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-users me-2"></i>{{ __('events_general.invites_and_gig') }}
+                            <i class="ph ph-users me-2"></i>{{ __('events.invites_and_gig') }}
                         </h5>
                     </div>
                     <div class="card-body">
@@ -883,18 +883,18 @@
                                 <div class="card border-primary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-primary">
-                                            <i class="ph ph-users-three me-2"></i>{{ __('events_general.participants') }}
+                                            <i class="ph ph-users-three me-2"></i>{{ __('events.participants') }}
                                         </h6>
                         </div>
                                     <div class="card-body p-3">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('events_general.max_participants') }}</label>
+                                            <label class="form-label">{{ __('events.max_participants') }}</label>
                                             <input type="number"
                                                    wire:model.live="max_participants"
                                                    class="form-control"
                                                    min="1"
-                                                   placeholder="{{ __('events_general.max_participants_placeholder') }}">
-                                            <small class="text-secondary">{{ __('events_general.max_participants_help') }}</small>
+                                                   placeholder="{{ __('events.max_participants_placeholder') }}">
+                                            <small class="text-secondary">{{ __('events.max_participants_help') }}</small>
                     </div>
 
                                         <div class="form-check">
@@ -903,11 +903,11 @@
                                                    class="form-check-input"
                                                    id="allow_requests">
                                             <label for="allow_requests" class="form-check-label f-w-600">
-                                                {{ __('events_general.allow_requests') }}
+                                                {{ __('events.allow_requests') }}
                                             </label>
                                         </div>
                                         <small class="text-secondary d-block mt-1">
-                                            {{ __('events_general.allow_requests_help') }}
+                                            {{ __('events.allow_requests_help') }}
                                         </small>
                                     </div>
                                 </div>
@@ -918,7 +918,7 @@
                                 <div class="card border-secondary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-secondary">
-                                            <i class="ph ph-globe me-2"></i>{{ __('events_general.event_status') }}
+                                            <i class="ph ph-globe me-2"></i>{{ __('events.event_status') }}
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -931,9 +931,9 @@
                                             <label for="status_published" class="form-check-label">
                                                 <div class="d-flex align-items-center mb-1">
                                                     <i class="ph ph-globe me-2 text-success"></i>
-                                                    <span class="f-w-600">{{ __('events_general.publish_immediately') }}</span>
+                                                    <span class="f-w-600">{{ __('events.publish_immediately') }}</span>
                                                 </div>
-                                                <small class="text-secondary">{{ __('events_general.publish_immediately_help') }}</small>
+                                                <small class="text-secondary">{{ __('events.publish_immediately_help') }}</small>
                                             </label>
                                         </div>
                                         <div class="form-check p-3 border rounded">
@@ -945,9 +945,9 @@
                                             <label for="status_draft" class="form-check-label">
                                                 <div class="d-flex align-items-center mb-1">
                                                     <i class="ph ph-note-pencil me-2 text-warning"></i>
-                                                    <span class="f-w-600">{{ __('events_general.save_as_draft') }}</span>
+                                                    <span class="f-w-600">{{ __('events.save_as_draft') }}</span>
                                                 </div>
-                                                <small class="text-secondary">{{ __('events_general.save_as_draft_help') }}</small>
+                                                <small class="text-secondary">{{ __('events.save_as_draft_help') }}</small>
                                             </label>
                                         </div>
                                     </div>
@@ -959,13 +959,13 @@
                                 <div class="card border-warning">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-warning">
-                                            <i class="ph ph-briefcase me-2"></i>{{ __('events_general.gig_positions') }}
+                                            <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_positions') }}
                                             <span class="badge bg-warning ms-2">{{ count($gig_positions) }}</span>
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
                                         <small class="text-secondary d-block mb-3">
-                                            <i class="ph ph-info me-1"></i>{{ __('events_general.gig_positions_help') }}
+                                            <i class="ph ph-info me-1"></i>{{ __('events.gig_positions_help') }}
                                         </small>
 
                                         <!-- Gig Positions List -->
@@ -976,7 +976,7 @@
                                                         <div class="card-header">
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <h6 class="mb-0">
-                                                                    <i class="ph ph-briefcase me-2"></i>{{ __('events_general.gig_position') }} #{{ $index + 1 }}
+                                                                    <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_position') }} #{{ $index + 1 }}
                                                                 </h6>
                                                                 <button type="button"
                                                                         wire:click="removeGigPosition({{ $index }})"
@@ -989,20 +989,20 @@
                                                             <div class="row">
                                                                 <!-- Tipologia -->
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label">{{ __('events_general.position_type') }} *</label>
+                                                                    <label class="form-label">{{ __('events.position_type') }} *</label>
                                                                     <select wire:model.live="gig_positions.{{ $index }}.type"
                                                                             class="form-select">
-                                                                        <option value="">{{ __('events_general.select_position_type') }}</option>
-                                                                        <option value="poeta">{{ __('events_general.artist_poet') }}</option>
-                                                                        <option value="mc">{{ __('events_general.mc_host') }}</option>
-                                                                        <option value="tecnico">{{ __('events_general.technical_support') }}</option>
-                                                                        <option value="volontario">{{ __('events_general.volunteer') }}</option>
+                                                                        <option value="">{{ __('events.select_position_type') }}</option>
+                                                                        <option value="poeta">{{ __('events.artist_poet') }}</option>
+                                                                        <option value="mc">{{ __('events.mc_host') }}</option>
+                                                                        <option value="tecnico">{{ __('events.technical_support') }}</option>
+                                                                        <option value="volontario">{{ __('events.volunteer') }}</option>
                                                                     </select>
                                                                 </div>
 
                                                                 <!-- Quantità -->
                                                                 <div class="col-md-3 mb-3">
-                                                                    <label class="form-label">{{ __('events_general.quantity') }} *</label>
+                                                                    <label class="form-label">{{ __('events.quantity') }} *</label>
                                                                     <input type="number"
                                                                            wire:model.live="gig_positions.{{ $index }}.quantity"
                                                                            class="form-control"
@@ -1012,10 +1012,10 @@
 
                                                                 <!-- Lingua -->
                                                                 <div class="col-md-3 mb-3">
-                                                                    <label class="form-label">{{ __('events_general.required_language') }}</label>
+                                                                    <label class="form-label">{{ __('events.required_language') }}</label>
                                                                     <select wire:model.live="gig_positions.{{ $index }}.language"
                                                                             class="form-select">
-                                                                        <option value="">{{ __('events_general.no_preference') }}</option>
+                                                                        <option value="">{{ __('events.no_preference') }}</option>
                                                                         <option value="italiano">{{ __('common.italian') }}</option>
                                                                         <option value="inglese">{{ __('common.english') }}</option>
                                                                         <option value="francese">{{ __('common.french') }}</option>
@@ -1033,14 +1033,14 @@
                                                                                class="form-check-input"
                                                                                id="cachet_{{ $index }}">
                                                                         <label for="cachet_{{ $index }}" class="form-check-label f-w-600">
-                                                                            {{ __('events_general.cachet') }}
+                                                                            {{ __('events.cachet') }}
                                                                         </label>
                                                                     </div>
                                                                     
                                                                     @if($position['has_cachet'])
                                                                         <div class="row">
                                                                             <div class="col-md-6">
-                                                                                <label class="form-label">{{ __('events_general.amount') }}</label>
+                                                                                <label class="form-label">{{ __('events.amount') }}</label>
                                                                                 <input type="number"
                                                                                        wire:model.live="gig_positions.{{ $index }}.cachet_amount"
                                                                                        class="form-control"
@@ -1070,14 +1070,14 @@
                                                                                class="form-check-input"
                                                                                id="travel_{{ $index }}">
                                                                         <label for="travel_{{ $index }}" class="form-check-label f-w-600">
-                                                                            {{ __('events_general.travel_expenses') }}
+                                                                            {{ __('events.travel_expenses') }}
                                                                         </label>
                                                                     </div>
                                                                     
                                                                     @if($position['has_travel'])
                                                                         <div class="row">
                                                                             <div class="col-md-6">
-                                                                                <label class="form-label">{{ __('events_general.max_coverage') }}</label>
+                                                                                <label class="form-label">{{ __('events.max_coverage') }}</label>
                                                                                 <input type="number"
                                                                                        wire:model.live="gig_positions.{{ $index }}.travel_max"
                                                                                        class="form-control"
@@ -1107,17 +1107,17 @@
                                                                                class="form-check-input"
                                                                                id="accommodation_{{ $index }}">
                                                                         <label for="accommodation_{{ $index }}" class="form-check-label f-w-600">
-                                                                            {{ __('events_general.accommodation') }}
+                                                                            {{ __('events.accommodation') }}
                                                                         </label>
                                                                     </div>
                                                                     
                                                                     @if($position['has_accommodation'])
                                                                         <div>
-                                                                            <label class="form-label">{{ __('events_general.accommodation_details') }}</label>
+                                                                            <label class="form-label">{{ __('events.accommodation_details') }}</label>
                                                                             <textarea wire:model.live="gig_positions.{{ $index }}.accommodation_details"
                                                                                       class="form-control"
                                                                                       rows="2"
-                                                                                      placeholder="{{ __('events_general.accommodation_details_placeholder') }}"></textarea>
+                                                                                      placeholder="{{ __('events.accommodation_details_placeholder') }}"></textarea>
                                                                         </div>
                                                                     @endif
                                                                 </div>
@@ -1133,7 +1133,7 @@
                                             <button type="button"
                                                     wire:click="addGigPosition"
                                                     class="btn btn-warning">
-                                                <i class="ph ph-plus me-2"></i>{{ __('events_general.add_gig_position') }}
+                                                <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
                                             </button>
                                         </div>
                                     </div>
@@ -1145,23 +1145,23 @@
                                 <div class="card border-success">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-success">
-                                            <i class="ph ph-envelope me-2"></i>{{ __('events_general.invitations') }} 
+                                            <i class="ph ph-envelope me-2"></i>{{ __('events.invitations') }} 
                                             <span class="badge bg-success ms-2">{{ count($invitations) }}</span>
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
                                         <small class="text-secondary d-block mb-3">
-                                            <i class="ph ph-info me-1"></i>{{ __('events_general.invitations_optional_help') }}
+                                            <i class="ph ph-info me-1"></i>{{ __('events.invitations_optional_help') }}
                                         </small>
 
                                         <!-- User Search -->
                                         <div class="mb-3">
-                                            <label class="form-label f-w-600">{{ __('events_general.search_users') }}</label>
+                                            <label class="form-label f-w-600">{{ __('events.search_users') }}</label>
                                             <div class="input-group">
                                                 <input type="text"
                                                        wire:model.live.debounce.300ms="userSearchQuery"
                                                        class="form-control"
-                                                       placeholder="{{ __('events_general.search_users_placeholder') }}">
+                                                       placeholder="{{ __('events.search_users_placeholder') }}">
                                                 <span class="input-group-text">
                                                     <i class="ph ph-magnifying-glass"></i>
                                                 </span>
@@ -1172,7 +1172,7 @@
                                         @if(strlen($userSearchQuery) >= 2 && count($searchResults) > 0)
                                             <div class="card mb-3">
                                                 <div class="card-body p-2">
-                                                    <small class="text-secondary f-w-600">{{ __('events_general.search_results') }}</small>
+                                                    <small class="text-secondary f-w-600">{{ __('events.search_results') }}</small>
                                                     <div class="list-group list-group-flush">
                                                         @foreach($searchResults as $result)
                                                             <div class="list-group-item list-group-item-action p-2">
@@ -1196,14 +1196,14 @@
                                             </div>
                                         @elseif(strlen($userSearchQuery) >= 2 && count($searchResults) === 0)
                                             <div class="alert alert-light mb-3">
-                                                <small><i class="ph ph-warning me-1"></i>{{ __('events_general.no_users_found') }}</small>
+                                                <small><i class="ph ph-warning me-1"></i>{{ __('events.no_users_found') }}</small>
                 </div>
                 @endif
 
                                         <!-- Invited Users List -->
                                         @if(count($invitations) > 0)
                                             <div class="mb-2">
-                                                <label class="form-label f-w-600">{{ __('events_general.invited_users') }}</label>
+                                                <label class="form-label f-w-600">{{ __('events.invited_users') }}</label>
                                             </div>
                                             <div class="row g-2">
                                                 @foreach($invitations as $index => $invitation)
@@ -1217,10 +1217,10 @@
                                                                     <div class="col-md-5">
                                                                         <select wire:model.live="invitations.{{ $index }}.role"
                                                                                 class="form-select form-select-sm">
-                                                                            <option value="performer">{{ __('events_general.performer') }}</option>
-                                                                            <option value="judge">{{ __('events_general.judge') }}</option>
-                                                                            <option value="technician">{{ __('events_general.technician') }}</option>
-                                                                            <option value="host">{{ __('events_general.host') }}</option>
+                                                                            <option value="performer">{{ __('events.performer') }}</option>
+                                                                            <option value="judge">{{ __('events.judge') }}</option>
+                                                                            <option value="technician">{{ __('events.technician') }}</option>
+                                                                            <option value="host">{{ __('events.host') }}</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-md-2 text-end">
@@ -1239,7 +1239,7 @@
                                         @else
                                             <div class="alert alert-light text-center">
                                                 <i class="ph ph-user-plus f-s-32 text-secondary mb-2"></i>
-                                                <p class="mb-0 text-secondary">{{ __('events_general.no_invitations_yet') }}</p>
+                                                <p class="mb-0 text-secondary">{{ __('events.no_invitations_yet') }}</p>
                                             </div>
                                         @endif
                                     </div>
@@ -1255,9 +1255,9 @@
                 <div class="card" style="display: {{ $currentStep == 5 ? 'block' : 'none' }}">
                     <div class="card-header">
                         <h5 class="mb-0">
-                            <i class="ph ph-eye me-2"></i>{{ __('events_general.event_preview') }}
+                            <i class="ph ph-eye me-2"></i>{{ __('events.event_preview') }}
                         </h5>
-                        <p class="text-muted mb-0 mt-2">{{ __('events_general.preview_description') }}</p>
+                        <p class="text-muted mb-0 mt-2">{{ __('events.preview_description') }}</p>
                     </div>
                     <div class="card-body">
                         <!-- Success Alert -->
@@ -1265,8 +1265,8 @@
                             <div class="d-flex align-items-start">
                                 <i class="ph ph-check-circle f-s-32 me-3"></i>
                                 <div>
-                                    <h5 class="mb-1">{{ __('events_general.ready_to_create') }}</h5>
-                                    <p class="mb-0">{{ __('events_general.ready_to_create_description') }}</p>
+                                    <h5 class="mb-1">{{ __('events.ready_to_create') }}</h5>
+                                    <p class="mb-0">{{ __('events.ready_to_create_description') }}</p>
                         </div>
                     </div>
                 </div>
@@ -1277,7 +1277,7 @@
                                 <div class="card border-primary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-primary">
-                                            <i class="ph ph-info me-2"></i>{{ __('events_general.basic_information') }}
+                                            <i class="ph ph-info me-2"></i>{{ __('events.basic_information') }}
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -1293,23 +1293,23 @@
                                                         {{ \App\Models\Event::getCategories()[$category] ?? $category }}
                                                     </span>
                                                     <span class="badge bg-{{ $is_public ? 'success' : 'warning' }}">
-                                                        {{ $is_public ? __('events_general.public') : __('events_general.private') }}
+                                                        {{ $is_public ? __('events.public') : __('events.private') }}
                                                     </span>
                                                     <span class="badge bg-{{ $status === 'published' ? 'success' : 'secondary' }}">
-                                                        {{ $status === 'published' ? __('events_general.published') : __('events_general.draft') }}
+                                                        {{ $status === 'published' ? __('events.published') : __('events.draft') }}
                                                     </span>
                                                 </div>
 
                                                 @if($description)
                                                     <div class="mt-3">
-                                                        <strong>{{ __('events_general.description') }}:</strong>
+                                                        <strong>{{ __('events.description') }}:</strong>
                                                         <p class="text-secondary mt-1">{{ Str::limit($description, 300) }}</p>
                                                     </div>
                                                 @endif
 
                                                 @if($requirements)
                                                     <div class="mt-2">
-                                                        <strong>{{ __('events_general.requirements') }}:</strong>
+                                                        <strong>{{ __('events.requirements') }}:</strong>
                                                         <p class="text-secondary mt-1">{{ Str::limit($requirements, 200) }}</p>
                                                     </div>
                                                 @endif
@@ -1338,17 +1338,17 @@
                                 <div class="card border-info">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-info">
-                                            <i class="ph ph-calendar me-2"></i>{{ __('events_general.date_and_time') }}
+                                            <i class="ph ph-calendar me-2"></i>{{ __('events.date_and_time') }}
                                         </h6>
                                     </div>
                     <div class="card-body">
                                         @if($is_availability_based)
                                             <div class="alert alert-info alert-sm">
                                                 <i class="ph ph-users-three me-1"></i>
-                                                <strong>{{ __('events_general.availability_based_event') }}</strong>
+                                                <strong>{{ __('events.availability_based_event') }}</strong>
                                             </div>
                                             @if(count($availability_options) > 0)
-                                                <p class="mb-1"><strong>{{ __('events_general.available_dates') }}:</strong></p>
+                                                <p class="mb-1"><strong>{{ __('events.available_dates') }}:</strong></p>
                                                 @foreach($availability_options as $option)
                                                     @if(is_array($option) && isset($option['datetime']))
                                                         <div class="d-flex align-items-center mb-1">
@@ -1364,18 +1364,18 @@
                             @else
                                             <p class="mb-1">
                                                 <i class="ph ph-calendar-check me-2 text-success"></i>
-                                                <strong>{{ __('events_general.start') }}:</strong> {{ $start_datetime ?: '-' }}
+                                                <strong>{{ __('events.start') }}:</strong> {{ $start_datetime ?: '-' }}
                                             </p>
                                             <p class="mb-0">
                                                 <i class="ph ph-calendar-x me-2 text-danger"></i>
-                                                <strong>{{ __('events_general.end') }}:</strong> {{ $end_datetime ?: '-' }}
+                                                <strong>{{ __('events.end') }}:</strong> {{ $end_datetime ?: '-' }}
                                             </p>
                             @endif
 
                                         @if($is_recurring)
                                             <div class="alert alert-warning alert-sm mt-2">
                                                 <i class="ph ph-arrow-clockwise me-1"></i>
-                                                <strong>{{ __('events_general.recurring_event') }}</strong>
+                                                <strong>{{ __('events.recurring_event') }}</strong>
                                                 <br><small>{{ ucfirst($recurrence_type) }} × {{ $recurrence_count ?: '∞' }}</small>
                                             </div>
                                         @endif
@@ -1388,14 +1388,14 @@
                                 <div class="card border-warning">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-warning">
-                                            <i class="ph ph-map-pin me-2"></i>{{ __('events_general.location') }}
+                                            <i class="ph ph-map-pin me-2"></i>{{ __('events.location') }}
                                         </h6>
                                     </div>
                                     <div class="card-body">
                                         @if($is_online)
                                             <div class="alert alert-info alert-sm">
                                                 <i class="ph ph-globe me-1"></i>
-                                                <strong>{{ __('events_general.online_event') }}</strong>
+                                                <strong>{{ __('events.online_event') }}</strong>
                                             </div>
                                             @if($online_url)
                                                 <p class="mb-1">
@@ -1405,7 +1405,7 @@
                                             @endif
                                             <p class="mb-0">
                                                 <i class="ph ph-clock me-2"></i>
-                                                <strong>{{ __('events_general.timezone') }}:</strong> {{ $timezone }}
+                                                <strong>{{ __('events.timezone') }}:</strong> {{ $timezone }}
                                             </p>
                             @else
                                             @if($venue_name)
@@ -1437,7 +1437,7 @@
                                     <div class="card">
                                         <div class="card-header py-2">
                                             <h6 class="mb-0">
-                                                <i class="ph ph-info me-2"></i>{{ __('events_general.additional_details') }}
+                                                <i class="ph ph-info me-2"></i>{{ __('events.additional_details') }}
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -1446,7 +1446,7 @@
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
                                                             <i class="ph ph-currency-circle-dollar me-2 text-success"></i>
-                                                            <strong>{{ __('events_general.ticket_price') }}:</strong>
+                                                            <strong>{{ __('events.ticket_price') }}:</strong>
                                                             {{ number_format($ticket_price, 2) }} {{ $ticket_currency }}
                                                         </p>
                                                     </div>
@@ -1456,7 +1456,7 @@
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
                                                             <i class="ph ph-video me-2 text-danger"></i>
-                                                            <strong>{{ __('events_general.promotional_video') }}:</strong>
+                                                            <strong>{{ __('events.promotional_video') }}:</strong>
                                                             <a href="{{ $promotional_video }}" target="_blank" class="text-break">{{ Str::limit($promotional_video, 40) }}</a>
                                                         </p>
                                                     </div>
@@ -1466,8 +1466,8 @@
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
                                                             <i class="ph ph-users-three me-2 text-primary"></i>
-                                                            <strong>{{ __('events_general.max_participants') }}:</strong>
-                                                            {{ $max_participants }} {{ __('events_general.people') }}
+                                                            <strong>{{ __('events.max_participants') }}:</strong>
+                                                            {{ $max_participants }} {{ __('events.people') }}
                                                         </p>
                                                     </div>
                                                 @endif
@@ -1476,7 +1476,7 @@
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
                                                             <i class="ph ph-check-circle me-2 text-success"></i>
-                                                            {{ __('events_general.allow_requests') }}
+                                                            {{ __('events.allow_requests') }}
                                                         </p>
                                                     </div>
                                                 @endif
@@ -1492,7 +1492,7 @@
                                     <div class="card border-warning">
                                         <div class="card-header py-2">
                                             <h6 class="mb-0 text-warning">
-                                                <i class="ph ph-briefcase me-2"></i>{{ __('events_general.gig_positions') }}
+                                                <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_positions') }}
                                                 <span class="badge bg-warning ms-2">{{ count($gig_positions) }}</span>
                                             </h6>
                                         </div>
@@ -1501,9 +1501,9 @@
                                                 <table class="table table-sm mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>{{ __('events_general.position_type') }}</th>
-                                                            <th>{{ __('events_general.benefits') }}</th>
-                                                            <th class="text-center">{{ __('events_general.quantity') }}</th>
+                                                            <th>{{ __('events.position_type') }}</th>
+                                                            <th>{{ __('events.benefits') }}</th>
+                                                            <th class="text-center">{{ __('events.quantity') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1511,10 +1511,10 @@
                                                             <tr>
                                                                 <td>
                                                                     <strong>
-                                                                        @if($position['type'] === 'poeta'){{ __('events_general.artist_poet') }}
-                                                                        @elseif($position['type'] === 'mc'){{ __('events_general.mc_host') }}
-                                                                        @elseif($position['type'] === 'tecnico'){{ __('events_general.technical_support') }}
-                                                                        @elseif($position['type'] === 'volontario'){{ __('events_general.volunteer') }}
+                                                                        @if($position['type'] === 'poeta'){{ __('events.artist_poet') }}
+                                                                        @elseif($position['type'] === 'mc'){{ __('events.mc_host') }}
+                                                                        @elseif($position['type'] === 'tecnico'){{ __('events.technical_support') }}
+                                                                        @elseif($position['type'] === 'volontario'){{ __('events.volunteer') }}
                                                                         @else{{ $position['type'] }}
                                                                         @endif
                                                                     </strong>
@@ -1529,10 +1529,10 @@
                                                                         <i class="ph ph-currency-circle-dollar me-1 text-success"></i>{{ $position['cachet_amount'] }} {{ $position['cachet_currency'] }}
                                                                     @endif
                                                                     @if($position['has_travel'] && $position['travel_max'])
-                                                                        <br><i class="ph ph-airplane me-1 text-info"></i>{{ __('events_general.travel') }}: {{ $position['travel_max'] }} {{ $position['travel_currency'] }}
+                                                                        <br><i class="ph ph-airplane me-1 text-info"></i>{{ __('events.travel') }}: {{ $position['travel_max'] }} {{ $position['travel_currency'] }}
                                                                     @endif
                                                                     @if($position['has_accommodation'])
-                                                                        <br><i class="ph ph-bed me-1 text-warning"></i>{{ __('events_general.accommodation_included') }}
+                                                                        <br><i class="ph ph-bed me-1 text-warning"></i>{{ __('events.accommodation_included') }}
                                                                     @endif
                                                                 </td>
                                                                 <td>
@@ -1554,7 +1554,7 @@
                                     <div class="card border-success">
                                         <div class="card-header py-2">
                                             <h6 class="mb-0 text-success">
-                                                <i class="ph ph-envelope me-2"></i>{{ __('events_general.invitations') }}
+                                                <i class="ph ph-envelope me-2"></i>{{ __('events.invitations') }}
                                                 <span class="badge bg-success ms-2">{{ count($invitations) }}</span>
                                             </h6>
                                         </div>
@@ -1564,7 +1564,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>{{ __('common.name') }}</th>
-                                                            <th>{{ __('events_general.role') }}</th>
+                                                            <th>{{ __('events.role') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1592,7 +1592,7 @@
                                     <div class="card border-info">
                                         <div class="card-header py-2">
                                             <h6 class="mb-0 text-info">
-                                                <i class="ph ph-users me-2"></i>{{ __('events_general.linked_groups') }}
+                                                <i class="ph ph-users me-2"></i>{{ __('events.linked_groups') }}
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -1615,7 +1615,7 @@
                                     <div class="card border-warning">
                                         <div class="card-header py-2">
                                             <h6 class="mb-0 text-warning">
-                                                <i class="ph ph-trophy me-2"></i>{{ __('events_general.festival') }}
+                                                <i class="ph ph-trophy me-2"></i>{{ __('events.festival') }}
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -1637,9 +1637,9 @@
                         <!-- Final CTA -->
                         <div class="alert alert-light border mt-4 text-center">
                             <i class="ph ph-arrow-down f-s-24 mb-2 text-primary"></i>
-                            <h6 class="mb-2">{{ __('events_general.ready_to_publish') }}</h6>
+                            <h6 class="mb-2">{{ __('events.ready_to_publish') }}</h6>
                             <p class="text-secondary mb-0">
-                                {{ __('events_general.click_create_below') }}
+                                {{ __('events.click_create_below') }}
                             </p>
                         </div>
                     </div>
@@ -1682,16 +1682,16 @@
 
                     <!-- Step Status -->
                     <div class="mb-4">
-                        <h6 class="mb-3">{{ __('events_general.steps') }}</h6>
+                        <h6 class="mb-3">{{ __('events.steps') }}</h6>
                         <div class="list-group list-group-flush">
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 1 ? 'bg-light-primary' : '' }}" 
                                  style="cursor: pointer;" wire:click="goToStep(1)">
                                 <i class="ph ph-{{ $currentStep > 1 ? 'check-circle text-success' : ($currentStep == 1 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 1 ? 'f-w-600 text-primary' : ($currentStep > 1 ? 'f-w-600' : 'text-secondary') }}">
-                                        {{ __('events_general.step_basic_info') }}
+                                        {{ __('events.step_basic_info') }}
                                 </div>
-                                    <small class="text-secondary d-block">{{ __('events_general.step_1_hint') }}</small>
+                                    <small class="text-secondary d-block">{{ __('events.step_1_hint') }}</small>
                         </div>
                     </div>
 
@@ -1700,9 +1700,9 @@
                                 <i class="ph ph-{{ $currentStep > 2 ? 'check-circle text-success' : ($currentStep == 2 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 2 ? 'f-w-600 text-primary' : ($currentStep > 2 ? 'f-w-600' : 'text-secondary') }}">
-                                        {{ __('events_general.step_date_location') }}
+                                        {{ __('events.step_date_location') }}
                 </div>
-                                    <small class="text-secondary d-block">{{ __('events_general.step_2_hint') }}</small>
+                                    <small class="text-secondary d-block">{{ __('events.step_2_hint') }}</small>
             </div>
         </div>
 
@@ -1711,9 +1711,9 @@
                                 <i class="ph ph-{{ $currentStep > 3 ? 'check-circle text-success' : ($currentStep == 3 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 3 ? 'f-w-600 text-primary' : ($currentStep > 3 ? 'f-w-600' : 'text-secondary') }}">
-                                        {{ __('events_general.step_event_details') }}
+                                        {{ __('events.step_event_details') }}
                                     </div>
-                                    <small class="text-secondary d-block">{{ __('events_general.step_3_hint') }}</small>
+                                    <small class="text-secondary d-block">{{ __('events.step_3_hint') }}</small>
                                 </div>
                             </div>
 
@@ -1722,9 +1722,9 @@
                                 <i class="ph ph-{{ $currentStep > 4 ? 'check-circle text-success' : ($currentStep == 4 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 4 ? 'f-w-600 text-primary' : ($currentStep > 4 ? 'f-w-600' : 'text-secondary') }}">
-                                        {{ __('events_general.invites_and_gig') }}
+                                        {{ __('events.invites_and_gig') }}
                                     </div>
-                                    <small class="text-secondary d-block">{{ __('events_general.step_4_hint') }}</small>
+                                    <small class="text-secondary d-block">{{ __('events.step_4_hint') }}</small>
                                 </div>
                             </div>
 
@@ -1733,9 +1733,9 @@
                                 <i class="ph ph-{{ $currentStep > 5 ? 'check-circle text-success' : ($currentStep == 5 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 5 ? 'f-w-600 text-primary' : ($currentStep > 5 ? 'f-w-600' : 'text-secondary') }}">
-                                        {{ __('events_general.event_preview') }}
+                                        {{ __('events.event_preview') }}
                                     </div>
-                                    <small class="text-secondary d-block">{{ __('events_general.step_5_hint') }}</small>
+                                    <small class="text-secondary d-block">{{ __('events.step_5_hint') }}</small>
                                 </div>
                             </div>
                         </div>
@@ -1754,7 +1754,7 @@
                                 <button type="button"
                                         wire:click="save"
                                         class="btn btn-success btn-lg">
-                                    <i class="ph ph-check-circle me-2"></i>{{ __('events_general.save_changes') }}
+                                    <i class="ph ph-check-circle me-2"></i>{{ __('events.save_changes') }}
                                 </button>
                             @endif
 

@@ -3,17 +3,17 @@
         <h5 class="card-title mb-0">
             <a href="{{ route('poems.index') }}" class="text-decoration-none text-primary d-flex align-items-center">
                 <i class="ph-duotone ph-book-open f-s-16 me-2"></i>
-                Poesie
+                {{ __('home.poetry_section.title') }}
             </a>
         </h5>
         <div class="d-flex align-items-center">
-            <span class="text-dark f-s-12 me-2 f-w-600">Nuove</span>
+            <span class="text-dark f-s-12 me-2 f-w-600">{{ __('home.poetry_section.new') }}</span>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" 
                        wire:click="toggleContent('{{ $contentType === 'new' ? 'popular' : 'new' }}')"
                        {{ $contentType === 'popular' ? 'checked' : '' }}>
             </div>
-            <span class="text-dark f-s-12 ms-2 f-w-600">Popolari</span>
+            <span class="text-dark f-s-12 ms-2 f-w-600">{{ __('home.poetry_section.popular') }}</span>
         </div>
     </div>
     <div class="card-body">
@@ -54,7 +54,7 @@
                                                 </small>
                                                 <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-sm btn-light-primary">
                                                     <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                                    Leggi
+                                                    {{ __('home.poetry_section.read') }}
                                                 </a>
                                             </div>
                                             <div class="d-flex justify-content-end mt-2">
@@ -73,7 +73,7 @@
         @else
             <div class="text-center py-4">
                 <i class="ph-duotone ph-book-open f-s-48 text-muted mb-3"></i>
-                <p class="text-muted">Nessuna poesia disponibile</p>
+                <p class="text-muted">{{ __('home.poetry_section.no_poems_available') }}</p>
             </div>
         @endif
     </div>
