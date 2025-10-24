@@ -37,22 +37,42 @@
                 <div class="card-body">
                     <form wire:submit.prevent="save">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="language_name" class="form-label">{{ __('languages.language_name') }}</label>
-                                <input type="text" class="form-control @error('language_name') is-invalid @enderror" 
-                                       id="language_name" wire:model="language_name" required>
-                                @error('language_name') 
-                                    <div class="invalid-feedback">{{ $message }}</div> 
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="language_code" class="form-label">{{ __('languages.language_code') }}</label>
-                                <input type="text" class="form-control @error('language_code') is-invalid @enderror" 
-                                       id="language_code" wire:model="language_code" required>
-                                @error('language_code') 
-                                    <div class="invalid-feedback">{{ $message }}</div> 
-                                @enderror
+                            <div class="col-12 mb-3">
+                                <label for="searchLanguage" class="form-label">{{ __('languages.language_name') }}</label>
+                                <div class="position-relative">
+                                    <input type="text" 
+                                           class="form-control @error('language_name') is-invalid @enderror" 
+                                           id="searchLanguage" 
+                                           wire:model.live="searchLanguage"
+                                           placeholder="Cerca una lingua..." 
+                                           autocomplete="off">
+                                    
+                                    @if($showLanguageDropdown && count($this->filteredLanguages) > 0)
+                                    <div class="list-group position-absolute w-100" style="z-index: 1000; max-height: 200px; overflow-y: auto;">
+                                        @foreach($this->filteredLanguages as $lang)
+                                        <button type="button" 
+                                                class="list-group-item list-group-item-action"
+                                                wire:click="selectLanguage('{{ $lang['name'] }}', '{{ $lang['code'] }}')">
+                                            <strong>{{ $lang['name'] }}</strong> 
+                                            <span class="badge bg-light-primary text-primary ms-2">{{ $lang['code'] }}</span>
+                                        </button>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                    
+                                    @error('language_name') 
+                                        <div class="invalid-feedback">{{ $message }}</div> 
+                                    @enderror
+                                </div>
+                                
+                                @if($language_name && $language_code)
+                                <div class="mt-2">
+                                    <span class="badge bg-success">
+                                        <i class="ph ph-check me-1"></i>
+                                        {{ $language_name }} ({{ $language_code }})
+                                    </span>
+                                </div>
+                                @endif
                             </div>
                         </div>
 
@@ -60,7 +80,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="type" class="form-label">{{ __('languages.type') }}</label>
                                 <select class="form-select @error('type') is-invalid @enderror" 
-                                        id="type" wire:model="type" required>
+                                        id="type" wire:model.live="type" required>
                                     <option value="native">{{ __('languages.native') }}</option>
                                     <option value="spoken">{{ __('languages.spoken') }}</option>
                                     <option value="written">{{ __('languages.written') }}</option>
@@ -68,6 +88,13 @@
                                 @error('type') 
                                     <div class="invalid-feedback">{{ $message }}</div> 
                                 @enderror
+                                
+                                @if($type === 'native')
+                                <div class="alert alert-info mt-2 mb-0">
+                                    <i class="ph ph-info me-2"></i>
+                                    Per le lingue native non è necessario specificare il livello.
+                                </div>
+                                @endif
                             </div>
                             
                             @if($type !== 'native')
