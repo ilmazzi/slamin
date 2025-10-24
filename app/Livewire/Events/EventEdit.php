@@ -250,7 +250,7 @@ class EventEdit extends EventCreation
                 'category' => $this->event->category,
             ], Event::class, $this->event->id);
 
-            session()->flash('success', 'Evento aggiornato con successo!');
+            session()->flash('success', __('events.event_updated_successfully'));
             return redirect()->route('events.show', $this->event->id);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -270,7 +270,7 @@ class EventEdit extends EventCreation
                 'event_id' => $this->eventId,
             ]);
 
-            session()->flash('error', 'Errore durante l\'aggiornamento dell\'evento: ' . $e->getMessage());
+            session()->flash('error', __('events.error_updating_event', ['message' => $e->getMessage()]));
         }
     }
 

@@ -214,6 +214,18 @@ return [
     // Associations
     'associations' => 'Associazioni',
     
+    // Messages & Confirmations
+    'confirm_delete_event' => 'Sei sicuro di voler eliminare l\'evento',
+    'events_shown' => ':count eventi visualizzati',
+    'venue_loaded_successfully' => 'Luogo caricato con successo!',
+    'user_already_invited' => 'Utente già invitato',
+    'invitation_added_for' => 'Invito aggiunto per :name',
+    'invitation_removed_for' => 'Invito rimosso per :name',
+    'event_created_successfully' => 'Evento creato con successo!',
+    'event_updated_successfully' => 'Evento aggiornato con successo!',
+    'error_creating_event' => 'Errore durante la creazione dell\'evento: :message',
+    'error_updating_event' => 'Errore durante l\'aggiornamento dell\'evento: :message',
+    
     'scoring' => [
         // Navigation & General
         'dashboard' => 'Dashboard',

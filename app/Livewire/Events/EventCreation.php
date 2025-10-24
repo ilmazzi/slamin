@@ -410,7 +410,7 @@ class EventCreation extends Component
         }
 
         // Show success message
-        session()->flash('success', 'Luogo caricato con successo!');
+        session()->flash('success', __('events.venue_loaded_successfully'));
     }
 
     // ========================================
@@ -452,7 +452,7 @@ class EventCreation extends Component
     {
         // Check if user already invited
         if (collect($this->invitations)->contains('user_id', $userId)) {
-            session()->flash('warning', 'Utente già invitato');
+            session()->flash('warning', __('events.user_already_invited'));
             return;
         }
 
@@ -472,7 +472,7 @@ class EventCreation extends Component
         $this->userSearchQuery = '';
         $this->searchResults = [];
 
-        session()->flash('success', "Invito aggiunto per {$user->name}");
+        session()->flash('success', __('events.invitation_added_for', ['name' => $user->name]));
     }
 
     public function removeInvitation($index)
@@ -481,7 +481,7 @@ class EventCreation extends Component
             $userName = $this->invitations[$index]['name'];
             unset($this->invitations[$index]);
             $this->invitations = array_values($this->invitations); // Re-index array
-            session()->flash('success', "Invito rimosso per {$userName}");
+            session()->flash('success', __('events.invitation_removed_for', ['name' => $userName]));
         }
     }
 
@@ -650,7 +650,7 @@ class EventCreation extends Component
                 'is_public' => $event->is_public,
             ], Event::class, $event->id);
 
-            session()->flash('success', 'Evento creato con successo!');
+            session()->flash('success', __('events.event_created_successfully'));
             return redirect()->route('events.show', $event->id);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -668,7 +668,7 @@ class EventCreation extends Component
                 'user_id' => Auth::id(),
             ]);
 
-            session()->flash('error', 'Errore durante la creazione dell\'evento: ' . $e->getMessage());
+            session()->flash('error', __('events.error_creating_event', ['message' => $e->getMessage()]));
         }
     }
 
