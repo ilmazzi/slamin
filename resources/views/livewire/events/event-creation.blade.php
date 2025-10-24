@@ -1759,3 +1759,45 @@
         </div>
     </div>
 </div>
+
+@assets
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/it.js"></script>
+@endassets
+
+@script
+<script>
+// Initialize Flatpickr for start datetime
+const startPicker = flatpickr("#start_datetime", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    time_24hr: true,
+    locale: "it",
+    minDate: "today",
+    onChange: function(selectedDates, dateStr) {
+        $wire.start_datetime = dateStr;
+    }
+});
+
+// Initialize Flatpickr for end datetime
+const endPicker = flatpickr("#end_datetime", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    time_24hr: true,
+    locale: "it",
+    minDate: "today",
+    onChange: function(selectedDates, dateStr) {
+        $wire.end_datetime = dateStr;
+    }
+});
+
+// Set initial values if they exist
+if ($wire.start_datetime) {
+    startPicker.setDate($wire.start_datetime);
+}
+if ($wire.end_datetime) {
+    endPicker.setDate($wire.end_datetime);
+}
+</script>
+@endscript

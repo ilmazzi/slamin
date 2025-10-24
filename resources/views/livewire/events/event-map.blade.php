@@ -2,10 +2,13 @@
     @assets
     <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
     <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
+    <style>
+        #eventMap { height: 400px; min-height: 400px; width: 100%; }
+    </style>
     @endassets
     
     <div wire:ignore>
-        <div id="eventMap" class="border rounded" style="height: 300px;"></div>
+        <div id="eventMap" class="border rounded"></div>
     </div>
 </div>
 
@@ -70,8 +73,18 @@ function initMap() {
                 });
         });
         
-        setTimeout(() => eventMap.invalidateSize(), 300);
-        console.log('✅ Event Map initialized');
+        // Force map to recalculate size multiple times to ensure proper display
+        setTimeout(() => {
+            if (eventMap) {
+                eventMap.invalidateSize();
+                console.log('✅ Event Map initialized and sized');
+            }
+        }, 100);
+        
+        setTimeout(() => {
+            if (eventMap) eventMap.invalidateSize();
+        }, 500);
+        
     } catch (e) {
         console.error('Map error:', e);
     }
