@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Forum;
 
 use App\Models\ForumVote;
 use Livewire\Component;

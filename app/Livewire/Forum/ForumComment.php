@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Forum;
 
 use App\Models\ForumComment as CommentModel;
 use App\Notifications\Forum\CommentReply;

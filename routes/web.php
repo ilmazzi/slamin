@@ -48,18 +48,18 @@ Route::get('/events/create', function () {
 // Forum Routes (Reddit-like system)
 Route::prefix('forum')->name('forum.')->group(function () {
     // Homepage
-    Route::get('/', App\Livewire\ForumIndex::class)->name('index');
+    Route::get('/', App\Livewire\Forum\ForumIndex::class)->name('index');
     
     // Create Post (requires auth)
-    Route::get('/post/create/{subreddit?}', App\Livewire\ForumPostCreate::class)
+    Route::get('/post/create/{subreddit?}', App\Livewire\Forum\ForumPostCreate::class)
         ->middleware('auth')
         ->name('post.create');
     
     // Subreddit routes
-    Route::get('/r/{subreddit:slug}', App\Livewire\SubredditShow::class)->name('subreddit.show');
+    Route::get('/r/{subreddit:slug}', App\Livewire\Forum\SubredditShow::class)->name('subreddit.show');
     
     // Post routes
-    Route::get('/r/{subreddit:slug}/post/{post}', App\Livewire\ForumPostShow::class)->name('post.show');
+    Route::get('/r/{subreddit:slug}/post/{post}', App\Livewire\Forum\ForumPostShow::class)->name('post.show');
 });
 
 // Admin Forum Routes
