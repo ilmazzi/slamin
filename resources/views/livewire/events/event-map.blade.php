@@ -113,17 +113,25 @@ document.addEventListener('livewire:navigated', () => {
 initMap();
 
 // Listen for geocode-address event (when user types address manually)
-Livewire.on('geocode-address', (event) => {
+$wire.on('geocode-address', (event) => {
     const address = event.address || event[0]?.address;
-    if (!address) return;
+    if (!address) {
+        console.log('No address to geocode');
+        return;
+    }
+    
+    console.log('Geocoding address:', address);
     
     // Geocode using Nominatim
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
         .then(r => r.json())
         .then(data => {
+            console.log('Geocoding result:', data);
             if (data && data.length > 0) {
                 const lat = parseFloat(data[0].lat);
                 const lng = parseFloat(data[0].lon);
+                
+                console.log('Setting pin at:', lat, lng);
                 
                 // Update wire properties
                 $wire.set('latitude', lat);
@@ -139,6 +147,8 @@ Livewire.on('geocode-address', (event) => {
                         eventMarker = L.marker([lat, lng]).addTo(eventMap);
                     }
                 }
+            } else {
+                console.log('No results found for address');
             }
         })
         .catch(err => {
@@ -147,7 +157,7 @@ Livewire.on('geocode-address', (event) => {
 });
 
 // Listen for updates from parent component (e.g. when a recent venue is selected)
-Livewire.on('update-map-location', (event) => {
+$wire.on('update-map-location', (event) => {
     const { latitude, longitude } = event;
     
     if (!eventMap || !latitude || !longitude) return;

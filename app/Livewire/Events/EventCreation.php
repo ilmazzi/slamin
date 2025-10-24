@@ -386,6 +386,7 @@ class EventCreation extends Component
     {
         // Need at least city or address to geocode
         if (empty($this->city) && empty($this->venue_address)) {
+            \Log::info('Geocode skipped: no city or address');
             return;
         }
         
@@ -401,8 +402,11 @@ class EventCreation extends Component
         
         // Only geocode if we have a meaningful address (at least 5 chars)
         if (strlen($fullAddress) < 5) {
+            \Log::info('Geocode skipped: address too short', ['address' => $fullAddress]);
             return;
         }
+        
+        \Log::info('Geocoding address', ['full_address' => $fullAddress]);
         
         // Dispatch to frontend to geocode
         $this->dispatch('geocode-address', address: $fullAddress);
