@@ -277,8 +277,8 @@ class EventEdit extends EventCreation
     // Override render to use edit view
     public function render()
     {
-        return view('livewire.event-edit', [
+        return view('livewire.events.event-edit', [
             'categories' => Event::getCategories(),
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

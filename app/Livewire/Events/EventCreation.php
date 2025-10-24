@@ -677,8 +677,8 @@ class EventCreation extends Component
     // ========================================
     public function render()
     {
-        return view('livewire.event-creation', [
+        return view('livewire.events.event-creation', [
             'categories' => Event::getCategories(),
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }

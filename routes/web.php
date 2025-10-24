@@ -41,9 +41,9 @@ Route::prefix('profile/payment-accounts')->name('profile.payment-accounts.')->mi
 });
 
 // Event Creation with Livewire
-Route::get('/events/create', function () {
-    return view('events.create-livewire');
-})->middleware('auth')->name('events.create');
+Route::get('/events/create', App\Livewire\Events\EventCreation::class)
+    ->middleware('auth')
+    ->name('events.create');
 
 // Forum Routes (Reddit-like system)
 Route::prefix('forum')->name('forum.')->group(function () {
@@ -554,9 +554,9 @@ Route::get('/test/error/500', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Event Edit with Livewire
-    Route::get('/events/{event}/edit', function (\App\Models\Event $event) {
-        return view('events.edit-livewire', compact('event'));
-    })->middleware('auth')->name('events.edit');
+    Route::get('/events/{event}/edit', App\Livewire\Events\EventEdit::class)
+        ->middleware('auth')
+        ->name('events.edit');
 
     // Event Complete
     Route::patch('/events/{event}/complete', [App\Http\Controllers\EventController::class, 'complete'])->middleware('auth')->name('events.complete');
