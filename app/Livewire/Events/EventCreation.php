@@ -377,6 +377,26 @@ class EventCreation extends Component
         $this->country = $country;
     }
 
+    public function geocodeAddress()
+    {
+        // Build full address for geocoding
+        $addressParts = array_filter([
+            $this->venue_address,
+            $this->city,
+            $this->postcode,
+            $this->country
+        ]);
+        
+        if (empty($addressParts)) {
+            return;
+        }
+        
+        $fullAddress = implode(', ', $addressParts);
+        
+        // Dispatch to frontend to geocode
+        $this->dispatch('geocode-address', address: $fullAddress);
+    }
+
     // Load a recent venue from select dropdown
     public function loadRecentVenueFromSelect()
     {

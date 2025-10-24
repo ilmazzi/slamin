@@ -112,6 +112,40 @@ document.addEventListener('livewire:navigated', () => {
 // First load
 initMap();
 
+// Listen for geocode-address event (when user types address manually)
+Livewire.on('geocode-address', (event) => {
+    const address = event.address || event[0]?.address;
+    if (!address) return;
+    
+    // Geocode using Nominatim
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lng = parseFloat(data[0].lon);
+                
+                // Update wire properties
+                $wire.set('latitude', lat);
+                $wire.set('longitude', lng);
+                
+                // Update map
+                if (eventMap) {
+                    eventMap.setView([lat, lng], 15);
+                    
+                    if (eventMarker) {
+                        eventMarker.setLatLng([lat, lng]);
+                    } else {
+                        eventMarker = L.marker([lat, lng]).addTo(eventMap);
+                    }
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Geocoding error:', err);
+        });
+});
+
 // Listen for updates from parent component (e.g. when a recent venue is selected)
 Livewire.on('update-map-location', (event) => {
     const { latitude, longitude } = event;

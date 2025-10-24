@@ -466,11 +466,10 @@
                                         <div class="col-12">
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.venue_address') }}</label>
-                                            <textarea id="venue-address-input"
-                                                      name="venue_address"
+                                            <textarea wire:model="venue_address"
                                                       class="form-control @error('venue_address') is-invalid @enderror"
                                                       rows="2"
-                                                      placeholder="{{ __('events.venue_address_placeholder') }}">{{ $venue_address }}</textarea>
+                                                      placeholder="{{ __('events.venue_address_placeholder') }}"></textarea>
                                             @error('venue_address')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -481,9 +480,7 @@
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.postcode') }}</label>
                                             <input type="text"
-                                                   id="postcode-input"
-                                                   name="postcode"
-                                                   value="{{ $postcode }}"
+                                                   wire:model="postcode"
                                                    class="form-control"
                                                    placeholder="{{ __('events.postcode_placeholder') }}">
                                             </div>
@@ -492,15 +489,21 @@
                                         <div class="col-md-8">
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.country') }}</label>
-                                            <select id="country-select" name="country" class="form-select">
-                                                <option value="IT" {{ $country == 'IT' ? 'selected' : '' }}>Italia</option>
-                                                <option value="FR" {{ $country == 'FR' ? 'selected' : '' }}>France</option>
-                                                <option value="DE" {{ $country == 'DE' ? 'selected' : '' }}>Deutschland</option>
-                                                <option value="ES" {{ $country == 'ES' ? 'selected' : '' }}>España</option>
-                                                <option value="GB" {{ $country == 'GB' ? 'selected' : '' }}>United Kingdom</option>
-                                                <option value="US" {{ $country == 'US' ? 'selected' : '' }}>United States</option>
+                                            <select wire:model="country" class="form-select">
+                                                <option value="IT">Italia</option>
+                                                <option value="FR">France</option>
+                                                <option value="DE">Deutschland</option>
+                                                <option value="ES">España</option>
+                                                <option value="GB">United Kingdom</option>
+                                                <option value="US">United States</option>
                                             </select>
                                             </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <button type="button" wire:click="geocodeAddress" class="btn btn-light-primary mb-3">
+                                                <i class="ph ph-map-pin me-2"></i>{{ __('events.set_pin_on_map') }}
+                                            </button>
                                         </div>
 
                                         <div class="col-12">

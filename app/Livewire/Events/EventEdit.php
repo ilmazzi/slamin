@@ -274,6 +274,37 @@ class EventEdit extends EventCreation
         }
     }
 
+    #[On('map-clicked')]
+    public function handleMapClick($latitude, $longitude, $city, $address, $postcode, $country)
+    {
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->city = $city;
+        $this->venue_address = $address;
+        $this->postcode = $postcode;
+        $this->country = $country;
+    }
+
+    public function geocodeAddress()
+    {
+        // Build full address for geocoding
+        $addressParts = array_filter([
+            $this->venue_address,
+            $this->city,
+            $this->postcode,
+            $this->country
+        ]);
+        
+        if (empty($addressParts)) {
+            return;
+        }
+        
+        $fullAddress = implode(', ', $addressParts);
+        
+        // Dispatch to frontend to geocode
+        $this->dispatch('geocode-address', address: $fullAddress);
+    }
+
     // Override render to use edit view
     public function render()
     {
