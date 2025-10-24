@@ -452,9 +452,7 @@
                                             <div class="mb-3">
                                             <label class="form-label">{{ __('events.city') }}</label>
                                             <input type="text"
-                                                   id="city-input"
-                                                   name="city"
-                                                   value="{{ $city }}"
+                                                   wire:model.live.debounce.1000ms="city"
                                                    class="form-control @error('city') is-invalid @enderror"
                                                    placeholder="{{ __('events.city_placeholder') }}">
                                             @error('city')

@@ -384,19 +384,25 @@ class EventCreation extends Component
 
     public function geocodeAddress()
     {
-        // Build full address for geocoding
-        $addressParts = array_filter([
-            $this->venue_address,
-            $this->city,
-            $this->postcode,
-            $this->country
-        ]);
-        
-        if (empty($addressParts)) {
+        // Need at least city or address to geocode
+        if (empty($this->city) && empty($this->venue_address)) {
             return;
         }
         
+        // Build full address for geocoding - in correct order for Nominatim
+        $addressParts = array_filter([
+            $this->venue_address,
+            $this->postcode,
+            $this->city,
+            $this->country
+        ]);
+        
         $fullAddress = implode(', ', $addressParts);
+        
+        // Only geocode if we have a meaningful address (at least 5 chars)
+        if (strlen($fullAddress) < 5) {
+            return;
+        }
         
         // Dispatch to frontend to geocode
         $this->dispatch('geocode-address', address: $fullAddress);
