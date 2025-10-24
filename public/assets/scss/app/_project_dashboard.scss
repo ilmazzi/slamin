@@ -393,7 +393,20 @@
     opacity: 1;
 }
 
-@keyframes orbit-rotate-1 {
+// Badge orbit animations with different directions
+.badge-orbit-1 {
+    animation: orbit-1-rotate 20s linear infinite;
+}
+
+.badge-orbit-2 {
+    animation: orbit-2-rotate 25s linear infinite reverse;
+}
+
+.badge-orbit-3 {
+    animation: orbit-3-rotate 30s linear infinite;
+}
+
+@keyframes orbit-1-rotate {
     0% {
         transform: translate(-50%, -50%) rotate(0deg) translateX(90px) rotate(0deg);
     }
@@ -402,21 +415,21 @@
     }
 }
 
-@keyframes orbit-rotate-2 {
+@keyframes orbit-2-rotate {
     0% {
-        transform: translate(-50%, -50%) rotate(120deg) translateX(120px) rotate(-120deg);
+        transform: translate(-50%, -50%) rotate(0deg) translateX(120px) rotate(0deg);
     }
     100% {
-        transform: translate(-50%, -50%) rotate(480deg) translateX(120px) rotate(-480deg);
+        transform: translate(-50%, -50%) rotate(360deg) translateX(120px) rotate(-360deg);
     }
 }
 
-@keyframes orbit-rotate-3 {
+@keyframes orbit-3-rotate {
     0% {
-        transform: translate(-50%, -50%) rotate(240deg) translateX(150px) rotate(-240deg);
+        transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg);
     }
     100% {
-        transform: translate(-50%, -50%) rotate(600deg) translateX(150px) rotate(-600deg);
+        transform: translate(-50%, -50%) rotate(360deg) translateX(150px) rotate(-360deg);
     }
 }
 

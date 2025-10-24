@@ -120,31 +120,28 @@
                                 
                                 <!-- Rotating Badges -->
                                 @if(isset($topBadges[0]) && $topBadges[0]->badge)
-                                <div class="badge-container" style="animation: orbit-rotate-1 20s linear infinite;">
+                                <div class="badge-container badge-orbit-1">
                                     <img src="{{ $topBadges[0]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[0]->badge->name }}" 
-                                         class="bg-vector-img" 
-                                         style="width: 60px; height: 60px;">
+                                         style="width: 60px; height: 60px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[0]->badge->name }}</div>
                                 </div>
                                 @endif
                                 
                                 @if(isset($topBadges[1]) && $topBadges[1]->badge)
-                                <div class="badge-container" style="animation: orbit-rotate-2 25s linear infinite;">
+                                <div class="badge-container badge-orbit-2">
                                     <img src="{{ $topBadges[1]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[1]->badge->name }}" 
-                                         class="bg-vector-img1" 
-                                         style="width: 60px; height: 60px;">
+                                         style="width: 60px; height: 60px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[1]->badge->name }}</div>
                                 </div>
                                 @endif
                                 
                                 @if(isset($topBadges[2]) && $topBadges[2]->badge)
-                                <div class="badge-container" style="animation: orbit-rotate-3 30s linear infinite;">
+                                <div class="badge-container badge-orbit-3">
                                     <img src="{{ $topBadges[2]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[2]->badge->name }}" 
-                                         class="bg-vector-img2" 
-                                         style="width: 60px; height: 60px;">
+                                         style="width: 60px; height: 60px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[2]->badge->name }}</div>
                                 </div>
                                 @endif
@@ -159,30 +156,22 @@
                             </div>
                             
                             <!-- Badge Info at Bottom -->
-                            <div class="position-absolute w-100 text-center" style="bottom: 20px; z-index: 10;">
-                                <div class="d-flex justify-content-center gap-4">
+                            <div class="position-absolute w-100 text-center" style="bottom: 15px; z-index: 10;">
+                                <div class="d-flex justify-content-center gap-4 flex-wrap">
                                     <div class="text-white">
                                         <i class="ph ph-medal f-s-20"></i>
-                                        <span class="ms-1">{{ $badgesCount }} Badge</span>
+                                        <span class="ms-1 fw-medium">{{ $badgesCount }} Badge</span>
                                     </div>
                                     <div class="text-white">
                                         <i class="ph ph-star f-s-20"></i>
-                                        <span class="ms-1">{{ $totalPoints }} Punti</span>
+                                        <span class="ms-1 fw-medium">{{ $totalPoints }} Punti</span>
                                     </div>
                                     <div class="text-white">
                                         <i class="ph ph-ranking f-s-20"></i>
-                                        <span class="ms-1">Livello {{ $level }}</span>
+                                        <span class="ms-1 fw-medium">Livello {{ $level }}</span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            @if($isOwnProfile)
-                            <div class="position-absolute" style="top: 15px; right: 15px; z-index: 10;">
-                                <a href="{{ route('profile.edit') }}" class="btn btn-white btn-sm">
-                                    <i class="ph ph-pencil me-1"></i>Modifica
-                                </a>
-                            </div>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -428,3 +417,4 @@
     </div>
 
 </div>
+
