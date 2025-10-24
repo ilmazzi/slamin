@@ -2,9 +2,6 @@
     @assets
     <link rel="stylesheet" href="{{ asset('assets/vendor/leafletmaps/leaflet.css') }}">
     <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
-    <style>
-        #eventMap { height: 400px; min-height: 400px; width: 100%; }
-    </style>
     @endassets
     
     <div wire:ignore>
@@ -17,29 +14,37 @@
 let eventMap = null;
 let eventMarker = null;
 
-// Initialize map immediately
-if (typeof L !== 'undefined') {
-    initMap();
-} else {
-    setTimeout(initMap, 500);
-}
-
 function initMap() {
+    // Wait for Leaflet to be loaded
     if (typeof L === 'undefined') {
-        setTimeout(initMap, 500);
+        setTimeout(initMap, 300);
         return;
     }
     
+    // Prevent double initialization
     if (eventMap) return;
     
     try {
-        eventMap = L.map('eventMap').setView([41.9028, 12.4964], 6);
+        // Wait for DOM element to be ready
+        const mapElement = document.getElementById('eventMap');
+        if (!mapElement) {
+            setTimeout(initMap, 300);
+            return;
+        }
         
+        // Initialize map
+        eventMap = L.map('eventMap', {
+            scrollWheelZoom: true,
+            zoomControl: true
+        }).setView([41.9028, 12.4964], 6);
+        
+        // Add tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap',
             maxZoom: 19
         }).addTo(eventMap);
         
+        // Click handler
         eventMap.on('click', (e) => {
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
@@ -53,14 +58,12 @@ function initMap() {
                 eventMarker = L.marker([lat, lng]).addTo(eventMap);
             }
             
-            // Reverse geocode to get address
+            // Reverse geocode
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                 .then(r => r.json())
                 .then(data => {
                     if (data && data.address) {
                         const addr = data.address;
-                        
-                        // Dispatch event to parent component with address data
                         $wire.dispatch('map-clicked', {
                             latitude: lat,
                             longitude: lng,
@@ -73,22 +76,35 @@ function initMap() {
                 });
         });
         
-        // Force map to recalculate size multiple times to ensure proper display
+        // CRITICAL: Force resize after initialization
         setTimeout(() => {
             if (eventMap) {
-                eventMap.invalidateSize();
-                console.log('✅ Event Map initialized and sized');
+                eventMap.invalidateSize(true);
             }
-        }, 100);
+        }, 250);
         
         setTimeout(() => {
-            if (eventMap) eventMap.invalidateSize();
-        }, 500);
+            if (eventMap) {
+                eventMap.invalidateSize(true);
+            }
+        }, 750);
+        
+        setTimeout(() => {
+            if (eventMap) {
+                eventMap.invalidateSize(true);
+            }
+        }, 1500);
+        
+        console.log('✅ Event Map initialized');
         
     } catch (e) {
-        console.error('Map error:', e);
+        console.error('❌ Map initialization error:', e);
+        setTimeout(initMap, 500);
     }
 }
+
+// Start initialization
+initMap();
 
 // Listen for updates from parent component (e.g. when a recent venue is selected)
 Livewire.on('update-map-location', (event) => {

@@ -1781,36 +1781,58 @@
 
 @script
 <script>
-// Initialize Flatpickr for start datetime
-const startPicker = flatpickr("#start_datetime", {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    time_24hr: true,
-    locale: "it",
-    minDate: "today",
-    onChange: function(selectedDates, dateStr) {
-        $wire.start_datetime = dateStr;
+function initDatePickers() {
+    // Wait for flatpickr to be loaded
+    if (typeof flatpickr === 'undefined') {
+        setTimeout(initDatePickers, 300);
+        return;
     }
-});
-
-// Initialize Flatpickr for end datetime
-const endPicker = flatpickr("#end_datetime", {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    time_24hr: true,
-    locale: "it",
-    minDate: "today",
-    onChange: function(selectedDates, dateStr) {
-        $wire.end_datetime = dateStr;
+    
+    // Wait for elements to exist
+    const startInput = document.getElementById('start_datetime');
+    const endInput = document.getElementById('end_datetime');
+    
+    if (!startInput || !endInput) {
+        setTimeout(initDatePickers, 300);
+        return;
     }
-});
+    
+    // Initialize Flatpickr for start datetime
+    const startPicker = flatpickr("#start_datetime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "it",
+        minDate: "today",
+        onChange: function(selectedDates, dateStr) {
+            $wire.set('start_datetime', dateStr);
+        }
+    });
 
-// Set initial values if they exist
-if ($wire.start_datetime) {
-    startPicker.setDate($wire.start_datetime);
+    // Initialize Flatpickr for end datetime
+    const endPicker = flatpickr("#end_datetime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        locale: "it",
+        minDate: "today",
+        onChange: function(selectedDates, dateStr) {
+            $wire.set('end_datetime', dateStr);
+        }
+    });
+
+    // Set initial values if they exist
+    if ($wire.start_datetime) {
+        startPicker.setDate($wire.start_datetime);
+    }
+    if ($wire.end_datetime) {
+        endPicker.setDate($wire.end_datetime);
+    }
+    
+    console.log('✅ Flatpickr initialized');
 }
-if ($wire.end_datetime) {
-    endPicker.setDate($wire.end_datetime);
-}
+
+// Start initialization
+initDatePickers();
 </script>
 @endscript
