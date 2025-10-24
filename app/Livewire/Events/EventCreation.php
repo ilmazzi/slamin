@@ -364,11 +364,6 @@ class EventCreation extends Component
         if ($propertyName === 'is_online') {
             $this->dispatch('location-mode-changed', isOnline: $this->is_online);
         }
-        
-        // Auto-geocode when address fields change
-        if (in_array($propertyName, ['venue_address', 'city', 'postcode', 'country'])) {
-            $this->geocodeAddress();
-        }
     }
 
     #[On('map-clicked')]
@@ -382,14 +377,8 @@ class EventCreation extends Component
         $this->country = $country;
     }
 
-    public function geocodeAddress()
+    public function getFullAddressProperty()
     {
-        // Need at least city or address to geocode
-        if (empty($this->city) && empty($this->venue_address)) {
-            \Log::info('Geocode skipped: no city or address');
-            return;
-        }
-        
         // Build full address for geocoding - in correct order for Nominatim
         $addressParts = array_filter([
             $this->venue_address,
@@ -398,18 +387,7 @@ class EventCreation extends Component
             $this->country
         ]);
         
-        $fullAddress = implode(', ', $addressParts);
-        
-        // Only geocode if we have a meaningful address (at least 5 chars)
-        if (strlen($fullAddress) < 5) {
-            \Log::info('Geocode skipped: address too short', ['address' => $fullAddress]);
-            return;
-        }
-        
-        \Log::info('Geocoding address', ['full_address' => $fullAddress]);
-        
-        // Dispatch to frontend to geocode
-        $this->dispatch('geocode-address', address: $fullAddress);
+        return implode(', ', $addressParts);
     }
 
     // Load a recent venue from select dropdown

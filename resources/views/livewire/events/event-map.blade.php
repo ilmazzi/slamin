@@ -112,8 +112,8 @@ document.addEventListener('livewire:navigated', () => {
 // First load
 initMap();
 
-// Listen for geocode-address event (when user types address manually)
-$wire.on('geocode-address', (event) => {
+// Listen for trigger-geocode event from THIS component (Livewire 3 way)
+@this.on('trigger-geocode', (event) => {
     const address = event.address || event[0]?.address;
     if (!address) {
         console.log('No address to geocode');
@@ -133,9 +133,9 @@ $wire.on('geocode-address', (event) => {
                 
                 console.log('Setting pin at:', lat, lng);
                 
-                // Update wire properties
-                $wire.set('latitude', lat);
-                $wire.set('longitude', lng);
+                // Update wire properties using @this (Livewire 3)
+                @this.set('latitude', lat);
+                @this.set('longitude', lng);
                 
                 // Update map
                 if (eventMap) {
@@ -157,7 +157,7 @@ $wire.on('geocode-address', (event) => {
 });
 
 // Listen for updates from parent component (e.g. when a recent venue is selected)
-$wire.on('update-map-location', (event) => {
+@this.on('update-map-location', (event) => {
     const { latitude, longitude } = event;
     
     if (!eventMap || !latitude || !longitude) return;

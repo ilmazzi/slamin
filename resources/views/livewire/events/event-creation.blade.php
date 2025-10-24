@@ -501,7 +501,7 @@
                                         <div class="col-12">
                                             <div class="mb-3">
                                                 <label class="form-label">{{ __('events.map_location') }}</label>
-                                                <livewire:events.event-map :latitude="$latitude" :longitude="$longitude" />
+                                                <livewire:events.event-map :latitude="$latitude" :longitude="$longitude" :full-address="$fullAddress" />
                                                 <small class="text-secondary d-block mt-2">{{ __('events.map_auto_positioning_help') }}</small>
                                             </div>
                                         </div>

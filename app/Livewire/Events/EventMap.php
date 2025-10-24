@@ -4,6 +4,7 @@ namespace App\Livewire\Events;
 
 use Livewire\Component;
 use Livewire\Attributes\Modelable;
+use Livewire\Attributes\Reactive;
 
 class EventMap extends Component
 {
@@ -13,10 +14,18 @@ class EventMap extends Component
     #[Modelable]
     public $longitude = '';
     
-    public $city = '';
-    public $address = '';
-    public $postcode = '';
-    public $country = 'IT';
+    #[Reactive]
+    public $fullAddress = '';
+
+    public function updatedFullAddress($value)
+    {
+        if (empty($value) || strlen($value) < 5) {
+            return;
+        }
+        
+        // Dispatch to JS to geocode
+        $this->dispatch('trigger-geocode', address: $value);
+    }
 
     public function render()
     {
