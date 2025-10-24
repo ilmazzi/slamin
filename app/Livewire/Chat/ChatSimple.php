@@ -212,6 +212,8 @@ class ChatSimple extends Component
 
     public function render()
     {
-        return view('livewire.chat-simple');
+        return view('livewire.chat.chat-simple')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }

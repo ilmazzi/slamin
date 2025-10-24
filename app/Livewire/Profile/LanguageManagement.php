@@ -204,7 +204,7 @@ class LanguageManagement extends Component
         return view('livewire.profile.language-management', [
             'languages' => $this->languages,
             'worldLanguages' => $this->worldLanguages,
-        ]);
+        ])->extends('layout.master')->section('main-content');
     }
 }
 

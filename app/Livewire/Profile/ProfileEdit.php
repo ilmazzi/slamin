@@ -177,7 +177,9 @@ class ProfileEdit extends Component
 
     public function render()
     {
-        return view('livewire.profile.profile-edit');
+        return view('livewire.profile.profile-edit')
+            ->extends('layout.master')
+            ->section('main-content');
     }
 }
 
