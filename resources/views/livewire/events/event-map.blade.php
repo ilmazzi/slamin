@@ -9,40 +9,49 @@
 let eventMap = null;
 let eventMarker = null;
 
-// Auto-initialize when DOM is ready
-document.addEventListener('livewire:navigated', () => {
-    initMap();
-});
+// Wait for element to have dimensions before initializing
+function waitForElement() {
+    return new Promise((resolve) => {
+        const checkElement = () => {
+            const mapElement = document.getElementById('eventMap');
+            if (!mapElement) {
+                setTimeout(checkElement, 100);
+                return;
+            }
+            
+            // Check if element has dimensions
+            const rect = mapElement.getBoundingClientRect();
+            if (rect.height === 0 || rect.width === 0) {
+                console.log('⏳ Waiting for map container dimensions...');
+                setTimeout(checkElement, 100);
+                return;
+            }
+            
+            console.log('✅ Map container ready:', rect.width, 'x', rect.height);
+            resolve(mapElement);
+        };
+        checkElement();
+    });
+}
 
-// Also init on first load
-setTimeout(() => {
-    initMap();
-}, 1000);
-
-function initMap() {
+async function initMap() {
     // Wait for Leaflet library
     if (typeof L === 'undefined') {
         console.log('⏳ Waiting for Leaflet...');
-        setTimeout(initMap, 500);
-        return;
-    }
-    
-    // Check if element exists
-    const mapElement = document.getElementById('eventMap');
-    if (!mapElement) {
-        console.log('⏳ Waiting for map element...');
-        setTimeout(initMap, 500);
+        setTimeout(initMap, 300);
         return;
     }
     
     // Prevent double initialization
     if (eventMap !== null) {
-        console.log('ℹ️ Map already initialized');
         return;
     }
     
     try {
-        console.log('🗺️ Initializing Event Map...');
+        // Wait for element to have dimensions
+        const mapElement = await waitForElement();
+        
+        console.log('🗺️ Initializing Leaflet map...');
         
         // Initialize map
         eventMap = L.map('eventMap', {
@@ -57,7 +66,7 @@ function initMap() {
             maxZoom: 19
         }).addTo(eventMap);
         
-        // Click handler for selecting location
+        // Click handler
         eventMap.on('click', (e) => {
             const lat = e.latlng.lat;
             const lng = e.latlng.lng;
@@ -89,23 +98,27 @@ function initMap() {
                 });
         });
         
-        // CRITICAL: Force multiple resizes to ensure proper display
-        [250, 500, 1000, 2000].forEach(delay => {
-            setTimeout(() => {
-                if (eventMap) {
-                    eventMap.invalidateSize(true);
-                }
-            }, delay);
-        });
+        // Force resize after tiles load
+        setTimeout(() => {
+            if (eventMap) eventMap.invalidateSize(true);
+        }, 500);
         
         console.log('✅ Event Map initialized successfully');
         
     } catch (e) {
-        console.error('❌ Map initialization error:', e);
+        console.error('❌ Map error:', e);
         eventMap = null;
-        setTimeout(initMap, 1000);
     }
 }
+
+// Initialize on component load
+document.addEventListener('livewire:navigated', () => {
+    eventMap = null;
+    initMap();
+});
+
+// First load
+initMap();
 
 // Listen for updates from parent component (e.g. when a recent venue is selected)
 Livewire.on('update-map-location', (event) => {
