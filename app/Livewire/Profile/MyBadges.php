@@ -69,7 +69,7 @@ class MyBadges extends Component
         // Prima rimuovi TUTTI i badge da tutte le posizioni rotanti
         $this->user->userBadges()->update([
             'show_in_profile' => false,
-            'profile_order' => null,
+            'profile_order' => 99, // Default per non selezionati
         ]);
         
         // Poi imposta i 3 badge scelti
@@ -103,7 +103,7 @@ class MyBadges extends Component
         // Prima rimuovi TUTTI i badge da tutte le posizioni sidebar
         $this->user->userBadges()->update([
             'show_in_sidebar' => false,
-            'sidebar_order' => null,
+            'sidebar_order' => 99, // Default per non selezionati
         ]);
         
         // Poi imposta i 3 badge scelti
