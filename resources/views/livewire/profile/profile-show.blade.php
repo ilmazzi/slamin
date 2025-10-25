@@ -74,25 +74,67 @@
                     <!-- Quick Actions -->
                     <div>
                         <h6 class="f-w-600 mb-3">{{__('profile.quick_actions')}}</h6>
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">
-                                <i class="ph ph-pencil me-2"></i>{{__('profile.edit_profile')}}
-                            </a>
-                            <a href="{{ route('profile.videos') }}" class="btn btn-success btn-sm">
-                                <i class="ph ph-video-camera me-2"></i>{{__('profile.manage_videos')}}
-                            </a>
-                            <a href="{{ route('profile.photos') }}" class="btn btn-info btn-sm">
-                                <i class="ph ph-image me-2"></i>{{__('profile.my_photos')}}
-                            </a>
-                            <a href="{{ route('articles.create') }}" class="btn btn-warning btn-sm">
-                                <i class="ph ph-article me-2"></i>{{__('profile.create_article')}}
-                            </a>
-                            <a href="{{ route('profile.activity') }}" class="btn btn-secondary btn-sm">
-                                <i class="ph ph-lightning me-2"></i>{{__('profile.view_all_activities')}}
-                            </a>
-                            <a href="{{ route('profile.languages.index') }}" class="btn btn-primary btn-sm">
-                                <i class="ph ph-globe me-2"></i>{{__('languages.manage_languages')}}
-                            </a>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{{ route('profile.edit') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-pencil f-s-28 text-primary mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.edit_profile')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('profile.videos') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-video-camera f-s-28 text-success mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.manage_videos')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('profile.photos') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-image f-s-28 text-info mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.my_photos')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('articles.create') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-article f-s-28 text-warning mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.create_article')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('profile.activity') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-lightning f-s-28 text-secondary mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.view_all_activities')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('profile.languages.index') }}" class="text-decoration-none">
+                                    <div class="card text-center hover-effect">
+                                        <div class="card-body p-3">
+                                            <i class="ph-duotone ph-globe f-s-28 text-primary mb-2"></i>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.manage_languages')}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
