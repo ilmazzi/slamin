@@ -21,6 +21,22 @@ class PeerTubeService
     {
         $this->loadConfiguration();
     }
+    
+    /**
+     * Crea un client HTTP con le giuste configurazioni SSL
+     */
+    protected function createHttpClient($asForm = false)
+    {
+        $client = $asForm ? Http::asForm()->timeout(30) : Http::timeout(30);
+        
+        // Disabilita verifica SSL se in sviluppo o se specificato
+        if (config('app.env') === 'local' || config('peertube.verify_ssl', true) === false) {
+            $client = $client->withoutVerifying();
+            Log::debug('PeerTubeService - SSL verification disabled (env: ' . config('app.env') . ')');
+        }
+        
+        return $client;
+    }
 
         /**
      * Carica le configurazioni dal database
@@ -66,7 +82,15 @@ class PeerTubeService
 
             // Step 1: Ottieni il client OAuth2
             Log::info('PeerTubeService - Step 1: Ottenimento client OAuth2');
-            $clientResponse = Http::get($this->baseUrl . '/api/v1/oauth-clients/local');
+            
+            // Disabilita verifica SSL se in sviluppo o se specificato nel .env
+            $httpClient = Http::timeout(30);
+            if (config('app.env') === 'local' || config('peertube.verify_ssl', true) === false) {
+                $httpClient = $httpClient->withoutVerifying();
+                Log::info('PeerTubeService - Verifica SSL disabilitata (ambiente: ' . config('app.env') . ')');
+            }
+            
+            $clientResponse = $httpClient->get($this->baseUrl . '/api/v1/oauth-clients/local');
 
             Log::info('PeerTubeService - Risposta client OAuth2', [
                 'status' => $clientResponse->status(),
@@ -113,7 +137,13 @@ class PeerTubeService
                 'form_data' => array_merge($formData, ['password' => '***HIDDEN***'])
             ]);
 
-            $response = Http::asForm()->post($this->baseUrl . '/api/v1/users/token', $formData);
+            // Usa lo stesso client con SSL verificato/non verificato
+            $tokenClient = Http::asForm()->timeout(30);
+            if (config('app.env') === 'local' || config('peertube.verify_ssl', true) === false) {
+                $tokenClient = $tokenClient->withoutVerifying();
+            }
+            
+            $response = $tokenClient->post($this->baseUrl . '/api/v1/users/token', $formData);
 
             Log::info('PeerTubeService - Risposta API token', [
                 'status' => $response->status(),
