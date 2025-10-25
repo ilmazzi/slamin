@@ -99,6 +99,12 @@ class GlobalCommentModal extends Component
                 'commentCount' => $this->content->comment_count
             ]);
             
+            // Check if a badge was earned
+            if (session()->has('badge_earned')) {
+                $badgeData = session()->pull('badge_earned');
+                $this->dispatch('badge-earned', badgeData: $badgeData);
+            }
+            
             $this->dispatch('show-success', 'Commento aggiunto con successo');
             
         } catch (\Exception $e) {

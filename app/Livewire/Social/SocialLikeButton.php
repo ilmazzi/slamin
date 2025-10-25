@@ -59,6 +59,13 @@ class SocialLikeButton extends Component
                 'likeCount' => $this->likeCount
             ]);
             
+            // Check if a badge was earned (stored in session by BadgeService)
+            if (session()->has('badge_earned')) {
+                $badgeData = session()->pull('badge_earned');
+                // Dispatch to BadgeNotification component
+                $this->dispatch('badge-earned', badgeData: $badgeData);
+            }
+            
         } catch (\Exception $e) {
             $this->dispatch('show-error', 'Errore durante l\'operazione');
         } finally {

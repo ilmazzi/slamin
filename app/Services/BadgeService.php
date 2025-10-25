@@ -520,17 +520,9 @@ class BadgeService
                 'leveled_up' => $leveledUp,
             ];
             
-            // Store badge data in session as fallback (for page refresh)
+            // Store badge data in session for component to pick up
+            // The component that triggered the badge (e.g., SocialLikeButton) will dispatch the event
             session()->put('badge_earned', $badgeData);
-            
-            // Dispatch Livewire event for immediate display (without page refresh)
-            try {
-                // Use Livewire's dispatch helper to trigger event on all components
-                app('livewire')->dispatch('badge-earned', badgeData: $badgeData);
-            } catch (\Exception $e) {
-                // If Livewire dispatch fails, event will be shown on next page load via session
-                Log::warning('Livewire dispatch failed, will show on page refresh', ['error' => $e->getMessage()]);
-            }
             
             Log::info('Badge earned event emitted', [
                 'user_id' => $user->id,
