@@ -145,37 +145,29 @@ use App\Helpers\PlaceholderHelper;
                         @endif
 
                         <div class="mt-auto">
-                            <div class="d-flex flex-column align-items-center gap-2">
-                                <div class="d-flex gap-3 justify-content-center mb-2">
-                                    <span class="text-muted f-s-14">
-                                        <i class="ph-duotone ph-eye f-s-12 me-1"></i>
-                                        {{ $poem->views_count }}
-                                    </span>
-                                    <span class="text-muted f-s-14">
-                                        <i class="ph-duotone ph-heart f-s-12 me-1"></i>
-                                        {{ $poem->likes_count }}
-                                    </span>
-                                    <span class="text-muted f-s-14">
-                                        <i class="ph-duotone ph-chat-circle f-s-12 me-1"></i>
-                                        {{ $poem->comments_count }}
-                                    </span>
-                                </div>
-                                <div class="d-flex gap-2 justify-content-center align-items-center">
-                                    @if($poem->id && $poem->slug)
-                                        <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-primary px-4">
-                                            <i class="ph-bold  ph-read-cv-logo"></i>
-                                            {{ __('poems.actions.read') }}
-                                        </a>
-                                    @else
-                                        <button class="btn btn-secondary px-4" disabled>
-                                            <i class="ph-bold  ph-read-cv-logo"></i>
-                                            {{ __('poems.actions.read') }}
-                                        </button>
-                                    @endif
-                                    @auth
-                                    <x-report-button :content="$poem" type="poem" size="sm" />
-                                    @endauth
-                                </div>
+                            <!-- Social Buttons -->
+                            @auth
+                            <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+                                <livewire:social.social-view-counter :content="$poem" type="poem" size="xs" :key="'poem-view-'.$poem->id" />
+                                <livewire:social.social-like-button :content="$poem" type="poem" size="xs" :key="'poem-like-'.$poem->id" />
+                                <livewire:social.social-comment-button :content="$poem" type="poem" size="xs" :key="'poem-comment-'.$poem->id" />
+                                <x-report-button :content="$poem" type="poem" size="sm" />
+                            </div>
+                            @endauth
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 justify-content-center align-items-center">
+                                @if($poem->id && $poem->slug)
+                                    <a href="{{ route('poems.show', $poem->slug) }}" class="btn btn-primary px-4 flex-fill">
+                                        <i class="ph-bold ph-read-cv-logo me-2"></i>
+                                        {{ __('poems.actions.read') }}
+                                    </a>
+                                @else
+                                    <button class="btn btn-secondary px-4 flex-fill" disabled>
+                                        <i class="ph-bold ph-read-cv-logo me-2"></i>
+                                        {{ __('poems.actions.read') }}
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
