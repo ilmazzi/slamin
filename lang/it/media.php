@@ -77,4 +77,10 @@ return [
   'success' => 'Successo',
   'no_media_found' => 'Nessun media trovato',
   'no_media_description' => 'Non hai ancora caricato foto o video. Inizia ora!',
+  
+  // Upload Progress
+  'elapsed' => 'Trascorso',
+  'remaining' => 'Rimanente',
+  'connection' => 'Connessione',
+  'mm_ss' => 'mm:ss',
 ];

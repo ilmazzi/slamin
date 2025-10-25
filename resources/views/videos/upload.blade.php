@@ -113,19 +113,21 @@
                                                     <div class="col-6">
                                                         <small class="text-muted d-block">
                                                             <i class="ph-duotone ph-clock me-1"></i>
-                                                            Trascorso: <span id="elapsedTime">00:00</span>
+                                                            {{ __('media.elapsed') }}: <span id="elapsedTime">00:00</span>
+                                                            <span class="f-s-10">({{ __('media.mm_ss') }})</span>
                                                         </small>
                                                     </div>
                                                     <div class="col-6">
                                                         <small class="text-muted d-block">
                                                             <i class="ph-duotone ph-timer me-1"></i>
-                                                            Rimanente: <span id="estimatedTime">--:--</span>
+                                                            {{ __('media.remaining') }}: <span id="estimatedTime">--:--</span>
+                                                            <span class="f-s-10">({{ __('media.mm_ss') }})</span>
                                                         </small>
                                                     </div>
                                                     <div class="col-12">
                                                         <small class="text-muted d-block">
                                                             <i class="ph-duotone ph-wifi me-1"></i>
-                                                            Connessione: <span id="connectionType">--</span>
+                                                            {{ __('media.connection') }}: <span id="connectionType">--</span>
                                                         </small>
                                                     </div>
                                                 </div>
@@ -419,9 +421,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     remainingSeconds = 30 - (elapsedSeconds - (uploadTime + processingTime + 30));
                 }
 
-                remainingSeconds = Math.max(0, remainingSeconds);
+                remainingSeconds = Math.max(0, Math.floor(remainingSeconds));
                 const estMinutes = Math.floor(remainingSeconds / 60);
-                const estSeconds = remainingSeconds % 60;
+                const estSeconds = Math.floor(remainingSeconds % 60);
                 estimatedTime.textContent = `${estMinutes.toString().padStart(2, '0')}:${estSeconds.toString().padStart(2, '0')}`;
 
                 currentPhase++;
