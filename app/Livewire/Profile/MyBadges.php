@@ -9,15 +9,22 @@ class MyBadges extends Component
 {
     public $user;
     public $badges;
-    public $rotatingBadgeIds = [];
-    public $sidebarBadgeIds = [];
-    public $rotatingOrders = [];
-    public $sidebarOrders = [];
+    
+    // Posizioni badge rotanti (1, 2, 3)
+    public $rotatingPosition1 = null;
+    public $rotatingPosition2 = null;
+    public $rotatingPosition3 = null;
+    
+    // Posizioni badge sidebar (1, 2, 3)
+    public $sidebarPosition1 = null;
+    public $sidebarPosition2 = null;
+    public $sidebarPosition3 = null;
 
     public function mount()
     {
         $this->user = Auth::user();
         $this->loadBadges();
+        $this->loadCurrentPositions();
     }
 
     public function loadBadges()
@@ -26,88 +33,105 @@ class MyBadges extends Component
             ->with('badge')
             ->orderBy('earned_at', 'desc')
             ->get();
-        
-        // Load current states
-        $this->rotatingBadgeIds = $this->badges->where('show_in_profile', true)->pluck('id')->toArray();
-        $this->sidebarBadgeIds = $this->badges->where('show_in_sidebar', true)->pluck('id')->toArray();
-        $this->rotatingOrders = $this->badges->pluck('profile_order', 'id')->toArray();
-        $this->sidebarOrders = $this->badges->pluck('sidebar_order', 'id')->toArray();
     }
-
-    public function toggleSidebar($userBadgeId)
+    
+    public function loadCurrentPositions()
     {
-        $userBadge = $this->user->userBadges()->find($userBadgeId);
+        // Carica badge rotanti attuali
+        $rotatingBadges = $this->user->userBadges()
+            ->where('show_in_profile', true)
+            ->orderBy('profile_order')
+            ->get();
         
-        if ($userBadge) {
-            // Check if we're trying to enable and already have 3 in sidebar
-            if (!$userBadge->show_in_sidebar) {
-                $sidebarCount = $this->user->userBadges()->where('show_in_sidebar', true)->count();
-                if ($sidebarCount >= 3) {
-                    $this->dispatch('swal:warning', ['title' => 'Limite Raggiunto', 'text' => 'Puoi mostrare massimo 3 badge nella sidebar!']);
-                    return;
-                }
-            }
-
-            $userBadge->show_in_sidebar = !$userBadge->show_in_sidebar;
-            $userBadge->save();
-            
-            $this->loadBadges();
-            
-            $message = $userBadge->show_in_sidebar ? 'Badge visibile nella sidebar!' : 'Badge rimosso dalla sidebar!';
-            $this->dispatch('swal:success', ['title' => 'Aggiornato!', 'text' => $message]);
-            
-            // Refresh sidebar badges
-            $this->dispatch('refresh-sidebar');
+        foreach ($rotatingBadges as $badge) {
+            $position = $badge->profile_order + 1; // 0,1,2 -> 1,2,3
+            if ($position == 1) $this->rotatingPosition1 = $badge->id;
+            if ($position == 2) $this->rotatingPosition2 = $badge->id;
+            if ($position == 3) $this->rotatingPosition3 = $badge->id;
+        }
+        
+        // Carica badge sidebar attuali
+        $sidebarBadges = $this->user->userBadges()
+            ->where('show_in_sidebar', true)
+            ->orderBy('sidebar_order')
+            ->get();
+        
+        foreach ($sidebarBadges as $badge) {
+            $position = $badge->sidebar_order + 1; // 0,1,2 -> 1,2,3
+            if ($position == 1) $this->sidebarPosition1 = $badge->id;
+            if ($position == 2) $this->sidebarPosition2 = $badge->id;
+            if ($position == 3) $this->sidebarPosition3 = $badge->id;
         }
     }
 
-    public function toggleRotating($userBadgeId)
+    public function setRotatingPosition($userBadgeId, $position)
     {
-        $userBadge = $this->user->userBadges()->find($userBadgeId);
+        // Prima rimuovi TUTTI i badge da tutte le posizioni rotanti
+        $this->user->userBadges()->update([
+            'show_in_profile' => false,
+            'profile_order' => null,
+        ]);
         
-        if ($userBadge) {
-            // Check if we're trying to enable and already have 3 rotating
-            if (!$userBadge->show_in_profile) {
-                $rotatingCount = $this->user->userBadges()->where('show_in_profile', true)->count();
-                if ($rotatingCount >= 3) {
-                    $this->dispatch('swal:warning', ['title' => __('profile.limit_reached'), 'text' => __('profile.max_rotating_badges')]);
-                    return;
-                }
-            }
-
-            $userBadge->show_in_profile = !$userBadge->show_in_profile;
-            $userBadge->save();
-            
-            $this->loadBadges();
-            
-            $message = $userBadge->show_in_profile ? __('profile.badge_rotating_visible') : __('profile.badge_rotating_removed');
-            $this->dispatch('swal:success', ['title' => __('profile.updated'), 'text' => $message]);
+        // Poi imposta i 3 badge scelti
+        if ($this->rotatingPosition1) {
+            $this->user->userBadges()->find($this->rotatingPosition1)->update([
+                'show_in_profile' => true,
+                'profile_order' => 0,
+            ]);
         }
+        if ($this->rotatingPosition2) {
+            $this->user->userBadges()->find($this->rotatingPosition2)->update([
+                'show_in_profile' => true,
+                'profile_order' => 1,
+            ]);
+        }
+        if ($this->rotatingPosition3) {
+            $this->user->userBadges()->find($this->rotatingPosition3)->update([
+                'show_in_profile' => true,
+                'profile_order' => 2,
+            ]);
+        }
+        
+        $this->dispatch('swal:success', [
+            'title' => __('profile.updated'),
+            'text' => __('profile.rotating_badges_updated')
+        ]);
     }
 
-    public function updateSidebarOrder($userBadgeId, $newOrder)
+    public function setSidebarPosition($userBadgeId, $position)
     {
-        $userBadge = $this->user->userBadges()->find($userBadgeId);
+        // Prima rimuovi TUTTI i badge da tutte le posizioni sidebar
+        $this->user->userBadges()->update([
+            'show_in_sidebar' => false,
+            'sidebar_order' => null,
+        ]);
         
-        if ($userBadge) {
-            $userBadge->sidebar_order = (int) $newOrder;
-            $userBadge->save();
-            $this->loadBadges();
-            
-            // Refresh sidebar badges
-            $this->dispatch('refresh-sidebar');
+        // Poi imposta i 3 badge scelti
+        if ($this->sidebarPosition1) {
+            $this->user->userBadges()->find($this->sidebarPosition1)->update([
+                'show_in_sidebar' => true,
+                'sidebar_order' => 0,
+            ]);
         }
-    }
-
-    public function updateRotatingOrder($userBadgeId, $newOrder)
-    {
-        $userBadge = $this->user->userBadges()->find($userBadgeId);
+        if ($this->sidebarPosition2) {
+            $this->user->userBadges()->find($this->sidebarPosition2)->update([
+                'show_in_sidebar' => true,
+                'sidebar_order' => 1,
+            ]);
+        }
+        if ($this->sidebarPosition3) {
+            $this->user->userBadges()->find($this->sidebarPosition3)->update([
+                'show_in_sidebar' => true,
+                'sidebar_order' => 2,
+            ]);
+        }
         
-        if ($userBadge) {
-            $userBadge->profile_order = (int) $newOrder;
-            $userBadge->save();
-            $this->loadBadges();
-        }
+        $this->dispatch('swal:success', [
+            'title' => __('profile.updated'),
+            'text' => __('profile.sidebar_badges_updated')
+        ]);
+        
+        $this->dispatch('refresh-sidebar');
     }
 
     public function render()
