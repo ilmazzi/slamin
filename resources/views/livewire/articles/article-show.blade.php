@@ -91,31 +91,10 @@
                     <!-- Social Actions -->
                     <div class="mt-4 pt-4 border-top">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center gap-3">
-                                <!-- Like Button -->
-                                @if(Auth::check())
-                                    <livewire:social.social-like-button :content="$article" type="article" size="md" />
-                                @else
-                                    <button class="btn btn-primary btn-sm" disabled>
-                                        <i class="ph ph-heart me-1"></i>
-                                        {{ number_format($article->likes_count ?? 0) }}
-                                    </button>
-                                @endif
-
-                                <!-- Comments Button -->
-                                <button wire:click="toggleComments" 
-                                        class="btn btn-primary btn-sm">
-                                    <i class="ph ph-chat-circle me-1"></i>
-                                    {{ number_format($article->comments_count ?? 0) }}
-                                    {{ __('articles.comments') }}
-                                </button>
-
-                                <!-- Share Button -->
-                                <button class="btn btn-primary btn-sm" 
-                                        onclick="navigator.share ? navigator.share({title: '{{ $article->title }}', url: '{{ route('articles.show', $article->slug) }}'}) : navigator.clipboard.writeText('{{ route('articles.show', $article->slug) }}')">
-                                    <i class="ph ph-share me-1"></i>
-                                    {{ __('articles.share') }}
-                                </button>
+                            <div class="d-flex align-items-center gap-2">
+                                <livewire:social.social-view-counter :content="$article" type="article" size="md" :key="'article-view-'.$article->id" />
+                                <livewire:social.social-like-button :content="$article" type="article" size="md" :key="'article-like-'.$article->id" />
+                                <livewire:social.social-comment-button :content="$article" type="article" size="md" :key="'article-comment-'.$article->id" />
                             </div>
 
                             <!-- Author Actions -->
@@ -170,20 +149,11 @@
             </article>
 
             <!-- Comments Section -->
-            @if($showComments)
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="ph ph-chat-circle me-2"></i>
-                            {{ __('articles.comments') }}
-                            <span class="badge bg-primary ms-2">{{ number_format($article->comments_count ?? 0) }}</span>
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        @livewire('social.comment-section', ['contentId' => $article->id, 'contentType' => 'article'], key('comment-section-article-'.$article->id))
-                    </div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    @livewire('social.comment-section', ['contentId' => $article->id, 'contentType' => 'article'], key('comment-section-article-'.$article->id))
                 </div>
-            @endif
+            </div>
 
             <!-- Related Articles -->
             @if($relatedArticles->count() > 0)
@@ -282,26 +252,6 @@
                 </div>
             </div>
 
-            <!-- Share Article -->
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-0">{{ __('articles.share_article') }}</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm" 
-                                onclick="navigator.share ? navigator.share({title: '{{ $article->title }}', url: '{{ route('articles.show', $article->slug) }}'}) : navigator.clipboard.writeText('{{ route('articles.show', $article->slug) }}')">
-                            <i class="ph ph-share me-2"></i>
-                            {{ __('articles.share') }}
-                        </button>
-                        <button class="btn btn-primary btn-sm" 
-                                onclick="navigator.clipboard.writeText('{{ route('articles.show', $article->slug) }}')">
-                            <i class="ph ph-copy me-2"></i>
-                            {{ __('articles.copy_link') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

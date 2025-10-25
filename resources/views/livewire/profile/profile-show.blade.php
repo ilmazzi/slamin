@@ -3,11 +3,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    @if($user->banner_url)
-                        <img src="{{ $user->banner_url }}" alt="Banner" class="img-fluid">
-                    @else
-                        <img src="{{ asset('assets/images/avatar/default-banner.webp') }}" alt="Banner" class="img-fluid">
-                    @endif
+                    {{ $user->getBannerImageUrlAttribute() }}
                 </div>
             </div>
         </div>

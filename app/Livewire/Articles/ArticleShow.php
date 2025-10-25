@@ -11,18 +11,12 @@ class ArticleShow extends Component
 {
     public Article $article;
     public $relatedArticles = [];
-    public $showComments = false;
 
     public function mount(Article $article)
     {
         $this->article = $article;
         $this->loadRelatedArticles();
         $this->incrementViews();
-    }
-
-    public function toggleComments()
-    {
-        $this->showComments = !$this->showComments;
     }
 
     private function loadRelatedArticles()
