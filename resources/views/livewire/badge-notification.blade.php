@@ -1,6 +1,8 @@
-@if($showNotification && $badge)
-<!-- Full Screen Badge Notification -->
-<div class="badge-notification-overlay" 
+<!-- Livewire Component Root (required) -->
+<div>
+    @if($showNotification && $badge)
+    <!-- Full Screen Badge Notification -->
+    <div class="badge-notification-overlay" 
          x-data="{ show: @entangle('showNotification') }"
          x-show="show"
          x-transition:enter="transition ease-out duration-300"
@@ -414,4 +416,5 @@
             }
         }
     </style>
-@endif
+    @endif
+</div>
