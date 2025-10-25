@@ -489,24 +489,20 @@ class BadgeService
             // Get user's updated stats
             $userPoints = UserPoints::where('user_id', $user->id)->first();
             $totalPoints = $userPoints ? $userPoints->total_points : 0;
+            $currentLevel = $userPoints ? $userPoints->level : 1;
             
-            $currentLevel = $this->getCurrentLevel($user);
-            $previousLevel = $currentLevel - 1; // Approximation, could be improved
+            // Calculate previous level (before this badge)
+            $previousTotalPoints = $totalPoints - $badge->points;
             
-            // Check if user leveled up
-            $leveledUp = false;
-            if ($currentLevel > 0) {
-                $requiredPointsForCurrentLevel = GamificationLevel::where('level', $currentLevel)->value('min_points');
-                $previousLevelPoints = GamificationLevel::where('level', $previousLevel)->value('min_points') ?? 0;
-                
-                // If badge points pushed user over the threshold
-                if ($totalPoints >= $requiredPointsForCurrentLevel && 
-                    ($totalPoints - $badge->points) < $requiredPointsForCurrentLevel) {
-                    $leveledUp = true;
-                } else {
-                    $previousLevel = $currentLevel;
-                }
-            }
+            // Get all levels to determine previous level
+            $levels = GamificationLevel::where('required_points', '<=', $previousTotalPoints)
+                ->orderBy('level', 'desc')
+                ->first();
+            
+            $previousLevel = $levels ? $levels->level : 1;
+            
+            // Check if user leveled up with this badge
+            $leveledUp = $currentLevel > $previousLevel;
             
             // Prepare badge data for event
             $badgeData = [
