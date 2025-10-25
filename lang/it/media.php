@@ -1,6 +1,6 @@
 <?php
 
-return array (
+return [
   'media_section' => 'Media',
   'video' => 'Video',
   'photo' => 'Foto',
