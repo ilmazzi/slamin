@@ -1443,10 +1443,10 @@ Route::prefix('articles/layout')->name('articles.layout.')->middleware(['auth', 
     Route::get('/current', [App\Http\Controllers\ArticleLayoutController::class, 'getLayout'])->name('current');
 });
 
-// Routes per articoli - RIPRISTINATE
+// Routes per articoli - LIVEWIRE 3
 Route::prefix('articles')->name('articles.')->group(function () {
     // Routes pubbliche specifiche - DEVE ESSERE PRIMA della rotta generica
-    Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('index');
+    Route::get('/', App\Livewire\Articles\ArticleIndex::class)->name('index');
     Route::get('/search', [App\Http\Controllers\ArticleController::class, 'search'])->name('search');
 
     // Routes autenticate - DEVE ESSERE PRIMA della rotta generica
@@ -1499,7 +1499,7 @@ Route::prefix('articles')->name('articles.')->group(function () {
     });
 
     // Route generica per visualizzare articoli - DEVE ESSERE ALLA FINE
-    Route::get('/{article}', [App\Http\Controllers\ArticleController::class, 'show'])->name('show');
+    Route::get('/{article}', App\Livewire\Articles\ArticleShow::class)->name('show');
 });
 
 // Dashboard principale articoli (admin/editor)
