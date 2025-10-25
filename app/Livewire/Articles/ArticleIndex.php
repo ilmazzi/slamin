@@ -61,12 +61,19 @@ class ArticleIndex extends Component
 
     private function loadLayoutArticles()
     {
-        $this->layoutArticles = ArticleLayout::with(['article.user', 'article.category'])
+        $layouts = ArticleLayout::with(['article.user', 'article.category'])
             ->where('is_active', true)
             ->orderBy('position')
             ->get()
-            ->groupBy('type')
-            ->toArray();
+            ->groupBy('type');
+        
+        // Converti in array mantenendo la struttura corretta
+        $this->layoutArticles = [];
+        foreach ($layouts as $type => $items) {
+            $this->layoutArticles[$type] = $items->map(function($item) {
+                return ['article' => $item->article];
+            })->toArray();
+        }
 
         $this->featuredArticles = Article::with(['user', 'category'])
             ->published()

@@ -42,7 +42,7 @@
 
                         <!-- Layout Articles - Editor Controlled -->
                         <!-- Banner Article -->
-                        @if(isset($layoutArticles['banner']))
+                        @if(isset($layoutArticles['banner']) && count($layoutArticles['banner']) > 0 && isset($layoutArticles['banner'][0]['article']))
                             <div class="row g-3 mb-4">
                                 <!-- Banner Article -->
                                 <div class="col-12">
@@ -83,7 +83,7 @@
                         @endif
 
                         <!-- Featured Articles Grid -->
-                        @if(isset($layoutArticles['featured']))
+                        @if(isset($layoutArticles['featured']) && count($layoutArticles['featured']) > 0)
                             <div class="row g-3 mb-4">
                                 <div class="col-12">
                                     <h5 class="mb-3 f-s-16 f-w-600">
@@ -120,7 +120,7 @@
                         @endif
 
                         <!-- Latest Articles -->
-                        @if(isset($layoutArticles['latest']))
+                        @if(isset($layoutArticles['latest']) && count($layoutArticles['latest']) > 0)
                             <div class="row g-3 mb-4">
                                 <div class="col-12">
                                     <h5 class="mb-3 f-s-16 f-w-600">
