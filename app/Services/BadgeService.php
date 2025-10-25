@@ -520,8 +520,9 @@ class BadgeService
                 'leveled_up' => $leveledUp,
             ];
             
-            // Dispatch Livewire event
-            \Livewire\Livewire::dispatch('badge-earned', badgeData: $badgeData);
+            // Dispatch Livewire event using Laravel event system
+            // Note: Livewire 3 will automatically pick up browser events
+            event(new \App\Events\BadgeEarned($user, $badgeData));
             
             Log::info('Badge earned event emitted', [
                 'user_id' => $user->id,

@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\Attributes\On;
 
 class BadgeNotification extends Component
 {
@@ -14,14 +13,32 @@ class BadgeNotification extends Component
     public $previousLevel = 0;
     public $leveledUp = false;
 
-    #[On('badge-earned')]
-    public function showBadgeNotification($badgeData)
+    /**
+     * Get Livewire listeners for Echo events
+     */
+    protected function getListeners()
     {
-        $this->badge = (object) $badgeData['badge'];
+        if (!auth()->check()) {
+            return [];
+        }
+
+        return [
+            "echo-private:user.{$this->getUserId()},BadgeEarned" => 'handleBadgeEarned',
+        ];
+    }
+
+    /**
+     * Handle badge earned broadcast event
+     */
+    public function handleBadgeEarned($event)
+    {
+        $badgeData = $event['badgeData'] ?? $event;
+        
+        $this->badge = (object) ($badgeData['badge'] ?? []);
         $this->points = $badgeData['points'] ?? 0;
         $this->level = $badgeData['level'] ?? 0;
         $this->previousLevel = $badgeData['previous_level'] ?? 0;
-        $this->leveledUp = $this->level > $this->previousLevel;
+        $this->leveledUp = $badgeData['leveled_up'] ?? ($this->level > $this->previousLevel);
         $this->showNotification = true;
     }
 
@@ -29,6 +46,11 @@ class BadgeNotification extends Component
     {
         $this->showNotification = false;
         $this->badge = null;
+    }
+
+    protected function getUserId()
+    {
+        return auth()->id();
     }
 
     public function render()
