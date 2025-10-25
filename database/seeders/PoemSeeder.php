@@ -15,11 +15,14 @@ class PoemSeeder extends Seeder
     public function run(): void
     {
         // Ottieni alcuni utenti per associare le poesie
-        $users = User::take(5)->get();
+        $users = User::all();
         
         if ($users->isEmpty()) {
+            $this->command->error('❌ Nessun utente trovato! Crea prima degli utenti.');
             return;
         }
+        
+        $this->command->info('📝 Creazione 50 poesie fake...');
 
         $poems = [
             [
@@ -263,5 +266,74 @@ class PoemSeeder extends Seeder
                 'published_at' => now()->subDays(rand(1, 30)),
             ]);
         }
+        
+        $this->command->info('✅ Creati primi 14 template poesie');
+        
+        // Genera altre 36 poesie random per arrivare a 50 totali
+        $faker = \Faker\Factory::create('it_IT');
+        
+        $categories = ['love', 'nature', 'social', 'politics', 'personal', 'philosophy', 'life', 'friendship', 'family', 'travel'];
+        $poemTypes = ['free_verse', 'sonnet', 'haiku', 'limerick', 'ballad', 'ode', 'elegy'];
+        $tagOptions = [
+            'amore', 'natura', 'vita', 'morte', 'libertà', 'pace', 'guerra', 'speranza',
+            'sogni', 'ricordi', 'tempo', 'silenzio', 'musica', 'luce', 'ombra', 'cielo',
+            'mare', 'montagne', 'fiori', 'stelle', 'luna', 'sole', 'vento', 'pioggia',
+            'amicizia', 'famiglia', 'viaggio', 'destino', 'futuro', 'passato', 'presente'
+        ];
+        
+        $this->command->info('🎲 Generazione 36 poesie random...');
+        
+        for ($i = 0; $i < 36; $i++) {
+            $user = $users->random();
+            $category = $faker->randomElement($categories);
+            $poemType = $faker->randomElement($poemTypes);
+            
+            // Genera contenuto poesia
+            $verses = [];
+            $numVerses = rand(4, 8);
+            for ($v = 0; $v < $numVerses; $v++) {
+                $verses[] = $faker->sentence(rand(4, 8));
+            }
+            $content = implode("\n", $verses);
+            
+            // Seleziona 3-5 tag random
+            $tags = $faker->randomElements($tagOptions, rand(3, 5));
+            
+            $title = $faker->sentence(rand(3, 6));
+            $baseSlug = \Illuminate\Support\Str::slug($title);
+            $uniqueSlug = $baseSlug . '-' . time() . '-' . rand(1000, 9999);
+            
+            Poem::create([
+                'title' => $title,
+                'content' => $content,
+                'description' => $faker->paragraph(2),
+                'user_id' => $user->id,
+                'category' => $category,
+                'poem_type' => $poemType,
+                'language' => 'it',
+                'original_language' => 'it',
+                'tags' => $tags,
+                'slug' => $uniqueSlug,
+                'is_public' => true,
+                'moderation_status' => 'approved',
+                'is_featured' => rand(1, 10) > 7, // 30% featured
+                'translation_available' => rand(1, 10) > 6, // 40% translation available
+                'translation_price' => rand(1, 10) > 6 ? rand(15, 50) : null,
+                'view_count' => rand(10, 500),
+                'like_count' => rand(5, 100),
+                'comment_count' => rand(0, 20),
+                'share_count' => rand(0, 50),
+                'bookmark_count' => rand(0, 30),
+                'word_count' => str_word_count(strip_tags($content)),
+                'published_at' => now()->subDays(rand(1, 90)),
+            ]);
+            
+            if (($i + 1) % 10 == 0) {
+                $this->command->info("   ✓ Creati " . ($i + 1) . "/36 poesie random");
+            }
+        }
+        
+        $this->command->info('✅ Totale: 50 poesie create con successo!');
+        $this->command->info('🎯 Ora puoi testare i like e vedere la notifica badge!');
     }
 }
