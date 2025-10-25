@@ -215,7 +215,7 @@
                                             <i class="ph ph-ranking f-s-20"></i>
                                             <span class="ms-1 fw-medium">{{ __('profile.level') }} {{ $level }}</span>
                                         </span>
-                                        <a href="{{ route('profile.badges') }}" 
+                                        <a href="{{ route('profile.my-badges') }}" 
                                            class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1 px-3 py-1"
                                            style="font-size: 0.75rem; border-radius: 20px;">
                                             <i class="ph ph-medal-military f-s-14"></i>
