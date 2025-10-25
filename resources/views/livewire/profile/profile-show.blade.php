@@ -160,7 +160,7 @@
                                 
                                 <!-- Name and Nickname Below Avatar -->
                                 <div class="position-absolute text-center" style="top: 65%; left: 50%; transform: translate(-50%, 0); z-index: 10;">
-                                    <div class="text-white-50 f-s-14">@{{ $user->nickname }}</div>
+                                    
                                     @if($user->bio)
                                     <div class="text-white-75 f-s-12 mt-1" style="max-width: 250px;">{{ Str::limit($user->bio, 60) }}</div>
                                     @endif
@@ -170,21 +170,34 @@
                             <!-- Badge Info at Bottom -->
                             <div class="position-absolute w-100 text-center" style="bottom: 15px; z-index: 10;">
                                 <div class="d-flex justify-content-center gap-4 flex-wrap">
-                                    <div class="text-white">
+                                    <div class="text-primary">
                                         <i class="ph ph-medal f-s-20"></i>
-                                        <span class="ms-1 fw-medium">{{ $badgesCount }} Badge</span>
+                                        <span class="ms-1 fw-medium">{{ $badgesCount }} {{ __('profile.badge') }}</span>
                                     </div>
-                                    <div class="text-white">
+                                    <div class="text-primary">
                                         <i class="ph ph-star f-s-20"></i>
-                                        <span class="ms-1 fw-medium">{{ $totalPoints }} Punti</span>
+                                        <span class="ms-1 fw-medium">{{ $totalPoints }} {{ __('profile.points') }}</span>
                                     </div>
-                                    <div class="text-white">
+                                    <div class="text-primary">
                                         <i class="ph ph-ranking f-s-20"></i>
-                                        <span class="ms-1 fw-medium">Livello {{ $level }}</span>
+                                        <span class="ms-1 fw-medium">{{ __('profile.level') }} {{ $level }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                   
+                </div>
+
+                <!-- About Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="f-w-600 mb-3">{{__('profile.about_me')}}</h6>
+                        @if($user->bio)
+                            <p class="f-s-14 text-muted">{{ $user->bio }}</p>
+                        @else
+                            <p class="f-s-14 text-muted fst-italic">{{__('profile.no_bio_available')}}</p>
+                        @endif
                     </div>
                 </div>
 
@@ -232,44 +245,9 @@
                 </div>
 
                 <!-- Badges Card with Meeting Call Style -->
-                @if($topBadges->count() > 0)
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h6 class="f-w-600 mb-3">
-                                <i class="ph ph-trophy me-2"></i>{{__('profile.badge')}}
-                            </h6>
-                            <div class="row">
-                                @foreach($topBadges->take(6) as $badge)
-                                    <div class="col-md-4 col-sm-6 mb-3">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light-primary d-flex-center p-2 w-40 h-40 b-r-8 me-3">
-                                                <img alt="{{ $badge->name }}" class="img-fluid" 
-                                                     src="{{ $badge->icon_url ?? asset('assets/images/badges/default-badge.png') }}"
-                                                     style="width: 24px; height: 24px; object-fit: cover;">
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <p class="text-dark-800 mb-0 f-w-500 f-s-14 txt-ellipsis-1">{{ $badge->name }}</p>
-                                                <small class="text-muted f-s-12">{{ $badge->description ?? 'Badge speciale' }}</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                @endif
+               
 
-                <!-- About Card -->
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="f-w-600 mb-3">{{__('profile.about_me')}}</h6>
-                        @if($user->bio)
-                            <p class="f-s-14 text-muted">{{ $user->bio }}</p>
-                        @else
-                            <p class="f-s-14 text-muted fst-italic">{{__('profile.no_bio_available')}}</p>
-                        @endif
-                    </div>
-                </div>
+               
             @else
                 <!-- Other Tabs Content -->
                 <div class="card">
