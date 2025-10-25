@@ -19,7 +19,7 @@
     <!-- Mobile-First Sidebar Toggle Button -->
     <div class="row mb-3 d-lg-none">
         <div class="col-12">
-            <button class="btn btn-outline-primary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
+            <button class="btn btn-primary btn-sm w-100" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
                 <i class="ph ph-funnel me-2"></i>
                 {{ __('articles.show_filters') }}
                 <i class="ph ph-chevron-down ms-2"></i>
@@ -144,7 +144,7 @@
                                                     <small class="text-muted f-s-11">
                                                         <i class="ph ph-calendar me-1"></i>{{ $article->published_at ? $article->published_at->format('d/m/Y') : $article->created_at->format('d/m/Y') }}
                                                     </small>
-                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-sm btn-outline-primary">
+                                                    <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-sm btn-primary">
                                                         {{ __('articles.read') }}
                                                     </a>
                                                 </div>
@@ -264,7 +264,7 @@
                         </div>
 
                         <!-- Clear Filters -->
-                        <button wire:click="clearFilters" class="btn btn-outline-secondary w-100">
+                        <button wire:click="clearFilters" class="btn btn-secondary w-100">
                             <i class="ph ph-arrow-counter-clockwise me-2"></i>
                             {{ __('articles.clear_filters') }}
                         </button>
@@ -283,7 +283,7 @@
                                         class="btn btn-link text-decoration-none p-0 text-start">
                                     {{ $category->name }}
                                 </button>
-                                <span class="badge bg-light text-dark">{{ $category->articles_count }}</span>
+                                <span class="badge bg-secondary">{{ $category->articles_count }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -297,7 +297,7 @@
                     <div class="card-body">
                         @foreach($this->tags->take(15) as $tagItem)
                             <button wire:click="$set('tag', '{{ $tagItem->slug }}')" 
-                                    class="badge bg-light text-dark border-0 me-1 mb-1">
+                                    class="badge bg-secondary border-0 me-1 mb-1">
                                 {{ $tagItem->name }} ({{ $tagItem->articles_count }})
                             </button>
                         @endforeach

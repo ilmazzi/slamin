@@ -1,29 +1,4 @@
 <div class="container-fluid">
-    <!-- Breadcrumb -->
-    <div class="row mb-3">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('articles.index') }}" class="text-decoration-none">
-                            {{ __('articles.articles') }}
-                        </a>
-                    </li>
-                    @if($article->category)
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('articles.index', ['category' => $article->category->slug]) }}" class="text-decoration-none">
-                                {{ $article->category->name }}
-                            </a>
-                        </li>
-                    @endif
-                    <li class="breadcrumb-item active" aria-current="page">
-                        {{ Str::limit($article->title, 50) }}
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-
     <div class="row">
         <!-- Main Content -->
         <div class="col-12 col-lg-8">
@@ -87,7 +62,7 @@
 
                         <!-- Excerpt -->
                         @if($article->excerpt)
-                            <div class="alert alert-light border-0 mb-4">
+                            <div class="alert alert-info border-0 mb-4">
                                 <p class="mb-0 f-s-16 f-w-500">{{ $article->excerpt }}</p>
                             </div>
                         @endif
@@ -105,7 +80,7 @@
                             <div class="d-flex flex-wrap gap-2">
                                 @foreach($article->tags as $tag)
                                     <a href="{{ route('articles.index', ['tag' => $tag->slug]) }}" 
-                                       class="badge bg-light text-dark text-decoration-none">
+                                       class="badge bg-primary text-decoration-none">
                                         {{ $tag->name }}
                                     </a>
                                 @endforeach
@@ -121,7 +96,7 @@
                                 @if(Auth::check())
                                     <livewire:social.social-like-button :content="$article" type="article" size="md" />
                                 @else
-                                    <button class="btn btn-outline-primary btn-sm" disabled>
+                                    <button class="btn btn-primary btn-sm" disabled>
                                         <i class="ph ph-heart me-1"></i>
                                         {{ number_format($article->likes_count ?? 0) }}
                                     </button>
@@ -129,14 +104,14 @@
 
                                 <!-- Comments Button -->
                                 <button wire:click="toggleComments" 
-                                        class="btn btn-outline-primary btn-sm">
+                                        class="btn btn-primary btn-sm">
                                     <i class="ph ph-chat-circle me-1"></i>
                                     {{ number_format($article->comments_count ?? 0) }}
                                     {{ __('articles.comments') }}
                                 </button>
 
                                 <!-- Share Button -->
-                                <button class="btn btn-outline-primary btn-sm" 
+                                <button class="btn btn-primary btn-sm" 
                                         onclick="navigator.share ? navigator.share({title: '{{ $article->title }}', url: '{{ route('articles.show', $article->slug) }}'}) : navigator.clipboard.writeText('{{ route('articles.show', $article->slug) }}')">
                                     <i class="ph ph-share me-1"></i>
                                     {{ __('articles.share') }}
@@ -147,7 +122,7 @@
                             @auth
                                 @if(Auth::id() === $article->user_id || Auth::user()->can('articles.moderate'))
                                     <div class="dropdown">
-                                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" 
+                                        <button class="btn btn-secondary btn-sm dropdown-toggle" 
                                                 type="button" 
                                                 data-bs-toggle="dropdown">
                                             <i class="ph ph-gear me-1"></i>
@@ -319,7 +294,7 @@
                             <i class="ph ph-share me-2"></i>
                             {{ __('articles.share') }}
                         </button>
-                        <button class="btn btn-outline-primary btn-sm" 
+                        <button class="btn btn-primary btn-sm" 
                                 onclick="navigator.clipboard.writeText('{{ route('articles.show', $article->slug) }}')">
                             <i class="ph ph-copy me-2"></i>
                             {{ __('articles.copy_link') }}

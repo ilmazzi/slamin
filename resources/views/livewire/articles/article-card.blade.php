@@ -74,12 +74,12 @@
         @if($article->tags->count() > 0)
             <div class="mt-2">
                 @foreach($article->tags->take(3) as $tag)
-                    <span class="badge bg-light text-dark f-s-10 me-1">
+                    <span class="badge bg-secondary f-s-10 me-1">
                         {{ $tag->name }}
                     </span>
                 @endforeach
                 @if($article->tags->count() > 3)
-                    <span class="badge bg-light text-dark f-s-10">
+                    <span class="badge bg-secondary f-s-10">
                         +{{ $article->tags->count() - 3 }}
                     </span>
                 @endif
