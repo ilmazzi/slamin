@@ -128,6 +128,8 @@ class GlobalCommentModal extends Component
     private function findContent($contentId, $contentType)
     {
         switch ($contentType) {
+            case 'event':
+                return \App\Models\Event::find($contentId);
             case 'photo':
                 return \App\Models\Photo::find($contentId);
             case 'video':
