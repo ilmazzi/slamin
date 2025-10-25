@@ -1,10 +1,14 @@
 <div>
     <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body w-100 h-50">
-                    <img src="{{ $user->getBannerImageUrlAttribute() }}" alt="Banner" class="img-fluid">
-                    
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-body p-0">
+                    <div class="position-relative" style="height: 300px; overflow: hidden;">
+                        <img src="{{ $user->getBannerImageUrlAttribute() }}" 
+                             alt="{{ $user->getDisplayName() }}" 
+                             class="w-100 h-100" 
+                             style="object-fit: cover;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,7 +23,7 @@
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'about' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('about')">
                                     <x-icon name="profile" size="20" class="me-2" />
-                                    Profilo
+                                    {{ __('profile.profile') }}
                                 </li>
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'poems' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('poems')">
@@ -86,7 +90,7 @@
                             <a href="{{ route('profile.activity') }}" class="btn btn-secondary btn-sm">
                                 <i class="ph ph-lightning me-2"></i>{{__('profile.view_all_activities')}}
                             </a>
-                            <a href="{{ route('profile.languages.index') }}" class="btn btn-outline-primary btn-sm">
+                            <a href="{{ route('profile.languages.index') }}" class="btn btn-primary btn-sm">
                                 <i class="ph ph-globe me-2"></i>{{__('languages.manage_languages')}}
                             </a>
                         </div>
@@ -222,7 +226,7 @@
                                     <i class="ph ph-medal me-1 ms-2"></i>{{ $badgesCount }} {{__('profile.badge')}}
                                 </div>
                             </div>
-                            <button class="btn btn-outline-primary btn-sm">{{__('profile.manage')}}</button>
+                            <a href="{{ route('profile.badges') }}" class="btn btn-primary btn-sm">{{__('profile.manage')}}</a>
                         </div>
                     </div>
                 </div>
