@@ -201,7 +201,7 @@
                             
                             <!-- Badge Info at Bottom -->
                             <div class="position-absolute w-100 text-center" style="bottom: 15px; z-index: 10;">
-                                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                                <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
                                     <div class="text-primary">
                                         <i class="ph ph-medal f-s-20"></i>
                                         <span class="ms-1 fw-medium">{{ $badgesCount }} {{ __('profile.badge') }}</span>
@@ -210,9 +210,17 @@
                                         <i class="ph ph-star f-s-20"></i>
                                         <span class="ms-1 fw-medium">{{ $totalPoints }} {{ __('profile.points') }}</span>
                                     </div>
-                                    <div class="text-primary">
-                                        <i class="ph ph-ranking f-s-20"></i>
-                                        <span class="ms-1 fw-medium">{{ __('profile.level') }} {{ $level }}</span>
+                                    <div class="text-primary d-flex align-items-center gap-2">
+                                        <span>
+                                            <i class="ph ph-ranking f-s-20"></i>
+                                            <span class="ms-1 fw-medium">{{ __('profile.level') }} {{ $level }}</span>
+                                        </span>
+                                        <a href="{{ route('profile.badges') }}" 
+                                           class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1 px-3 py-1"
+                                           style="font-size: 0.75rem; border-radius: 20px;">
+                                            <i class="ph ph-medal-military f-s-14"></i>
+                                            <span class="fw-medium">{{ __('profile.manage_badges') }}</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

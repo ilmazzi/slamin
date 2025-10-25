@@ -44,6 +44,7 @@ return [
   
   // Badge Management
   'my_badges' => 'I Miei Badge',
+  'manage_badges' => 'Gestisci Badge',
   'manage_badges_description' => 'Gestisci i tuoi badge: scegli quali mostrare come rotanti e in sidebar',
   'show_rotating' => 'Badge Rotanti',
   'show_sidebar' => 'Mostra in Sidebar',
