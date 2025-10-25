@@ -1,4 +1,22 @@
-<div>
+<div x-data="{ 
+    showNotification: @entangle('showNotification'),
+    badge: @entangle('badge'),
+    points: @entangle('points'),
+    level: @entangle('level'),
+    previousLevel: @entangle('previousLevel'),
+    leveledUp: @entangle('leveledUp')
+}" x-init="
+    @auth
+    // Listen to badge earned event via Echo
+    window.Echo.private('user.{{ auth()->id() }}')
+        .listen('BadgeEarned', (event) => {
+            console.log('🎉 Badge Earned Event Received:', event);
+            
+            // Update component data
+            @this.handleBadgeEarned(event);
+        });
+    @endauth
+">
     @if($showNotification && $badge)
     <!-- Full Screen Badge Notification -->
     <div class="badge-notification-overlay" 
