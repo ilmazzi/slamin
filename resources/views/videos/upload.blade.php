@@ -42,6 +42,59 @@
             </div>
         </div>
 
+        <!-- Error Alert -->
+        @if($errors->any())
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-start">
+                        <i class="ph-duotone ph-warning-circle f-s-24 me-3 mt-1"></i>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading mb-2">
+                                <i class="ph ph-x-circle me-2"></i>Errore durante l'upload
+                            </h5>
+                            @foreach($errors->all() as $error)
+                                <p class="mb-0">{{ $error }}</p>
+                            @endforeach
+                            <hr>
+                            <p class="mb-0 small">
+                                <i class="ph ph-info me-1"></i>
+                                Se il problema persiste, verifica:
+                            </p>
+                            <ul class="mb-0 small mt-2">
+                                <li>Di avere un account PeerTube attivo</li>
+                                <li>Che il file video sia in un formato supportato</li>
+                                <li>Che la dimensione del file non superi 100MB</li>
+                                <li>La tua connessione internet</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Success Alert -->
+        @if(session('success'))
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-start">
+                        <i class="ph-duotone ph-check-circle f-s-24 me-3 mt-1 text-success"></i>
+                        <div class="flex-grow-1">
+                            <h5 class="alert-heading mb-2">
+                                <i class="ph ph-check-circle me-2"></i>Upload completato!
+                            </h5>
+                            <p class="mb-0">{{ session('success') }}</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Info Alert -->
         <div class="row mb-4">
             <div class="col-12">
@@ -442,47 +495,91 @@ document.addEventListener('DOMContentLoaded', function() {
 
         fetch(uploadForm.action, {
             method: 'POST',
-            body: formData
+            body: formData,
+            redirect: 'manual' // Gestisci i redirect manualmente
         })
-        .then(response => {
+        .then(async response => {
             clearInterval(timeInterval);
 
-            // Complete the progress
-            progressTitle.textContent = 'Completato!';
-            progressText.textContent = '{{ __('common.video') }} caricato con successo';
-            progressBar.style.width = '100%';
-            progressPercent.textContent = '100%';
-            progressBar.classList.remove('progress-bar-animated');
+            // Se è un redirect, segui il redirect
+            if (response.type === 'opaqueredirect' || response.status === 302 || response.status === 301) {
+                // Complete the progress
+                progressTitle.textContent = 'Completato!';
+                progressText.textContent = '{{ __('common.video') }} caricato con successo';
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                progressBar.classList.remove('progress-bar-animated');
 
-            // Redirect after a short delay
-            setTimeout(() => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    return response.json();
-                }
-            }, 1500);
+                // Redirect dopo breve pausa
+                setTimeout(() => {
+                    window.location.href = response.url || '{{ route("profile.videos") }}';
+                }, 1500);
+                return;
+            }
+
+            // Se non è un redirect di successo, c'è un errore
+            if (!response.ok) {
+                throw new Error('Errore nel server durante l\'upload');
+            }
+
+            // Risposta JSON (non dovrebbe succedere con Laravel redirect)
+            const data = await response.json();
+            
+            if (data.success) {
+                // Success
+                progressTitle.textContent = 'Completato!';
+                progressText.textContent = '{{ __('common.video') }} caricato con successo';
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                progressBar.classList.remove('progress-bar-animated');
+
+                setTimeout(() => {
+                    window.location.href = '{{ route("profile.videos") }}';
+                }, 1500);
+            } else {
+                throw new Error(data.message || 'Errore sconosciuto');
+            }
         })
         .catch(error => {
             clearInterval(timeInterval);
 
-            // Reset to upload state
-            progressState.style.display = 'none';
-            uploadState.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="ph-duotone ph-upload me-1"></i>{{ __('videos.upload_video') }}';
+            // Mostra errore nella progress bar
+            progressTitle.textContent = 'Errore!';
+            progressText.textContent = 'Upload fallito';
+            progressBar.classList.remove('bg-success', 'progress-bar-animated');
+            progressBar.classList.add('bg-danger');
 
-            // Show error with SweetAlert if available
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: '{{ __("videos.upload_error") }}',
-                    text: error.message,
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                alert('{{ __("videos.upload_error_message") }}' + error.message);
-            }
+            // Mostra messaggio di errore dettagliato
+            setTimeout(() => {
+                // Reset UI
+                progressState.style.display = 'none';
+                uploadState.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="ph-duotone ph-upload me-1"></i>{{ __('videos.upload_video') }}';
+
+                // Mostra alert di errore
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore durante l\'upload',
+                        html: `
+                            <p>${error.message}</p>
+                            <hr>
+                            <small class="text-muted">
+                                <strong>Cosa fare:</strong><br>
+                                • Verifica la tua connessione internet<br>
+                                • Controlla che il file sia valido<br>
+                                • Ricarica la pagina e riprova<br>
+                                • Se il problema persiste, contatta l'amministratore
+                            </small>
+                        `,
+                        confirmButtonText: 'Riprova',
+                        confirmButtonColor: '#dc3545'
+                    });
+                } else {
+                    alert('❌ Errore: ' + error.message + '\n\nRicarica la pagina e riprova.');
+                }
+            }, 1000);
         });
     });
 

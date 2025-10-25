@@ -295,7 +295,9 @@ class ProfileController extends Controller
             // Verifica che l'utente abbia un account PeerTube
             if (!$user->hasPeerTubeAccount()) {
                 \Log::warning('❌ Utente senza account PeerTube', ['user_id' => $user->id]);
-                return back()->withErrors(['error' => 'Devi avere un account PeerTube per caricare video. Contatta l\'amministratore.']);
+                return back()
+                    ->withInput()
+                    ->withErrors(['error' => '❌ Account PeerTube non trovato. Devi avere un account PeerTube per caricare video. Contatta l\'amministratore.']);
             }
 
             \Log::info('✅ Account PeerTube verificato');
@@ -377,7 +379,7 @@ class ProfileController extends Controller
             ]);
 
             if (!$peerTubeVideo) {
-                \Log::error('❌ Upload PeerTube fallito');
+                \Log::error('❌ Upload PeerTube fallito - Nessuna risposta dal server');
 
                 // Pulisci i file temporanei
                 Storage::disk('local')->delete($tempPath);
@@ -385,7 +387,9 @@ class ProfileController extends Controller
                     Storage::disk('local')->delete($thumbnailPath);
                 }
 
-                return back()->withErrors(['error' => 'Errore durante l\'upload su PeerTube. Riprova più tardi.']);
+                return back()
+                    ->withInput()
+                    ->withErrors(['error' => '❌ Errore durante l\'upload su PeerTube. Il server non ha risposto correttamente. Verifica la tua connessione e riprova. Se il problema persiste, contatta l\'amministratore.']);
             }
 
             \Log::info('✅ Upload PeerTube completato con successo');
@@ -453,6 +457,25 @@ class ProfileController extends Controller
             return redirect()->route('profile.videos')
                 ->with('success', 'Video caricato con successo! Il video sarà disponibile a breve una volta completata l\'elaborazione.');
 
+        } catch (\Illuminate\Database\QueryException $e) {
+            \Log::error('💥 Errore database durante upload video', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'sql' => $e->getSql() ?? 'N/A'
+            ]);
+
+            // Pulisci i file temporanei
+            if (isset($tempPath)) {
+                Storage::disk('local')->delete($tempPath);
+            }
+            if (isset($thumbnailPath)) {
+                Storage::disk('local')->delete($thumbnailPath);
+            }
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => '❌ Errore nel salvataggio del video nel database. Dettagli: ' . $e->getMessage()]);
+
         } catch (\Exception $e) {
             \Log::error('💥 Errore critico durante upload video', [
                 'user_id' => $user->id,
@@ -470,7 +493,18 @@ class ProfileController extends Controller
                 Storage::disk('local')->delete($thumbnailPath);
             }
 
-            return back()->withErrors(['error' => 'Errore durante l\'upload del video: ' . $e->getMessage()]);
+            $errorMessage = '❌ Errore imprevisto durante l\'upload del video.';
+            
+            // Aggiungi dettagli solo in ambiente di sviluppo
+            if (config('app.debug')) {
+                $errorMessage .= ' Dettagli tecnici: ' . $e->getMessage() . ' (File: ' . basename($e->getFile()) . ':' . $e->getLine() . ')';
+            } else {
+                $errorMessage .= ' Contatta l\'amministratore se il problema persiste.';
+            }
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => $errorMessage]);
         }
     }
 
