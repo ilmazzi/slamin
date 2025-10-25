@@ -2,8 +2,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-body">
-                    {{ $user->getBannerImageUrlAttribute() }}
+                <div class="card-body w-100 h-50">
+                    <img src="{{ $user->getBannerImageUrlAttribute() }}" alt="Banner" class="img-fluid">
+                    
                 </div>
             </div>
         </div>

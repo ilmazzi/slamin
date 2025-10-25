@@ -50,19 +50,10 @@
 
         <!-- Stats & Actions -->
         <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-3 text-muted f-s-12">
-                <span>
-                    <i class="ph ph-eye me-1"></i>
-                    {{ number_format($article->views_count ?? 0) }}
-                </span>
-                <span>
-                    <i class="ph ph-heart me-1"></i>
-                    {{ number_format($article->likes_count ?? 0) }}
-                </span>
-                <span>
-                    <i class="ph ph-chat-circle me-1"></i>
-                    {{ number_format($article->comments_count ?? 0) }}
-                </span>
+            <div class="d-flex align-items-center gap-2">
+                <livewire:social.social-view-counter :content="$article" type="article" size="xs" :key="'article-view-'.$article->id" />
+                <livewire:social.social-like-button :content="$article" type="article" size="xs" :key="'article-like-'.$article->id" />
+                <livewire:social.social-comment-button :content="$article" type="article" size="xs" :key="'article-comment-'.$article->id" />
             </div>
             <a href="{{ route('articles.show', $article->slug) }}" 
                class="btn btn-primary btn-sm">
