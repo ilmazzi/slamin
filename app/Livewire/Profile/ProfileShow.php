@@ -121,7 +121,8 @@ class ProfileShow extends Component
     {
         return $this->user->userBadges()
             ->with('badge')
-            ->orderBy('earned_at', 'desc')
+            ->where('show_in_profile', true)
+            ->orderBy('profile_order', 'asc')
             ->limit(3)
             ->get();
     }
