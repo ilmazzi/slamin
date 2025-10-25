@@ -271,7 +271,7 @@
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
                                             <a href="#" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ $photo->title ? Str::limit($photo->title, 40) : '{{ __('media.untitled_photo') }}' }}
+                                                {{ $photo->title ? Str::limit($photo->title, 40) : __('media.untitled_photo') }}
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-1 mb-2">
@@ -283,7 +283,7 @@
                                                         <i class="ph-duotone ph-user f-s-10 text-primary"></i>
                                                     </div>
                                                 @endif
-                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : '{{ __('media.unknown_user') }}' }}</span>
+                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : __('media.unknown_user') }}</span>
                                             </div>
                                             <span class="f-s-11 text-muted">•</span>
                                             <span class="f-s-11 text-muted">{{ $photo->created_at->diffForHumans() }}</span>
@@ -325,7 +325,7 @@
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
                                             <a href="#" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ $photo->title ? Str::limit($photo->title, 40) : '{{ __('media.untitled_photo') }}' }}
+                                                {{ $photo->title ? Str::limit($photo->title, 40) : __('media.untitled_photo') }}
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-1 mb-2">
@@ -337,7 +337,7 @@
                                                         <i class="ph-duotone ph-user f-s-10 text-primary"></i>
                                                     </div>
                                                 @endif
-                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : '{{ __('media.unknown_user') }}' }}</span>
+                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : __('media.unknown_user') }}</span>
                                             </div>
                                             <span class="f-s-11 text-muted">•</span>
                                             <span class="f-s-11 text-muted">{{ $photo->created_at->diffForHumans() }}</span>
@@ -555,7 +555,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })">{{ Str::limit($video->title ?? '{{ __('media.untitled_video') }}', 50) }}</h6>
+                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })">{{ Str::limit($video->title ?? __('media.untitled_video'), 50) }}</h6>
                                                 <p class="card-text text-muted f-s-12 mb-3">{{ Str::limit($video->description ?? '', 100) }}</p>
                                                 
                                                 <!-- User Info -->
@@ -626,7 +626,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })">{{ Str::limit($photo->title ?? '{{ __('media.untitled_photo') }}', 50) }}</h6>
+                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })">{{ Str::limit($photo->title ?? __('media.untitled_photo'), 50) }}</h6>
                                                 <p class="card-text text-muted f-s-12 mb-3">{{ Str::limit($photo->description ?? '', 100) }}</p>
                                                 
                                                 <!-- User Info -->

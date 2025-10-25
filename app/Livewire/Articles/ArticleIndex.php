@@ -61,31 +61,25 @@ class ArticleIndex extends Component
 
     private function loadLayoutArticles()
     {
-        if (!$this->showAllArticles) {
-            $this->layoutArticles = ArticleLayout::with(['article.user', 'article.category'])
-                ->where('is_active', true)
-                ->orderBy('position')
-                ->get()
-                ->groupBy('type')
-                ->toArray();
+        $this->layoutArticles = ArticleLayout::with(['article.user', 'article.category'])
+            ->where('is_active', true)
+            ->orderBy('position')
+            ->get()
+            ->groupBy('type')
+            ->toArray();
 
-            $this->featuredArticles = Article::with(['user', 'category'])
-                ->published()
-                ->where('featured', true)
-                ->withCount(['likes', 'comments'])
-                ->orderBy('published_at', 'desc')
-                ->limit(6)
-                ->get();
-        }
+        $this->featuredArticles = Article::with(['user', 'category'])
+            ->published()
+            ->where('featured', true)
+            ->withCount(['likes', 'comments'])
+            ->orderBy('published_at', 'desc')
+            ->limit(6)
+            ->get();
     }
 
     public function getArticlesProperty()
     {
-        if ($this->showAllArticles) {
-            return $this->getAllArticles();
-        }
-
-        return collect();
+        return $this->getAllArticles();
     }
 
     private function getAllArticles()

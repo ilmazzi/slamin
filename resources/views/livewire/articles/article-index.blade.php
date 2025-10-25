@@ -174,16 +174,16 @@
                                 {{ __('articles.editor_layout') }}
                             </button>
                         </div>
-                        @if($articles->count() > 0)
+                        @if($this->articles->count() > 0)
                             <div class="row g-3">
-                                @foreach($articles as $article)
+                                @foreach($this->articles as $article)
                                     <div class="col-md-6 col-lg-4">
                                         <livewire:articles.article-card :article="$article" :key="'article-'.$article->id" />
                                     </div>
                                 @endforeach
                             </div>
                             <div class="mt-4">
-                                {{ $articles->links() }}
+                                {{ $this->articles->links() }}
                             </div>
                         @else
                             <div class="text-center py-5">
@@ -251,7 +251,7 @@
                             <label class="form-label">{{ __('articles.category') }}</label>
                             <select class="form-select" wire:model.live="category">
                                 <option value="">{{ __('articles.all_categories') }}</option>
-                                @foreach($categories as $cat)
+                                @foreach($this->categories as $cat)
                                     <option value="{{ $cat->slug }}">{{ $cat->name }} ({{ $cat->articles_count }})</option>
                                 @endforeach
                             </select>
@@ -262,7 +262,7 @@
                             <label class="form-label">{{ __('articles.tags') }}</label>
                             <select class="form-select" wire:model.live="tag">
                                 <option value="">{{ __('articles.all_tags') }}</option>
-                                @foreach($tags as $tag)
+                                @foreach($this->tags as $tag)
                                     <option value="{{ $tag->slug }}">{{ $tag->name }} ({{ $tag->articles_count }})</option>
                                 @endforeach
                             </select>
@@ -293,7 +293,7 @@
                         <h6 class="mb-0">{{ __('articles.categories') }}</h6>
                     </div>
                     <div class="card-body">
-                        @foreach($categories->take(10) as $category)
+                        @foreach($this->categories->take(10) as $category)
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <a href="{{ route('articles.browse.category', $category->slug) }}" 
                                    class="text-decoration-none">
@@ -311,7 +311,7 @@
                         <h6 class="mb-0">{{ __('articles.popular_tags') }}</h6>
                     </div>
                     <div class="card-body">
-                        @foreach($tags->take(15) as $tag)
+                        @foreach($this->tags->take(15) as $tag)
                             <a href="{{ route('articles.browse.tag', $tag->slug) }}" 
                                class="badge bg-light text-dark text-decoration-none me-1 mb-1">
                                 {{ $tag->name }} ({{ $tag->articles_count }})

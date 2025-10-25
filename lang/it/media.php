@@ -1,6 +1,6 @@
 <?php
 
-return [
+return array (
   'media_section' => 'Media',
   'video' => 'Video',
   'photo' => 'Foto',
@@ -57,8 +57,6 @@ return [
   'complete' => 'completato',
   'cancel' => 'Annulla',
   'upload_photo_button' => 'Carica foto',
-  
-  // Common translations (migrated from common.*)
   'back' => 'Indietro',
   'optional' => 'opzionale',
-];
+);
