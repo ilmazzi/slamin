@@ -520,9 +520,16 @@ class BadgeService
                 'leveled_up' => $leveledUp,
             ];
             
-            // Dispatch Livewire event using Laravel event system
-            // Note: Livewire 3 will automatically pick up browser events
-            event(new \App\Events\BadgeEarned($user, $badgeData));
+            // Store badge data in session for immediate display
+            session()->put('badge_earned', $badgeData);
+            
+            // Also dispatch broadcast event for real-time (if available)
+            try {
+                event(new \App\Events\BadgeEarned($user, $badgeData));
+            } catch (\Exception $e) {
+                // Broadcasting might not be configured, continue anyway
+                Log::warning('Badge broadcast failed', ['error' => $e->getMessage()]);
+            }
             
             Log::info('Badge earned event emitted', [
                 'user_id' => $user->id,

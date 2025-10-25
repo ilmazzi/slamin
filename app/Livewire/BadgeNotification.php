@@ -13,27 +13,25 @@ class BadgeNotification extends Component
     public $previousLevel = 0;
     public $leveledUp = false;
 
-    /**
-     * Get Livewire listeners for Echo events
-     */
-    protected function getListeners()
+    public function mount()
     {
-        if (!auth()->check()) {
-            return [];
-        }
+        // Check if there's a badge earned in session
+        $this->checkSessionForBadge();
+    }
 
-        return [
-            "echo-private:user.{$this->getUserId()},BadgeEarned" => 'handleBadgeEarned',
-        ];
+    public function checkSessionForBadge()
+    {
+        if (session()->has('badge_earned')) {
+            $badgeData = session()->pull('badge_earned'); // Get and remove from session
+            $this->handleBadgeEarned($badgeData);
+        }
     }
 
     /**
-     * Handle badge earned broadcast event
+     * Handle badge earned event
      */
-    public function handleBadgeEarned($event)
+    public function handleBadgeEarned($badgeData)
     {
-        $badgeData = $event['badgeData'] ?? $event;
-        
         $this->badge = (object) ($badgeData['badge'] ?? []);
         $this->points = $badgeData['points'] ?? 0;
         $this->level = $badgeData['level'] ?? 0;
@@ -46,11 +44,9 @@ class BadgeNotification extends Component
     {
         $this->showNotification = false;
         $this->badge = null;
-    }
-
-    protected function getUserId()
-    {
-        return auth()->id();
+        
+        // Clear session if still present
+        session()->forget('badge_earned');
     }
 
     public function render()
