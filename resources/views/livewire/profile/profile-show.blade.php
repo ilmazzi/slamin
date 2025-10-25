@@ -86,21 +86,11 @@
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="{{ route('profile.videos') }}" class="text-decoration-none">
+                                <a href="{{ route('profile.media') }}" class="text-decoration-none">
                                     <div class="card text-center hover-effect">
                                         <div class="card-body p-3">
                                             <i class="ph-duotone ph-video-camera f-s-28 text-success mb-2"></i>
-                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.manage_videos')}}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="{{ route('profile.photos') }}" class="text-decoration-none">
-                                    <div class="card text-center hover-effect">
-                                        <div class="card-body p-3">
-                                            <i class="ph-duotone ph-image f-s-28 text-info mb-2"></i>
-                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.my_photos')}}</p>
+                                            <p class="mb-0 f-s-12 text-dark">{{__('profile.my_media')}}</p>
                                         </div>
                                     </div>
                                 </a>
@@ -243,48 +233,7 @@
                     </div>
                 </div>
 
-                <!-- Social Stats Card -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h6 class="f-w-600 mb-3">
-                            <i class="ph ph-chart-bar me-2"></i>{{__('profile.statistics')}}
-                        </h6>
-                        <div class="d-flex justify-content-center gap-4">
-                            <div class="text-center">
-                                <div class="f-w-600 f-s-16">{{ $stats['photos'] + $stats['videos'] + $stats['articles'] + $stats['poems'] }}</div>
-                                <small class="text-muted f-s-12">{{__('profile.posts')}}</small>
-                            </div>
-                            <div class="text-center">
-                                <div class="f-w-600 f-s-16">{{ $stats['followers'] }}</div>
-                                <small class="text-muted f-s-12">{{__('profile.followers')}}</small>
-                            </div>
-                            <div class="text-center">
-                                <div class="f-w-600 f-s-16">{{ $stats['following'] }}</div>
-                                <small class="text-muted f-s-12">{{__('profile.following')}}</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Level Card -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="f-w-600 mb-1">
-                                        <i class="ph ph-waves me-2"></i>{{__('profile.level')}}
-                                </h6>
-                                <div class="f-s-14 text-muted">{{__('profile.apprentice')}}</div>
-                                <div class="f-s-16 f-w-600">{{__('profile.level')}} {{ $level }}</div>
-                                <div class="f-s-14 text-muted">
-                                    <i class="ph ph-diamond me-1"></i>{{ $totalPoints }} {{__('profile.points')}}
-                                    <i class="ph ph-medal me-1 ms-2"></i>{{ $badgesCount }} {{__('profile.badge')}}
-                                </div>
-                            </div>
-                            <a href="{{ route('profile.my-badges') }}" class="btn btn-primary btn-sm">{{__('profile.manage')}}</a>
-                        </div>
-                    </div>
-                </div>
+               
 
                 <!-- Badges Card with Meeting Call Style -->
                

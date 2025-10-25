@@ -59,4 +59,22 @@ return array (
   'upload_photo_button' => 'Carica foto',
   'back' => 'Indietro',
   'optional' => 'opzionale',
-);
+  
+  // Media Management
+  'my_media' => 'I Miei Media',
+  'upload_photo' => 'Carica Foto',
+  'upload_video' => 'Carica Video',
+  'status' => 'Stato',
+  'all_status' => 'Tutti gli Stati',
+  'approved' => 'Approvato',
+  'pending' => 'In Attesa',
+  'rejected' => 'Rifiutato',
+  'untitled' => 'Senza Titolo',
+  'view' => 'Visualizza',
+  'confirm_delete' => 'Sei sicuro di voler eliminare questo elemento?',
+  'video_deleted' => 'Video eliminato con successo',
+  'photo_deleted' => 'Foto eliminata con successo',
+  'success' => 'Successo',
+  'no_media_found' => 'Nessun media trovato',
+  'no_media_description' => 'Non hai ancora caricato foto o video. Inizia ora!',
+];

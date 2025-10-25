@@ -916,10 +916,9 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
             Route::get('/', App\Livewire\Profile\ProfileShow::class)->name('show');
             Route::get('/edit', App\Livewire\Profile\ProfileEdit::class)->name('edit');
             Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('update');
-        Route::get('/videos', App\Livewire\Profile\VideoManagement::class)->name('videos');
-        Route::delete('/videos/{video}', [App\Http\Controllers\ProfileController::class, 'deleteVideo'])->name('videos.delete');
-        Route::get('/photos', App\Livewire\Photos\PhotoIndex::class)->name('photos');
-        Route::delete('/photos/{photo}', [App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('photos.delete');
+        Route::get('/media', App\Livewire\Profile\MediaManagement::class)->name('media');
+        Route::get('/videos', App\Livewire\Profile\MediaManagement::class)->name('videos'); // Redirect to unified media
+        Route::get('/photos', App\Livewire\Profile\MediaManagement::class)->name('photos'); // Redirect to unified media
         Route::get('/activity', [App\Http\Controllers\ProfileController::class, 'activity'])->name('activity');
         Route::get('/followers', [App\Http\Controllers\ProfileController::class, 'followers'])->name('followers');
         Route::get('/following', [App\Http\Controllers\ProfileController::class, 'following'])->name('following');
