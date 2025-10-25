@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class BadgeNotification extends Component
 {
@@ -15,7 +16,7 @@ class BadgeNotification extends Component
 
     public function mount()
     {
-        // Check if there's a badge earned in session
+        // Check if there's a badge earned in session (for page refresh)
         $this->checkSessionForBadge();
     }
 
@@ -28,8 +29,9 @@ class BadgeNotification extends Component
     }
 
     /**
-     * Handle badge earned event
+     * Listen for badge-earned event from other Livewire components
      */
+    #[On('badge-earned')]
     public function handleBadgeEarned($badgeData)
     {
         $this->badge = (object) ($badgeData['badge'] ?? []);
@@ -38,6 +40,9 @@ class BadgeNotification extends Component
         $this->previousLevel = $badgeData['previous_level'] ?? 0;
         $this->leveledUp = $badgeData['leveled_up'] ?? ($this->level > $this->previousLevel);
         $this->showNotification = true;
+        
+        // Clear session since we're showing it now
+        session()->forget('badge_earned');
     }
 
     public function closeNotification()

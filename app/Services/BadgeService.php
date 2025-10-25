@@ -520,15 +520,16 @@ class BadgeService
                 'leveled_up' => $leveledUp,
             ];
             
-            // Store badge data in session for immediate display
+            // Store badge data in session as fallback (for page refresh)
             session()->put('badge_earned', $badgeData);
             
-            // Also dispatch broadcast event for real-time (if available)
+            // Dispatch Livewire event for immediate display (without page refresh)
             try {
-                event(new \App\Events\BadgeEarned($user, $badgeData));
+                // Use Livewire's dispatch helper to trigger event on all components
+                app('livewire')->dispatch('badge-earned', badgeData: $badgeData);
             } catch (\Exception $e) {
-                // Broadcasting might not be configured, continue anyway
-                Log::warning('Badge broadcast failed', ['error' => $e->getMessage()]);
+                // If Livewire dispatch fails, event will be shown on next page load via session
+                Log::warning('Livewire dispatch failed, will show on page refresh', ['error' => $e->getMessage()]);
             }
             
             Log::info('Badge earned event emitted', [
