@@ -62,6 +62,10 @@ trait HasLikes
             'likeable_id' => $this->id
         ]);
         
+        // Check for badge achievement
+        $badgeService = app(\App\Services\BadgeService::class);
+        $badgeService->checkAndAwardBadge($user, 'likes', $this);
+        
         return true;
     }
 

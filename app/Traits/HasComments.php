@@ -46,6 +46,12 @@ trait HasComments
             'status' => 'approved', // Auto-approve for now
         ]);
         
+        // Check for badge achievement (only for top-level comments, not replies)
+        if (!$parentId) {
+            $badgeService = app(\App\Services\BadgeService::class);
+            $badgeService->checkAndAwardBadge($user, 'comments', $this);
+        }
+        
         return $comment;
     }
 
