@@ -57,7 +57,7 @@
                                     <button type="button" 
                                             wire:click="removeImage"
                                             class="btn btn-outline-danger btn-sm">
-                                        <i class="ph ph-x me-1"></i>Rimuovi immagine
+                                        <i class="ph ph-x me-1"></i>{{ __('media.remove_image') }}
                                     </button>
                                 @else
                                     <!-- Upload Icon and Text -->
@@ -85,30 +85,30 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <h5 class="card-title mb-0">
-                                <i class="ph ph-info me-2"></i>Dettagli foto
+                                <i class="ph ph-info me-2"></i>{{ __('media.photo_details') }}
                             </h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="title" class="form-label">Titolo (opzionale)</label>
+                                    <label for="title" class="form-label">{{ __('media.title_optional') }}</label>
                                     <input type="text" 
                                            class="form-control" 
                                            id="title"
                                            wire:model="title"
-                                           placeholder="Inserisci un titolo per la foto">
+                                           placeholder="{{ __('media.title_placeholder') }}">
                                     @error('title') 
                                         <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 
                                 <div class="col-md-6 mb-3">
-                                    <label for="alt_text" class="form-label">Testo alternativo (opzionale)</label>
+                                    <label for="alt_text" class="form-label">{{ __('media.alt_text_optional') }}</label>
                                     <input type="text" 
                                            class="form-control" 
                                            id="alt_text"
                                            wire:model="alt_text"
-                                           placeholder="Descrizione per accessibilità">
+                                           placeholder="{{ __('media.alt_text_placeholder') }}">
                                     @error('alt_text') 
                                         <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
@@ -116,12 +116,12 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="description" class="form-label">Descrizione (opzionale)</label>
+                                <label for="description" class="form-label">{{ __('media.description_optional') }}</label>
                                 <textarea class="form-control" 
                                           id="description"
                                           wire:model="description"
                                           rows="3"
-                                          placeholder="Racconta la storia dietro questa foto..."></textarea>
+                                          placeholder="{{ __('media.description_placeholder') }}"></textarea>
                                 @error('description') 
                                     <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror
@@ -135,7 +135,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="ph ph-upload text-primary me-2"></i>
-                                    <span class="fw-medium">Caricamento in corso...</span>
+                                    <span class="fw-medium">{{ __('media.uploading') }}</span>
                                 </div>
                                 <div class="progress" style="height: 8px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated" 
@@ -146,7 +146,7 @@
                                          aria-valuemax="100">
                                     </div>
                                 </div>
-                                <small class="text-muted mt-1 d-block">{{ $uploadProgress }}% completato</small>
+                                <small class="text-muted mt-1 d-block">{{ $uploadProgress }}% {{ __('media.complete') }}</small>
                             </div>
                         </div>
                     @endif
@@ -163,7 +163,7 @@
                                 wire:target="save"
                                 @if(!$photo) disabled @endif>
                             <span wire:loading.remove wire:target="save">
-                                <i class="ph ph-upload me-1"></i>Carica foto
+                                <i class="ph ph-upload me-1"></i>{{ __('media.upload_photo_button') }}
                             </span>
                             <span wire:loading wire:target="save">
                                 <span class="spinner-border spinner-border-sm me-1" role="status"></span>

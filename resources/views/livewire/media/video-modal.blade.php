@@ -44,7 +44,7 @@
                        class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
                        target="_blank">
                         <i class="ph-duotone ph-arrow-square-out f-s-14"></i>
-                        <span>Apri video</span>
+                        <span>{{ __('media.open_video') }}</span>
                     </a>
                 </div>
                 

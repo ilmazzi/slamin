@@ -4,20 +4,20 @@
         <div class="col-12">
             <h4 class="main-title">
                 <i class="ph ph-video-camera me-2"></i>
-                {{ __('common.media_section') }}
+                {{ __('media.media_section') }}
             </h4>
         </div>
     </div>
 
-    <!-- Prima Riga: Video Più Popolare + 6 Video con Switch -->
+    <!-- Prima Riga: {{ __('media.most_popular_video') }} + 6 Video con Switch -->
     <div class="row mb-4">
-        <!-- Video Più Popolare (Grande) -->
+        <!-- {{ __('media.most_popular_video') }} (Grande) -->
         <div class="col-lg-8">
             <div class="card hover-effect">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-trophy me-2"></i>
-                        Video Più Popolare
+                        {{ __('media.most_popular_video') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -37,12 +37,12 @@
                                             @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
                                                 {{ $mostPopularVideo->formatted_duration ?? '--:--' }}
                                             @else
-                                                <span title="Durata non disponibile">--:--</span>
+                                                <span title="{{ __('media.duration_not_available') }}">--:--</span>
                                             @endif
                                         </small>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views ?? 0 }} Visualizzazioni</span>
+                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views ?? 0 }} {{ __('media.views') }}</span>
                                     </div>
                                 </div>
                             @else
@@ -56,7 +56,7 @@
                                         </div>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views ?? 0 }} Visualizzazioni</span>
+                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views ?? 0 }} {{ __('media.views') }}</span>
                                     </div>
                                 </div>
                             @endif
@@ -85,7 +85,7 @@
                                        class="btn btn-primary btn-sm d-flex align-items-center gap-1 w-100 w-md-auto justify-content-center"
                                        target="_blank">
                                         <i class="ph-duotone ph-arrow-square-out f-s-12"></i>
-                                        <span>Apri video</span>
+                                        <span>{{ __('media.open_video') }}</span>
                                     </a>
                                     <small class="text-muted d-none d-md-block">
                                         <i class="ph-duotone ph-calendar f-s-12 me-1"></i>
@@ -99,7 +99,7 @@
                             <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                                 <i class="ph-duotone ph-video-camera-slash f-s-48 text-primary"></i>
                             </div>
-                            <p class="text-muted f-s-16 mb-0">Nessun video disponibile</p>
+                            <p class="text-muted f-s-16 mb-0">{{ __('media.no_videos_available') }}</p>
                         </div>
                     @endif
                 </div>
@@ -117,11 +117,11 @@
                         </h5>
                         <!-- Switch Nuovi/Popolari -->
                         <div class="d-flex align-items-center">
-                            <span class="me-2 {{ $videoType === 'popular' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="toggleVideoType('popular')">Popolari</span>
+                            <span class="me-2 {{ $videoType === 'popular' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="toggleVideoType('popular')">{{ __('media.popular') }}</span>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" {{ $videoType === 'recent' ? 'checked' : '' }} wire:change="toggleVideoType('{{ $videoType === 'popular' ? 'recent' : 'popular' }}')">
                             </div>
-                            <span class="ms-2 {{ $videoType === 'recent' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="toggleVideoType('recent')">Nuovi</span>
+                            <span class="ms-2 {{ $videoType === 'recent' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="toggleVideoType('recent')">{{ __('media.recent') }}</span>
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                                                target="_blank"
                                                style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                                 <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
-                                                <span>Apri</span>
+                                                <span>{{ __('media.open') }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                 <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-video-camera-slash f-s-24 text-warning"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">Nessun video popolare</p>
+                                <p class="text-muted f-s-14 mb-0">{{ __('media.no_popular_videos') }}</p>
                             </div>
                         @endif
                     @else
@@ -210,7 +210,7 @@
                                                target="_blank"
                                                style="font-size: 10px; padding: 4px 8px; white-space: nowrap;">
                                                 <i class="ph-duotone ph-arrow-square-out f-s-10"></i>
-                                                <span>Apri</span>
+                                                <span>{{ __('media.open') }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -221,7 +221,7 @@
                                 <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-video-camera-slash f-s-24 text-info"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">Nessun video nuovo</p>
+                                <p class="text-muted f-s-14 mb-0">{{ __('media.no_recent_videos') }}</p>
                             </div>
                         @endif
                     @endif
@@ -230,7 +230,7 @@
         </div>
     </div>
 
-    <!-- Seconda Riga: Foto con Switch Nuovi/Popolari + Foto Più Popolare -->
+    <!-- Seconda Riga: Foto con Switch Nuovi/Popolari + {{ __('media.most_popular_photo') }} -->
     <div class="row mb-4">
         <!-- 6 Foto con Switch Nuovi/Popolari (Piccolo) -->
         <div class="col-lg-4">
@@ -243,11 +243,11 @@
                         </h5>
                         <!-- Switch Nuovi/Popolari -->
                         <div class="d-flex align-items-center">
-                            <span class="me-2 {{ $photoType === 'popular' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="togglePhotoType('popular')">Popolari</span>
+                            <span class="me-2 {{ $photoType === 'popular' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="togglePhotoType('popular')">{{ __('media.popular') }}</span>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" {{ $photoType === 'recent' ? 'checked' : '' }} wire:change="togglePhotoType('{{ $photoType === 'popular' ? 'recent' : 'popular' }}')">
                             </div>
-                            <span class="ms-2 {{ $photoType === 'recent' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="togglePhotoType('recent')">Nuovi</span>
+                            <span class="ms-2 {{ $photoType === 'recent' ? 'text-primary' : 'text-muted' }} f-s-14 f-w-500" style="cursor: pointer;" wire:click="togglePhotoType('recent')">{{ __('media.recent') }}</span>
                         </div>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
                                             <a href="#" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ $photo->title ? Str::limit($photo->title, 40) : 'Foto senza titolo' }}
+                                                {{ $photo->title ? Str::limit($photo->title, 40) : '{{ __('media.untitled_photo') }}' }}
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-1 mb-2">
@@ -283,7 +283,7 @@
                                                         <i class="ph-duotone ph-user f-s-10 text-primary"></i>
                                                     </div>
                                                 @endif
-                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : 'Utente sconosciuto' }}</span>
+                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : '{{ __('media.unknown_user') }}' }}</span>
                                             </div>
                                             <span class="f-s-11 text-muted">•</span>
                                             <span class="f-s-11 text-muted">{{ $photo->created_at->diffForHumans() }}</span>
@@ -303,7 +303,7 @@
                                 <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-image-slash f-s-24 text-warning"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">Nessuna foto popolare</p>
+                                <p class="text-muted f-s-14 mb-0">{{ __('media.no_popular_photos') }}</p>
                             </div>
                         @endif
                     @else
@@ -325,7 +325,7 @@
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1 f-w-600 f-s-13">
                                             <a href="#" class="text-decoration-none text-dark hover-text-primary" style="cursor: pointer;">
-                                                {{ $photo->title ? Str::limit($photo->title, 40) : 'Foto senza titolo' }}
+                                                {{ $photo->title ? Str::limit($photo->title, 40) : '{{ __('media.untitled_photo') }}' }}
                                             </a>
                                         </h6>
                                         <div class="d-flex align-items-center gap-1 mb-2">
@@ -337,7 +337,7 @@
                                                         <i class="ph-duotone ph-user f-s-10 text-primary"></i>
                                                     </div>
                                                 @endif
-                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : 'Utente sconosciuto' }}</span>
+                                                <span class="f-s-11 text-muted">{{ $photo->user ? $photo->user->name : '{{ __('media.unknown_user') }}' }}</span>
                                             </div>
                                             <span class="f-s-11 text-muted">•</span>
                                             <span class="f-s-11 text-muted">{{ $photo->created_at->diffForHumans() }}</span>
@@ -357,7 +357,7 @@
                                 <div class="bg-light-info h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-image-slash f-s-24 text-info"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">Nessuna foto nuova</p>
+                                <p class="text-muted f-s-14 mb-0">{{ __('media.no_recent_photos') }}</p>
                             </div>
                         @endif
                     @endif
@@ -365,13 +365,13 @@
             </div>
         </div>
 
-        <!-- Foto Più Popolare (Grande) -->
+        <!-- {{ __('media.most_popular_photo') }} (Grande) -->
         <div class="col-lg-8">
             <div class="card hover-effect">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-trophy me-2"></i>
-                        Foto Più Popolare
+                        {{ __('media.most_popular_photo') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
@@ -386,7 +386,7 @@
                                         </div>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularPhoto->view_count ?? $mostPopularPhoto->views ?? 0 }} Visualizzazioni</span>
+                                        <span class="badge bg-dark f-s-12">{{ $mostPopularPhoto->view_count ?? $mostPopularPhoto->views ?? 0 }} {{ __('media.views') }}</span>
                                     </div>
                                 </div>
                             @else
@@ -400,7 +400,7 @@
                                         </div>
                                     </div>
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularPhoto->view_count ?? $mostPopularPhoto->views ?? 0 }} Visualizzazioni</span>
+                                        <span class="badge bg-dark f-s-12">{{ $mostPopularPhoto->view_count ?? $mostPopularPhoto->views ?? 0 }} {{ __('media.views') }}</span>
                                     </div>
                                 </div>
                             @endif
@@ -435,7 +435,7 @@
                             <div class="bg-light-primary h-80 w-80 d-flex-center rounded-circle m-auto mb-3">
                                 <i class="ph-duotone ph-image-slash f-s-48 text-primary"></i>
                             </div>
-                            <p class="text-muted f-s-16 mb-0">Nessuna foto disponibile</p>
+                            <p class="text-muted f-s-16 mb-0">{{ __('media.no_photos_available') }}</p>
                         </div>
                     @endif
                 </div>
@@ -450,7 +450,7 @@
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="ph-duotone ph-magnifying-glass me-2"></i>
-                        Cerca Media
+                        {{ __('media.search_media') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -458,23 +458,23 @@
                         <div class="col-md-6">
                             <label for="searchQuery" class="form-label">
                                 <i class="ph-duotone ph-search me-1"></i>
-                                Parole chiave
+                                {{ __('media.keywords') }}
                             </label>
                             <input type="text" 
                                    class="form-control" 
                                    id="searchQuery" 
                                    wire:model.live.debounce.300ms="searchQuery"
-                                   placeholder="Cerca video e foto...">
+                                   placeholder="{{ __('media.search_placeholder') }}">
                         </div>
                         <div class="col-md-3">
                             <label for="mediaType" class="form-label">
                                 <i class="ph-duotone ph-files me-1"></i>
-                                Tipo di media
+                                {{ __('media.media_type') }}
                             </label>
                             <select class="form-select" id="mediaType" wire:model.live="mediaType">
-                                <option value="">Tutti i media</option>
-                                <option value="video">Solo video</option>
-                                <option value="photo">Solo foto</option>
+                                <option value="">{{ __('media.all_media') }}</option>
+                                <option value="video">{{ __('media.only_videos') }}</option>
+                                <option value="photo">{{ __('media.only_photos') }}</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -486,12 +486,12 @@
                                    class="form-control" 
                                    id="userId" 
                                    wire:model.live.debounce.300ms="userId"
-                                   placeholder="Nome utente...">
+                                   placeholder="{{ __('media.username_placeholder') }}">
                         </div>
                         <div class="col-md-4">
                             <label for="dateFrom" class="form-label">
                                 <i class="ph-duotone ph-calendar me-1"></i>
-                                Data da
+                                {{ __('media.date_from') }}
                             </label>
                             <input type="date" 
                                    class="form-control" 
@@ -501,7 +501,7 @@
                         <div class="col-md-4">
                             <label for="dateTo" class="form-label">
                                 <i class="ph-duotone ph-calendar me-1"></i>
-                                Data a
+                                {{ __('media.date_to') }}
                             </label>
                             <input type="date" 
                                    class="form-control" 
@@ -524,7 +524,7 @@
         </div>
     </div>
 
-    <!-- Risultati di Ricerca -->
+    <!-- {{ __('media.search_results') }} -->
     @if($hasActiveSearch)
         <div class="row mb-4">
             <div class="col-12">
@@ -532,8 +532,8 @@
                     <div class="card-header">
                         <h5 class="mb-0">
                             <i class="ph-duotone ph-magnifying-glass me-2"></i>
-                            Risultati di Ricerca
-                            <span class="badge bg-primary ms-2">{{ $searchResults['total'] }} risultati</span>
+                            {{ __('media.search_results') }}
+                            <span class="badge bg-primary ms-2">{{ $searchResults['total'] }} {{ __('media.results') }}</span>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -551,11 +551,11 @@
                                                     </div>
                                                 @endif
                                                 <div class="position-absolute top-0 end-0 m-2">
-                                                    <span class="badge bg-primary">Video</span>
+                                                    <span class="badge bg-primary">{{ __('media.video') }}</span>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })">{{ Str::limit($video->title ?? 'Video senza titolo', 50) }}</h6>
+                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })">{{ Str::limit($video->title ?? '{{ __('media.untitled_video') }}', 50) }}</h6>
                                                 <p class="card-text text-muted f-s-12 mb-3">{{ Str::limit($video->description ?? '', 100) }}</p>
                                                 
                                                 <!-- User Info -->
@@ -580,7 +580,7 @@
                                                         class="btn btn-outline-0 d-flex align-items-center justify-content-center gap-1 {{ auth()->check() && $video->isLikedBy(auth()->user()) ? 'text-primary' : 'text-muted' }}"
                                                         style="width: 60px; height: 32px; transition: all 0.2s ease;"
                                                         onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })"
-                                                        title="Metti like">
+                                                        title="{{ __('media.like') }}">
                                                         <img src="{{ asset('assets/icon/new/like.svg') }}" 
                                                              alt="Like" 
                                                              style="width: 26px; height: 26px; {{ auth()->check() && $video->isLikedBy(auth()->user()) ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
@@ -590,7 +590,7 @@
                                                         class="btn btn-outline-0 d-flex align-items-center justify-content-center gap-1 text-muted"
                                                         style="width: 60px; height: 32px; transition: all 0.2s ease;"
                                                         onclick="Livewire.dispatch('openVideoModal', { videoId: {{ $video->id }} })"
-                                                        title="Commenti">
+                                                        title="{{ __('media.comments') }}">
                                                         <i class="ph-duotone ph-chat-circle f-s-18"></i>
                                                         <span class="f-s-13">{{ number_format($video->comments_count ?? 0) }}</span>
                                                     </button>
@@ -602,7 +602,7 @@
                                                        class="btn btn-primary btn-sm d-flex align-items-center gap-1"
                                                        target="_blank">
                                                         <i class="ph-duotone ph-arrow-square-out f-s-12"></i>
-                                                        <span>Apri video</span>
+                                                        <span>{{ __('media.open_video') }}</span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -622,11 +622,11 @@
                                                     </div>
                                                 @endif
                                                 <div class="position-absolute top-0 end-0 m-2">
-                                                    <span class="badge bg-success">Foto</span>
+                                                    <span class="badge bg-success">{{ __('media.photo') }}</span>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })">{{ Str::limit($photo->title ?? 'Foto senza titolo', 50) }}</h6>
+                                                <h6 class="card-title" style="cursor: pointer;" onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })">{{ Str::limit($photo->title ?? '{{ __('media.untitled_photo') }}', 50) }}</h6>
                                                 <p class="card-text text-muted f-s-12 mb-3">{{ Str::limit($photo->description ?? '', 100) }}</p>
                                                 
                                                 <!-- User Info -->
@@ -651,7 +651,7 @@
                                                         class="btn btn-outline-0 d-flex align-items-center justify-content-center gap-1 {{ auth()->check() && $photo->isLikedBy(auth()->user()) ? 'text-primary' : 'text-muted' }}"
                                                         style="width: 60px; height: 32px; transition: all 0.2s ease;"
                                                         onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })"
-                                                        title="Metti like">
+                                                        title="{{ __('media.like') }}">
                                                         <img src="{{ asset('assets/icon/new/like.svg') }}" 
                                                              alt="Like" 
                                                              style="width: 26px; height: 26px; {{ auth()->check() && $photo->isLikedBy(auth()->user()) ? 'filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);' : 'filter: brightness(0) saturate(100%) invert(60%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(89%) contrast(86%);' }}">
@@ -661,7 +661,7 @@
                                                         class="btn btn-outline-0 d-flex align-items-center justify-content-center gap-1 text-muted"
                                                         style="width: 60px; height: 32px; transition: all 0.2s ease;"
                                                         onclick="Livewire.dispatch('openPhotoModal', { photoId: {{ $photo->id }} })"
-                                                        title="Commenti">
+                                                        title="{{ __('media.comments') }}">
                                                         <i class="ph-duotone ph-chat-circle f-s-18"></i>
                                                         <span class="f-s-13">{{ number_format($photo->comments_count ?? 0) }}</span>
                                                     </button>
@@ -676,8 +676,8 @@
                                 <div class="bg-light-warning h-50 w-50 d-flex-center rounded-circle m-auto mb-2">
                                     <i class="ph-duotone ph-magnifying-glass f-s-24 text-warning"></i>
                                 </div>
-                                <p class="text-muted f-s-14 mb-0">Nessun risultato trovato</p>
-                                <p class="text-muted f-s-12 mb-0">Prova a modificare i filtri di ricerca</p>
+                                <p class="text-muted f-s-14 mb-0">{{ __('media.no_results_found') }}</p>
+                                <p class="text-muted f-s-12 mb-0">{{ __('media.try_different_filters') }}</p>
                             </div>
                         @endif
                     </div>

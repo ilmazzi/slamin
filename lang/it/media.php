@@ -1,0 +1,74 @@
+<?php
+
+return [
+  // Media Section
+  'media_section' => 'Media',
+  'video' => 'Video',
+  'photo' => 'Foto',
+  'views' => 'Visualizzazioni',
+  
+  // Popular & Recent
+  'most_popular_video' => 'Video Più Popolare',
+  'most_popular_photo' => 'Foto Più Popolare',
+  'popular' => 'Popolari',
+  'recent' => 'Nuovi',
+  
+  // No Content Messages
+  'no_videos_available' => 'Nessun video disponibile',
+  'no_photos_available' => 'Nessuna foto disponibile',
+  'no_popular_videos' => 'Nessun video popolare',
+  'no_popular_photos' => 'Nessuna foto popolare',
+  'no_recent_videos' => 'Nessun video nuovo',
+  'no_recent_photos' => 'Nessuna foto nuova',
+  'no_photos_found' => 'Nessuna foto trovata',
+  'no_results_found' => 'Nessun risultato trovato',
+  'no_photos_match_search' => 'Nessuna foto corrisponde alla ricerca',
+  
+  // Search & Filters
+  'search_media' => 'Cerca Media',
+  'search_results' => 'Risultati di Ricerca',
+  'results' => 'risultati',
+  'keywords' => 'Parole chiave',
+  'search_placeholder' => 'Cerca video e foto...',
+  'search_photos_placeholder' => 'Cerca foto per titolo, descrizione...',
+  'media_type' => 'Tipo di media',
+  'all_media' => 'Tutti i media',
+  'only_videos' => 'Solo video',
+  'only_photos' => 'Solo foto',
+  'user' => 'Utente',
+  'username_placeholder' => 'Nome utente...',
+  'date_from' => 'Data da',
+  'date_to' => 'Data a',
+  'search' => 'Cerca',
+  'clear' => 'Pulisci',
+  'clear_search' => 'Cancella ricerca',
+  'try_different_filters' => 'Prova a modificare i filtri di ricerca',
+  'photos_per_page' => 'Foto per pagina',
+  
+  // Actions
+  'open' => 'Apri',
+  'open_video' => 'Apri video',
+  'like' => 'Metti like',
+  'comments' => 'Commenti',
+  
+  // Content Details
+  'untitled_video' => 'Video senza titolo',
+  'untitled_photo' => 'Foto senza titolo',
+  'unknown_user' => 'Utente sconosciuto',
+  'duration_not_available' => 'Durata non disponibile',
+  
+  // Upload & Edit
+  'remove_image' => 'Rimuovi immagine',
+  'photo_details' => 'Dettagli foto',
+  'title_optional' => 'Titolo (opzionale)',
+  'title_placeholder' => 'Inserisci un titolo per la foto',
+  'alt_text_optional' => 'Testo alternativo (opzionale)',
+  'alt_text_placeholder' => 'Descrizione per accessibilità',
+  'description_optional' => 'Descrizione (opzionale)',
+  'description_placeholder' => 'Racconta la storia dietro questa foto...',
+  'uploading' => 'Caricamento in corso...',
+  'complete' => 'completato',
+  'cancel' => 'Annulla',
+  'upload_photo_button' => 'Carica foto',
+];
+

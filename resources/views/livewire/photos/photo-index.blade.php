@@ -37,12 +37,12 @@
                                 <input type="text" 
                                        class="form-control" 
                                        wire:model.live.debounce.300ms="search"
-                                       placeholder="Cerca foto per titolo, descrizione...">
+                                       placeholder="{{ __('media.search_photos_placeholder') }}">
                             </div>
                         </div>
                         <div class="col-md-6 text-md-end">
                             <div class="d-flex align-items-center justify-content-md-end">
-                                <label class="form-label me-2 mb-0">Foto per pagina:</label>
+                                <label class="form-label me-2 mb-0">{{ __('media.photos_per_page') }}:</label>
                                 <select class="form-select form-select-sm" 
                                         wire:model.live="perPage" 
                                         style="width: auto;">
@@ -131,13 +131,13 @@
                     <div class="card-body text-center py-5">
                         @if($search)
                             <i class="ph ph-magnifying-glass f-s-48 text-muted mb-3"></i>
-                            <h5 class="text-muted mb-3">Nessuna foto trovata</h5>
+                            <h5 class="text-muted mb-3">{{ __('media.no_photos_found') }}</h5>
                             <p class="text-secondary mb-4">
-                                Nessuna foto corrisponde alla ricerca "{{ $search }}"
+                                {{ __('media.no_photos_match_search') }} "{{ $search }}"
                             </p>
                             <button class="btn btn-outline-primary" wire:click="$set('search', '')">
                                 <i class="ph ph-arrow-counter-clockwise me-1"></i>
-                                Cancella ricerca
+                                {{ __('media.clear_search') }}
                             </button>
                         @else
                             <i class="ph ph-images f-s-48 text-muted mb-3"></i>
