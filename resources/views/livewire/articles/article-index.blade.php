@@ -31,14 +31,13 @@
     <div class="row">
         <!-- Main Content - Mobile-First -->
         <div class="col-12 col-lg-8 order-1 order-lg-1">
-            @if(!$showAllArticles)
+            @if(!$showAllArticles && isset($layoutArticles) && !empty($layoutArticles))
                 <!-- Editor-Controlled Layout -->
-                @if(isset($layoutArticles) && !empty($layoutArticles))
-                    <div class="mb-4">
-                        <h4 class="mb-3 f-s-18 f-w-600">
-                            <i class="ph ph-star me-2"></i>
-                            {{ __('articles.editor_picks') }}
-                        </h4>
+                <div class="mb-4">
+                    <h4 class="mb-3 f-s-18 f-w-600">
+                        <i class="ph ph-star me-2"></i>
+                        {{ __('articles.editor_picks') }}
+                    </h4>
 
                         <!-- Layout Articles - Editor Controlled -->
                         <!-- Banner Article -->
@@ -156,64 +155,49 @@
                             </div>
                         @endif
 
-                        <!-- Show All Articles Toggle -->
-                        <div class="text-center mb-4">
-                            <button wire:click="toggleShowAll" class="btn btn-primary">
-                                <i class="ph ph-list me-2"></i>
-                                {{ __('articles.show_all_articles') }}
-                            </button>
-                        </div>
+                    <!-- Show All Articles Toggle -->
+                    <div class="text-center mb-4">
+                        <button wire:click="toggleShowAll" class="btn btn-primary">
+                            <i class="ph ph-list me-2"></i>
+                            {{ __('articles.show_all_articles') }}
+                        </button>
                     </div>
-                @else
-                    <!-- No Layout Articles - Show All -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="mb-0">{{ __('articles.all_articles') }}</h4>
-                            <button wire:click="toggleShowAll" class="btn btn-sm btn-outline-primary">
-                                <i class="ph ph-layout me-2"></i>
-                                {{ __('articles.editor_layout') }}
-                            </button>
-                        </div>
-                        @if($this->articles->count() > 0)
-                            <div class="row g-3">
-                                @foreach($this->articles as $article)
-                                    <div class="col-md-6 col-lg-4">
-                                        <livewire:articles.article-card :article="$article" :key="'article-'.$article->id" />
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="mt-4">
-                                {{ $this->articles->links() }}
-                            </div>
-                        @else
-                            <div class="text-center py-5">
-                                <i class="ph ph-newspaper f-s-48 text-muted mb-3"></i>
-                                <h5 class="text-muted">{{ __('articles.no_articles_found') }}</h5>
-                                <p class="text-secondary">{{ __('articles.no_articles_description') }}</p>
-                            </div>
-                        @endif
+                </div>
+            @elseif(!$showAllArticles && (empty($layoutArticles) || !isset($layoutArticles)))
+                <!-- No Layout Articles - Show message -->
+                <div class="mb-4">
+                    <div class="text-center py-5">
+                        <i class="ph ph-layout f-s-48 text-muted mb-3"></i>
+                        <h5 class="text-muted">{{ __('articles.no_layout_configured') }}</h5>
+                        <p class="text-secondary">{{ __('articles.no_layout_description') }}</p>
+                        <button wire:click="toggleShowAll" class="btn btn-primary">
+                            <i class="ph ph-list me-2"></i>
+                            {{ __('articles.show_all_articles') }}
+                        </button>
                     </div>
-                @endif
-            @else
+                </div>
+            @endif
+            
+            @if($showAllArticles)
                 <!-- Show All Articles Mode -->
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="mb-0">{{ __('articles.all_articles') }}</h4>
-                        <button wire:click="toggleShowAll" class="btn btn-sm btn-outline-primary">
+                        <button wire:click="toggleShowAll" class="btn btn-sm btn-primary">
                             <i class="ph ph-layout me-2"></i>
                             {{ __('articles.editor_layout') }}
                         </button>
                     </div>
-                    @if($articles->count() > 0)
+                    @if($this->articles->count() > 0)
                         <div class="row g-3">
-                            @foreach($articles as $article)
+                            @foreach($this->articles as $article)
                                 <div class="col-md-6 col-lg-4">
                                     <livewire:articles.article-card :article="$article" :key="'article-'.$article->id" />
                                 </div>
                             @endforeach
                         </div>
                         <div class="mt-4">
-                            {{ $articles->links() }}
+                            {{ $this->articles->links() }}
                         </div>
                     @else
                         <div class="text-center py-5">

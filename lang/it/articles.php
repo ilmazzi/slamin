@@ -8,6 +8,8 @@ return [
   'all_articles' => 'Tutti gli Articoli',
   'no_articles_found' => 'Nessun articolo trovato',
   'no_articles_description' => 'Non ci sono articoli disponibili al momento.',
+  'no_layout_configured' => 'Nessun layout configurato',
+  'no_layout_description' => 'Gli editor non hanno ancora configurato un layout. Visualizza tutti gli articoli.',
   
   // Layout & Display
   'editor_picks' => 'Scelte della Redazione',
