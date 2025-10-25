@@ -11,7 +11,7 @@
                     </li>
                     @if($article->category)
                         <li class="breadcrumb-item">
-                            <a href="{{ route('articles.browse.category', $article->category->slug) }}" class="text-decoration-none">
+                            <a href="{{ route('articles.index', ['category' => $article->category->slug]) }}" class="text-decoration-none">
                                 {{ $article->category->name }}
                             </a>
                         </li>
@@ -104,7 +104,7 @@
                             <h6 class="mb-3">{{ __('articles.tags') }}</h6>
                             <div class="d-flex flex-wrap gap-2">
                                 @foreach($article->tags as $tag)
-                                    <a href="{{ route('articles.browse.tag', $tag->slug) }}" 
+                                    <a href="{{ route('articles.index', ['tag' => $tag->slug]) }}" 
                                        class="badge bg-light text-dark text-decoration-none">
                                         {{ $tag->name }}
                                     </a>

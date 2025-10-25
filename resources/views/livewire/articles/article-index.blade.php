@@ -295,10 +295,10 @@
                     <div class="card-body">
                         @foreach($this->categories->take(10) as $category)
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <a href="{{ route('articles.browse.category', $category->slug) }}" 
-                                   class="text-decoration-none">
+                                <button wire:click="$set('category', '{{ $category->slug }}')" 
+                                        class="btn btn-link text-decoration-none p-0 text-start">
                                     {{ $category->name }}
-                                </a>
+                                </button>
                                 <span class="badge bg-light text-dark">{{ $category->articles_count }}</span>
                             </div>
                         @endforeach
@@ -311,11 +311,11 @@
                         <h6 class="mb-0">{{ __('articles.popular_tags') }}</h6>
                     </div>
                     <div class="card-body">
-                        @foreach($this->tags->take(15) as $tag)
-                            <a href="{{ route('articles.browse.tag', $tag->slug) }}" 
-                               class="badge bg-light text-dark text-decoration-none me-1 mb-1">
-                                {{ $tag->name }} ({{ $tag->articles_count }})
-                            </a>
+                        @foreach($this->tags->take(15) as $tagItem)
+                            <button wire:click="$set('tag', '{{ $tagItem->slug }}')" 
+                                    class="badge bg-light text-dark border-0 me-1 mb-1">
+                                {{ $tagItem->name }} ({{ $tagItem->articles_count }})
+                            </button>
                         @endforeach
                     </div>
                 </div>
