@@ -167,7 +167,7 @@
                                 <div class="badge-container badge-orbit-1">
                                     <img src="{{ $topBadges[0]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[0]->badge->name }}" 
-                                         style="width: 60px; height: 60px; border-radius: 50%;">
+                                         style="width: 45px; height: 45px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[0]->badge->name }}</div>
                                 </div>
                                 @endif
@@ -176,7 +176,7 @@
                                 <div class="badge-container badge-orbit-2">
                                     <img src="{{ $topBadges[1]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[1]->badge->name }}" 
-                                         style="width: 60px; height: 60px; border-radius: 50%;">
+                                         style="width: 45px; height: 45px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[1]->badge->name }}</div>
                                 </div>
                                 @endif
@@ -185,7 +185,7 @@
                                 <div class="badge-container badge-orbit-3">
                                     <img src="{{ $topBadges[2]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
                                          alt="{{ $topBadges[2]->badge->name }}" 
-                                         style="width: 60px; height: 60px; border-radius: 50%;">
+                                         style="width: 45px; height: 45px; border-radius: 50%;">
                                     <div class="badge-name">{{ $topBadges[2]->badge->name }}</div>
                                 </div>
                                 @endif

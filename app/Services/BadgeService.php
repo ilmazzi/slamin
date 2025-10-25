@@ -107,6 +107,9 @@ class BadgeService
             // Send notification
             $user->notify(new BadgeEarnedNotification($badge));
 
+            // Emit Livewire event for full-screen notification
+            $this->emitBadgeEarnedEvent($user, $badge);
+
             return $userBadge;
 
         } catch (\Exception $e) {
@@ -208,6 +211,9 @@ class BadgeService
 
             // Send notification
             $user->notify(new BadgeEarnedNotification($badge));
+
+            // Emit Livewire event for full-screen notification
+            $this->emitBadgeEarnedEvent($user, $badge);
 
             Log::info('Badge awarded', [
                 'user_id' => $user->id,
@@ -468,6 +474,73 @@ class BadgeService
             'progress' => $progress,
             'all_badges' => $allBadges,
         ];
+    }
+
+    /**
+     * Emit Livewire event for badge earned notification
+     *
+     * @param User $user
+     * @param Badge $badge
+     * @return void
+     */
+    protected function emitBadgeEarnedEvent(User $user, Badge $badge): void
+    {
+        try {
+            // Get user's updated stats
+            $userPoints = UserPoints::where('user_id', $user->id)->first();
+            $totalPoints = $userPoints ? $userPoints->total_points : 0;
+            
+            $currentLevel = $this->getCurrentLevel($user);
+            $previousLevel = $currentLevel - 1; // Approximation, could be improved
+            
+            // Check if user leveled up
+            $leveledUp = false;
+            if ($currentLevel > 0) {
+                $requiredPointsForCurrentLevel = GamificationLevel::where('level', $currentLevel)->value('min_points');
+                $previousLevelPoints = GamificationLevel::where('level', $previousLevel)->value('min_points') ?? 0;
+                
+                // If badge points pushed user over the threshold
+                if ($totalPoints >= $requiredPointsForCurrentLevel && 
+                    ($totalPoints - $badge->points) < $requiredPointsForCurrentLevel) {
+                    $leveledUp = true;
+                } else {
+                    $previousLevel = $currentLevel;
+                }
+            }
+            
+            // Prepare badge data for event
+            $badgeData = [
+                'badge' => [
+                    'id' => $badge->id,
+                    'name' => $badge->name,
+                    'description' => $badge->description,
+                    'icon_url' => $badge->icon_url,
+                    'points' => $badge->points,
+                    'category' => $badge->category,
+                ],
+                'points' => $badge->points,
+                'level' => $currentLevel,
+                'previous_level' => $previousLevel,
+                'leveled_up' => $leveledUp,
+            ];
+            
+            // Dispatch Livewire event
+            \Livewire\Livewire::dispatch('badge-earned', badgeData: $badgeData);
+            
+            Log::info('Badge earned event emitted', [
+                'user_id' => $user->id,
+                'badge_id' => $badge->id,
+                'level' => $currentLevel,
+                'leveled_up' => $leveledUp,
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error emitting badge earned event', [
+                'user_id' => $user->id,
+                'badge_id' => $badge->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
 
