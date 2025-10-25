@@ -226,7 +226,7 @@
                                     <i class="ph ph-medal me-1 ms-2"></i>{{ $badgesCount }} {{__('profile.badge')}}
                                 </div>
                             </div>
-                            <a href="{{ route('profile.badges') }}" class="btn btn-primary btn-sm">{{__('profile.manage')}}</a>
+                            <a href="{{ route('profile.my-badges') }}" class="btn btn-primary btn-sm">{{__('profile.manage')}}</a>
                         </div>
                     </div>
                 </div>
