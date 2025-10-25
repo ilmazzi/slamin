@@ -88,6 +88,9 @@ Route::prefix('events/{event}/scoring')->name('events.scoring.')->middleware('au
 // User Profile Badges & Gamification
 Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
     Route::get('/my-badges', App\Livewire\Profile\MyBadges::class)->name('my-badges');
+    Route::get('/badge-display-demo', function () {
+        return view('badge-display-demo');
+    })->name('badge-display-demo');
 });
 
 // Moderator Forum Routes
