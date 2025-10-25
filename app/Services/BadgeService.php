@@ -212,8 +212,8 @@ class BadgeService
             // Send notification
             $user->notify(new BadgeEarnedNotification($badge));
 
-            // Store badge earned data in session for immediate display
-            $this->storeBadgeInSession($user, $badge);
+            // Emit Livewire event for full-screen notification
+            $this->emitBadgeEarnedEvent($user, $badge);
 
             Log::info('Badge awarded', [
                 'user_id' => $user->id,
