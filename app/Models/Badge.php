@@ -62,10 +62,21 @@ class Badge extends Model
      */
     public function getIconUrlAttribute(): string
     {
-        if ($this->icon_path && file_exists(public_path($this->icon_path))) {
-            // Add timestamp to force cache refresh when image is updated
-            $timestamp = $this->updated_at ? $this->updated_at->timestamp : time();
-            return asset($this->icon_path) . '?v=' . $timestamp;
+        // Check if icon_path exists and is a storage path
+        if ($this->icon_path) {
+            // If it's a storage path (badges/...)
+            if (str_starts_with($this->icon_path, 'badges/')) {
+                if (\Storage::disk('public')->exists($this->icon_path)) {
+                    // Add timestamp to force cache refresh when image is updated
+                    $timestamp = $this->updated_at ? $this->updated_at->timestamp : time();
+                    return asset('storage/' . $this->icon_path) . '?v=' . $timestamp;
+                }
+            }
+            // If it's a public path (assets/images/...)
+            elseif (file_exists(public_path($this->icon_path))) {
+                $timestamp = $this->updated_at ? $this->updated_at->timestamp : time();
+                return asset($this->icon_path) . '?v=' . $timestamp;
+            }
         }
         
         // Fallback to draghetto.png
