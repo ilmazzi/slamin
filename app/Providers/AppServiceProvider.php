@@ -71,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
             'event_round' => \App\Models\EventRound::class,
             'event_participant' => \App\Models\EventParticipant::class,
             'event_ranking' => \App\Models\EventRanking::class,
+            'user_badge' => \App\Models\UserBadge::class,
         ]);
 
         // Registra l'observer per i video
