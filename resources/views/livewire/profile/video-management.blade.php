@@ -116,7 +116,7 @@
                                     </button>
                                     <button class="btn btn-outline-danger btn-sm" 
                                             onclick="confirm('{{ __('videos.confirm_delete') }}') && @this.deleteVideo({{ $video->id }})"
-                                            title="{{ __('common.delete') }}">
+                                            title="{{ __('profile.delete') }}">
                                         <i class="ph ph-trash"></i>
                                     </button>
                                 </div>

@@ -7,7 +7,7 @@
                     <i class="ph ph-image me-2"></i>{{ __('photos.upload_photo') }}
                 </h4>
                 <a href="{{ route('photos.index') }}" class="btn btn-light">
-                    <i class="ph ph-arrow-left me-1"></i>{{ __('common.back') }}
+                    <i class="ph ph-arrow-left me-1"></i>{{ __('media.back') }}
                 </a>
             </div>
         </div>

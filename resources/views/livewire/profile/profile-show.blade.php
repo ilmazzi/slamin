@@ -16,12 +16,12 @@
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'poems' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('poems')">
                                     <x-icon name="poetry" size="20" class="me-2" />
-                                    {{__('common.poems')}}
+                                    {{__('profile.poems')}}
                                 </li>
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'events' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('events')">
                                     <x-icon name="event" size="20" class="me-2" />
-                                    {{__('common.events')}}
+                                    {{__('profile.events')}}
                                     <span class="badge rounded-pill bg-success badge-notification">
                                         1
                                         <span class="visually-hidden">unread messages</span>
@@ -30,7 +30,7 @@
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'media' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('media')">
                                     <x-icon name="media" size="20" class="me-2" />
-                                    {{__('common.my_media')}}
+                                    {{__('profile.my_media')}}
                                     <span class="badge rounded-pill bg-primary badge-notification">
                                         2
                                         <span class="visually-hidden">unread messages</span>
@@ -39,12 +39,12 @@
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'articles' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('articles')">
                                     <x-icon name="article" size="20" class="me-2" />
-                                    {{__('common.my_articles')}}
+                                    {{__('profile.my_articles')}}
                                 </li>
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'activities' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('activities')">
                                     <x-icon name="activity" size="20" class="me-2" />
-                                    {{__('common.my_activities')}}
+                                    {{__('profile.my_activities')}}
                                     <span class="badge rounded-pill bg-warning badge-notification">
                                         10+
                                         <span class="visually-hidden">unread messages</span>
@@ -53,7 +53,7 @@
                                 <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'settings' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('settings')">
                                     <x-icon name="settings" size="20" class="me-2" />
-                                    {{__('common.settings')}}
+                                    {{__('profile.settings')}}
                                 </li>
                             </ul>
                         </div>
@@ -61,22 +61,22 @@
 
                     <!-- Quick Actions -->
                     <div>
-                        <h6 class="f-w-600 mb-3">{{__('common.quick_actions')}}</h6>
+                        <h6 class="f-w-600 mb-3">{{__('profile.quick_actions')}}</h6>
                         <div class="d-grid gap-2">
                             <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm">
-                                <i class="ph ph-pencil me-2"></i>{{__('common.edit_profile')}}
+                                <i class="ph ph-pencil me-2"></i>{{__('profile.edit_profile')}}
                             </a>
                             <a href="{{ route('profile.videos') }}" class="btn btn-success btn-sm">
-                                <i class="ph ph-video-camera me-2"></i>{{__('common.manage_videos')}}
+                                <i class="ph ph-video-camera me-2"></i>{{__('profile.manage_videos')}}
                             </a>
                             <a href="{{ route('profile.photos') }}" class="btn btn-info btn-sm">
-                                <i class="ph ph-image me-2"></i>{{__('common.my_photos')}}
+                                <i class="ph ph-image me-2"></i>{{__('profile.my_photos')}}
                             </a>
                             <a href="{{ route('articles.create') }}" class="btn btn-warning btn-sm">
-                                <i class="ph ph-article me-2"></i>{{__('common.create_article')}}
+                                <i class="ph ph-article me-2"></i>{{__('profile.create_article')}}
                             </a>
                             <a href="{{ route('profile.activity') }}" class="btn btn-secondary btn-sm">
-                                <i class="ph ph-lightning me-2"></i>{{__('common.view_all_activities')}}
+                                <i class="ph ph-lightning me-2"></i>{{__('profile.view_all_activities')}}
                             </a>
                             <a href="{{ route('profile.languages.index') }}" class="btn btn-outline-primary btn-sm">
                                 <i class="ph ph-globe me-2"></i>{{__('languages.manage_languages')}}
@@ -180,20 +180,20 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h6 class="f-w-600 mb-3">
-                            <i class="ph ph-chart-bar me-2"></i>{{__('common.statistics')}}
+                            <i class="ph ph-chart-bar me-2"></i>{{__('profile.statistics')}}
                         </h6>
                         <div class="d-flex justify-content-center gap-4">
                             <div class="text-center">
                                 <div class="f-w-600 f-s-16">{{ $stats['photos'] + $stats['videos'] + $stats['articles'] + $stats['poems'] }}</div>
-                                <small class="text-muted f-s-12">{{__('common.posts')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.posts')}}</small>
                             </div>
                             <div class="text-center">
                                 <div class="f-w-600 f-s-16">{{ $stats['followers'] }}</div>
-                                <small class="text-muted f-s-12">{{__('common.followers')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.followers')}}</small>
                             </div>
                             <div class="text-center">
                                 <div class="f-w-600 f-s-16">{{ $stats['following'] }}</div>
-                                <small class="text-muted f-s-12">{{__('common.following')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.following')}}</small>
                             </div>
                         </div>
                     </div>
@@ -205,16 +205,16 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="f-w-600 mb-1">
-                                        <i class="ph ph-waves me-2"></i>{{__('common.level')}}
+                                        <i class="ph ph-waves me-2"></i>{{__('profile.level')}}
                                 </h6>
-                                <div class="f-s-14 text-muted">{{__('common.apprentice')}}</div>
-                                <div class="f-s-16 f-w-600">{{__('common.level')}} {{ $level }}</div>
+                                <div class="f-s-14 text-muted">{{__('profile.apprentice')}}</div>
+                                <div class="f-s-16 f-w-600">{{__('profile.level')}} {{ $level }}</div>
                                 <div class="f-s-14 text-muted">
-                                    <i class="ph ph-diamond me-1"></i>{{ $totalPoints }} {{__('common.points')}}
-                                    <i class="ph ph-medal me-1 ms-2"></i>{{ $badgesCount }} {{__('common.badge')}}
+                                    <i class="ph ph-diamond me-1"></i>{{ $totalPoints }} {{__('profile.points')}}
+                                    <i class="ph ph-medal me-1 ms-2"></i>{{ $badgesCount }} {{__('profile.badge')}}
                                 </div>
                             </div>
-                            <button class="btn btn-outline-primary btn-sm">{{__('common.manage')}}</button>
+                            <button class="btn btn-outline-primary btn-sm">{{__('profile.manage')}}</button>
                         </div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <h6 class="f-w-600 mb-3">
-                                <i class="ph ph-trophy me-2"></i>{{__('common.badge')}}
+                                <i class="ph ph-trophy me-2"></i>{{__('profile.badge')}}
                             </h6>
                             <div class="row">
                                 @foreach($topBadges->take(6) as $badge)
@@ -250,11 +250,11 @@
                 <!-- About Card -->
                 <div class="card">
                     <div class="card-body">
-                        <h6 class="f-w-600 mb-3">{{__('common.about_me')}}</h6>
+                        <h6 class="f-w-600 mb-3">{{__('profile.about_me')}}</h6>
                         @if($user->bio)
                             <p class="f-s-14 text-muted">{{ $user->bio }}</p>
                         @else
-                            <p class="f-s-14 text-muted fst-italic">{{__('common.no_bio_available')}}</p>
+                            <p class="f-s-14 text-muted fst-italic">{{__('profile.no_bio_available')}}</p>
                         @endif
                     </div>
                 </div>
@@ -278,7 +278,7 @@
                                     <div class="col-12">
                                         <div class="text-center py-5">
                                             <i class="ph ph-image text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('common.no_photos_available')}}</p>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_photos_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
@@ -304,7 +304,7 @@
                                     <div class="col-12">
                                         <div class="text-center py-5">
                                             <i class="ph ph-video text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('common.no_videos_available')}}</p>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_videos_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
@@ -328,7 +328,7 @@
                                     <div class="col-12">
                                         <div class="text-center py-5">
                                             <i class="ph ph-article text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('common.no_articles_available')}}</p>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_articles_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
@@ -352,7 +352,7 @@
                                     <div class="col-12">
                                         <div class="text-center py-5">
                                             <i class="ph ph-book text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('common.no_poems_available')}}</p>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_poems_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
@@ -369,34 +369,34 @@
             <!-- Statistics Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h6 class="f-w-600 mb-3">{{__('common.statistics')}}</h6>
+                    <h6 class="f-w-600 mb-3">{{__('profile.statistics')}}</h6>
                     <div class="row g-2">
                         <div class="col-6">
                             <div class="text-center p-3 rounded" style="background-color: rgba(var(--success), 0.1);">
                                 <i class="ph ph-book mb-2" style="font-size: 24px; color: rgba(var(--success), 1);"></i>
                                 <div class="f-w-600 f-s-16" style="color: rgba(var(--success), 1);">{{ $stats['poems'] }}</div>
-                                <small class="text-muted f-s-12">{{__('common.poems')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.poems')}}</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="text-center p-3 rounded" style="background-color: rgba(var(--success), 0.1);">
                                 <i class="ph ph-calendar mb-2" style="font-size: 24px; color: rgba(var(--success), 1);"></i>
                                 <div class="f-w-600 f-s-16" style="color: rgba(var(--success), 1);">1</div>
-                                <small class="text-muted f-s-12">{{__('common.events_general')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.events_general')}}</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="text-center p-3 rounded" style="background-color: rgba(var(--warning), 0.1);">
                                 <i class="ph ph-article mb-2" style="font-size: 24px; color: rgba(var(--warning), 1);"></i>
                                 <div class="f-w-600 f-s-16" style="color: rgba(var(--warning), 1);">{{ $stats['articles'] }}</div>
-                                <small class="text-muted f-s-12">{{__('common.articles')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.articles')}}</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="text-center p-3 rounded" style="background-color: rgba(var(--info), 0.1);">
                                 <i class="ph ph-map-pin mb-2" style="font-size: 24px; color: rgba(var(--info), 1);"></i>
                                 <div class="f-w-600 f-s-16" style="color: rgba(var(--info), 1);">1</div>
-                                <small class="text-muted f-s-12">{{__('common.venue')}}</small>
+                                <small class="text-muted f-s-12">{{__('profile.venue')}}</small>
                             </div>
                         </div>
                     </div>
@@ -406,10 +406,10 @@
             <!-- Participated Events Card -->
             <div class="card">
                 <div class="card-body">
-                        <h6 class="f-w-600 mb-3">{{__('common.participated_events')}}</h6>
+                        <h6 class="f-w-600 mb-3">{{__('profile.participated_events')}}</h6>
                     <div class="text-center py-4">
                         <i class="ph ph-calendar text-muted" style="font-size: 48px; opacity: 0.3;"></i>
-                        <p class="text-muted mt-2 f-s-14">{{__('common.no_participated_events')}}</p>
+                        <p class="text-muted mt-2 f-s-14">{{__('profile.no_participated_events')}}</p>
                     </div>
                 </div>
             </div>

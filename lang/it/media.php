@@ -1,19 +1,14 @@
 <?php
 
 return [
-  // Media Section
   'media_section' => 'Media',
   'video' => 'Video',
   'photo' => 'Foto',
   'views' => 'Visualizzazioni',
-  
-  // Popular & Recent
-  'most_popular_video' => 'Video Più Popolare',
+  'most_popular_video' => 'Video Più Popolare test',
   'most_popular_photo' => 'Foto Più Popolare',
   'popular' => 'Popolari',
   'recent' => 'Nuovi',
-  
-  // No Content Messages
   'no_videos_available' => 'Nessun video disponibile',
   'no_photos_available' => 'Nessuna foto disponibile',
   'no_popular_videos' => 'Nessun video popolare',
@@ -23,8 +18,6 @@ return [
   'no_photos_found' => 'Nessuna foto trovata',
   'no_results_found' => 'Nessun risultato trovato',
   'no_photos_match_search' => 'Nessuna foto corrisponde alla ricerca',
-  
-  // Search & Filters
   'search_media' => 'Cerca Media',
   'search_results' => 'Risultati di Ricerca',
   'results' => 'risultati',
@@ -44,31 +37,28 @@ return [
   'clear_search' => 'Cancella ricerca',
   'try_different_filters' => 'Prova a modificare i filtri di ricerca',
   'photos_per_page' => 'Foto per pagina',
-  
-  // Actions
   'open' => 'Apri',
   'open_video' => 'Apri video',
   'like' => 'Metti like',
   'comments' => 'Commenti',
-  
-  // Content Details
   'untitled_video' => 'Video senza titolo',
   'untitled_photo' => 'Foto senza titolo',
   'unknown_user' => 'Utente sconosciuto',
   'duration_not_available' => 'Durata non disponibile',
-  
-  // Upload & Edit
   'remove_image' => 'Rimuovi immagine',
   'photo_details' => 'Dettagli foto',
-  'title_optional' => 'Titolo (opzionale)',
+  'title_optional' => 'Titolo (opzionale]',
   'title_placeholder' => 'Inserisci un titolo per la foto',
-  'alt_text_optional' => 'Testo alternativo (opzionale)',
+  'alt_text_optional' => 'Testo alternativo (opzionale]',
   'alt_text_placeholder' => 'Descrizione per accessibilità',
-  'description_optional' => 'Descrizione (opzionale)',
+  'description_optional' => 'Descrizione (opzionale]',
   'description_placeholder' => 'Racconta la storia dietro questa foto...',
   'uploading' => 'Caricamento in corso...',
   'complete' => 'completato',
   'cancel' => 'Annulla',
   'upload_photo_button' => 'Carica foto',
+  
+  // Common translations (migrated from common.*)
+  'back' => 'Indietro',
+  'optional' => 'opzionale',
 ];
-

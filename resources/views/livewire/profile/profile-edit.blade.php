@@ -34,7 +34,7 @@
                                 <input type="file" class="form-control form-control-sm" wire:model="avatar" accept="image/*">
                                 @if($avatarPreview || $user->avatar)
                                     <button type="button" class="btn btn-sm btn-outline-danger mt-1" wire:click="removeAvatar">
-                                        <i class="ph ph-trash me-1"></i>{{ __('common.remove') }}
+                                        <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
                                     </button>
                                 @endif
                             </div>
@@ -58,7 +58,7 @@
                                 <input type="file" class="form-control form-control-sm" wire:model="banner" accept="image/*">
                                 @if($bannerPreview || $user->banner)
                                     <button type="button" class="btn btn-sm btn-outline-danger mt-1" wire:click="removeBanner">
-                                        <i class="ph ph-trash me-1"></i>{{ __('common.remove') }}
+                                        <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
                                     </button>
                                 @endif
                             </div>
@@ -226,10 +226,10 @@
                 <!-- Submit Buttons -->
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-check me-1"></i>{{ __('common.save') }}
+                        <i class="ph ph-check me-1"></i>{{ __('profile.save') }}
                     </button>
                     <a href="{{ route('profile.show') }}" class="btn btn-secondary">
-                        <i class="ph ph-x me-1"></i>{{ __('common.cancel') }}
+                        <i class="ph ph-x me-1"></i>{{ __('profile.cancel') }}
                     </a>
                 </div>
             </form>

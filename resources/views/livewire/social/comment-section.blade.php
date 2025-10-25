@@ -1,7 +1,7 @@
 <div>
     <h6 class="f-s-14 f-w-600 mb-3">
         <i class="ph-duotone ph-chat-circle me-1"></i>
-        {{ __('common.comments') }} ({{ $comments->count() }})
+        {{ __('social.comments') }} ({{ $comments->count() }})
     </h6>
     
     <!-- Add Comment Form -->
@@ -19,7 +19,7 @@
                         wire:model.live="newComment" 
                         class="form-control" 
                         rows="3" 
-                        placeholder="{{ __('common.write_comment') }}"
+                        placeholder="{{ __('social.write_comment') }}"
                         style="resize: none;"
                     ></textarea>
                     <div class="d-flex justify-content-end mt-2">
@@ -33,13 +33,13 @@
                         >
                             <span wire:loading.remove wire:target="addComment">
                                 <i class="ph-duotone ph-paper-plane-tilt me-1"></i>
-                                {{ __('common.add_comment') }}
+                                {{ __('social.add_comment') }}
                             </span>
                             <span wire:loading wire:target="addComment">
                                 <div class="spinner-border spinner-border-sm me-1" role="status">
-                                    <span class="visually-hidden">{{ __('common.loading') }}</span>
+                                    <span class="visually-hidden">{{ __('social.loading') }}</span>
                                 </div>
-                                {{ __('common.sending') }}
+                                {{ __('social.sending') }}
                             </span>
                         </button>
                     </div>

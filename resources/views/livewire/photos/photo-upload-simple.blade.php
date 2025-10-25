@@ -6,7 +6,7 @@
                     <i class="ph ph-image me-2"></i>{{ __('photos.upload_photo') }}
                 </h4>
                 <a href="{{ route('photos.index') }}" class="btn btn-light">
-                    <i class="ph ph-arrow-left me-1"></i>{{ __('common.back') }}
+                    <i class="ph ph-arrow-left me-1"></i>{{ __('media.back') }}
                 </a>
             </div>
         </div>
@@ -48,7 +48,7 @@
                             <!-- Title -->
                             <div class="mb-3">
                                 <label for="title" class="form-label">
-                                    {{ __('photos.title') }} <span class="text-secondary">({{ __('common.optional') }})</span>
+                                    {{ __('photos.title') }} <span class="text-secondary">({{ __('media.optional') }})</span>
                                 </label>
                                 <input type="text" 
                                        class="form-control" 
@@ -63,7 +63,7 @@
                             <!-- Description -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">
-                                    {{ __('photos.description') }} <span class="text-secondary">({{ __('common.optional') }})</span>
+                                    {{ __('photos.description') }} <span class="text-secondary">({{ __('media.optional') }})</span>
                                 </label>
                                 <textarea class="form-control" 
                                           id="description" 
