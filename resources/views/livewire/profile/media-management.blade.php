@@ -10,7 +10,7 @@
                     <a href="{{ route('photos.create') }}" class="btn btn-success btn-sm">
                         <i class="ph ph-image me-2"></i>{{ __('media.upload_photo') }}
                     </a>
-                    <a href="{{ route('videos.upload') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary btn-sm">
                         <i class="ph ph-video-camera me-2"></i>{{ __('media.upload_video') }}
                     </a>
                 </div>
@@ -183,7 +183,7 @@
                             <a href="{{ route('photos.create') }}" class="btn btn-success">
                                 <i class="ph ph-image me-2"></i>{{ __('media.upload_photo') }}
                             </a>
-                            <a href="{{ route('videos.upload') }}" class="btn btn-primary">
+                            <a href="{{ route('peertube.upload-video') }}" class="btn btn-primary">
                                 <i class="ph ph-video-camera me-2"></i>{{ __('media.upload_video') }}
                             </a>
                         </div>
