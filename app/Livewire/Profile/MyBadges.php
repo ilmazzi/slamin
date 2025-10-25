@@ -9,10 +9,10 @@ class MyBadges extends Component
 {
     public $user;
     public $badges;
+    public $rotatingBadgeIds = [];
     public $sidebarBadgeIds = [];
-    public $profileBadgeIds = [];
+    public $rotatingOrders = [];
     public $sidebarOrders = [];
-    public $profileOrders = [];
 
     public function mount()
     {
@@ -28,10 +28,10 @@ class MyBadges extends Component
             ->get();
         
         // Load current states
+        $this->rotatingBadgeIds = $this->badges->where('show_in_profile', true)->pluck('id')->toArray();
         $this->sidebarBadgeIds = $this->badges->where('show_in_sidebar', true)->pluck('id')->toArray();
-        $this->profileBadgeIds = $this->badges->where('show_in_profile', true)->pluck('id')->toArray();
+        $this->rotatingOrders = $this->badges->pluck('profile_order', 'id')->toArray();
         $this->sidebarOrders = $this->badges->pluck('sidebar_order', 'id')->toArray();
-        $this->profileOrders = $this->badges->pluck('profile_order', 'id')->toArray();
     }
 
     public function toggleSidebar($userBadgeId)
@@ -61,18 +61,27 @@ class MyBadges extends Component
         }
     }
 
-    public function toggleProfile($userBadgeId)
+    public function toggleRotating($userBadgeId)
     {
         $userBadge = $this->user->userBadges()->find($userBadgeId);
         
         if ($userBadge) {
+            // Check if we're trying to enable and already have 3 rotating
+            if (!$userBadge->show_in_profile) {
+                $rotatingCount = $this->user->userBadges()->where('show_in_profile', true)->count();
+                if ($rotatingCount >= 3) {
+                    $this->dispatch('swal:warning', ['title' => __('profile.limit_reached'), 'text' => __('profile.max_rotating_badges')]);
+                    return;
+                }
+            }
+
             $userBadge->show_in_profile = !$userBadge->show_in_profile;
             $userBadge->save();
             
             $this->loadBadges();
             
-            $message = $userBadge->show_in_profile ? 'Badge visibile nel profilo!' : 'Badge rimosso dal profilo!';
-            $this->dispatch('swal:success', ['title' => 'Aggiornato!', 'text' => $message]);
+            $message = $userBadge->show_in_profile ? __('profile.badge_rotating_visible') : __('profile.badge_rotating_removed');
+            $this->dispatch('swal:success', ['title' => __('profile.updated'), 'text' => $message]);
         }
     }
 
@@ -90,7 +99,7 @@ class MyBadges extends Component
         }
     }
 
-    public function updateProfileOrder($userBadgeId, $newOrder)
+    public function updateRotatingOrder($userBadgeId, $newOrder)
     {
         $userBadge = $this->user->userBadges()->find($userBadgeId);
         
