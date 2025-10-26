@@ -471,4 +471,6 @@ return array (
   ),
   'name' => 'Nome',
   'participants' => 'Partecipanti',
+  'quick_filters' => 'Filtri Rapidi',
+  'all_cities' => 'Tutte le Città',
 );

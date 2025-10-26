@@ -167,24 +167,26 @@
             <div class="card">
                 <div class="card-body">
                     <form method="GET" id="filterForm">
-                        <!-- Mobile-First Filters -->
                         <div class="row g-3">
-                            <!-- Search - Full width on mobile -->
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <span class="input-group-text border-end-0">
-                                        <i class="ph ph-magnifying-glass text-primary"></i>
-                                    </span>
-                                    <input type="text" name="search" class="form-control border-start-0"
-                                           placeholder="{{ __('events.search_events') }}"
-                                           value="{{ request('search') }}">
-                                </div>
+                            <!-- Search Bar -->
+                            <div class="col-lg-6 col-md-12">
+                                <label class="form-label f-w-600 mb-2">
+                                    <i class="ph ph-magnifying-glass me-1 text-primary"></i>
+                                    {{ __('events.search_events') }}
+                                </label>
+                                <input type="text" name="search" class="form-control"
+                                       placeholder="{{ __('events.search_events') }}"
+                                       value="{{ request('search') }}">
                             </div>
 
-                            <!-- City Filter - Full width on mobile, half on tablet -->
-                            <div class="col-12 col-sm-6">
+                            <!-- City Filter -->
+                            <div class="col-lg-3 col-md-6">
+                                <label class="form-label f-w-600 mb-2">
+                                    <i class="ph ph-map-pin me-1 text-primary"></i>
+                                    {{ __('events.filter_by_city') }}
+                                </label>
                                 <select name="city" class="form-select">
-                                    <option value="">{{ __('events.filter_by_city') }}</option>
+                                    <option value="">{{ __('events.all_cities') }}</option>
                                     @foreach($events->pluck('city')->unique()->filter() as $city)
                                         <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>
                                             {{ $city }}
@@ -193,64 +195,91 @@
                                 </select>
                             </div>
 
-                            <!-- Type Filter - Full width on mobile, half on tablet -->
-                            <div class="col-12 col-sm-6">
+                            <!-- Type Filter -->
+                            <div class="col-lg-3 col-md-6">
+                                <label class="form-label f-w-600 mb-2">
+                                    <i class="ph ph-globe me-1 text-primary"></i>
+                                    {{ __('events.event_type') }}
+                                </label>
                                 <select name="type" class="form-select">
                                     <option value="">{{ __('events.all_types') }}</option>
                                     <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>{{ __('events.public_events') }}</option>
                                     <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>{{ __('events.private_events') }}</option>
                                 </select>
                             </div>
-                            </div>
                         </div>
 
-                        <!-- Second Row: Quick Filters and Action Buttons -->
-                        <div class="row g-3 mt-3">
+                        <!-- Divider -->
+                        <hr class="my-4">
+
+                        <!-- Quick Filters Section -->
+                        <div class="row g-3">
                             <div class="col-12">
-                                <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                                    <!-- Quick Filters -->
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <button type="button" class="btn btn-primary btn-sm" data-filter="today">
-                                            <i class="ph ph-calendar me-1"></i>{{ __('events.today') }}
-                                        </button>
-                                        <button type="button" class="btn btn-info btn-sm" data-filter="tomorrow">
-                                            <i class="ph ph-calendar-plus me-1"></i>{{ __('events.tomorrow') }}
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-sm" data-filter="weekend">
-                                            <i class="ph ph-calendar-check me-1"></i>{{ __('events.weekend') }}
-                                        </button>
-                                        <button type="button" class="btn btn-warning btn-sm" data-filter="free">
-                                            <i class="ph ph-currency-circle-dollar me-1"></i>{{ __('events.free_events') }}
-                                        </button>
-                                        <button type="button" class="btn btn-secondary btn-sm" data-filter="nearby">
-                                            <i class="ph ph-map-pin me-1"></i>{{ __('events.nearby') }}
-                                        </button>
-                                        @auth
-                                            <button type="button" class="btn btn-primary btn-sm" data-filter="my">
-                                                <i class="ph ph-user me-1"></i>{{ __('events.my_events') }}
-                                            </button>
-                                            <button type="button" class="btn btn-warning btn-sm" data-filter="private">
-                                                <i class="ph ph-lock me-1"></i>{{ __('events.my_private_events') }}
-                                            </button>
-                                        @endauth
-                                        <button type="button" class="btn btn-danger btn-sm" data-filter="past">
-                                            <i class="ph ph-clock-counter-clockwise me-1"></i>{{ __('events.past_events') }}
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Action Buttons -->
-                                    <div class="d-flex gap-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="ph ph-funnel me-1"></i>{{ __('events.filter') }}
-                                        </button>
-                                        @auth
-                                            @can('events.create.public')
-                                                <a href="{{ route('events.create') }}" class="btn btn-success">
-                                                    <i class="ph ph-plus me-1"></i>{{ __('events.create') }}
-                                                </a>
-                                            @endcan
-                                        @endauth
-                                    </div>
+                                <h6 class="f-w-600 mb-3">
+                                    <i class="ph ph-faders me-2 text-primary"></i>
+                                    {{ __('events.quick_filters') }}
+                                </h6>
+                            </div>
+                            
+                            <!-- Date Filters -->
+                            <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <button type="button" class="btn btn-primary btn-sm" data-filter="today">
+                                        <i class="ph ph-calendar me-1"></i>{{ __('events.today') }}
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-sm" data-filter="tomorrow">
+                                        <i class="ph ph-calendar-plus me-1"></i>{{ __('events.tomorrow') }}
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-sm" data-filter="weekend">
+                                        <i class="ph ph-calendar-check me-1"></i>{{ __('events.weekend') }}
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm" data-filter="free">
+                                        <i class="ph ph-currency-circle-dollar me-1"></i>{{ __('events.free_events') }}
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm" data-filter="nearby">
+                                        <i class="ph ph-map-pin me-1"></i>{{ __('events.nearby') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- User Filters (if authenticated) -->
+                            @auth
+                            <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button type="button" class="btn btn-primary btn-sm" data-filter="my">
+                                        <i class="ph ph-user me-1"></i>{{ __('events.my_events') }}
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm" data-filter="private">
+                                        <i class="ph ph-lock me-1"></i>{{ __('events.my_private_events') }}
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" data-filter="past">
+                                        <i class="ph ph-clock-counter-clockwise me-1"></i>{{ __('events.past_events') }}
+                                    </button>
+                                </div>
+                            </div>
+                            @else
+                            <div class="col-12">
+                                <button type="button" class="btn btn-danger btn-sm" data-filter="past">
+                                    <i class="ph ph-clock-counter-clockwise me-1"></i>{{ __('events.past_events') }}
+                                </button>
+                            </div>
+                            @endauth
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ph ph-funnel me-1"></i>{{ __('events.filter') }}
+                                    </button>
+                                    @auth
+                                        @can('events.create.public')
+                                            <a href="{{ route('events.create') }}" class="btn btn-success">
+                                                <i class="ph ph-plus me-1"></i>{{ __('events.create') }}
+                                            </a>
+                                        @endcan
+                                    @endauth
                                 </div>
                             </div>
                         </div>
