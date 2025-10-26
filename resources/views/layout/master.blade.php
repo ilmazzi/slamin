@@ -120,6 +120,36 @@
             transform: translateY(-10px);
         }
     }
+    
+    /* Profile Sidebar Tabs */
+    .profile-tab-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-tab-item > div {
+        transition: all 0.3s ease;
+    }
+    
+    .profile-tab-item:hover > div {
+        background: rgba(var(--primary), 0.08);
+        transform: translateX(5px);
+    }
+    
+    .profile-tab-item.active > div {
+        background: linear-gradient(90deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.05));
+        border-left: 4px solid rgba(var(--primary), 1);
+        padding-left: 8px;
+        color: rgba(var(--primary), 1);
+    }
+    
+    .profile-tab-item.active i {
+        color: rgba(var(--primary), 1);
+    }
+    
+    .profile-tab-item.active span {
+        color: rgba(var(--primary), 1);
+    }
     </style>
     
     <!-- Initialize Popovers for Badge -->

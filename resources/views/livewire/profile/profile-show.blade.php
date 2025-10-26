@@ -80,54 +80,58 @@
                     <!-- Navigation -->
                     <div class="mb-4">
                         <div class="tab-wrapper">
-                            <ul class="profile-app-tabs">
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'about' ? 'active' : '' }}" 
+                            <ul class="profile-app-tabs list-unstyled">
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'about' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('about')">
-                                    <x-icon name="profile" size="20" class="me-2" />
-                                    {{ __('profile.profile') }}
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'about' ? 'ph-user-circle-fill' : 'ph-user-circle' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{ __('profile.profile') }}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'poems' ? 'active' : '' }}" 
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'poems' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('poems')">
-                                    <x-icon name="poetry" size="20" class="me-2" />
-                                    {{__('profile.poems')}}
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'poems' ? 'ph-scroll-fill' : 'ph-scroll' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.poems')}}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'events' ? 'active' : '' }}" 
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'events' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('events')">
-                                    <x-icon name="event" size="20" class="me-2" />
-                                    {{__('profile.events')}}
-                                    <span class="badge rounded-pill bg-success badge-notification">
-                                        1
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'events' ? 'ph-calendar-fill' : 'ph-calendar' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.events')}}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'media' ? 'active' : '' }}" 
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'media' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('media')">
-                                    <x-icon name="media" size="20" class="me-2" />
-                                    {{__('profile.my_media')}}
-                                    <span class="badge rounded-pill bg-primary badge-notification">
-                                        2
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'media' ? 'ph-video-camera-fill' : 'ph-video-camera' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.my_media')}}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'articles' ? 'active' : '' }}" 
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'articles' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('articles')">
-                                    <x-icon name="article" size="20" class="me-2" />
-                                    {{__('profile.my_articles')}}
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'articles' ? 'ph-article-fill' : 'ph-article' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.my_articles')}}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'activities' ? 'active' : '' }}" 
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'activities' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('activities')">
-                                    <x-icon name="activity" size="20" class="me-2" />
-                                    {{__('profile.my_activities')}}
-                                    <span class="badge rounded-pill bg-warning badge-notification">
-                                        10+
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'activities' ? 'ph-activity-fill' : 'ph-activity' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.my_activities')}}</span>
+                                    </div>
                                 </li>
-                                <li class="tab-link fw-medium f-s-16 f-w-600 {{ $activeTab === 'settings' ? 'active' : '' }}" 
+                                @if($isOwnProfile)
+                                <li class="profile-tab-item mb-2 {{ $activeTab === 'settings' ? 'active' : '' }}" 
                                     wire:click="setActiveTab('settings')">
-                                    <x-icon name="settings" size="20" class="me-2" />
-                                    {{__('profile.settings')}}
+                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
+                                        <i class="ph {{ $activeTab === 'settings' ? 'ph-gear-fill' : 'ph-gear' }} f-s-20 me-2"></i>
+                                        <span class="f-w-600">{{__('profile.settings')}}</span>
+                                    </div>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
