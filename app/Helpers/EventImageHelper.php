@@ -27,8 +27,8 @@ class EventImageHelper
             }
         }
 
-        // Altrimenti usa l'immagine di default (draghetto)
-        return asset('assets/images/draghetto.png');
+        // Fallback: placeholder configurabile dall'admin
+        return PlaceholderHelper::getEventPlaceholderUrl();
     }
 }
 

@@ -131,4 +131,21 @@ class PlaceholderHelper
         
         return $placeholder;
     }
+
+    /**
+     * Genera l'URL del placeholder per un evento (ora usa data URI)
+     */
+    public static function getEventPlaceholderUrl($width = 300, $height = 200)
+    {
+        $settings = PlaceholderSetting::getSettings();
+        $color = $settings->event_placeholder_color ?? '#17a2b8';
+        
+        // Crea un SVG inline con il colore personalizzato
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' . $width . '" height="' . $height . '" viewBox="0 0 ' . $width . ' ' . $height . '">
+            <rect width="100%" height="100%" fill="' . $color . '"/>
+            <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle" dy=".3em">📅</text>
+        </svg>';
+        
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
 }

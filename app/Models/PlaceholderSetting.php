@@ -9,11 +9,13 @@ class PlaceholderSetting extends Model
     protected $fillable = [
         'poem_placeholder_color',
         'article_placeholder_color',
+        'event_placeholder_color',
     ];
 
     protected $casts = [
         'poem_placeholder_color' => 'string',
         'article_placeholder_color' => 'string',
+        'event_placeholder_color' => 'string',
     ];
 
     /**
@@ -24,6 +26,7 @@ class PlaceholderSetting extends Model
         return static::first() ?? static::create([
             'poem_placeholder_color' => '#6c757d',
             'article_placeholder_color' => '#007bff',
+            'event_placeholder_color' => '#17a2b8',
         ]);
     }
 
