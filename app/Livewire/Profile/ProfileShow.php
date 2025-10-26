@@ -179,14 +179,30 @@ class ProfileShow extends Component
         return $icons[$type] ?? 'activity';
     }
 
+    public function getEventsProperty()
+    {
+        return $this->user->events()
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
+    }
+
+    public function getActivitiesProperty()
+    {
+        return $this->user->activities()
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
+    }
+
     public function render()
     {
-        return view('livewire.profile.profile-show-modern', [
+        return view('livewire.profile.profile-show', [
             'user' => $this->user,
             'photos' => $this->photos,
             'videos' => $this->videos,
             'articles' => $this->articles,
             'poems' => $this->poems,
+            'events' => $this->events,
+            'activities' => $this->activities,
             'recentPhotos' => $this->recentPhotos,
             'recentActivities' => $this->recentActivities,
             'topBadges' => $this->topBadges,

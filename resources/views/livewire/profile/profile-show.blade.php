@@ -137,8 +137,8 @@
                 <!-- Modern Profile Header Card -->
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
                     <div class="card-body p-0">
-                        <!-- Banner with gradient (keep) -->
-                        <div class="profile-banner position-relative" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <!-- Banner -->
+                        <div class="profile-banner position-relative" style="height: 200px; background: rgba(var(--primary), 1);">
                             <!-- Avatar -->
                             <div class="position-absolute" style="bottom: -50px; left: 50%; transform: translateX(-50%); z-index: 10;">
                                 <div class="avatar-circle">
@@ -218,57 +218,39 @@
                 <!-- Other Tabs Content -->
                 <div class="card">
                     <div class="card-body">
-                        @if($activeTab === 'photos')
+                        @if($activeTab === 'poems')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-book-open me-2 text-primary"></i>
+                                {{ __('profile.poems') }}
+                            </h5>
                             <div class="row">
-                                @forelse($photos as $photo)
-                                    <div class="col-md-4 mb-3">
+                                @forelse($poems as $poem)
+                                    <div class="col-12 mb-3">
                                         <div class="card hover-effect">
-                                            <img src="{{ $photo->image_url }}" alt="{{ $photo->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                                             <div class="card-body">
-                                                <h6 class="card-title f-w-600">{{ $photo->title }}</h6>
-                                                <p class="card-text text-muted f-s-12">{{ $photo->description }}</p>
+                                                <h5 class="card-title f-w-600">{{ $poem->title }}</h5>
+                                                <p class="card-text f-s-14">{{ Str::limit($poem->content, 150) }}</p>
+                                                <small class="text-muted f-s-12">{{ $poem->created_at->format('d/m/Y') }}</small>
                                             </div>
                                         </div>
                                     </div>
                                 @empty
                                     <div class="col-12">
                                         <div class="text-center py-5">
-                                            <i class="ph ph-image text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_photos_available')}}</p>
+                                            <i class="ph ph-book text-muted" style="font-size: 48px;"></i>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_poems_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $photos->links() }}
-                        @endif
-
-                        @if($activeTab === 'videos')
-                            <div class="row">
-                                @forelse($videos as $video)
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card hover-effect">
-                                            <video class="card-img-top" style="height: 200px; object-fit: cover;" controls>
-                                                <source src="{{ $video->video_url }}" type="video/mp4">
-                                            </video>
-                                            <div class="card-body">
-                                                <h6 class="card-title f-w-600">{{ $video->title }}</h6>
-                                                <p class="card-text text-muted f-s-12">{{ $video->description }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <div class="col-12">
-                                        <div class="text-center py-5">
-                                            <i class="ph ph-video text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_videos_available')}}</p>
-                                        </div>
-                                    </div>
-                                @endforelse
-                            </div>
-                            {{ $videos->links() }}
+                            {{ $poems->links() }}
                         @endif
 
                         @if($activeTab === 'articles')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-newspaper me-2 text-primary"></i>
+                                {{ __('profile.my_articles') }}
+                            </h5>
                             <div class="row">
                                 @forelse($articles as $article)
                                     <div class="col-12 mb-3">
@@ -292,28 +274,119 @@
                             {{ $articles->links() }}
                         @endif
 
-                        @if($activeTab === 'poems')
+                        @if($activeTab === 'media')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-images me-2 text-primary"></i>
+                                {{ __('profile.my_media') }}
+                            </h5>
+                            
+                            <h6 class="f-w-600 mb-3">{{ __('profile.photos') }}</h6>
                             <div class="row">
-                                @forelse($poems as $poem)
-                                    <div class="col-12 mb-3">
+                                @forelse($photos as $photo)
+                                    <div class="col-md-4 mb-3">
                                         <div class="card hover-effect">
+                                            <img src="{{ $photo->image_url }}" alt="{{ $photo->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                                             <div class="card-body">
-                                                <h5 class="card-title f-w-600">{{ $poem->title }}</h5>
-                                                <p class="card-text f-s-14">{{ Str::limit($poem->content, 150) }}</p>
-                                                <small class="text-muted f-s-12">{{ $poem->created_at->format('d/m/Y') }}</small>
+                                                <h6 class="card-title f-w-600">{{ $photo->title }}</h6>
+                                                <p class="card-text text-muted f-s-12">{{ $photo->description }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 @empty
                                     <div class="col-12">
                                         <div class="text-center py-5">
-                                            <i class="ph ph-book text-muted" style="font-size: 48px;"></i>
-                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_poems_available')}}</p>
+                                            <i class="ph ph-image text-muted" style="font-size: 48px;"></i>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_photos_available')}}</p>
                                         </div>
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $poems->links() }}
+                            {{ $photos->links() }}
+                            
+                            <h6 class="f-w-600 mb-3 mt-4">{{ __('profile.videos') }}</h6>
+                            <div class="row">
+                                @forelse($videos as $video)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card hover-effect">
+                                            <video class="card-img-top" style="height: 200px; object-fit: cover;" controls>
+                                                <source src="{{ $video->video_url }}" type="video/mp4">
+                                            </video>
+                                            <div class="card-body">
+                                                <h6 class="card-title f-w-600">{{ $video->title }}</h6>
+                                                <p class="card-text text-muted f-s-12">{{ $video->description }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        <div class="text-center py-5">
+                                            <i class="ph ph-video text-muted" style="font-size: 48px;"></i>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_videos_available')}}</p>
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </div>
+                        @endif
+
+                        @if($activeTab === 'events')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-calendar-check me-2 text-primary"></i>
+                                {{ __('profile.events') }}
+                            </h5>
+                            <div class="row">
+                                @forelse($events as $event)
+                                    <div class="col-12 mb-3">
+                                        <div class="card hover-effect">
+                                            <div class="card-body">
+                                                <h5 class="card-title f-w-600">{{ $event->title }}</h5>
+                                                <p class="card-text f-s-14">{{ Str::limit($event->description, 150) }}</p>
+                                                <small class="text-muted f-s-12">{{ $event->event_date->format('d/m/Y H:i') }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        <div class="text-center py-5">
+                                            <i class="ph ph-calendar-x text-muted" style="font-size: 48px;"></i>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_events_available')}}</p>
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </div>
+                            {{ $events->links() }}
+                        @endif
+
+                        @if($activeTab === 'activities')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-lightning me-2 text-primary"></i>
+                                {{ __('profile.my_activities') }}
+                            </h5>
+                            <div class="activities-list">
+                                @forelse($activities as $activity)
+                                    <div class="activity-item mb-3 p-3 rounded" style="background: #f8f9fa;">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="activity-icon">
+                                                <i class="ph ph-{{ $this->getActivityIcon($activity->type) }} f-s-24 text-primary"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 f-w-600">{{ $activity->description }}</h6>
+                                                <small class="text-muted">
+                                                    <i class="ph ph-clock me-1"></i>
+                                                    {{ $activity->created_at->diffForHumans() }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        <div class="text-center py-5">
+                                            <i class="ph ph-list-dashes text-muted" style="font-size: 48px;"></i>
+                                            <p class="text-muted mt-2 f-s-14">{{__('profile.no_activities_available')}}</p>
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </div>
+                            {{ $activities->links() }}
                         @endif
                     </div>
                 </div>
@@ -358,6 +431,22 @@
                     </div>
                 </div>
             </div>
+
+            @if($isOwnProfile)
+            <!-- Badge Management Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="f-w-600 mb-0">{{ __('profile.my_badges') }}</h6>
+                        <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
+                            <i class="ph ph-trophy me-1"></i>
+                            {{ __('profile.manage') }}
+                        </a>
+                    </div>
+                    @livewire('profile.badge-display-sidebar', ['user' => $user])
+                </div>
+            </div>
+            @endif
 
             <!-- Participated Events Card -->
             <div class="card">
