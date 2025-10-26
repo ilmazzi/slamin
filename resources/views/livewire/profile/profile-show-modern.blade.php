@@ -244,7 +244,7 @@
         @elseif($activeTab === 'events')
             <!-- Events Grid -->
             <div class="events-grid">
-                @forelse($organizedEvents as $event)
+                @forelse($events as $event)
                 <div class="event-card-modern fade-in-up" style="animation-delay: {{ $loop->index * 0.05 }}s;">
                     <div class="event-date-badge">
                         <div class="date-day">{{ $event->start_datetime->format('d') }}</div>
@@ -275,11 +275,14 @@
                 </div>
                 @endforelse
             </div>
+            <div class="mt-4">
+                {{ $events->links() }}
+            </div>
 
         @elseif($activeTab === 'activities')
             <!-- Activities Timeline -->
             <div class="activities-timeline">
-                @forelse($activities->take(10) as $activity)
+                @forelse($activities as $activity)
                 <div class="activity-item fade-in-left" style="animation-delay: {{ $loop->index * 0.05 }}s;">
                     <div class="activity-icon {{ $activity->type }}">
                         <i class="ph ph-{{ $this->getActivityIcon($activity->type) }}"></i>
@@ -298,6 +301,9 @@
                     <p>Nessuna attività recente</p>
                 </div>
                 @endforelse
+            </div>
+            <div class="mt-4">
+                {{ $activities->links() }}
             </div>
 
         @elseif($activeTab === 'settings' && $isOwnProfile)
