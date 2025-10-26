@@ -13,7 +13,12 @@
         @auth
         <div class="d-flex align-items-center nav-profile p-3">
             <span class="h-45 w-45 d-flex-center rounded-circle position-relative m-auto">
-                <img alt="avatar" class="img-fluid rounded-circle" src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user()) }}" style="width: 45px; height: 45px; object-fit: cover;">
+                @php
+                    $avatarUrl = auth()->user()->avatar_thumbnail 
+                        ? asset('storage/' . auth()->user()->avatar_thumbnail)
+                        : \App\Helpers\AvatarHelper::getUserAvatarUrl(auth()->user());
+                @endphp
+                <img alt="avatar" class="img-fluid rounded-circle" src="{{ $avatarUrl }}" style="width: 45px; height: 45px; object-fit: cover;">
                 <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
             </span>
             <div class="flex-grow-1 ps-2 sidebar-text">
