@@ -334,7 +334,7 @@ Route::view('privacy_policy', 'privacy_policy')->name('privacy_policy');
 Route::view('product', 'product')->name('product');
 Route::view('product_details', 'product_details')->name('product_details');
 Route::view('product_list', 'product_list')->name('product_list');
-Route::view('profile', 'profile')->name('profile');
+// Route::view('profile', 'profile')->name('profile'); // DISABLED - Using Livewire ProfileShow component instead
 Route::view('progress', 'progress')->name('progress');
 
 // Photo Routes - AUTHENTICATED (management and interactions) - MUST BE FIRST!
