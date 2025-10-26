@@ -29,17 +29,17 @@ class BadgeDisplayWallGrid extends Component
         // Get earned badges
         $this->earnedBadges = UserBadge::where('user_id', $this->user->id)
             ->with('badge')
+            ->orderBy('earned_at', 'desc')
             ->get();
 
-        // Get all badges to show locked ones
+        // Get ALL locked badges (not just 12)
         $earnedBadgeIds = $this->earnedBadges->pluck('badge_id')->toArray();
         
         $this->lockedBadges = Badge::active()
             ->whereNotIn('id', $earnedBadgeIds)
             ->orderBy('category')
             ->orderBy('criteria_value')
-            ->take(12) // Show next 12 to unlock
-            ->get();
+            ->get(); // Show ALL locked badges
     }
 
     public function selectBadge($userBadgeId)
