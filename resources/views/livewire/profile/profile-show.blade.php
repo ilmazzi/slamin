@@ -134,99 +134,52 @@
         <!-- Main Content -->
         <div class="col-lg-6 col-md-8 mb-4">
             @if($activeTab === 'about')
-                <!-- Elegant Profile Card with Badges -->
-                <div class="card overflow-hidden mb-4">
+                <!-- Modern Profile Header Card -->
+                <div class="card overflow-hidden mb-4 border-0 shadow-sm">
                     <div class="card-body p-0">
-                        <div class="profile-call-box bg-gradient-mode position-relative" style="height: 450px;">
-                            <!-- Display Name at Top -->
-                            <div class="position-absolute w-100 text-center text-primary fw-bold f-s-24" style="top: 20px; z-index: 10;">
-                                {{ $user->getDisplayName() }}
-                                @if($user->verified_at)
-                                    <i class="ph ph-check-circle-fill text-success ms-1" title="Verificato"></i>
-                                @endif
+                        <!-- Banner with gradient (keep) -->
+                        <div class="profile-banner position-relative" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <!-- Avatar -->
+                            <div class="position-absolute" style="bottom: -50px; left: 50%; transform: translateX(-50%); z-index: 10;">
+                                <div class="avatar-circle">
+                                    <img alt="{{ $user->name }}" 
+                                         src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                         style="width: 120px; height: 120px; border-radius: 50%; border: 5px solid white; box-shadow: 0 5px 20px rgba(0,0,0,0.2); object-fit: cover;">
+                                </div>
                             </div>
 
-                            <!-- Solar System Container -->
-                            <div class="meeting-call-box position-relative d-flex flex-column align-items-center justify-content-center" style="height: 400px; margin-top: 50px;">
-                                <!-- Orbits -->
-                                <div class="orbit-path orbit-1"></div>
-                                <div class="orbit-path orbit-2"></div>
-                                <div class="orbit-path orbit-3"></div>
-                                
-                                <!-- Central Avatar -->
-                                <div class="position-absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;">
-                                    <div class="d-flex-center b-r-50 overflow-hidden bg-white shadow" style="width: 100px; height: 100px;">
-                                        <img alt="{{ $user->name }}" class="img-fluid" 
-                                             src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                             style="width: 100%; height: 100%; object-fit: cover;">
+                            <!-- Stats Bar at bottom of banner -->
+                            <div class="position-absolute w-100" style="bottom: 15px; z-index: 5;">
+                                <div class="d-flex justify-content-center gap-4">
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-20">{{ $badgesCount }}</div>
+                                        <small class="opacity-75">{{ __('profile.badge') }}</small>
                                     </div>
-                                </div>
-                                
-                                <!-- Rotating Badges -->
-                                @if(isset($topBadges[0]) && $topBadges[0]->badge)
-                                <div class="badge-container badge-orbit-1">
-                                    <img src="{{ $topBadges[0]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
-                                         alt="{{ $topBadges[0]->badge->name }}" 
-                                         style="width: 45px; height: 45px; border-radius: 50%;">
-                                    <div class="badge-name">{{ $topBadges[0]->badge->name }}</div>
-                                </div>
-                                @endif
-                                
-                                @if(isset($topBadges[1]) && $topBadges[1]->badge)
-                                <div class="badge-container badge-orbit-2">
-                                    <img src="{{ $topBadges[1]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
-                                         alt="{{ $topBadges[1]->badge->name }}" 
-                                         style="width: 45px; height: 45px; border-radius: 50%;">
-                                    <div class="badge-name">{{ $topBadges[1]->badge->name }}</div>
-                                </div>
-                                @endif
-                                
-                                @if(isset($topBadges[2]) && $topBadges[2]->badge)
-                                <div class="badge-container badge-orbit-3">
-                                    <img src="{{ $topBadges[2]->badge->icon_url ?? asset('assets/images/badge/default.png') }}" 
-                                         alt="{{ $topBadges[2]->badge->name }}" 
-                                         style="width: 45px; height: 45px; border-radius: 50%;">
-                                    <div class="badge-name">{{ $topBadges[2]->badge->name }}</div>
-                                </div>
-                                @endif
-                                
-                                <!-- Name and Nickname Below Avatar -->
-                                <div class="position-absolute text-center" style="top: 65%; left: 50%; transform: translate(-50%, 0); z-index: 10;">
-                                    
-                                    @if($user->bio)
-                                    <div class="text-white-75 f-s-12 mt-1" style="max-width: 250px;">{{ Str::limit($user->bio, 60) }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <!-- Badge Info at Bottom -->
-                            <div class="position-absolute w-100 text-center" style="bottom: 15px; z-index: 10;">
-                                <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
-                                    <div class="text-primary">
-                                        <i class="ph ph-medal f-s-20"></i>
-                                        <span class="ms-1 fw-medium">{{ $badgesCount }} {{ __('profile.badge') }}</span>
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-20">{{ $totalPoints }}</div>
+                                        <small class="opacity-75">{{ __('profile.points') }}</small>
                                     </div>
-                                    <div class="text-primary">
-                                        <i class="ph ph-star f-s-20"></i>
-                                        <span class="ms-1 fw-medium">{{ $totalPoints }} {{ __('profile.points') }}</span>
-                                    </div>
-                                    <div class="text-primary d-flex align-items-center gap-2">
-                                        <span>
-                                            <i class="ph ph-ranking f-s-20"></i>
-                                            <span class="ms-1 fw-medium">{{ __('profile.level') }} {{ $level }}</span>
-                                        </span>
-                                        <a href="{{ route('profile.my-badges') }}" 
-                                           class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1 px-3 py-1"
-                                           style="font-size: 0.75rem; border-radius: 20px;">
-                                            <i class="ph ph-medal-military f-s-14"></i>
-                                            <span class="fw-medium">{{ __('profile.manage_badges') }}</span>
-                                        </a>
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-20">{{ $level }}</div>
+                                        <small class="opacity-75">{{ __('profile.level') }}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- User Info Below Banner -->
+                        <div class="text-center pt-5 pb-3 px-4" style="margin-top: 50px;">
+                            <h3 class="mb-1 f-w-700">
+                                {{ $user->getDisplayName() }}
+                                @if($user->verified_at)
+                                    <i class="ph ph-check-circle-fill text-success ms-1" title="Verificato"></i>
+                                @endif
+                            </h3>
+                            @if($user->bio)
+                            <p class="text-muted f-s-14 mb-0">{{ Str::limit($user->bio, 120) }}</p>
+                            @endif
+                        </div>
                     </div>
-                   
                 </div>
 
                 <!-- About Card -->
@@ -242,39 +195,22 @@
                 </div>
 
 
-                <!-- Badge Display Section -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header bg-gradient-primary text-white">
-                                <h5 class="mb-0">
-                                    <i class="ph ph-medal me-2"></i>
-                                    I Miei Badge in Evidenza
-                                </h5>
-                                <small>I tuoi achievement più recenti</small>
-                            </div>
-                            <div class="card-body">
-                                @livewire('profile.badge-display-stack-cards', ['user' => $user])
-                            </div>
+                <!-- Badge Showcase - Stack Cards -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 f-w-700">
+                                <i class="ph ph-medal-military me-2 text-primary"></i>
+                                Badge in Evidenza
+                            </h5>
+                            <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
+                                <i class="ph ph-trophy me-1"></i>
+                                Vedi Trophy Case
+                            </a>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Trophy Case Section -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header bg-gradient-success text-white">
-                                <h5 class="mb-0">
-                                    <i class="ph ph-trophy me-2"></i>
-                                    Trophy Case - Tutti i Badge
-                                </h5>
-                                <small>La tua collezione completa di achievement</small>
-                            </div>
-                            <div class="card-body">
-                                @livewire('profile.badge-display-wall-grid', ['user' => $user])
-                            </div>
-                        </div>
+                        <p class="text-muted f-s-13 mb-4">I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare</p>
+                        
+                        @livewire('profile.badge-display-stack-cards', ['user' => $user])
                     </div>
                 </div>
 
