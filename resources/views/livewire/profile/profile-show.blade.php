@@ -281,7 +281,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $poems->links() }}
+                            <div class="mt-4">
+                                {{ $poems->links() }}
+                            </div>
                         @endif
 
                         @if($activeTab === 'articles')
@@ -332,7 +334,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $articles->links() }}
+                            <div class="mt-4">
+                                {{ $articles->links() }}
+                            </div>
                         @endif
 
                         @if($activeTab === 'media')
@@ -396,7 +400,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $photos->links() }}
+                            <div class="mt-4">
+                                {{ $photos->links() }}
+                            </div>
                             
                             <h6 class="f-w-600 mb-3 mt-4">{{ __('profile.videos') }}</h6>
                             <div class="row g-3">
@@ -444,7 +450,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $videos->links() }}
+                            <div class="mt-4">
+                                {{ $videos->links() }}
+                            </div>
                         @endif
 
                         @if($activeTab === 'events')
@@ -503,7 +511,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $events->links() }}
+                            <div class="mt-4">
+                                {{ $events->links() }}
+                            </div>
                         @endif
 
                         @if($activeTab === 'activities')
@@ -555,7 +565,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{ $activities->links() }}
+                            <div class="mt-4">
+                                {{ $activities->links() }}
+                            </div>
                         @endif
 
                         @if($activeTab === 'settings')
