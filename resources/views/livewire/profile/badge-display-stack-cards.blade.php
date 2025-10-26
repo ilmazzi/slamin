@@ -178,7 +178,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, rgba(var(--primary), 1) 0%, rgba(var(--primary), 0.7) 100%);
         }
 
         .badge-icon-large {
@@ -193,7 +193,7 @@
             left: -20px;
             right: -20px;
             bottom: -20px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.3), transparent);
+            background: radial-gradient(circle, rgba(var(--primary), 0.2), transparent);
             border-radius: 50%;
             animation: pulse 2s ease-in-out infinite;
         }
@@ -269,7 +269,7 @@
             justify-content: center;
             cursor: pointer;
             font-size: 2rem;
-            color: #667eea;
+            color: rgba(var(--primary), 1);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             z-index: 40;
@@ -301,13 +301,13 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(var(--primary), 0.15);
             z-index: 40;
         }
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, rgba(var(--primary), 1) 0%, rgba(var(--primary), 0.7) 100%);
             transition: width 0.5s ease;
         }
 
@@ -320,7 +320,7 @@
             padding: 10px 20px;
             border-radius: 25px;
             font-weight: 700;
-            color: #667eea;
+            color: rgba(var(--primary), 1);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             z-index: 40;
             font-size: 1.1rem;
