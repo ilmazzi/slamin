@@ -251,20 +251,28 @@
                         <div class="date-month">{{ $event->start_datetime->format('M') }}</div>
                     </div>
                     
-                    @if($event->image_url)
                     <div class="event-image">
-                        <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
+                        <img src="{{ \App\Helpers\EventImageHelper::getEventImageUrl($event) }}" 
+                             alt="{{ $event->title }}"
+                             style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    @endif
                     
                     <div class="event-content">
-                        <h6 class="event-title">{{ Str::limit($event->title, 50) }}</h6>
+                        <h6 class="event-title">{{ $event->title }}</h6>
+                        @if($event->description)
+                        <p class="event-description">{{ Str::limit($event->description, 100) }}</p>
+                        @endif
                         <div class="event-meta">
-                            <span><i class="ph ph-map-pin"></i> {{ $event->city }}</span>
-                            <span><i class="ph ph-clock"></i> {{ $event->start_datetime->format('H:i') }}</span>
+                            <span><i class="ph ph-map-pin"></i> {{ $event->city ?? 'N/D' }}</span>
+                            <span><i class="ph ph-clock"></i> {{ $event->start_datetime->format('d/m/Y H:i') }}</span>
                         </div>
+                        @if($event->venue)
+                        <div class="event-venue">
+                            <i class="ph ph-buildings"></i> {{ $event->venue->name }}
+                        </div>
+                        @endif
                         <a href="{{ route('events.show', $event) }}" class="btn-view-event">
-                            Visualizza <i class="ph ph-arrow-right"></i>
+                            Visualizza Evento <i class="ph ph-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -480,7 +488,7 @@
         .hero-banner {
             position: relative;
             height: 350px;
-            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
+            background: rgba(var(--primary), 1);
         }
 
         .banner-image {
@@ -496,7 +504,7 @@
             left: 0;
             right: 0;
             height: 150px;
-            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+            background: rgba(0,0,0,0.4);
         }
 
         /* Avatar */
@@ -672,10 +680,10 @@
         }
 
         .nav-tab.active {
-            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
-            border-color: rgb(15, 98, 106);
+            background: rgba(var(--primary), 1);
+            border-color: rgba(var(--primary), 1);
             color: white;
-            box-shadow: 0 8px 20px rgba(15, 98, 106, 0.4);
+            box-shadow: 0 8px 20px rgba(var(--primary), 0.4);
         }
 
         .nav-tab i {
@@ -702,8 +710,8 @@
 
         .card-header-modern {
             padding: 20px 25px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 3px solid rgb(15, 98, 106);
+            background: #f8f9fa;
+            border-bottom: 3px solid rgba(var(--primary), 1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -727,7 +735,7 @@
         }
 
         .btn-modern-sm {
-            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
+            background: rgba(var(--primary), 1);
             color: white;
             border: none;
             border-radius: 20px;
@@ -738,7 +746,7 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(15, 98, 106, 0.3);
+            box-shadow: 0 4px 10px rgba(var(--primary), 0.3);
         }
 
         .btn-modern-sm:hover {
@@ -791,7 +799,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(79, 172, 254, 0.9) 0%, rgba(0, 242, 254, 0.9) 100%);
+            background: rgba(var(--primary), 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -884,7 +892,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            background: rgba(var(--primary), 0.9);
             color: white;
             display: flex;
             flex-direction: column;
@@ -936,7 +944,7 @@
             position: absolute;
             top: 15px;
             left: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(var(--warning), 1);
             color: white;
             border-radius: 12px;
             padding: 10px 15px;
@@ -959,7 +967,7 @@
 
         .event-image {
             height: 200px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #e9ecef;
         }
 
         .event-image img {
@@ -976,6 +984,22 @@
             font-weight: 700;
             color: #2d3748;
             margin-bottom: 12px;
+        }
+
+        .event-description {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .event-venue {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .event-meta {
@@ -996,7 +1020,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(var(--warning), 1);
             color: white;
             padding: 10px 20px;
             border-radius: 20px;
@@ -1047,15 +1071,15 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .activity-icon.poem_created { background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%); color: white; }
-        .activity-icon.article_created { background: linear-gradient(135deg, rgb(65, 150, 250) 0%, rgb(15, 98, 106) 100%); color: white; }
-        .activity-icon.event_organized { background: linear-gradient(135deg, rgb(249, 193, 35) 0%, rgb(225, 78, 90) 100%); color: white; }
-        .activity-icon.event_participation { background: linear-gradient(135deg, rgb(10, 185, 100) 0%, rgb(65, 150, 250) 100%); color: white; }
-        .activity-icon.badge_earned { background: linear-gradient(135deg, rgb(249, 193, 35) 0%, rgb(225, 78, 90) 100%); color: white; }
-        .activity-icon.video_uploaded { background: linear-gradient(135deg, rgb(225, 78, 90) 0%, rgb(15, 98, 106) 100%); color: white; }
-        .activity-icon.photo_uploaded { background: linear-gradient(135deg, rgb(65, 150, 250) 0%, rgb(10, 185, 100) 100%); color: white; }
-        .activity-icon.comment_added { background: linear-gradient(135deg, rgb(10, 185, 100) 0%, rgb(15, 98, 106) 100%); color: white; }
-        .activity-icon.like_given { background: linear-gradient(135deg, rgb(225, 78, 90) 0%, rgb(249, 193, 35) 100%); color: white; }
+        .activity-icon.poem_created { background: rgba(var(--primary), 1); color: white; }
+        .activity-icon.article_created { background: rgba(var(--info), 1); color: white; }
+        .activity-icon.event_organized { background: rgba(var(--warning), 1); color: white; }
+        .activity-icon.event_participation { background: rgba(var(--success), 1); color: white; }
+        .activity-icon.badge_earned { background: rgba(var(--warning), 1); color: white; }
+        .activity-icon.video_uploaded { background: rgba(var(--danger), 1); color: white; }
+        .activity-icon.photo_uploaded { background: rgba(var(--info), 1); color: white; }
+        .activity-icon.comment_added { background: rgba(var(--success), 1); color: white; }
+        .activity-icon.like_given { background: rgba(var(--danger), 1); color: white; }
 
         .activity-content {
             flex: 1;
