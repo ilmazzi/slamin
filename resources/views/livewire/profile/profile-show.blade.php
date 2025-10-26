@@ -281,11 +281,10 @@
                                     </div>
                                 @endforelse
                             </div>
-                            @if($poems->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $poems->links('pagination::bootstrap-5') }}
+                                {{ $poems->onEachSide(1)->links() }}
                             </div>
-                            @endif
+                            {{-- Debug: Total={{ $poems->total() }} PerPage={{ $poems->perPage() }} Pages={{ $poems->lastPage() }} --}}
                         @endif
 
                         @if($activeTab === 'articles')

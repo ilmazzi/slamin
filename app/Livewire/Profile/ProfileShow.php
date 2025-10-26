@@ -18,6 +18,9 @@ class ProfileShow extends Component
     protected $queryString = [
         'activeTab' => ['except' => 'about'],
     ];
+    
+    // Force Livewire to use Bootstrap pagination
+    protected $paginationTheme = 'bootstrap';
 
     public function mount($user = null)
     {
