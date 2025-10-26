@@ -163,23 +163,32 @@ class ProfileEdit extends Component
                 'social_twitter' => 'nullable|url|max:255',
                 'social_youtube' => 'nullable|url|max:255',
                 'social_linkedin' => 'nullable|url|max:255',
-                'is_public' => 'boolean',
-                'show_email' => 'boolean',
-                'show_phone' => 'boolean',
-                'show_birth_date' => 'boolean',
+                'is_public' => 'nullable|boolean',
+                'show_email' => 'nullable|boolean',
+                'show_phone' => 'nullable|boolean',
+                'show_birth_date' => 'nullable|boolean',
             ];
             
             // Only validate files if they exist (Livewire 3)
             if ($this->avatar) {
-                $rules['avatar'] = 'image|mimes:jpeg,png,jpg,gif,webp|max:2048';
+                $rules['avatar'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
             }
             if ($this->banner) {
-                $rules['banner'] = 'image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+                $rules['banner'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
             }
 
-            $this->validate($rules);
+            \Log::info('ProfileEdit before validation', ['rules' => array_keys($rules)]);
             
-            \Log::info('ProfileEdit validation passed');
+            try {
+                $this->validate($rules);
+                \Log::info('ProfileEdit validation passed');
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                \Log::error('ProfileEdit validation failed', [
+                    'errors' => $e->errors(),
+                    'message' => $e->getMessage()
+                ]);
+                throw $e;
+            }
 
         $data = [
             'name' => $this->name,
