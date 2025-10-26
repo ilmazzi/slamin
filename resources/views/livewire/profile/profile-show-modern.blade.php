@@ -252,7 +252,7 @@
                     </div>
                     
                     <div class="event-image">
-                        <img src="{{ \App\Helpers\EventImageHelper::getEventImageUrl($event) }}" 
+                        <img src="{{ $event->image_url ?? asset('assets/images/events/default-event.jpg') }}" 
                              alt="{{ $event->title }}"
                              style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
