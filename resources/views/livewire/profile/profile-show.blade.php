@@ -183,7 +183,25 @@
                     <div class="card-body p-0">
                         <!-- Banner -->
                         <div class="profile-banner position-relative" style="height: 180px; background: rgba(var(--primary), 1);">
-                            <!-- Avatar - Responsive Size -->
+                            <!-- Stats Bar - Top Position -->
+                            <div class="position-absolute w-100" style="top: 20px; z-index: 5;">
+                                <div class="d-flex justify-content-center gap-3 gap-md-5">
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $badgesCount }}</div>
+                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.badge') }}</small>
+                                    </div>
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $totalPoints }}</div>
+                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.points') }}</small>
+                                    </div>
+                                    <div class="text-white text-center">
+                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $level }}</div>
+                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.level') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Avatar - Bottom Center -->
                             <div class="position-absolute" style="bottom: -40px; left: 50%; transform: translateX(-50%); z-index: 10;">
                                 <div class="avatar-circle">
                                     <img alt="{{ $user->name }}" 
@@ -195,24 +213,6 @@
                                         <i class="ph ph-check-circle-fill text-success f-s-18"></i>
                                     </span>
                                     @endif
-                                </div>
-                            </div>
-
-                            <!-- Stats Bar - Responsive -->
-                            <div class="position-absolute w-100" style="bottom: 10px; z-index: 5;">
-                                <div class="d-flex justify-content-center gap-2 gap-md-4">
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $badgesCount }}</div>
-                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.badge') }}</small>
-                                    </div>
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $totalPoints }}</div>
-                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.points') }}</small>
-                                    </div>
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $level }}</div>
-                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.level') }}</small>
-                                    </div>
                                 </div>
                             </div>
                         </div>
