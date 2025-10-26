@@ -19,6 +19,27 @@ class CustomErrorPages
         if ($request->is('api/*') || $request->is('api/social/*') || $request->is('api/test')) {
             return $next($request);
         }
+        
+        // Skip custom error pages for admins - they should see detailed errors
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user) {
+            try {
+                $isAdmin = false;
+                
+                if (method_exists($user, 'hasRole')) {
+                    $isAdmin = $user->hasRole('admin');
+                } elseif (method_exists($user, 'roles')) {
+                    $isAdmin = $user->roles()->where('name', 'admin')->exists();
+                }
+                
+                // If admin, skip custom error pages and show detailed errors
+                if ($isAdmin) {
+                    return $next($request);
+                }
+            } catch (\Exception $e) {
+                // Continue to custom error pages if check fails
+            }
+        }
 
         $response = $next($request);
 

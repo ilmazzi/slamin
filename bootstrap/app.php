@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SetTimezone::class,
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\ForceDebugForAdmin::class, // MUST be before CustomErrorPages
             \App\Http\Middleware\ExceptionLoggingMiddleware::class,
             // \App\Http\Middleware\LoggingMiddleware::class, // Temporaneamente disabilitato per debug
             \App\Http\Middleware\CustomErrorPages::class,
