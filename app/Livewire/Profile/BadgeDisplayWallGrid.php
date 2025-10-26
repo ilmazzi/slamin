@@ -91,6 +91,11 @@ class BadgeDisplayWallGrid extends Component
             }
             
             $this->loadBadges();
+            
+            // Reload the selected badge to update the modal state
+            $userBadge->refresh();
+            $this->selectedBadge = $userBadge;
+            
             session()->flash('success', 'Badge aggiornato!');
         }
     }
@@ -130,6 +135,11 @@ class BadgeDisplayWallGrid extends Component
             }
             
             $this->loadBadges();
+            
+            // Reload the selected badge to update the modal state
+            $userBadge->refresh();
+            $this->selectedBadge = $userBadge;
+            
             session()->flash('success', 'Badge aggiornato!');
         }
     }
