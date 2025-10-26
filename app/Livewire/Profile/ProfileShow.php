@@ -68,6 +68,11 @@ class ProfileShow extends Component
         $this->activeTab = $tab;
         $this->resetPage();
     }
+    
+    public function gotoPage($page, $pageName = 'page')
+    {
+        $this->setPage($page, $pageName);
+    }
 
     public function getPhotosProperty()
     {

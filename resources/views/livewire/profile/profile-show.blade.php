@@ -179,9 +179,6 @@
 
         <!-- Main Content - Full width on mobile -->
         <div class="col-12 col-md-8 col-lg-6 mb-4">
-            <div class="alert alert-warning mb-3">
-                🐛 DEBUG: activeTab = <strong>{{ $activeTab }}</strong>
-            </div>
             @if($activeTab === 'about')
                 <!-- Profile Info Card -->
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
@@ -238,7 +235,6 @@
 
             @else
                 <!-- Other Tabs Content -->
-                {{-- DEBUG: ActiveTab = {{ $activeTab }} --}}
                 <div class="card">
                     <div class="card-body">
                         @if($activeTab === 'poems')
@@ -285,10 +281,50 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4 d-flex justify-content-center">
-                                {{ $poems->onEachSide(1)->links() }}
+                            @if($poems->hasPages())
+                            <div class="mt-4">
+                                <nav aria-label="Pagination">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        {{-- Previous --}}
+                                        @if($poems->onFirstPage())
+                                            <li class="page-item disabled">
+                                                <span class="page-link"><i class="ph ph-caret-left"></i></span>
+                                            </li>
+                                        @else
+                                            <li class="page-item">
+                                                <button wire:click="gotoPage({{ $poems->currentPage() - 1 }}, 'poems_page')" class="page-link">
+                                                    <i class="ph ph-caret-left"></i>
+                                                </button>
+                                            </li>
+                                        @endif
+
+                                        {{-- Pages --}}
+                                        @for($i = 1; $i <= $poems->lastPage(); $i++)
+                                            @if($i == $poems->currentPage())
+                                                <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                                            @else
+                                                <li class="page-item">
+                                                    <button wire:click="gotoPage({{ $i }}, 'poems_page')" class="page-link">{{ $i }}</button>
+                                                </li>
+                                            @endif
+                                        @endfor
+
+                                        {{-- Next --}}
+                                        @if($poems->hasMorePages())
+                                            <li class="page-item">
+                                                <button wire:click="gotoPage({{ $poems->currentPage() + 1 }}, 'poems_page')" class="page-link">
+                                                    <i class="ph ph-caret-right"></i>
+                                                </button>
+                                            </li>
+                                        @else
+                                            <li class="page-item disabled">
+                                                <span class="page-link"><i class="ph ph-caret-right"></i></span>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </nav>
                             </div>
-                            {{-- Debug: Total={{ $poems->total() }} PerPage={{ $poems->perPage() }} Pages={{ $poems->lastPage() }} --}}
+                            @endif
                         @endif
 
                         @if($activeTab === 'articles')
@@ -340,8 +376,24 @@
                                 @endforelse
                             </div>
                             @if($articles->hasPages())
-                            <div class="mt-4 d-flex justify-content-center">
-                                {{ $articles->links('pagination::bootstrap-5') }}
+                            <div class="mt-4">
+                                <nav><ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ $articles->onFirstPage() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ max(1, $articles->currentPage() - 1) }}, 'articles_page')" class="page-link" {{ $articles->onFirstPage() ? 'disabled' : '' }}>
+                                            <i class="ph ph-caret-left"></i>
+                                        </button>
+                                    </li>
+                                    @foreach(range(1, $articles->lastPage()) as $page)
+                                        <li class="page-item {{ $page == $articles->currentPage() ? 'active' : '' }}">
+                                            <button wire:click="gotoPage({{ $page }}, 'articles_page')" class="page-link">{{ $page }}</button>
+                                        </li>
+                                    @endforeach
+                                    <li class="page-item {{ !$articles->hasMorePages() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ min($articles->lastPage(), $articles->currentPage() + 1) }}, 'articles_page')" class="page-link" {{ !$articles->hasMorePages() ? 'disabled' : '' }}>
+                                            <i class="ph ph-caret-right"></i>
+                                        </button>
+                                    </li>
+                                </ul></nav>
                             </div>
                             @endif
                         @endif
@@ -407,9 +459,23 @@
                                     </div>
                                 @endforelse
                             </div>
+                            @if($photos->hasPages())
                             <div class="mt-4">
-                                {{ $photos->links() }}
+                                <nav><ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ $photos->onFirstPage() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ max(1, $photos->currentPage() - 1) }}, 'photos_page')" class="page-link" {{ $photos->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
+                                    </li>
+                                    @foreach(range(1, $photos->lastPage()) as $page)
+                                        <li class="page-item {{ $page == $photos->currentPage() ? 'active' : '' }}">
+                                            <button wire:click="gotoPage({{ $page }}, 'photos_page')" class="page-link">{{ $page }}</button>
+                                        </li>
+                                    @endforeach
+                                    <li class="page-item {{ !$photos->hasMorePages() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ min($photos->lastPage(), $photos->currentPage() + 1) }}, 'photos_page')" class="page-link" {{ !$photos->hasMorePages() ? 'disabled' : '' }}><i class="ph ph-caret-right"></i></button>
+                                    </li>
+                                </ul></nav>
                             </div>
+                            @endif
                             
                             <h6 class="f-w-600 mb-3 mt-4">{{ __('profile.videos') }}</h6>
                             <div class="row g-3">
@@ -458,8 +524,20 @@
                                 @endforelse
                             </div>
                             @if($videos->hasPages())
-                            <div class="mt-4 d-flex justify-content-center">
-                                {{ $videos->links('pagination::bootstrap-5') }}
+                            <div class="mt-4">
+                                <nav><ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ $videos->onFirstPage() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ max(1, $videos->currentPage() - 1) }}, 'videos_page')" class="page-link" {{ $videos->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
+                                    </li>
+                                    @foreach(range(1, $videos->lastPage()) as $page)
+                                        <li class="page-item {{ $page == $videos->currentPage() ? 'active' : '' }}">
+                                            <button wire:click="gotoPage({{ $page }}, 'videos_page')" class="page-link">{{ $page }}</button>
+                                        </li>
+                                    @endforeach
+                                    <li class="page-item {{ !$videos->hasMorePages() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ min($videos->lastPage(), $videos->currentPage() + 1) }}, 'videos_page')" class="page-link" {{ !$videos->hasMorePages() ? 'disabled' : '' }}><i class="ph ph-caret-right"></i></button>
+                                    </li>
+                                </ul></nav>
                             </div>
                             @endif
                         @endif
@@ -521,8 +599,20 @@
                                 @endforelse
                             </div>
                             @if($events->hasPages())
-                            <div class="mt-4 d-flex justify-content-center">
-                                {{ $events->links('pagination::bootstrap-5') }}
+                            <div class="mt-4">
+                                <nav><ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ $events->onFirstPage() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ max(1, $events->currentPage() - 1) }}, 'events_page')" class="page-link" {{ $events->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
+                                    </li>
+                                    @foreach(range(1, $events->lastPage()) as $page)
+                                        <li class="page-item {{ $page == $events->currentPage() ? 'active' : '' }}">
+                                            <button wire:click="gotoPage({{ $page }}, 'events_page')" class="page-link">{{ $page }}</button>
+                                        </li>
+                                    @endforeach
+                                    <li class="page-item {{ !$events->hasMorePages() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ min($events->lastPage(), $events->currentPage() + 1) }}, 'events_page')" class="page-link" {{ !$events->hasMorePages() ? 'disabled' : '' }}><i class="ph ph-caret-right"></i></button>
+                                    </li>
+                                </ul></nav>
                             </div>
                             @endif
                         @endif
@@ -577,8 +667,26 @@
                                 @endforelse
                             </div>
                             @if($activities->hasPages())
-                            <div class="mt-4 d-flex justify-content-center">
-                                {{ $activities->links('pagination::bootstrap-5') }}
+                            <div class="mt-4">
+                                <nav><ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ $activities->onFirstPage() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ max(1, $activities->currentPage() - 1) }}, 'activities_page')" class="page-link" {{ $activities->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
+                                    </li>
+                                    @foreach(range(1, min(5, $activities->lastPage())) as $page)
+                                        <li class="page-item {{ $page == $activities->currentPage() ? 'active' : '' }}">
+                                            <button wire:click="gotoPage({{ $page }}, 'activities_page')" class="page-link">{{ $page }}</button>
+                                        </li>
+                                    @endforeach
+                                    @if($activities->lastPage() > 5)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                        <li class="page-item">
+                                            <button wire:click="gotoPage({{ $activities->lastPage() }}, 'activities_page')" class="page-link">{{ $activities->lastPage() }}</button>
+                                        </li>
+                                    @endif
+                                    <li class="page-item {{ !$activities->hasMorePages() ? 'disabled' : '' }}">
+                                        <button wire:click="gotoPage({{ min($activities->lastPage(), $activities->currentPage() + 1) }}, 'activities_page')" class="page-link" {{ !$activities->hasMorePages() ? 'disabled' : '' }}><i class="ph ph-caret-right"></i></button>
+                                    </li>
+                                </ul></nav>
                             </div>
                             @endif
                         @endif
