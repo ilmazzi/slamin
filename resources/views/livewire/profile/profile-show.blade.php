@@ -444,6 +444,7 @@
                                     </div>
                                 @endforelse
                             </div>
+                            {{ $videos->links() }}
                         @endif
 
                         @if($activeTab === 'events')

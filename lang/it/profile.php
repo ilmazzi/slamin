@@ -85,10 +85,16 @@ return [
   // Events & Content
   'participated_events' => 'Eventi Partecipati',
   'no_participated_events' => 'Nessun evento partecipato',
+  'no_events_available' => 'Nessun evento disponibile',
   'no_photos_available' => 'Nessuna foto disponibile',
   'no_videos_available' => 'Nessun video disponibile',
   'no_articles_available' => 'Nessun articolo disponibile',
   'no_poems_available' => 'Nessuna poesia disponibile',
+  'photos' => 'Foto',
+  'videos' => 'Video',
+  'images' => 'Immagini',
+  'edit_your_profile_info' => 'Modifica le tue informazioni personali',
+  'no_badges_yet' => 'Nessun badge ancora',
   
   // Basic Information
   'basic_information' => 'Informazioni Base',
