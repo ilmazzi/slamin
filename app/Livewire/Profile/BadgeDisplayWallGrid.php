@@ -60,9 +60,16 @@ class BadgeDisplayWallGrid extends Component
     {
         if (!$this->selectedUserBadgeId) return;
         
-        $userBadge = UserBadge::find($this->selectedUserBadgeId);
+        $userBadge = UserBadge::with('badge')->find($this->selectedUserBadgeId);
         
         if ($userBadge && $userBadge->user_id === $this->user->id) {
+            \Log::info('Toggle Profile BEFORE', [
+                'badge_id' => $userBadge->id,
+                'current_show' => $userBadge->show_in_profile,
+                'current_order' => $userBadge->profile_order,
+                'this_show' => $this->showInProfile
+            ]);
+            
             // If enabling, find next available position (1-3)
             if (!$this->showInProfile) {
                 $existingProfileBadges = UserBadge::where('user_id', $this->user->id)
@@ -90,12 +97,21 @@ class BadgeDisplayWallGrid extends Component
                 $this->profileOrder = 0;
             }
             
-            $this->loadBadges();
-            
-            // Reload the selected badge to update the modal state
-            $userBadge->refresh();
+            // Reload fresh data
+            $userBadge = UserBadge::with('badge')->find($this->selectedUserBadgeId);
             $this->selectedBadge = $userBadge;
+            $this->showInProfile = (bool) $userBadge->show_in_profile;
+            $this->profileOrder = $userBadge->profile_order;
             
+            \Log::info('Toggle Profile AFTER', [
+                'badge_id' => $userBadge->id,
+                'new_show' => $userBadge->show_in_profile,
+                'new_order' => $userBadge->profile_order,
+                'this_show' => $this->showInProfile,
+                'this_order' => $this->profileOrder
+            ]);
+            
+            $this->loadBadges();
             session()->flash('success', 'Badge aggiornato!');
         }
     }

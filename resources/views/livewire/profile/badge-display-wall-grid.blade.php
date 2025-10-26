@@ -106,8 +106,8 @@
                             </div>
                             <div class="form-check form-switch mb-0">
                                 <input class="form-check-input" type="checkbox" 
-                                       wire:model="showInProfile" 
-                                       wire:change="toggleProfile"
+                                       @if($showInProfile) checked @endif
+                                       wire:click="toggleProfile"
                                        style="cursor: pointer; width: 3rem; height: 1.5rem;">
                             </div>
                         </div>
@@ -123,8 +123,8 @@
                             </div>
                             <div class="form-check form-switch mb-0">
                                 <input class="form-check-input" type="checkbox" 
-                                       wire:model="showInSidebar" 
-                                       wire:change="toggleSidebar"
+                                       @if($showInSidebar) checked @endif
+                                       wire:click="toggleSidebar"
                                        style="cursor: pointer; width: 3rem; height: 1.5rem;">
                             </div>
                         </div>
