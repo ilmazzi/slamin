@@ -16,41 +16,41 @@
         <!-- Mobile Navigation - Horizontal Tabs (visible only on mobile) -->
         <div class="col-12 d-md-none mb-3">
             <div class="d-flex gap-2 overflow-auto pb-2" style="scrollbar-width: none;">
-                <button class="btn {{ $activeTab === 'about' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'about' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('about')">
-                    <i class="ph ph-user-circle me-1"></i>
-                    <span class="d-none d-sm-inline">Profilo</span>
+                    <i class="ph ph-user-circle {{ $activeTab === 'about' ? 'text-white' : 'text-primary' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'about' ? 'text-white' : '' }}">Profilo</span>
                 </button>
-                <button class="btn {{ $activeTab === 'poems' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'poems' ? 'btn-success' : 'btn-light-success' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('poems')">
-                    <i class="ph ph-book-open me-1"></i>
-                    <span class="d-none d-sm-inline">Poesie</span>
+                    <i class="ph ph-book-open {{ $activeTab === 'poems' ? 'text-white' : 'text-success' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'poems' ? 'text-white' : '' }}">Poesie</span>
                 </button>
-                <button class="btn {{ $activeTab === 'events' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'events' ? 'btn-warning' : 'btn-light-warning' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('events')">
-                    <i class="ph ph-calendar me-1"></i>
-                    <span class="d-none d-sm-inline">Eventi</span>
+                    <i class="ph ph-calendar {{ $activeTab === 'events' ? 'text-white' : 'text-warning' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'events' ? 'text-white' : '' }}">Eventi</span>
                 </button>
-                <button class="btn {{ $activeTab === 'media' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'media' ? 'btn-danger' : 'btn-light-danger' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('media')">
-                    <i class="ph ph-play-circle me-1"></i>
-                    <span class="d-none d-sm-inline">Media</span>
+                    <i class="ph ph-play-circle {{ $activeTab === 'media' ? 'text-white' : 'text-danger' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'media' ? 'text-white' : '' }}">Media</span>
                 </button>
-                <button class="btn {{ $activeTab === 'articles' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'articles' ? 'btn-info' : 'btn-light-info' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('articles')">
-                    <i class="ph ph-newspaper me-1"></i>
-                    <span class="d-none d-sm-inline">Articoli</span>
+                    <i class="ph ph-newspaper {{ $activeTab === 'articles' ? 'text-white' : 'text-info' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'articles' ? 'text-white' : '' }}">Articoli</span>
                 </button>
-                <button class="btn {{ $activeTab === 'activities' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'activities' ? 'btn-secondary' : 'btn-light-secondary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('activities')">
-                    <i class="ph ph-activity me-1"></i>
-                    <span class="d-none d-sm-inline">Attività</span>
+                    <i class="ph ph-activity {{ $activeTab === 'activities' ? 'text-white' : 'text-secondary' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'activities' ? 'text-white' : '' }}">Attività</span>
                 </button>
                 @if($isOwnProfile)
-                <button class="btn {{ $activeTab === 'settings' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'settings' ? 'btn-dark' : 'btn-light-dark' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('settings')">
-                    <i class="ph ph-gear me-1"></i>
-                    <span class="d-none d-sm-inline">Impostazioni</span>
+                    <i class="ph ph-gear {{ $activeTab === 'settings' ? 'text-white' : 'text-dark' }} me-1"></i>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'settings' ? 'text-white' : '' }}">Impostazioni</span>
                 </button>
                 @endif
             </div>
@@ -436,6 +436,196 @@
                                 @endforelse
                             </div>
                             {{ $activities->links() }}
+                        @endif
+
+                        @if($activeTab === 'settings')
+                            <h5 class="mb-4 f-w-700">
+                                <i class="ph ph-gear me-2 text-primary"></i>
+                                {{ __('profile.settings') }}
+                            </h5>
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('profile.edit') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-primary p-3 rounded-3">
+                                                    <i class="ph-duotone ph-user-circle text-primary f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.edit_profile')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Info personali</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('profile.my-badges') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-warning p-3 rounded-3">
+                                                    <i class="ph-duotone ph-medal-military text-warning f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.manage_badges')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Badge e trophy</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('profile.languages.index') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-info p-3 rounded-3">
+                                                    <i class="ph-duotone ph-globe text-info f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.manage_languages')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Gestisci lingue</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('profile.media') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-success p-3 rounded-3">
+                                                    <i class="ph-duotone ph-video-camera text-success f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.my_media')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Foto e video</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('profile.activity') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-secondary p-3 rounded-3">
+                                                    <i class="ph-duotone ph-lightning text-secondary f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.view_all_activities')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Vedi tutte</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('articles.create') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-info p-3 rounded-3">
+                                                    <i class="ph-duotone ph-article text-info f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">{{__('profile.create_article')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Scrivi articolo</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                @if($user->hasRole('poet'))
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('poems.create') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-primary p-3 rounded-3">
+                                                    <i class="ph-duotone ph-pen-nib text-primary f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">Crea Poesia</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Scrivi poesia</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                @endif
+
+                                @if($user->hasRole('organizer'))
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('events.create') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-warning p-3 rounded-3">
+                                                    <i class="ph-duotone ph-calendar-plus text-warning f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">Crea Evento</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Organizza evento</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                @endif
+
+                                @if($user->hasRole('venue'))
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('venues.create') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-secondary p-3 rounded-3">
+                                                    <i class="ph-duotone ph-buildings text-secondary f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">Crea Venue</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Aggiungi locale</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                @endif
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('videos.upload') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-danger p-3 rounded-3">
+                                                    <i class="ph-duotone ph-upload text-danger f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">Carica Video</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Upload video</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <a href="{{ route('photos.create') }}" class="text-decoration-none">
+                                        <div class="card hover-effect h-100">
+                                            <div class="card-body p-3 d-flex align-items-center gap-3">
+                                                <div class="bg-light-info p-3 rounded-3">
+                                                    <i class="ph-duotone ph-image-square text-info f-s-28"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fw-bold mb-1">Carica Foto</h6>
+                                                    <p class="text-muted f-s-12 mb-0">Upload foto</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
