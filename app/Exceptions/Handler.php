@@ -131,11 +131,25 @@ class Handler extends ExceptionHandler
             'user_id' => \Illuminate\Support\Facades\Auth::id(),
             'exception' => get_class($e),
             'message' => $e->getMessage(),
-            'will_show_details' => !app()->environment('production') || $isAdmin
+            'will_show_details' => $isAdmin || !app()->environment('production')
         ]);
         
-        // In production, don't show detailed error information (unless admin)
-        if (app()->environment('production') && !$isAdmin) {
+        // ADMIN: Always show detailed error (Whoops screen)
+        if ($isAdmin) {
+            // Force detailed error display by temporarily setting debug mode
+            $originalDebug = config('app.debug');
+            config(['app.debug' => true]);
+            
+            $response = parent::render($request, $e);
+            
+            // Restore original debug setting
+            config(['app.debug' => $originalDebug]);
+            
+            return $response;
+        }
+        
+        // In production, don't show detailed error information for non-admins
+        if (app()->environment('production')) {
             // Log the exception before rendering
             $this->logException($e);
 
@@ -151,7 +165,7 @@ class Handler extends ExceptionHandler
             return response()->view('errors.500', [], 500);
         }
 
-        // For admin or non-production, show detailed error
+        // For non-production environments, show detailed error
         return parent::render($request, $e);
     }
 }
