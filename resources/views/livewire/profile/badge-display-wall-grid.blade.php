@@ -3,8 +3,8 @@
         <!-- Earned Badges -->
         @foreach($earnedBadges as $index => $userBadge)
         @if($userBadge->badge)
-        <div class="wall-badge earned" 
-             wire:click="selectBadge({{ $userBadge->badge->id }}, true)"
+        <div class="wall-badge earned {{ $userBadge->show_in_profile ? 'in-profile' : '' }} {{ $userBadge->show_in_sidebar ? 'in-sidebar' : '' }}" 
+             wire:click="selectBadge({{ $userBadge->id }})"
              style="animation-delay: {{ $index * 0.05 }}s;">
             <div class="badge-frame">
                 <div class="badge-shine"></div>
@@ -16,15 +16,28 @@
                 <div class="earned-checkmark">
                     <i class="ph ph-check-circle"></i>
                 </div>
+                
+                <!-- Profile indicator -->
+                @if($userBadge->show_in_profile)
+                <div class="profile-indicator" title="In evidenza nel profilo">
+                    <i class="ph ph-star-fill"></i>
+                </div>
+                @endif
+                
+                <!-- Sidebar indicator -->
+                @if($userBadge->show_in_sidebar)
+                <div class="sidebar-indicator" title="Mostrato in sidebar">
+                    <i class="ph ph-layout-fill"></i>
+                </div>
+                @endif
             </div>
         </div>
         @endif
         @endforeach
 
-        <!-- Locked Badges -->
+        <!-- Locked Badges - Non cliccabili -->
         @foreach($lockedBadges as $index => $badge)
         <div class="wall-badge locked" 
-             wire:click="selectBadge({{ $badge->id }}, false)"
              style="animation-delay: {{ ($earnedBadges->count() + $index) * 0.05 }}s;">
             <div class="badge-frame">
                 <div class="lock-overlay">
@@ -51,23 +64,16 @@
             </button>
 
             <div class="detail-content">
-                @if($selectedBadge->is_earned)
                 <div class="earned-banner">
                     <i class="ph ph-check-circle me-2"></i>
                     Sbloccato!
                 </div>
-                @else
-                <div class="locked-banner">
-                    <i class="ph ph-lock me-2"></i>
-                    Bloccato
-                </div>
-                @endif
 
                 <img src="{{ $selectedBadge->badge->icon_url }}" 
                      alt="{{ $selectedBadge->badge->name }}"
-                     class="detail-icon {{ !$selectedBadge->is_earned ? 'locked' : '' }}">
+                     class="detail-icon">
 
-                <h3>{{ $selectedBadge->is_earned ? $selectedBadge->badge->name : '???' }}</h3>
+                <h3>{{ $selectedBadge->badge->name }}</h3>
                 <p class="text-muted">{{ $selectedBadge->badge->description }}</p>
 
                 <div class="detail-stats">
@@ -75,15 +81,66 @@
                         <i class="ph ph-star text-warning"></i>
                         <span>{{ $selectedBadge->badge->points }} punti</span>
                     </div>
-                    @if($selectedBadge->is_earned)
                     <div class="detail-stat">
                         <i class="ph ph-calendar text-primary"></i>
                         <span>{{ $selectedBadge->earned_at->format('d/m/Y H:i') }}</span>
                     </div>
-                    @else
-                    <div class="detail-stat">
-                        <i class="ph ph-target text-success"></i>
-                        <span>{{ $selectedBadge->badge->criteria_value }}x {{ $selectedBadge->badge->criteria_type }}</span>
+                </div>
+                
+                <!-- Management Section -->
+                <div class="badge-management mt-4 pt-4" style="border-top: 2px solid #e2e8f0;">
+                    <h6 class="mb-3 f-w-600">
+                        <i class="ph ph-gear me-2"></i>
+                        Gestisci Visualizzazione
+                    </h6>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        <!-- Profile Toggle -->
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(var(--primary), 0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ph ph-star f-s-24 text-primary"></i>
+                                <div>
+                                    <div class="f-w-600">Profilo Stack Cards</div>
+                                    <small class="text-muted">Mostra tra i 3 badge in evidenza</small>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" 
+                                       wire:model="showInProfile" 
+                                       wire:change="toggleProfile"
+                                       style="cursor: pointer; width: 3rem; height: 1.5rem;">
+                            </div>
+                        </div>
+                        
+                        <!-- Sidebar Toggle -->
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(var(--success), 0.05);">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ph ph-layout f-s-24 text-success"></i>
+                                <div>
+                                    <div class="f-w-600">Sidebar</div>
+                                    <small class="text-muted">Mostra nella barra laterale (max 5)</small>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" 
+                                       wire:model="showInSidebar" 
+                                       wire:change="toggleSidebar"
+                                       style="cursor: pointer; width: 3rem; height: 1.5rem;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if(session()->has('success'))
+                    <div class="alert alert-success mt-3 mb-0">
+                        <i class="ph ph-check-circle me-2"></i>
+                        {{ session('success') }}
+                    </div>
+                    @endif
+                    
+                    @if(session()->has('error'))
+                    <div class="alert alert-danger mt-3 mb-0">
+                        <i class="ph ph-warning-circle me-2"></i>
+                        {{ session('error') }}
                     </div>
                     @endif
                 </div>
@@ -235,6 +292,38 @@
             0% { transform: scale(0) rotate(-180deg); }
             50% { transform: scale(1.3) rotate(10deg); }
             100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        .profile-indicator {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background: linear-gradient(135deg, rgba(var(--primary), 0.9), rgba(var(--primary), 1));
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(var(--primary), 0.4);
+        }
+        
+        .sidebar-indicator {
+            position: absolute;
+            bottom: 5px;
+            left: 38px;
+            background: linear-gradient(135deg, rgba(var(--success), 0.9), rgba(var(--success), 1));
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(var(--success), 0.4);
         }
 
         .progress-ring {

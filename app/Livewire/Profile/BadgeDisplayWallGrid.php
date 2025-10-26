@@ -12,6 +12,11 @@ class BadgeDisplayWallGrid extends Component
     public $earnedBadges = [];
     public $lockedBadges = [];
     public $selectedBadge = null;
+    public $selectedUserBadgeId = null;
+    public $showInProfile = false;
+    public $profileOrder = null;
+    public $showInSidebar = false;
+    public $sidebarOrder = null;
 
     public function mount($user)
     {
@@ -37,21 +42,95 @@ class BadgeDisplayWallGrid extends Component
             ->get();
     }
 
-    public function selectBadge($badgeId, $isEarned = true)
+    public function selectBadge($userBadgeId)
     {
-        if ($isEarned) {
-            $userBadge = UserBadge::with('badge')->where('badge_id', $badgeId)->where('user_id', $this->user->id)->first();
-            $this->selectedBadge = $userBadge ? (object)[
-                'badge' => $userBadge->badge,
-                'earned_at' => $userBadge->earned_at,
-                'is_earned' => true
-            ] : null;
-        } else {
-            $badge = Badge::find($badgeId);
-            $this->selectedBadge = $badge ? (object)[
-                'badge' => $badge,
-                'is_earned' => false
-            ] : null;
+        $userBadge = UserBadge::with('badge')->find($userBadgeId);
+        
+        if ($userBadge && $userBadge->user_id === $this->user->id) {
+            $this->selectedUserBadgeId = $userBadgeId;
+            $this->selectedBadge = $userBadge;
+            $this->showInProfile = (bool) $userBadge->show_in_profile;
+            $this->profileOrder = $userBadge->profile_order;
+            $this->showInSidebar = (bool) $userBadge->show_in_sidebar;
+            $this->sidebarOrder = $userBadge->sidebar_order;
+        }
+    }
+    
+    public function toggleProfile()
+    {
+        if (!$this->selectedUserBadgeId) return;
+        
+        $userBadge = UserBadge::find($this->selectedUserBadgeId);
+        
+        if ($userBadge && $userBadge->user_id === $this->user->id) {
+            // If enabling, find next available position (1-3)
+            if (!$this->showInProfile) {
+                $existingProfileBadges = UserBadge::where('user_id', $this->user->id)
+                    ->where('show_in_profile', true)
+                    ->count();
+                
+                if ($existingProfileBadges >= 3) {
+                    session()->flash('error', 'Puoi mostrare massimo 3 badge nel profilo!');
+                    return;
+                }
+                
+                $this->profileOrder = $existingProfileBadges + 1;
+                $userBadge->update([
+                    'show_in_profile' => true,
+                    'profile_order' => $this->profileOrder
+                ]);
+                $this->showInProfile = true;
+            } else {
+                // Disabling
+                $userBadge->update([
+                    'show_in_profile' => false,
+                    'profile_order' => null
+                ]);
+                $this->showInProfile = false;
+                $this->profileOrder = null;
+            }
+            
+            $this->loadBadges();
+            session()->flash('success', 'Badge aggiornato!');
+        }
+    }
+    
+    public function toggleSidebar()
+    {
+        if (!$this->selectedUserBadgeId) return;
+        
+        $userBadge = UserBadge::find($this->selectedUserBadgeId);
+        
+        if ($userBadge && $userBadge->user_id === $this->user->id) {
+            // If enabling, find next available position (1-5)
+            if (!$this->showInSidebar) {
+                $existingSidebarBadges = UserBadge::where('user_id', $this->user->id)
+                    ->where('show_in_sidebar', true)
+                    ->count();
+                
+                if ($existingSidebarBadges >= 5) {
+                    session()->flash('error', 'Puoi mostrare massimo 5 badge nella sidebar!');
+                    return;
+                }
+                
+                $this->sidebarOrder = $existingSidebarBadges + 1;
+                $userBadge->update([
+                    'show_in_sidebar' => true,
+                    'sidebar_order' => $this->sidebarOrder
+                ]);
+                $this->showInSidebar = true;
+            } else {
+                // Disabling
+                $userBadge->update([
+                    'show_in_sidebar' => false,
+                    'sidebar_order' => null
+                ]);
+                $this->showInSidebar = false;
+                $this->sidebarOrder = null;
+            }
+            
+            $this->loadBadges();
+            session()->flash('success', 'Badge aggiornato!');
         }
     }
 
