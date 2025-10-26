@@ -598,6 +598,9 @@
                                     </div>
                                 @endforelse
                             </div>
+                            <div class="alert alert-info mt-3">
+                                📊 Eventi: {{ $events->total() }} totali | Pagina {{ $events->currentPage() }} di {{ $events->lastPage() }} | hasPages: {{ $events->hasPages() ? 'SI' : 'NO' }}
+                            </div>
                             @if($events->hasPages())
                             <div class="mt-4">
                                 <nav><ul class="pagination justify-content-center mb-0">
