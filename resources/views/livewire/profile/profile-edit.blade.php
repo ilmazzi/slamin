@@ -240,13 +240,24 @@
                 </div>
 
                 <!-- Submit Buttons -->
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="ph ph-check me-1"></i>{{ __('profile.save') }}
+                <div class="d-flex gap-2 align-items-center">
+                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove>
+                            <i class="ph ph-check me-1"></i>{{ __('profile.save') }}
+                        </span>
+                        <span wire:loading>
+                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                            Salvataggio...
+                        </span>
                     </button>
                     <a href="{{ route('profile.show') }}" class="btn btn-secondary">
                         <i class="ph ph-x me-1"></i>{{ __('profile.cancel') }}
                     </a>
+                    
+                    <div wire:loading class="text-primary f-s-13">
+                        <i class="ph ph-spinner ph-spin me-1"></i>
+                        Aggiornamento in corso...
+                    </div>
                 </div>
             </form>
         </div>

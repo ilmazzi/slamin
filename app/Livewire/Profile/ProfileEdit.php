@@ -152,8 +152,13 @@ class ProfileEdit extends Component
 
         // Handle avatar upload
         if ($this->avatar) {
+            // Delete old avatar if exists
+            if ($this->user->profile_photo) {
+                Storage::disk('public')->delete($this->user->profile_photo);
+            }
+            
             $avatarPath = $this->avatar->store('avatars', 'public');
-            $data['avatar'] = $avatarPath;
+            $data['profile_photo'] = $avatarPath;
             
             // Generate thumbnail
             $imageService = app(ImageService::class);
@@ -163,8 +168,13 @@ class ProfileEdit extends Component
 
         // Handle banner upload
         if ($this->banner) {
+            // Delete old banner if exists
+            if ($this->user->banner_image) {
+                Storage::disk('public')->delete($this->user->banner_image);
+            }
+            
             $bannerPath = $this->banner->store('banners', 'public');
-            $data['banner'] = $bannerPath;
+            $data['banner_image'] = $bannerPath;
         }
 
         $this->user->update($data);
