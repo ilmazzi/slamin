@@ -51,8 +51,8 @@
         </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="profile-nav-tabs mb-4">
+    <!-- Navigation Tabs - Hidden on Mobile -->
+    <div class="profile-nav-tabs mb-4 d-none d-md-flex">
         <button class="nav-tab {{ $activeTab === 'about' ? 'active' : '' }}" wire:click="setActiveTab('about')">
             <i class="ph ph-user-circle"></i>
             <span>Profilo</span>
@@ -91,8 +91,8 @@
 
     <!-- Content Area -->
     <div class="profile-content">
-        @if($activeTab === 'about')
-            <!-- About Section -->
+        <!-- About Section -->
+        <div class="about-section mb-4 d-block {{ $activeTab !== 'about' ? 'd-md-none' : '' }}">
             <div class="card shadow-sm">
                 <div class="card-header bg-white border-bottom border-3 border-primary">
                     <h5 class="mb-0 fw-bold">
@@ -115,8 +115,10 @@
                     @endif
                 </div>
             </div>
+        </div>
 
-        @elseif($activeTab === 'badges')
+        <!-- Badges Section -->
+        <div class="badges-section mb-4 d-block {{ $activeTab !== 'badges' ? 'd-md-none' : '' }}">
             <!-- Badges Section -->
             <div class="card shadow-sm">
                 <div class="card-header bg-white border-bottom border-3 border-primary d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -129,12 +131,14 @@
                         Trophy Case
                     </a>
                 </div>
-                <div class="card-body">
+                <div class="card-body overflow-hidden">
                     @livewire('profile.badge-display-stack-cards', ['user' => $user])
                 </div>
             </div>
+        </div>
 
-        @elseif($activeTab === 'poems')
+        <!-- Poems Section -->
+        <div class="poems-section mb-4 d-block {{ $activeTab !== 'poems' ? 'd-md-none' : '' }}">
             <!-- Poems Grid -->
             <div class="row g-3">
                 @forelse($poems as $poem)
@@ -168,8 +172,10 @@
                 @endforelse
             </div>
             <div class="mt-3">{{ $poems->links() }}</div>
+        </div>
 
-        @elseif($activeTab === 'articles')
+        <!-- Articles Section -->
+        <div class="articles-section mb-4 d-block {{ $activeTab !== 'articles' ? 'd-md-none' : '' }}">
             <!-- Articles Grid -->
             <div class="row g-3">
                 @forelse($articles as $article)
@@ -202,8 +208,10 @@
                 @endforelse
             </div>
             <div class="mt-3">{{ $articles->links() }}</div>
+        </div>
 
-        @elseif($activeTab === 'media')
+        <!-- Media Section -->
+        <div class="media-section mb-4 d-block {{ $activeTab !== 'media' ? 'd-md-none' : '' }}">
             <!-- Media Grid -->
             <div class="row g-3">
                 @forelse($photos->take(12) as $photo)
@@ -244,8 +252,10 @@
                 </div>
                 @endif
             </div>
+        </div>
 
-        @elseif($activeTab === 'events')
+        <!-- Events Section -->
+        <div class="events-section mb-4 d-block {{ $activeTab !== 'events' ? 'd-md-none' : '' }}">
             <!-- Events Grid -->
             <div class="row g-3 g-lg-4">
                 @forelse($events as $event)
@@ -329,8 +339,10 @@
                 @endforelse
             </div>
             <div class="mt-4">{{ $events->links() }}</div>
+        </div>
 
-        @elseif($activeTab === 'activities')
+        <!-- Activities Section -->
+        <div class="activities-section mb-4 d-block {{ $activeTab !== 'activities' ? 'd-md-none' : '' }}">
             <!-- Activities List -->
             <div class="row g-3">
                 @forelse($activities as $activity)
@@ -372,8 +384,11 @@
                 @endforelse
             </div>
             <div class="mt-4">{{ $activities->links() }}</div>
+        </div>
 
-        @elseif($activeTab === 'settings' && $isOwnProfile)
+        @if($isOwnProfile)
+        <!-- Settings Section -->
+        <div class="settings-section mb-4 d-block {{ $activeTab !== 'settings' ? 'd-md-none' : '' }}">
             <!-- Settings Grid -->
             <div class="row g-3">
                 <div class="col-12 col-sm-6 col-lg-4">
@@ -569,6 +584,7 @@
                     </a>
                 </div>
             </div>
+        </div>
         @endif
     </div>
 </div>
