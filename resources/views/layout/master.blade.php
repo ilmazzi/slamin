@@ -82,6 +82,34 @@
             opacity: 1;
         }
     }
+    
+    /* Floating Avatar Animation */
+    .floating-avatar {
+        animation: floatIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .floating-avatar img {
+        transition: all 0.3s ease;
+    }
+    
+    .floating-avatar:hover img {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    @keyframes floatIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.8);
+        }
+        60% {
+            transform: translateY(5px) scale(1.05);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
     </style>
     
     <!-- Initialize Popovers for Badge -->

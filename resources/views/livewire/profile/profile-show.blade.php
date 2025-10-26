@@ -2,7 +2,7 @@
     <!-- Floating Avatar - Above Everything -->
     <div class="position-relative" style="z-index: 1000;">
         <div class="d-flex justify-content-center">
-            <div class="position-relative" style="margin-bottom: -60px;">
+            <div class="position-relative floating-avatar" style="margin-bottom: -60px;">
                 <img alt="{{ $user->name }}" 
                      src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
                      class="rounded-circle border border-4 border-white shadow-lg"
@@ -20,7 +20,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-body p-0">
-                    <div class="position-relative overflow-hidden" style="height: 200px;">
+                    <div class="position-relative overflow-hidden" style="height: 280px;">
                         <img src="{{ $user->getBannerImageUrlAttribute() }}" 
                              alt="{{ $user->getDisplayName() }}" 
                              class="w-100 h-100" 
@@ -202,7 +202,7 @@
                             {{ $user->getDisplayName() }}
                         </h3>
                         @if($user->nickname)
-                        <p class="text-muted f-s-14 mb-2">@{{ $user->nickname }}</p>
+                        <p class="text-muted f-s-14 mb-2">{{ $user->nickname }}</p>
                         @endif
                         @if($user->bio)
                         <p class="text-muted f-s-13 f-s-md-14 mb-0 mt-3">{{ Str::limit($user->bio, 120) }}</p>
