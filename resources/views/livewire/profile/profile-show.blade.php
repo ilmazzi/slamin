@@ -179,6 +179,7 @@
 
         <!-- Main Content - Full width on mobile -->
         <div class="col-12 col-md-8 col-lg-6 mb-4">
+            {{-- DEBUG MAIN: activeTab = {{ $activeTab }} --}}
             @if($activeTab === 'about')
                 <!-- Profile Info Card -->
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
