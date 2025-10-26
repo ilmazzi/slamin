@@ -242,16 +242,35 @@
                                 <i class="ph ph-book-open me-2 text-primary"></i>
                                 {{ __('profile.poems') }}
                             </h5>
-                            <div class="row">
+                            <div class="row g-3">
                                 @forelse($poems as $poem)
-                                    <div class="col-12 mb-3">
-                                        <div class="card hover-effect">
-                                            <div class="card-body">
-                                                <h5 class="card-title f-w-600">{{ $poem->title }}</h5>
-                                                <p class="card-text f-s-14">{{ Str::limit($poem->content, 150) }}</p>
-                                                <small class="text-muted f-s-12">{{ $poem->created_at->format('d/m/Y') }}</small>
+                                    <div class="col-12">
+                                        <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
+                                            <div class="card hover-effect h-100 border-0 shadow-sm">
+                                                <div class="card-body p-3">
+                                                    <div class="d-flex align-items-start gap-3">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="bg-light-primary p-3 rounded-3">
+                                                                <i class="ph-duotone ph-scroll text-primary f-s-32"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-2 f-w-700 text-dark">{{ $poem->title ?: __('poems.untitled') }}</h6>
+                                                            <p class="text-muted f-s-13 mb-2" style="line-height: 1.6;">{{ Str::limit(strip_tags($poem->content), 120) }}</p>
+                                                            <div class="d-flex align-items-center gap-3 text-muted f-s-12">
+                                                                <span><i class="ph ph-calendar me-1"></i>{{ $poem->created_at->format('d/m/Y') }}</span>
+                                                                @if($poem->like_count > 0)
+                                                                <span><i class="ph ph-heart me-1"></i>{{ $poem->like_count }}</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-shrink-0 align-self-center">
+                                                            <i class="ph ph-caret-right text-muted f-s-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-12">
@@ -270,16 +289,41 @@
                                 <i class="ph ph-newspaper me-2 text-primary"></i>
                                 {{ __('profile.my_articles') }}
                             </h5>
-                            <div class="row">
+                            <div class="row g-3">
                                 @forelse($articles as $article)
-                                    <div class="col-12 mb-3">
-                                        <div class="card hover-effect">
-                                            <div class="card-body">
-                                                <h5 class="card-title f-w-600">{{ $article->title }}</h5>
-                                                <p class="card-text f-s-14">{{ Str::limit($article->content, 150) }}</p>
-                                                <small class="text-muted f-s-12">{{ $article->created_at->format('d/m/Y') }}</small>
+                                    <div class="col-12">
+                                        <a href="{{ route('articles.show', $article) }}" class="text-decoration-none">
+                                            <div class="card hover-effect h-100 border-0 shadow-sm">
+                                                <div class="card-body p-0">
+                                                    <div class="row g-0">
+                                                        @if($article->featured_image)
+                                                        <div class="col-4 col-md-3">
+                                                            <img src="{{ Storage::url($article->featured_image) }}" 
+                                                                 alt="{{ is_array($article->title) ? ($article->title[app()->getLocale()] ?? reset($article->title)) : $article->title }}" 
+                                                                 class="w-100 h-100 rounded-start"
+                                                                 style="object-fit: cover; min-height: 120px; max-height: 150px;">
+                                                        </div>
+                                                        @endif
+                                                        <div class="{{ $article->featured_image ? 'col-8 col-md-9' : 'col-12' }}">
+                                                            <div class="p-3">
+                                                                <h6 class="mb-2 f-w-700 text-dark">
+                                                                    {{ is_array($article->title) ? ($article->title[app()->getLocale()] ?? reset($article->title)) : $article->title }}
+                                                                </h6>
+                                                                <p class="text-muted f-s-13 mb-2">
+                                                                    {{ Str::limit(strip_tags(is_array($article->content) ? ($article->content[app()->getLocale()] ?? reset($article->content)) : $article->content), 120) }}
+                                                                </p>
+                                                                <div class="d-flex align-items-center gap-3 text-muted f-s-12">
+                                                                    <span><i class="ph ph-calendar me-1"></i>{{ $article->published_at?->format('d/m/Y') ?? $article->created_at->format('d/m/Y') }}</span>
+                                                                    @if($article->views_count > 0)
+                                                                    <span><i class="ph ph-eye me-1"></i>{{ $article->views_count }}</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-12">
@@ -300,16 +344,30 @@
                             </h5>
                             
                             <h6 class="f-w-600 mb-3">{{ __('profile.photos') }}</h6>
-                            <div class="row">
+                            <div class="row g-3">
                                 @forelse($photos as $photo)
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card hover-effect">
-                                            <img src="{{ $photo->image_url }}" alt="{{ $photo->title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-                                            <div class="card-body">
-                                                <h6 class="card-title f-w-600">{{ $photo->title }}</h6>
-                                                <p class="card-text text-muted f-s-12">{{ $photo->description }}</p>
+                                    <div class="col-md-4 col-sm-6">
+                                        <a href="{{ route('photos.show', $photo) }}" class="text-decoration-none">
+                                            <div class="card hover-effect border-0 shadow-sm h-100">
+                                                <div class="position-relative overflow-hidden">
+                                                    <img src="{{ $photo->image_url }}" 
+                                                         alt="{{ $photo->title }}" 
+                                                         class="card-img-top" 
+                                                         style="height: 200px; object-fit: cover;">
+                                                    <div class="position-absolute top-0 end-0 m-2">
+                                                        <span class="badge bg-dark bg-opacity-75">
+                                                            <i class="ph ph-heart me-1"></i>{{ $photo->like_count ?? 0 }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-3">
+                                                    <h6 class="card-title f-w-600 mb-1 text-dark">{{ Str::limit($photo->title, 40) }}</h6>
+                                                    <small class="text-muted f-s-12">
+                                                        <i class="ph ph-calendar me-1"></i>{{ $photo->created_at->format('d/m/Y') }}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-12">
@@ -323,18 +381,41 @@
                             {{ $photos->links() }}
                             
                             <h6 class="f-w-600 mb-3 mt-4">{{ __('profile.videos') }}</h6>
-                            <div class="row">
+                            <div class="row g-3">
                                 @forelse($videos as $video)
-                                    <div class="col-md-6 mb-3">
-                                        <div class="card hover-effect">
-                                            <video class="card-img-top" style="height: 200px; object-fit: cover;" controls>
-                                                <source src="{{ $video->video_url }}" type="video/mp4">
-                                            </video>
-                                            <div class="card-body">
-                                                <h6 class="card-title f-w-600">{{ $video->title }}</h6>
-                                                <p class="card-text text-muted f-s-12">{{ $video->description }}</p>
+                                    <div class="col-md-6">
+                                        <a href="{{ route('videos.show', $video) }}" class="text-decoration-none">
+                                            <div class="card hover-effect border-0 shadow-sm h-100">
+                                                <div class="position-relative overflow-hidden">
+                                                    @if($video->thumbnail_url)
+                                                        <img src="{{ $video->thumbnail_url }}" 
+                                                             alt="{{ $video->title }}" 
+                                                             class="card-img-top" 
+                                                             style="height: 200px; object-fit: cover;">
+                                                    @else
+                                                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                            <i class="ph ph-video-camera text-muted" style="font-size: 64px;"></i>
+                                                        </div>
+                                                    @endif
+                                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                                        <div class="bg-dark bg-opacity-75 rounded-circle p-3">
+                                                            <i class="ph ph-play-fill text-white f-s-32"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="position-absolute top-0 end-0 m-2">
+                                                        <span class="badge bg-dark bg-opacity-75">
+                                                            <i class="ph ph-eye me-1"></i>{{ $video->view_count ?? 0 }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-3">
+                                                    <h6 class="card-title f-w-600 mb-1 text-dark">{{ Str::limit($video->title, 50) }}</h6>
+                                                    <small class="text-muted f-s-12">
+                                                        <i class="ph ph-calendar me-1"></i>{{ $video->created_at->format('d/m/Y') }}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-12">
@@ -352,24 +433,49 @@
                                 <i class="ph ph-calendar-check me-2 text-primary"></i>
                                 {{ __('profile.events') }}
                             </h5>
-                            <div class="row">
+                            <div class="row g-3">
                                 @forelse($events as $event)
-                                    <div class="col-12 mb-3">
-                                        <div class="card hover-effect">
-                                            <div class="card-body">
-                                                <h5 class="card-title f-w-600">{{ $event->title }}</h5>
-                                                <p class="card-text f-s-14">{{ Str::limit($event->description, 150) }}</p>
-                                                <small class="text-muted f-s-12">
-                                                    @if($event->start_datetime)
-                                                        {{ $event->start_datetime->format('d/m/Y H:i') }}
-                                                    @elseif($event->event_date)
-                                                        {{ $event->event_date->format('d/m/Y H:i') }}
-                                                    @else
-                                                        Data non disponibile
-                                                    @endif
-                                                </small>
+                                    <div class="col-12">
+                                        <a href="{{ route('events.show', $event) }}" class="text-decoration-none">
+                                            <div class="card hover-effect h-100 border-0 shadow-sm">
+                                                <div class="card-body p-0">
+                                                    <div class="row g-0">
+                                                        @if($event->image_url)
+                                                        <div class="col-4 col-md-3">
+                                                            <img src="{{ $event->image_url }}" 
+                                                                 alt="{{ $event->title }}" 
+                                                                 class="w-100 h-100 rounded-start"
+                                                                 style="object-fit: cover; min-height: 120px; max-height: 150px;">
+                                                        </div>
+                                                        @endif
+                                                        <div class="{{ $event->image_url ? 'col-8 col-md-9' : 'col-12' }}">
+                                                            <div class="p-3">
+                                                                <h6 class="mb-2 f-w-700 text-dark">{{ $event->title }}</h6>
+                                                                <p class="text-muted f-s-13 mb-2">{{ Str::limit(strip_tags($event->description), 100) }}</p>
+                                                                <div class="d-flex align-items-center gap-3 text-muted f-s-12 flex-wrap">
+                                                                    <span>
+                                                                        <i class="ph ph-calendar me-1"></i>
+                                                                        @if($event->start_datetime)
+                                                                            {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                                        @elseif($event->event_date)
+                                                                            {{ $event->event_date->format('d/m/Y H:i') }}
+                                                                        @else
+                                                                            Data non disponibile
+                                                                        @endif
+                                                                    </span>
+                                                                    @if($event->city)
+                                                                    <span><i class="ph ph-map-pin me-1"></i>{{ $event->city }}</span>
+                                                                    @endif
+                                                                    @if($event->venue_name)
+                                                                    <span><i class="ph ph-buildings me-1"></i>{{ $event->venue_name }}</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     </div>
                                 @empty
                                     <div class="col-12">
