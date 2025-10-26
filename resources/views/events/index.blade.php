@@ -161,119 +161,107 @@
         </div>
     </div>
 
-    <!-- Search and Filters - Premium Design -->
-    <div class="row g-3 mb-4">
-        <!-- Search Card -->
-        <div class="col-lg-5 col-md-12">
-            <div class="card hover-effect h-100">
-                <div class="card-body">
-                    <form method="GET" id="filterForm">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="ph ph-magnifying-glass text-primary f-s-20 me-2"></i>
-                            <h6 class="mb-0 f-w-600">Cerca Eventi</h6>
-                        </div>
-                        <input type="text" name="search" class="form-control" 
-                               placeholder="Titolo, città, organizzatore..."
-                               value="{{ request('search') }}">
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filters Card -->
-        <div class="col-lg-4 col-md-8">
-            <div class="card hover-effect h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2">
-                        <i class="ph ph-faders text-primary f-s-20 me-2"></i>
-                        <h6 class="mb-0 f-w-600">Filtra per</h6>
-                    </div>
-                    <form method="GET" id="filterFormSelects">
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <select name="city" class="form-select form-select-sm">
-                                    <option value="">Tutte le città</option>
-                                    @foreach($events->pluck('city')->unique()->filter() as $city)
-                                        <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <select name="type" class="form-select form-select-sm">
-                                    <option value="">Tutti i tipi</option>
-                                    <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>Pubblici</option>
-                                    <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>Privati</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Actions Card -->
-        <div class="col-lg-3 col-md-4">
-            <div class="card hover-effect h-100">
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <div class="d-grid gap-2">
-                        <button type="submit" form="filterForm" class="btn btn-primary">
-                            <i class="ph ph-funnel me-1"></i>Applica
-                        </button>
-                        @auth
-                            @can('events.create.public')
-                                <a href="{{ route('events.create') }}" class="btn btn-success">
-                                    <i class="ph ph-plus me-1"></i>Nuovo
-                                </a>
-                            @endcan
-                        @endauth
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Filters - Chip Style -->
+    <!-- Hero Search Section - Poetry Themed -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body py-3">
-                    <div class="d-flex flex-wrap gap-2 align-items-center">
-                        <span class="badge bg-light-primary text-primary f-s-12 f-w-600">
-                            <i class="ph ph-lightning me-1"></i>FILTRI RAPIDI
-                        </span>
-                        
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="today" style="cursor: pointer;">
-                            <i class="ph ph-calendar me-1"></i>Oggi
-                        </button>
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="tomorrow" style="cursor: pointer;">
-                            <i class="ph ph-calendar-plus me-1"></i>Domani
-                        </button>
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="weekend" style="cursor: pointer;">
-                            <i class="ph ph-calendar-check me-1"></i>Weekend
-                        </button>
-                        
-                        <span class="vr mx-1"></span>
-                        
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="free" style="cursor: pointer;">
-                            <i class="ph ph-gift me-1"></i>Gratuiti
-                        </button>
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="nearby" style="cursor: pointer;">
-                            <i class="ph ph-map-pin me-1"></i>Vicini
-                        </button>
-                        
-                        @auth
-                        <span class="vr mx-1"></span>
-                        
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="my" style="cursor: pointer;">
-                            <i class="ph ph-user me-1"></i>I Miei
-                        </button>
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="private" style="cursor: pointer;">
-                            <i class="ph ph-lock me-1"></i>Privati
-                        </button>
-                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="past" style="cursor: pointer;">
-                            <i class="ph ph-clock-counter-clockwise me-1"></i>Passati
-                        </button>
-                        @endauth
+            <div class="card hover-effect">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <!-- Poetic Intro -->
+                        <div class="col-lg-3 col-md-12 mb-3 mb-lg-0">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width: 50px; height: 50px; background: rgba(var(--primary), 0.1);">
+                                        <i class="ph ph-microphone-stage text-primary f-s-24"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 f-w-700">Scopri Eventi</h5>
+                                    <p class="text-muted mb-0 f-s-13 fst-italic">Dove la poesia prende vita</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search -->
+                        <div class="col-lg-6 col-md-8 mb-3 mb-md-0">
+                            <form method="GET" id="filterForm">
+                                <div class="position-relative">
+                                    <i class="ph ph-magnifying-glass position-absolute text-muted" 
+                                       style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px;"></i>
+                                    <input type="text" name="search" class="form-control ps-5" 
+                                           placeholder="Cerca poetry slam, open mic, letture..."
+                                           value="{{ request('search') }}"
+                                           style="border-radius: 50px;">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="col-lg-3 col-md-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" form="filterForm" class="btn btn-primary flex-fill">
+                                    <i class="ph ph-funnel me-1"></i>Cerca
+                                </button>
+                                @auth
+                                    @can('events.create.public')
+                                        <a href="{{ route('events.create') }}" class="btn btn-success">
+                                            <i class="ph ph-plus"></i>
+                                        </a>
+                                    @endcan
+                                @endauth
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Filters Row -->
+                    <div class="row mt-3 pt-3" style="border-top: 1px solid rgba(var(--primary), 0.1);">
+                        <div class="col-12">
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <small class="text-muted me-2">
+                                    <i class="ph ph-faders-horizontal me-1"></i>Affina:
+                                </small>
+                                
+                                <form method="GET" id="filterFormSelects" class="d-flex flex-wrap gap-2 align-items-center">
+                                    <select name="city" class="form-select form-select-sm" style="width: auto; min-width: 120px;">
+                                        <option value="">📍 Tutte le città</option>
+                                        @foreach($events->pluck('city')->unique()->filter() as $city)
+                                            <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
+                                        @endforeach
+                                    </select>
+                                    
+                                    <select name="type" class="form-select form-select-sm" style="width: auto; min-width: 100px;">
+                                        <option value="">🌍 Tutti</option>
+                                        <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>Pubblici</option>
+                                        <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>Privati</option>
+                                    </select>
+                                </form>
+
+                                <span class="vr mx-2 d-none d-md-block"></span>
+
+                                <!-- Quick Date Filters -->
+                                <div class="d-flex flex-wrap gap-1">
+                                    <button type="button" class="btn btn-sm btn-primary" data-filter="today">
+                                        <i class="ph ph-calendar me-1"></i>Oggi
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary" data-filter="tomorrow">
+                                        <i class="ph ph-calendar-plus me-1"></i>Domani
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary" data-filter="weekend">
+                                        <i class="ph ph-sparkle me-1"></i>Weekend
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary" data-filter="free">
+                                        <i class="ph ph-gift me-1"></i>Gratis
+                                    </button>
+                                    
+                                    @auth
+                                    <button type="button" class="btn btn-sm btn-primary" data-filter="my">
+                                        <i class="ph ph-user me-1"></i>Miei
+                                    </button>
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
