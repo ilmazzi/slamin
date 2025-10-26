@@ -121,34 +121,35 @@
         }
     }
     
-    /* Profile Sidebar Tabs */
+    /* Profile Sidebar Tabs - Clean & Compact */
     .profile-tab-item {
         cursor: pointer;
-        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        color: #64748b;
+        display: flex;
+        align-items: center;
     }
     
-    .profile-tab-item > div {
-        transition: all 0.3s ease;
-    }
-    
-    .profile-tab-item:hover > div {
-        background: rgba(var(--primary), 0.08);
-        transform: translateX(5px);
-    }
-    
-    .profile-tab-item.active > div {
-        background: linear-gradient(90deg, rgba(var(--primary), 0.15), rgba(var(--primary), 0.05));
-        border-left: 4px solid rgba(var(--primary), 1);
-        padding-left: 8px;
+    .profile-tab-item:hover {
+        background: rgba(var(--primary), 0.05);
         color: rgba(var(--primary), 1);
     }
     
-    .profile-tab-item.active i {
-        color: rgba(var(--primary), 1);
+    .profile-tab-item.active {
+        background: rgba(var(--primary), 1);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(var(--primary), 0.25);
     }
     
-    .profile-tab-item.active span {
-        color: rgba(var(--primary), 1);
+    .profile-tab-item i {
+        font-size: 18px;
+    }
+    
+    .profile-tab-item span {
+        font-size: 14px;
     }
     </style>
     

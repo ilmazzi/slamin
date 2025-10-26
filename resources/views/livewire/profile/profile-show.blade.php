@@ -80,56 +80,35 @@
                     <!-- Navigation -->
                     <div class="mb-4">
                         <div class="tab-wrapper">
-                            <ul class="profile-app-tabs list-unstyled">
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'about' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('about')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'about' ? 'ph-user-circle-fill' : 'ph-user-circle' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{ __('profile.profile') }}</span>
-                                    </div>
+                            <ul class="profile-app-tabs list-unstyled mb-0">
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'about' ? 'active' : '' }}" wire:click="setActiveTab('about')">
+                                    <i class="ph ph-user-circle me-2"></i>
+                                    <span>{{ __('profile.profile') }}</span>
                                 </li>
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'poems' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('poems')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'poems' ? 'ph-scroll-fill' : 'ph-scroll' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.poems')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'poems' ? 'active' : '' }}" wire:click="setActiveTab('poems')">
+                                    <i class="ph ph-scroll me-2"></i>
+                                    <span>{{__('profile.poems')}}</span>
                                 </li>
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'events' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('events')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'events' ? 'ph-calendar-fill' : 'ph-calendar' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.events')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'events' ? 'active' : '' }}" wire:click="setActiveTab('events')">
+                                    <i class="ph ph-calendar me-2"></i>
+                                    <span>{{__('profile.events')}}</span>
                                 </li>
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'media' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('media')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'media' ? 'ph-video-camera-fill' : 'ph-video-camera' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.my_media')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'media' ? 'active' : '' }}" wire:click="setActiveTab('media')">
+                                    <i class="ph ph-video-camera me-2"></i>
+                                    <span>{{__('profile.my_media')}}</span>
                                 </li>
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'articles' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('articles')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'articles' ? 'ph-article-fill' : 'ph-article' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.my_articles')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'articles' ? 'active' : '' }}" wire:click="setActiveTab('articles')">
+                                    <i class="ph ph-article me-2"></i>
+                                    <span>{{__('profile.my_articles')}}</span>
                                 </li>
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'activities' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('activities')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'activities' ? 'ph-activity-fill' : 'ph-activity' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.my_activities')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'activities' ? 'active' : '' }}" wire:click="setActiveTab('activities')">
+                                    <i class="ph ph-activity me-2"></i>
+                                    <span>{{__('profile.my_activities')}}</span>
                                 </li>
                                 @if($isOwnProfile)
-                                <li class="profile-tab-item mb-2 {{ $activeTab === 'settings' ? 'active' : '' }}" 
-                                    wire:click="setActiveTab('settings')">
-                                    <div class="d-flex align-items-center p-2 rounded cursor-pointer">
-                                        <i class="ph {{ $activeTab === 'settings' ? 'ph-gear-fill' : 'ph-gear' }} f-s-20 me-2"></i>
-                                        <span class="f-w-600">{{__('profile.settings')}}</span>
-                                    </div>
+                                <li class="profile-tab-item mb-1 {{ $activeTab === 'settings' ? 'active' : '' }}" wire:click="setActiveTab('settings')">
+                                    <i class="ph ph-gear me-2"></i>
+                                    <span>{{__('profile.settings')}}</span>
                                 </li>
                                 @endif
                             </ul>
