@@ -679,22 +679,6 @@
                 </div>
             </div>
 
-            @if($isOwnProfile)
-            <!-- Badge Management Card -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="f-w-600 mb-0">{{ __('profile.my_badges') }}</h6>
-                        <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
-                            <i class="ph ph-trophy me-1"></i>
-                            {{ __('profile.manage') }}
-                        </a>
-                    </div>
-                    @livewire('profile.badge-display-sidebar', ['user' => $user])
-                </div>
-            </div>
-            @endif
-
             <!-- Participated Events Card -->
             <div class="card">
                 <div class="card-body">
