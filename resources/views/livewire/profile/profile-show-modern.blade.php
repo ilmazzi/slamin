@@ -376,6 +376,67 @@
                             </div>
                             <i class="ph ph-caret-right"></i>
                         </a>
+
+                        @if($user->hasRole('poet'))
+                        <a href="{{ route('poems.create') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-pen-nib"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Crea Poesia</h6>
+                                <p>Scrivi una nuova poesia</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+                        @endif
+
+                        @if($user->hasRole('organizer'))
+                        <a href="{{ route('events.create') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-calendar-plus"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Crea Evento</h6>
+                                <p>Organizza un nuovo evento</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+                        @endif
+
+                        @if($user->hasRole('venue'))
+                        <a href="{{ route('venues.create') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-buildings"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Crea Venue</h6>
+                                <p>Aggiungi un nuovo locale</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+                        @endif
+
+                        <a href="{{ route('videos.upload') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-upload"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Carica Video</h6>
+                                <p>Carica un nuovo video</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('photos.create') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-image-square"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Carica Foto</h6>
+                                <p>Carica una nuova foto</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
