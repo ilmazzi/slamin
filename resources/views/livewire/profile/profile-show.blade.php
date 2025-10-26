@@ -1,4 +1,21 @@
 <div>
+    <!-- Floating Avatar - Above Everything -->
+    <div class="position-relative" style="z-index: 1000;">
+        <div class="d-flex justify-content-center">
+            <div class="position-relative" style="margin-bottom: -60px;">
+                <img alt="{{ $user->name }}" 
+                     src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                     class="rounded-circle border border-4 border-white shadow-lg"
+                     style="width: 120px; height: 120px; object-fit: cover; background: white;">
+                @if($user->verified_at)
+                <span class="position-absolute bottom-0 end-0 bg-white rounded-circle p-2 shadow">
+                    <i class="ph ph-check-circle-fill text-success f-s-20"></i>
+                </span>
+                @endif
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -178,23 +195,6 @@
         <!-- Main Content - Full width on mobile -->
         <div class="col-12 col-md-8 col-lg-6 mb-4">
             @if($activeTab === 'about')
-                <!-- Avatar Floating Above Content -->
-                <div class="position-relative mb-5">
-                    <div class="d-flex justify-content-center" style="margin-bottom: -45px; z-index: 100; position: relative;">
-                        <div class="position-relative">
-                            <img alt="{{ $user->name }}" 
-                                 src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                 class="rounded-circle border border-4 border-white shadow-lg"
-                                 style="width: 120px; height: 120px; object-fit: cover;">
-                            @if($user->verified_at)
-                            <span class="position-absolute bottom-0 end-0 bg-white rounded-circle p-2 shadow">
-                                <i class="ph ph-check-circle-fill text-success f-s-20"></i>
-                            </span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                
                 <!-- Profile Info Card -->
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
                     <div class="card-body text-center pt-5 pb-3 px-3">
