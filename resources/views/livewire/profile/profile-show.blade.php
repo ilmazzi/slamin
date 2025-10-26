@@ -347,27 +347,47 @@
                             <div class="row g-3">
                                 @forelse($photos as $photo)
                                     <div class="col-md-4 col-sm-6">
-                                        <a href="{{ route('photos.show', $photo) }}" class="text-decoration-none">
-                                            <div class="card hover-effect border-0 shadow-sm h-100">
-                                                <div class="position-relative overflow-hidden">
-                                                    <img src="{{ $photo->image_url }}" 
-                                                         alt="{{ $photo->title }}" 
-                                                         class="card-img-top" 
-                                                         style="height: 200px; object-fit: cover;">
-                                                    <div class="position-absolute top-0 end-0 m-2">
-                                                        <span class="badge bg-dark bg-opacity-75">
-                                                            <i class="ph ph-heart me-1"></i>{{ $photo->like_count ?? 0 }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body p-3">
-                                                    <h6 class="card-title f-w-600 mb-1 text-dark">{{ Str::limit($photo->title, 40) }}</h6>
-                                                    <small class="text-muted f-s-12">
-                                                        <i class="ph ph-calendar me-1"></i>{{ $photo->created_at->format('d/m/Y') }}
-                                                    </small>
+                                        <div class="card hover-effect border-0 shadow-sm h-100" style="cursor: pointer;" 
+                                             data-bs-toggle="modal" 
+                                             data-bs-target="#photoModal{{ $photo->id }}">
+                                            <div class="position-relative overflow-hidden">
+                                                <img src="{{ $photo->image_url }}" 
+                                                     alt="{{ $photo->title }}" 
+                                                     class="card-img-top" 
+                                                     style="height: 200px; object-fit: cover;">
+                                                <div class="position-absolute top-0 end-0 m-2">
+                                                    <span class="badge bg-dark bg-opacity-75">
+                                                        <i class="ph ph-heart me-1"></i>{{ $photo->like_count ?? 0 }}
+                                                    </span>
                                                 </div>
                                             </div>
-                                        </a>
+                                            <div class="card-body p-3">
+                                                <h6 class="card-title f-w-600 mb-1 text-dark">{{ Str::limit($photo->title, 40) }}</h6>
+                                                <small class="text-muted f-s-12">
+                                                    <i class="ph ph-calendar me-1"></i>{{ $photo->created_at->format('d/m/Y') }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Photo Modal -->
+                                        <div class="modal fade" id="photoModal{{ $photo->id }}" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <h5 class="modal-title">{{ $photo->title }}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body p-0">
+                                                        <img src="{{ $photo->image_url }}" alt="{{ $photo->title }}" class="w-100">
+                                                    </div>
+                                                    @if($photo->description)
+                                                    <div class="modal-footer border-0">
+                                                        <p class="text-muted mb-0">{{ $photo->description }}</p>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @empty
                                     <div class="col-12">
