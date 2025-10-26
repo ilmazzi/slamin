@@ -241,12 +241,43 @@
                     </div>
                 </div>
 
-               
 
-                <!-- Badges Card with Meeting Call Style -->
-               
+                <!-- Badge Display Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-gradient-primary text-white">
+                                <h5 class="mb-0">
+                                    <i class="ph ph-medal me-2"></i>
+                                    I Miei Badge in Evidenza
+                                </h5>
+                                <small>I tuoi achievement più recenti</small>
+                            </div>
+                            <div class="card-body">
+                                @livewire('profile.badge-display-stack-cards', ['user' => $user])
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-               
+                <!-- Trophy Case Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-gradient-success text-white">
+                                <h5 class="mb-0">
+                                    <i class="ph ph-trophy me-2"></i>
+                                    Trophy Case - Tutti i Badge
+                                </h5>
+                                <small>La tua collezione completa di achievement</small>
+                            </div>
+                            <div class="card-body">
+                                @livewire('profile.badge-display-wall-grid', ['user' => $user])
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             @else
                 <!-- Other Tabs Content -->
                 <div class="card">
