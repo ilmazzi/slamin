@@ -283,7 +283,7 @@
                             </div>
                             @if($poems->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $poems->links('pagination.bootstrap-4') }}
+                                {{ $poems->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                         @endif
@@ -338,7 +338,7 @@
                             </div>
                             @if($articles->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $articles->links('pagination.bootstrap-4') }}
+                                {{ $articles->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                         @endif
@@ -406,7 +406,7 @@
                             </div>
                             @if($photos->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $photos->links('pagination.bootstrap-4') }}
+                                {{ $photos->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                             
@@ -458,7 +458,7 @@
                             </div>
                             @if($videos->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $videos->links('pagination.bootstrap-4') }}
+                                {{ $videos->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                         @endif
@@ -521,7 +521,7 @@
                             </div>
                             @if($events->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $events->links('pagination.bootstrap-4') }}
+                                {{ $events->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                         @endif
@@ -577,7 +577,7 @@
                             </div>
                             @if($activities->hasPages())
                             <div class="mt-4 d-flex justify-content-center">
-                                {{ $activities->links('pagination.bootstrap-4') }}
+                                {{ $activities->links('pagination.livewire-bootstrap-4') }}
                             </div>
                             @endif
                         @endif
