@@ -284,7 +284,7 @@
                             @if($poems->hasPages())
                             <div class="mt-4">
                                 <nav aria-label="Pagination">
-                                    <ul class="pagination justify-content-center mb-0">
+                                    <ul class="pagination app-pagination justify-content-center mb-0">
                                         {{-- Previous --}}
                                         @if($poems->onFirstPage())
                                             <li class="page-item disabled">
@@ -377,7 +377,7 @@
                             </div>
                             @if($articles->hasPages())
                             <div class="mt-4">
-                                <nav><ul class="pagination justify-content-center mb-0">
+                                <nav><ul class="pagination app-pagination justify-content-center mb-0">
                                     <li class="page-item {{ $articles->onFirstPage() ? 'disabled' : '' }}">
                                         <button wire:click="gotoPage({{ max(1, $articles->currentPage() - 1) }}, 'articles_page')" class="page-link" {{ $articles->onFirstPage() ? 'disabled' : '' }}>
                                             <i class="ph ph-caret-left"></i>
@@ -461,7 +461,7 @@
                             </div>
                             @if($photos->hasPages())
                             <div class="mt-4">
-                                <nav><ul class="pagination justify-content-center mb-0">
+                                <nav><ul class="pagination app-pagination justify-content-center mb-0">
                                     <li class="page-item {{ $photos->onFirstPage() ? 'disabled' : '' }}">
                                         <button wire:click="gotoPage({{ max(1, $photos->currentPage() - 1) }}, 'photos_page')" class="page-link" {{ $photos->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
                                     </li>
@@ -525,7 +525,7 @@
                             </div>
                             @if($videos->hasPages())
                             <div class="mt-4">
-                                <nav><ul class="pagination justify-content-center mb-0">
+                                <nav><ul class="pagination app-pagination justify-content-center mb-0">
                                     <li class="page-item {{ $videos->onFirstPage() ? 'disabled' : '' }}">
                                         <button wire:click="gotoPage({{ max(1, $videos->currentPage() - 1) }}, 'videos_page')" class="page-link" {{ $videos->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
                                     </li>
@@ -598,12 +598,9 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="alert alert-info mt-3">
-                                📊 Eventi: {{ $events->total() }} totali | Pagina {{ $events->currentPage() }} di {{ $events->lastPage() }} | hasPages: {{ $events->hasPages() ? 'SI' : 'NO' }}
-                            </div>
                             @if($events->hasPages())
                             <div class="mt-4">
-                                <nav><ul class="pagination justify-content-center mb-0">
+                                <nav><ul class="pagination app-pagination justify-content-center mb-0">
                                     <li class="page-item {{ $events->onFirstPage() ? 'disabled' : '' }}">
                                         <button wire:click="gotoPage({{ max(1, $events->currentPage() - 1) }}, 'events_page')" class="page-link" {{ $events->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
                                     </li>
@@ -671,7 +668,7 @@
                             </div>
                             @if($activities->hasPages())
                             <div class="mt-4">
-                                <nav><ul class="pagination justify-content-center mb-0">
+                                <nav><ul class="pagination app-pagination justify-content-center mb-0">
                                     <li class="page-item {{ $activities->onFirstPage() ? 'disabled' : '' }}">
                                         <button wire:click="gotoPage({{ max(1, $activities->currentPage() - 1) }}, 'activities_page')" class="page-link" {{ $activities->onFirstPage() ? 'disabled' : '' }}><i class="ph ph-caret-left"></i></button>
                                     </li>
