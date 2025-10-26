@@ -89,12 +89,13 @@
     }
     
     .floating-avatar img {
+        animation: floatContinuous 3s ease-in-out infinite;
         transition: all 0.3s ease;
     }
     
     .floating-avatar:hover img {
-        transform: scale(1.05);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transform: scale(1.08) translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
     
     @keyframes floatIn {
@@ -108,6 +109,15 @@
         100% {
             opacity: 1;
             transform: translateY(0) scale(1);
+        }
+    }
+    
+    @keyframes floatContinuous {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
         }
     }
     </style>

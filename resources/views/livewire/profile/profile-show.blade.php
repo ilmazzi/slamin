@@ -199,7 +199,7 @@
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
                     <div class="card-body text-center pt-5 pb-3 px-3">
                         <h3 class="mb-1 f-w-700 f-s-20 f-s-md-28">
-                            {{ $user->getDisplayName() }}
+                            {{ $user->name }}
                         </h3>
                         @if($user->nickname)
                         <p class="text-muted f-s-14 mb-2">{{ $user->nickname }}</p>
