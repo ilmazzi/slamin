@@ -13,7 +13,7 @@ class ProfileShow extends Component
 
     public $userId;
     public $activeTab = 'about';
-    public $perPage = 12;
+    public $perPage = 6;
 
     protected $queryString = [
         'activeTab' => ['except' => 'about'],
