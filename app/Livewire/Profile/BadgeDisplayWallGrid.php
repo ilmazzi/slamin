@@ -123,18 +123,18 @@ class BadgeDisplayWallGrid extends Component
         $userBadge = UserBadge::find($this->selectedUserBadgeId);
         
         if ($userBadge && $userBadge->user_id === $this->user->id) {
-            // If enabling, find next available position (1-5)
+            // If enabling, check if there's already one (max 1)
             if (!$this->showInSidebar) {
                 $existingSidebarBadges = UserBadge::where('user_id', $this->user->id)
                     ->where('show_in_sidebar', true)
                     ->count();
                 
-                if ($existingSidebarBadges >= 5) {
-                    session()->flash('error', 'Puoi mostrare massimo 5 badge nella sidebar!');
+                if ($existingSidebarBadges >= 1) {
+                    session()->flash('error', 'Puoi mostrare solo 1 badge nella sidebar!');
                     return;
                 }
                 
-                $this->sidebarOrder = $existingSidebarBadges + 1;
+                $this->sidebarOrder = 1;
                 $userBadge->update([
                     'show_in_sidebar' => true,
                     'sidebar_order' => $this->sidebarOrder

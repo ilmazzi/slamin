@@ -23,12 +23,27 @@
             </span>
             <div class="flex-grow-1 ps-2 sidebar-text">
                 <a href="{{ route('user.show', auth()->user()) }}" class="text-primary mb-0 d-flex flex-column">
-                    <div>
-                        {!! \App\Helpers\AvatarHelper::getUserBadgesHtml(auth()->user(), 3, '18') !!}
+                    <div class="d-flex align-items-center gap-2">
+                        @php
+                            $sidebarBadge = auth()->user()->userBadges()
+                                ->with('badge')
+                                ->where('show_in_sidebar', true)
+                                ->orderBy('sidebar_order', 'asc')
+                                ->first();
+                        @endphp
+                        @if($sidebarBadge && $sidebarBadge->badge)
+                            <img src="{{ $sidebarBadge->badge->icon_url }}" 
+                                 alt="{{ $sidebarBadge->badge->name }}" 
+                                 title="{{ $sidebarBadge->badge->name }}: {{ $sidebarBadge->badge->description }}" 
+                                 class="rounded-circle" 
+                                 style="width: 32px; height: 32px; object-fit: contain; border: 2px solid rgba(var(--primary), 0.3); padding: 2px;"
+                                 data-bs-toggle="tooltip" 
+                                 data-bs-placement="top">
+                        @endif
                         <span class="fw-semibold">{{ auth()->user()->name }}</span>
                     </div>
                     @if(auth()->user()->nickname)
-                        <small class="text-muted f-s-11 ms-3">{{ auth()->user()->nickname }}</small>
+                        <small class="text-muted f-s-11">{{ auth()->user()->nickname }}</small>
                     @endif
                 </a>
                 <p class="text-muted f-s-12 mb-0">

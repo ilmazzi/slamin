@@ -117,8 +117,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <i class="ph ph-layout f-s-24 text-success"></i>
                                 <div>
-                                    <div class="f-w-600">Sidebar</div>
-                                    <small class="text-muted">Mostra nella barra laterale (max 5)</small>
+                                    <div class="f-w-600">Sidebar Badge</div>
+                                    <small class="text-muted">Mostra il tuo badge principale (solo 1)</small>
                                 </div>
                             </div>
                             <div class="form-check form-switch mb-0">
