@@ -99,8 +99,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        // In production, don't show detailed error information
-        if (app()->environment('production')) {
+        // Check if user is admin
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $isAdmin = $user && $user->hasRole('admin');
+        
+        // In production, don't show detailed error information (unless admin)
+        if (app()->environment('production') && !$isAdmin) {
             // Log the exception before rendering
             $this->logException($e);
 
@@ -116,6 +120,7 @@ class Handler extends ExceptionHandler
             return response()->view('errors.500', [], 500);
         }
 
+        // For admin or non-production, show detailed error
         return parent::render($request, $e);
     }
 }
