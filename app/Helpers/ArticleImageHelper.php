@@ -24,8 +24,8 @@ class ArticleImageHelper
             return asset($article->featured_image);
         }
 
-        // Fallback: icona articolo
-        return asset('assets/images/draghetto.png');
+        // Fallback: placeholder configurabile dall'admin
+        return PlaceholderHelper::getArticlePlaceholderUrl();
     }
 }
 

@@ -24,8 +24,8 @@ class PoemImageHelper
             return asset($poem->thumbnail);
         }
 
-        // Fallback: icona poesia
-        return asset('assets/images/draghetto.png');
+        // Fallback: placeholder configurabile dall'admin
+        return PlaceholderHelper::getPoemPlaceholderUrl();
     }
 }
 
