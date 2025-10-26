@@ -252,7 +252,7 @@
                     </div>
                     
                     <div class="event-image">
-                        <img src="{{ $event->image_url ?? asset('assets/images/events/default-event.jpg') }}" 
+                        <img src="{{ \App\Helpers\EventImageHelper::getEventImageUrl($event) }}" 
                              alt="{{ $event->title }}"
                              style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
@@ -260,19 +260,46 @@
                     <div class="event-content">
                         <h6 class="event-title">{{ $event->title }}</h6>
                         @if($event->description)
-                        <p class="event-description">{{ Str::limit($event->description, 100) }}</p>
+                        <p class="event-description">{{ Str::limit($event->description, 120) }}</p>
                         @endif
-                        <div class="event-meta">
-                            <span><i class="ph ph-map-pin"></i> {{ $event->city ?? 'N/D' }}</span>
-                            <span><i class="ph ph-clock"></i> {{ $event->start_datetime->format('d/m/Y H:i') }}</span>
+                        
+                        <div class="event-info-grid">
+                            <div class="event-info-item">
+                                <i class="ph ph-calendar-dots"></i>
+                                <span>{{ $event->start_datetime->format('d/m/Y') }}</span>
+                            </div>
+                            <div class="event-info-item">
+                                <i class="ph ph-clock"></i>
+                                <span>{{ $event->start_datetime->format('H:i') }}</span>
+                            </div>
+                            @if($event->city)
+                            <div class="event-info-item">
+                                <i class="ph ph-map-pin"></i>
+                                <span>{{ $event->city }}</span>
+                            </div>
+                            @endif
+                            @if($event->venue)
+                            <div class="event-info-item">
+                                <i class="ph ph-buildings"></i>
+                                <span>{{ $event->venue->name }}</span>
+                            </div>
+                            @endif
+                            @if($event->price)
+                            <div class="event-info-item">
+                                <i class="ph ph-ticket"></i>
+                                <span>{{ $event->price > 0 ? '€ '.$event->price : 'Gratuito' }}</span>
+                            </div>
+                            @endif
+                            @if($event->category)
+                            <div class="event-info-item">
+                                <i class="ph ph-tag"></i>
+                                <span>{{ $event->category }}</span>
+                            </div>
+                            @endif
                         </div>
-                        @if($event->venue)
-                        <div class="event-venue">
-                            <i class="ph ph-buildings"></i> {{ $event->venue->name }}
-                        </div>
-                        @endif
+                        
                         <a href="{{ route('events.show', $event) }}" class="btn-view-event">
-                            Visualizza Evento <i class="ph ph-arrow-right"></i>
+                            Dettagli Evento <i class="ph ph-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -944,7 +971,7 @@
             position: absolute;
             top: 15px;
             left: 15px;
-            background: rgba(var(--warning), 1);
+            background: rgba(var(--primary), 1);
             color: white;
             border-radius: 12px;
             padding: 10px 15px;
@@ -1002,6 +1029,36 @@
             gap: 5px;
         }
 
+        .event-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .event-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #4a5568;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .event-info-item i {
+            font-size: 1.1rem;
+            color: rgba(var(--primary), 1);
+            flex-shrink: 0;
+        }
+
+        .event-info-item span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .event-meta {
             display: flex;
             gap: 15px;
@@ -1020,7 +1077,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(var(--warning), 1);
+            background: rgba(var(--primary), 1);
             color: white;
             padding: 10px 20px;
             border-radius: 20px;
