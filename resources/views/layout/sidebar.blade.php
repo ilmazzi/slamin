@@ -32,13 +32,24 @@
                                 ->first();
                         @endphp
                         @if($sidebarBadge && $sidebarBadge->badge)
-                            <img src="{{ $sidebarBadge->badge->icon_url }}" 
-                                 alt="{{ $sidebarBadge->badge->name }}" 
-                                 title="{{ $sidebarBadge->badge->name }}: {{ $sidebarBadge->badge->description }}" 
-                                 class="rounded-circle" 
-                                 style="width: 32px; height: 32px; object-fit: contain; border: 2px solid rgba(var(--primary), 0.3); padding: 2px;"
-                                 data-bs-toggle="tooltip" 
-                                 data-bs-placement="top">
+                            <span class="badge-sidebar-wrapper" 
+                                  data-bs-toggle="popover" 
+                                  data-bs-trigger="hover"
+                                  data-bs-placement="right"
+                                  data-bs-html="true"
+                                  title="{{ $sidebarBadge->badge->name }}"
+                                  data-bs-content='<div class="text-center">
+                                      <img src="{{ $sidebarBadge->badge->icon_url }}" alt="{{ $sidebarBadge->badge->name }}" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; animation: badgeSpin 0.6s ease;">
+                                      <p class="text-muted f-s-13 mb-3">{{ $sidebarBadge->badge->description }}</p>
+                                      <div class="d-flex justify-content-center gap-2">
+                                          <span class="badge bg-light-warning"><i class="ph ph-star me-1"></i>{{ $sidebarBadge->badge->points }} pts</span>
+                                          <span class="badge bg-light-success"><i class="ph ph-check-circle me-1"></i>{{ $sidebarBadge->earned_at->format("d/m/Y") }}</span>
+                                      </div>
+                                  </div>'>
+                                <img src="{{ $sidebarBadge->badge->icon_url }}" 
+                                     alt="{{ $sidebarBadge->badge->name }}" 
+                                     class="sidebar-badge-icon">
+                            </span>
                         @endif
                         <span class="fw-semibold">{{ auth()->user()->name }}</span>
                     </div>

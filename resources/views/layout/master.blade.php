@@ -24,7 +24,75 @@
     .poem-content, .poem-content * {
         white-space: pre-wrap !important;
     }
+    
+    /* Sidebar Badge Animation */
+    .sidebar-badge-icon {
+        border: 2px solid rgba(var(--primary), 0.3);
+        padding: 3px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        animation: badgePulse 3s ease-in-out infinite;
+        box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
+    }
+    
+    @keyframes badgePulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
+            transform: scale(1);
+        }
+        50% {
+            box-shadow: 0 0 0 8px rgba(var(--primary), 0);
+            transform: scale(1.05);
+        }
+    }
+    
+    .sidebar-badge-icon:hover {
+        transform: scale(1.15) rotate(5deg);
+        border-color: rgba(var(--primary), 0.6);
+        box-shadow: 0 4px 12px rgba(var(--primary), 0.3);
+    }
+    
+    .badge-sidebar-wrapper {
+        display: inline-block;
+        animation: badgeAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    @keyframes badgeAppear {
+        from {
+            opacity: 0;
+            transform: scale(0) rotate(-180deg);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+    
+    @keyframes badgeSpin {
+        from {
+            transform: scale(0.5) rotate(-360deg);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
     </style>
+    
+    <!-- Initialize Popovers for Badge -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all popovers
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl, {
+                    container: 'body',
+                    customClass: 'badge-popover'
+                });
+            });
+        });
+    </script>
     <!-- css end !-->
     
     @livewireStyles
