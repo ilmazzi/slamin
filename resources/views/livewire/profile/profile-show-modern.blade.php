@@ -383,7 +383,6 @@
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            border: 5px solid white;
             object-fit: cover;
             position: relative;
             z-index: 2;
