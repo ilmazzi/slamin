@@ -115,6 +115,7 @@
                         </div>
                     </div>
 
+                    @if($isOwnProfile)
                     <!-- Quick Actions -->
                     <div>
                         <h6 class="f-w-600 mb-3">{{__('profile.quick_actions')}}</h6>
@@ -171,6 +172,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -214,12 +216,16 @@
                                 <i class="ph ph-medal-military me-2 text-primary"></i>
                                 Badge in Evidenza
                             </h5>
+                            @if($isOwnProfile)
                             <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
                                 <i class="ph ph-trophy me-1"></i>
-                                <span class="d-none d-sm-inline">Vedi</span> Trophy
+                                <span class="d-none d-sm-inline">Gestisci</span> Trophy
                             </a>
+                            @endif
                         </div>
-                        <p class="text-muted f-s-12 f-s-md-13 mb-3">I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare</p>
+                        <p class="text-muted f-s-12 f-s-md-13 mb-3">
+                            {{ $isOwnProfile ? 'I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare' : 'I 3 badge in evidenza di ' . $user->name }}
+                        </p>
                         
                         <div class="overflow-hidden">
                             @livewire('profile.badge-display-stack-cards', ['user' => $user])
