@@ -9,7 +9,6 @@
             
             <!-- Avatar Float -->
             <div class="avatar-container">
-                <div class="avatar-ring"></div>
                 <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
                      alt="{{ $user->name }}"
                      class="avatar-image">
@@ -359,24 +358,6 @@
         @keyframes avatarFloat {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(-10px); }
-        }
-
-        .avatar-ring {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, rgb(15, 98, 106), rgb(10, 185, 100), rgb(249, 193, 35), rgb(15, 98, 106));
-            background-size: 200% 200%;
-            animation: ringRotate 3s linear infinite;
-        }
-
-        @keyframes ringRotate {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .avatar-image {
