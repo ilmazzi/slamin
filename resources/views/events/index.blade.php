@@ -172,8 +172,8 @@
                             <!-- Search - Full width on mobile -->
                             <div class="col-12">
                                 <div class="input-group">
-                                    <span class="input-group-text bg-light-primary border-end-0">
-                                        <i class="ph ph-magnifying-glass text-muted"></i>
+                                    <span class="input-group-text border-end-0">
+                                        <i class="ph ph-magnifying-glass text-primary"></i>
                                     </span>
                                     <input type="text" name="search" class="form-control border-start-0"
                                            placeholder="{{ __('events.search_events') }}"
@@ -205,49 +205,52 @@
                         </div>
 
                         <!-- Second Row: Quick Filters and Action Buttons -->
-                        <div class="row g-3 mt-4 mb-2">
-                            <div class="col-lg-9 col-md-12">
-                                <div class="d-flex flex-wrap gap-2 align-items-center p-2">
-                                    <button type="button" class="btn btn-light-primary btn-sm" data-filter="today">
-                                        <i class="ph ph-calendar me-1"></i> {{ __('events.today') }}
-                                    </button>
-                                    <button type="button" class="btn btn-light-info btn-sm" data-filter="tomorrow">
-                                        <i class="ph ph-calendar-plus me-1"></i> {{ __('events.tomorrow') }}
-                                    </button>
-                                    <button type="button" class="btn btn-light-success btn-sm" data-filter="weekend">
-                                        <i class="ph ph-calendar-check me-1"></i> {{ __('events.weekend') }}
-                                    </button>
-                                    <button type="button" class="btn btn-light-warning btn-sm" data-filter="free">
-                                        <i class="ph ph-currency-circle-dollar me-1"></i> {{ __('events.free_events') }}
-                                    </button>
-                                    <button type="button" class="btn btn-light-secondary btn-sm" data-filter="nearby">
-                                        <i class="ph ph-map-pin me-1"></i> {{ __('events.nearby') }}
-                                    </button>
-                                    @auth
-                                        <button type="button" class="btn btn-light-primary btn-sm" data-filter="my">
-                                            <i class="ph ph-user me-1"></i> {{ __('events.my_events') }}
+                        <div class="row g-3 mt-3">
+                            <div class="col-12">
+                                <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                    <!-- Quick Filters -->
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button type="button" class="btn btn-primary btn-sm" data-filter="today">
+                                            <i class="ph ph-calendar me-1"></i>{{ __('events.today') }}
                                         </button>
-                                        <button type="button" class="btn btn-light-warning btn-sm" data-filter="private">
-                                            <i class="ph ph-lock me-1"></i> {{ __('events.my_private_events') }}
+                                        <button type="button" class="btn btn-info btn-sm" data-filter="tomorrow">
+                                            <i class="ph ph-calendar-plus me-1"></i>{{ __('events.tomorrow') }}
                                         </button>
-                                    @endauth
-                                    <button type="button" class="btn btn-light-danger btn-sm" data-filter="past">
-                                        <i class="ph ph-clock-counter-clockwise me-1"></i> {{ __('events.past_events') }}
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <div class="d-flex gap-2 justify-content-end p-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="ph ph-funnel me-1"></i>{{ __('events.filter') }}
-                                    </button>
-                                    @auth
-                                        @can('events.create.public')
-                                            <a href="{{ route('events.create') }}" class="btn btn-success">
-                                                <i class="ph ph-plus me-1"></i>{{ __('events.create') }}
-                                            </a>
-                                        @endcan
-                                    @endauth
+                                        <button type="button" class="btn btn-success btn-sm" data-filter="weekend">
+                                            <i class="ph ph-calendar-check me-1"></i>{{ __('events.weekend') }}
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-filter="free">
+                                            <i class="ph ph-currency-circle-dollar me-1"></i>{{ __('events.free_events') }}
+                                        </button>
+                                        <button type="button" class="btn btn-secondary btn-sm" data-filter="nearby">
+                                            <i class="ph ph-map-pin me-1"></i>{{ __('events.nearby') }}
+                                        </button>
+                                        @auth
+                                            <button type="button" class="btn btn-primary btn-sm" data-filter="my">
+                                                <i class="ph ph-user me-1"></i>{{ __('events.my_events') }}
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" data-filter="private">
+                                                <i class="ph ph-lock me-1"></i>{{ __('events.my_private_events') }}
+                                            </button>
+                                        @endauth
+                                        <button type="button" class="btn btn-danger btn-sm" data-filter="past">
+                                            <i class="ph ph-clock-counter-clockwise me-1"></i>{{ __('events.past_events') }}
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="ph ph-funnel me-1"></i>{{ __('events.filter') }}
+                                        </button>
+                                        @auth
+                                            @can('events.create.public')
+                                                <a href="{{ route('events.create') }}" class="btn btn-success">
+                                                    <i class="ph ph-plus me-1"></i>{{ __('events.create') }}
+                                                </a>
+                                            @endcan
+                                        @endauth
+                                    </div>
                                 </div>
                             </div>
                         </div>
