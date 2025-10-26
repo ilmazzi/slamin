@@ -250,11 +250,11 @@
 
                 <!-- Submit Buttons -->
                 <div class="d-flex gap-2 align-items-center">
-                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                        <span wire:loading.remove>
+                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" onclick="console.log('Save button clicked')">
+                        <span wire:loading.remove wire:target="save">
                             <i class="ph ph-check me-1"></i>{{ __('profile.save') }}
                         </span>
-                        <span wire:loading>
+                        <span wire:loading wire:target="save">
                             <span class="spinner-border spinner-border-sm me-1" role="status"></span>
                             Salvataggio...
                         </span>
@@ -263,7 +263,7 @@
                         <i class="ph ph-x me-1"></i>{{ __('profile.cancel') }}
                     </a>
                     
-                    <div wire:loading class="text-primary f-s-13">
+                    <div wire:loading wire:target="save" class="text-primary f-s-13">
                         <i class="ph ph-spinner ph-spin me-1"></i>
                         Aggiornamento in corso...
                     </div>
