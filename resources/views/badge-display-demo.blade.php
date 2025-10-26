@@ -101,12 +101,133 @@
         </div>
     </div>
 
+    <!-- Style 4: Stack Cards -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="ph ph-stack me-2"></i>
+                        Style 4: Stack Cards 📚
+                    </h4>
+                    <small>Come Tinder - swipe per sfogliare i badge</small>
+                </div>
+                <div class="card-body">
+                    @livewire('profile.badge-display-stack-cards', ['user' => auth()->user()])
+                    
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <strong>✨ Caratteristiche:</strong>
+                        <ul class="mb-0 f-s-14">
+                            <li>Badge impilati come carte</li>
+                            <li>Solo il primo completamente visibile</li>
+                            <li>Gli altri fanno "peek" da dietro</li>
+                            <li>Navigazione con frecce o swipe</li>
+                            <li>Progress bar in basso</li>
+                            <li>Focus su un badge alla volta</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Style 5: Badge Wall Grid -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-info text-white">
+                    <h4 class="mb-0">
+                        <i class="ph ph-grid-four me-2"></i>
+                        Style 5: Badge Wall (Trophy Case) 🏆
+                    </h4>
+                    <small>Mostra earned E locked badges - motivazione a sbloccare</small>
+                </div>
+                <div class="card-body">
+                    @livewire('profile.badge-display-wall-grid', ['user' => auth()->user()])
+                    
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <strong>✨ Caratteristiche:</strong>
+                        <ul class="mb-0 f-s-14">
+                            <li>Badge guadagnati con glow e checkmark</li>
+                            <li>Badge bloccati in grayscale con lucchetto</li>
+                            <li>Progress ring mostra requirement</li>
+                            <li>Click per dettagli completi</li>
+                            <li>Stagger animation all'ingresso</li>
+                            <li>Shine effect sui badge earned</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Style 6: Medal Podium -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-warning text-white">
+                    <h4 class="mb-0">
+                        <i class="ph ph-trophy me-2"></i>
+                        Style 6: Medal Podium 🥇
+                    </h4>
+                    <small>Top 3 badges sul podio - spotlight e corona</small>
+                </div>
+                <div class="card-body">
+                    @livewire('profile.badge-display-podium', ['user' => auth()->user()])
+                    
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <strong>✨ Caratteristiche:</strong>
+                        <ul class="mb-0 f-s-14">
+                            <li>Top 3 badge sul podio (oro, argento, bronzo)</li>
+                            <li>Spotlight animati per ogni posizione</li>
+                            <li>Corona sul 1° posto</li>
+                            <li>Auto-rotazione ogni 5s (opzionale)</li>
+                            <li>Altri badge in galleria sotto</li>
+                            <li>Sfondo scuro drammatico</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Style 7: Constellation Map -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="ph ph-planet me-2"></i>
+                        Style 7: Constellation Map ⭐
+                    </h4>
+                    <small>Badge come stelle in una costellazione - super spettacolare!</small>
+                </div>
+                <div class="card-body">
+                    @livewire('profile.badge-display-constellation', ['user' => auth()->user()])
+                    
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <strong>✨ Caratteristiche:</strong>
+                        <ul class="mb-0 f-s-14">
+                            <li>Badge disposti in pattern circolare (costellazione)</li>
+                            <li>Linee connettono badge della stessa categoria</li>
+                            <li>Badge earned brillano con particles</li>
+                            <li>Badge locked in grayscale con lucchetto</li>
+                            <li>100 stelle background che twinklano</li>
+                            <li>Click per modal dettagli spaziale</li>
+                            <li>Effetto "discover" quando unlock</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Comparison Table -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="mb-0">📊 Confronto Stili</h4>
+                    <h4 class="mb-0">📊 Confronto TUTTI gli Stili</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
