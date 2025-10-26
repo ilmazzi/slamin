@@ -327,7 +327,7 @@
         .hero-banner {
             position: relative;
             height: 350px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
         }
 
         .banner-image {
@@ -368,7 +368,7 @@
             right: -10px;
             bottom: -10px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
+            background: linear-gradient(45deg, rgb(15, 98, 106), rgb(10, 185, 100), rgb(249, 193, 35), rgb(15, 98, 106));
             background-size: 200% 200%;
             animation: ringRotate 3s linear infinite;
         }
@@ -470,9 +470,19 @@
             }
         }
 
-        .stat-pill i {
+        .stat-pill:nth-child(1) i {
             font-size: 1.3rem;
-            color: #667eea;
+            color: rgb(249, 193, 35); /* Warning/Gold for badges */
+        }
+
+        .stat-pill:nth-child(2) i {
+            font-size: 1.3rem;
+            color: rgb(10, 185, 100); /* Success/Green for points */
+        }
+
+        .stat-pill:nth-child(3) i {
+            font-size: 1.3rem;
+            color: rgb(15, 98, 106); /* Primary/Teal for level */
         }
 
         .stat-value {
@@ -522,21 +532,30 @@
 
         .nav-tab:hover {
             background: #f7fafc;
-            border-color: #667eea;
+            border-color: rgb(15, 98, 106);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 5px 15px rgba(15, 98, 106, 0.2);
         }
 
         .nav-tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
+            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
+            border-color: rgb(15, 98, 106);
             color: white;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(15, 98, 106, 0.4);
         }
 
         .nav-tab i {
             font-size: 1.2rem;
         }
+
+        /* Colored tab icons (when not active) */
+        .nav-tab:not(.active):nth-child(1) i { color: rgb(15, 98, 106); }
+        .nav-tab:not(.active):nth-child(2) i { color: rgb(249, 193, 35); }
+        .nav-tab:not(.active):nth-child(3) i { color: rgb(10, 185, 100); }
+        .nav-tab:not(.active):nth-child(4) i { color: rgb(65, 150, 250); }
+        .nav-tab:not(.active):nth-child(5) i { color: rgb(225, 78, 90); }
+        .nav-tab:not(.active):nth-child(6) i { color: rgb(249, 193, 35); }
+        .nav-tab:not(.active):nth-child(7) i { color: rgb(15, 98, 106); }
 
         /* Content Cards */
         .content-card {
@@ -550,7 +569,7 @@
         .card-header-modern {
             padding: 20px 25px;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid rgb(15, 98, 106);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -558,7 +577,7 @@
 
         .card-header-modern i {
             font-size: 1.5rem;
-            color: #667eea;
+            color: rgb(15, 98, 106);
             margin-right: 10px;
         }
 
@@ -574,7 +593,7 @@
         }
 
         .btn-modern-sm {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%);
             color: white;
             border: none;
             border-radius: 20px;
@@ -585,12 +604,12 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 10px rgba(15, 98, 106, 0.3);
         }
 
         .btn-modern-sm:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 6px 15px rgba(15, 98, 106, 0.5);
             color: white;
         }
 
@@ -638,7 +657,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(102, 126, 234, 0.8);
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.9) 0%, rgba(0, 242, 254, 0.9) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -894,10 +913,15 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .activity-icon.poem_created { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .activity-icon.article_created { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; }
-        .activity-icon.event_organized { background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%); color: white; }
-        .activity-icon.badge_earned { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); color: white; }
+        .activity-icon.poem_created { background: linear-gradient(135deg, rgb(15, 98, 106) 0%, rgb(10, 185, 100) 100%); color: white; }
+        .activity-icon.article_created { background: linear-gradient(135deg, rgb(65, 150, 250) 0%, rgb(15, 98, 106) 100%); color: white; }
+        .activity-icon.event_organized { background: linear-gradient(135deg, rgb(249, 193, 35) 0%, rgb(225, 78, 90) 100%); color: white; }
+        .activity-icon.event_participation { background: linear-gradient(135deg, rgb(10, 185, 100) 0%, rgb(65, 150, 250) 100%); color: white; }
+        .activity-icon.badge_earned { background: linear-gradient(135deg, rgb(249, 193, 35) 0%, rgb(225, 78, 90) 100%); color: white; }
+        .activity-icon.video_uploaded { background: linear-gradient(135deg, rgb(225, 78, 90) 0%, rgb(15, 98, 106) 100%); color: white; }
+        .activity-icon.photo_uploaded { background: linear-gradient(135deg, rgb(65, 150, 250) 0%, rgb(10, 185, 100) 100%); color: white; }
+        .activity-icon.comment_added { background: linear-gradient(135deg, rgb(10, 185, 100) 0%, rgb(15, 98, 106) 100%); color: white; }
+        .activity-icon.like_given { background: linear-gradient(135deg, rgb(225, 78, 90) 0%, rgb(249, 193, 35) 100%); color: white; }
 
         .activity-content {
             flex: 1;
