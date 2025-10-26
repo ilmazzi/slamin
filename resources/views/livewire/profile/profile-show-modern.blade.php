@@ -50,28 +50,6 @@
         </div>
     </div>
 
-    @if($isOwnProfile)
-    <!-- Quick Actions -->
-    <div class="quick-actions-bar mb-4">
-        <a href="{{ route('profile.edit') }}" class="quick-action-btn">
-            <i class="ph ph-pencil"></i>
-            <span>Modifica Profilo</span>
-        </a>
-        <a href="{{ route('profile.my-badges') }}" class="quick-action-btn">
-            <i class="ph ph-medal-military"></i>
-            <span>Gestisci Badge</span>
-        </a>
-        <a href="{{ route('profile.languages.index') }}" class="quick-action-btn">
-            <i class="ph ph-globe"></i>
-            <span>Lingue</span>
-        </a>
-        <a href="{{ route('profile.media') }}" class="quick-action-btn">
-            <i class="ph ph-video-camera"></i>
-            <span>Media</span>
-        </a>
-    </div>
-    @endif
-
     <!-- Navigation Tabs -->
     <div class="profile-nav-tabs mb-4">
         <button class="nav-tab {{ $activeTab === 'about' ? 'active' : '' }}" 
@@ -1110,49 +1088,6 @@
             .nav-tab {
                 padding: 12px;
             }
-
-            .quick-actions-bar {
-                flex-wrap: wrap;
-            }
-
-            .quick-action-btn {
-                padding: 10px 15px;
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Quick Actions Bar */
-        .quick-actions-bar {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .quick-action-btn {
-            background: white;
-            border: 2px solid rgba(var(--primary), 0.2);
-            border-radius: 15px;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: rgba(var(--primary), 1);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .quick-action-btn:hover {
-            background: rgba(var(--primary), 1);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(var(--primary), 0.3);
-        }
-
-        .quick-action-btn i {
-            font-size: 1.2rem;
         }
 
         /* Settings Grid */
