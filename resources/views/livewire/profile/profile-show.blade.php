@@ -178,54 +178,35 @@
         <!-- Main Content - Full width on mobile -->
         <div class="col-12 col-md-8 col-lg-6 mb-4">
             @if($activeTab === 'about')
-                <!-- Modern Profile Header Card -->
-                <div class="card overflow-hidden mb-4 border-0 shadow-sm">
-                    <div class="card-body p-0">
-                        <!-- Banner -->
-                        <div class="profile-banner position-relative" style="height: 180px; background: rgba(var(--primary), 1);">
-                            <!-- Stats Bar - Top Position -->
-                            <div class="position-absolute w-100" style="top: 20px; z-index: 5;">
-                                <div class="d-flex justify-content-center gap-3 gap-md-5">
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $badgesCount }}</div>
-                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.badge') }}</small>
-                                    </div>
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $totalPoints }}</div>
-                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.points') }}</small>
-                                    </div>
-                                    <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-18 f-s-md-24">{{ $level }}</div>
-                                        <small class="opacity-75 f-s-11 f-s-md-13">{{ __('profile.level') }}</small>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Avatar - Bottom Center -->
-                            <div class="position-absolute" style="bottom: -40px; left: 50%; transform: translateX(-50%); z-index: 10;">
-                                <div class="avatar-circle">
-                                    <img alt="{{ $user->name }}" 
-                                         src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                         class="rounded-circle border border-3 border-white shadow"
-                                         style="width: 90px; height: 90px; object-fit: cover;">
-                                    @if($user->verified_at)
-                                    <span class="position-absolute bottom-0 end-0 bg-white rounded-circle p-1">
-                                        <i class="ph ph-check-circle-fill text-success f-s-18"></i>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User Info Below Banner -->
-                        <div class="text-center pt-5 pb-3 px-3 px-md-4" style="margin-top: 40px;">
-                            <h3 class="mb-1 f-w-700 f-s-18 f-s-md-24">
-                                {{ $user->getDisplayName() }}
-                            </h3>
-                            @if($user->bio)
-                            <p class="text-muted f-s-13 f-s-md-14 mb-0">{{ Str::limit($user->bio, 120) }}</p>
+                <!-- Avatar Floating Above Content -->
+                <div class="position-relative mb-5">
+                    <div class="d-flex justify-content-center" style="margin-bottom: -45px; z-index: 100; position: relative;">
+                        <div class="position-relative">
+                            <img alt="{{ $user->name }}" 
+                                 src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                 class="rounded-circle border border-4 border-white shadow-lg"
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                            @if($user->verified_at)
+                            <span class="position-absolute bottom-0 end-0 bg-white rounded-circle p-2 shadow">
+                                <i class="ph ph-check-circle-fill text-success f-s-20"></i>
+                            </span>
                             @endif
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Info Card -->
+                <div class="card overflow-hidden mb-4 border-0 shadow-sm">
+                    <div class="card-body text-center pt-5 pb-3 px-3">
+                        <h3 class="mb-1 f-w-700 f-s-20 f-s-md-28">
+                            {{ $user->getDisplayName() }}
+                        </h3>
+                        @if($user->nickname)
+                        <p class="text-muted f-s-14 mb-2">@{{ $user->nickname }}</p>
+                        @endif
+                        @if($user->bio)
+                        <p class="text-muted f-s-13 f-s-md-14 mb-0 mt-3">{{ Str::limit($user->bio, 120) }}</p>
+                        @endif
                     </div>
                 </div>
 
