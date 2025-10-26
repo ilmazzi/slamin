@@ -162,9 +162,26 @@ class ProfileShow extends Component
         ];
     }
 
+    public function getActivityIcon($type)
+    {
+        $icons = [
+            'poem_created' => 'book-open',
+            'article_created' => 'newspaper',
+            'event_organized' => 'calendar-check',
+            'event_participation' => 'users',
+            'badge_earned' => 'medal',
+            'video_uploaded' => 'video-camera',
+            'photo_uploaded' => 'image',
+            'comment_added' => 'chat-circle',
+            'like_given' => 'heart',
+        ];
+        
+        return $icons[$type] ?? 'activity';
+    }
+
     public function render()
     {
-        return view('livewire.profile.profile-show', [
+        return view('livewire.profile.profile-show-modern', [
             'user' => $this->user,
             'photos' => $this->photos,
             'videos' => $this->videos,
