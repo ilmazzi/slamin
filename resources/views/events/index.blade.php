@@ -656,17 +656,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initMap() {
-
+    console.log('🗺️ Inizializzazione mappa...');
 
     // Inizializza la mappa
-    map = L.map('eventsMap').setView([41.9028, 12.4964], 10);
+    map = L.map('eventsMap').setView([41.9028, 12.4964], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Carica gli eventi con i filtri correnti
-    loadEventsWithCurrentFilters();
+    console.log('✅ Mappa inizializzata, carico eventi...');
+
+    // Carica TUTTI gli eventi senza filtri geografici iniziali
+    loadAllEventsOnMap();
 }
 
 function loadEventsWithCurrentFilters() {
@@ -725,55 +727,37 @@ function loadEventsWithCurrentFilters() {
     loadEventsOnMapWithFilter(params);
 }
 
-function loadEventsOnMap(lat = 45.59614070, lng = 8.91219860) {
-    loadEventsOnMapWithFilter({
-        latitude: lat,
-        longitude: lng
-    });
-}
-
-function loadEventsOnMapWithFilter(params) {
-
-
+function loadAllEventsOnMap() {
+    console.log('📍 Caricamento TUTTI gli eventi sulla mappa...');
+    
     // Clear existing markers
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
 
-    // Build URL with parameters
-    let url;
-    if (params.latitude && params.longitude) {
-        // Se abbiamo coordinate, usa l'endpoint /api/events/near
-        url = new URL('/api/events/near', window.location.origin);
-    } else {
-        // Se non abbiamo coordinate, usa l'endpoint /api/events (senza filtro di posizione)
-        url = new URL('/api/events', window.location.origin);
-    }
-
-    Object.keys(params).forEach(key => {
-        if (params[key] !== null && params[key] !== undefined) {
-            url.searchParams.append(key, params[key]);
-        }
-    });
+    // Usa l'endpoint /api/events per caricare TUTTI gli eventi
+    const url = new URL('/api/events', window.location.origin);
+    
+    console.log('🌐 Fetching da:', url.toString());
 
     fetch(url)
         .then(response => {
-
-        return response.json();
-    })
-    .then(events => {
-
-
-
+            console.log('📡 Response ricevuta:', response.status);
+            return response.json();
+        })
+        .then(events => {
+            console.log('📊 Eventi ricevuti:', events.length);
+            
             if (events.length === 0) {
-
-                showNotification('{{ __('events.no_events_with_filters') }}', 'info');
+                console.warn('⚠️ Nessun evento trovato!');
+                showNotification('Nessun evento disponibile sulla mappa', 'info');
                 return;
             }
 
+            let markersAdded = 0;
             events.forEach((event, index) => {
-
-
-            if (event.latitude && event.longitude) {
+                console.log(`📌 Evento ${index + 1}:`, event.title, `(${event.latitude}, ${event.longitude})`);
+                
+                if (event.latitude && event.longitude) {
                     // Determina il colore del marker basato sulla categoria
                     let markerColor = '#6c757d'; // Default secondary (grigio)
                     if (event.category_color_class) {
@@ -835,24 +819,29 @@ function loadEventsOnMapWithFilter(params) {
                         openEventDetailsModal(event);
                     });
 
-                markers.push(marker);
+                    markers.push(marker);
+                    markersAdded++;
                 } else {
-                    console.log(`Event ${event.title} has no coordinates`);
+                    console.warn(`⚠️ Evento "${event.title}" non ha coordinate!`);
                 }
             });
 
-            console.log(`Total markers added: ${markers.length}`);
+            console.log(`✅ Markers aggiunti: ${markersAdded} su ${events.length} eventi`);
 
             // Fit map to show all markers
             if (markers.length > 0) {
                 const group = new L.featureGroup(markers);
                 map.fitBounds(group.getBounds().pad(0.1));
+                console.log('🎯 Mappa centrata sui markers');
+            } else {
+                console.error('❌ NESSUN marker aggiunto! Tutti gli eventi mancano di coordinate!');
+                showNotification('Gli eventi non hanno coordinate geografiche', 'warning');
             }
-    })
-    .catch(error => {
-            console.error('Error loading events:', error);
-            showNotification('{{ __('events.error_loading_events') }}', 'error');
-    });
+        })
+        .catch(error => {
+            console.error('❌ Errore caricamento eventi:', error);
+            showNotification('Errore nel caricamento degli eventi sulla mappa', 'error');
+        });
 }
 
 // Funzione per centrare sulla posizione dell'utente
@@ -878,14 +867,20 @@ function centerOnUser() {
 
 // Funzione per aggiornare gli eventi
 function refreshEvents() {
-    const center = map.getCenter();
-    loadEventsOnMap(center.lat, center.lng);
-    showNotification('{{ __('events.events_updated') }}', 'success');
+    console.log('🔄 Refresh eventi...');
+    loadAllEventsOnMap();
+    showNotification('Eventi aggiornati', 'success');
 }
 
 // Funzione per mostrare tutti gli eventi (senza filtro geografico)
 function showAllEvents() {
-    // Rimuovi la logica di distanza temporaneamente
+    console.log('🌍 Mostra tutti gli eventi...');
+    loadAllEventsOnMap();
+    showNotification('Visualizzazione di tutti gli eventi', 'success');
+}
+
+// Funzione LEGACY per compatibilità (deprecata)
+function showAllEventsOld() {
     fetch('/api/events/test')
         .then(response => response.json())
         .then(data => {
