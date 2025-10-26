@@ -50,6 +50,28 @@
         </div>
     </div>
 
+    @if($isOwnProfile)
+    <!-- Quick Actions -->
+    <div class="quick-actions-bar mb-4">
+        <a href="{{ route('profile.edit') }}" class="quick-action-btn">
+            <i class="ph ph-pencil"></i>
+            <span>Modifica Profilo</span>
+        </a>
+        <a href="{{ route('profile.my-badges') }}" class="quick-action-btn">
+            <i class="ph ph-medal-military"></i>
+            <span>Gestisci Badge</span>
+        </a>
+        <a href="{{ route('profile.languages.index') }}" class="quick-action-btn">
+            <i class="ph ph-globe"></i>
+            <span>Lingue</span>
+        </a>
+        <a href="{{ route('profile.media') }}" class="quick-action-btn">
+            <i class="ph ph-video-camera"></i>
+            <span>Media</span>
+        </a>
+    </div>
+    @endif
+
     <!-- Navigation Tabs -->
     <div class="profile-nav-tabs mb-4">
         <button class="nav-tab {{ $activeTab === 'about' ? 'active' : '' }}" 
@@ -87,6 +109,13 @@
             <i class="ph ph-activity"></i>
             <span>Attività</span>
         </button>
+        @if($isOwnProfile)
+        <button class="nav-tab {{ $activeTab === 'settings' ? 'active' : '' }}" 
+                wire:click="setActiveTab('settings')">
+            <i class="ph ph-gear"></i>
+            <span>Impostazioni</span>
+        </button>
+        @endif
     </div>
 
     <!-- Content Area -->
@@ -291,6 +320,86 @@
                     <p>Nessuna attività recente</p>
                 </div>
                 @endforelse
+            </div>
+
+        @elseif($activeTab === 'settings' && $isOwnProfile)
+            <!-- Settings Section -->
+            <div class="content-card fade-in">
+                <div class="card-header-modern">
+                    <div>
+                        <i class="ph ph-gear"></i>
+                        <h5>Impostazioni</h5>
+                    </div>
+                </div>
+                <div class="card-body-modern">
+                    <div class="settings-grid">
+                        <a href="{{ route('profile.edit') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-user-circle"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Modifica Profilo</h6>
+                                <p>Aggiorna le tue informazioni personali</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('profile.my-badges') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-medal-military"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Gestione Badge</h6>
+                                <p>Gestisci i tuoi badge e trophy</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('profile.languages.index') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-globe"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Lingue</h6>
+                                <p>Gestisci le lingue che parli</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('profile.media') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-video-camera"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Media</h6>
+                                <p>Gestisci foto e video</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('profile.activity') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-lightning"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Tutte le Attività</h6>
+                                <p>Visualizza tutte le tue attività</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+
+                        <a href="{{ route('articles.create') }}" class="setting-card">
+                            <div class="setting-icon">
+                                <i class="ph ph-article"></i>
+                            </div>
+                            <div class="setting-content">
+                                <h6>Crea Articolo</h6>
+                                <p>Scrivi un nuovo articolo</p>
+                            </div>
+                            <i class="ph ph-caret-right"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
@@ -1001,6 +1110,117 @@
             .nav-tab {
                 padding: 12px;
             }
+
+            .quick-actions-bar {
+                flex-wrap: wrap;
+            }
+
+            .quick-action-btn {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Quick Actions Bar */
+        .quick-actions-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            background: white;
+            border: 2px solid rgba(var(--primary), 0.2);
+            border-radius: 15px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(var(--primary), 1);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(var(--primary), 1);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(var(--primary), 0.3);
+        }
+
+        .quick-action-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .setting-card {
+            background: white;
+            border: 2px solid #edf2f7;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .setting-card:hover {
+            border-color: rgba(var(--primary), 1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(var(--primary), 0.15);
+        }
+
+        .setting-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(var(--primary), 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .setting-icon i {
+            font-size: 1.5rem;
+            color: rgba(var(--primary), 1);
+        }
+
+        .setting-content {
+            flex: 1;
+        }
+
+        .setting-content h6 {
+            margin: 0 0 5px 0;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .setting-content p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #a0aec0;
+        }
+
+        .setting-card > i.ph-caret-right {
+            color: #cbd5e0;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-card:hover > i.ph-caret-right {
+            color: rgba(var(--primary), 1);
+            transform: translateX(5px);
         }
     </style>
 </div>

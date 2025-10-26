@@ -195,7 +195,7 @@ class ProfileShow extends Component
 
     public function render()
     {
-        return view('livewire.profile.profile-show', [
+        return view('livewire.profile.profile-show-modern', [
             'user' => $this->user,
             'photos' => $this->photos,
             'videos' => $this->videos,
