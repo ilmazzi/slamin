@@ -390,14 +390,14 @@
                             </h5>
                             <div class="activities-list">
                                 @forelse($activities as $activity)
-                                    <div class="activity-item mb-3 p-3 rounded" style="background: #f8f9fa;">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="activity-icon">
-                                                <i class="ph ph-{{ $this->getActivityIcon($activity->type) }} f-s-24 text-primary"></i>
+                                    <div class="activity-item mb-2 p-3 rounded bg-light">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="activity-icon flex-shrink-0">
+                                                <i class="{{ $activity->icon }} f-s-24 {{ $activity->color_class }}"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <h6 class="mb-1 f-w-600">{{ $activity->description }}</h6>
-                                                <small class="text-muted">
+                                                <p class="mb-1 f-s-14">{{ $activity->formatted_description }}</p>
+                                                <small class="text-muted f-s-12">
                                                     <i class="ph ph-clock me-1"></i>
                                                     {{ $activity->created_at->diffForHumans() }}
                                                 </small>
