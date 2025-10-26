@@ -281,9 +281,11 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4">
-                                {{ $poems->links() }}
+                            @if($poems->hasPages())
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{ $poems->links('pagination::bootstrap-5') }}
                             </div>
+                            @endif
                         @endif
 
                         @if($activeTab === 'articles')
@@ -334,9 +336,11 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4">
-                                {{ $articles->links() }}
+                            @if($articles->hasPages())
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{ $articles->links('pagination::bootstrap-5') }}
                             </div>
+                            @endif
                         @endif
 
                         @if($activeTab === 'media')
@@ -450,9 +454,11 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4">
-                                {{ $videos->links() }}
+                            @if($videos->hasPages())
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{ $videos->links('pagination::bootstrap-5') }}
                             </div>
+                            @endif
                         @endif
 
                         @if($activeTab === 'events')
@@ -511,9 +517,11 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4">
-                                {{ $events->links() }}
+                            @if($events->hasPages())
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{ $events->links('pagination::bootstrap-5') }}
                             </div>
+                            @endif
                         @endif
 
                         @if($activeTab === 'activities')
@@ -565,9 +573,11 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="mt-4">
-                                {{ $activities->links() }}
+                            @if($activities->hasPages())
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{ $activities->links('pagination::bootstrap-5') }}
                             </div>
+                            @endif
                         @endif
 
                         @if($activeTab === 'settings')

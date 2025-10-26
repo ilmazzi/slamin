@@ -22,8 +22,9 @@ return [
   'quick_actions' => 'Azioni Rapide',
   'manage_videos' => 'Gestisci Video',
   'create_article' => 'Crea Articolo',
-  'view_all_activities' => 'Visualizza Tutte le Attività',
+  'view_all_activities' => 'Attività',
   'manage' => 'Gestisci',
+  'manage_media' => 'Gestisci Media',
   
   // About
   'about_me' => 'Chi Sono',
