@@ -137,30 +137,6 @@
 @section('main-content')
 <div class="container-fluid">
 
-    <!-- Map Container (Always Visible) -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div id="eventsMap" style="height: 300px; border-radius: 10px; overflow: hidden; position: relative;">
-                        <!-- Map Controls Overlay -->
-                        <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1001; pointer-events: auto;">
-                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}" style="z-index: 1002;">
-                                <i class="ph ph-map-pin f-s-14"></i>
-                            </button>
-                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}" style="z-index: 1002;">
-                                <i class="ph ph-arrow-clockwise f-s-14"></i>
-                            </button>
-                            <button class="btn btn-primary btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}" style="z-index: 1002;">
-                                <i class="ph ph-globe f-s-14"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Hero Search Section - Poetry Themed -->
     <div class="row mb-4">
         <div class="col-12">
@@ -268,13 +244,36 @@
         </div>
     </div>
 
-    <!-- Events Grid with Pagination Controls -->
+    <!-- Map Container -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
-                <h5 class="mb-0">{{ __('events.events_list') }}</h5>
+            <div class="card">
+                <div class="card-body p-0">
+                    <div id="eventsMap" style="height: 350px; border-radius: 10px; overflow: hidden; position: relative;">
+                        <!-- Map Controls Overlay -->
+                        <div class="map-controls position-absolute top-0 end-0 p-2" style="z-index: 1001; pointer-events: auto;">
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="centerOnUser()" title="{{ __('events.center_on_my_position') }}" style="z-index: 1002;">
+                                <i class="ph ph-map-pin f-s-14"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm mb-1 d-block" onclick="refreshEvents()" title="{{ __('events.refresh_events') }}" style="z-index: 1002;">
+                                <i class="ph ph-arrow-clockwise f-s-14"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm d-block" onclick="showAllEvents()" title="{{ __('events.show_all_events') }}" style="z-index: 1002;">
+                                <i class="ph ph-globe f-s-14"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid with Pagination Controls -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
                 <div class="d-flex align-items-center gap-2">
-                    <label class="form-label mb-0 f-s-14">{{ __('events.show') }}:</label>
+                    <label class="form-label mb-0 f-s-14 text-muted">{{ __('events.show') }}:</label>
                     <select class="form-select form-select-sm" style="width: auto;" onchange="changePerPage(this.value)">
                         <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
                         <option value="20" {{ request('per_page', 10) == 20 ? 'selected' : '' }}>20</option>
