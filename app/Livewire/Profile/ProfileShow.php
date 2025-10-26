@@ -72,7 +72,7 @@ class ProfileShow extends Component
             ->where('status', 'approved')
             ->where('moderation_status', 'approved')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'photos_page');
     }
 
     public function getVideosProperty()
@@ -80,7 +80,7 @@ class ProfileShow extends Component
         return $this->user->videos()
             ->where('status', 'approved')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'videos_page');
     }
 
     public function getArticlesProperty()
@@ -88,7 +88,7 @@ class ProfileShow extends Component
         return $this->user->articles()
             ->where('status', 'published')
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'articles_page');
     }
 
     public function getPoemsProperty()
@@ -96,7 +96,7 @@ class ProfileShow extends Component
         return $this->user->poems()
             ->published()
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'poems_page');
     }
 
     public function getRecentPhotosProperty()
@@ -183,14 +183,14 @@ class ProfileShow extends Component
     {
         return $this->user->events()
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'events_page');
     }
 
     public function getActivitiesProperty()
     {
         return $this->user->activities()
             ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->paginate($this->perPage, ['*'], 'activities_page');
     }
 
     public function render()
