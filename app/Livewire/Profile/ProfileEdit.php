@@ -139,6 +139,15 @@ class ProfileEdit extends Component
     public function save()
     {
         try {
+            \Log::info('ProfileEdit save started', [
+                'user_id' => $this->user->id,
+                'name' => $this->name,
+                'nickname' => $this->nickname,
+                'email' => $this->email,
+                'avatar' => $this->avatar ? 'has file' : 'no file',
+                'banner' => $this->banner ? 'has file' : 'no file'
+            ]);
+            
             // Update validation rules for current user
             $this->rules['nickname'] = 'required|string|max:50|unique:users,nickname,' . $this->user->id;
             $this->rules['email'] = 'required|email|unique:users,email,' . $this->user->id;
@@ -193,6 +202,13 @@ class ProfileEdit extends Component
         }
 
             $this->user->update($data);
+            
+            \Log::info('ProfileEdit save completed', [
+                'user_id' => $this->user->id,
+                'updated_data' => $data,
+                'new_profile_photo' => $this->user->fresh()->profile_photo,
+                'new_banner_image' => $this->user->fresh()->banner_image
+            ]);
 
             session()->flash('success', __('profile.updated_successfully'));
             

@@ -19,7 +19,12 @@ class AvatarHelper
             return $user->profile_photo_url;
         }
 
-        // Check if user has a custom avatar
+        // Check if user has a custom profile photo
+        if ($user->profile_photo) {
+            return asset('storage/' . $user->profile_photo);
+        }
+
+        // Check if user has a custom avatar (legacy)
         if ($user->avatar) {
             return asset('storage/' . $user->avatar);
         }
