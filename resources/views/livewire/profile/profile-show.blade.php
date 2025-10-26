@@ -235,6 +235,7 @@
 
             @else
                 <!-- Other Tabs Content -->
+                {{-- DEBUG: ActiveTab = {{ $activeTab }} --}}
                 <div class="card">
                     <div class="card-body">
                         @if($activeTab === 'poems')
