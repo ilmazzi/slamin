@@ -114,21 +114,36 @@ class ProfileEdit extends Component
     {
         $this->avatar = null;
         $this->avatarPreview = null;
+        
+        // Delete from database and storage
+        if ($this->user->profile_photo) {
+            Storage::disk('public')->delete($this->user->profile_photo);
+            $this->user->update(['profile_photo' => null, 'avatar_thumbnail' => null]);
+            session()->flash('success', 'Avatar rimosso con successo');
+        }
     }
 
     public function removeBanner()
     {
         $this->banner = null;
         $this->bannerPreview = null;
+        
+        // Delete from database and storage
+        if ($this->user->banner_image) {
+            Storage::disk('public')->delete($this->user->banner_image);
+            $this->user->update(['banner_image' => null]);
+            session()->flash('success', 'Banner rimosso con successo');
+        }
     }
 
     public function save()
     {
-        // Update validation rules for current user
-        $this->rules['nickname'] = 'required|string|max:50|unique:users,nickname,' . $this->user->id;
-        $this->rules['email'] = 'required|email|unique:users,email,' . $this->user->id;
+        try {
+            // Update validation rules for current user
+            $this->rules['nickname'] = 'required|string|max:50|unique:users,nickname,' . $this->user->id;
+            $this->rules['email'] = 'required|email|unique:users,email,' . $this->user->id;
 
-        $this->validate();
+            $this->validate();
 
         $data = [
             'name' => $this->name,
@@ -177,12 +192,26 @@ class ProfileEdit extends Component
             $data['banner_image'] = $bannerPath;
         }
 
-        $this->user->update($data);
+            $this->user->update($data);
 
-        session()->flash('success', __('profile.updated_successfully'));
-        
-        // Redirect to profile
-        return redirect()->route('profile.show');
+            session()->flash('success', __('profile.updated_successfully'));
+            
+            // Reload user data to show updated values
+            $this->user->refresh();
+            $this->loadUserData();
+            
+            $this->dispatch('profile-updated');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            \Log::error('Profile update error', [
+                'user_id' => $this->user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            session()->flash('error', 'Errore durante il salvataggio: ' . $e->getMessage());
+        }
     }
 
     public function render()

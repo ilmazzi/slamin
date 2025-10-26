@@ -24,7 +24,16 @@
             
             @if (session()->has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="ph ph-check-circle me-2"></i>
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+            
+            @if (session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="ph ph-warning-circle me-2"></i>
+                    {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
@@ -58,8 +67,8 @@
                         <input type="file" class="form-control @error('avatar') is-invalid @enderror" wire:model="avatar" accept="image/*">
                         <small class="text-muted f-s-11">JPG, PNG, WEBP - Max 2MB</small>
                         @error('avatar') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        @if($avatarPreview || $user->avatar)
-                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" wire:click="removeAvatar">
+                        @if($avatarPreview || $user->profile_photo)
+                            <button type="button" class="btn btn-sm btn-danger mt-2" wire:click="removeAvatar">
                                 <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
                             </button>
                         @endif
@@ -73,8 +82,8 @@
                         <input type="file" class="form-control @error('banner') is-invalid @enderror" wire:model="banner" accept="image/*">
                         <small class="text-muted f-s-11">JPG, PNG, WEBP - Max 5MB</small>
                         @error('banner') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        @if($bannerPreview || $user->banner)
-                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" wire:click="removeBanner">
+                        @if($bannerPreview || $user->banner_image)
+                            <button type="button" class="btn btn-sm btn-danger mt-2" wire:click="removeBanner">
                                 <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
                             </button>
                         @endif
