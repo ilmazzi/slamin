@@ -19,22 +19,26 @@ class BadgeDisplayStackCards extends Component
 
     public function loadBadges()
     {
-        // Get only the 3 rotating badges selected by user
-        $rotatingBadges = UserBadge::where('user_id', $this->user->id)
+        // Get badges selected for profile display (using existing columns)
+        $profileBadges = UserBadge::where('user_id', $this->user->id)
             ->with('badge')
-            ->whereIn('rotating_position', [1, 2, 3])
-            ->orderBy('rotating_position')
+            ->where('show_in_profile', true)
+            ->orderBy('profile_order', 'asc')
             ->get();
 
-        // If no rotating badges selected, show most recent 3
-        if ($rotatingBadges->count() < 3) {
-            $this->badges = UserBadge::where('user_id', $this->user->id)
+        // If less than 3, fill with most recent badges
+        if ($profileBadges->count() < 3) {
+            $existingIds = $profileBadges->pluck('id')->toArray();
+            $additionalBadges = UserBadge::where('user_id', $this->user->id)
                 ->with('badge')
+                ->whereNotIn('id', $existingIds)
                 ->orderBy('earned_at', 'desc')
-                ->take(3)
+                ->take(3 - $profileBadges->count())
                 ->get();
+            
+            $this->badges = $profileBadges->concat($additionalBadges);
         } else {
-            $this->badges = $rotatingBadges;
+            $this->badges = $profileBadges->take(3);
         }
     }
 

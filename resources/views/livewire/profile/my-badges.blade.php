@@ -95,7 +95,7 @@
                                 <i class="ph ph-star me-1 text-warning"></i>
                                 Badge Posizione 1
                             </label>
-                            <select class="form-select" wire:model.live="rotatingPosition1" wire:change="setRotatingPosition($event.target.value, 1)">
+                            <select class="form-select" wire:model.live="profilePosition1" wire:change="setProfilePosition($event.target.value, 1)">
                                 <option value="">Seleziona badge...</option>
                                 @foreach($badges as $userBadge)
                                     @if($userBadge->badge)
@@ -111,7 +111,7 @@
                                 <i class="ph ph-star me-1 text-warning"></i>
                                 Badge Posizione 2
                             </label>
-                            <select class="form-select" wire:model.live="rotatingPosition2" wire:change="setRotatingPosition($event.target.value, 2)">
+                            <select class="form-select" wire:model.live="profilePosition2" wire:change="setProfilePosition($event.target.value, 2)">
                                 <option value="">Seleziona badge...</option>
                                 @foreach($badges as $userBadge)
                                     @if($userBadge->badge)
@@ -127,7 +127,7 @@
                                 <i class="ph ph-star me-1 text-warning"></i>
                                 Badge Posizione 3
                             </label>
-                            <select class="form-select" wire:model.live="rotatingPosition3" wire:change="setRotatingPosition($event.target.value, 3)">
+                            <select class="form-select" wire:model.live="profilePosition3" wire:change="setProfilePosition($event.target.value, 3)">
                                 <option value="">Seleziona badge...</option>
                                 @foreach($badges as $userBadge)
                                     @if($userBadge->badge)
