@@ -389,7 +389,15 @@
                                             <div class="card-body">
                                                 <h5 class="card-title f-w-600">{{ $event->title }}</h5>
                                                 <p class="card-text f-s-14">{{ Str::limit($event->description, 150) }}</p>
-                                                <small class="text-muted f-s-12">{{ $event->event_date->format('d/m/Y H:i') }}</small>
+                                                <small class="text-muted f-s-12">
+                                                    @if($event->start_datetime)
+                                                        {{ $event->start_datetime->format('d/m/Y H:i') }}
+                                                    @elseif($event->event_date)
+                                                        {{ $event->event_date->format('d/m/Y H:i') }}
+                                                    @else
+                                                        Data non disponibile
+                                                    @endif
+                                                </small>
                                             </div>
                                         </div>
                                     </div>
